@@ -189,7 +189,9 @@ class Buyster extends PaymentModule
 	private function _displayFormConfig()
 	{
 		global $smarty;
-		$var = array('account' => $this->_displayFormAccount(), 'parameter' => $this->_displayFormParameters(), 'info' => $this->_displayInfo(), 'manage' => $this->_displayManage(), 'logo' => $this->_displayLogo());//, 'diagnostic' => $this->_displayFormDiagnostic());
+		$var = array('account' => $this->_displayFormAccount(), 'parameter' => $this->_displayFormParameters(), 'info' => $this->_displayInfo(),
+				'manage' => $this->_displayManage(), 
+				'logo' => ( _PS_VERSION_ >= 1.4 ? $this->_displayLogo() : ''));
 		$smarty->assign('varMain', $var);
 		$html = $this->display( __FILE__, 'tpl/main.tpl' );
 		if (isset($_GET['id_tab']))
@@ -200,7 +202,6 @@ class Buyster extends PaymentModule
 				  $("#menuTab'.Tools::safeOutput(Tools::getValue('id_tab')).'Sheet").addClass("selected");
 			</script>';
 		return $html;
-		return '';
 	}
 	
 	private function _displayInfo()
@@ -347,6 +348,7 @@ class Buyster extends PaymentModule
 		$total = $cart->getOrderTotal();
 		if ((int)$total < 1 && (int)$total > 1800)
 			return;
+		
 		$times = Configuration::get('BUYSTER_PAYMENT_TIME_PAYMENT');
 		$initAccount = Configuration::get('BUYSTER_PAYMENT_INITIAL_AMOUNT');
 		
@@ -355,7 +357,7 @@ class Buyster extends PaymentModule
 		else
 			$payment = 0;
 		
-		$var = array('path' => $this->_path, 'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'.$this->_moduleName.'/', 'paymentN' => $paymentN,
+		$var = array('path' => $this->_path, 'this_path_ssl' => (_PS_VERSION_ >= 1.4 ? Tools::getShopDomainSsl(true, true) : '' ).__PS_BASE_URI__.'modules/'.$this->_moduleName.'/', 'paymentN' => $paymentN,
 				'times' => $times, 'period' => Configuration::get('BUYSTER_PAYMENT_PERIOD_PAYMENT'), 'initAccount' => $initAccount, 'restAmount' => ($total - Configuration::get('BUYSTER_PAYMENT_INITIAL_AMOUNT')) / ((int)$times - 1));
 		$smarty->assign('var', $var);
 		return $this->display( __FILE__, 'tpl/payment.tpl' );
@@ -371,10 +373,10 @@ class Buyster extends PaymentModule
 	}
 	
 	public function hookAdminOrder($params)
-	{		
+	{	
 		if (!$this->active)
 			return ;
-			
+		
 		$order = new Order($params['id_order']);
 		if ($order->module != $this->name)
 			return;
@@ -399,6 +401,7 @@ class Buyster extends PaymentModule
 		$smarty->assign('token', Tools::safeOutput(Tools::getValue('token')));
 		$smarty->assign('resultWebServiceBuyster', $resultWebServiceBuyster);
 		$smarty->assign('buyster_token', Configuration::get('BUYSTER_PAYMENT_TOKEN'));
+		
 		return $this->display(__FILE__, 'tpl/waitAdminOrder.tpl');
 	}
 	

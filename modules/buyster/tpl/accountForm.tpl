@@ -1,8 +1,10 @@
 <style>
+{literal}
 #configFormAccount label
 {
 	font-size:13px;
 }
+{/literal}
 </style>
 <p style="font-size:15px">{l s='The following parameters were provided to you by Buyster' mod='buyster'}. {l s='If you are not yet registered, click ' mod='buyster'} <a style="color:blue;text-decoration:underline" href="http://buyster.fr/accueil-marchand?format=Pro">{l s='here' mod='buyster'}</a></p>
 <form action="index.php?tab={$global.tab}&configure={$global.configure}&token={$global.token}&tab_module={$global.tab_module}&module_name={$global.module_name}&id_tab=2&section=account" method="post" class="form" id="configFormAccount">

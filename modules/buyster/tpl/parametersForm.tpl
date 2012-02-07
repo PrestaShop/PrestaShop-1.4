@@ -1,4 +1,5 @@
 <style>
+{literal}
 #configFormParameters label
 {
 	width:252px;
@@ -11,6 +12,7 @@
     padding: 0 0 1em 262px;
 	font-size:15px;
 }
+{/literal}
 </style>
 <script type="text/javascript" src="../modules/{$global.module_name}/js/parameters.js"></script>
 <p style="font-size:15px">{l s='Buyster allows you to choose your environment(test or production) depending on whether you want to receive actual payments.' mod='buyster'}<br/>{l s='You can also choose three types of payment below: simple, delay or after validation' mod='buyster'}

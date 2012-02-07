@@ -1,4 +1,5 @@
 <style>
+{literal}
 #optionOrderBuyster
 {
     padding:0;
@@ -13,6 +14,7 @@
 {
     width:100%;
 }
+{/literal}
 </style>
 <span style='font-weight: bold;'>{l s='Order status' mod='buyster'}</span> : {$content.status_text}<br/><br/>
 <span style='font-weight: bold;'>{l s='Order reference' mod='buyster'}</span> : {$content.ref} <br/>

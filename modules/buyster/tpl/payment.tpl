@@ -1,8 +1,9 @@
 <script type='text/javascript'>
+{literal}
 function popupbuyster(){
 	var win2 = window.open("http://www.buyster.fr", '_newtab');
 }
-
+{/literal}
 </script>
 
 <p class="payment_module">

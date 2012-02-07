@@ -1,4 +1,5 @@
 <style>
+{literal}
 	#manageList p
 	{
 		font-size:15px;
@@ -8,6 +9,7 @@
 		margin-bottom:10px;
 		font-size:15px;
 	}
+{/literal}
 </style>
 <ul id="manageList">
 	<li>
