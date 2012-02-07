@@ -125,7 +125,7 @@ class authorizeAIM extends PaymentModule
 		return '
 		<h2>'.$this->displayName.'</h2>
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Help').'</legend>
-			<a href="http://api.prestashop.com/partner/authorize.net/" style="float: right;"><img src="../modules/'.$this->name.'/logo_authorize.png" alt="" /></a>
+			<a href="http://api.prestashop.com/partner/authorize.net/" target="_blank" style="float: right;"><img src="../modules/'.$this->name.'/logo_authorize.png" alt="" /></a>
 			<h3>'.$this->l('In your PrestaShop admin panel').'</h3>
 			- '.$this->l('Fill the Login ID field with the one provided by Authorize.net').'<br />
 			- '.$this->l('Fill the key field with the transaction key provided by Authorize.net').'<br />
