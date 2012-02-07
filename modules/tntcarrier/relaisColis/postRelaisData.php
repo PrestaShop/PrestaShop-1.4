@@ -17,6 +17,6 @@ if (count($data) > 0)
 								`address` = "'.$address.'", `zipcode` = "'.$zipcode.'", `city` = "'.$city.'" WHERE `id_cart` = "'.(int)($id_cart).'"');
 }
 else
-	Db::getInstance()->ExecuteS('INSERT INTO `'._DB_PREFIX_.'tnt_carrier_drop_off` (`id_cart`, `code`, `name`, `address`, `zipcode`, `city`) 
+	Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tnt_carrier_drop_off` (`id_cart`, `code`, `name`, `address`, `zipcode`, `city`)
 							VALUES ("'.(int)($id_cart).'", "'.$code.'", "'.$name.'", "'.$address.'", "'.$zipcode.'", "'.$city.'")');
 ?>

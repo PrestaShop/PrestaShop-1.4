@@ -27,7 +27,7 @@ class TntCarrier extends CarrierModule
 	{
 		$this->name = 'tntcarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.6.3';
+		$this->version = '1.6.5';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 
@@ -878,37 +878,10 @@ class TntCarrier extends CarrierModule
 			$smarty->assign('cities', $cities);
 		}		
 		$services = Db::getInstance()->ExecuteS('SELECT `id_carrier`, `option` FROM `'._DB_PREFIX_.'tnt_carrier_option`');
-		echo '<script type="text/javascript">
-			$().ready(function()
-			{
-				';
-		foreach ($services as $k => $v)
-		{
-			echo 'if ($("#id_carrier'.$v['id_carrier'].'").length > 0)
-				{';
-			if (strlen($v['option']) > 1)
-			{
-				if (substr($v['option'], 1, 1) == 'Z')
-					echo '$("#id_carrier'.$v['id_carrier'].'").parent().parent().children(".carrier_infos").append(" <span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_domicile.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");';
-				else if (substr($v['option'], 1, 1) == 'D')
-				{
-					echo '$("#id_carrier'.$v['id_carrier'].'").parent().parent().children(".carrier_infos").append(" <span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_relais-colis.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos<br/><img style=\'display:none\' id=\'loadingRelais'.$v['id_carrier'].'\' src=\'./img/loadingAnimation.gif\' alt=\'wait\'/></span>");';
-					echo '$("#id_carrier'.$v['id_carrier'].'").click(function() {
-							$("#loadingRelais'.$v['id_carrier'].'").show();
-							});';
-				}
-				else
-					echo '$("#id_carrier'.$v['id_carrier'].'").parent().parent().children(".carrier_infos").append(" <span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_popup.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");';
-			}
-			else
-				echo '$("#id_carrier'.$v['id_carrier'].'").parent().parent().children(".carrier_infos").append(" <span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_popup.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");';
-			echo'}';
-		}
-		echo '
-			});
-			</script>';
 		$smarty->assign('id_cart', $id_cart);
 		$smarty->assign('tnt_token', Configuration::get('TNT_CARRIER_TOKEN'));
+		$smarty->assign('version', _PS_VERSION_);
+		$smarty->assign('services', $services);
 		return $this->display( __FILE__, 'tpl/relaisColis.tpl' );
 	}
 	
@@ -920,7 +893,8 @@ class TntCarrier extends CarrierModule
 		$table = 'order';
 		$token = Tools::safeOutput(Tools::getValue('token'));
 		$errorShipping = 0;
-		
+		if ($currentIndex == '')
+			$currentIndex = 'index.php?controller='.Tools::safeOutput(Tools::getValue('controller'))."&id_order=".(int)($params['id_order']);
 		$carrierName = Db::getInstance()->getRow('SELECT c.external_module_name FROM `'._DB_PREFIX_.'carrier` as c, `'._DB_PREFIX_.'orders` as o WHERE c.id_carrier = o.id_carrier AND o.id_order = "'.(int)($params['id_order']).'"');
 		if ($carrierName!= null && $carrierName['external_module_name'] != $this->_moduleName)
 			return false;
@@ -1141,9 +1115,9 @@ class TntCarrier extends CarrierModule
 	{
 		$city = iconv("utf-8", 'ASCII//TRANSLIT', $city);
 		$city = mb_strtoupper($city, 'utf-8');
-		$table = array('`' => '','\''=> '', '^' => '','À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
-        'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O',
-        'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U', 'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B');
+		$table = array('`' => '','\''=> '', '^' => '','ï¿½'=>'A', 'ï¿½'=>'A', 'ï¿½'=>'A', 'ï¿½'=>'A', 'ï¿½'=>'A', 'ï¿½'=>'A', 'ï¿½'=>'A', 'ï¿½'=>'C', 'ï¿½'=>'E', 'ï¿½'=>'E',
+        'ï¿½'=>'E', 'ï¿½'=>'E', 'ï¿½'=>'I', 'ï¿½'=>'I', 'ï¿½'=>'I', 'ï¿½'=>'I', 'ï¿½'=>'N', 'ï¿½'=>'O', 'ï¿½'=>'O', 'ï¿½'=>'O',
+        'ï¿½'=>'O', 'ï¿½'=>'O', 'ï¿½'=>'O', 'ï¿½'=>'U', 'ï¿½'=>'U', 'ï¿½'=>'U', 'ï¿½'=>'U', 'ï¿½'=>'Y', 'ï¿½'=>'B');
 		$city = strtr($city, $table);
 		$old = array("SAINT", "-");
 		$new = array("ST", " ");

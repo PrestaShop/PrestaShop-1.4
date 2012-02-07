@@ -1,21 +1,109 @@
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 <script type="text/javascript" src="./modules/tntcarrier/js/relais.js"></script>
 <script type="text/javascript">
-{literal}	
-	
-    $("input[name='id_carrier']").click(function() {
-    getAjaxRelais($("input[name='id_carrier']:checked").val());
-    });
+var id_carrier = new Array();
+var option_carrier = new Array();
+var i = 0;
+	{foreach from=$services item=foo}
+	id_carrier[i] = '{$foo.id_carrier}';
+	option_carrier[i] = '{$foo.option}';
+	i++;
+	{/foreach}
 
-	function getAjaxRelais(id)
-	{
-        if (document.getElementById("tr_carrier_relais"))
+{if $version < '1.5'}
+{literal}
+$().ready(function()
+{
+	$("[id*='id_carrier']").each(function(){
+			var id_array = $(this).val();
+			var indexTab = jQuery.inArray(id_array, id_carrier);
+			if (indexTab >= 0)
+			{
+				if(option_carrier[indexTab].length > 1)
+				{
+					if (option_carrier[indexTab].charAt(1) == 'Z')
+						$("#id_carrier"+$(this).val()).parent().parent().children(".carrier_infos").append(" <span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_domicile.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
+					else if (option_carrier[indexTab].charAt(1) == 'D')
+						$("#id_carrier"+$(this).val()).parent().parent().children(".carrier_infos").append(" <span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_relais-colis.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
+				
+					else
+						$("#id_carrier"+$(this).val()).parent().parent().children(".carrier_infos").append(" <span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_popup.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
+				}
+				else
+					$("#id_carrier"+$(this).val()).parent().parent().children(".carrier_infos").append(" <span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_popup.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
+			}
+		});
+});
+$("input[name='id_carrier']").click(function() {
+	getAjaxRelais($("input[name='id_carrier']:checked").val());
+	if (document.getElementById("tr_carrier_relais"))
             {
                 var node = document.getElementById("tr_carrier_relais").parentNode;
                 var father = node.parentNode;
                 father.removeChild(node);
-                //return;
             }
+});
+
+function displayNewTable(response, id)
+{
+	$("#id_carrier"+id).parent().parent().after("<tr><td colspan='4' style='display:none' id='tr_carrier_relais'></td></tr>");
+    $("#tr_carrier_relais").html(response);
+	$("#tr_carrier_relais").slideDown('slow');
+	tntRCInitMap();
+	tntRCgetCommunes();
+}
+		
+{/literal}
+{else}
+{literal}
+$().ready(function()
+	{
+		$("[id*='delivery_option_']").each(function(){
+			var id_array = $(this).val().split(',');
+			var indexTab = jQuery.inArray(id_array[0], id_carrier);
+			if (indexTab >= 0 && $("#tnt_popup"+id_array[0]).length <= 0)
+			{
+				if(option_carrier[indexTab].length > 1)
+				{
+					if (option_carrier[indexTab].charAt(1) == 'Z')
+						$("[for='"+$(this).attr('id')+"'] .delivery_option_delay").append(" <span id=\'tnt_popup"+id_array[0]+"\' onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_domicile.html\");return false;\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
+					else if (option_carrier[indexTab].charAt(1) == 'D')
+						$("[for='"+$(this).attr('id')+"'] .delivery_option_delay").append(" <span id=\'tnt_popup"+id_array[0]+"\' onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_relais-colis.html\");return false;\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
+					else
+						$("[for='"+$(this).attr('id')+"'] .delivery_option_delay").append(" <span id=\'tnt_popup"+id_array[0]+"\' onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_popup.html\");return false;\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
+				}
+				else
+					$("[for='"+$(this).attr('id')+"'] .delivery_option_delay").append(" <span id=\'tnt_popup"+id_array[0]+"\' onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_popup.html\");return false;\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
+			}
+		});
+	});
+	$("input[name*='delivery_option[']").click(function() {
+		var id_array = $("input[name*='delivery_option[']:checked").val().split(',');
+		if (document.getElementById("tr_carrier_relais"))
+		{
+			$("#tr_carrier_relais").remove();
+		}
+		getAjaxRelais(id_array[0]);
+	});
+	function displayNewTable(response, id)
+		{
+			$("[id*='delivery_option_']").each(function(){
+				var id_array = $(this).val().split(',');
+				if (id_array[0] == id && $("#tr_carrier_relais").length <= 0)
+				{
+					$(this).next("[for*='delivery_option_']").after("<div style='display:none' id='tr_carrier_relais'></div>");
+					$("#tr_carrier_relais").html(response);
+					$("#tr_carrier_relais").slideDown('slow');
+					tntRCInitMap();
+					tntRCgetCommunes();
+				}
+				});
+		}
+{/literal}
+{/if}
+{literal}
+	function getAjaxRelais(id)
+	{
 		$.get(
 			"./modules/tntcarrier/relaisColis.php?id_carrier="+id+"&idcart="+$("#cartRelaisColis").val(),
 			function(response, status, xhr) 
@@ -25,11 +113,7 @@
 				$("#loadingRelais"+id).hide();
 				if (status == 'success' && response != 'none')
 				{
-					$("#id_carrier"+id).parent().parent().after("<tr><td colspan='4' style='display:none' id='tr_carrier_relais'></td></tr>");
-                    $("#tr_carrier_relais").html(response);
-					$("#tr_carrier_relais").slideDown('slow');
-					tntRCInitMap();
-					tntRCgetCommunes();
+					displayNewTable(response, id);
 				}
 			}
 		);
@@ -64,8 +148,6 @@
 			"./modules/tntcarrier/changeCity.php?city="+$("#citiesGuide").val()+"&id="+$("#cartRelaisColis").val()+"&token="+token,
 			function(response, status, xhr) 
 			{
-				/*if (status == "error") 
-					$("#tr_carrier_relais").html(xhr.status + " " + xhr.statusText);*/
 				if (status == 'success' && response != 'none')
 				{
 					window.location.href = $("#reload_link").val();
