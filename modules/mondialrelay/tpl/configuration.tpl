@@ -66,6 +66,16 @@
 {l s='Please set your Mondial Relay account settings'}
 </div>
 
+{if $MR_upgrade_detail|count}
+<div class="PS_MRFormType MR_error">
+	<ul>
+		{foreach from=$MR_upgrade_detail item=message}
+			<li>{$message}</li>
+		{/foreach}
+	</ul>
+</div>
+{/if}
+
 {*
 ** General information
 *}
@@ -274,4 +284,4 @@
 		</fieldset>
 	</form>
 </div>
-{/if}	
+{/if}

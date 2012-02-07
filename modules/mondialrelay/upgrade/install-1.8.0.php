@@ -8,6 +8,8 @@ if (!defined('_PS_VERSION_'))
 // object module ($this) available
 function upgrade_module_1_8_0($object)
 {
+	$object->upgrade_detail['1.8.0'] = array();
+
 	// Add new table to handle multi-shop for a carrier
 	$query = '
 		CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'mr_method_shop` (
@@ -18,7 +20,10 @@ function upgrade_module_1_8_0($object)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
 
 	if (!Db::getInstance()->execute($query))
+	{
+		$object->upgrade_detail['1.8.0'][] = $object->l('Can\'t create method shop table');
 		return false;
+	}
 
 	// Refacto name
 	$query = '
@@ -31,34 +36,52 @@ function upgrade_module_1_8_0($object)
 		CHANGE  `id_carrier`  `id_carrier` INT( 10 ) NOT NULL';
 
 	if (!Db::getInstance()->execute($query))
+	{
+		$object->upgrade_detail['1.8.0'][] = $object->l('Can\'t change name of the method table');
 		return false;
+	}
 
 	$query = 'RENAME TABLE  `'._DB_PREFIX_.'mr_historique` TO  `'._DB_PREFIX_.'mr_history`';
 
 	if (!Db::getInstance()->execute($query))
+	{
+		$object->upgrade_detail['1.8.0'][] = $object->l('Can\'t rename the history table');
 		return false;
+	}
 
-	$query = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'mr_method_shop` (
-		`id_mr_method_shop` int(10) unsigned NOT NULL auto_increment,
-		`id_mr_method` int(10) unsigned NOT NULL,
-		`id_shop` int(10) unsigned NOT NULL,
-		PRIMARY KEY  (`id_mr_method_shop`)
-	) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
-
-	if (!Db::getInstance()->execute($query))
-		return false;
+	$object->account_shop['MR_ENSEIGNE_WEBSERVICE'] = Configuration::get('MR_ENSEIGNE_WEBSERVICE');
+	$object->account_shop['MR_CODE_MARQUE'] = Configuration::get('MR_CODE_MARQUE');
+	$object->account_shop['MR_KEY_WEBSERVICE'] = Configuration::get('MR_KEY_WEBSERVICE');
+	$object->account_shop['MR_LANGUAGE'] = Configuration::get('MR_LANGUAGE');
+	$object->account_shop['MR_WEIGHT_COEFFICIENT'] = Configuration::get('MR_WEIGHT_COEF');
+	$object->account_shop['MR_ORDER_STATE'] = Configuration::get('MONDIAL_RELAY_ORDER_STATE');
+	$object->updateAccountShop();
 
 	Configuration::deleteByName('MONDIAL_RELAY_INSTALL_UPDATE');
-	Configuration::deleteByName('MONDIAL_RELAY_SECURE_KEY');
 	Configuration::deleteByName('MONDIAL_RELAY_ORDER_STATE');
 	Configuration::deleteByName('MR_ENSEIGNE_WEBSERVICE');
 	Configuration::deleteByName('MR_CODE_MARQUE');
 	Configuration::deleteByName('MR_KEY_WEBSERVICE');
 	Configuration::deleteByName('MR_WEIGHT_COEF');
+	Configuration::deleteByName('MR_LANGUAGE');
 	Configuration::deleteByName('MONDIAL_RELAY_1_4');
 	Configuration::deleteByName('MONDIAL_RELAY_INSTALL_UPDATE_1');
 
 	Configuration::updateValue('MONDIAL_RELAY', $object->version);
+
+	$methods = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'mr_method`');
+	$query = '
+		INSERT INTO `'._DB_PREFIX_.'mr_method_shop`
+		(id_mr_method, id_shop) VALUES ';
+
+	foreach ($methods as $method)
+		$query .= '('.(int)$method['id_mr_method'].', '.(int)$this->account_shop['id_shop'].'),';
+	$query = trim($query, ',');
+	if (!Db::getInstance()->execute($query))
+	{
+		$object->upgrade_detail['1.8.0'][] = $object->l('Can\'t update table mr_method_shop');
+		return false;
+	}
 
 	if (!empty($object->installed_version))
 	{

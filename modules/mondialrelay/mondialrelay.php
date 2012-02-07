@@ -65,6 +65,8 @@ class MondialRelay extends Module
 		'id_shop' => 1
 	);
 
+	public $upgrade_detail = array();
+
 	public function __construct()
 	{
 		$this->name		= 'mondialrelay';
@@ -749,6 +751,7 @@ class MondialRelay extends Module
 				'MR_delay' => Tools::getValue('MR_delay') ? Tools::getValue('MR_delay') : '',
 				'MR_account_set' => MondialRelay::isAccountSet(),
 				'MR_local_path' => MondialRelay::$modulePath,
+				'MR_upgrade_detail' => $this->upgrade_detail,
 				'MR_base_dir' => MondialRelay::$moduleURL)
 		);
 

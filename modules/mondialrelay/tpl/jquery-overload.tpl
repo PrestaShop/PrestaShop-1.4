@@ -28,7 +28,7 @@
 	<script type="text/javascript">
 		var currentJquery = jQuery.noConflict(true);
 	</script>
-	<script type="text/javascript" src="{$new_base_dir}js/jquery-1.6.4.min.js"></script>';
+	<script type="text/javascript" src="{$new_base_dir}js/jquery-1.6.4.min.js"></script>
 {else}
 	<script type="text/javascript" src="{$new_base_dir}js/jquery-1.6.4.min.js"></script>
 	<script type="text/javascript">

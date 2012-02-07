@@ -72,5 +72,4 @@
 </script>
 	{else}
 	{l s='Mondial relay can\'t fetch any replay point due to prestashop error' mod='mondialrelay'}
-{/if}o prestashop error' mod='mondialrelay'}
 {/if}
