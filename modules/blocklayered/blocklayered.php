@@ -39,7 +39,7 @@ class BlockLayered extends Module
 	{
 		$this->name = 'blocklayered';
 		$this->tab = 'front_office_features';
-		$this->version = '1.7.7';
+		$this->version = '1.7.8';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
@@ -67,6 +67,7 @@ class BlockLayered extends Module
 			Configuration::updateValue('PS_LAYERED_SHOW_QTIES', 1);
 			Configuration::updateValue('PS_LAYERED_FULL_TREE', 1);
 			Configuration::updateValue('PS_LAYERED_FILTER_PRICE_USETAX', 1);
+			Configuration::updateValue('PS_LAYERED_FILTER_CATEGORY_DEPTH', 1);
 			
 			$this->rebuildLayeredStructure();
 			$this->rebuildLayeredCache();
@@ -99,6 +100,7 @@ class BlockLayered extends Module
 		Configuration::deleteByName('PS_LAYERED_FULL_TREE');
 		Configuration::deleteByName('PS_LAYERED_INDEXED');
 		Configuration::deleteByName('PS_LAYERED_FILTER_PRICE_USETAX');
+		Configuration::deleteByName('PS_LAYERED_FILTER_CATEGORY_DEPTH');
 		
 		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'layered_price_index');
 		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'layered_friendly_url');
@@ -1365,6 +1367,7 @@ class BlockLayered extends Module
 			Configuration::updateValue('PS_LAYERED_SHOW_QTIES', Tools::getValue('ps_layered_show_qties'));
 			Configuration::updateValue('PS_LAYERED_FULL_TREE', Tools::getValue('ps_layered_full_tree'));
 			Configuration::updateValue('PS_LAYERED_FILTER_PRICE_USETAX', Tools::getValue('ps_layered_filter_price_usetax'));
+			Configuration::updateValue('PS_LAYERED_FILTER_CATEGORY_DEPTH', (int)Tools::getValue('ps_layered_filter_category_depth'));
 			
 			$html .= '
 			<div class="conf">'.
@@ -1813,7 +1816,7 @@ class BlockLayered extends Module
 							data: \'layered_token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&id_lang='.$id_lang.'&\'
 								+(all ? \'\' : $(\'input[name="categoryBox[]"]\').serialize()+\'&\')
 								+(id_layered_filter ? \'id_layered_filter=\'+parseInt(id_layered_filter) : \'\')
-								+\'&base_folder='._PS_ADMIN_DIR_.'\',
+								+\'&base_folder='.urlencode(_PS_ADMIN_DIR_).'\',
 							success: function(result)
 							{
 								$(\'#layered-ajax-refresh\').css(\'background-color\', \'transparent\');
@@ -1989,6 +1992,12 @@ class BlockLayered extends Module
 							'.$this->l('Yes').' <input type="radio" name="ps_layered_full_tree" value="1" '.(Configuration::get('PS_LAYERED_FULL_TREE') ? 'checked="checked"' : '').' />
 							<img src="../img/admin/disabled.gif" alt="'.$this->l('No').'" title="'.$this->l('No').'" style="margin-left: 10px;" />
 							'.$this->l('No').' <input type="radio" name="ps_layered_full_tree" value="0" '.(!Configuration::get('PS_LAYERED_FULL_TREE') ? 'checked="checked"' : '').' />
+						</td>
+					</tr>
+					<tr style="text-align: center;">
+						<td style="text-align: right;">'.$this->l('Category filter depth (0 for no limits, 1 by default)').'</td>
+						<td>
+							<input type="text" name="ps_layered_filter_category_depth" value="'.((Configuration::get('PS_LAYERED_FILTER_CATEGORY_DEPTH') !== false) ? Configuration::get('PS_LAYERED_FILTER_CATEGORY_DEPTH') : 1).'" />
 						</td>
 					</tr>
 					<tr style="text-align: center;">
@@ -2190,7 +2199,7 @@ class BlockLayered extends Module
 					if (version_compare(_PS_VERSION_,'1.5','>'))
 					{
 						$queryFiltersWhere .= ' AND sa.quantity '.(!$selectedFilters['quantity'][0] ? '>=' : '>').' 0 ';
-						$queryFiltersFrom .= 'LEFT JOIN stock_available sa ON (sa.id_product = p.id_product AND sa.id_shop = '.(int)Context::getContext()->shop->getID(true).') ';
+						$queryFiltersFrom .= 'LEFT JOIN `'._DB_PREFIX_.'stock_available` sa ON (sa.id_product = p.id_product AND sa.id_shop = '.(int)Context::getContext()->shop->getID(true).') ';
 					}
 					else
 						$queryFiltersWhere .= ' AND p.quantity '.(!$selectedFilters['quantity'][0] ? '>=' : '>').' 0 ';
@@ -2395,7 +2404,7 @@ class BlockLayered extends Module
 					AND c.nright <= '.(int)$parent->nright : 'c.id_category = '.(int)$id_parent).'
 					AND c.active = 1) ';
 					if (version_compare(_PS_VERSION_,'1.5','>'))
-						$sqlQuery['join'] .= 'LEFT JOIN '._DB_PREFIX_.'stock_available sa
+						$sqlQuery['join'] .= 'LEFT JOIN `'._DB_PREFIX_.'stock_available` sa
 							ON (sa.id_product = p.id_product AND sa.id_shop = '.(int)$this->context->shop->getID(true).') ';
 					$sqlQuery['where'] = 'WHERE p.`active` = 1 ';
 					$sqlQuery['group'] = ' GROUP BY p.id_product ';
@@ -2479,6 +2488,10 @@ class BlockLayered extends Module
 					break;
 
 				case 'category':
+					$depth = Configuration::get('PS_LAYERED_FILTER_CATEGORY_DEPTH');
+					if ($depth === false)
+						$depth = 1;
+					
 					$sqlQuery['select'] = '
 					SELECT c.id_category, c.id_parent, cl.name, (SELECT count(DISTINCT p.id_product) # ';
 					$sqlQuery['from'] = '
@@ -2489,8 +2502,10 @@ class BlockLayered extends Module
 					$sqlQuery['group'] = ') count_products
 					FROM '._DB_PREFIX_.'category c
 					LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = c.id_category AND cl.id_lang = '.(int)$cookie->id_lang.')
-					WHERE c.id_parent = '.(int)$id_parent.'
-					GROUP BY c.id_category ORDER BY level_depth, c.position';
+					WHERE c.nleft > '.(int)$parent->nleft.'
+					AND c.nright < '.(int)$parent->nright.'
+					'.($depth ? 'AND c.level_depth <= '.($parent->level_depth+(int)$depth) : '').'
+					GROUP BY c.id_category ORDER BY c.nleft, c.position';
 			}
 			
 			foreach ($filters as $filterTmp)
@@ -3088,7 +3103,7 @@ class BlockLayered extends Module
 		if (version_compare(_PS_VERSION_,'1.5','>'))
 		{
 			$queryFilters = ' AND sav.quantity '.(!$filterValue[0] ? '>=' : '>').' 0 ';
-			$queryFiltersJoin = 'LEFT JOIN stock_available sav ON (sav.id_product = p.id_product AND sav.id_shop = '.(int)Context::getContext()->shop->getID(true).') ';
+			$queryFiltersJoin = 'LEFT JOIN `'._DB_PREFIX_.'stock_available` sav ON (sav.id_product = p.id_product AND sav.id_shop = '.(int)Context::getContext()->shop->getID(true).') ';
 		}
 		else
 			$queryFilters = ' AND p.quantity '.(!$filterValue[0] ? '>=' : '>').' 0 ';
