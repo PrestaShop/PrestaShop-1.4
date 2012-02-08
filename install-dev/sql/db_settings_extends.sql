@@ -42,8 +42,8 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VAL
 	('CHECKUP_SALES_GT', '2', NOW(), NOW()),
 	('CHECKUP_STOCK_LT', '1', NOW(), NOW()),
 	('CHECKUP_STOCK_GT', '3', NOW(), NOW()),
-	('FOOTER_CMS', '0_3|0_4', NOW(), NOW()),
-	('FOOTER_BLOCK_ACTIVATION', '0_3|0_4', NOW(), NOW()),
+	('FOOTER_CMS', '0_3|0_4|0_6|0_7', NOW(), NOW()),
+	('FOOTER_BLOCK_ACTIVATION', '0_3|0_4|0_6|0_7', NOW(), NOW()),
 	('FOOTER_POWEREDBY', 1, NOW(), NOW()),
 	('BLOCKADVERT_LINK', 0, NOW(), NOW()),
 	('BLOCKSTORE_IMG', 'store.jpg', NOW(), NOW());
@@ -446,7 +446,7 @@ Cordialmente,');
 /* Block CMS module*/
 
 INSERT INTO `PREFIX_cms_block` (`id_cms_block`, `id_cms_category`, `name`, `location`, `position`) VALUES(1, 1, '', 0, 0);
-INSERT INTO `PREFIX_cms_block_page` (`id_cms_block_page`, `id_cms_block`, `id_cms`, `is_category`) VALUES(1, 1, 1, 0), (2, 1, 2, 0), (3, 1, 3, 0), (4, 1, 4, 0), (5, 1, 5, 0);
+INSERT INTO `PREFIX_cms_block_page` (`id_cms_block_page`, `id_cms_block`, `id_cms`, `is_category`) VALUES(1, 1, 1, 0), (2, 1, 2, 0), (3, 1, 3, 0), (4, 1, 4, 0), (5, 1, 5, 0), (6, 1, 6, 0), (7, 1, 7, 0);
 INSERT INTO `PREFIX_cms_block_lang` (`id_cms_block`, `id_lang`, `name`) VALUES (1, 1, 'Information'),(1, 2, 'Informations'),(1, 3, 'Informaciónes'),(1, 4, 'Information'),(1, 5, 'Informazioni');
 
 /* Currency/Country module */
