@@ -105,7 +105,7 @@ class EmployeeCore extends ObjectModel
 		$fields['stats_date_from'] = pSQL($this->stats_date_from);
 
 		if (empty($this->stats_date_to))
-			$this->stats_date_to = date('Y-m-d 23:59:59');
+			$this->stats_date_to = date('Y-m-d 23:59:59', strtotime('+1 year'));
 		$fields['stats_date_to'] = pSQL($this->stats_date_to);
 
 		$fields['bo_color'] = pSQL($this->bo_color);
