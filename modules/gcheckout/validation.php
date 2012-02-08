@@ -26,12 +26,16 @@
 */
 
 require_once(dirname(__FILE__).'/../../config/config.inc.php');
+
+require_once(realpath(dirname(__FILE__).'/../../init.php'));
+
 require_once(dirname(__FILE__).'/gcheckout.php');
 require_once(dirname(__FILE__).'/library/googleresponse.php');
 require_once(dirname(__FILE__).'/library/googlemerchantcalculations.php');
 require_once(dirname(__FILE__).'/library/googleresult.php');
 require_once(dirname(__FILE__).'/library/googlerequest.php');
 require_once(dirname(__FILE__).'/library/googlecart.php');
+
 
 $merchant_id = Configuration::get('GCHECKOUT_MERCHANT_ID');
 $merchant_key = Configuration::get('GCHECKOUT_MERCHANT_KEY');
@@ -82,20 +86,20 @@ switch ($root)
 	case "merchant-calculation-callback":
 		break;
 	case "new-order-notification":
-		// secure_cart[0] => id_cart
-		// secure_cart[1] => secure_key
+			// secure_cart[0] => id_cart
+			// secure_cart[1] => secure_key
 
-		$gcheckout = new GCheckout();
-		$secure_cart = explode('|', $data[$root]['shopping-cart']['merchant-private-data']['VALUE']);
-		$cart = new Cart((int)$secure_cart[0]);
-		$currency = $gcheckout->getCurrency((int)$cart->id_currency);
-		unset($cart);
+			$gcheckout = new GCheckout();
+			$secure_cart = explode('|', $data[$root]['shopping-cart']['merchant-private-data']['VALUE']);
+			$cart = new Cart((int)$secure_cart[0]);
+			$currency = $gcheckout->getCurrency((int)$cart->id_currency);
+			unset($cart);
 
-		$orderTotal = (float)($data[$root]['order-total']['VALUE']);
+			$orderTotal = (float)($data[$root]['order-total']['VALUE']);
 		$gcheckout->validateOrder((int)$secure_cart[0], Configuration::get('PS_OS_PAYMENT'), (float)$orderTotal, 
-			$gcheckout->displayName, NULL, array(), NULL, false, $secure_cart[1]);
-		$Gresponse->SendAck();
-		break;
+				$gcheckout->displayName, NULL, array(), NULL, false, $secure_cart[1]);
+			$Gresponse->SendAck();
+			break;
 	case "order-state-change-notification":
 		$Gresponse->SendAck();
 		break;

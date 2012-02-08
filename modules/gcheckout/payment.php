@@ -29,12 +29,15 @@ include(dirname(__FILE__).'/../../config/config.inc.php');
 include(dirname(__FILE__).'/../../init.php');
 include(dirname(__FILE__).'/gcheckout.php');
 
-if (!$cookie->isLogged(true))
+$gcheckout = new GCheckout();
+
+if (_PS_VERSION_ >= '1.5' && !Context::getContext()->customer->isLogged(true))
+	Tools::redirect('index.php?co:q:q:qntroller=authentication&back=order.php');
+else if (_PS_VERSION_ < '1.5' && !$cookie->isLogged(true))
 	Tools::redirect('authentication.php?back=order.php');
-elseif (!$cart->getOrderTotal(true, Cart::BOTH))
+else if (!$gcheckout->context->cart->getOrderTotal(true, Cart::BOTH))
 	Tools::displayError('Error: Empty cart');
 
-$gcheckout = new GCheckout();
 // Prepare payment
 $gcheckout->preparePayment();
 
@@ -43,5 +46,3 @@ include(dirname(__FILE__).'/../../header.php');
 echo $gcheckout->display('gcheckout.php', 'confirm.tpl');
 
 include_once(dirname(__FILE__).'/../../footer.php');
-
-

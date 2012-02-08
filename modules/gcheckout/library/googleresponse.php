@@ -63,13 +63,15 @@
     function SetLogFiles($errorLogFile, $messageLogFile, $logLevel=L_ERR_RQST) {
       $this->log = new GoogleLog($errorLogFile, $messageLogFile, $logLevel);
     }
-    
-    /**
-     * Verifies that the authentication sent by Google Checkout matches the 
-     * merchant id and key
-     * 
-     * @param string $headers the headers from the request
-     */
+
+	  /**
+	   * Verifies that the authentication sent by Google Checkout matches the
+	   * merchant id and key
+	   *
+	   * @param null $headers param from the header request
+	   * @param bool $die
+	   * @return bool
+	   */
     function HttpAuthentication($headers=null, $die=true) {
       if (!is_null($headers))
         $_SERVER = $headers;
@@ -80,7 +82,7 @@
 			// GET['HTTP_AUTHORIZATION'] is set in the .htaccess
 			list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(':', 
 					base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
-
+      
 			if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
         $compare_mer_id = $_SERVER['PHP_AUTH_USER']; 
         $compare_mer_key = $_SERVER['PHP_AUTH_PW'];
@@ -90,11 +92,11 @@
       }
   //  IIS Note::  For HTTP Authentication to work with IIS, 
   // the PHP directive cgi.rfc2616_headers must be set to 0 (the default value). 
-      elseif (isset($_SERVER['HTTP_AUTHORIZATION'])){
+      else if(isset($_SERVER['HTTP_AUTHORIZATION'])){
         list($compare_mer_id, $compare_mer_key) = explode(':', 
             base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'],
             strpos($_SERVER['HTTP_AUTHORIZATION'], " ") + 1)));
-      } elseif (isset($_SERVER['Authorization'])) {
+      } else if(isset($_SERVER['Authorization'])) {
         list($compare_mer_id, $compare_mer_key) = explode(':', 
             base64_decode(substr($_SERVER['Authorization'],
             strpos($_SERVER['Authorization'], " ") + 1)));
