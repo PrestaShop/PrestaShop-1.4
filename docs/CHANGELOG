@@ -24,6 +24,179 @@ International Registred Trademark & Property of PrestaShop SA
 Release Notes for PrestaShop 1.4
 --------------------------------
 ####################################
+#   v1.4.7.0 - 13112 (2012-02-08)  #
+####################################
+
+	Added Features:
+
+	[+] MO : Add Kwixo module in SVN
+	[+] mo : module tnt
+	[+] MO : Mondialrelay, prepare compatibility 1.5
+	[+] mo : new module buyster
+
+	Improved/changed features:
+
+	[*] Installer : now, only needed php files are loaded
+
+	[*] BO : Attributes & groups textures
+
+	[*] MO : Buyster is now working on 1.3
+	[*] MO : Buyster updates
+	[*] MO : Buyster update validation.php
+	[*] MO : Debug of module Buyster
+	[*] MO : Module CanadaPost 0.8 (PS 1.4)
+	[*] MO : Mondialrelay, rewrite part of the code for compatibility 1.3/1.4/1,5. Trad missing...!
+	[*] MO : TNT carrier updates
+	[*] MO : TNT module, the module is now compatible on 1.4/1.5
+	[*] MO : Updated Authorize.net module
+	[*] MO : Update module Buyster
+	[*] MO : update module TNT
+	[*] MO : Update module TNT
+	[*] MO : Vatnumber - a warning is now displayed if the field "Your country" is empty (related #PSCFI-4200)
+
+	[*] WS : New entities : customer_threads, customer_messages
+	[*] WS : removed date_add from parameters. #PSCFI-4581
+	[*] WS : WS now able to set product tags in products entity
+
+	[*] TR : #PSTEST-553 : Replaced can't with cannot
+	[*] TR : #PSTEST-553 : Replaced can't with cannot
+
+	[*] LO : Colombia states
+	[*] LO : tax rate update (FR & CA)
+
+	Fixed bugs:
+
+	[-] Project : fixed rare bug in Tools::displayPrice that occur when the currency is not valid
+	[-] Project : #PSCFI-4836 - Fix Bug with cacheFS and DB::getNumRows()
+
+	[-] Installer : #PSCFI-4383 : BugFix SQL installation script corrected, unique key for specific_price_priority
+	[-] Installer : #PSCFI-4383 : BugFix SQL installation, unique key name changed
+	[-] Installer : #PSCFI-4397 - Missing unique index on PREFIX_category_product
+
+	[-] FO : added an "isset()" in order to don't break a feature of the Blocklayered module
+	[-] FO : Bug Fixed #PSCFI-4549 - Discount quantity per user
+	[-] FO : BugFix : #PSCFI-4641 : Order flow fail: ParentOrderController does not add order-address.js on error at step 1
+	[-] FO : fixed an error of variable assign with smarty
+	[-] FO : fixed bug #PSCFI-4343 - broken page display when no carrier is selected during 5 steps checkout
+	[-] FO : fixed bug #PSCFI-4415 - Issue with product cache for packs
+	[-] FO : Fixed #PSCFI-4080 - short descriptions in product-list.tpl are now correctly displayed
+	[-] FO : fix #PSCFI-3757 for ce http page to remain http
+	[-] FO : #PSCFI-3866 - PaymentModule ValidateOrder method bug
+	[-] FO : #PSCFI-3880 : BugFix : Gestion de la surcharge mbString lors de l'authentification
+	[-] FO : #PSCFI-4032 : fixed an URL encode/decode problem with the referral module
+	[-] FO : #PSCFI-4032 : fixed an URL encode/decode problem with the referral module
+	[-] FO : #PSCFI-4196 : bug fixed : Cart summary and minimum quantity (adding ajax check when updating product quantity)
+
+	[-] BO : Added translation
+	[-] BO : AdminPayment saves memory by loading only installed payment modules
+	[-] BO : bug fixed, division by zero (AdminStats)
+	[-] BO : Bug Fixed #PSCFI-4132 - Customization + Order Slip
+	[-] BO : Bug Fixed #PSCFI-4646 - Deleted order statuses still appear
+	[-] BO : BugFix : #PSCFI-4359 : you cannot change guest customer password in backoffice anymore.
+	[-] BO : BugFix : removing bug voucher with discount product : thanks to Eric Dolou
+	[-] BO : BugFix : Search index re-build
+	[-] BO : Changed translation 'egal' to 'equal'
+	[-] BO : fix bug #PSCFI-4472 - FPDF error: Alpha channel not supported
+	[-] BO : fixed bug #PSCFI-4341 - A non admin employee with edit rights on the Employees tab could make himself an admin
+	[-] BO : Fixed bug #PSCFI-4407. Imported CSV lines are now checked using a valide id.
+	[-] BO : fixed bug which appeared in the customer service when some employees were deleted
+	[-] BO : Fixed import
+	[-] BO : Fixed #PSCFI-4642 - fixed regex for parsing mail subjects
+	[-] BO : fixed small error in AdminPayment which occurred when some modules with multiple currency management were installed
+	[-] BO : modified the treatment in order to add specials characters like password in Preferences/Emails
+	[-] BO : #PSCFI-4212 : bug fixed : fatal error when cancel product from order with deleted products (now we check if the product is deletable -not in a non-valid order-)
+	[-] BO : #PSCFI-4245 : bug fixed : ajaxCart.collapse don't work in 1.4.6.2
+	[-] BO : #PSCFI-4255 : deleting ";;"
+	[-] BO : #PSCFI-4319 : bug fixed : Admin ajax.php error (Category::regenerateEntireNTree moved and called only if the position is updated)
+	[-] BO : #PSCFI-4393 : Andre Silva UTF-8 comments
+	[-] BO : #PSCFI-4484 - Add historisation of the order status
+	[-] BO : #PSCFI-4495 : increased the time "setTimeout" which wasn't compatible with some mail servers
+	[-] BO : #PSCFI-4580 - Error in shipping Calculation for different zones
+	[-] BO : #PSCFI-4599 : Modified links in AdminImport.php
+	[-] BO : #PSCFI-4599 : revert code
+	[-] BO : #PSCFI-4664 : Changed back office content-type from text/html to application/xhtml+xml according to the DOCTYPE
+	[-] BO : #PSCFI-4681 : delete configure link
+	[-] BO : #PSCFI-4694 - Blockadvertising small issue
+	[-] BO : #PSCFI-4799 : There is now a verification after selecting all the employees in order to delete them, the last admin account can't be deleted.
+	[-] BO : #PSCFI-4799 : There is now a verification after selecting all the employees's profiles in order to delete them, the admin's profile cannot be deleted.
+	[-] BO : #PSFV-197 - Forced "Delivery number" to be an integer
+	[-] BO : robots.txt now contain rewrited urls if friendly urls are activated #PSCFI-4515
+	[-] BO : update lib jquery.flot.min.js => fix bug with graph on BO home on IE9
+	[-] BO : Used urlencode() in order to receive the good format password in Preferences/Emails
+
+	[-] Classes : BugFix : Products variable verification (Search)
+	[-] Classes : BugFix #PSCFI-4337 : removed the ini_set() from Swift mailer
+	[-] Classes : Carrier class's security improved
+	[-] Classes : fixed bug #PSCFI-4352 - remove unused parameter added in previous commit
+	[-] Classes : fixed bug #PSCFI-4401 - linebreaks in product return message cause fatal error in BO
+	[-] Classes : Improved security in Carrier class
+	[-] Classes : #PSCFI-3880 : BugFix mbstring overload on Rijndael encrypt/decrypt
+	[-] Classes : #PSCFI-4285 : BugFix : Categories & regenerate entire N tree corrected & optimized
+	[-] Classes : #PSCFI-4464, #PSCFI-4494 : BugFix : smarty plugin edited, check if function mb_split exists (Ajax, add or delete into/from cart)
+	[-] Classes : #PSCFI-4477 : BugFix GSiteMap priority - Decimals no longer take care about local numeric separator
+	[-] Classes : #PSCFI-4523 : modified condition in ModuleGrid.php
+	[-] Classes : #PSCFI-4569 : BugFix : Get module instance by name fixed
+	[-] Classes : #PSCFI-4640 : Country name depending on current language (countries restricted to active deliveries)
+	[-] Classes : #PSCFI-4688 : Added a base64_encode() for the mail receiver name. Needed for names with accentuated chars
+	[-] Classes : #PSCFI-4688 : Added a base64_encode() for the mail receiver name. Needed for names with accentuated chars
+	[-] Classes : #PSCFI-4688 : Catch SwiftMailer exception corrected (syntax)
+
+	[-] Core : Improve cacheFS storage
+
+	[-] MO : Add header to the install :)
+	[-] MO : Bug Fix : #PSCFI-4131 Refferal Program : discount is only available if the sponsor has a valid order.
+	[-] MO : BugFix : #PSCFI-4307 : bug in blockbestsellers module with foreach : wrong variable name
+	[-] MO : eKomi (1.3) - Fix on warnings (PS 1.4)
+	[-] MO : Fixed bug #PNM-15. Bad variable used $_GET instead of $_SERVER
+	[-] MO : fixed bug #PSCFI-4268 - ajax-cart displays "undefined" on product with customization insertion
+	[-] MO : fixed bug #PSCFI-4387 - Existing wishlist is not used when adding product if block Wishlist is not hooked to left or right column
+	[-] MO : Fixed bug #PSCFI-4614. Soap inclusion for CRON task changed.
+	[-] MO : fixed socolissimo bug
+	[-] MO : fixed socolissimo bug 2
+	[-] MO : fixed socolissimo bug //part 3
+	[-] MO : Fix on card validation. HTTP_REFERER does not have .php
+	[-] MO : Fix on TrustedShop
+	[-] MO : Gcheckout, add backward compatibility 1.5
+	[-] MO : Gcheckout, Fix authentification problem
+	[-] MO : Google Sitemap - duplicate pictures on combination
+	[-] MO : Module Fedex (1.2.6) - Wordings changed and module updgrades
+	[-] MO : Module MoneyBookers (1.6.3) - Fix on return urls
+	[-] MO : Module ShoppingFlux (1.5)
+	[-] MO : Module UPS 1.2.3 - Retrocompatibility 1.4 / 1.5 - Replacing cURL with file_get_content
+	[-] MO : Module USPS 1.2.2 - Retrocompatibility 1.4 / 1.5 - Replacing cURL with file_get_content
+	[-] MO : Mondialrelay, fix 1.3 backward compatibility and add comments
+	[-] MO : Mondialrelay : Fix backward inclusion and refacto
+	[-] MO : MondialRelay, Fix displayed relay point problem using OPC during the logged process
+	[-] MO : Mondialrelay, fix issue on IE during the checkout process and duplicate css
+	[-] MO : PayPal (2.8.6) - #PSCFI-4394 - Fix return link to others payment methods
+	[-] MO : prestashop security scoring field can now save values > 1
+	[-] MO : #PSCFI-3917 : BugFix for sql upgrade file, id module was incorrect
+	[-] MO : #PSCFI-3917 : BugFix pages not found with canonical URIs was not working with stats
+	[-] MO : #PSCFI-4368 : bug fixed : Faulty conditional branches in Editorial/Home Text Editor tpl
+	[-] MO : #PSCFI-4389 : Block Advertising hookHeader added
+	[-] MO : #PSCFI-4440 - Fixed image problem is the blockwishlist and images
+	[-] MO : #PSCFI-4677 : Mail alerts can be delete (created with or without user account + no duplication)
+	[-] MO : #PSCFI-4677 : Mail alerts getEmailValue function removed
+	[-] MO : #PSCFI-4677 : Mail alerts SQL syntax on deleteAlert corrected
+	[-] MO : #PSCFI-4677 : Mail alerts was sending more than one mail per user (user not registered then register and ask again)
+	[-] MO : #PSFV-4702 - Layered Navigation: radio buttons don't behave as "radio"
+	[-] MO : Shipping Estimation, fixed bug #PSCFI-4147 refreshing problem with restriction fields like canada.
+	[-] MO : Shopping Flux 1.5.1
+
+	[-] WS : Compatibility for PHP as CGI
+	[-] WS : Fixed norm on WebserviceRequest
+
+	[-] PDF : Bug Fixed #PSCFI-4509 - PDF Incorrect: tax excluded + discount
+	[-] PDF : Bug Fixed #PSCFI-4629 - Canadian taxes incorrectly calculated
+	[-] PDF : Rounding Issue
+
+	[-] TR : Fixed #PSCFI-3994 german translation in installer, infinite thanks to Conny
+	[-] TR : tabname translations, thanks again to Conny
+
+	[-] LO : Slovakia tax rates updated
+
+
+####################################
 #   v1.4.6.2 - 10647 (2011-11-25)  #
 ####################################
 
