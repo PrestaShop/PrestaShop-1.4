@@ -156,6 +156,7 @@ $_ERRORS['b4816317cad36c53e8b4120c7f2b561a'] = 'La sélection des pays est inval
 $_ERRORS['9d35e3b5d28c6a068a6c6856e359b87b'] = 'Thème actuel indisponible. Merci de vérifier le répertoire de votre thème ou ses permissions.';
 $_ERRORS['e6b214cab4477a7bd120bc996f06734c'] = 'le client doit être dans au moins un groupe';
 $_ERRORS['28ca4ab8455ffa19e6f0577aefa9f1c9'] = 'client non trouvé';
+$_ERRORS['e3e5ca7410afd92ef167c19be38cb6cc'] = 'Personnalisation sauvegardée avec succès.';
 $_ERRORS['2d23b982e03f3e2ff37a0833033fb8bd'] = 'date spécifiée invalide';
 $_ERRORS['56ed19a8b705ff0da23d026ebce133b5'] = 'le groupe par défaut du client doit être coché';
 $_ERRORS['832c4ce25a57e0e4094673216a19ff97'] = 'Extension DOM n\'est pas chargée.';

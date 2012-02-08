@@ -71,9 +71,23 @@ class ProductControllerCore extends FrontController
 
 	public function preProcess()
 	{
+		global $cart;
 		if ($id_product = (int)Tools::getValue('id_product'))
 			$this->product = new Product($id_product, true, self::$cookie->id_lang);
 
+		if (Tools::isSubmit('ajax'))
+		{
+			if (Tools::isSubmit('submitCustomizedDatas'))
+			{
+				$this->pictureUpload($this->product, $cart);
+				$this->textRecord($this->product, $cart);
+				$this->formTargetFormat();
+			}
+			if (count($this->errors))
+				die(Tools::jsonEncode(array('hasErrors' => true, 'errors' => $this->errors)));
+			else
+				die(Tools::jsonEncode(array('hasErrors' => false, 'conf' => Tools::displayError('Customization saved successfully.'))));
+		}
 		if (!Validate::isLoadedObject($this->product))
 		{
 			header('HTTP/1.1 404 Not Found');
@@ -193,7 +207,7 @@ class ProductControllerCore extends FrontController
 				$productPriceWithoutEcoTax = (float)($productPriceWithTax - $this->product->ecotax);
 
 				$ecotax_rate = (float) Tax::getProductEcotaxRate($cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')});
-            $ecotaxTaxAmount = Tools::ps_round($this->product->ecotax, 2);
+				$ecotaxTaxAmount = Tools::ps_round($this->product->ecotax, 2);
 				if (Product::$_taxCalculationMethod == PS_TAX_INC && (int)Configuration::get('PS_TAX'))
 					$ecotaxTaxAmount = Tools::ps_round($ecotaxTaxAmount * (1 + $ecotax_rate / 100), 2);
 
