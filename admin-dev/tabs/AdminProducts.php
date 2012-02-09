@@ -1883,7 +1883,7 @@ class AdminProducts extends AdminTab
 				<span id="spm_currency_sign_pre_0" style="font-weight:bold; color:#000000; font-size:12px">'.($defaultCurrency->format == 1 ? ' '.$defaultCurrency->sign : '').'</span>
 				<input type="text" name="sp_price" value="0" size="11" />
 				<span id="spm_currency_sign_post_0" style="font-weight:bold; color:#000000; font-size:12px">'.($defaultCurrency->format == 2 ? ' '.$defaultCurrency->sign : '').'</span>
-				<span id="sp_current_ht_price" > ('.$this->l('Current:').' '.Tools::displayPrice((float)($product->price), $defaultCurrency).')</span>
+				<span id="sp_current_ht_price" > ('.$this->l('Current:').' '.Tools::displayPrice((float)$product->price, $defaultCurrency).')</span>
 				<div class="hint clear" style="display:block;">
 					'.$this->l('You can set this value at 0 in order to apply the default price').'
 				</div>
@@ -1904,8 +1904,7 @@ class AdminProducts extends AdminTab
 				<input type="submit" name="submitPriceAddition" value="'.$this->l('Add').'" class="button" />
 			</div>
 		</div>
-		<hr />
-		';
+		<hr />';
 		include_once('functions.php');
 		includeDatepicker(array('sp_from', 'sp_to'), true);
 	}

@@ -30,7 +30,7 @@ require_once(dirname(__FILE__).'/../images.inc.php');
 function bindDatepicker($id, $time)
 {
 	if ($time)
-	echo '
+		echo '
 		var dateObj = new Date();
 		var hours = dateObj.getHours();
 		var mins = dateObj.getMinutes();
@@ -42,7 +42,7 @@ function bindDatepicker($id, $time)
 
 	echo '
 	$(function() {
-		$("#'.$id.'").datepicker({
+		$("#'.Tools::htmlentitiesUTF8($id).'").datepicker({
 			prevText:"",
 			nextText:"",
 			dateFormat:"yy-mm-dd"'.($time ? '+time' : '').'});
@@ -54,9 +54,9 @@ function includeDatepicker($id, $time = false)
 {
 	global $cookie;
 	echo '<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/jquery-ui-1.8.10.custom.min.js"></script>';
-	$iso = Db::getInstance()->getValue('SELECT iso_code FROM '._DB_PREFIX_.'lang WHERE `id_lang` = '.(int)($cookie->id_lang));
+	$iso = Db::getInstance()->getValue('SELECT iso_code FROM '._DB_PREFIX_.'lang WHERE `id_lang` = '.(int)$cookie->id_lang);
 	if ($iso != 'en')
-		echo '<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/datepicker/ui/i18n/ui.datepicker-'.$iso.'.js"></script>';
+		echo '<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/datepicker/ui/i18n/ui.datepicker-'.Tools::htmlentitiesUTF8($iso).'.js"></script>';
 	echo '<script type="text/javascript">';
 		if (is_array($id))
 			foreach ($id as $id2)
