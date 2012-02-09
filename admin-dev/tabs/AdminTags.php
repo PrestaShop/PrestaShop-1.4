@@ -37,7 +37,7 @@ class AdminTags extends AdminTab
 		$this->delete = true;
 
 		$this->fieldsDisplay = array(
-		'id_tag' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25, 'filter_key' => 'a!id_seller_message'),
+		'id_tag' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 		'lang' => array('title' => $this->l('Language'), 'filter_key' => 'l!name'),
 		'name' => array('title' => $this->l('Name'), 'width' => 200, 'filter_key' => 'a!name'),
 		'products' => array('title' => $this->l('Products'), 'align' => 'right', 'havingFilter' => true));
