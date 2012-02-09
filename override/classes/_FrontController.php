@@ -333,6 +333,7 @@ class FrontController extends FrontControllerCore
 				<li><a href="#stopwatch">Go to Stopwatch</a></li>
 				<li><a href="#doubles">Go to Doubles</a></li>
 				<li><a href="#tables">Go to Tables</a></li>
+				<li><a href="#includedFiles">Go to included files</a></li>
 			</ul>
 		</div>
 		<div class="rte" style="text-align:left;padding:8px">
@@ -355,6 +356,19 @@ class FrontController extends FrontControllerCore
 		arsort($tables);
 		foreach ($tables as $table => $nb)
 			echo $hr.'<b '.$this->getTableColor($nb).'>'.$nb.'</b> '.$table;
+		echo '</div>';
+
+		// List of included files
+		echo '<div class="rte" style="text-align:left;padding:8px">
+		<h3><a name="includedFiles">Included files</a></h3>';
+		$i = 1;
+		foreach (get_included_files() as $file)
+		{
+			$file = ltrim(str_replace('\\', '/', str_replace(_PS_ROOT_DIR_, '', $file)), '/');
+			$file = '<b style="color: red">'.dirname($file).'/</b><b style="color: blue">'.basename($file).'</b>';
+			echo $i.' '.$file.'<br />';
+			$i++;
+		}
 		echo '</div>';
 	}
 }
