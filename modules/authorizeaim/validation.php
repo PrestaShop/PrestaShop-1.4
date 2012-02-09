@@ -26,8 +26,15 @@
 */
 
 include(dirname(__FILE__). '/../../config/config.inc.php');
-include(dirname(__FILE__). '/../../init.php');
+// will include backward file
 include(dirname(__FILE__). '/authorizeaim.php');
+
+$authorizeaim = new authorizeaim();
+
+// SSL Tricks to bypass the redirect for the FrontController in 1.5 +
+Configuration::updateValue('PS_SSL_ENABLED', 0);
+include(dirname(__FILE__). '/../../init.php');
+Configuration::updateValue('PS_SSL_ENABLED', 1);
 
 /* Transform the POST from the template to a GET for the CURL */
 if (isset($_POST['x_exp_date_m']) && isset($_POST['x_exp_date_y']))
@@ -67,8 +74,12 @@ if (!isset($response[7]) OR !isset($response[3]) OR !isset($response[9]))
 
 if ($response[0] != 1)
 {
+	$checkout_type = Configuration::get('PS_ORDER_PROCESS_TYPE') ? 'order-opc' : 'opc';
+	$url = _PS_VERSION_ >= '1.5' ? 'index.php?controller='.$checkout_type.'&' : $checkout_type.'.php?';
+	$url .= 'step=3&cgv=1&aimerror=1';
+
 	if (!isset($_SERVER['HTTP_REFERER']) || strstr($_SERVER['HTTP_REFERER'], 'order'))
-		Tools::redirect('order.php?step=3&cgv=1&aimerror=1');
+		Tools::redirect($url);
 	elseif (strstr($_SERVER['HTTP_REFERER'], '?'))
 		Tools::redirect($_SERVER['HTTP_REFERER'].'&aimerror=1', '');
 	else
@@ -86,17 +97,20 @@ else
 
 	$customer = new Customer((int)$cart->id_customer);
 
-	/* Loading the object */	
-	$authorizeaim = new authorizeaim();
+	/* Loading the object */
 	$message = $response[3];
+	$payment_method = 'Authorize.net AIM';
 	if ($response[0] == 1)
 	{		
 		$authorizeaim->setTransactionDetail($response);	
-		$authorizeaim->validateOrder((int)$cart->id, Configuration::get('PS_OS_PAYMENT'), (float)$response[9], $authorizeaim->displayName, $message, NULL, NULL, false, $customer->secure_key);	
+		$authorizeaim->validateOrder((int)$cart->id, Configuration::get('PS_OS_PAYMENT'), (float)$response[9], $payment_method, $message, NULL, NULL, false, $customer->secure_key);
 	}
 	else
-		$authorizeaim->validateOrder((int)$cart->id, Configuration::get('PS_OS_ERROR'), (float)$response[9], $authorizeaim->displayName, $message, NULL, NULL, false, $customer->secure_key);
+		$authorizeaim->validateOrder((int)$cart->id, Configuration::get('PS_OS_ERROR'), (float)$response[9], $payment_method, $message, NULL, NULL, false, $customer->secure_key);
 
-	Tools::redirect('order-confirmation.php?id_module='.(int)$authorizeaim->id.'&id_cart='.(int)$cart->id.'&key='.$customer->secure_key);
+	$url = 'index.php?controller=order-confirmation&';
+	if (_PS_VERSION_ < '1.5')
+		$url = 'order-confirmation.php?';
+	Tools::redirect($url.'id_module='.(int)$authorizeaim->id.'&id_cart='.(int)$cart->id.'&key='.$customer->secure_key);
 }
 
