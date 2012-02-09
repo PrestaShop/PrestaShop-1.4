@@ -69,12 +69,12 @@ class AdminReferrers extends AdminTab
 			'cache_registrations' => array('title' => $this->l('Reg.'), 'width' => 30, 'align' => 'center'),
 			'cache_orders' => array('title' => $this->l('Ord.'), 'width' => 30, 'align' => 'center'),
 			'cache_sales' => array('title' => $this->l('Sales'), 'width' => 80, 'align' => 'right', 'prefix' => '<b>', 'suffix' => '</b>', 'price' => true),
-			'cart' => array('title' => $this->l('Avg. cart'), 'width' => 50, 'align' => 'right', 'price' => true),
+			'cart' => array('title' => $this->l('Avg. cart'), 'width' => 50, 'align' => 'right', 'price' => true, 'havingFilter' => true),
 			'cache_reg_rate' => array('title' => $this->l('Reg. rate'), 'width' => 30, 'align' => 'center'),
 			'cache_order_rate' => array('title' => $this->l('Order rate'), 'width' => 30, 'align' => 'center'),
-			'fee0' => array('title' => $this->l('Click'), 'width' => 30, 'align' => 'right', 'price' => true),
-			'fee1' => array('title' => $this->l('Base'), 'width' => 30, 'align' => 'right', 'price' => true),
-			'fee2' => array('title' => $this->l('Percent'), 'width' => 30, 'align' => 'right', 'price' => true));
+			'fee0' => array('title' => $this->l('Click'), 'width' => 30, 'align' => 'right', 'price' => true, 'havingFilter' => true),
+			'fee1' => array('title' => $this->l('Base'), 'width' => 30, 'align' => 'right', 'price' => true, 'havingFilter' => true),
+			'fee2' => array('title' => $this->l('Percent'), 'width' => 30, 'align' => 'right', 'price' => true, 'havingFilter' => true));
 			
 		parent::__construct();
 	}
