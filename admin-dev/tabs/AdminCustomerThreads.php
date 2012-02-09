@@ -83,7 +83,7 @@ class AdminCustomerThreads extends AdminTab
 			'status' => array('title' => $this->l('Status'), 'width' => 50, 'type' => 'select', 'select' => $statusArray, 'icon' => $imagesArray, 'align' => 'center', 'filter_key' => 'a!status', 'filter_type' => 'string'),
 			'employee' => array('title' => $this->l('Employee'), 'width' => 100, 'filter_key' => 'employee', 'tmpTableFilter' => true),
 			'messages' => array('title' => $this->l('Messages'), 'width' => 50, 'filter_key' => 'messages', 'tmpTableFilter' => true, 'maxlength' => 0),
-			'date_upd' => array('title' => $this->l('Last message'), 'width' => 90)
+			'date_upd' => array('title' => $this->l('Last message'), 'width' => 90, 'havingFilter' => true)
 		);
 
 		parent::__construct();
