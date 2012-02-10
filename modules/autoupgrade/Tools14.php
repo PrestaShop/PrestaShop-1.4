@@ -537,7 +537,7 @@ class Tools14
 				elseif (file_exists($dirname.$file))
 					unlink($dirname.$file);
 			}
-		if ($delete_self)
+		if ($delete_self && is_dir($dirname))
 			rmdir($dirname);
 	}
 

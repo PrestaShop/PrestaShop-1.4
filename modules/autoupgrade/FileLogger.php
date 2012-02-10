@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -24,26 +24,47 @@
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
-
-
-// autoloader 1.3 / 1.4 
-ob_start();
-$timerStart = microtime(true);
-
-require_once(AUTOUPGRADE_MODULE_DIR.'Tools14.php');
-require_once(AUTOUPGRADE_MODULE_DIR.'AdminSelfUpgrade.php');
-
-if (!class_exists('Tools',false))
-	eval('class Tools extends Tools14{}');
-
-
-require_once(_PS_ROOT_DIR_.'/modules/autoupgrade/Upgrader.php');
-	
-if (!class_exists('Upgrader',false))
+class FileLoggerCore extends AbstractLogger
 {
-	if(file_exists(_PS_ROOT_DIR_.'/override/classes/Upgrader.php'))
-		require_once(_PS_ROOT_DIR_.'/override/classes/Upgrader.php');
-	else
-		eval('class Upgrader extends UpgraderCore{}');
+	protected $filename = '';
+
+	/**
+	* Write the message in the log file
+	*
+	* @param string message
+	* @param level
+	*/
+	protected function logMessage($message, $level)
+	{
+		$formatted_message = '*'.$this->level_value[$level].'* '."\t".date('Y/m/d - H:i:s').': '.$message."\r\n";
+		return file_put_contents($this->getFilename(), $formatted_message, FILE_APPEND);
+	}
+
+	/**
+	* Check if the specified filename is writable and set the filename
+	*
+	* @param string filename
+	*/
+	public function setFilename($filename)
+	{
+		if (is_writable(dirname($filename)))
+			$this->filename = $filename;
+		else
+			die('Directory '.dirname($filename).' is not writable');
+	}
+
+	/**
+	* Log the message
+	*
+	* @param string message
+	* @param level
+	*/
+	public function getFilename()
+	{
+		if (empty($this->filename))
+			die('Filename is empty.');
+
+		return $this->filename;
+	}
 }
 

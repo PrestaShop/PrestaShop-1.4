@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop
+* 2007-2011 PrestaShop 
 *
 * NOTICE OF LICENSE
 *
@@ -68,7 +68,7 @@ class UpgraderCore
 
 	/**
 	 * downloadLast download the last version of PrestaShop and save it in $dest/$filename
-	 *
+	 * 
 	 * @param string $dest directory where to save the file
 	 * @param string $filename new filename
 	 * @return boolean
@@ -80,7 +80,7 @@ class UpgraderCore
 		if (empty($this->link))
 			$this->checkPSVersion();
 
-		$destPath =  realpath($dest).DIRECTORY_SEPARATOR.$filename;
+		$destPath = realpath($dest).DIRECTORY_SEPARATOR.$filename;
 		if (@copy($this->link, $destPath))
 			return true;
 		else
@@ -97,12 +97,11 @@ class UpgraderCore
 
 	/**
 	 * checkPSVersion ask to prestashop.com if there is a new version. return an array if yes, false otherwise
-	 *
+	 * 
 	 * @return mixed
 	 */
 	public function checkPSVersion($force = false)
 	{
-
 		if (class_exists('Configuration'))
 			$last_check = Configuration::get('PS_LAST_VERSION_CHECK');
 		else
@@ -159,7 +158,7 @@ class UpgraderCore
 
 	/**
 	 * load the last version informations stocked in base
-	 *
+	 * 
 	 * @return $this
 	 */
 	public function loadFromConfig()
@@ -192,16 +191,61 @@ class UpgraderCore
 	}
 
 	/**
-	 * return an array of files
-	 * that the md5file does not match to the original md5file (provided by $rss_md5file_link_dir )
-	 * @return void
+	 * delete the file /config/xml/$version.xml if exists
+	 * 
+	 * @param string $version
+	 * @return boolean true if succeed
 	 */
-	public function getChangedFilesList()
+	public function clearXmlMd5File($version)
 	{
+		$filename = _PS_ROOT_DIR_.'/config/xml/'.$version.'.xml';
+		if (file_exists($filename))
+			return unlink ($filename);
+		return true;
+	}
+	/**
+	 * return a xml containing the list of all default PrestaShop files for version $version, 
+	 * and their respective md5sum
+	 * 
+	 * @param string $version 
+	 * @return SimpleXMLElement or false if error
+	 */
+	public function getXmlMd5File($version)
+	{
+		// @TODO : this has to be moved in autoupgrade.php > install method
+		if (!is_dir(_PS_ROOT_DIR_.'/config/xml'))
+		{
+			if (is_file(_PS_ROOT_DIR_.'/config/xml'))
+				unlink(_PS_ROOT_DIR_.'/config/xml');
+
+			mkdir(_PS_ROOT_DIR_.'/config/xml', 0777);
+		}
+		$filename = _PS_ROOT_DIR_.'/config/xml/'.$version.'.xml';
+		// @todo maybe use a longer cache than 24h (or make it unlimited, with a way to reset it)
+		if (!file_exists($filename) || filemtime($filename) < time() - (3600 * Upgrader::DEFAULT_CHECK_VERSION_DELAY_HOURS))
+		{
+			$xml_content = file_get_contents($this->rss_md5file_link_dir.$version.'.xml', false, stream_context_create(array('http' => array('timeout' => 3))));
+			$checksum = @simplexml_load_string($xml_content);
+			if ($checksum !== false)
+				file_put_contents($filename, $xml_content);
+		}
+		else
+			$checksum = @simplexml_load_file($filename);
+		return $checksum;
+	}
+
+	/**
+	 * returns an array of files which are present in PrestaShop version $version and has been modified 
+	 * in the current filesystem.
+	 * @return array of string> array of filepath
+	 */
+	public function getChangedFilesList($version = null)
+	{
+		if (empty($version))
+			$version = _PS_VERSION_;
 		if (is_array($this->changed_files) && count($this->changed_files) == 0)
 		{
-			libxml_set_streams_context(@stream_context_create(array('http' => array('timeout' => 3))));
-			$checksum = @simplexml_load_file($this->rss_md5file_link_dir._PS_VERSION_.'.xml');
+			$checksum = $this->getXmlMd5File($version);
 			if ($checksum == false)
 			{
 				$this->changed_files = false;
@@ -213,13 +257,13 @@ class UpgraderCore
 	}
 
 	/** populate $this->changed_files with $path
-	 * in sub arrays  mail, translation and core items
+	 * in sub arrays  mail, translation and core items 
 	 * @param string $path filepath to add, relative to _PS_ROOT_DIR_
 	 */
 	protected function addChangedFile($path)
 	{
 		$this->version_is_modified = true;
-
+		
 		if (strpos($path, 'mails/') !== false)
 			$this->changed_files['mail'][] = $path;
 		else if (
@@ -244,6 +288,102 @@ class UpgraderCore
 		$this->missing_files[] = $path;
 	}
 
+	
+	public function md5FileAsArray($node, $dir = '/')
+	{
+		$array = array();
+		foreach ($node as $key => $child)
+		{
+			if (is_object($child) && $child->getName() == 'dir')
+			{
+				$dir = (string)$child['name'];
+				// $current_path = $dir.(string)$child['name'];
+				// @todo : something else than array pop ?
+				$dir_content = $this->md5FileAsArray($child, $dir);
+				$array[$dir] = $dir_content;
+			}
+			else if (is_object($child) && $child->getName() == 'md5file')
+				$array[(string)$child['name']] = (string)$child;
+		}
+		return $array;
+	}
+
+	/**
+	 * getDiffFilesList 
+	 * 
+	 * @param string $version1 
+	 * @param string $version2 
+	 * @param boolean $show_modif 
+	 * @return array array('modified'=>array(...), 'deleted'=>array(...))
+	 */
+	public function getDiffFilesList($version1, $version2, $show_modif = true)
+	{
+		$checksum1 = $this->getXmlMd5File($version1);
+		$checksum2 = $this->getXmlMd5File($version2);
+		$v1 = $this->md5FileAsArray($checksum1->ps_root_dir[0]);
+		$v2 = $this->md5FileAsArray($checksum2->ps_root_dir[0]);
+		if (empty($v1) || empty($v2))
+			return false;
+		$filesList = $this->compareReleases($v1, $v2, $show_modif);
+		if (!$show_modif)
+			return $filesList['deleted'];
+		return $filesList;
+
+	}
+
+	/**
+	 * returns an array of files which 
+	 * 
+	 * @param array $v1 result of method $this->md5FileAsArray()
+	 * @param array $v2 result of method $this->md5FileAsArray()
+	 * @param boolean $show_modif if set to false, the method will only
+	 *   list deleted files 
+	 * @param string $path 
+	 * 		deleted files in version $v2. Otherwise, only deleted.
+	 * @return array('modified' => array(files..), 'deleted' => array(files..)
+	 */
+	public function compareReleases($v1, $v2, $show_modif = true, $path = '/')
+	{
+		// in that array the list of files present in v1 deleted in v2
+		static $deletedFiles = array();
+		// in that array the list of files present in v1 modified in v2
+		static $modifiedFiles = array();
+
+		foreach ($v1 as $file => $md5)
+		{
+
+			if (is_array($md5))
+			{
+				$subpath = $path.$file;
+				if (isset($v2[$file]) && is_array($v2[$file]))
+					$this->compareReleases($md5, $v2[$file], $show_modif, $path.$file.'/');
+				else // also remove old dir
+					$deletedFiles[] = $subpath;
+			}
+			else
+			{
+				if (in_array($file, array_keys($v2)))
+				{
+					if ($show_modif && ($v1[$file] != $v2[$file]))
+						$modifiedFiles[] = $path.$file;
+					$exists = true;
+				}
+				else
+					$deletedFiles[] = $path.$file;
+			}
+		}
+		return array('deleted' => $deletedFiles, 'modified' => $modifiedFiles);
+	}
+
+	
+	/**
+	 * Compare the md5sum of the current files with the md5sum of the original 
+	 * 
+	 * @param mixed $node 
+	 * @param array $current_path 
+	 * @param int $level 
+	 * @return void
+	 */
 	protected function browseXmlAndCompare($node, &$current_path = array(), $level = 1)
 	{
 		foreach ($node as $key => $child)
@@ -261,11 +401,11 @@ class UpgraderCore
 					for ($i = 1; $i < $level; $i++)
 					$relative_path .= $current_path[$i].'/';
 				$relative_path .= (string)$child['name'];
-				$fullpath = _PS_ROOT_DIR_.DIRECTORY_SEPARATOR . $relative_path;
 
+				$fullpath = _PS_ROOT_DIR_.DIRECTORY_SEPARATOR.$relative_path;
 				$fullpath = str_replace('ps_root_dir', _PS_ROOT_DIR_, $fullpath);
 
-					// replace default admin dir by current one
+					// replace default admin dir by current one 
 				$fullpath = str_replace(_PS_ROOT_DIR_.'/admin', _PS_ADMIN_DIR_, $fullpath);
 				if (!file_exists($fullpath))
 					$this->addMissingFile($relative_path);
@@ -276,9 +416,9 @@ class UpgraderCore
 		}
 	}
 
-	protected function compareChecksum($path, $original_sum)
+	protected function compareChecksum($filepath, $md5sum)
 	{
-		if (md5_file($path) == $original_sum)
+		if (md5_file($filepath) == $md5sum)
 			return true;
 		return false;
 	}

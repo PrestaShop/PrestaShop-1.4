@@ -32,9 +32,10 @@ class Autoupgrade extends Module
 		$this->name = 'autoupgrade';
 		$this->tab = 'administration';
 		// version number x.y.z 
+		// x=0 means not yet considered as fully stable
 		// y+1 means a major bugfix or improvement
 		// z+1 means a bugfix
-		$this->version = '0.2.2';
+		$this->version = '0.3.0';
 
 		if (!defined('_PS_ADMIN_DIR_'))
 		{
@@ -58,11 +59,13 @@ class Autoupgrade extends Module
 		$res = true;
 		// before adding AdminSelfUpgrade, we should remove AdminUpgrade
 		$idTab = Tab::getIdFromClassName('AdminUpgrade');
-
 		if ($idTab)
 		{
 			$tab = new Tab($idTab);
-			$res &= $tab->delete();
+			// this deletion will not cancel the installation
+			$resDelete &= $tab->delete();
+			if (!$resDelete)
+				$this->_errors[] = sprintf($this->l('Unable to delete outdated AdminUpgrade tab %s'), $idTab);
 		}
 		
 		$idTab = Tab::getIdFromClassName('AdminSelfUpgrade');
@@ -77,32 +80,70 @@ class Autoupgrade extends Module
 			foreach ($languages as $lang)
 				$tab->name[$lang['id_lang']] = 'Upgrade';
 			$res &= $tab->save();
+			if (!$res)
+				$this->_errors[] = $this->l('New tab "AdminSelfUpgrade" cannot be created');
 		}
 		else
 			$tab = new Tab($idTab);
-		Configuration::updateValue('PS_AUTOUPDATE_MODULE_IDTAB',$tab->id);
+
+		Configuration::updateValue('PS_AUTOUPDATE_MODULE_IDTAB', $tab->id);
 
 		$autoupgradeDir = _PS_ADMIN_DIR_.DIRECTORY_SEPARATOR.'autoupgrade';
-		if (!file_exists($autoupgradeDir))
-			$res &= @mkdir($autoupgradeDir);
-		if (file_exists($autoupgradeDir.DIRECTORY_SEPARATOR.'ajax-upgradetab.php'))
+		if ($res && !file_exists($autoupgradeDir))
+		{
+			$res &= @mkdir($autoupgradeDir, 0755);
+			if (!$res)
+				$this->_errors[] = sprintf($this->l('unable to create %s'), $autoupgradeDir);
+		}
+
+		if ($res && file_exists($autoupgradeDir.DIRECTORY_SEPARATOR.'ajax-upgradetab.php'))
 			$res &= unlink($autoupgradeDir.DIRECTORY_SEPARATOR.'ajax-upgradetab.php');
+
 		if (!defined('_PS_MODULE_DIR_'))
 		{
 			define('_PS_MODULE_DIR_', _PS_ROOT_DIR_.'/modules/');
 		}
 		
-		$res &= copy(_PS_MODULE_DIR_.'autoupgrade/ajax-upgradetab.php',$autoupgradeDir . DIRECTORY_SEPARATOR . 'ajax-upgradetab.php');
-		$res &= copy(_PS_MODULE_DIR_.'autoupgrade/logo.gif',_PS_ROOT_DIR_. DIRECTORY_SEPARATOR . 'img/t/AdminSelfUpgrade.gif');
+		if ($res) 
+			if (!is_writable($autoupgradeDir))
+			{
+				$res = false;
+				$this->_errors[] = sprintf($this->l('%s is not writable'), $autoupgradeDir);
+			}
+		
+		if ($res)
+		{
+			$res &= copy(_PS_MODULE_DIR_.'autoupgrade/ajax-upgradetab.php', $autoupgradeDir.DIRECTORY_SEPARATOR.'ajax-upgradetab.php');
+			if (!$res)
+			{
+				$res = false;
+				$this->_errors[] = sprintf($this->l('Unable to copy ajax-upgradetab.php in %s'), $autoupgradeDir);
+			}
+		}
+		
+		if ($res)
+		{
+			$res &= copy(_PS_MODULE_DIR_.'autoupgrade/logo.gif',_PS_ROOT_DIR_. DIRECTORY_SEPARATOR . 'img/t/AdminSelfUpgrade.gif');
+			if (!$res)
+			{
+				$res = false;
+				$this->_errors[] = sprintf($this->l('Unable to copy logo.gif in %s'), $autoupgradeDir);
+			}
+		}
 
+		if ($res && !file_exists(_PS_ROOT_DIR_.'/config/xml'))
+			$res &= @mkdir(_PS_ROOT_DIR_.'/config/xml', 0755);
 		if (!$res 
 			OR !Tab::getIdFromClassName('AdminSelfUpgrade')
-			OR !parent::install()
-		)
+			OR !parent::install())
+		{
+			parent::uninstall();
 			return false;
+		}
 
 		return true;
 	}
+
 	public function uninstall()
 	{
 		$id_tab = Configuration::get('PS_AUTOUPDATE_MODULE_IDTAB');
@@ -125,13 +166,14 @@ class Autoupgrade extends Module
 			$res &= unlink(_PS_ADMIN_DIR_.DIRECTORY_SEPARATOR.'tabs'.'AdminUpgrade.php');
 		}
 		
-		if (file_exists(_PS_ADMIN_DIR_.DIRECTORY_SEPARATOR.'autoupgrade'.DIRECTORY_SEPARATOR.'ajax-upgradetab.php'))
-			$res &= @unlink(_PS_ADMIN_DIR_.DIRECTORY_SEPARATOR.'autoupgrade'.DIRECTORY_SEPARATOR.'ajax-upgradetab.php');
+		// if the function does not exists, ignore it
+		// (there is no return value in Tools::deleteDirectory)
+		if (method_exists('Tools', 'deleteDirectory'))
+			Tools::deleteDirectory(_PS_ADMIN_DIR_.DIRECTORY_SEPARATOR.'autoupgrade', false);
+
 		if (!$res OR !parent::uninstall())
 			return false;
 
 		return true;
 	}
-
-
 }

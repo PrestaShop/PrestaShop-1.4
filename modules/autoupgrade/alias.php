@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop 
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -25,25 +25,53 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-
-// autoloader 1.3 / 1.4 
-ob_start();
-$timerStart = microtime(true);
-
-require_once(AUTOUPGRADE_MODULE_DIR.'Tools14.php');
-require_once(AUTOUPGRADE_MODULE_DIR.'AdminSelfUpgrade.php');
-
-if (!class_exists('Tools',false))
-	eval('class Tools extends Tools14{}');
-
-
-require_once(_PS_ROOT_DIR_.'/modules/autoupgrade/Upgrader.php');
-	
-if (!class_exists('Upgrader',false))
+function fd($var)
 {
-	if(file_exists(_PS_ROOT_DIR_.'/override/classes/Upgrader.php'))
-		require_once(_PS_ROOT_DIR_.'/override/classes/Upgrader.php');
-	else
-		eval('class Upgrader extends UpgraderCore{}');
+	return (Tools::fd($var));
 }
 
+function p($var)
+{
+	return (Tools::p($var));
+}
+
+function d($var)
+{
+	Tools::d($var);
+}
+
+function ppp($var)
+{
+	return (Tools::p($var));
+}
+
+function ddd($var)
+{
+	Tools::d($var);
+}
+
+/**
+ * Sanitize data which will be injected into SQL query
+ *
+ * @param string $string SQL data which will be injected into SQL query
+ * @param boolean $htmlOK Does data contain HTML code ? (optional)
+ * @return string Sanitized data
+ */
+function pSQL($string, $htmlOK = false)
+{
+	return Db::getInstance()->escape($string, $htmlOK);
+}
+
+function bqSQL($string)
+{
+	return str_replace('`', '\`', pSQL($string));
+}
+
+/**
+ * @deprecated
+ */
+function nl2br2($string)
+{
+	Tools::displayAsDeprecated();
+	return Tools::nl2br($string);
+}
