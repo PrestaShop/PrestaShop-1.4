@@ -107,16 +107,14 @@ class Newsletter extends Module
 				else
 					$result = $this->_getBlockNewsletter();
 			}
-			if (!$nb = (int)(Db::getInstance(_PS_USE_SQL_SLAVE_)->NumRows()))
-				$this->_html .= $this->displayError($this->l('No customers found with these filters!'));
-			elseif ($fd = @fopen(dirname(__FILE__).'/'.strval(preg_replace('#\.{2,}#', '.', $_POST['action'])).'_'.$this->_file, 'w'))
+			if ($fd = @fopen(dirname(__FILE__).'/'.strval(preg_replace('#\.{2,}#', '.', $_POST['action'])).'_'.$this->_file, 'w'))
 			{
 				foreach ($result AS $tab)
 					$this->_my_fputcsv($fd, $tab);
 				fclose($fd);
 				$this->_html .= $this->displayConfirmation(
 				$this->l('The .CSV file has been successfully exported.').
-				' ('.$nb.' '.$this->l('customers found').')<br />> 
+				' ('.$nb.' '.$this->l('customers found').')<br /> 
 				<a href="../modules/newsletter/'.Tools::safeOutput(strval($_POST['action'])).'_'.$this->_file.'"><b>'.$this->l('Download the file').' '.$this->_file.'</b></a>
 				<br />
 				<ol style="margin-top: 10px;">
@@ -148,7 +146,7 @@ class Newsletter extends Module
 		$rq = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'newsletter`');
-		$header = array('id_customer', 'email', 'newsletter_date_add', 'ip_address');
+		$header = array('id_customer', 'email', 'newsletter_date_add', 'ip_address', 'http_referer');
 		$result = (is_array($rq) ? array_merge(array($header), $rq) : $header);
 		return $result;
 	}
