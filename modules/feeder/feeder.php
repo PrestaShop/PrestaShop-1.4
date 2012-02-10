@@ -84,4 +84,18 @@ class Feeder extends Module
 		));
 		return $this->display(__FILE__, 'feederHeader.tpl');
 	}
+
+	public function getContent()
+	{
+		/* display the module name */
+		$this->_html = '<h2>'.$this->displayName.'</h2><br />';
+		$this->_html .= $this->l('Url for example:').'<br />';
+
+		$orderBy = Tools::getProductsOrder('by');
+		$orderWay = Tools::getProductsOrder('way');
+		$this->_html .= Tools::getShopDomain(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/rss.php?id_category=<span style="color:red;">{id_category}</span>&amp;orderby='.$orderBy.'&amp;orderway='.$orderWay;
+		$this->_html .= '<br /><br />'.$this->l('Replace').' <span style="color:red;">{id_category}</span> '.$this->l('by the id category current or "0"');
+
+		return $this->_html;
+	}
 }
