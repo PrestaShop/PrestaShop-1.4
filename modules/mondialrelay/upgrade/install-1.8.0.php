@@ -75,7 +75,7 @@ function upgrade_module_1_8_0($object)
 		(id_mr_method, id_shop) VALUES ';
 
 	foreach ($methods as $method)
-		$query .= '('.(int)$method['id_mr_method'].', '.(int)$this->account_shop['id_shop'].'),';
+		$query .= '('.(int)$method['id_mr_method'].', '.(int)$object->account_shop['id_shop'].'),';
 	$query = trim($query, ',');
 	if (!Db::getInstance()->execute($query))
 	{
@@ -97,13 +97,13 @@ function upgrade_module_1_8_0($object)
 				IN (SELECT `id_carrier`
 						FROM `'._DB_PREFIX_.'mr_method`)');
 
-		if (!$this->isRegisteredInHook('newOrder'))
-			$this->registerHook('newOrder');
-		if (!$this->isRegisteredInHook('BackOfficeHeader'))
-			$this->registerHook('BackOfficeHeader');
+		if (!$object->isRegisteredInHook('newOrder'))
+			$object->registerHook('newOrder');
+		if (!$object->isRegisteredInHook('BackOfficeHeader'))
+			$object->registerHook('BackOfficeHeader');
 
-		if (!$this->isRegisteredInHook('header'))
-			$this->registerHook('header');
+		if (!$object->isRegisteredInHook('header'))
+			$object->registerHook('header');
 
 		// Insert back all existing carrier with asssociated shop (1 by default)
 		$methods = Db::getInstance()->executeS('
