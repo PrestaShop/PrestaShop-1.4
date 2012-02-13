@@ -30,12 +30,14 @@ include(dirname(__FILE__).'/paysafecard.php');
 
 $module = new PaysafeCard();
 
+$url = (_PS_VERSION_ < '1.5') ? 'order.php?step=3' : 'index.php?controller=order&step=3';
+
 if (!$cart->id OR $cart->id_customer == 0 OR $cart->id_address_delivery == 0 OR $cart->id_address_invoice == 0 OR !$module->active)
-	Tools::redirect('order.php?step=3');
+	Tools::redirect($url);
 	
 $currency = new Currency($cart->id_currency);
 if (!$module->isCurrencyActive($currency->iso_code))
-	Tools::redirect('order.php?step=3');
+	Tools::redirect($url);
 
 $result = $module->createDisposition($cart);
 

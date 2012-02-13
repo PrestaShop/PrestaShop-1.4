@@ -47,9 +47,9 @@ class PaysafeCard extends PSCPrepaidServices
 
 	protected $supported_currencies = array('EUR', 'GBP', 'CHF', 'USD', 'PLN', 'CZK', 'SEK', 'DKK', 'RON', 'NOK', 'ARS');
 
-	protected $register_url = array('en' => 'http://www.prestashop.com/partner/url.php?to=http://www.paysafecard.com/index.php?id=947&L=8',
-	                                'fr' => 'http://www.prestashop.com/partner/url.php?to=http://www.paysafecard.com/index.php?id=947&L=3',
-	                                'es' => 'http://www.prestashop.com/partner/url.php?to=http://www.paysafecard.com/index.php?id=947&L=9');
+	protected $register_url = array('en' => 'http://api.prestashop.com/partner/url.php?to=http://www.paysafecard.com/index.php?id=947&L=8',
+	                                'fr' => 'http://api.prestashop.com/partner/url.php?to=http://www.paysafecard.com/index.php?id=947&L=3',
+	                                'es' => 'http://api.prestashop.com/partner/url.php?to=http://www.paysafecard.com/index.php?id=947&L=9');
 
 
 	protected $certificat_dir;
@@ -58,7 +58,7 @@ class PaysafeCard extends PSCPrepaidServices
 	{
 		$this->name = 'paysafecard';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.3';
+		$this->version = '1.4';
 		$this->module_dir = dirname(__FILE__);
 		$this->certificat_dir = dirname(__FILE__).'/keyring/';
 		$this->need_instance = 0;
@@ -74,6 +74,9 @@ class PaysafeCard extends PSCPrepaidServices
 			foreach ($updateConfig as $u)
 				if (!Configuration::get($u) && defined('_'.$u.'_'))
 					Configuration::updateValue($u, constant('_'.$u.'_'));
+
+		/** Backward compatibility */
+		require(_PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php');
 	}
 
 	public function getL($key)
@@ -122,6 +125,19 @@ class PaysafeCard extends PSCPrepaidServices
 						   2 => $this->l('Invalid amount'));
 
 		return $error_msg[$error_code];
+	}
+	
+	/**
+	 * Set the detail of a payment - Call before the validate order init
+	 * correctly the pcc object
+	 * See Authorize documentation to know the associated key => value
+	 * @param array fields
+	 */
+	public function setTransactionDetail($response)
+	{
+		// If Exist we can store the details
+		if (isset($this->pcc))
+			$this->pcc->transaction_id = (string)$response['transaction_id'];
 	}
 }
 

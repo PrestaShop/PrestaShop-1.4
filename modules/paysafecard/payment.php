@@ -30,12 +30,14 @@ include(dirname(__FILE__).'/paysafecard.php');
 
 $module = new PaysafeCard();
 
+$url = (_PS_VERSION_ < '1.5') ? 'order.php?step=3' : 'index.php?controller=order&step=3';
+
 if (!$cart->id OR $cart->id_customer == 0 OR $cart->id_address_delivery == 0 OR $cart->id_address_invoice == 0 OR !$module->active)
-	Tools::redirect('order.php?step=3');
+	Tools::redirect($url);
 
 $currency = new Currency($cart->id_currency);
 if (!$module->isCurrencyActive($currency->iso_code))
-	Tools::redirect('order.php?step=3');
+	Tools::redirect($url);
 
 $amount = number_format((float)($cart->getOrderTotal(true, Cart::BOTH)), 2, '.','');
 if (Tools::getValue('hash') != md5(Configuration::get($module->prefix.'SALT') + $amount + $currency->iso_code)) 
@@ -84,7 +86,11 @@ if ($state != Configuration::get('PS_OS_ERROR'))
 	} 
 }
 
-$module->validateOrder((int)($cart->id), $state, (float)($cart->getOrderTotal(true, Cart::BOTH)), $module->displayName, $message, NULL, (int)($currency->id), false, $cart->secure_key);
+$module->setTransactionDetail(array(
+	'transaction_id', $disposition['mtid']));
+
+$module->validateOrder((int)($cart->id), $state, (float)($cart->getOrderTotal(true, Cart::BOTH)), 
+	$module->displayName, $message, NULL, (int)($currency->id), false, $cart->secure_key);
 
 if ($state == Configuration::get('PS_OS_ERROR')) 
 {
@@ -95,7 +101,11 @@ if ($state == Configuration::get('PS_OS_ERROR'))
 else 
 {
 	$order = new Order($module->currentOrder);
-	Tools::redirect('order-confirmation.php?id_cart='.(int)($cart->id).'&id_module='.(int)($module->id).'&id_order='.(int)($module->currentOrder).'&key='.$order->secure_key);
+
+	$url = 'order-confirmation.php?id_cart=';
+	if (_PS_VERSION_ >= '1.5')
+		$url = 'index.php?controller=order-confirmation&id_cart=';
+	Tools::redirect($url.(int)($cart->id).'&id_module='.(int)($module->id).'&id_order='.(int)($module->currentOrder).'&key='.$order->secure_key);
 }
 
 
