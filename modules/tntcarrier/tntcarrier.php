@@ -27,7 +27,7 @@ class TntCarrier extends CarrierModule
 	{
 		$this->name = 'tntcarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.6.5';
+		$this->version = '1.6.6';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 
@@ -117,6 +117,7 @@ class TntCarrier extends CarrierModule
 			if ($serviceList == false)
 				return false;
 		}
+
 		foreach($serviceList as $k => $v)
 		{
 			$carrierConfig = array(
@@ -214,11 +215,12 @@ class TntCarrier extends CarrierModule
 	public function uninstall()
 	{
 		// Uninstall Carriers
+		// 1.5 id_shop !!
 		Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier', array('deleted' => 1), 'UPDATE', '`external_module_name` = \'tntcarrier\'');
 		// Uninstall Config
 		foreach ($this->_fieldsList as $keyConfiguration => $name)
 			if (!Configuration::deleteByName($keyConfiguration))
-				return false;	
+				return false;
 		// Uninstall SQL
 		include(dirname(__FILE__).'/sql-uninstall.php');
 		foreach ($sql as $s)
@@ -254,14 +256,17 @@ class TntCarrier extends CarrierModule
 	private function _displayForm()
 	{
 		global $smarty;
-		
+
+		$shop = (_PS_VERSION_ >= 1.5 ? Context::getContext()->shop->getID() : '');
+
 		$globalVar = array(
 		'tab' => htmlentities(Tools::getValue('tab')),
 		'configure' => htmlentities(Tools::getValue('configure')),
 		'token' => htmlentities(Tools::getValue('token')),
 		'tab_module' => htmlentities(Tools::getValue('tab_module')),
 		'module_name' => htmlentities(Tools::getValue('module_name')),
-		'tnt_token' => Configuration::get('TNT_CARRIER_TOKEN'));
+		'tnt_token' => Configuration::get('TNT_CARRIER_TOKEN'),
+		'shop' => $shop);
 		
 		$smarty->assign('glob', $globalVar);
 		
@@ -1030,7 +1035,8 @@ class TntCarrier extends CarrierModule
 	*/
 	
 	public function getOrderShippingCost($params, $shipping_cost)
-	{	
+	{
+
 		if (!$this->active)
 			return false;
 		if (!Configuration::get('TNT_CARRIER_LOGIN') || !Configuration::get('TNT_CARRIER_PASSWORD') || !Configuration::get('TNT_CARRIER_NUMBER_ACCOUNT'))
@@ -1039,7 +1045,7 @@ class TntCarrier extends CarrierModule
 			return false;
 		if (!extension_loaded('soap'))
 			return false;
-			
+
 		$product = $params->getProducts();
 		$weight = 0;
 		$add = 0;
@@ -1057,9 +1063,9 @@ class TntCarrier extends CarrierModule
 				$serviceCache->deletePreviousServices();
 				$tntWebService = new TntWebService();
 				if (date("N") == 6)
-					$date_exp = date("Y-m-d", mktime(0, 0, 0, date("m")  , date("d")+2, date("Y")));
+					$date_exp = date("Y-m-d", strtotime("now + 2 days"));
 				elseif (date("N") == 7)
-					$date_exp = date("Y-m-d", mktime(0, 0, 0, date("m")  , date("d")+1, date("Y")));
+					$date_exp = date("Y-m-d", strtotime("now + 1 day"));
 				try {
 						$service = $tntWebService->faisabilite($date_exp, Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE'), $this->putCityInNormeTnt(Configuration::get('TNT_CARRIER_SHIPPING_CITY')), 
 										$info['postcode'], $this->putCityInNormeTnt($info['city']), 'INDIVIDUAL');
@@ -1100,7 +1106,6 @@ class TntCarrier extends CarrierModule
 			$add += (float)($weightLimit['additionnal_charges']);
 		if (substr($info['postcode'], 0, 2) == "20")
 			$add += (float)(Configuration::get('TNT_CARRIER_CORSE_OVERCOST'));
-		
 		if (isset($priceCarrier))
 			return ((($priceCarrier + $add) * $currency['conversion_rate']) + $shipping_cost);
 		return false;

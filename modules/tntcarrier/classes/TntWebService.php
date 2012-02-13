@@ -9,11 +9,20 @@ class TntWebService
 	private $header;
 	private $file;
 	
-	public	function __construct()
+	public	function __construct($id_shop = null)
 	{
-		$this->_login = Configuration::get('TNT_CARRIER_LOGIN');
-		$this->_password = Configuration::get('TNT_CARRIER_PASSWORD');
-		$this->_account = Configuration::get('TNT_CARRIER_NUMBER_ACCOUNT');
+		if (_PS_VERSION_ >= 1.5)
+		{
+			$this->_login = Configuration::get('TNT_CARRIER_LOGIN', null, null, $id_shop);
+			$this->_password = Configuration::get('TNT_CARRIER_PASSWORD', null, null, $id_shop);
+			$this->_account = Configuration::get('TNT_CARRIER_NUMBER_ACCOUNT', null, null, $id_shop);
+		}
+		else
+		{
+			$this->_login = Configuration::get('TNT_CARRIER_LOGIN');
+			$this->_password = Configuration::get('TNT_CARRIER_PASSWORD');
+			$this->_account = Configuration::get('TNT_CARRIER_NUMBER_ACCOUNT');
+		}
 		
 		$this->_authheader = $this->genAuth();
 		$this->_authvars = new SoapVar($this->_authheader, XSD_ANYXML);
@@ -36,7 +45,7 @@ class TntWebService
 	{
 		$soapclient = new SoapClient($this->_file, array('trace'=>1));
 		$soapclient->__setSOAPHeaders(array($this->_header));
-		
+
 		$cities = $soapclient->citiesGuide(array('zipCode' => $postal));
 		return ($cities);
 	}
@@ -81,9 +90,9 @@ class TntWebService
 	{
 		$city = iconv("utf-8", 'ASCII//TRANSLIT', $city);
 		$city = mb_strtoupper($city, 'utf-8');
-		$table = array('`' => '','\''=> '', '^' => '','À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
-        'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O',
-        'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U', 'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'İ'=>'Y', 'Ş'=>'B');
+		$table = array('`' => '','\''=> '', '^' => '','ï¿½'=>'A', 'ï¿½'=>'A', 'ï¿½'=>'A', 'ï¿½'=>'A', 'ï¿½'=>'A', 'ï¿½'=>'A', 'ï¿½'=>'A', 'ï¿½'=>'C', 'ï¿½'=>'E', 'ï¿½'=>'E',
+        'ï¿½'=>'E', 'ï¿½'=>'E', 'ï¿½'=>'I', 'ï¿½'=>'I', 'ï¿½'=>'I', 'ï¿½'=>'I', 'ï¿½'=>'N', 'ï¿½'=>'O', 'ï¿½'=>'O', 'ï¿½'=>'O',
+        'ï¿½'=>'O', 'ï¿½'=>'O', 'ï¿½'=>'O', 'ï¿½'=>'U', 'ï¿½'=>'U', 'ï¿½'=>'U', 'ï¿½'=>'U', 'ï¿½'=>'Y', 'ï¿½'=>'B');
 		$city = strtr($city, $table);
 		$old = array("SAINT", "-");
 		$new = array("ST", " ");

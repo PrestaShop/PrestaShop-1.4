@@ -10,7 +10,7 @@
 		<label>{l s='Address line 2' mod='tntcarrier'} : </label>
 		<div class="margin-form"><input type="text" size="20" id="tnt_carrier_shipping_address2" name="tnt_carrier_shipping_address2" value="{$varShipping.address2}" /></div>
 		<label>{l s='Postal Code' mod='tntcarrier'} : </label>
-		<div class="margin-form"><input type="text" size="20" id="tnt_carrier_shipping_postal_code" name="tnt_carrier_shipping_postal_code" value="{$varShipping.zipCode}" onkeyup="displayCity()"/> <span style="color:red">*</span> <span id="resultCity"></span></div>
+		<div class="margin-form"><input type="text" size="20" id="tnt_carrier_shipping_postal_code" name="tnt_carrier_shipping_postal_code" value="{$varShipping.zipCode}" onkeyup="displayCity({$glob.shop})"/> <span style="color:red">*</span> <span id="resultCity"></span></div>
 		<label>{l s='City' mod='tntcarrier'} : </label>
 		<div class="margin-form">
 		<select disabled="disabled" id="tnt_carrier_shipping_city" name="tnt_carrier_shipping_city" style="width:130px" >

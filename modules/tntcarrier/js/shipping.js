@@ -85,14 +85,14 @@ function changeValueTntRC(code, name, address1, address2, zipcode, city)
 	document.getElementById("tntRCSelectedCommune").value = city;
 }
 
-function	displayCity()
+function	displayCity(id_shop)
 {
 	var postal = $("#tnt_carrier_shipping_postal_code").val();
 	if (postal.length == 5)
 	{
 		$("#resultCity").html("");
 		$.get(
-			"../modules/tntcarrier/tntGetCity.php?code="+postal,
+			"../modules/tntcarrier/tntGetCity.php?code="+postal+"&id_shop="+id_shop,
 			function(response, status, xhr) 
 				{
 					if (status == "error") 

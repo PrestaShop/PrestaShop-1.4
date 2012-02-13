@@ -1,8 +1,9 @@
-<?php
+	<?php
 include( '../../config/config.inc.php' );
 require_once(_PS_MODULE_DIR_."/tntcarrier/classes/TntWebService.php");
 
 $postal = htmlentities($_GET['code']);
+
 $cities = array();
 
 if ($postal == '75000')
@@ -38,7 +39,10 @@ else
 {
 	try
 	{
-		$tntWebService = new TntWebService();
+		if (isset($_GET['id_shop']))
+			$tntWebService = new TntWebService(Tools::safeOutput($_GET['id_shop']));
+		else
+			$tntWebService = new TntWebService();
 		$cities = $tntWebService->getCity($postal);
 	} 
 	catch( SoapFault $e ) 
