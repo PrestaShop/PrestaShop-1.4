@@ -37,7 +37,7 @@ class Hipay extends PaymentModule
 	{
 		$this->name = 'hipay';
 		$this->tab = 'payments_gateways';
-		$this->version = 1.1;
+		$this->version = 1.2;
 
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
