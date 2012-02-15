@@ -60,6 +60,8 @@ foreach ($errors AS $error)
 $message = nl2br(strip_tags($message));
 
 $id_cart = (int)(substr($_POST['transaction_id'], 0, strpos($_POST['transaction_id'], '_')));
+if (_PS_VERSION_ >= 1.5)
+	Context::getContext()->cart = new Cart((int)$id_cart);
 $secure_cart = explode('_', $_POST['transaction_id']);
 $status = (int)($_POST['status']);
 if (!isset($secure_cart[2]))
