@@ -25,7 +25,8 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-define('PS_ADMIN_DIR', getcwd());
+define('_PS_ADMIN_DIR_', getcwd());
+define('PS_ADMIN_DIR', _PS_ADMIN_DIR_); // Retro-compatibility
 
 include(PS_ADMIN_DIR.'/../config/config.inc.php');
 include(PS_ADMIN_DIR.'/functions.php');
