@@ -135,7 +135,7 @@ class Hipay extends PaymentModule
 		$hipayPassword = ($this->prod ? Configuration::get('HIPAY_PASSWORD_'.$currency->iso_code) : Configuration::get('HIPAY_PASSWORD_TEST_'.$currency->iso_code));
 		$hipaySiteId = ($this->prod ? Configuration::get('HIPAY_SITEID_'.$currency->iso_code) : Configuration::get('HIPAY_SITEID_TEST_'.$currency->iso_code));
 		$hipayCategory = ($this->prod ? Configuration::get('HIPAY_CATEGORY_'.$currency->iso_code) : Configuration::get('HIPAY_CATEGORY_TEST_'.$currency->iso_code));
-		
+
 		if ($hipayAccount AND $hipayPassword AND $hipaySiteId AND $hipayCategory AND Configuration::get('HIPAY_RATING'))
 		{
 			$smarty->assign('hipay_prod', $this->prod);
@@ -276,6 +276,9 @@ class Hipay extends PaymentModule
 			return false;
 		}
 		
+		if (_PS_VERSION_ >= 1.5)
+			Context::getContext()->cart = new Cart((int)$id_cart);
+		
 		$cart = new Cart((int)$id_cart);
 		if ($cart->secure_key != Tools::getValue('token'))
 			file_put_contents('logs'.Configuration::get('HIPAY_UNIQID').'.txt', '['.date('Y-m-d H:i:s').'] Token error: '.htmlentities($_POST['xml'])."\n", FILE_APPEND);
@@ -334,6 +337,8 @@ class Hipay extends PaymentModule
 	{
 		global $currentIndex, $cookie;
 
+		if ($currentIndex == '' && _PS_VERSION_ >= 1.5)
+			$currentIndex = 'index.php?controller='.Tools::safeOutput(Tools::getValue('controller'));
 		$currencies = DB::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT c.iso_code, c.name, c.sign FROM '._DB_PREFIX_.'currency c');
 		
 		if (Tools::isSubmit('submitHipayAZ')) 
@@ -357,12 +362,14 @@ class Hipay extends PaymentModule
 			}
 			$request = 'SELECT id_country FROM '._DB_PREFIX_.'country WHERE ';
 			$results = Db::getInstance()->ExecuteS($request.$this->getRequestZones('id_zone'));
+
 			foreach ($results as $rowValues)
-				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'module_country VALUE('.(int)$this->id.', '.(int)$rowValues['id_country'].')');
+				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'module_country VALUE('.(int)$this->id.', '.(_PS_VERSION_ >= 1.5 ?  Context::getContext()->shop->getID().',' : '').' '.(int)$rowValues['id_country'].')');
 			
 		}
 		elseif (Tools::isSubmit('submitHipay'))
 		{
+			
 			Configuration::updateValue('HIPAY_PROD', Tools::getValue('HIPAY_PROD'));
 			$this->prod = (int)Tools::getValue('HIPAY_PROD', Configuration::get('HIPAY_PROD'));
 			
@@ -477,7 +484,8 @@ class Hipay extends PaymentModule
 				<a style="color:blue; text-decoration:underline;" href="mailto:commercial@hipay.com">'
 				.$this->l('contacting our sales department').'</a></td>
 			</tr>
-		</table>	
+		</table>
+		
 		<form action="'.$link.'" method="post">
 		<table id="hipay_table" cellspacing="0" cellpadding="0">
 			<tr>
