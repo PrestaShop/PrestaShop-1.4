@@ -71,7 +71,7 @@ class MondialRelay extends Module
 	{
 		$this->name		= 'mondialrelay';
 		$this->tab		= 'shipping_logistics';
-		$this->version	= '1.8';
+		$this->version	= '1.8.1';
 		$this->installed_version = '';
 
 		parent::__construct();
@@ -449,39 +449,6 @@ class MondialRelay extends Module
 			Db::getInstance()->execute($query);
 		}
 	}
-	
-	public function displayInfoByCart($id_cart)
-	{
-		$html = '<p>';
-		$simpleresul = Db::getInstance()->executeS('
-			SELECT * FROM ' . _DB_PREFIX_ . 'mr_selected 
-			WHERE id_cart='.(int)($id_cart));
-	
-		if (trim($simpleresul[0]['exp_number']) != '0') 
-			$html .= $this->l('Nb expedition:').$simpleresul[0]['exp_number']."<br>";
-		if (trim($simpleresul[0]['url_etiquette']) != '0') 
-			$html .= "<a href='".$simpleresul[0]['url_etiquette']."' target='etiquette".$simpleresul[0]['url_etiquette']."'>".$this->l('Label URL')."</a><br>";
-		if (trim($simpleresul[0]['url_suivi']) != '0')
-			$html .= "<a href='".$simpleresul[0]['url_suivi']."' target='suivi".$simpleresul[0]['exp_number']."'>".$this->l('Follow-up URL')."</a><br>";
-		if (trim($simpleresul[0]['MR_Selected_Num']) != '')
-			$html .= $this->l('Nb Point Relay :').$simpleresul[0]['MR_Selected_Num']."<br>";
-		if (trim($simpleresul[0]['MR_Selected_LgAdr1']) != '')
-			$html .= $simpleresul[0]['MR_Selected_LgAdr1']."<br>";
-		if (trim($simpleresul[0]['MR_Selected_LgAdr2']) != '')
-			$html .= $simpleresul[0]['MR_Selected_LgAdr2']."<br>";
-		if (trim($simpleresul[0]['MR_Selected_LgAdr3']) != '')
-			$html .= $simpleresul[0]['MR_Selected_LgAdr3']."<br>"; 
-		if (trim($simpleresul[0]['MR_Selected_LgAdr4']) != '')
-			$html .= $simpleresul[0]['MR_Selected_LgAdr4']."<br>"; 
-		if (trim($simpleresul[0]['MR_Selected_CP']) != '')
-			$html .= $simpleresul[0]['MR_Selected_CP']." ";
-		if (trim($simpleresul[0]['MR_Selected_Ville']) != '')
-			$html .= $simpleresul[0]['MR_Selected_Ville']."<br>";
-		if (trim($simpleresul[0]['MR_Selected_Pays']) != '')
-			$html .= $simpleresul[0]['MR_Selected_Pays']."<br>";
-		$html .= '</p>';
-		return $html;
-	}
 
 	/**
 	 * Get a carrier list liable to the module
@@ -816,6 +783,39 @@ class MondialRelay extends Module
 			$ret = $carrier->add();
 		}
 		return $ret ? $carrier->id : false;
+	}
+	
+	public function displayInfoByCart($id_cart)
+	{
+		$html = '<p>';
+		$simpleresul = Db::getInstance()->executeS('
+			SELECT * FROM ' . _DB_PREFIX_ . 'mr_selected 
+			WHERE id_cart='.(int)($id_cart));
+	
+		if (trim($simpleresul[0]['exp_number']) != '0') 
+			$html .= $this->l('Nb expedition:').$simpleresul[0]['exp_number']."<br>";
+		if (trim($simpleresul[0]['url_etiquette']) != '0') 
+			$html .= "<a href='".$simpleresul[0]['url_etiquette']."' target='etiquette".$simpleresul[0]['url_etiquette']."'>".$this->l('Label URL')."</a><br>";
+		if (trim($simpleresul[0]['url_suivi']) != '0')
+			$html .= "<a href='".$simpleresul[0]['url_suivi']."' target='suivi".$simpleresul[0]['exp_number']."'>".$this->l('Follow-up URL')."</a><br>";
+		if (trim($simpleresul[0]['MR_Selected_Num']) != '')
+			$html .= $this->l('Nb Point Relay :').$simpleresul[0]['MR_Selected_Num']."<br>";
+		if (trim($simpleresul[0]['MR_Selected_LgAdr1']) != '')
+			$html .= $simpleresul[0]['MR_Selected_LgAdr1']."<br>";
+		if (trim($simpleresul[0]['MR_Selected_LgAdr2']) != '')
+			$html .= $simpleresul[0]['MR_Selected_LgAdr2']."<br>";
+		if (trim($simpleresul[0]['MR_Selected_LgAdr3']) != '')
+			$html .= $simpleresul[0]['MR_Selected_LgAdr3']."<br>"; 
+		if (trim($simpleresul[0]['MR_Selected_LgAdr4']) != '')
+			$html .= $simpleresul[0]['MR_Selected_LgAdr4']."<br>"; 
+		if (trim($simpleresul[0]['MR_Selected_CP']) != '')
+			$html .= $simpleresul[0]['MR_Selected_CP']." ";
+		if (trim($simpleresul[0]['MR_Selected_Ville']) != '')
+			$html .= $simpleresul[0]['MR_Selected_Ville']."<br>";
+		if (trim($simpleresul[0]['MR_Selected_Pays']) != '')
+			$html .= $simpleresul[0]['MR_Selected_Pays']."<br>";
+		$html .= '</p>';
+		return $html;
 	}
 
 	/**
