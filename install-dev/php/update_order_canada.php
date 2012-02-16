@@ -26,8 +26,8 @@
 */
 
 function update_order_canada()
-	{
-	$sql ='SHOW TABLES LIKE "'._DB_PREFIX_.'order_tax"';
+{
+	$sql ='SHOW TABLES LIKE "'.str_replace('_', '\_', _DB_PREFIX_).'order\_tax"';
 	$table = Db::getInstance()->executeS($sql);
 
 	if (!count($table))
@@ -46,7 +46,7 @@ function update_order_canada()
 			WHERE name="PS_TAX_ADDRESS_TYPE"');
 		$address_field = str_replace('`','\`', $address_field);
 
-		$sql = 'SELECT `id_order`
+		$sql = 'SELECT `id_order`, `price_display_method`
 					FROM `'._DB_PREFIX_.'orders` o
 					LEFT JOIN `'._DB_PREFIX_.'customer` cus ON (o.id_customer = cus.id_customer)
 					LEFT JOIN `'._DB_PREFIX_.'group` g ON (g.id_group = cus.id_default_group)
@@ -66,7 +66,7 @@ function update_order_canada()
 			// 	returns Group::getDefaultPriceDisplayMethod
 			$tax_calculation_method = $order['price_display_method'];
 
-			$products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+			$products = Db::getInstance()->executeS('
 				SELECT * FROM `'._DB_PREFIX_.'order_detail` od
 				WHERE od.`id_order` = '.(int)$id_order);
 
@@ -116,9 +116,9 @@ function update_order_canada_ps_round($val){
 
 	switch ($ps_price_round_mode)
 	{
-		case PS_ROUND_UP:
+		case 0:
 			return ceil($val * 100)/100;
-		case PS_ROUND_DOWN:
+		case 1:
 			return floor($val * 100)/100;
 		default:
 			return round($val, 2);
