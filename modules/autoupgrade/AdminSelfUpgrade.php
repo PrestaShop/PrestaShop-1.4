@@ -2146,6 +2146,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 		while(($time_elapsed < self::$loopBackupDbTime) || ($written < 4194304));
 		if (isset($fp))
 		{
+			$this->nextParams['dbStep']++;
 			fclose($fp);
 			unset($fp);
 		}
