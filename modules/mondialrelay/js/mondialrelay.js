@@ -1030,6 +1030,25 @@ $(document).ready(function()
 
 	if (typeof(PS_MR_SELECTED_TAB ) != 'undefined')
 		$('#MR_' + PS_MR_SELECTED_TAB + '_block').fadeIn('fast');
+    
+    	// Have the <li> elements centered (TODO: Change it using css if possible)
+    	if ($('#MR_config_menu').size())
+    	{
+        	var width = $('#MR_config_menu').width();
+        
+        	// Take directly the ul width woudln't work
+        	var ul_width = 0;
+        
+        	$('#MR_config_menu').find('ul > li').each(function() {
+            
+            		var padding_left = parseInt($(this).css('padding-left').replace(/[^-\d\.]/g, ''));
+            		var padding_right = parseInt($(this).css('padding-right').replace(/[^-\d\.]/g, ''));
+            
+            		ul_width += parseInt($(this).width()) + padding_left + padding_right;
+        	});
+        
+        	width = ((width - ul_width) / 2);
+        	$('#MR_config_menu').children('ul').css('margin-left', width + 'px');
+    	}
 });
-
 

@@ -351,6 +351,14 @@ class MondialRelay extends Module
 			MondialRelay::$moduleURL = $protocol.$_SERVER['HTTP_HOST'].$endURL;
 	}
 
+	public function fetchTemplate($path, $name)
+	{
+		if (_PS_VERSION_ < '1.4')
+			$this->context->smarty->currentTemplate = $name;
+
+		return $this->context->smarty->fetch(dirname(__FILE__).$path.$name.'.tpl');
+	}
+
 	public function hookNewOrder($params)
 	{
 		DB::getInstance()->execute('
@@ -373,7 +381,7 @@ class MondialRelay extends Module
 			'MR_overload_current_jquery' => $overload_current_jquery,
 			'MR_account_set' => MondialRelay::isAccountSet()
 		));
-		return $this->context->smarty->fetch(dirname(__FILE__).'/tpl/bo-header.tpl');
+		return $this->fetchTemplate('/tpl/', 'bo-header');
 	}
 
 	public function hookOrderDetail($params)
@@ -405,7 +413,7 @@ class MondialRelay extends Module
 					$res['MR_Selected_Ville'].' - '.$res['MR_Selected_Pays'],
 				'mr_url' => $res['url_suivi']));
 
-		return $this->context->smarty->fetch(dirname(__FILE__).'/tpl/order_detail.tpl');
+		return $this->fetchTemplate('/tpl/', 'order_detail');
 	}
 
 	/*
@@ -512,7 +520,7 @@ class MondialRelay extends Module
 					'MRToken' => MondialRelay::$MRFrontToken,
 					'MR_overload_current_jquery' => false)
 			);
-			return $this->context->smarty->fetch(dirname(__FILE__).'/tpl/header.tpl');
+			return $this->fetchTemplate('/tpl/', 'header');
 		}
 		return '';
 	}
@@ -568,7 +576,7 @@ class MondialRelay extends Module
 			'MR_dlv_mode' => $id_carrier ? $carrier['dlv_mode']: ''
 		));
 
-		return $this->context->smarty->fetch(dirname(__FILE__).'/tpl/checkout_process.tpl');
+		return $this->fetchTemplate('/tpl/', 'checkout_process');
 	}
 
 	/**
@@ -754,8 +762,7 @@ class MondialRelay extends Module
 				'MR_upgrade_detail' => $this->upgrade_detail,
 				'MR_base_dir' => MondialRelay::$moduleURL)
 		);
-
-		return $this->context->smarty->fetch(dirname(__FILE__).'/tpl/configuration.tpl');
+		return $this->fetchTemplate('/tpl/', 'configuration');
 	}
 
 	/**

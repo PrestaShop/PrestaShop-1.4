@@ -405,7 +405,7 @@ div#PS_MRPersonalizedFields
 {
 	margin: 0 auto;
 	padding: 0;
-	width: 700px;
+    	width:100%;
 }
 
 #MR_config_menu ul > li

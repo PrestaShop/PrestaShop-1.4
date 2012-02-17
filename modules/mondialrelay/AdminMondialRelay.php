@@ -75,7 +75,7 @@ class AdminMondialRelay extends AdminTab
 		);
 
 		unset($order_state);
-		echo $this->context->smarty->fetch(dirname(__FILE__).'/tpl/admintab/generate_tickets.tpl');
+		echo $this->mondialrelay->fetchTemplate('/tpl/admintab/', 'generate_tickets');
 	}
 
 	public function displayhistoriqueForm()
@@ -85,8 +85,7 @@ class AdminMondialRelay extends AdminTab
 		$this->context->smarty->assign(array(
 			'MR_histories' => Db::getInstance()->executeS($query))
 		);
-
-		echo $this->context->smarty->fetch(dirname(__FILE__).'/tpl/admintab/history.tpl');
+		echo $this->mondialrelay->fetchTemplate('/tpl/admintab/', 'history');
 	}
 
 	public function displaySettings($post_action)
@@ -106,7 +105,7 @@ class AdminMondialRelay extends AdminTab
 			'MR_error_list' => $this->post_errors
 		));
 
-		echo $this->context->smarty->fetch(dirname(__FILE__).'/tpl/admintab/settings.tpl');
+		echo $this->mondialrelay->fetchTemplate('/tpl/admintab/', 'settings');
 	}
 
 	public function postProcess()
