@@ -80,7 +80,7 @@ class UpgraderCore
 		if (empty($this->link))
 			$this->checkPSVersion();
 
-		$destPath =  realpath($dest).DIRECTORY_SEPARATOR.$filename;
+		$destPath = realpath($dest).DIRECTORY_SEPARATOR.$filename;
 		if (@copy($this->link, $destPath))
 			return true;
 		else
@@ -102,7 +102,6 @@ class UpgraderCore
 	 */
 	public function checkPSVersion($force = false)
 	{
-
 		if (class_exists('Configuration'))
 			$last_check = Configuration::get('PS_LAST_VERSION_CHECK');
 		else
@@ -180,7 +179,7 @@ class UpgraderCore
 			if (isset($last_version_check['autoupgrade_last_version']))
 				$this->autoupgrade_last_version = $last_version_check['autoupgrade_last_version'];
 			if (isset($last_version_check['autoupgrade_module_link']))
-				$this->autoupgrade_module_link= $last_version_check['autoupgrade_module_link'];
+				$this->autoupgrade_module_link = $last_version_check['autoupgrade_module_link'];
 			if (isset($last_version_check['md5']))
 				$this->md5 = $last_version_check['md5'];
 			if (isset($last_version_check['desc']))
@@ -293,7 +292,7 @@ class UpgraderCore
 	public function md5FileAsArray($node, $dir = '/')
 	{
 		$array = array();
-		foreach($node as $key => $child)
+		foreach ($node as $key => $child)
 		{
 			if (is_object($child) && $child->getName() == 'dir')
 			{
@@ -317,16 +316,14 @@ class UpgraderCore
 	 * @param boolean $show_modif 
 	 * @return array array('modified'=>array(...), 'deleted'=>array(...))
 	 */
-	public  function getDiffFilesList($version1, $version2, $show_modif = true)
+	public function getDiffFilesList($version1, $version2, $show_modif = true)
 	{
 		$checksum1 = $this->getXmlMd5File($version1);
 		$checksum2 = $this->getXmlMd5File($version2);
 		$v1 = $this->md5FileAsArray($checksum1->ps_root_dir[0]);
 		$v2 = $this->md5FileAsArray($checksum2->ps_root_dir[0]);
 		if (empty($v1) || empty($v2))
-		{
 			return false;
-		}
 		$filesList = $this->compareReleases($v1, $v2, $show_modif);
 		if (!$show_modif)
 			return $filesList['deleted'];
@@ -359,9 +356,7 @@ class UpgraderCore
 			{
 				$subpath = $path.$file;
 				if (isset($v2[$file]) && is_array($v2[$file]))
-				{
 					$this->compareReleases($md5, $v2[$file], $show_modif, $path.$file.'/');
-				}
 				else // also remove old dir
 					$deletedFiles[] = $subpath;
 			}
@@ -369,14 +364,12 @@ class UpgraderCore
 			{
 				if (in_array($file, array_keys($v2)))
 				{
-					if($show_modif && ($v1[$file] != $v2[$file]))
+					if ($show_modif && ($v1[$file] != $v2[$file]))
 						$modifiedFiles[] = $path.$file;
 					$exists = true;
 				}
 				else
-				{
 					$deletedFiles[] = $path.$file;
-				}
 			}
 		}
 		return array('deleted' => $deletedFiles, 'modified' => $modifiedFiles);
@@ -409,7 +402,7 @@ class UpgraderCore
 					$relative_path .= $current_path[$i].'/';
 				$relative_path .= (string)$child['name'];
 
-				$fullpath = _PS_ROOT_DIR_.DIRECTORY_SEPARATOR . $relative_path;
+				$fullpath = _PS_ROOT_DIR_.DIRECTORY_SEPARATOR.$relative_path;
 				$fullpath = str_replace('ps_root_dir', _PS_ROOT_DIR_, $fullpath);
 
 					// replace default admin dir by current one 

@@ -57,6 +57,7 @@ $adminObj = new AdminSelfUpgrade();
 
 if (is_object($adminObj))
 {
+	$adminObj->ajax = 1;
 	if ($adminObj->checkToken())
 	{
 		// the differences with index.php is here 
