@@ -161,12 +161,20 @@ class AdminProducts extends AdminTab
 	{
 		if (!($id_product_download = ProductDownload::getIdFromIdProduct((int)Tools::getValue('id_product'))) && !Tools::getValue('file'))
 			return false;
-		$file = Tools::getValue('file');
-		$productDownload = new ProductDownload((int)($id_product_download));
-		$return = $productDownload->deleteFile();
-		if (!$return && file_exists(_PS_DOWNLOAD_DIR_.$file))
-			$return = unlink(_PS_DOWNLOAD_DIR_.$file);
-		return $return;
+
+		// case 1: product has been saved and product download entry has been created
+		if ($id_product_download)
+		{
+			$productDownload = new ProductDownload((int)($id_product_download));
+			return $productDownload->delete(true);
+		}
+		// case 2: product has not been created yet
+		else
+		{
+			$file = Tools::getValue('file');
+			if (file_exists(_PS_DOWNLOAD_DIR_.$file))
+				return unlink(_PS_DOWNLOAD_DIR_.$file);
+		}
 	}
 
 	/**

@@ -90,12 +90,19 @@ class ProductDownloadCore extends ObjectModel
 		parent::__construct($id_product_download);
 		// @TODO check if the file is present on hard drive
 	}
-	
-	public function delete($deleteFile=false)
+
+	/**
+	 * Delete object
+	 *
+	 * @param bool $deleteFile if true delete the file on disk
+	 * @return bool success
+	 */
+	public function delete($deleteFile = false)
 	{
 		if ($deleteFile)
-			return $this->deleteFile();
-		return true;
+			$this->deleteFile();
+
+		return parent::delete();
 	}
 
 	public function getFields()
@@ -129,6 +136,11 @@ class ProductDownloadCore extends ObjectModel
 	{
 		if (!$this->checkFile())
 			return false;
+
+		// Don't delete the file if it's still used somewhere else
+		if ($this->isUsedInMultipleProducts())
+			return true;
+
 		return unlink(_PS_DOWNLOAD_DIR_.$this->physically_filename);
 	}
 
@@ -271,6 +283,25 @@ class ProductDownloadCore extends ObjectModel
 		return $ret;
 	}
 
+	/**
+	 * Checks if a downloadable file is linked by more than one product (happens with product duplication)
+	 * @return bool
+	 */
+	public function isUsedInMultipleProducts()
+	{
+		if (!$this->physically_filename)
+			return false;
+
+		$result = Db::getInstance()->getValue('
+		SELECT COUNT(*)
+		FROM `'._DB_PREFIX_.'product_download`
+		WHERE `physically_filename` = \''.pSQL($this->physically_filename).'\'');
+
+		if ($result > 1)
+			return true;
+
+		return false;
+	}
 }
 
 
