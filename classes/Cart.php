@@ -114,6 +114,7 @@ class CartCore extends ObjectModel
 	const ONLY_SHIPPING = 5;
 	const ONLY_WRAPPING = 6;
 	const ONLY_PRODUCTS_WITHOUT_SHIPPING = 7;
+	const ONLY_PHYSICAL_PRODUCTS_WITHOUT_SHIPPING = 8;
 
 	public function getFields()
 	{
@@ -845,6 +846,7 @@ class CartCore extends ObjectModel
 	* Cart::ONLY_SHIPPING
 	* Cart::ONLY_WRAPPING
 	* Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING
+	* Cart::ONLY_PHYSICAL_PRODUCTS_WITHOUT_SHIPPING
 	*
 	* @param boolean $withTaxes With or without taxes
 	* @param integer $type Total type
@@ -855,7 +857,17 @@ class CartCore extends ObjectModel
 		if (!$this->id)
 			return 0;
 		$type = (int)($type);
-		if (!in_array($type, array(Cart::ONLY_PRODUCTS, Cart::ONLY_DISCOUNTS, Cart::BOTH, Cart::BOTH_WITHOUT_SHIPPING, Cart::ONLY_SHIPPING, Cart::ONLY_WRAPPING, Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING)))
+		if (!in_array($type, array(
+				Cart::ONLY_PRODUCTS,
+				Cart::ONLY_DISCOUNTS,
+				Cart::BOTH,
+				Cart::BOTH_WITHOUT_SHIPPING,
+				Cart::ONLY_SHIPPING,
+				Cart::ONLY_WRAPPING,
+				Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING,
+				Cart::ONLY_PHYSICAL_PRODUCTS_WITHOUT_SHIPPING,
+			)
+		))
 			die(Tools::displayError());
 
 		// no shipping cost if is a cart with only virtuals products
@@ -864,11 +876,25 @@ class CartCore extends ObjectModel
 			return 0;
 		if ($virtual AND $type == Cart::BOTH)
 			$type = Cart::BOTH_WITHOUT_SHIPPING;
-		$shipping_fees = ($type != Cart::BOTH_WITHOUT_SHIPPING AND $type != Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING) ? $this->getOrderShippingCost(NULL, (int)($withTaxes)) : 0;
+		
+		if (!in_array($type, array(Cart::BOTH_WITHOUT_SHIPPING, Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING, Cart::ONLY_PHYSICAL_PRODUCTS_WITHOUT_SHIPPING)))
+			$shipping_fees = $this->getOrderShippingCost(null, (int)($withTaxes));
+		else
+			$shipping_fees = 0;
+			
 		if ($type == Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING)
 			$type = Cart::ONLY_PRODUCTS;
 
 		$products = $this->getProducts();
+		
+		if ($type == Cart::ONLY_PHYSICAL_PRODUCTS_WITHOUT_SHIPPING)
+		{
+			foreach ($products as $key => $product)
+				if (ProductDownload::getIdFromIdProduct($product['id_product']))
+					unset($products[$key]);
+			$type = Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING;
+		}
+		
 		$order_total = 0;
 		if (Tax::excludeTaxeOption())
 			$withTaxes = false;
@@ -1006,7 +1032,7 @@ class CartCore extends ObjectModel
 				}
 
 		// Order total in default currency without fees
-		$order_total = $this->getOrderTotal(true, Cart::ONLY_PRODUCTS_WITHOUT_SHIPPING);
+		$order_total = $this->getOrderTotal(true, Cart::ONLY_PHYSICAL_PRODUCTS_WITHOUT_SHIPPING);
 
 		// Start with shipping cost at 0
 		$shipping_cost = 0;
