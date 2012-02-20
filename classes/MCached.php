@@ -35,7 +35,11 @@ class MCachedCore extends Cache
 		parent::__construct();
 		$this->connect();
 	}
-
+	public function __destruct()
+	{
+		return $this->close();
+	}
+	
 	public function connect()
 	{
 		$this->_memcacheObj = new Memcache();
@@ -154,7 +158,6 @@ class MCachedCore extends Cache
 			return false;
 		$this->_memcacheObj->set('keysCached', $this->_keysCached, 0, 0);
 		$this->_memcacheObj->set('tablesCached', $this->_tablesCached, 0, 0);
-		$this->close();
 	}
 	
 	public static function addServer($ip, $port, $weight)
