@@ -99,7 +99,7 @@ class AdminEmployees extends AdminTab
 					break;
 				}
 
-		echo '<script type="text/javascript" src="'._PS_JS_DIR_.'/jquery/jquery-colorpicker.js"></script>
+		echo '<script type="text/javascript" src="'._PS_JS_DIR_.'jquery/jquery-colorpicker.js"></script>
 		 	 <script type="text/javascript">
 				var employeePage = true;
 		 	 </script>
