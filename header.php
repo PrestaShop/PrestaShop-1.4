@@ -25,6 +25,15 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
+// Save the value of $useSSL ($useSSL will be overwritten by FrontController::__contruct())
+$saveSSL = false;
+if (isset($useSSL) and $useSSL)
+	$saveSSL = true;
+	
 $controller = new FrontController();
-$controller->displayHeader();
 
+// If $useSSL was set to "true", then overwrite its value to true 
+if ($saveSSL)
+	$useSSL = $controller->ssl = true;
+	
+$controller->displayHeader();
