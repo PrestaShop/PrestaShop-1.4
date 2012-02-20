@@ -217,7 +217,7 @@ class AdminOrders extends AdminTab
 					foreach ($customizationList as $key => $id_order_detail)
 					{
 						$full_product_list[$id_order_detail] = $id_order_detail;
-						$full_quantity_list[$id_order_detail] = $customizationQtyList[$key];
+						$full_quantity_list[$id_order_detail] += $customizationQtyList[$key];
 					}
 				}
 
@@ -427,7 +427,6 @@ class AdminOrders extends AdminTab
                     echo '
 						<input type="checkbox" name="id_customization['.$customizationId.']" id="id_customization['.$customizationId.']" value="'.$id_order_detail.'" onchange="setCancelQuantity(this, \''.$customizationId.'\', \''.(int)($customization['quantity'] - $customization['quantity_refunded']).'\')" '.(((int) ($customization['quantity_returned'] + $customization['quantity_refunded']) >= (int)($customization['quantity'])) ? 'disabled="disabled" ' : '').'/>';
 				else
-					echo '--';
 				echo '
 					</td>
 					<td class="cancelQuantity">';
