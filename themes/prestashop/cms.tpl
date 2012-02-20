@@ -57,7 +57,7 @@
 			</ul>
 		{/if}
 		{if isset($cms_pages) & !empty($cms_pages)}
-		<h4>{l s='List of pages in '}{$category->name}{l s=':'}</h4>
+		<h4>{l s='List of pages in'}&nbsp;{$category->name}{l s=':'}</h4>
 			<ul class="bullet">
 				{foreach from=$cms_pages item=cmspages}
 					<li>
