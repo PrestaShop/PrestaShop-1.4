@@ -132,7 +132,7 @@ abstract class DbCore
 				$query .= '`'.$key.'`,';
 			$query = rtrim($query, ',').') VALUES (';
 			foreach ($values AS $key => $value)
-				$query .= '\''.$value.'\',';
+				$query .= '\''.(is_bool($value) ? (int)$value : $value).'\',';
 			$query = rtrim($query, ',').')';
 			if ($limit)
 				$query .= ' LIMIT '.(int)($limit);
@@ -142,7 +142,7 @@ abstract class DbCore
 		{
 			$query = 'UPDATE `'.$table.'` SET ';
 			foreach ($values AS $key => $value)
-				$query .= '`'.$key.'` = \''.$value.'\',';
+				$query .= '`'.$key.'` = \''.(is_bool($value) ? (int)$value : $value).'\',';
 			$query = rtrim($query, ',');
 			if ($where)
 				$query .= ' WHERE '.$where;
@@ -177,7 +177,7 @@ abstract class DbCore
 				$query .= '`'.$key.'`,';
 			$query = rtrim($query, ',').') VALUES (';
 			foreach ($values AS $key => $value)
-				$query .= (($value === '' OR $value === NULL) ? 'NULL' : '\''.$value.'\'').',';
+				$query .= (($value === '' || $value === null) ? 'NULL' : '\''.(is_bool($value) ? (int)$value : $value).'\'').',';
 			$query = rtrim($query, ',').')';
 			if ($limit)
 				$query .= ' LIMIT '.(int)($limit);
@@ -187,7 +187,7 @@ abstract class DbCore
 		{
 			$query = 'UPDATE `'.$table.'` SET ';
 			foreach ($values AS $key => $value)
-				$query .= '`'.$key.'` = '.(($value === '' OR $value === NULL) ? 'NULL' : '\''.$value.'\'').',';
+				$query .= '`'.$key.'` = '.(($value === '' || $value === null) ? 'NULL' : '\''.(is_bool($value) ? (int)$value : $value).'\'').',';
 			$query = rtrim($query, ',');
 			if ($where)
 				$query .= ' WHERE '.$where;
