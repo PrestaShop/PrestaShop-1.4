@@ -107,7 +107,9 @@ class CustomerCore extends ObjectModel
 			'deleted' => array(),
 			'passwd' => array('setter' => 'setWsPasswd'),
 		),
-	);
+		'associations' => array(
+				'groups' => array('resource' => 'group'),
+		));
 
 	protected 	$table = 'customer';
 	protected 	$identifier = 'id_customer';
@@ -680,6 +682,24 @@ class CustomerCore extends ObjectModel
 		}
 		else
 			$this->passwd = Tools::encrypt($passwd);
+		return true;
+	}
+
+	public function getWsGroups()
+	{
+		return Db::getInstance()->ExecuteS('
+		SELECT cg.`id_group` as id
+		FROM '._DB_PREFIX_.'customer_group cg
+		WHERE cg.`id_customer` = '.(int)($this->id));
+	}
+	
+	public function setWsGroups($result)
+	{
+		$groups = array();
+		foreach ($result as $row)
+			$groups[] = $row['id'];
+		$this->cleanGroups();
+		$this->addGroups($groups);
 		return true;
 	}
 }
