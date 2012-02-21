@@ -4,13 +4,11 @@ include_once('../../config/config.inc.php');
 include_once('../../init.php');
 include_once('../../modules/socolissimo/socolissimo.php');
 
-global $cookie;
-
-if (Tools::getValue('token') == sha1('socolissimo'._COOKIE_KEY_.$cookie->id_cart))
+if (Tools::getValue('token') == sha1('socolissimo'._COOKIE_KEY_.Context::getContext()->cart->id))
 	die('INVALID TOKEN');
 
 $socolissimo = new Socolissimo();
-$result = $socolissimo->getDeliveryInfos($cookie->id_cart,$cookie->id_customer);
+$result = $socolissimo->getDeliveryInfos(Context::getContext()->cart->id, Context::getContext()->customer->id);
 if (!$result)
 	die('{"result" : false}');
 else

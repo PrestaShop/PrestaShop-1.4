@@ -24,6 +24,12 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
+<style type="text/css">
+	.soBackward_compat_tab { text-align: center; }
+	.soBackward_compat_tab a { margin: 10px; }
+
+</style>
+
 <a href="#" class="iframe" style="display:none" id="soLink"></a>
 {if isset($opc) && $opc}
 <script type="text/javascript">
@@ -45,6 +51,9 @@
 {/if}
 <script type="text/javascript">
 var soInputs = new Object();
+var soBwdCompat = "{$SOBWD_C}";
+var soCarrierId = "{$id_carrier}";
+
 {foreach from=$inputs item=input key=name name=myLoop}
 		soInputs.{$name} = "{$input|strip_tags|addslashes}";
 {/foreach}
@@ -90,10 +99,18 @@ var soInputs = new Object();
 		$(document).ready(function() 
 		{	
 			var interval;	
-			$('input[name=id_carrier]').change(function() {
-				so_click();	
-			});
-			so_click();	
+
+			// 1.4 way
+			if (!soBwdCompat)
+			{
+				$('input[name=id_carrier]').change(function() {
+					so_click();	
+				});
+				so_click();
+			}
+			// 1.5 way
+			else if (soCarrierId)
+				so_click();
 		});
 		
 	
@@ -113,7 +130,8 @@ var soInputs = new Object();
 						modifyCarrierLine(true);
 					},10);
 		}
-		else if ($('#id_carrier{/literal}{$id_carrier}{literal}').is(':not(:checked)'))
+		else if ((!soBwdCompat && $('#id_carrier{/literal}{$id_carrier}{literal}').is(':not(:checked)')) ||
+			(soBwdCompat && soCarrierId == 0))
 		{
 			$('[name=processCarrier]').unbind('click').click(function () {
 				return true;
@@ -131,6 +149,17 @@ var soInputs = new Object();
 
 function modifyCarrierLine(edit)
 {
+	if (soBwdCompat && soCarrierId > 0)
+	{
+		var carrier_block = $('input[class=delivery_option_radio]:checked').parent('div.delivery_option');
+	
+			// Simulate 1.4 table to store the fetched relay point 
+			$(carrier_block).append(
+				'<div><table width="' + $(carrier_block).width() + '"><tr>'
+					+	  '<td class="soBackward_compat_tab"><input type="hidden" id="id_carrier' + soCarrierId + '" value="' + soCarrierId + '" /></td>'
+					+ '</tr></table></div>');
+	}
+
 	if ($('#button_socolissimo').length != 0)
 	{
 		clearInterval(interval);
