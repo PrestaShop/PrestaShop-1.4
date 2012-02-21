@@ -81,12 +81,14 @@ class FrontControllerCore
 		if ($this->ssl AND !Tools::usingSecureMode() AND Configuration::get('PS_SSL_ENABLED'))
 		{
 			header('HTTP/1.1 301 Moved Permanently');
+			header('Cache-Control: no-cache');
 			header('Location: '.Tools::getShopDomainSsl(true).$_SERVER['REQUEST_URI']);
 			exit();
 		}
 		else if (Configuration::get('PS_SSL_ENABLED') AND Tools::usingSecureMode() AND !($this->ssl))
 		{
 			header('HTTP/1.1 301 Moved Permanently');
+			header('Cache-Control: no-cache');
 			header('Location: '.Tools::getShopDomain(true).$_SERVER['REQUEST_URI']);
 			exit();
 		}
@@ -356,9 +358,15 @@ class FrontControllerCore
 				if (!Tools::getValue('ajax') && !preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', (($this->ssl AND Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 				{
 					if ($_SERVER['REQUEST_URI'] == __PS_BASE_URI__)
+					{
 						header('HTTP/1.0 303 See Other');
+						header('Cache-Control: no-cache');
+					}
 					else
+					{
 						header('HTTP/1.0 301 Moved Permanently');
+						header('Cache-Control: no-cache');
+					}
 						
 					$params = '';
 					$excludedKey = array('isolang', 'id_lang');

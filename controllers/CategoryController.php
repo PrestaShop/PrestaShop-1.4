@@ -60,6 +60,7 @@ class CategoryControllerCore extends FrontController
 			if (!preg_match('/^'.Tools::pRegexp($currentURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 			{
 				header('HTTP/1.0 301 Moved');
+				header('Cache-Control: no-cache');
 				if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_ )
 					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$currentURL.'">'.$currentURL.'</a>');
 				Tools::redirectLink($currentURL);
@@ -174,7 +175,6 @@ class CategoryControllerCore extends FrontController
 	public function displayContent()
 	{
 		parent::displayContent();
-		self::$smarty->assign('categoryNameComplement', '');
 		self::$smarty->display(_PS_THEME_DIR_.'category.tpl');
 	}
 }
