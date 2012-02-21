@@ -690,9 +690,9 @@ class CustomerCore extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT cg.`id_group` as id
 		FROM '._DB_PREFIX_.'customer_group cg
-		WHERE cg.`id_customer` = '.(int)($this->id));
+		WHERE cg.`id_customer` = '.(int)$this->id);
 	}
-	
+
 	public function setWsGroups($result)
 	{
 		$groups = array();
@@ -703,4 +703,3 @@ class CustomerCore extends ObjectModel
 		return true;
 	}
 }
-
