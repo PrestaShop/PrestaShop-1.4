@@ -565,6 +565,9 @@ class FrontControllerCore
 		$this->n = abs((int)(Tools::getValue('n', ((isset(self::$cookie->nb_item_per_page) AND self::$cookie->nb_item_per_page >= 10) ? self::$cookie->nb_item_per_page : (int)(Configuration::get('PS_PRODUCTS_PER_PAGE'))))));
 		$this->p = abs((int)(Tools::getValue('p', 1)));
 
+		if (!is_numeric(Tools::getValue('p', 1)) || Tools::getValue('p', 1) < 0)
+			Tools::redirect('404.php');
+
 		$current_url = tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']);
 		//delete parameter page
 		$current_url = preg_replace('/(\?)?(&amp;)?p=\d+/', '$1', $current_url);
@@ -577,8 +580,9 @@ class FrontControllerCore
 		if (isset(self::$cookie->nb_item_per_page) AND $this->n != self::$cookie->nb_item_per_page AND in_array($this->n, $nArray))
 			self::$cookie->nb_item_per_page = $this->n;
 
-		if ($this->p > ($nbProducts / $this->n))
-			$this->p = ceil($nbProducts / $this->n);
+		if ($this->p > (($nbProducts / $this->n) + 1))
+			Tools::redirect(preg_replace('/[&?]p=\d+/', '', $_SERVER['REQUEST_URI']));
+
 		$pages_nb = ceil($nbProducts / (int)($this->n));
 
 		$start = (int)($this->p - $range);
