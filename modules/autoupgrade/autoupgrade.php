@@ -63,7 +63,7 @@ class Autoupgrade extends Module
 		{
 			$tab = new Tab($idTab);
 			// this deletion will not cancel the installation
-			$resDelete &= $tab->delete();
+			$resDelete = $tab->delete();
 			if (!$resDelete)
 				$this->_errors[] = sprintf($this->l('Unable to delete outdated AdminUpgrade tab %s'), $idTab);
 		}
