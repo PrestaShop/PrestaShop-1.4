@@ -50,6 +50,11 @@ class TaxCore extends ObjectModel
 
 	protected	$webserviceParameters = array(
 		'objectsNodeName' => 'taxes',
+			'fields' => array(
+				'rate' => array('required' => true),
+				'active' => array(),
+				'name' => array('i18n' => true, 'required' => true),
+			),
 	);
 	
 	public function getFields()
