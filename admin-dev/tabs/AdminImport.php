@@ -395,7 +395,7 @@ class AdminImport extends AdminTab
 	{
 		$members = get_object_vars($entity);
 		foreach (self::$default_values AS $k => $v)
-			if ((array_key_exists($k, $members) AND $entity->$k === NULL) OR !array_key_exists($k, $members))
+			if ((array_key_exists($k, $members) && $entity->$k === null) || !array_key_exists($k, $members))
 				$entity->$k = $v;
 	}
 
@@ -435,7 +435,7 @@ class AdminImport extends AdminTab
 	 * @param string entity 'products' or 'categories'
 	 * @return void
 	 */
-	private static function copyImg($id_entity, $id_image = NULL, $url, $entity = 'products')
+	private static function copyImg($id_entity, $id_image = null, $url, $entity = 'products')
 	{
 		$tmpfile = tempnam(_PS_TMP_IMG_DIR_, 'ps_import');
 		$watermark_types = explode(',', Configuration::get('WATERMARK_TYPES'));
@@ -562,7 +562,7 @@ class AdminImport extends AdminTab
 			}
 			//copying images of categories
 			if (isset($category->image) AND !empty($category->image))
-				if (!(self::copyImg($category->id, NULL, $category->image, 'categories')))
+				if (!(self::copyImg($category->id, null, $category->image, 'categories')))
 					$this->_warnings[] = $category->image.' '.Tools::displayError('Cannot be copied');
 			// If both failed, mysql error
 			if (!$res)
@@ -733,7 +733,7 @@ class AdminImport extends AdminTab
 			if ($fieldError === true AND $langFieldError === true)
 			{
 				// check quantity
-				if ($product->quantity == NULL)
+				if ($product->quantity == null)
 					$product->quantity = 0;
 
 				// If match ref is specified AND ref product AND ref product already in base, trying to update
@@ -936,7 +936,7 @@ class AdminImport extends AdminTab
 					$this->_warnings[] = sprintf(Tools::displayError('No image found for combination with id_product = %s and image position = %s.'), $product->id, (int)$info['image_position']);
 			}
 
-			$id_product_attribute = $product->addProductAttribute((float)($info['price']), (float)($info['weight']), 0, (float)($info['ecotax']), (int)($info['quantity']), $id_image, strval($info['reference']), strval($info['supplier_reference']), strval($info['ean13']), (int)($info['default_on']), strval($info['upc']));
+			$id_product_attribute = $product->addProductAttribute((float)($info['price']), (float)($info['weight']), 0, (float)($info['ecotax']), (int)($info['quantity']), $id_image, strval($info['reference']), strval($info['supplier_reference']), strval($info['ean13']), (int)($info['default_on']), null, strval($info['upc']));
 			foreach (explode($fsep, $info['options']) as $option)
 			{
 				list($group, $attribute) = array_map('trim', explode(':', $option));
@@ -1033,7 +1033,7 @@ class AdminImport extends AdminTab
 			}
 			elseif (isset($address->country) AND is_string($address->country) AND !empty($address->country))
 			{
-				if ($id_country = Country::getIdByName(NULL, $address->country))
+				if ($id_country = Country::getIdByName(null, $address->country))
 					$address->id_country = (int)($id_country);
 				else
 				{
@@ -1742,7 +1742,7 @@ class AdminImport extends AdminTab
 		setlocale(LC_CTYPE, strtolower($iso_lang).'_'.strtoupper($iso_lang).'.UTF-8');
 	}
 
-	protected function _addProductWarning($product_name, $product_id = NULL, $message = '')
+	protected function _addProductWarning($product_name, $product_id = null, $message = '')
 	{
 		$this->_warnings[] = $product_name.(isset($product_id) ? ' (ID '.$product_id.')' : '').' '.Tools::displayError($message);
 	}
