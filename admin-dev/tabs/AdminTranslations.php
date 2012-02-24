@@ -563,7 +563,7 @@ class AdminTranslations extends AdminTab
 						$arr_find_and_write = array_merge($arr_find_and_write, $arr_files);
 					}
 					
-					foreach ($arr_find_and_write as $key=>$value)
+					foreach ($arr_find_and_write as $key => $value)
 						$this->findAndWriteTranslationsIntoFile($value['file_name'], $value['files'], $value['theme'], $value['module'], $value['dir']);
 					Tools::redirectAdmin($currentIndex.'&conf=4&token='.$this->token);
 				}
@@ -705,7 +705,7 @@ class AdminTranslations extends AdminTab
 			'back' => $this->l('Back Office translations'),
 			'errors' => $this->l('Error message translations'),
 			'fields' => $this->l('Field name translations'),
-			'modules' => $this->l('Module translations'),
+			'modules' => $this->l('Translations of installed modules'),
 			'pdf' => $this->l('PDF translations'),
 			'mails' => $this->l('E-mail template translations'),
 		);
@@ -1702,17 +1702,16 @@ class AdminTranslations extends AdminTab
 		}
 		return $array_files;
 	}
+
 	public function displayFormModules($lang)
 	{
 		global $currentIndex, $_MODULES;
-		
+
 		$array_lang_src = Language::getLanguages(false);
 		$str_output = '';
-		
+
 		foreach ($array_lang_src as $language)
-		{
 			$this->all_iso_lang[] = $language['iso_code'];
-		}
 
 		if (!file_exists(_PS_MODULE_DIR_))
 			die($this->displayWarning(Tools::displayError('Fatal error: Module directory is not here anymore ').'('._PS_MODULE_DIR_.')'));
@@ -1722,22 +1721,29 @@ class AdminTranslations extends AdminTab
 			$this->displayWarning(Tools::displayError('There are no modules in your copy of PrestaShop. Use the Modules tab to activate them or go to our Website to download additional Modules.'));
 		else
 		{
+			// Get all module which are installed for to have a minimum of POST
+			$modules = Module::getModulesInstalled();
+
+			foreach ($modules as &$module)
+				$module = $module['name'];
+
 			$arr_find_and_fill = array();
-			
+
 			$arr_files = $this->getAllModuleFiles($modules, _PS_MODULE_DIR_, $lang, true);
 			$arr_find_and_fill = array_merge($arr_find_and_fill, $arr_files);
-			
+
 			if (file_exists(_PS_THEME_DIR_.'/modules/'))
 			{
 				$modules = scandir(_PS_THEME_DIR_.'/modules/');
 				$arr_files = $this->getAllModuleFiles($modules, _PS_THEME_DIR_.'modules/', $lang);
 				$arr_find_and_fill = array_merge($arr_find_and_fill, $arr_files);
 			}
+
 			foreach ($arr_find_and_fill as $value)
 				$this->findAndFillTranslations($value['files'], $value['theme'], $value['module'], $value['dir'], $lang);
-			
+
 			$str_output .= '
-			<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('Modules translations').'</h2>
+			<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('Translations of installed modules').'</h2>
 			'.$this->l('Total expressions').' : <b>'.$this->total_expression.'</b>. '.$this->l('Click the fieldset title to expand or close the fieldset.').'.<br /><br />';
 			$str_output .= $this->displayLimitPostWarning($this->total_expression);
 			if (!$this->suhosin_limit_exceed)
