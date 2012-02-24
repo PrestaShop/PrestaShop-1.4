@@ -2,9 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{dibs}prestashop>dibs_b64af11b4f643164b0b418c716a6f7a0'] = 'Pagar con DIBS';
-$_MODULE['<{dibs}prestashop>dibs_fda89beb6740540db1053016d96624c3'] = 'Logo de DIBS';
-$_MODULE['<{dibs}prestashop>dibs_eeaf35c1eb180cc38a77b892a96d7ed3'] = 'Pagar rápidamente de manera segura con DIBS';
 $_MODULE['<{dibs}prestashop>dibs_b508edd89d96e13df300b298143998d3'] = 'DIBS';
 $_MODULE['<{dibs}prestashop>dibs_ef3a95ad5c00ef1b4d1d73d2b50bf54c'] = 'DIBS API de pago';
 $_MODULE['<{dibs}prestashop>dibs_f146cc67c82721f372d15664a9e4a0d6'] = 'Por razones de seguridad, debe grabar las claves 1 y 2 utilizadas por el control MD de el API de DIBS.';
@@ -35,11 +32,12 @@ $_MODULE['<{dibs}prestashop>dibs_0e260f9297ec338abbf671829d53c4ae'] = 'La URL de
 $_MODULE['<{dibs}prestashop>dibs_fcb9c3f1b9731de08442d81583782db7'] = 'Anular la URL';
 $_MODULE['<{dibs}prestashop>dibs_491f74497aaca60ae31a327d12d52925'] = 'La URL de la página que aparecerá si el usuario anula el pago';
 $_MODULE['<{dibs}prestashop>dibs_b17f3f4dcf653a5776792498a9b44d6a'] = 'Modificar las configuraciones';
+$_MODULE['<{dibs}prestashop>dibs_b64af11b4f643164b0b418c716a6f7a0'] = 'Pagar con DIBS';
+$_MODULE['<{dibs}prestashop>dibs_fda89beb6740540db1053016d96624c3'] = 'Logo de DIBS';
+$_MODULE['<{dibs}prestashop>dibs_eeaf35c1eb180cc38a77b892a96d7ed3'] = 'Pagar rápidamente de manera segura con DIBS';
 $_MODULE['<{dibs}prestashop>hookorderconfirmation_2e2117b7c81aa9ea6931641ea2c6499f'] = 'Su pedido en';
 $_MODULE['<{dibs}prestashop>hookorderconfirmation_75fbf512d744977d62599cc3f0ae2bb4'] = 'está terminado.';
 $_MODULE['<{dibs}prestashop>hookorderconfirmation_30163d8fc3068e8297e7ab5bf32aec87'] = 'Le enviaremos su pedido cuanto antes.';
 $_MODULE['<{dibs}prestashop>hookorderconfirmation_0db71da7150c27142eef9d22b843b4a9'] = 'Para cualquier pregunta o para más información, póngase en contacto con nuestro';
 $_MODULE['<{dibs}prestashop>hookorderconfirmation_64430ad2835be8ad60c59e7d44e4b0b1'] = 'servicio clientela';
 $_MODULE['<{dibs}prestashop>hookorderconfirmation_8de637e24570c1edb0357826a2ad5aea'] = 'Hemos observado un problema con su pedido. Si piensa que se trata de un error, puede ponerse en contacto con nuestro';
-
-?>

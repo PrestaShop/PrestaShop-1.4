@@ -19,12 +19,12 @@ if (count($_POST))
 	$secure_cart = explode('_', $posted_values['uniqueoid']);
 	$arr_order_id = explode('_',$posted_values['orderid']);
 	$posted_values['orderid'] = $arr_order_id[0];
-	
+
 	if ((string)$posted_values['merchant'] !== (string)dibs::$ID_MERCHANT)
 		$errors[] = Tools::displayError('You did not use the correct merchant ID.');
 
 	$md5_key = md5(dibs::$MORE_SETTINGS['k2'].md5(dibs::$MORE_SETTINGS['k1'].'transact='.$posted_values['transact'].'&amount='.$posted_values['amount'].'&currency='.$posted_values['currency']));
-	if ((string)$posted_values['authkey'] !== $md5_key)
+	if((string)$posted_values['authkey'] !== $md5_key)
 		$errors[] = Tools::displayError('Your are not allowed to validate the command for security reasons.');
 
 	$message = '';
@@ -43,7 +43,7 @@ if (count($_POST))
 	if ($valid_order === true)
 	{
     $obj_dibs->setTransactionDetail($posted_values);
-		$obj_dibs->validateOrder((int)$posted_values['orderid'], Configuration::get('PS_OS_PAYMENT'), 
+		$obj_dibs->validateOrder((int)$posted_values['orderid'], Configuration::get('PS_OS_PAYMENT'),
 			(float)((int)$posted_values['amount'] / 100), $obj_dibs->displayName, $message, array(), NULL, false, $secure_cart[2]);
 	}
 	else if ($valid_order === false)
