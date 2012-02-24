@@ -155,7 +155,7 @@ class AdminReferrers extends AdminTab
 		{
 			echo '
 			<div style="float:left;margin-right:20px">
-				'.AdminStatsTab::displayCalendarStatic(array('Calendar' => $this->l('Calendar'), 'Day' => $this->l('Today'), 'Month' => $this->l('Month'), 'Year' => $this->l('Year'))).'
+				'.AdminStatsTab::displayCalendarStatic(array('Calendar' => $this->l('Calendar'), 'Day' => $this->l('Today'), 'Month' => $this->l('Month'), 'Year' => $this->l('Year'), 'From' => $this->l('From'), 'To' => $this->l('To'))).'
 			</div>';
 			if (!Tools::isSubmit('viewreferrer'))
 				echo '
