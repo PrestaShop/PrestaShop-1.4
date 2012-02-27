@@ -17,5 +17,5 @@ $buyster = new Buyster();
 
 $smarty->assign('content', $buyster->getContentAdminOrder($orderId));
 
-$smarty->display('tpl/adminOrder.tpl');
+$smarty->display(dirname(__FILE__).'/tpl/adminOrder.tpl');
 ?>

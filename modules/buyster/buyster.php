@@ -20,7 +20,7 @@ class Buyster extends PaymentModule
 	{
 		$this->name = 'buyster';
 		$this->tab = 'payments_gateways';
-		$this->version = 1.3 ;
+		$this->version = 1.4 ;
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 
@@ -43,6 +43,17 @@ class Buyster extends PaymentModule
             if (count($warning) == 1)
 				$this->warning .= implode(' , ',$warning).$this->l('has to be configured to use this module correctly.').' ';
 		}
+		
+		$updateConfig = array('PS_OS_CHEQUE' => 1, 'PS_OS_PAYMENT' => 2, 'PS_OS_PREPARATION' => 3, 'PS_OS_SHIPPING' => 4, 'PS_OS_DELIVERED' => 5, 'PS_OS_CANCELED' => 6,
+				      'PS_OS_REFUND' => 7, 'PS_OS_ERROR' => 8, 'PS_OS_OUTOFSTOCK' => 9, 'PS_OS_BANKWIRE' => 10, 'PS_OS_PAYPAL' => 11, 'PS_OS_WS_PAYMENT' => 12);
+		foreach ($updateConfig as $u => $v)
+			if (!Configuration::get($u) || (int)Configuration::get($u) < 1)
+			{
+				if (defined('_'.$u.'_') && (int)constant('_'.$u.'_') > 0)
+					Configuration::updateValue($u, constant('_'.$u.'_'));
+				else
+					Configuration::updateValue($u, $v);
+			}
 	}
 	
 	public function install()
