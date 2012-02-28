@@ -892,18 +892,27 @@ class AdminTranslations extends AdminTab
 	public function displayLimitPostWarning($count)
 	{
 		$str_output = '';
-		if ((ini_get('suhosin.post.max_vars') AND ini_get('suhosin.post.max_vars') < $count)
-		 OR (ini_get('suhosin.request.max_vars') AND ini_get('suhosin.request.max_vars') < $count))
+		$suhosin_post = ini_get('suhosin.post.max_vars');
+		$suhosin_request = ini_get('suhosin.request.max_vars');
+		$php_max_input = ini_get('max_input_vars');
+		if ((!empty($suhosin_post) && ($suhosin_post < $count))
+		 || (!empty($suhosin_request) && ($suhosin_request < $count))
+		 || (!empty($php_max_input) && ($php_max_input < $count)))
 		{
-			if (ini_get('suhosin.post.max_vars') < $count OR ini_get('suhosin.request.max_vars') < $count)
-			{
-				$this->suhosin_limit_exceed = true;
-				$str_output .= '<div class="warning">'.$this->l('Warning, your hosting provider is using the suhosin patch for PHP, which limits the maximum number of fields to post in a form:').'<br/>'
-				.'<b>'.ini_get('suhosin.post.max_vars').'</b> '.$this->l('for suhosin.post.max_vars.').'<br/>'
-				.'<b>'.ini_get('suhosin.request.max_vars').'</b> '.$this->l('for suhosin.request.max_vars.').'<br/>'
-				.$this->l('Please ask your hosting provider to increase the suhosin post and request limit to')
-				.' <u><b>'.((int)$count + 100).'</b></u> '.$this->l('at least.').' '.$this->l('or edit the translation file manually.').'</div>'; 
-			}
+			$this->suhosin_limit_exceed = true;
+			$str_output .= '<div class="warning">'
+				.$this->l('Warning, your hosting provider limits the maximum number of fields to post in a form:').'<br/>'
+				.(!empty($suhosin_post)?'<b>'.$suhosin_post.'</b> '
+					.sprintf($this->l('for %s'), 'suhosin.post.max_vars').'<br/>'
+				:'')
+				.(!empty($suhosin_request)?'<b>'.$suhosin_request.'</b> '
+					.sprintf($this->l('for %s'), 'suhosin.request.max_vars').'<br/>'
+				:'')
+				.(!empty($php_max_input)?'<b>'.$php_max_input.'</b> '
+					.sprintf($this->l('for %s'), 'max_input_vars').'<br/>'
+				:'')
+			.$this->l('Please ask your hosting provider to increase the suhosin post and request limit to')
+			.' <u><b>'.((int)$count + 100).'</b></u> '.$this->l('at least.').' '.$this->l('or edit the translation file manually.').'</div>'; 
 		}
 		return $str_output;
 	}
