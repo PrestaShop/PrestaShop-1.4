@@ -55,11 +55,17 @@ if (empty($tab) and !sizeof($_POST))
 		// @TODO : a way to desactivate this feature
 		echo'<script type="text/javascript">
 
-		$(function() {
+		$(document).ready(function(){
 			$.ajax({
-				type: \'POST\',
-				url: \'ajax.php\',
-				data: \'helpAccess=1&item='.$item['class_name'].'&isoUser='.$isoUser.'&country='.Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')).'&version='._PS_VERSION_.'\',
+				type : "POST",
+				url: "ajax.php",
+				data:{
+					"helpAccess":"1",
+					"item":"'.$item['class_name'].'",
+					"isoUser":"'.$isoUser.'",
+					"country":"'.Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')).'",
+					"version":"'._PS_VERSION_.'"
+				},
 				async : true,
 				success: function(msg) {
 					$("#help-button").html(msg);
