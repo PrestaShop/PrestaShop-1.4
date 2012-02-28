@@ -29,7 +29,6 @@
 	{
 		var items_length = $('#ts-list-items').find('input').length;
 		//$('#ts-list-items').css('line-height', ((70/items_length) > 12 ? Math.round(70/items_length) : 12 )+'px');
-
 		TS.init();
 	});
 
@@ -48,12 +47,14 @@ var TS = (function()
 			{
 				ajaxCart.updateCart(jsonData);
 				$('span.price').not('#cart_block_shipping_cost').not('.products .price').html(jsonData.total);
+				
 			}
 		});
 	}
+
 	return {
 		init: function ()
-		{
+		{	
 			$('#ts-list-items input[type=checkbox]').click(function(e)
 			{
 				var $t = $(this);
@@ -78,7 +79,7 @@ var TS = (function()
 	</div>
 	<div id="ts-list-items">
 		{foreach from=$buyer_protection_items item=product}
-			<p><input id="ts-product-{$product.id_product}" type="checkbox" value="{$product.id_product}" name="item_product"> {l s='Buyer protection up to' mod='trustedshops'} {$product.protected_amount_decimal} {$currency_iso_code} ({$price|round:2} {$currency_iso_code} {l s='incl. VAT' mod='trustedshops'})</p>
+			<p><input id="ts-product-{$product.id_product}" type="checkbox" value="{$product.id_product}" name="item_product"> {l s='Buyer protection up to' mod='trustedshops'} {($product.protected_amount_decimal * $conversion_rate)|round:2} {$currency_iso_code} ({$price|round:2} {$currency_iso_code} {l s='incl. VAT' mod='trustedshops'})</p>
 		{/foreach}
 		<div id="content_checkout" style="margin-left:100px">
 		<p>{l s='The Trusted Shops Buyer Protection secures your online purchase. I agree to my email address being transferred and' mod='trustedshops'} <b><a href="http://www.trustedshops.com/shop/data_privacy.php?shop_id={$shop_id}" target="_blank">{l s='saved' mod='trustedshops'}</a></b> {l s='for the purposes of Buyer Protection processing by Trusted Shops.' mod='trustedshops'} <b><a href="http://www.trustedshops.com/shop/protection_conditions.php?shop_id={$shop_id}" target="_blank">{l s='Conditions' mod='trustedshops'}</a></b> {l s='for Buyer Protection.' mod='trustedshops'}</p></div>

@@ -495,7 +495,10 @@ class TSBuyerProtection extends AbsTrustedShops
 				WHERE `ts_product_id` = "'.(int)$params['tsProductID'].'"
 				';
 				$ts_product = Db::getInstance()->ExecuteS($sql);
-				$product = new Product($ts_product[0]['id_product']);
+				if (isset($ts_product[0]))
+					$product = new Product($ts_product[0]['id_product']);
+				else
+					$product = new Product($ts_product['id_product']);
 				$product->quantity = 1000;
 				$product->update();
 			}
@@ -1285,7 +1288,8 @@ class TSBuyerProtection extends AbsTrustedShops
 				'shop_id' => TSBuyerProtection::$CERTIFICATE[$lang]['tsID'],
 				'price' => Product::getPriceStatic((int)$items[0]['id_product']),
 				'currency_iso_code' => $items[0]['currency'],
-				'buyer_protection_items' => $items)
+				'buyer_protection_items' => $items,
+				'conversion_rate' => $currency->conversion_rate)
 			);
 		}
 		return $this->display(TSBuyerProtection::$module_name, 'display_products.tpl');
