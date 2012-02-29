@@ -3,7 +3,7 @@
 // File Example for upgrade
 
 if (!defined('_PS_VERSION_'))
-  exit;
+	exit;
 
 // object module ($this) available
 function upgrade_module_1_8_0($object)
@@ -70,17 +70,20 @@ function upgrade_module_1_8_0($object)
 	Configuration::updateValue('MONDIAL_RELAY', $object->version);
 
 	$methods = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'mr_method`');
-	$query = '
-		INSERT INTO `'._DB_PREFIX_.'mr_method_shop`
-		(id_mr_method, id_shop) VALUES ';
-
-	foreach ($methods as $method)
-		$query .= '('.(int)$method['id_mr_method'].', '.(int)$object->account_shop['id_shop'].'),';
-	$query = trim($query, ',');
-	if (!Db::getInstance()->execute($query))
+	if ($count($methods))
 	{
-		$object->upgrade_detail['1.8.0'][] = $object->l('Can\'t update table mr_method_shop');
-		return false;
+		$query = '
+			INSERT INTO `'._DB_PREFIX_.'mr_method_shop`
+			(id_mr_method, id_shop) VALUES ';
+
+		foreach ($methods as $method)
+			$query .= '('.(int)$method['id_mr_method'].', '.(int)$object->account_shop['id_shop'].'),';
+		$query = trim($query, ',');
+		if (!Db::getInstance()->execute($query))
+		{
+			$object->upgrade_detail['1.8.0'][] = $object->l('Can\'t update table mr_method_shop');
+			return false;
+		}
 	}
 
 	if (!empty($object->installed_version))
@@ -104,14 +107,6 @@ function upgrade_module_1_8_0($object)
 
 		if (!$object->isRegisteredInHook('header'))
 			$object->registerHook('header');
-
-		// Insert back all existing carrier with asssociated shop (1 by default)
-		$methods = Db::getInstance()->executeS('
-			SELECT id_mr_method FROM `'._DB_PREFIX_.'mr_method`');
-		foreach ($methods as $method)
-			Db::getInstance()->execute('
-				INSERT INTO `'._DB_PREFIX_.'mr_method_shop`
-				(`id_mr_method`, `id_shop`) VALUES('.(int)$method['id_mr_method'].', 1)');
 	}
 
 	return true;

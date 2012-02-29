@@ -324,6 +324,10 @@ class MRCreateTickets implements IMondialRelayWSMethod
 						$tmp['Poids']['value'] = $this->_weightFormat($detail[0]);
 				}
 
+				$dest_tel = (!empty($deliveriesAddress->phone)) ?
+					str_pad(substr(preg_replace('/[^0-9+\(\)]*/', '', $deliveriesAddress->phone), 0, 10), 10, '0') :
+					'';
+
 				$dest_tel2 = (!empty($deliveriesAddress->phone_mobile)) ?
 					str_pad(substr(preg_replace('/[^0-9+\(\)]*/', '', $deliveriesAddress->phone_mobile), 0, 10), 10, '0') :
 					'';
@@ -341,16 +345,7 @@ class MRCreateTickets implements IMondialRelayWSMethod
 				$tmp['Dest_CP']['value'] = $deliveriesAddress->postcode;
 				$tmp['Dest_CP']['params']['id_country'] = $deliveriesAddress->id_country;
 				$tmp['Dest_Pays']['value'] = $destIsoCode;
-
-				if (!empty($deliveriesAddress->phone))
-					$tmp['Dest_Tel1']['value'] = str_pad(substr(preg_replace('/[^0-9+\(\)]*/', '', $deliveriesAddress->phone), 0, 10), 10, '0');
-				else
-					$tmp['Dest_Tel1']['value'] = str_pad(substr(preg_replace('/[^0-9+\(\)]*/', '', $deliveriesAddress->phone_mobile), 0, 10), 10, '0');
-
-				// If no phone number exist, make it clean.
-				if ($tmp['Dest_Tel1']['value'] == '0000000000')
-					$tmp['Dest_Tel1']['value'] = '';
-
+				$tmp['Dest_Tel1']['value'] = $dest_tel;
 				$tmp['Dest_Tel2']['value'] = $dest_tel2;
 				$tmp['Dest_Mail']['value'] = $customer->email;
 				$tmp['Assurance']['value'] = $orderDetail['mr_ModeAss'];
