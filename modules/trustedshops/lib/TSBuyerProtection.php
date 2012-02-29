@@ -1292,6 +1292,26 @@ class TSBuyerProtection extends AbsTrustedShops
 				'conversion_rate' => $currency->conversion_rate)
 			);
 		}
+		
+		/**
+		* We need to clean the cart of other TSBuyerProtection product, in case the customer wants to change the currency
+		* The price of a TSBuyerProtection product is different for each currency, the conversion_rate won't change anything
+		*/
+		
+		$sql = 'SELECT id_product FROM `'._DB_PREFIX_.TSBuyerProtection::DB_ITEMS.'`';
+		$product = Db::getInstance()->ExecuteS($sql);
+		
+		$product_cart = array();
+		$product_protection = array();
+		
+		foreach ($product as $k => $v)
+			$product_protection[] = $v['id_product'];
+		
+		
+		foreach ($params['cart']->getProducts() as $k => $v)
+			if (in_array($v['id_product'], $product_protection))
+				$params['cart']->deleteProduct($v['id_product']);
+		
 		return $this->display(TSBuyerProtection::$module_name, 'display_products.tpl');
 	}
 
