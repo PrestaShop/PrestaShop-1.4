@@ -257,7 +257,7 @@ class TntCarrier extends CarrierModule
 	{
 		global $smarty;
 
-		$shop = (_PS_VERSION_ >= 1.5 ? Context::getContext()->shop->getID() : '');
+		$shop = (_PS_VERSION_ >= 1.5 ? Context::getContext()->shop->id : '');
 
 		$globalVar = array(
 		'tab' => htmlentities(Tools::getValue('tab')),
