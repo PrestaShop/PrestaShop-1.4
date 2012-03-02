@@ -428,7 +428,8 @@ class DiscountCore extends ObjectModel
 		$voucher->quantity_per_user = 1;
 		$voucher->cumulable = 1;
 		$voucher->cumulable_reduction = 1;
-		$voucher->minimal = (float)($voucher->value);
+        $voucher->minimal = (float)($voucher->value);
+        $voucher->include_tax = 1;
 		$voucher->active = 1;
 		$voucher->cart_display = 1;
 		$now = time();
