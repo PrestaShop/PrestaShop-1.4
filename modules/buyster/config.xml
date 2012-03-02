@@ -2,7 +2,7 @@
 <module>
 	<name>buyster</name>
 	<displayName><![CDATA[Buyster]]></displayName>
-	<version><![CDATA[1.2]]></version>
+	<version><![CDATA[1.4]]></version>
 	<description><![CDATA[The new online payment solution approved by the Bank of France, which combines simplicity and security through mobile.]]></description>
 	<author><![CDATA[PrestaShop]]></author>
 	<tab><![CDATA[payments_gateways]]></tab>
