@@ -673,7 +673,7 @@ class PDFCore extends PDF_PageGroupCore
 					$priceBreakDown['totalWithoutTax'] -= Tools::ps_round(self::$order->total_discounts / (1 + self::$order->getTaxesAverageUsed() * 0.01), 2);
 				else
 					$priceBreakDown['totalWithoutTax'] -= self::$order->total_discounts;
-				$priceBreakDown['totalWithTax'] -= self::$order->total_discounts;
+				//$priceBreakDown['totalWithTax'] -= self::$order->total_discounts;
 			}
 
 			/*
@@ -941,6 +941,7 @@ class PDFCore extends PDF_PageGroupCore
 			$this->Cell($w[4], 6, '1', 'B', 0, 'C');
 
             $discount_value = $discount['value'];
+            $tax_rate_discount = 0;
             if (self::$_priceDisplayMethod == PS_TAX_EXC)
                 $tax_rate_discount = self::$order->getTaxesAverageUsed();
 
@@ -1030,10 +1031,10 @@ class PDFCore extends PDF_PageGroupCore
 				$vat = $priceWithTaxAndReduction - Tools::ps_round($priceWithTaxAndReduction / $product['product_quantity'] / (((float)($product['tax_rate']) / 100) + 1), 2) * $product['product_quantity'];
 				$priceBreakDown['totalsWithoutTax'][$product['tax_rate']] += $product['priceWithoutTax'] ;
 				$priceBreakDown['totalsProductsWithoutTax'][$product['tax_rate']] += $product['priceWithoutTax'];
-                $total_ecotax = ($product['priceEcotax'] * $product['product_quantity']);
-                $priceBreakDown['totalsProductsWithTax'][$product['tax_rate']] += Tools::ps_round((($product['priceWithoutTax'] - $total_ecotax) * (1 + $product['tax_rate'] / 100)) + $total_ecotax, 2);
+				$total_ecotax = ($product['priceEcotax'] * $product['product_quantity']);
+				$priceBreakDown['totalsProductsWithTax'][$product['tax_rate']] += Tools::ps_round((($product['priceWithoutTax'] - $total_ecotax) * (1 + $product['tax_rate'] / 100)) + $total_ecotax, 2);
 
-                $price_tax_excl_with_reduction = Tools::ps_round($product['priceWithoutTax'] - (float)$discountAmountWithoutTax, 2);
+	 			$price_tax_excl_with_reduction = Tools::ps_round($product['priceWithoutTax'] - (float)$discountAmountWithoutTax, 2);
 				$priceBreakDown['totalsProductsWithoutTaxAndReduction'][$product['tax_rate']] += $price_tax_excl_with_reduction;
                 $priceBreakDown['totalsProductsWithTaxAndReduction'][$product['tax_rate']] += Tools::ps_round(($price_tax_excl_with_reduction - $total_ecotax) * (1 + $product['tax_rate'] / 100) + $total_ecotax, 2);
 			}
