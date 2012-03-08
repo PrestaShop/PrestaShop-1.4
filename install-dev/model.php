@@ -44,7 +44,7 @@ if ($tmp = strpos($_SERVER['REQUEST_URI'], '?'))
 	$_SERVER['REQUEST_URI'] = substr($_SERVER['REQUEST_URI'], 0, $tmp);
 $_SERVER['REQUEST_URI'] = str_replace('//', '/', $_SERVER['REQUEST_URI']);
 
-define('INSTALL_VERSION', '1.4.7.0');
+define('INSTALL_VERSION', '1.4.8.0');
 define('INSTALL_PATH', dirname(__FILE__));
 define('PS_INSTALLATION_IN_PROGRESS', true);
 require_once(INSTALL_PATH.'/classes/ToolsInstall.php');
@@ -54,7 +54,15 @@ define('INSTALLER__PS_BASE_URI', substr($_SERVER['REQUEST_URI'], 0, -1 * (strlen
 define('INSTALLER__PS_BASE_URI_ABSOLUTE', 'http://'.ToolsInstall::getHttpHost(false, true).INSTALLER__PS_BASE_URI);
 
 // XML Header
-header('Content-Type: text/xml');
+if (empty($_GET['return_type']))
+	$return_type = 'xml';
+else
+	$return_type = $_GET['return_type'];
+
+if ($return_type == 'xml')
+{
+	header('Content-Type: text/xml');
+}
 
 // Switching method
 if (isset($_GET['method']))
