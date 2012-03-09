@@ -1,9 +1,13 @@
 
 /* product.tpl */
 #primary_block #pb-right-column {
-	width: 310px;
-	float: left
+	float: right;
+	width: 10em;
+	text-align: right;
+	margin-left: 0.8em;
+	margin-top:0;
 }
+
 #primary_block #image-block {
 	border: #d0d1d5 solid 1px;
 	height: 300px;
