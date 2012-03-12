@@ -1503,12 +1503,12 @@ class BlockLayered extends Module
 			href="'.$domain.__PS_BASE_URI__.'modules/blocklayered/blocklayered-price-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&full=1">'.
 			$this->l('Re-build entire price index').'</a>
 			<br />
-			<a class="bold ajaxcall" id="attribute-indexer"
+			<a class="bold ajaxcall" id="attribute-indexer" rel="attribute"
 			style="width: 250px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" id="full-index"
 			href="'.$domain.__PS_BASE_URI__.'modules/blocklayered/blocklayered-attribute-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'">'.
 			$this->l('Build attribute index').'</a>
 			<br />
-			<a class="bold ajaxcall" id="url-indexer"
+			<a class="bold ajaxcall" id="url-indexer" rel="price"
 			style="width: 250px; text-align:center;display:block;border:1px solid #aaa;text-decoration:none;background-color:#fafafa;color:#123456;margin:2px;padding:2px" id="full-index"
 			href="'.$domain.__PS_BASE_URI__.'modules/blocklayered/blocklayered-url-indexer.php'.'?token='.substr(Tools::encrypt('blocklayered/index'), 0, 10).'&truncate=1">'.
 			$this->l('Build url index').'</a>
@@ -1546,6 +1546,7 @@ class BlockLayered extends Module
 					}
 						
 					this.restartAllowed = false;
+					var type = $(this).attr(\'rel\');
 					
 					$.ajax({
 						url: this.href+\'&ajax=1\',
@@ -1558,7 +1559,10 @@ class BlockLayered extends Module
 							this.restartAllowed = true;
 							$(\'#indexing-warning\').hide();
 							$(this).html(this.legend);
-							$(\'#ajax-message-ok span\').html(\''.addslashes($this->l('Url indexation finished')).'\');
+							if (type == \'price\')
+								$(\'#ajax-message-ok span\').html(\''.addslashes($this->l('Url indexation finished')).'\');
+							else
+								$(\'#ajax-message-ok span\').html(\''.addslashes($this->l('Attribute indexation finished')).'\');
 							$(\'#ajax-message-ok\').show();
 							return;
 						},
@@ -1566,7 +1570,10 @@ class BlockLayered extends Module
 						{
 							this.restartAllowed = true;
 							$(\'#indexing-warning\').hide();
-							$(\'#ajax-message-ko span\').html(\''.addslashes($this->l('Url indexation failed')).'\');
+							if (type == \'price\')
+								$(\'#ajax-message-ko span\').html(\''.addslashes($this->l('Url indexation failed')).'\');
+							else
+								$(\'#ajax-message-ko span\').html(\''.addslashes($this->l('Attribute indexation failed')).'\');
 							$(\'#ajax-message-ko\').show();
 							$(this).html(this.legend);
 							
@@ -2389,10 +2396,14 @@ class BlockLayered extends Module
 				$alias = 'asso_shop_product';
 			}
 			$this->products = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('
-			SELECT p.id_product, p.on_sale, p.out_of_stock, p.available_for_order, p.quantity, p.minimal_quantity, '.$alias.'.id_category_default, p.customizable, p.show_price, p.`weight`,
-			p.ean13, pl.available_later, pl.description_short, pl.link_rewrite, pl.name, i.id_image, il.legend,  m.name manufacturer_name, p.condition, p.id_manufacturer,
-			DATEDIFF(p.`date_add`,
-			DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new
+			SELECT
+				p.*,
+				'.$alias.'.id_category_default,
+				pl.available_later, pl.description_short, pl.link_rewrite, pl.name,
+				i.id_image,
+				il.legend, 
+				m.name manufacturer_name,
+				DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new
 			FROM `'._DB_PREFIX_.'category_product` cp
 			LEFT JOIN '._DB_PREFIX_.'category c ON (c.id_category = cp.id_category)
 			LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = cp.`id_product`
