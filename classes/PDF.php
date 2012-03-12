@@ -673,7 +673,10 @@ class PDFCore extends PDF_PageGroupCore
 					$priceBreakDown['totalWithoutTax'] -= Tools::ps_round(self::$order->total_discounts / (1 + self::$order->getTaxesAverageUsed() * 0.01), 2);
 				else
 					$priceBreakDown['totalWithoutTax'] -= self::$order->total_discounts;
-				//$priceBreakDown['totalWithTax'] -= self::$order->total_discounts;
+
+				// The discount is already applied in Tax Incl mode
+				if (self::$_priceDisplayMethod == PS_TAX_EXC)
+					$priceBreakDown['totalWithTax'] -= self::$order->total_discounts;
 			}
 
 			/*
