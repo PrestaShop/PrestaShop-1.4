@@ -2,6 +2,9 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{mondialrelay}prestashop>adminmondialrelay_e82faee1422140edd04b2f94c5051500'] = 'Action réussie';
+$_MODULE['<{mondialrelay}prestashop>adminmondialrelay_3b2d373418745276ae6e207421245cdc'] = 'Le type de commande a été mis a jour';
+$_MODULE['<{mondialrelay}prestashop>adminmondialrelay_b4ac3d3f15bc0984d0906aff1202e701'] = 'N\'a pu mettre a jour les infos du compte';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_44585fcd617dce6416d8283b026714c1'] = 'Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_ed4a3b96dc1f38c160775cac1f7bcd6d'] = 'Livrez vos colis en point relais';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_d2286c9c8c8f92cb0e805b17834591b0'] = 'Enseigne invalide';
@@ -21,6 +24,10 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_b4ac3d3f15bc0984d0906aff1202e70
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_ea50be3d60be594e10e9e3560cb9159f'] = 'Nouvelle méthode de transport ajoutée';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_d0cfdfcfb71029b561f5ebdc176d87ca'] = 'Le statu de la commande à été mise à jour';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_d4359accf9c917bb57954dafa577b877'] = 'Le transporteur est actuellement désactivée';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_2673bca5ba0a7871770e69c962e6ce38'] = 'Nb d\'expédition';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_0dbe844fb964d5eca2f51be724e43294'] = 'Label de l\'URL';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_c6aefd5e2191e1210a2f50416812b517'] = 'URL de suivie';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_61e70b58e38fd01daa254f44c4fa264b'] = 'Nb de point relay';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_aa625fced6f01ae595b6a9ac499c2ecf'] = 'La tranche de poids ne peut être ajouté';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_63d15383121b5bb5c53323f3f96bd1f2'] = 'La tranche de prix ne peux être ajouté';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_d4d197dd028e28ae56208971b564921a'] = 'La zone par défaut ne peut être ajouté';
