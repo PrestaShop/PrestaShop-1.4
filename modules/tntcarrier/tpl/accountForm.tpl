@@ -1,4 +1,5 @@
-<p>{l s='The following parameters were provided to you by TNT' mod='tntcarrier'}. {l s='If you are not yet registered, click ' mod='tntcarrier'} <a style="color:blue;text-decoration:underline" href="https://www.tnt.fr/public/utilisateurs/adminExt/new.do">{l s='here' mod='tntcarrier'}</a></p>
+<p>{l s='The following parameters were provided to you by TNT' mod='tntcarrier'}. {l s='If you are not yet registered, click ' mod='tntcarrier'} <a style="color:blue;text-decoration:underline" href="https://www.tnt.fr/public/utilisateurs/adminExt/new.do">{l s='here' mod='tntcarrier'}</a><br/>
+<a target="_BLANK" href="../modules/{$glob.module_name}/tntDocumentation.pdf">{l s='(cf. Configuration guide attached)' mod='tntcarrier'}</a></p>
 	<form action="index.php?tab={$glob.tab}&configure={$glob.configure}&token={$glob.token}&tab_module={$glob.tab_module}&module_name={$glob.module_name}&id_tab=1&section=account" method="post" class="form" id="configFormAccount">
 		<fieldset style="border: 0px;">
 			<h4>{l s='Account TNT' mod='tntcarrier'} :</h4>

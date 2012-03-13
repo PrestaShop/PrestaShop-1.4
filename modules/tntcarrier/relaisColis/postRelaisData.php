@@ -3,7 +3,7 @@
 require('../../../config/config.inc.php');
 
 $code = pSQL($_POST['tntRCSelectedCode']);
-$name = pSQL($_POST['tntRCSelectedNom']);
+$name = substr(pSQL($_POST['tntRCSelectedNom']), 0, 32);
 $address = pSQL($_POST['tntRCSelectedAdresse']);
 $zipcode = pSQL($_POST['tntRCSelectedCodePostal']);
 $city = pSQL($_POST['tntRCSelectedCommune']);

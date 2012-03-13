@@ -27,9 +27,10 @@ class TntCarrier extends CarrierModule
 	{
 		$this->name = 'tntcarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.6.6';
+		$this->version = '1.6.7';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
+		$this->module_key = 'd4dcfde9937b67002235598ac35cbdf8';
 
 		parent::__construct ();
 
@@ -791,7 +792,10 @@ class TntCarrier extends CarrierModule
 				$address_new->alias = $alias;
 			}
 			
-			$address_new->company = $dropOff['name'];
+			if (strlen($dropOff['name']) >= 32)
+				$address_new->company = substr($dropOff['name'], 0, 31);
+			else
+				$address_new->company = $dropOff['name'];
 			$address_new->address1 = $dropOff['address'];
 			$address_new->postcode = $dropOff['zipcode'];
 			$address_new->city = $dropOff['city'];

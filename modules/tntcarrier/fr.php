@@ -52,6 +52,7 @@ $_MODULE['<{tntcarrier}prestashop>tntcarrier_a8902236aba1133fdf18a5fa229422bb'] 
 $_MODULE['<{tntcarrier}prestashop>accountform_d968787921c136e1cf9f766562aec8bc'] = 'Les paramètres suivants vous ont été fournis par TNT';
 $_MODULE['<{tntcarrier}prestashop>accountform_af7c2efe81330e4c9089f2c90781282e'] = 'Si vous n\'êtes pas encore inscrit, cliquez ';
 $_MODULE['<{tntcarrier}prestashop>accountform_6c92285fa6d3e827b198d120ea3ac674'] = 'ici';
+$_MODULE['<{tntcarrier}prestashop>accountform_91396a85cdff74c571ec0bdc5a9bc136'] = '(Cf. guide de configuration ci-joint)';
 $_MODULE['<{tntcarrier}prestashop>accountform_160f61d02d22b76b47b4305094bf36a6'] = 'Compte TNT';
 $_MODULE['<{tntcarrier}prestashop>accountform_99dea78007133396a7b8ed70578ac6ae'] = 'Identifiant';
 $_MODULE['<{tntcarrier}prestashop>accountform_dc647eb65e6711e155375218212b3964'] = 'Mot de passe';

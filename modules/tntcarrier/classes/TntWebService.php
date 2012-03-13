@@ -124,13 +124,13 @@ class TntWebService
 				'type' => ($info[0]['company'] != '' && (strlen($info[3]['option']) == 1 || substr($info[3]['option'], 1, 1) == 'S') ? "ENTERPRISE" : 'INDIVIDUAL'), // ENTREPRISE DEPOT DROPOFFPOINT INDIVIDUAL
 				'typeId' => '', // IF DEPOT => code PEX else if DROPOFFPOINT => XETT
 				'name' => ($info[0]['company'] != '' ? $info[0]['company'] : ''),
-				'address1' => $info[0]['address1'],
-				'address2' => $info[0]['address2'],
+				'address1' => (strlen($info[0]['address1']) > 32 ? substr($info[0]['address1'], 0, 32) : $info[0]['address1']),
+				'address2' => (strlen($info[0]['address2']) > 32 ? substr($info[0]['address2'], 0, 32) : $info[0]['address2']),
 				'zipCode' => $info[0]['postcode'],
-				'city' => $this->putCityInNormeTnt($info[0]['city']),
+				'city' => $this->putCityInNormeTnt((strlen($info[0]['city']) > 27 ? substr($info[0]['city'], 0, 27) : $info[0]['city'])),
 				'instructions' => '',
-				'contactLastName' => $info[0]['lastname'],
-				'contactFirstName' => $info[0]['firstname'],
+				'contactLastName' => (strlen($info[0]['lastname']) > 32 ? substr($info[0]['lastname'], 0, 32) : $info[0]['lastname']),
+				'contactFirstName' => (strlen($info[0]['firstname']) > 32 ? substr($info[0]['firstname'], 0, 32) : $info[0]['firstname']),
 				'emailAddress' => $info[0]['email'],
 				'phoneNumber' => (isset($info[0]['phone_mobile']) && $info[0]['phone_mobile'] != '' ? $info[0]['phone_mobile'] : $info[0]['phone']),
 				'accessCode' => '',
@@ -142,14 +142,14 @@ class TntWebService
 			$receiver = array(
 				'type' => 'DROPOFFPOINT', // ENTREPRISE DEPOT DROPOFFPOINT INDIVIDUAL
 				'typeId' => $info[4]['code'], // IF DEPOT => code PEX else if DROPOFFPOINT => XETT
-				'name' => $info[4]['name'],
-				'address1' => $info[4]['address'],
-				'address2' => '',
+				//'name' => $info[4]['name'],
+				/*'address1' => $info[4]['address'],
+				'address2' => '',*/
 				'zipCode' => $info[4]['zipcode'],
-				'city' => $this->putCityInNormeTnt($info[4]['city']),
+				'city' => $this->putCityInNormeTnt((strlen($info[4]['city']) > 27 ? substr($info[4]['city'], 0, 27) : $info[4]['city'])),
 				'instructions' => '',
-				'contactLastName' => $info[0]['lastname'],
-				'contactFirstName' => $info[0]['firstname'],
+				'contactLastName' => (strlen($info[0]['lastname']) > 32 ? substr($info[0]['lastname'], 0, 32) : $info[0]['lastname']),
+				'contactFirstName' => (strlen($info[0]['firstname']) > 32 ? substr($info[0]['firstname'], 0, 32) : $info[0]['firstname']),
 				'emailAddress' => $info[0]['email'],
 				'phoneNumber' => (isset($info[0]['phone_mobile']) && $info[0]['phone_mobile'] != '' ? $info[0]['phone_mobile'] : $info[0]['phone']),
 				'accessCode' => '',
