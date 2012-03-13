@@ -268,8 +268,6 @@ class OrderControllerCore extends ParentOrderController
 		parent::_assignAddress();
 
 		self::$smarty->assign('cart', self::$cart);
-		if (self::$cookie->is_guest)
-			Tools::redirect('order.php?step=2');
 	}
 
 	/* Carrier step */
