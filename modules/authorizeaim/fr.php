@@ -31,7 +31,7 @@ $_MODULE['<{authorizeaim}prestashop>authorizeaim_a44217022190f5734b2f72ba1e4f8a7
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_8c1279db4db86553e4b9682f78cf500e'] = 'Date d\'expiration';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_60a104dc50579d60cbc90158fada1dcf'] = 'Code CVV';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_6149e52c36edb9ee4494d5412e42eef2'] = 'les 3 derniers chiffres au dos de votre carte';
-$_MODULE['<{authorizeaim}prestashop>authorizeaim_3cfd82f426314baac679a85da388c8b7'] = 'Valider le paiement';
+$_MODULE['<{authorizeaim}prestashop>authorizeaim_40566b26dcc126bce704f2c1d622a6a3'] = 'Valider la commande';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_5dfe4041e37dfb15cdbdfe8b977950f5'] = 'Veuillez vérifier vos informations bancaires (type de carte de crédit, numéro et date d\'expiration)';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_90c9737c99792791c8fe7c9e469bae9c'] = 'Merci de spécifier votre nom complet';
 $_MODULE['<{authorizeaim}prestashop>hookorderconfirmation_2e2117b7c81aa9ea6931641ea2c6499f'] = 'Votre commande sur';
