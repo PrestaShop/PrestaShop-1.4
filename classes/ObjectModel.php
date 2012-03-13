@@ -722,10 +722,16 @@ abstract class ObjectModelCore
 	*/
 	public static function existsInDatabase($id_entity, $table)
 	{
+		
+		if ($table == 'orders')
+			$field == 'order';
+		else
+			$table = $field;
+			
 		$row = Db::getInstance()->getRow('
 		SELECT `id_'.$table.'` as id
-		FROM `'._DB_PREFIX_.$table.'` e
-		WHERE e.`id_'.$table.'` = '.(int)($id_entity));
+		FROM `'._DB_PREFIX_.$field.'` e
+		WHERE e.`id_'.$field.'` = '.(int)($id_entity));
 
 		return isset($row['id']);
 	}
