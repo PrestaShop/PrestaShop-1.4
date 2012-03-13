@@ -1893,8 +1893,8 @@ class AdminSelfUpgrade extends AdminSelfTab
 						$this->stepDone = true;
 						$this->status = 'ok';
 						$this->next = 'rollbackComplete';
-						$this->nextDesc = $this->l('Database restoration done. now restoring files ...');
-						$this->nextQuickInfo[] = $this->l('database backup has been restored. now restoring files ...');
+						$this->nextDesc = $this->l('Database restoration done.');
+						$this->nextQuickInfo[] = $this->l('database has been restored.');
 						return true;
 					}
 				}
@@ -2512,18 +2512,6 @@ class AdminSelfUpgrade extends AdminSelfTab
 		return Tools14::jsonEncode($return);
 	}
 
-	/**
-	 * displayConf
-	 *
-	 * @return void
-	 */
-	public function displayConf()
-	{
-
-		if (version_compare(_PS_VERSION_,'1.4.5.0','<') AND false)
-			$this->_errors[] = $this->l('This class depends of several files modified in 1.4.5.0 version and should not be used in an older version');
-		parent::displayConf();
-	}
 
 	public function ajaxPreProcess()
 	{
