@@ -65,6 +65,7 @@ var productAvailableForOrder = {if (isset($restricted_country_mode) AND $restric
 var productShowPrice = '{if !$PS_CATALOG_MODE}{$product->show_price}{else}0{/if}';
 var productUnitPriceRatio = '{$product->unit_price_ratio}';
 var idDefaultImage = {if isset($cover.id_image_only)}{$cover.id_image_only}{else}0{/if};
+var ipa_default = {if isset($ipa_default)}{$ipa_default}{/if};
 
 // Customizable field
 var img_ps_dir = '{$img_ps_dir}';
@@ -523,6 +524,7 @@ var fieldRequired = '{l s='Please fill in all required fields, then save the cus
 			</ul>
 			{/if}
 			<p style="clear: left;" id="customizedDatas">
+				<input type="hidden" name="ipa_customization" id="ipa_customization" value="{$ipa_customization}" />
 				<input type="hidden" name="quantityBackup" id="quantityBackup" value="" />
 				<input type="hidden" name="submitCustomizedDatas" value="1" />
 				<input type="button" class="button" value="{l s='Save'}" onclick="javascript:saveCustomization()" />

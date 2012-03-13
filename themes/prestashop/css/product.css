@@ -1,7 +1,7 @@
 
 /* product.tpl */
 #primary_block #pb-right-column {
-	float: right;
+	float: left;
 	width: 10em;
 	text-align: right;
 	margin-left: 0.8em;
@@ -34,7 +34,7 @@
 	height: 15px
 }
 #primary_block #pb-left-column {
-	float: left;
+	float: right;
 	margin-left: 1.1em;
 	width: 233px
 }

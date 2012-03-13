@@ -42,5 +42,5 @@
 {/literal}
 </script>
 {foreach from=$inputs item=input key=name name=myLoop}
-	<input type="hidden" name="{$name|escape:'htmlall':'UTF-8'}" value="{$input|strip_tags|addslashes}"/>
+	<input type="hidden" name="{$name|escape:'htmlall':'UTF-8'}" value="{$input|strip_tags|escape:'htmlall'}"/>
 {/foreach}

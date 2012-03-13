@@ -263,8 +263,11 @@ class ToolsCore
 		$ret = (isset($_POST[$key]) ? $_POST[$key] : (isset($_GET[$key]) ? $_GET[$key] : $defaultValue));
 
 		if (is_string($ret) === true)
-			$ret = urldecode(preg_replace('/((\%5C0+)|(\%00+))/i', '', urlencode($ret)));
-		return !is_string($ret)? $ret : stripslashes($ret);
+			$ret = stripslashes(urldecode(preg_replace('/((\%5C0+)|(\%00+))/i', '', urlencode($ret))));
+		elseif (is_array($ret))
+			foreach ($ret as &$row)
+				$row = stripslashes(urldecode(preg_replace('/((\%5C0+)|(\%00+))/i', '', urlencode($row))));
+		return $ret;
 	}
 
 	public static function getIsset($key)

@@ -39,7 +39,8 @@ if (Tools::isSubmit('firstcall'))
 		<?php
 		echo '<form id="socoForm" name="form" action="'.Configuration::get('SOCOLISSIMO_URL').'" method="POST">';
 		foreach($_GET as $key => $val)
-			echo '<input type="hidden" name="'.$key.'" value="'.$val.'"/>';
+			if (Validate::isCleanHtml($key) && Validate::isCleanHtml($val))
+				echo '<input type="hidden" name="'.Tools::safeOutput($key).'" value="'.Tools::safeOutput($val).'"/>';
 		?>
 	</body>
 </html>
