@@ -622,7 +622,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 		$this->excludeFilesFromUpgrade[] = '..';
 		$this->excludeFilesFromUpgrade[] = '.svn';
 		// do not copy install, neither settings.inc.php in case it would be present
-		$this->excludeFilesFromUpgrade[] = 'install';
+		$this->excludeAbsoluteFilesFromUpgrade[] = "/install";
 		$this->excludeFilesFromUpgrade[] = 'settings.inc.php';
 		// this will exclude autoupgrade dir from admin, and autoupgrade from modules
 		$this->excludeFilesFromUpgrade[] = 'autoupgrade';
@@ -2663,7 +2663,6 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 		else if (!empty($this->backupFilesFilename) || !empty($this->backupDbFilename))
 		{
 			$content .= '<div id="rollbackContainer">
-				@TODO rollback
 				<a disabled="disabled" class="upgradestep button" href="" id="rollback">'.$this->l('rollback').'</a>
 			</div><br/>';
 		}
