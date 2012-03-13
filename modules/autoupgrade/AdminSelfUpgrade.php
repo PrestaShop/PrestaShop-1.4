@@ -1856,7 +1856,10 @@ class AdminSelfUpgrade extends AdminSelfTab
 			{
 				$table = array_shift($v);
 				if (!in_array($table, $ignore_stats_table))
-					$drops['drop'.$k] = 'DROP TABLE IF EXISTS `'.bqSql($table).'`';
+				{
+					$drops['drop table '.$k] = 'DROP TABLE IF EXISTS `'.bqSql($table).'`';
+					$drops['drop view '.$k] = 'DROP VIEW IF EXISTS `'.bqSql($table).'`';
+				}
 			}
 			unset($all_tables);
 			$listQuery = array_merge($drops, $listQuery);
