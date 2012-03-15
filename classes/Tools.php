@@ -265,10 +265,29 @@ class ToolsCore
 		if (is_string($ret) === true)
 			$ret = stripslashes(urldecode(preg_replace('/((\%5C0+)|(\%00+))/i', '', urlencode($ret))));
 		elseif (is_array($ret))
-			foreach ($ret as &$row)
-				$row = stripslashes(urldecode(preg_replace('/((\%5C0+)|(\%00+))/i', '', urlencode($row))));
+            $ret = Tools::getArrayValue($ret);
+
 		return $ret;
 	}
+
+    /**
+     * Escape values contained in an array
+     *
+     * @param array $array Value array
+     * @return mixed Value
+     */
+    public static function getArrayValue($array)
+    {
+        foreach ($array as &$row)
+        {
+            if (is_array($row))
+                $row = Tools::getArrayValue($row);
+            else
+                $row = stripslashes(urldecode(preg_replace('/((\%5C0+)|(\%00+))/i', '', urlencode($row))));
+        }
+
+        return $array;
+    }
 
 	public static function getIsset($key)
 	{
