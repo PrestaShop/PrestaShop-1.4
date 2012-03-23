@@ -50,7 +50,7 @@ $customer = new Customer((int)$cart->id_customer);
 if (!Validate::isLoadedObject($customer))
 	Tools::redirectLink(__PS_BASE_URI__.'order.php?step=1');
 
-$currency = new Currency((int)(Tools::isSubmit('currency_payement') ? Tools::getValue('currency_payement') : $cookie->id_currency));
+$currency = new Currency($cookie->id_currency);
 $total = (float)$cart->getOrderTotal(true, Cart::BOTH);
 
 $mailVars =	array(

@@ -50,8 +50,9 @@ $customer = new Customer((int)$cart->id_customer);
 if (!Validate::isLoadedObject($customer))
 	Tools::redirectLink(__PS_BASE_URI__.'order.php?step=1');
 
-$currency = new Currency(Tools::getValue('currency_payement', false) ? Tools::getValue('currency_payement') : $cookie->id_currency);
-$total = (float)($cart->getOrderTotal(true, Cart::BOTH));
+$currency = new Currency($cookie->id_currency);
+$total = (float)$cart->getOrderTotal(true, Cart::BOTH);
+
 $mailVars = array(
 	'{bankwire_owner}' => Configuration::get('BANK_WIRE_OWNER'),
 	'{bankwire_details}' => nl2br(Configuration::get('BANK_WIRE_DETAILS')),
