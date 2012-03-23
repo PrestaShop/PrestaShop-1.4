@@ -33,8 +33,8 @@ if (version_compare(_PS_VERSION_, '1.4', '<'))
 	{
 		public function __construct()
 		{
-
 		}
+
 
 		public static function getShops()
 		{
@@ -178,15 +178,11 @@ class ShopBackwardModule extends Shop
 {
 	const CONTEXT_ALL = 1;
 
+	public $id = 1;
+
 	public function getContextType()
 	{
 		return ShopBackwardModule::CONTEXT_ALL;
-	}
-
-	// Simulate shop for 1.3 / 1.4
-	public function getID()
-	{
-		return 1;
 	}
 }
 

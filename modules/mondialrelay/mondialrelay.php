@@ -71,7 +71,7 @@ class MondialRelay extends Module
 	{
 		$this->name		= 'mondialrelay';
 		$this->tab		= 'shipping_logistics';
-		$this->version	= '1.8.1';
+		$this->version	= '1.8.2';
 		$this->installed_version = '';
 		$this->module_key = '366584e511d311cfaa899fc2d9ec1bd0';
 
@@ -142,12 +142,8 @@ class MondialRelay extends Module
 				(id_lang, id_tab, name)
 				VALUES("'.(int)($language['id_lang']).'", "'.(int)($id_tab).'", "Mondial Relay")');
 
-			$profiles = Profile::getProfiles(Configuration::get('PS_LANG_DEFAULT'));
-			foreach ($profiles as $profile)
-				Db::getInstance()->execute('
-				INSERT INTO ' . _DB_PREFIX_ . 'access
-				(`id_profile`,`id_tab`,`view`,`add`,`edit`,`delete`)
-				VALUES('.$profile['id_profile'].', '.(int)($id_tab).', 1, 1, 1, 1)');
+			if (!Tab::initAccess($id_tab))
+				return false;
 
 			if (is_dir(_PS_MODULE_DIR_.'mondialrelay/'))
 				@copy(_PS_MODULE_DIR_.'mondialrelay/AdminMondialRelay.gif', _PS_IMG_DIR_.'/AdminMondialRelay.gif');
@@ -684,8 +680,8 @@ class MondialRelay extends Module
 				'MR_CODE_MARQUE' => Tools::getValue('MR_code_marque'),
 				'MR_KEY_WEBSERVICE' => Tools::getValue('MR_webservice_key'),
 				'MR_LANGUAGE' => Tools::getValue('MR_language'),
-				'MR_WEIGHT_COEFFICIENT' => Tools::getValue('MR_weight_coefficient'),
 				'MR_ORDER_STATE' => $this->account_shop['MR_ORDER_STATE'],
+				'MR_WEIGHT_COEFFICIENT' => Tools::getValue('MR_weight_coefficient'),
 				'id_shop' => $this->context->shop->getID()
 			);
 
@@ -761,6 +757,7 @@ class MondialRelay extends Module
 				'MR_account_set' => MondialRelay::isAccountSet(),
 				'MR_local_path' => MondialRelay::$modulePath,
 				'MR_upgrade_detail' => $this->upgrade_detail,
+				'MR_unit_weight_used' => Configuration::get('PS_WEIGHT_UNIT'),
 				'MR_base_dir' => MondialRelay::$moduleURL)
 		);
 		return $this->fetchTemplate('/tpl/', 'configuration');
@@ -1007,10 +1004,10 @@ class MondialRelay extends Module
 							CONCAT(c.`firstname`, " ", c.`lastname`) AS `customer`,
 							o.`total_paid_real` as total, o.`total_shipping` as shipping,
 							o.`date_add` as date, o.`id_currency` as id_currency, o.`id_lang` as id_lang,
-							mrs.`MR_poids` as weight, mr.`name` as mr_Name, mrs.`MR_Selected_Num` as MR_Selected_Num,
+							mrs.`MR_poids` as mr_weight, mr.`name` as mr_Name, mrs.`MR_Selected_Num` as MR_Selected_Num,
 							mrs.`MR_Selected_Pays` as MR_Selected_Pays, mrs.`exp_number` as exp_number,
 							mr.`col_mode` as mr_ModeCol, mr.`dlv_mode` as mr_ModeLiv, mr.`insurance` as mr_ModeAss,
-							ROUND(SUM(odt.`product_weight` * odt.`product_quantity`)  * '.(int)$weight_coefficient.') AS "odt_weight"
+							ROUND(SUM(odt.`product_weight` * odt.`product_quantity`)  * '.(int)$weight_coefficient.') AS "order_weight"
 			FROM `'._DB_PREFIX_.'orders` o
 			LEFT JOIN `'._DB_PREFIX_.'carrier` ca
 			ON (ca.`id_carrier` = o.`id_carrier`)

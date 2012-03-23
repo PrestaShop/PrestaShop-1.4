@@ -62,6 +62,7 @@ class AdminMondialRelay extends AdminTab
 			$order['display_total_price'] = Tools::displayPrice($order['total'], new Currency($order['id_currency']));
 			$order['display_shipping_price'] = Tools::displayPrice($order['shipping'], new Currency($order['id_currency']));
 			$order['display_date'] = Tools::displayDate($order['date'], $order['id_lang']);
+			$order['weight'] = (!empty($order['mr_weight']) && $order['mr_weight'] > 0) ? $order['mr_weight'] : $order['order_weight'];
 		}
 
 		$this->context->smarty->assign(array(
