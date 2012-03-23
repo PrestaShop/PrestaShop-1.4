@@ -33,8 +33,6 @@ class ConnectionsSourceCore extends ObjectModel
 	public $keywords;
 	public $date_add;
 
-	// Controler les keywords
-	
 	protected	$fieldsRequired = array('id_connections', 'date_add');
 	protected	$fieldsValidate = array('id_connections' => 'isUnsignedId', 'http_referer' => 'isAbsoluteUrl', 'request_uri' => 'isUrl', 'keywords' => 'isMessage');
 
