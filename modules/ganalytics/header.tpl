@@ -1,8 +1,11 @@
 <script type="text/javascript">
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', '{$ganalytics_id}']);
+// Recommanded value by Google doc and has to before the trackPageView
+_gaq.push(['_setSiteSpeedSampleRate', 5]);
+
 {if isset($pageTrack)}_gaq.push(['_trackPageview', '{$pageTrack}']);{/if}
-_gaq.push(['_trackPageLoadTime']);
+
 {if $isOrder eq true}		{* If it's an order we need more data for stats *}
   _gaq.push(['_addTrans',
     '{$trans.id}',			{* order ID - required			*}
