@@ -724,13 +724,13 @@ abstract class ObjectModelCore
 	{
 		
 		if ($table == 'orders')
-			$field == 'order';
+			$field = 'order';
 		else
-			$table = $field;
+			$field = $table;
 			
 		$row = Db::getInstance()->getRow('
-		SELECT `id_'.$table.'` as id
-		FROM `'._DB_PREFIX_.$field.'` e
+		SELECT `id_'.$field.'` as id
+		FROM `'._DB_PREFIX_.$table.'` e
 		WHERE e.`id_'.$field.'` = '.(int)($id_entity));
 
 		return isset($row['id']);
