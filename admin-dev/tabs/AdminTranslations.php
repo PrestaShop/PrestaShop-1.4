@@ -211,25 +211,71 @@ class AdminTranslations extends AdminTab
 	
 	public function checkAndAddMailsFiles ($iso_code, $files_list)
 	{
+		// 1 - Scan mails files
 		$mails = scandir(_PS_MAIL_DIR_.'en/');
 		$mails_new_lang = array();
+
+		// Get all email files
 		foreach ($files_list as $file)
-		{
 			if (preg_match('#^mails\/([a-z0-9]+)\/#Ui', $file['filename'], $matches))
 			{
 				$slash_pos = strrpos($file['filename'], '/');
-				$mails_new_lang[] = substr($file['filename'], -(strlen($file['filename'])-$slash_pos-1));
+				$mails_new_lang[] = substr($file['filename'], -(strlen($file['filename']) - $slash_pos - 1));
+			}
+
+		// Get the difference
+		$arr_mails_needed = array_diff($mails, $mails_new_lang);
+
+		// Add mails files
+		foreach ($arr_mails_needed as $mail_to_add)
+			if (!in_array($mail_to_add, array('.', '..', '.svn', '.htaccess')))
+				@copy(_PS_MAIL_DIR_.'en/'.$mail_to_add, _PS_MAIL_DIR_.$iso_code.'/'.$mail_to_add);
+
+
+		// 2 - Scan modules files
+		$modules = scandir(_PS_MODULE_DIR_);
+
+		$module_mail_en = array();
+		$module_mail_iso_code = array();
+
+		foreach ($modules as $module)
+		{
+			if (!in_array($module, array('.', '..', '.svn', '.htaccess')) && file_exists(_PS_MODULE_DIR_.$module.'/mails/en/'))
+			{
+				$arr_files = scandir(_PS_MODULE_DIR_.$module.'/mails/en/');
+
+				foreach ($arr_files as $file)
+				{
+					if (!in_array($file, array('.', '..', '.svn', '.htaccess')))
+					{
+						if (file_exists(_PS_MODULE_DIR_.$module.'/mails/en/'.$file))
+							$module_mail_en[] = _PS_MODULE_DIR_.$module.'/mails/ISO_CODE/'.$file;
+
+						if (file_exists(_PS_MODULE_DIR_.$module.'/mails/'.$iso_code.'/'.$file))
+							$module_mail_iso_code[] = _PS_MODULE_DIR_.$module.'/mails/ISO_CODE/'.$file;
+					}
+				}
 			}
 		}
-		$arr_mails_needed = array_diff($mails, $mails_new_lang);
-		foreach ($arr_mails_needed as $mail_to_add)
+
+		// Get the difference in this modules
+		$arr_modules_mails_needed = array_diff($module_mail_en, $module_mail_iso_code);
+
+		// Add mails files for this modules
+		foreach ($arr_modules_mails_needed as $file)
 		{
-			if ($mail_to_add !== '.' && $mail_to_add !== '..' && $mail_to_add !== '.svn')
-			{
-				@copy(_PS_MAIL_DIR_.'en/'.$mail_to_add, _PS_MAIL_DIR_.$iso_code.'/'.$mail_to_add);
-			}
+			$file_en = str_replace('ISO_CODE', 'en', $file);
+			$file_iso_code = str_replace('ISO_CODE', $iso_code, $file);
+			$dir_iso_code = substr($file_iso_code, 0, -(strlen($file_iso_code) - strrpos($file_iso_code, '/') - 1));
+
+			if (!file_exists($dir_iso_code))
+				mkdir($dir_iso_code);
+
+			if (file_exists($file_en))
+				copy($file_en, $file_iso_code);
 		}
 	}
+
 	public function submitImportLang()
 	{
 		global $currentIndex;
@@ -241,9 +287,11 @@ class AdminTranslations extends AdminTab
 			$gz = new Archive_Tar($_FILES['file']['tmp_name'], true);
 			$iso_code = str_replace('.gzip', '', $_FILES['file']['name']);
 			$files_list = $gz->listContent();
+
 			if ($gz->extract(_PS_TRANSLATIONS_DIR_.'../', false))
 			{
 				$this->checkAndAddMailsFiles($iso_code, $files_list);
+
 				if (Validate::isLanguageFileName($_FILES['file']['name']))
 				{
 					if (!Language::checkAndAddLanguage($iso_code))
@@ -251,7 +299,8 @@ class AdminTranslations extends AdminTab
 				}
 				Tools::redirectAdmin($currentIndex.'&conf='.(isset($conf) ? $conf : '15').'&token='.$this->token);
 			}
-			$this->_errors[] = Tools::displayError('Archive cannot be extracted.');
+			else
+				$this->_errors[] = Tools::displayError('Archive cannot be extracted.');
 		}
 	}
 	
