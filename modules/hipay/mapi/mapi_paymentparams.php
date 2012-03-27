@@ -57,9 +57,17 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 	/**
 	 * Langue par défaut de l'interface de paiement
 	 *
+	 * @Deprecated by $locale (see hipay documentation)
 	 * @var string
 	 */
 	protected $defaultLang;
+
+	/**
+	 * Langue par défaut de l'interface de paiement
+	 *
+	 * @var string
+	 */
+	protected $locale;
 
 	/**
 	 * Type d'interface de paiement
@@ -342,6 +350,32 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 	 */
 	public function getDefaultLang() {
 		return $this->defaultLang;
+	}
+
+	/**
+	 * Assigne la lange par défaut (AZ_az = pays_langue)
+	 *
+	 * @param string $locale
+	 * @return boolean
+	 */
+	public function setLocale($locale) {
+		if ($this->_locked)
+			return false;
+
+		if (!preg_match('#^[A-Z]{2}_[a-z]{2}$#', $locale))
+			return false;
+
+		$this->locale = $locale;
+		return true;
+	}
+
+	/**
+	 * Retourne la langue par défaut
+	 *
+	 * @return string
+	 */
+	public function getLocale() {
+		return $this->locale;
 	}
 
 	/**
@@ -854,6 +888,7 @@ class HIPAY_MAPI_PaymentParams extends HIPAY_MAPI_lockable {
 		$this->fixedCostAccount = 0;
 		$this->shippingCostAccount = 0;
 		$this->defaultLang = HIPAY_MAPI_DEFLANG;
+		$this->locale = HIPAY_MAPI_DEFLANG;
 		$this->media = HIPAY_MAPI_DEFMEDIA;
 		$this->rating = '';
 		$this->paymentMethod = -1;

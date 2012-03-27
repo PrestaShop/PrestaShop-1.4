@@ -37,7 +37,7 @@ class Hipay extends PaymentModule
 	{
 		$this->name = 'hipay';
 		$this->tab = 'payments_gateways';
-		$this->version = 1.2;
+		$this->version = 1.3;
 
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
@@ -192,9 +192,9 @@ class Hipay extends PaymentModule
 		$paymentParams->setAccounts($hipayAccount, $hipayAccount);
 		// EN_us is not a standard format, but that's what Hipay uses 
 		if (isset($language->language_code))
-			$paymentParams->setDefaultLang($this->formatLanguageCode($language->language_code));
+			$paymentParams->setLocale($this->formatLanguageCode($language->language_code));
 		else
-			$paymentParams->setDefaultLang(strtoupper($language->iso_code).'_'.strtolower($language->iso_code));
+			$paymentParams->setLocale(strtoupper($language->iso_code).'_'.strtolower($language->iso_code));
 		$paymentParams->setMedia('WEB');
 		$paymentParams->setRating(Configuration::get('HIPAY_RATING'));
 		$paymentParams->setPaymentMethod(HIPAY_MAPI_METHOD_SIMPLE);
