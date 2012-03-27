@@ -34,6 +34,9 @@ include(dirname(__FILE__).'/bankwire.php');
 
 if (!$cookie->isLogged(true))
 	Tools::redirect('authentication.php?back=order.php');
+elseif (!Customer::getAddressesTotalById((int)($cookie->id_customer)))
+	Tools::redirect('address.php?back=order.php?step=1');
+
 $bankwire = new BankWire();
 echo $bankwire->execPayment($cart);
 
