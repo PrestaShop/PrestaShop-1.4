@@ -34,7 +34,7 @@ class GAnalytics extends Module
 	{
 	 	$this->name = 'ganalytics';
 	 	$this->tab = 'analytics_stats';
-	 	$this->version = '1.4';
+	 	$this->version = '1.4.1';
 		$this->author = 'PrestaShop';
 		$this->displayName = 'Google Analytics';
 		
@@ -159,17 +159,20 @@ class GAnalytics extends Module
 		// Better way to check which file / controller name is loaded
 		if (!($file = basename(Tools::getValue('controller'))))
 			$file = str_replace(array('.php', '-'), '', basename($_SERVER['SCRIPT_NAME']));
-		
-		// If other controller / file name need to be done, add it to the array
-		if (in_array($file, array('orderconfirmation')))
-			return '';
+
+		#PNM-30 - Order confirmation wasn't tracked
+			// If other controller / file name need to be done, add it to the array
+			// if (in_array(v, array('orderconfirmation')))
+				// return '';
 		
 		// Otherwise, create Google Analytics stats
 		$ganalytics_id = Configuration::get('GANALYTICS_ID');
 		$multilang = method_exists('Language', 'isMultiLanguageActivated') ? Language::isMultiLanguageActivated() : (Language::countActiveLanguages() > 1);
 		$defaultMetaOrder = Meta::getMetaByPage('order',$this->context->language->id);
 		$order = ($multilang?((string)Tools::getValue('isolang').'/'):'').$defaultMetaOrder['url_rewrite'];
-		$pageTrack = ((strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order.php') === 0 || strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.($multilang?((string)Tools::getValue('isolang').'/'):'').$defaultMetaOrder['url_rewrite']) === 0) ? '/order/step'.(int)(Tools::getValue('step')).'.html' : '');
+		$pageTrack = ((strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order.php') === 0 ||
+			strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.($multilang ? ((string)Tools::getValue('isolang').'/') : '').$defaultMetaOrder['url_rewrite']) === 0) ?
+			'/order/step'.(int)(Tools::getValue('step')).'.html' : $file);
 		$this->context->smarty->assign('ganalytics_id', $ganalytics_id);
 		$this->context->smarty->assign('pageTrack', $pageTrack);
 		$this->context->smarty->assign('isOrder', false);
