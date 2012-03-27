@@ -125,7 +125,7 @@
 				}
 				else
 				{
-					$('#aut').submit();
+					$('#authorizeaim_form').submit();
 				}
 				return false;
 			});
