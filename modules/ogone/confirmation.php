@@ -35,7 +35,7 @@ $id_cart = Tools::getValue('orderID');
 $key = Db::getInstance()->getValue('SELECT secure_key FROM '._DB_PREFIX_.'customer WHERE id_customer = '.(int)$cookie->id_customer);
 $context = Context::getContext();
 
-$page = (_PS_VERSION_ < '1.5') ? 'my-account.php' : 'my-account';
+$page = (_PS_VERSION_ < '1.5') ? 'order-confirmation.php' : 'order-confirmation';
 
 $ogone_link = method_exists($context->link, 'getPageLink') ? $context->link->getPageLink($page) : _PS_BASE_URL_.$page;
 
