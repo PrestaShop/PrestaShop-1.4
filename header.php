@@ -26,14 +26,10 @@
 */
 
 // Save the value of $useSSL ($useSSL will be overwritten by FrontController::__contruct())
-$saveSSL = false;
-if (isset($useSSL) and $useSSL)
-	$saveSSL = true;
-	
 $controller = new FrontController();
 
-// If $useSSL was set to "true", then overwrite its value to true 
-if ($saveSSL)
+if (Tools::usingSecureMode())
 	$useSSL = $controller->ssl = true;
 	
 $controller->displayHeader();
+
