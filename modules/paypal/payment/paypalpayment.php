@@ -72,9 +72,9 @@ class PaypalPayment extends Paypal
 		$discounts = (float)($cart->getOrderTotal(true, PayPal::ONLY_DISCOUNTS));
 		if ($discounts == 0)
 		{
-			if ($params['cart']->id_customer)
+			if ($cart->id_customer)
 			{
-				$customer = new Customer((int)$params['cart']->id_customer);
+				$customer = new Customer((int)$cart->id_customer);
 				$taxCalculationMethod = Group::getPriceDisplayMethod((int)$customer->id_default_group);
 			}
 			else

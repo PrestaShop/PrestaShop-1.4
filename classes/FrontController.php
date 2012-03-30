@@ -75,6 +75,10 @@ class FrontControllerCore
 			return;
 		self::$initialized = true;
 
+		// If current URL use SSL, set it true (used a lot for module redirect)
+		if (Tools::usingSecureMode())
+			$useSSL = $this->ssl = true;
+
 		$css_files = array();
 		$js_files = array();
 

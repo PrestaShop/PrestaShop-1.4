@@ -438,7 +438,6 @@ class PayPal extends PaymentModule
 			$request .= '&ORDERDESCRIPTION='.urlencode(substr($description, 0, 120));
 		}
 
-
 		// Calling PayPal API
 		include_once(_PS_MODULE_DIR_.'paypal/api/paypallib.php');
 		$ppAPI = new PaypalLib();
@@ -456,9 +455,6 @@ class PayPal extends PaymentModule
 			$ppExpress->displayPayPalAPIError($ppExpress->l('PayPal return error.', 'submit'), $logs);
 		}
 		
-
-
-
 		// Making log
 		$id_transaction = $result['TRANSACTIONID'];
 		if (Configuration::get('PAYPAL_CAPTURE'))
@@ -504,7 +500,7 @@ class PayPal extends PaymentModule
 			return;
 		
 		// Set transaction details if pcc is defiend in PaymentModule class_exists
-		if ($this->pcc)
+		if (isset($this->pcc))
 		{
 			$this->pcc->transaction_id = (isset($extraVars['transaction_id']) ?
 				$extraVars['transaction_id'] : '');
