@@ -24,6 +24,92 @@ International Registred Trademark & Property of PrestaShop SA
 Release Notes for PrestaShop 1.4
 --------------------------------
 ####################################
+#   v1.4.7.2 - 14279 (2012-03-26)  #
+####################################
+
+	Improved/changed features:
+
+	[*] WS : Allow getter override from another class
+
+	Fixed bugs:
+
+	[-] Classes : improve escape method of getValues method
+
+	[-] MO : Cash on delivery updated
+	[-] MO : Fixed bug #PNM-34. Deprecated function.
+	[-] MO : Fixed bug #PSFV-493, fix multiple id form
+	[-] MO : Fix tab init access install, update backward retrocompatibility
+	[-] MO : Mondialrelay [backward compatibility] : add currentIndex for 1.5 shops
+
+
+####################################
+#   v1.4.7.1 - 14114 (2012-03-13)  #
+####################################
+
+	Added Features:
+
+	[+] MO : Paysafecard, Add backward compatibility < 1.5
+
+	Improved/changed features:
+
+	[*] Installer : now doUpgrade.php can returns xml, json or nothing if specified
+	[*] Installer : upgrade database result now has also version number information for each query
+
+	[*] MO : buyster module updated
+	[*] MO : Feeder : #PSCFI-4851 : Added in the page module configuration example of a url
+	[*] MO : trustedshop, protection product is deleted of the cart when the customer change the currency
+	[*] MO : updated module tnt
+
+	Fixed bugs:
+
+	[-] Project : #PSCFI-4737 - Add no-cache to header when there are 301 to avoid caching
+
+	[-] FO : BugFix : #PSCFI-4788 : space added between category name and label.
+	[-] FO : Fixed bug #PSCFI-4804. Product style reviewed for safari.
+	[-] FO : #PSCFI-4733 - Pagination creates pages that should not exist (and duplicate content)
+	[-] FO : #PSCFI-4762 - When cart contain virtual products and physical products, use only physicals to calculate shipping cost
+	[-] FO : #PSCFI-4892 : BugFix CMS terms and conditions breadcrumb
+	[-] FO : #PSCFI-4986 : Delete instruction which create a loop for a guest who use the process payment
+	[-] FO : SSL configuration wasn't properly saved for the payment modules (only when header.php was included)
+
+	[-] BO : Bug Fixed #PSCFI-4954 Incorrect number of customization refunded
+	[-] BO : BugFix : #PSCFI-4919 : "/" removed from a path to a jquery plugin.
+	[-] BO : fix bug #PSCFI-4960 - Clone Downloadable product and delete file from the clone result file deletion in both products
+	[-] BO : Fixed bug PSCFI-4736 -  Order details not saved when tax name too long
+	[-] BO : fixed bug #PSCFI-4761 - Attributes import missing parameter
+	[-] BO : Fixed #PSCFI-4808
+	[-] BO : #PSCFI-4696 - Blocklayered : option "Hide filter values with no product is matching" does'nt work
+	[-] BO : #PSCFI-4783 : Corrected some errors and added a field in order fox an export bug of csv
+	[-] BO : #PSCFI-4790 : deleted "fr/" directory
+	[-] BO : #PSCFI-4873 : Updated of method for translated modules. Now, you can translate only installed modules
+	[-] BO : #PSCFI-4890 : Fix bugs of languages
+	[-] BO : #PSFV-595 - Can't delete CMS Category.
+
+	[-] Classes : fixed bug #PSCFI-4884 - DbCore::autoExecute function doesn't handle booleans correctly (boolean converted to empty string instead of int)
+	[-] Classes : #PSCFI-4931 : BugFix Better encoding for accentuated chars in mails headers
+	[-] Classes : #PSCFI-4993 : BugFix - Generate vouchers taxes included on cancel order
+
+	[-] MO : Authorize AIM, Add backward compatibility 1.5
+	[-] MO : DIBS, Add backward compatibility for 1.4 / 1.5
+	[-] MO : DIBS, Add backward compatibility for 1.4 / 1.5 #2
+	[-] MO : hipay module is now working on 1.4 and 1.5
+	[-] MO : MailAlerts : fix bug translation of subject email
+	[-] MO : Mondialrelay, Add back 'displayInfoCart' and fix generated tickets with a bad number phone
+	[-] MO : Mondialrelay, Fix translation for 1.3 using smarty
+	[-] MO : moneybookers updated, the module is now working on version 1.4 and 1.5
+	[-] MO : Removing CashTicket module
+	[-] MO : Socolissimo, Add backward compatibility 1.4/ 1.5
+	[-] MO : TNT carrier updated
+
+	[-] WS : Fixed groups for customer in Webservice
+	[-] WS : Fixed groups for customer in Webservice
+	[-] WS : Fixed taxes api PSCFI-4902
+
+	[-] PDF : Discount applied 2 times
+	[-] PDF : Discount applied 2 times when using an order discount
+
+
+####################################
 #   v1.4.7.0 - 13144 (2012-02-08)  #
 ####################################
 
