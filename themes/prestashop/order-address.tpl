@@ -88,7 +88,7 @@
 			],
 			'formated_fields_values':{ldelim}
 					{foreach from=$type.formated_fields_values key=pattern_name item=field_name name=inv_loop}
-						{if !$smarty.foreach.inv_loop.first},{/if}"{$pattern_name}":"{$field_name}"
+						{if !$smarty.foreach.inv_loop.first},{/if}"{$pattern_name}":"{$field_name|escape:'htmlall':'UTF-8'}"
 					{/foreach}
 				{rdelim}
 		{rdelim}
