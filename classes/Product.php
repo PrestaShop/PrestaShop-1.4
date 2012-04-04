@@ -590,7 +590,8 @@ class ProductCore extends ObjectModel
 		$return = 1;
 		foreach ($products AS $id_product)
 		{
-			$product = new Product((int)($id_product));
+			$product = new Product();
+			$product->id = (int)$id_product;
 			$return &= $product->delete();
 		}
 		return $return;
