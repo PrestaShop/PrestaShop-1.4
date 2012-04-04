@@ -413,7 +413,7 @@ class BlockCms extends Module
 		<form method="POST" action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'">
 		<fieldset>
 			<legend><img src="'._PS_BASE_URL_.__PS_BASE_URI__.'modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Footer\'s various links Configuration').'</legend>
-			<input type="checkbox" name="footer_poweredby_active" id="footer_poweredby_active" '.(((int)Configuration::get('FOOTER_POWEREDBY') === 1 || Configuration::get('FOOTER_POWEREDBY') === false) ? 'checked="checked"' : '').'> <label for="footer_active" style="float:none;">'.$this->l('Display "Powered by Prestashop"').'</label><br /><br />
+			<input type="checkbox" name="footer_poweredby_active" id="footer_poweredby_active" '.(((int)Configuration::get('FOOTER_POWEREDBY') === 1 || Configuration::get('FOOTER_POWEREDBY') === false) ? 'checked="checked"' : '').'> <label for="footer_poweredby_active" style="float:none;">'.$this->l('Display "Powered by Prestashop"').'</label><br /><br />
 			<input type="checkbox" name="footer_active" id="footer_active" '.(Configuration::get('FOOTER_BLOCK_ACTIVATION') ? 'checked="checked"' : '').'> <label for="footer_active" style="float:none;">'.$this->l('Display the Footer\'s various links').'</label><br /><br />
 			<table cellspacing="0" cellpadding="0" class="table" width="100%">
 				<tr>
