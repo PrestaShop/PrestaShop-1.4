@@ -206,7 +206,7 @@ class TrustedShopsRating extends AbsTrustedShops
 				}
 				elseif (!$this->_isTsIdActive((int)$language['id_lang'], $ts_id))
 				{
-					$error = $this->_validateTrustedShopId_validateTrustedShopId($ts_id, (int)$language['id_lang']);
+					$error = $this->_validateTrustedShopId($ts_id, (int)$language['id_lang']);
 					if ($error != '') $this->errors[] = $error;
 					$flag_return = false;
 				}
