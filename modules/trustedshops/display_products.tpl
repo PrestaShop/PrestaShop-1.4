@@ -24,65 +24,74 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<script type="text/javascript">
-	$().ready(function()
-	{
-		var items_length = $('#ts-list-items').find('input').length;
-		//$('#ts-list-items').css('line-height', ((70/items_length) > 12 ? Math.round(70/items_length) : 12 )+'px');
-		TS.init();
-	});
 
-var TS = (function()
+{if $item_exist}
+	<script type="text/javascript">
+		$().ready(function()
 		{
-	function updateTsProduct(id_product, type_action)
-	{
-		$.ajax({
-			type: 'POST',
-			url: baseDir + 'cart.php',
-			async: true,
-			cache: false,
-			dataType : "json",
-			data: type_action+'=1&ajax=true&qty=1&id_product=' + id_product + '&token=' + static_token,
-			success: function(jsonData)
-			{
-				ajaxCart.updateCart(jsonData);
-				$('span.price').not('#cart_block_shipping_cost').not('.products .price').html(jsonData.total);
-				
-			}
+			var items_length = $('#ts-list-items').find('input').length;
+			//$('#ts-list-items').css('line-height', ((70/items_length) > 12 ? Math.round(70/items_length) : 12 )+'px');
+			TS.init();
 		});
-	}
 
-	return {
-		init: function ()
-		{	
-			$('#ts-list-items input[type=checkbox]').click(function(e)
+	var TS = (function()
 			{
-				var $t = $(this);
-				var id_number = $t.attr('id').split('-')[2];
+		function updateTsProduct(id_product, type_action)
+		{
+			$.ajax({
+				type: 'POST',
+				url: baseDir + 'cart.php',
+				async: true,
+				cache: false,
+				dataType : "json",
+				data: type_action+'=1&ajax=true&qty=1&id_product=' + id_product + '&token=' + static_token,
+				success: function(jsonData)
+				{
+					ajaxCart.updateCart(jsonData);
+					$('span.price').not('#cart_block_shipping_cost').not('.products .price').html(jsonData.total);
 
-				if ($t.attr('checked'))	
-					updateTsProduct(id_number, 'add');
-				else
-					updateTsProduct(id_number, 'delete');
+				}
 			});
 		}
-	}
-})();
-</script>
 
-<div style="border:solid 1px #000; width: 537px; border: 1px solid #595A5E; margin-bottom: 10px;">
-	<h3 style="padding:0 0 0 5px;"><b>{l s='Trusted Shops Buyer Protection (recommended)' mod='trustedshops'}</b></h3>
-	<div style="float:left; width:100px;">
-		<a href="https://www.trustedshops.com/shop/certificate.php?shop_id={$shop_id}" target="_blank">
-			<img id="logo_trusted" style="margin:2px 0 10px 10px" alt="logo" src="{$module_dir}img/siegel.gif" border="0" />
-		</a>
-	</div>
-	<div id="ts-list-items">
-		{foreach from=$buyer_protection_items item=product}
-			<p><input id="ts-product-{$product.id_product}" type="checkbox" value="{$product.id_product}" name="item_product"> {l s='Buyer protection up to' mod='trustedshops'} {($product.protected_amount_decimal * $conversion_rate)|round:2} {$currency_iso_code} ({$price|round:2} {$currency_iso_code} {l s='incl. VAT' mod='trustedshops'})</p>
-		{/foreach}
+		return {
+			init: function ()
+			{
+				$('#ts-list-items input[type=checkbox]').click(function(e)
+				{
+					var $t = $(this);
+					var id_number = $t.attr('id').split('-')[2];
+
+					if ($t.attr('checked'))
+						updateTsProduct(id_number, 'add');
+					else
+						updateTsProduct(id_number, 'delete');
+				});
+			}
+		}
+	})();
+	</script>
+
+	<div style="border:solid 1px #000; width: 537px; border: 1px solid #595A5E; margin-bottom: 10px;">
+		<h3 style="padding:0 0 0 5px;"><b>{l s='Trusted Shops Buyer Protection (recommended)' mod='trustedshops'}</b></h3>
+		<div style="float:left; width:100px;">
+			<a href="https://www.trustedshops.com/shop/certificate.php?shop_id={$shop_id}" target="_blank">
+				<img id="logo_trusted" style="margin:2px 0 10px 10px" alt="logo" src="{$module_dir}img/siegel.gif" border="0" />
+			</a>
+		</div>
+		<div id="ts-list-items">
+			<p>
+				<input id="ts-product-{$buyer_protection_item.id_product}" type="checkbox" value="{$buyer_protection_item.id_product}" name="item_product">
+				{l s='Buyer protection up to' mod='trustedshops'} {$buyer_protection_item.protected_amount_decimal|round:2} {$buyer_protection_item.currency.iso_code} ({$buyer_protection_item.gross_fee|round:2}{$buyer_protection_item.currency.iso_code} {l s='incl. VAT' mod='trustedshops'})
+			</p>
 		<div id="content_checkout" style="margin-left:100px">
-		<p>{l s='The Trusted Shops Buyer Protection secures your online purchase. I agree to my email address being transferred and' mod='trustedshops'} <b><a href="http://www.trustedshops.com/shop/data_privacy.php?shop_id={$shop_id}" target="_blank">{l s='saved' mod='trustedshops'}</a></b> {l s='for the purposes of Buyer Protection processing by Trusted Shops.' mod='trustedshops'} <b><a href="http://www.trustedshops.com/shop/protection_conditions.php?shop_id={$shop_id}" target="_blank">{l s='Conditions' mod='trustedshops'}</a></b> {l s='for Buyer Protection.' mod='trustedshops'}</p></div>
+			<p>
+				{l s='The Trusted Shops Buyer Protection secures your online purchase. I agree to my email address being transferred and' mod='trustedshops'} <b>
+				<a href="http://www.trustedshops.com/shop/data_privacy.php?shop_id={$shop_id}" target="_blank">{l s='saved' mod='trustedshops'}</a></b>
+				{l s='for the purposes of Buyer Protection processing by Trusted Shops.' mod='trustedshops'} <b>
+				<a href="http://www.trustedshops.com/shop/protection_conditions.php?shop_id={$shop_id}" target="_blank">{l s='Conditions' mod='trustedshops'}</a></b>
+				{l s='for Buyer Protection.' mod='trustedshops'}</p></div>
+		</div>
+		<div class="clear"/></div>
 	</div>
-	<div class="clear"/></div>
-</div>
+{/if}

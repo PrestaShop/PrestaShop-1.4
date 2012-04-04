@@ -28,7 +28,6 @@
 class WidgetCache
 {
 	private $_fileName;
-	private $__ts_id;
 	
 	public function __construct($_fileName, $_ts_id)
 	{

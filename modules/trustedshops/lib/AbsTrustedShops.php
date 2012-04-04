@@ -49,10 +49,13 @@ abstract class AbsTrustedShops
 	 * @var string
 	 */
 	protected static $module_name;
-	
+
 	public $limited_countries = array();
+
 	public static $smarty;
+
 	public $tab_name;
+
 	public $id_tab;
 	
 	/**
@@ -62,25 +65,33 @@ abstract class AbsTrustedShops
 	protected static $translation_object;
 	
 	abstract public function install();
+
 	abstract public function uninstall();
+
 	abstract public function getContent();
+
 	public static function setTranslationObject(Module $object)
 	{
 		self::$translation_object = $object;
 	}
+
 	protected function _makeFormAction($uri, $id_tab)
 	{
+        $arr_query_new = array();
 		$uri_component = parse_url($uri);
 		$arr_query = explode('&', $uri_component['query']);
-		$arr_query_new = array();
-		foreach($arr_query as $key=>$value)
+
+		foreach($arr_query as $value)
 		{
 			$arr = explode('=', $value);
 			$arr_query_new[$arr[0]] = $arr[1];
 		}
+
 		$arr_query_new['id_tab'] = $id_tab;
+
 		return str_replace($uri_component['query'], '', $uri).http_build_query($arr_query_new);
 	}
+
 	/**
 	 * Set a static name for the module.
 	 * 
@@ -109,11 +120,11 @@ abstract class AbsTrustedShops
 			$reflection_class = new ReflectionClass(get_class($this));
 			$specific = basename($reflection_class->getFileName(), '.php');
 		}
+
 		if (self::$translation_object instanceof Module)
-		{
 			return self::$translation_object->l($string, $specific);
-		}
 	}
+
 	public function display($file, $template, $cacheId = NULL, $compileId = NULL)
 	{
 		global $smarty;
@@ -123,7 +134,9 @@ abstract class AbsTrustedShops
 			$previousTemplate = $smarty->currentTemplate;
 			$smarty->currentTemplate = substr(basename($template), 0, -4);
 		}
+
 		$smarty->assign('module_dir', __PS_BASE_URI__.'modules/'.basename($file, '.php').'/');
+
 		if (($overloaded = self::_isTemplateOverloadedStatic(basename($file, '.php'), $template)) === NULL)
 			$result = Tools::displayError('No template found');
 		else
@@ -131,6 +144,7 @@ abstract class AbsTrustedShops
 			$smarty->assign('module_template_dir', ($overloaded ? _THEME_DIR_ : __PS_BASE_URI__).'modules/'.basename($file, '.php').'/');
 			$result = $smarty->fetch(($overloaded ? _PS_THEME_DIR_.'modules/'.basename($file, '.php') : _PS_MODULE_DIR_.basename($file, '.php')).'/'.$template, $cacheId, $compileId);
 		}
+
 		if (Configuration::get('PS_FORCE_SMARTY_2')) /* Keep a backward compatibility for Smarty v2 */
 			$smarty->currentTemplate = $previousTemplate;
 		return $result;
@@ -144,8 +158,9 @@ abstract class AbsTrustedShops
 	{
 		if (Tools::file_exists_cache(_PS_THEME_DIR_.'modules/'.$moduleName.'/'.$template))
 			return true;
-		elseif (Tools::file_exists_cache(_PS_MODULE_DIR_.$moduleName.'/'.$template))
+		else if (Tools::file_exists_cache(_PS_MODULE_DIR_.$moduleName.'/'.$template))
 			return false;
-		return NULL;
+
+		return null;
 	}
 }
