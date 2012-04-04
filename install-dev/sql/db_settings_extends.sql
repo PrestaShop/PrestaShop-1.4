@@ -246,7 +246,7 @@ INSERT INTO `PREFIX_specific_price` (`id_product`, `id_shop`, `id_currency`, `id
 (1, 0, 0, 0, 0, 0, 1, 0.05, 'percentage', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 INSERT INTO `PREFIX_category` (`id_category`, `id_parent`, `level_depth`, `nleft`, `nright`, `active`, `date_add`, `date_upd`, `position`) VALUES
-(2, 1, 1, 2, 3, 1, NOW(), NOW(), 0),(3, 1, 1, 3, 4, 1, NOW(), NOW(), 1),(4, 1, 1, 4, 5, 1, NOW(), NOW(), 2);
+(2, 1, 1, 2, 3, 1, NOW(), NOW(), 0),(3, 1, 1, 4, 5, 1, NOW(), NOW(), 1),(4, 1, 1, 6, 7, 1, NOW(), NOW(), 2);
 
 INSERT INTO `PREFIX_category_lang` (`id_category`, `id_lang`, `name`, `description`, `link_rewrite`, `meta_title`, `meta_keywords`, `meta_description`) VALUES
 (2, 1, 'iPods', 'Now that you can buy movies from the iTunes Store and sync them to your iPod, the whole world is your theater.', 'music-ipods', '', '', ''),
