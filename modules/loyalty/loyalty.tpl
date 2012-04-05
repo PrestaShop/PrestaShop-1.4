@@ -168,7 +168,7 @@
 	<div id="block-order-detail" class="hidden">&nbsp;</div>
 </div>
 
-{if $minimalLoyalty > 0}<p>{l s='The minimum order amount in order to use these vouchers is:'} {convertPrice price=$minimalLoyalty}</p>{/if}
+{if $minimalLoyalty > 0}<p>{l s='The minimum order amount in order to use these vouchers is:' mod='loyalty'} {convertPrice price=$minimalLoyalty}</p>{/if}
 
 <script type="text/javascript">
 {literal}
