@@ -54,7 +54,7 @@ class TrustedShops extends Module
 
 		$this->name = 'trustedshops';
 		$this->tab = 'payment_security';
-		$this->version = '1.3.3';
+		$this->version = '1.3.4';
 
 		parent::__construct();
 

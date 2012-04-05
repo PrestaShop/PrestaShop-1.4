@@ -734,6 +734,7 @@ class TSBuyerProtection extends AbsTrustedShops
 			$product->price = ToolsCore::convertPrice($item->grossFee,Currency::getIdByIsoCode($item->currency));
 			$product->id_category_default = TSBuyerProtection::$CAT_ID;
 			$product->active = true;
+			$product->visibility = 'none';
 			$product->id_tax = 0;
 			$product->add();
 
@@ -748,6 +749,25 @@ class TSBuyerProtection extends AbsTrustedShops
 					'"'.pSQL($item->protectionDurationInt).'", "'.pSQL($item->tsProductID).'")';
 
 				Db::getInstance()->Execute($query);
+
+				if (class_exists('StockAvailable'))
+				{
+					$id_stock_available = Db::getInstance()->getValue('
+						SELECT s.`id_stock_available` FROM `'._DB_PREFIX_.'stock_available` s
+						WHERE s.`id_product` = '.(int)$product->id);
+
+					$stock = new StockAvailable($id_stock_available);
+					$stock->id_product = $product->id;
+					$stock->out_of_stock = 1;
+					$stock->id_product_attribute = 0;
+					$stock->quantity = 1000000;
+					$stock->id_shop = Context::getContext()->shop->id;
+					// @TODO : Check another way to get the current id shop
+					if ($stock->id)
+						$stock->update();
+					else
+						$stock->add();
+				}
 			}
 			else
 				$this->errors['products'] = $this->l('Product wasn\'t saved.');
