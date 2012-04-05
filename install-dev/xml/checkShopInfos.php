@@ -276,6 +276,13 @@ if (isFormValid())
 	Tools::selectionVersionSmarty();
 }
 
+// Active only the country selected by the merchant
+if (isFormValid())
+{
+	if ($id_country = Tools::getValue('infosCountry'))
+		Db::getInstance()->execute('UPDATE '._DB_PREFIX_.'country SET active = 0 WHERE id_country != '.(int)$id_country);
+}
+
 //////////////////////////
 // Building XML Response//
 //////////////////////////
