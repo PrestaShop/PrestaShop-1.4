@@ -35,7 +35,7 @@ class Autoupgrade extends Module
 		// x=0 means not yet considered as fully stable
 		// y+1 means a major bugfix or improvement
 		// z+1 means a bugfix, optimization or minor improvements
-		$this->version = '0.3.1';
+		$this->version = '0.3.4';
 
 		if (!defined('_PS_ADMIN_DIR_'))
 		{

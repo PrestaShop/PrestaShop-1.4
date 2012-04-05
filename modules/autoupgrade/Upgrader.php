@@ -320,8 +320,10 @@ class UpgraderCore
 	{
 		$checksum1 = $this->getXmlMd5File($version1);
 		$checksum2 = $this->getXmlMd5File($version2);
-		$v1 = $this->md5FileAsArray($checksum1->ps_root_dir[0]);
-		$v2 = $this->md5FileAsArray($checksum2->ps_root_dir[0]);
+		if ($checksum1)
+			$v1 = $this->md5FileAsArray($checksum1->ps_root_dir[0]);
+		if ($checksum2)
+			$v2 = $this->md5FileAsArray($checksum2->ps_root_dir[0]);
 		if (empty($v1) || empty($v2))
 			return false;
 		$filesList = $this->compareReleases($v1, $v2, $show_modif);
