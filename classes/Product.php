@@ -575,10 +575,10 @@ class ProductCore extends ObjectModel
 			!$this->deleteAccessories() OR
 			!$this->deleteFromAccessories())
 		return false;
-		
+
 		if (!_PS_MODE_DEMO_ AND !$this->deleteImages())
 			return false;
-		
+
 		if ($id = ProductDownload::getIdFromIdProduct($this->id))
 			if ($productDownload = new ProductDownload($id) AND !$productDownload->delete(true))
 				return false;
@@ -590,8 +590,7 @@ class ProductCore extends ObjectModel
 		$return = 1;
 		foreach ($products AS $id_product)
 		{
-			$product = new Product();
-			$product->id = (int)$id_product;
+			$product = new Product((int)$id_product);
 			$return &= $product->delete();
 		}
 		return $return;
