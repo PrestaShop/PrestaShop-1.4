@@ -376,7 +376,7 @@ class AdminProducts extends AdminTab
 						}
 						elseif ($object->delete())
 							Tools::redirectAdmin($currentIndex.'&conf=1&token='.($token ? $token : $this->token).$category_url);
-						$this->_errors[] = Tools::displayError('An error occurred during deletion.');
+						$this->_errors[] = Tools::displayError('An error occurred during deletion: this product is contained in an order.');
 					}
 				}
 				else
