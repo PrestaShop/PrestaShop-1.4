@@ -24,6 +24,7 @@ $_ERRORS['d8f4f69d48a199f1c406d3e821b7828a'] = 'Ein Fehler ist vor dem Senden de
 $_ERRORS['200cb26c2479e770241b1c62ccfb8e08'] = 'Beim Löschen eines benutzerdefinierten Produkts ist ein Fehler aufgetreten';
 $_ERRORS['8eccd648c123a09bcf8520fea052861d'] = 'Beim Löschen eines Produkts ist ein Fehler aufgetreten';
 $_ERRORS['bc33aa1314e7dcd3472db72472b909b2'] = 'Ein Fehler ist beim Löschen aufgetreten';
+$_ERRORS['dc2b65bc5956a6fec3276d19190f7d2b'] = 'Ein Fehler ist beim Löschen aufgetreten: Dieses Produkt wird in einem Auftrag enthalten sind.';
 $_ERRORS['472266472e3353d32d8a8ffa25c60154'] = 'Beim Löschen des Bildes ist ein Fehler aufgetreten';
 $_ERRORS['7f2673e88a2cf04ce4e559cdf1b30277'] = 'Beim Löschen des Bildes ist ein Fehler aufgetreten';
 $_ERRORS['50289ca189ede3317209fcb9ecce167c'] = 'Beim Anlegen des neuen Ordner ist ein Fehler aufgetreten';

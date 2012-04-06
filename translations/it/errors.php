@@ -24,6 +24,7 @@ $_ERRORS['d8f4f69d48a199f1c406d3e821b7828a'] = 'si è verificato un errore prima
 $_ERRORS['200cb26c2479e770241b1c62ccfb8e08'] = 'si è verificato un errore durante la cancellazione del prodott personalizzato';
 $_ERRORS['8eccd648c123a09bcf8520fea052861d'] = 'si è verificato un errore durante la cancellazione del prodotto';
 $_ERRORS['bc33aa1314e7dcd3472db72472b909b2'] = 'si è verificato un errore durante la cancellazione';
+$_ERRORS['dc2b65bc5956a6fec3276d19190f7d2b'] = 'si è verificato un errore durante la cancellazione: questo prodotto è contenuto in un ordine.';
 $_ERRORS['472266472e3353d32d8a8ffa25c60154'] = 'si è verificato un errore durante la cancellazione dell\'immagine';
 $_ERRORS['7f2673e88a2cf04ce4e559cdf1b30277'] = 'si è verificato un errore durante la cancellazione dell\'immagine';
 $_ERRORS['50289ca189ede3317209fcb9ecce167c'] = 'È verificato un errore durante la creazione di nuova cartella';

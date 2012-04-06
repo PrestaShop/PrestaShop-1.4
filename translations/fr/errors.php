@@ -27,6 +27,7 @@ $_ERRORS['d8f4f69d48a199f1c406d3e821b7828a'] = 'une erreur est survenue avant d\
 $_ERRORS['200cb26c2479e770241b1c62ccfb8e08'] = 'une erreur est survenue lors de la suppression du produit personnalisé';
 $_ERRORS['8eccd648c123a09bcf8520fea052861d'] = 'une erreur est survenue lors de la suppression du produit';
 $_ERRORS['bc33aa1314e7dcd3472db72472b909b2'] = 'une erreur s\'est produite pendant la suppression';
+$_ERRORS['dc2b65bc5956a6fec3276d19190f7d2b'] = 'une erreur s\'est produite pendant la suppression: ce produit est contenu dans une commande';
 $_ERRORS['472266472e3353d32d8a8ffa25c60154'] = 'une erreur s\'est produite pendant la suppression de l\'image';
 $_ERRORS['7f2673e88a2cf04ce4e559cdf1b30277'] = 'une erreur s\'est produite pendant la suppression de l\'image';
 $_ERRORS['50289ca189ede3317209fcb9ecce167c'] = 'Une erreur s\'est produite lors de la création de nouveaux dossiers';

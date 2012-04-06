@@ -24,6 +24,7 @@ $_ERRORS['d8f4f69d48a199f1c406d3e821b7828a'] = 'se ha producido un error antes d
 $_ERRORS['200cb26c2479e770241b1c62ccfb8e08'] = 'se ha producido un error mientras se eliminaba la personalización del producto';
 $_ERRORS['8eccd648c123a09bcf8520fea052861d'] = 'se ha producido un error mientras se eliminaba el producto';
 $_ERRORS['bc33aa1314e7dcd3472db72472b909b2'] = 'se ha producido un error al borrar';
+$_ERRORS['dc2b65bc5956a6fec3276d19190f7d2b'] = 'se ha producido un error al borrar: este producto está incluida en el orden.';
 $_ERRORS['472266472e3353d32d8a8ffa25c60154'] = 'se ha producido un error mientras se borraba la imagen';
 $_ERRORS['7f2673e88a2cf04ce4e559cdf1b30277'] = 'se ha producido un error mientras se borraba la imagen';
 $_ERRORS['50289ca189ede3317209fcb9ecce167c'] = 'Se ha producido un error durante la creación de nueva carpeta';
