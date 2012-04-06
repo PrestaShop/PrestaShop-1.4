@@ -202,7 +202,7 @@ class CustomerCore extends ObjectModel
 	  * @param string $passwd Password is also checked if specified
 	  * @return Customer instance
 	  */
-	public function getByEmail($email, $passwd = NULL)
+	public function getByEmail($email, $passwd = null, $guest = null)
 	{
 	 	if (!Validate::isEmail($email) OR ($passwd AND !Validate::isPasswd($passwd)))
 	 		die (Tools::displayError());
@@ -214,7 +214,7 @@ class CustomerCore extends ObjectModel
 		AND `email` = \''.pSQL($email).'\'
 		'.(isset($passwd) ? 'AND `passwd` = \''.md5(pSQL(_COOKIE_KEY_.$passwd)).'\'' : '').'
 		AND `deleted` = 0
-		AND `is_guest` = 0');
+		'.(isset($guest) ? 'AND `is_guest` = '.$guest : 'AND `is_guest` = 0'));
 
 		if (!$result)
 			return false;

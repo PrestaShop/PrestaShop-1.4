@@ -77,7 +77,7 @@ class AdminAddresses extends AdminTab
 				if (Validate::isEmail(Tools::getValue('email')))
 				{
 					$customer = new Customer();
-					$customer->getByEmail(Tools::getValue('email'));
+					$customer->getByEmail(Tools::getValue('email'), null, 1);
 					if (Validate::isLoadedObject($customer))
 						$_POST['id_customer'] = $customer->id;
 					else
