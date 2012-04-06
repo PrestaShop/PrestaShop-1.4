@@ -196,13 +196,14 @@ class CustomerCore extends ObjectModel
 	}
 
 	/**
-	  * Return customer instance from its e-mail (optionnaly check password)
-	  *
-	  * @param string $email e-mail
-	  * @param string $passwd Password is also checked if specified
-	  * @return Customer instance
-	  */
-	public function getByEmail($email, $passwd = null, $guest = null)
+	 * Return customer instance from its e-mail (optionnaly check password)
+	 *
+	 * @param string $email e-mail
+	 * @param string $passwd Password is also checked if specified
+	 * @param bool $include_guest allows to consider guest user
+	 * @return Customer instance
+	 */
+	public function getByEmail($email, $passwd = null, $include_guest = false)
 	{
 	 	if (!Validate::isEmail($email) OR ($passwd AND !Validate::isPasswd($passwd)))
 	 		die (Tools::displayError());
@@ -214,7 +215,7 @@ class CustomerCore extends ObjectModel
 		AND `email` = \''.pSQL($email).'\'
 		'.(isset($passwd) ? 'AND `passwd` = \''.md5(pSQL(_COOKIE_KEY_.$passwd)).'\'' : '').'
 		AND `deleted` = 0
-		'.(isset($guest) ? 'AND `is_guest` = '.$guest : 'AND `is_guest` = 0'));
+		'.(!$include_guest ? 'AND `is_guest` = 0' : ''));
 
 		if (!$result)
 			return false;
