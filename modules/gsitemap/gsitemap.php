@@ -97,7 +97,7 @@ XML;
 			$this->_addSitemapNode($xml, Tools::getShopDomain(true, true).__PS_BASE_URI__, '1.00', 'daily', date('Y-m-d'));
 
 		/* Product Generator */
-		$products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		$sql = '
 		SELECT p.id_product, pl.link_rewrite, DATE_FORMAT(IF(date_upd,date_upd,date_add), \'%Y-%m-%d\') date_upd, pl.id_lang, cl.`link_rewrite` category, ean13, i.id_image, il.legend legend_image, (
 			SELECT MIN(level_depth)
 			FROM '._DB_PREFIX_.'product p2
@@ -112,36 +112,43 @@ XML;
 		LEFT JOIN '._DB_PREFIX_.'lang l ON (pl.id_lang = l.id_lang)
 		WHERE l.`active` = 1 AND p.`active` = 1
 		'.(Configuration::get('GSITEMAP_ALL_PRODUCTS') ? '' : 'HAVING level_depth IS NOT NULL').'
-		ORDER BY pl.id_product, pl.id_lang ASC');
+		ORDER BY pl.id_product, pl.id_lang ASC';
 
-		$tmp = null;
-		$res = null;
+		$resource = Db::getInstance(_PS_USE_SQL_SLAVE_)->Execute($sql);
+
+		// array used to know which product/image was already added (blacklist)
 		$done = null;
-		foreach ($products as $product)
+		$sitemap = null;
+
+		// iterates on the products, to gather the image ids
+		while ($product = Db::getInstance()->nextRow($resource))
 		{
-			if (!isset($done[$product['id_image']]))
+			// if the product has not been added
+			$id_product = $product['id_product'];
+			if (!isset($done[$id_product]['added']))
 			{
-				if ($tmp == $product['id_product'])
-				   $res[$tmp]['images'] []= array('id_image' => $product['id_image'], 'legend_image' => $product['legend_image']);
-				else
-				{
-					$tmp = $product['id_product'];
-					$res[$tmp] = $product;
-					unset($res[$tmp]['id_image'], $res[$tmp]['legend_image']);
-					$res[$tmp]['images'] []= array('id_image' => $product['id_image'], 'legend_image' => $product['legend_image']);
-				}
-				$done[$product['id_image']] = true;
+				// priority
+				if (($priority = 0.7 - ($product['level_depth'] / 10)) < 0.1)
+					$priority = 0.1;
+
+				// adds the product
+				$tmpLink = $link->getProductLink((int)($product['id_product']), $product['link_rewrite'], $product['category'], $product['ean13'], (int)($product['id_lang']));
+				$sitemap = $this->_addSitemapNode($xml, $tmpLink, $priority, 'weekly', substr($product['date_upd'], 0, 10));
+
+				// considers the product has added
+				$done[$id_product]['added'] = true;
 			}
-		}
 
-		foreach ($res as $product)
-		{
-			if (($priority = 0.7 - ($product['level_depth'] / 10)) < 0.1)
-				$priority = 0.1;
+			// if the image has not been added
+			$id_image = $product['id_image'];
+			if (!isset($done[$id_product][$id_image]) && $id_image)
+			{
+				// adds the image
+				$this->_addSitemapNodeImage($sitemap, $product);
 
-			$tmpLink = $link->getProductLink((int)($product['id_product']), $product['link_rewrite'], $product['category'], $product['ean13'], (int)($product['id_lang']));
-			$sitemap = $this->_addSitemapNode($xml, htmlspecialchars($tmpLink), $priority, 'weekly', substr($product['date_upd'], 0, 10));
-			$sitemap = $this->_addSitemapNodeImage($sitemap, $product);
+				// considers the image as added
+				$done[$id_product][$id_image] = true;
+			}
 		}
 
 		/* Categories Generator */
@@ -245,16 +252,13 @@ XML;
 
 	private function _addSitemapNodeImage($xml, $product)
 	{
-		foreach ($product['images'] as $img)
-		{
-			$link = new Link();
-			$image = $xml->addChild('image', null, 'http://www.google.com/schemas/sitemap-image/1.1');
-			$image->addChild('loc', $link->getImageLink($product['link_rewrite'], (int)$product['id_product'].'-'.(int)$img['id_image']), 'http://www.google.com/schemas/sitemap-image/1.1');
+		$link = new Link();
+		$image = $xml->addChild('image', null, 'http://www.google.com/schemas/sitemap-image/1.1');
+		$image->addChild('loc', htmlspecialchars($link->getImageLink($product['link_rewrite'], (int)$product['id_product'].'-'.(int)$product['id_image'])), 'http://www.google.com/schemas/sitemap-image/1.1');
 
-			$legend_image = preg_replace('/(&+)/i', '&amp;', $img['legend_image']);
-			$image->addChild('caption', $legend_image, 'http://www.google.com/schemas/sitemap-image/1.1');
-			$image->addChild('title', $legend_image, 'http://www.google.com/schemas/sitemap-image/1.1');
-		}
+		$legend_image = preg_replace('/(&+)/i', '&amp;', $product['legend_image']);
+		$image->addChild('caption', $legend_image, 'http://www.google.com/schemas/sitemap-image/1.1');
+		$image->addChild('title', $legend_image, 'http://www.google.com/schemas/sitemap-image/1.1');
 	}
 
 	private function _displaySitemap()
@@ -294,9 +298,6 @@ XML;
 
 	public function getContent()
 	{
-		$this->_html .= '<h2>'.$this->l('Search Engine Optimization').'</h2>
-		'.$this->l('See').' <a href="http://www.google.com/support/webmasters/bin/answer.py?hl=en&answer=156184&from=40318&rd=1" style="font-weight:bold;text-decoration:underline;" target="_blank">
-		'.$this->l('this page').'</a> '.$this->l('for more information').'<br /><br />';
 		if (Tools::isSubmit('btnSubmit'))
 		{
 			$this->_postValidation();
@@ -307,9 +308,18 @@ XML;
 					$this->_html .= '<div class="alert error">'.$err.'</div>';
 		}
 
+		$this->_html .= '
+			<fieldset>
+				<legend>'.$this->l('Search Engine Optimization').'</legend>
+				<br />
+				'.$this->l('See').' <a href="http://www.google.com/support/webmasters/bin/answer.py?hl=en&answer=156184&from=40318&rd=1" style="font-weight:bold;text-decoration:underline;" target="_blank">
+				'.$this->l('this page').'</a> '.$this->l('for more information').'
+				<br />';
+
 		$this->_displaySitemap();
 		$this->_displayForm();
 
+		$this->_html .= '</fieldset>';
 		return $this->_html;
 	}
 }
