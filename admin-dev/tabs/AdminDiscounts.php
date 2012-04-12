@@ -127,6 +127,15 @@ class AdminDiscounts extends AdminTab
 								if (($categories = Tools::getValue('categoryBox')) === false OR (!empty($categories) AND !is_array($categories)))
 									$this->_errors[] = Tools::displayError('Please set a category for this voucher.');
 								$this->copyFromPost($object, $this->table);
+								
+								if ($object->id_discount_type == 3)
+								{
+									$object->id_currency = 0;
+									$object->value = 0;
+								}
+								elseif ($object->id_discount_type == 1)
+									$object->id_currency = 0;
+								
 								$result = $object->update(true, false, $categories);
 							}
 							if (!$result)
