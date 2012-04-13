@@ -679,13 +679,16 @@ class CarrierCore extends ObjectModel
 		}
 
 		// Copy existing zones
- $res = Db::getInstance()->ExecuteS('
-		SELECT * FROM `'._DB_PREFIX_.'carrier_zone`
-		WHERE id_carrier = '.(int)($oldId));
-		foreach ($res as $val)
-			Db::getInstance()->Execute('
-			INSERT INTO `'._DB_PREFIX_.'carrier_zone` (`id_carrier`, `id_zone`)
-			VALUES ('.(int)($this->id).','.(int)($val['id_zone']).')');
+ 		$res = Db::getInstance()->ExecuteS('
+			SELECT * FROM `'._DB_PREFIX_.'carrier_zone`
+			WHERE id_carrier = '.(int)$oldId
+		);
+
+		if ((int)$oldId != (int)$this->id)
+			foreach ($res as $val)
+				Db::getInstance()->Execute('
+				INSERT INTO `'._DB_PREFIX_.'carrier_zone` (`id_carrier`, `id_zone`)
+				VALUES ('.(int)$this->id.','.(int)$val['id_zone'].')');
 
 		//Copy default carrier
 		if ((int)(Configuration::get('PS_CARRIER_DEFAULT')) == $oldId)
