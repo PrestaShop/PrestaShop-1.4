@@ -357,15 +357,30 @@ class OrderCore extends ObjectModel
 	 * Get order history
 	 *
 	 * @param integer $id_lang Language id
+	 * @param integer $id_order_state Filter a specific order state
+	 * @param integer $no_hidden Filter no hidden status
+	 * @param integer $filters Flag to use specific field filter
 	 *
 	 * @return array History entries ordered by date DESC
 	 */
-	public function getHistory($id_lang, $id_order_state = false, $no_hidden = false)
+	public function getHistory($id_lang, $id_order_state = false, $no_hidden = false, $filters = 0)
 	{
 		if (!$id_order_state)
 			$id_order_state = 0;
+		
+		$logable = false;
+		$delivery = false;
+		if ($filters > 0)
+		{
+			if ($filters & OrderState::FLAG_NO_HIDDEN)
+				$no_hidden = true;
+			if ($filters & OrderState::FLAG_DELIVERY)
+				$delivery = true;
+			if ($filters & OrderState::FLAG_LOGABLE)
+				$logable = true;
+		}
 
-		if (!isset(self::$_historyCache[$this->id.'_'.$id_order_state]) OR $no_hidden)
+		if (!isset(self::$_historyCache[$this->id.'_'.$id_order_state.'_'.$filters]) || $no_hidden)
 		{
 			$id_lang = $id_lang ? (int)($id_lang) : 'o.`id_lang`';
 			$result = Db::getInstance()->ExecuteS('
@@ -377,13 +392,15 @@ class OrderCore extends ObjectModel
 			LEFT JOIN `'._DB_PREFIX_.'employee` e ON e.`id_employee` = oh.`id_employee`
 			WHERE oh.id_order = '.(int)($this->id).'
 			'.($no_hidden ? ' AND os.hidden = 0' : '').'
+			'.($logable ? ' AND os.logable = 1' : '').'
+			'.($delivery ? ' AND os.delivery = 1' : '').'
 			'.((int)($id_order_state) ? ' AND oh.`id_order_state` = '.(int)($id_order_state) : '').'
 			ORDER BY oh.date_add DESC, oh.id_order_history DESC');
 			if ($no_hidden)
 				return $result;
-			self::$_historyCache[$this->id.'_'.$id_order_state] = $result;
+			self::$_historyCache[$this->id.'_'.$id_order_state.'_'.$filters] = $result;
 		}
-		return self::$_historyCache[$this->id.'_'.$id_order_state];
+		return self::$_historyCache[$this->id.'_'.$id_order_state.'_'.$filters];
 	}
 
 	public function getProductsDetail()
@@ -613,12 +630,12 @@ class OrderCore extends ObjectModel
 
 	public function hasBeenDelivered()
 	{
-		return sizeof($this->getHistory((int)($this->id_lang), Configuration::get('PS_OS_DELIVERED')));
+		return count($this->getHistory((int)($this->id_lang), false, false, OrderState::FLAG_DELIVERY));
 	}
 
 	public function hasBeenPaid()
 	{
-		return sizeof($this->getHistory((int)($this->id_lang), Configuration::get('PS_OS_PAYMENT')));
+		return count($this->getHistory((int)($this->id_lang), false, false, OrderState::FLAG_LOGABLE));
 	}
 
 	public function hasBeenShipped()
