@@ -803,26 +803,30 @@ class CategoryCore extends ObjectModel
 	  * @param integer $id_lang Language ID
 	  * @return array Corresponding categories
 	  */
-	public function getParentsCategories($idLang = null)
+	public function getParentsCategories($id_lang = null)
 	{
-		//get idLang
-		$idLang = is_null($idLang) ? _USER_ID_LANG_ : (int)($idLang);
+		//get id_lang
+		$id_lang = is_null($id_lang) ? _USER_ID_LANG_ : (int)$id_lang;
 
 		$categories = null;
-		$idCurrent = (int)($this->id);
+		$id_current = (int)$this->id;
 		while (true)
 		{
 			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 				SELECT c.*, cl.*
 				FROM `'._DB_PREFIX_.'category` c
-				LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.(int)($idLang).')
-				WHERE c.`id_category` = '.(int)$idCurrent.' AND c.`id_parent` != 0
+				LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.(int)$id_lang.')
+				WHERE c.`id_category` = '.(int)$id_current.' AND c.`id_parent` != 0
 			');
 
-			$categories[] = $result[0];
-			if (!$result OR $result[0]['id_parent'] == 1)
+			if (isset($result[0]))
+				$categories[] = $result[0];
+			else if (!$categories)
+				$categories = array();
+
+			if (!$result || $result[0]['id_parent'] == 1)
 				return $categories;
-			$idCurrent = $result[0]['id_parent'];
+			$id_current = $result[0]['id_parent'];
 		}
 	}
 	/**
