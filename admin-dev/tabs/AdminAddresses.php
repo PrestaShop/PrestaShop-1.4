@@ -364,7 +364,7 @@ class AdminAddresses extends AdminTab
 				echo '
 					<label>'.$this->l('Postcode/ Zip Code').'</label>
 					<div class="margin-form">
-					<input type="text" size="33" name="postcode" value="'.htmlentities($this->getFieldValue($obj, 'postcode'), ENT_COMPAT, 'UTF-8').'" />
+					<input type="text" size="33" name="postcode" value="'.htmlentities($this->getFieldValue($obj, 'postcode'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 					</div>';
 			}
 			elseif ($addr_field_item == 'city')
