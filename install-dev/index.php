@@ -1364,8 +1364,8 @@ if ($lm->getIncludeTradFilename())
 </div>
 <ul id="footer">
 	<li><a href="http://www.prestashop.com/forums/" title="<?php echo lang('PrestaShop Forums'); ?>" target="_blank"><?php echo lang('PrestaShop Forums'); ?></a> | </li>
-	<li><a href="http://www.prestashop.com" title="PrestaShop.com" target="_blank">PrestaShop.com</a> | </li>
-	<li><a href="http://www.prestashop.com/contact.php" title="<?php echo lang('Contact us!'); ?>" target="_blank"><?php echo lang('Contact us!'); ?></a> | </li>
+	<li><a href="http://www.prestashop.com/?lang=<?php echo $lm->getIsoCodeSelectedLang(); ?>" title="PrestaShop.com" target="_blank">PrestaShop.com</a> | </li>
+	<li><a href="http://www.prestashop.com/contact.php?lang=<?php echo $lm->getIsoCodeSelectedLang(); ?>" title="<?php echo lang('Contact us!'); ?>" target="_blank"><?php echo lang('Contact us!'); ?></a> | </li>
 	<li>&copy; 2007-<?php echo date('Y'); ?></li>
 </ul>
 </body>
