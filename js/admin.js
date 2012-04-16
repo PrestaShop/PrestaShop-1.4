@@ -518,6 +518,12 @@ function askFeatureName(selected, selector)
 		$('#features_' + selector).show();
 		$('#feature_name_' + selector).attr('name', selected.name);
 	}
+	else
+	{
+		$('#features_' + selector).hide();
+		$('#feature_name_' + selector).removeAttr('name');
+	}
+
 }
 
 function replaceFeature(toReplace, selector)
