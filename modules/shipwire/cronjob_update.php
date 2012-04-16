@@ -27,7 +27,7 @@
 
 include(dirname(__FILE__).'/../../config/config.inc.php');
 
-if (isset($_GET['secure_key']))
+if (isset($_GET['secure_key']) || isset($_ARGV[1]))
 {
 	$secureKey = md5(_COOKIE_KEY_.Configuration::get('PS_SHOP_NAME'));
 	if (!empty($secureKey) && ($secureKey == $_GET['secure_key'] || (isset($_ARGV[1]) && $secureKey == $_ARGV[1])))
