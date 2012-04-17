@@ -52,6 +52,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		'EN'	=> 'http://www.trustedshops.com/merchants/membership.html',
 		'FR'	=> 'http://www.trustedshops.com/marchands/affiliation.html',
 		'PL'	=> 'http://www.trustedshops.pl/handlowcy/cennik.html',
+		'ES'	=> ''
 	);
 
 	/**
@@ -65,6 +66,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		'EN'	=> 'http://www.trustedshops.com/profile/#shop_name#_#shop_id#.html',
 		'FR'	=> 'http://www.trustedshops.fr',
 		'PL'	=> 'http://www.trustedshops.de/profil/#shop_name#_#shop_id#.html',
+		'ES'	=> ''
 	);
 
 	/**
@@ -72,13 +74,13 @@ class TSBuyerProtection extends AbsTrustedShops
 	 * @see TSBuyerProtection::__construct()
 	 * @var array
 	 */
-	private $available_languages = array('EN'=>'', 'FR'=>'', 'DE'=>'', 'PL'=>'', );
+	private $available_languages = array('EN' => '', 'FR' => '', 'DE' =>'', 'PL'=>'', 'ES' => '');
 
 	/**
 	 * @todo : be sure : see TrustedShopsRating::__construct()
 	 * @var array
 	 */
-	public $limited_countries = array('PL', 'GB', 'US', 'FR', 'DE');
+	public $limited_countries = array('PL', 'GB', 'US', 'FR', 'DE', 'ES');
 
 	/**
 	 * Differents urls to call for Trusted Shops API
@@ -331,6 +333,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		catch (SoapFault $fault)
 		{
 			$this->errors[] = $this->l('Code #').$fault->faultcode.',<br />'.$this->l('message:').$fault->faultstring;
+			return false;
 		}
 
 		if (is_int($validation))
@@ -397,6 +400,10 @@ class TSBuyerProtection extends AbsTrustedShops
 		try
 		{
 			$items = $client->getProtectionItems($ts_id);
+
+			// Sometimes an object could be send for the item attribute if there is only one result
+			if (isset($items) && !is_array($items->item))
+				$items->item = array(0 => $items->item);
 		}
 		catch (SoapFault $fault)
 		{
@@ -456,9 +463,7 @@ class TSBuyerProtection extends AbsTrustedShops
 				break;
 			}
 		}
-
 		return $bool_flag;
-
 	}
 
 	/**
@@ -731,7 +736,7 @@ class TSBuyerProtection extends AbsTrustedShops
 			if ((int)$id_lang > 0) $product->name[$id_lang] = 'Trusted Shops protection acheteur';
 
 			$product->quantity = 1000;
-			$product->price = ToolsCore::convertPrice($item->grossFee,Currency::getIdByIsoCode($item->currency));
+			$product->price = Tools::convertPrice($item->grossFee, Currency::getIdByIsoCode($item->currency));
 			$product->id_category_default = TSBuyerProtection::$CAT_ID;
 			$product->active = true;
 			$product->visibility = 'none';
@@ -762,7 +767,6 @@ class TSBuyerProtection extends AbsTrustedShops
 					$stock->id_product_attribute = 0;
 					$stock->quantity = 1000000;
 					$stock->id_shop = Context::getContext()->shop->id;
-					// @TODO : Check another way to get the current id shop
 					if ($stock->id)
 						$stock->update();
 					else
@@ -888,13 +892,12 @@ class TSBuyerProtection extends AbsTrustedShops
 		if ($user != '' AND $password != '')
 		{
 			TSBuyerProtection::$CERTIFICATES[$iso_lang]['payment_type'] = array();
+			$check_login = false;
 
 			if ($all_payment_type)
 				if (is_array($all_payment_type))
 					foreach ($all_payment_type as $key=>$module_id)
 						TSBuyerProtection::$CERTIFICATES[$iso_lang]['payment_type'][(string)$key] = $module_id;
-
-			$check_login = false;
 
 			try
 			{
@@ -914,6 +917,8 @@ class TSBuyerProtection extends AbsTrustedShops
 				$this->confirmations[] = $this->l('Certificate login has been successful.');
 
 			}
+			else
+				$this->errors[] = $this->l('Certificate login failed');
 		}
 		else
 			$this->errors[] = $this->l('You have to set a username and a password before any change.');
@@ -1295,9 +1300,6 @@ class TSBuyerProtection extends AbsTrustedShops
 
 	public function hookRightColumn($params)
 	{
-		if ((int)Configuration::get('TS_TAB0_DISPLAY_IN_SHOP') !== 1)
-			return '';
-
 		$iso_code = strtoupper(Language::getIsoById($params['cookie']->id_lang));
 
 		if (array_key_exists($iso_code, $this->available_languages) AND isset(TSBuyerProtection::$CERTIFICATES[$iso_code]['tsID']))
@@ -1371,7 +1373,8 @@ class TSBuyerProtection extends AbsTrustedShops
 				TSBuyerProtection::$smarty->assign(array(
 						'item_exist' => true,
 						'shop_id' => TSBuyerProtection::$CERTIFICATES[$lang]['tsID'],
-						'buyer_protection_item' => $item)
+						'buyer_protection_item' => $item,
+						'currency', $currency)
 				);
 		}
 
@@ -1486,6 +1489,28 @@ class TSBuyerProtection extends AbsTrustedShops
 	 */
 	private function _orderConfirmationClassic($params, $lang)
 	{
+		$payment_type = 'OTHER';
+
+		// Payment type for native module list
+		$payment_type_list = array(
+			'bankwire' => 'DIRECT_DEBIT',
+			'authorizeaim' => 'CREDIT_CARD',
+			'buyster' => 'CREDIT_CARD',
+			'cashondelivery' => 'CASH_ON_DELIVERY',
+			'dibs' => 'CREDIT_CARD' ,
+			'cheque' => 'CHEQUE',
+			'gcheckout' => 'GOOGLE_CHECKOUT',
+			'hipay' => 'CREDIT_CARD',
+			'kwixo' => 'CREDIT_CARD',
+			'moneybookers' => 'MONEYBOOKERS',
+			'paypal' => 'CREDIT_CARD',
+			'paysafecard' => 'CREDIT_CARD',
+			'wexpay' => 'CREDIT_CARD'
+		);
+
+		if (array_key_exists($params['objOrder']->module, $payment_type_list))
+			$payment_type = $payment_type_list[$params['objOrder']->module];
+
 		$customer = new Customer($params['objOrder']->id_customer);
 		$currency = new Currency((int)$params['objOrder']->id_currency);
 
@@ -1496,7 +1521,7 @@ class TSBuyerProtection extends AbsTrustedShops
 			'currency'      => $currency->iso_code,
 			'customer_id'   => $customer->id,
 			'order_id'      => $params['objOrder']->id,
-			'payment_type'  => 'CHEQUE',
+			'payment_type'  => $payment_type,
 			'shop_id'       => TSBuyerProtection::$CERTIFICATES[$lang]['tsID']
 		);
 
@@ -1509,6 +1534,8 @@ class TSBuyerProtection extends AbsTrustedShops
 
 		return $this->display(TSBuyerProtection::$module_name, 'order-confirmation-tsbp-classic.tpl');
 	}
+
+
 
 	/**
 	 * Order confirmation displaying and actions depend on the certificate type.

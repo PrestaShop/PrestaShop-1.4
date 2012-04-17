@@ -48,8 +48,7 @@
 				success: function(jsonData)
 				{
 					ajaxCart.updateCart(jsonData);
-					$('span.price').not('#cart_block_shipping_cost').not('.products .price').html(jsonData.total);
-
+					$('span.price').not('#cart_block_shipping_cost').not('.products .price').not('.carrier_price > .price').html(jsonData.total);
 				}
 			});
 		}
@@ -82,7 +81,7 @@
 		<div id="ts-list-items">
 			<p>
 				<input id="ts-product-{$buyer_protection_item.id_product}" type="checkbox" value="{$buyer_protection_item.id_product}" name="item_product">
-				{l s='Buyer protection up to' mod='trustedshops'} {$buyer_protection_item.protected_amount_decimal|round:2} {$buyer_protection_item.currency.iso_code} ({$buyer_protection_item.gross_fee|round:2}{$buyer_protection_item.currency.iso_code} {l s='incl. VAT' mod='trustedshops'})
+				{l s='Buyer protection up to' mod='trustedshops'} {$buyer_protection_item.protected_amount_decimal|round:2}{$currency->sign} ({$buyer_protection_item.gross_fee|round:2}{$currency->sign} {l s='incl. VAT' mod='trustedshops'})
 			</p>
 		<div id="content_checkout" style="margin-left:100px">
 			<p>
