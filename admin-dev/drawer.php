@@ -39,8 +39,11 @@ $height = Tools::getValue('height');
 $id_employee = Tools::getValue('id_employee');
 $id_lang = Tools::getValue('id_lang');
 
-if ($cookie->id_employee != $id_employee)
-	die;
+if (!Validate::isModuleName($module))
+    die(Tools::displayError());
+
+if (!isset($cookie->id_employee) || !$cookie->id_employee  || $cookie->id_employee != $id_employee)
+    die(Tools::displayError());
 
 if (!Tools::file_exists_cache($module_path = dirname(__FILE__).'/../modules/'.$module.'/'.$module.'.php'))
 	die(Tools::displayError());

@@ -228,8 +228,12 @@ abstract class ModuleGraphCore extends Module
 	
 	public function create($render, $type, $width, $height, $layers)
 	{
+		if (!Validate::isModuleName($render))
+    		die(Tools::displayError());
+    		
 		if (!Tools::file_exists_cache($file = dirname(__FILE__).'/../modules/'.$render.'/'.$render.'.php'))
 			die(Tools::displayError());
+			
 		require_once($file);
 		$this->_render = new $render($type);
 		
@@ -249,6 +253,10 @@ abstract class ModuleGraphCore extends Module
 	{		
 		if (!($render = Configuration::get('PS_STATS_RENDER')))
 			return Tools::displayError('No graph engine selected');
+
+		if (!Validate::isModuleName($render))
+    		die(Tools::displayError());
+    		
 		if (!file_exists(dirname(__FILE__).'/../modules/'.$render.'/'.$render.'.php'))
 			return Tools::displayError('Graph engine selected is unavailable.');
 			

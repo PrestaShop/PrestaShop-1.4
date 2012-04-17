@@ -485,33 +485,33 @@ class AdminCustomerThreads extends AdminTab
 
 		if ($thread->status != "closed")
 			echo $this->displayButton('
-			<a href="'.$currentIndex.'&viewcustomer_thread&setstatus=2&id_customer_thread='.Tools::getValue('id_customer_thread').'&viewmsg&token='.$this->token.'">
+			<a href="'.$currentIndex.'&viewcustomer_thread&setstatus=2&id_customer_thread='.(int)Tools::getValue('id_customer_thread').'&viewmsg&token='.$this->token.'">
 				<img src="../img/admin/msg-ok.png" style="margin-bottom:10px" />
 				<br />'.$this->l('Set this message as handled').'
 			</a>');
 			
 		if ($thread->status != "pending1")
 			echo $this->displayButton('
-			<a href="'.$currentIndex.'&viewcustomer_thread&setstatus=3&id_customer_thread='.Tools::getValue('id_customer_thread').'&viewmsg&token='.$this->token.'">
+			<a href="'.$currentIndex.'&viewcustomer_thread&setstatus=3&id_customer_thread='.(int)Tools::getValue('id_customer_thread').'&viewmsg&token='.$this->token.'">
 				<img src="../img/admin/msg-pending.png" style="margin-bottom:10px" />
 				<br />'.$this->l('Declare this message').'<br />'.$this->l('as "pending 1"').'<br />'.$this->l('(will be answered later)').'
 			</a>');
 		else
 			echo $this->displayButton('
-			<a href="'.$currentIndex.'&viewcustomer_thread&setstatus=1&id_customer_thread='.Tools::getValue('id_customer_thread').'&viewmsg&token='.$this->token.'">
+			<a href="'.$currentIndex.'&viewcustomer_thread&setstatus=1&id_customer_thread='.(int)Tools::getValue('id_customer_thread').'&viewmsg&token='.$this->token.'">
 				<img src="../img/admin/msg-is-pending.png" style="margin-bottom:10px" />
 				<br />'.$this->l('Click here to disable pending status').'
 			</a>');
 			
 		if ($thread->status != "pending2")
 			echo $this->displayButton('
-			<a href="'.$currentIndex.'&viewcustomer_thread&setstatus=4&id_customer_thread='.Tools::getValue('id_customer_thread').'&viewmsg&token='.$this->token.'">
+			<a href="'.$currentIndex.'&viewcustomer_thread&setstatus=4&id_customer_thread='.(int)Tools::getValue('id_customer_thread').'&viewmsg&token='.$this->token.'">
 				<img src="../img/admin/msg-pending.png" style="margin-bottom:10px" />
 				<br />'.$this->l('Declare this message').'<br />'.$this->l('as "pending 2"').'<br />'.$this->l('(will be answered later)').'
 			</a>');
 		else
 			echo $this->displayButton('
-			<a href="'.$currentIndex.'&viewcustomer_thread&setstatus=1&id_customer_thread='.Tools::getValue('id_customer_thread').'&viewmsg&token='.$this->token.'">
+			<a href="'.$currentIndex.'&viewcustomer_thread&setstatus=1&id_customer_thread='.(int)Tools::getValue('id_customer_thread').'&viewmsg&token='.$this->token.'">
 				<img src="../img/admin/msg-is-pending.png" style="margin-bottom:10px" />
 				<br />'.$this->l('Click here to disable pending status').'
 			</a>');

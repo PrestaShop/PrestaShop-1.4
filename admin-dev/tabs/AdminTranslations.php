@@ -673,15 +673,20 @@ class AdminTranslations extends AdminTab
 		{
 			foreach ($all_content as $type_content=>$mails)
 			{
+				if (!in_array($type_content, array('txt', 'html')))
+					die(Tools::displayError());
 				foreach ($mails as $mail_name=>$content)
 				{
-					
 					$module_name = false;
 					$module_name_pipe_pos = stripos($mail_name, '|');
 					if ($module_name_pipe_pos)
 					{
 						$module_name = substr($mail_name, 0, $module_name_pipe_pos);
+						if (!Validate::isModuleName($module_name))
+							die(Tools::displayError());
 						$mail_name = substr($mail_name, $module_name_pipe_pos+1);
+						if (!Validate::isTplName($mail_name))
+							die(Tools::displayError());
 					}
 					
 					if ($type_content == 'html')
@@ -969,6 +974,10 @@ class AdminTranslations extends AdminTab
 	public function displayFormFront($lang)
 	{
 		global $currentIndex;
+
+		if (!Validate::isLangIsoCode($lang))
+			die(Tools::displayError());
+
 		$_LANG = $this->fileExists(_PS_THEME_DIR_.'lang', Tools::strtolower($lang).'.php', '_LANG');
 		$str_output = '';
 		
@@ -1051,6 +1060,10 @@ class AdminTranslations extends AdminTab
 	public function displayFormBack($lang)
 	{
 		global $currentIndex;
+
+		if (!Validate::isLangIsoCode($lang))
+			die(Tools::displayError());
+			
 		$_LANGADM = $this->fileExists(_PS_TRANSLATIONS_DIR_.$lang, 'admin.php', '_LANGADM');
 		$str_output = '';
 		/* List templates to parse */
@@ -1124,6 +1137,10 @@ class AdminTranslations extends AdminTab
 	public function displayFormErrors($lang)
 	{
 		global $currentIndex;
+
+		if (!Validate::isLangIsoCode($lang))
+			die(Tools::displayError());
+			
 		$_ERRORS = $this->fileExists(_PS_TRANSLATIONS_DIR_.$lang, 'errors.php', '_ERRORS');
 		
 		$str_output = '';
@@ -1182,6 +1199,10 @@ class AdminTranslations extends AdminTab
 	public function displayFormFields($lang)
 	{
 		global $currentIndex;
+		
+		if (!Validate::isLangIsoCode($lang))
+			die(Tools::displayError());
+		
 		$_FIELDS = $this->fileExists(_PS_TRANSLATIONS_DIR_.$lang, 'fields.php', '_FIELDS');
 
 		$str_output = '';
@@ -1886,7 +1907,8 @@ class AdminTranslations extends AdminTab
 		$lang = Tools::strtolower(Tools::getValue('lang'));
 		$_LANG = array();
 		$str_output = '';
-		
+		if (!Validate::isLangIsoCode($lang))
+			die(Tools::displayError());
 		if (!file_exists(_PS_TRANSLATIONS_DIR_.$lang))
 			if (!mkdir(_PS_TRANSLATIONS_DIR_.$lang, 0700))
 				die('Please create a "'.$iso.'" directory in '._PS_TRANSLATIONS_DIR_);
