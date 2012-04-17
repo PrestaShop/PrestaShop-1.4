@@ -236,7 +236,7 @@ if (!$fail_result)
 		$sqlContent .= "\n";
 		
 		$sqlContent = str_replace(array($filePrefix, $engineType), array(_DB_PREFIX_, $mysqlEngine), $sqlContent);
-		$sqlContent = preg_split("/;\s*[\r\n]+/",$sqlContent);
+		$sqlContent = preg_split("/;\s*[\r\n]+/", $sqlContent);
 		$sqlContentVersion[$version] = $sqlContent;
 	}
 	error_reporting($oldLevel);
@@ -267,7 +267,7 @@ if (!$fail_result)
 
 	Configuration::loadConfiguration();
 
-	foreach ($sqlContentVersion as $upgrade_file => $sqlContent)
+	foreach ($sqlContentVersion as $version => $sqlContent)
 		foreach ($sqlContent as $query)
 		{
 			$query = trim($query);
@@ -298,11 +298,12 @@ if (!$fail_result)
 						&& !file_exists(_PS_INSTALLER_PHP_UPGRADE_DIR_.$func_name.'.php')
 					)
 					{
+						$warningExist = true;
 						$logger->logError('PHP error: '.$func_name.' does not exists and '.$func_name.'.php is missing '."\r\n");
-						$requests .= '	<request result="fail">
+						$requests .= '	<request result="fail" sqlfile="'.$version.'">
 			<sqlQuery><![CDATA['.htmlentities($query).']]></sqlQuery>
-			<phpMsgError><![CDATA[file is missing]]></sqlMsgError>
-			<phpNumberError><![CDATA[666]]></sqlNumberError>
+			<sqlMsgError><![CDATA[file is missing]]></sqlMsgError>
+			<sqlNumberError><![CDATA[666]]></sqlNumberError>
 		</request>'."\n";
 					}
 					else
@@ -312,12 +313,13 @@ if (!$fail_result)
 					}
 					if ((is_array($phpRes) AND !empty($phpRes['error'])) OR $phpRes === false )
 					{
+						$warningExist = true;
 						$logger->logError('PHP error: '.$query."\r\n".(empty($phpRes['msg'])?'':' - '.$phpRes['msg']));
 						$logger->logError(empty($phpRes['error'])?'':$phpRes['error']);
 						$requests .= '	<request result="fail" sqlfile="'.$version.'">
 				<sqlQuery><![CDATA['.htmlentities($query).']]></sqlQuery>
-				<phpMsgError><![CDATA['.(empty($phpRes['msg'])?'':$phpRes['msg']).']]></phpMsgError>
-				<phpNumberError><![CDATA['.(empty($phpRes['error'])?'':$phpRes['error']).']]></phpNumberError>
+				<sqlMsgError><![CDATA['.(empty($phpRes['msg'])?'':$phpRes['msg']).']]></sqlMsgError>
+				<sqlNumberError><![CDATA['.(empty($phpRes['error'])?'':$phpRes['error']).']]></sqlNumberError>
 			</request>'."\n";
 					}
 					else
