@@ -251,7 +251,7 @@ class AdminManufacturers extends AdminTab
 				</div>
 				<table border="0" cellpadding="0" cellspacing="0" class="table width3">
 					<tr>
-						<th>'.$product->name.'</th>
+						<th>'.$product->name.' <img src="../img/admin/'.($product->active ? 'enabled' : 'disabled').'.gif" /></th>
 						'.(!empty($product->reference) ? '<th width="150">'.$this->l('Ref:').' '.$product->reference.'</th>' : '').'
 						'.(!empty($product->ean13) ? '<th width="120">'.$this->l('EAN13:').' '.$product->ean13.'</th>' : '').'
 						'.(!empty($product->upc) ? '<th width="120">'.$this->l('UPC:').' '.$product->upc.'</th>' : '').'
@@ -266,8 +266,8 @@ class AdminManufacturers extends AdminTab
 					<a href="?tab=AdminCatalog&id_product='.$product->id.'&updateproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'" class="button">'.$this->l('Edit').'</a>
 					<a href="?tab=AdminCatalog&id_product='.$product->id.'&deleteproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'" class="button" onclick="return confirm(\''.$this->l('Delete item #', __CLASS__, TRUE).$product->id.' ?\');">'.$this->l('Delete').'</a>
 				</div>
-				<h3><a href="?tab=AdminCatalog&id_product='.$product->id.'&updateproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">'.$product->name.'</a></h3>
-				<table border="0" cellpadding="0" cellspacing="0" class="table" style="width: 600px;">
+				<h3><a href="?tab=AdminCatalog&id_product='.$product->id.'&updateproduct&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'">'.$product->name.'</a> <img src="../img/admin/'.($product->active ? 'enabled' : 'disabled').'.gif" /></h3>
+				<table border="0" cellpadding="0" cellspacing="0" class="table" style="width:600px">
 					<tr>
 	                    <th>'.$this->l('Attribute name').'</th>
 	                    <th width="80">'.$this->l('Reference').'</th>
@@ -295,9 +295,10 @@ class AdminManufacturers extends AdminTab
 					echo '
 					<tr'.($irow++ % 2 ? ' class="alt_row"' : '').' >
 						<td>'.stripslashes($list).'</td>
-						<td>'.$product_attribute['reference'].'</td>
-						'.(Configuration::get('PS_STOCK_MANAGEMENT') ? '<td>'.$product_attribute['ean13'].'</td><td>'.$product_attribute['upc'].'</td>' : '').'
-						<td class="right">'.$product_attribute['quantity'].'</td>
+						<td>'.(!empty($product_attribute['reference']) ? $product_attribute['reference'] : '-').'</td>
+						<td>'.(!empty($product_attribute['ean13']) ? $product_attribute['ean13'] : '-').'</td>
+						<td>'.(!empty($product_attribute['upc']) ? $product_attribute['upc'] : '-').'</td>
+						'.(Configuration::get('PS_STOCK_MANAGEMENT') ? '<td class="right">'.$product_attribute['quantity'].'</td>' : '').'
 					</tr>';
 				}
 				unset($combArray);
