@@ -2,7 +2,7 @@
 <module>
 	<name>opensi</name>
 	<displayName><![CDATA[OpenSi connector]]></displayName>
-	<version><![CDATA[1.0.9]]></version>
+	<version><![CDATA[1.0.10]]></version>
 	<description><![CDATA[Self-made Management Accounting Software for PrestaShop]]></description>
 	<author><![CDATA[Speedinfo]]></author>
 	<tab><![CDATA[billing_invoicing]]></tab>

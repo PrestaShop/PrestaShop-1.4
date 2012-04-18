@@ -61,7 +61,7 @@ class opensi extends Module
 	public function __construct() {
 		$this->name = 'opensi';
 		$this->tab = "billing_invoicing";
-		$this->version = '1.0.9';
+		$this->version = '1.0.10';
 		$this->author = "Speedinfo";
 		$this->displayName = $this->l('OpenSi connector');
 		$this->description = $this->l('Self-made Management Accounting Software for PrestaShop');
@@ -424,7 +424,7 @@ class opensi extends Module
 	private function _displayForm()
 	{
 		$this->_html .= '
-			<form action="'.$_SERVER['REQUEST_URI'].'" method="post">
+			<form action="'.htmlentities($_SERVER['REQUEST_URI']).'" method="post">
 				<ul id="menuTab">
 					<li id="menuTab1" class="menuTabButton selected"><span>'.$this->l('Introduction').'</span></li>
 					<li id="menuTab2" class="menuTabButton"><span>'.$this->l('General informations').'</span></li>

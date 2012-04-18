@@ -59,12 +59,12 @@ class Dao{
 												`"._DB_PREFIX_."country` as co1, `"._DB_PREFIX_."country` as co2,
 												`"._DB_PREFIX_."orders` as o
 												LEFT JOIN `"._DB_PREFIX_."carrier` AS car ON car.id_carrier=o.id_carrier
-												LEFT JOIN `"._DB_PREFIX_."tax_rule` AS tax ON tax.`id_tax_rules_group`=car.`id_tax_rules_group` and tax.`id_country` = \"".$country."\"
+												LEFT JOIN `"._DB_PREFIX_."tax_rule` AS tax ON tax.`id_tax_rules_group`=car.`id_tax_rules_group` and tax.`id_country` = \"".(int)$country."\"
 												LEFT JOIN `"._DB_PREFIX_."tax` AS tx ON tx.id_tax = tax.id_tax
 												LEFT JOIN `"._DB_PREFIX_."message` AS msg ON msg.id_order=o.id_order
 												LEFT JOIN `"._DB_PREFIX_."customer` AS cust ON cust.id_customer=o.id_customer
 												LEFT JOIN `"._DB_PREFIX_."opensi_order` as osi ON osi.id_order = o.id_order
-												WHERE o.date_add>\"".$since."\" AND o.date_add<=\"".$to."\"
+												WHERE o.date_add>\"".pSQL($since)."\" AND o.date_add<=\"".pSQL($to)."\"
 												AND a1.id_address = o.id_address_invoice AND a2.id_address = o.id_address_delivery 
 												AND	co1.id_country = a1.id_country AND	co2.id_country = a2.id_country
 												AND osi.id_order is null
@@ -93,7 +93,7 @@ class Dao{
 												LEFT JOIN `"._DB_PREFIX_."message` AS msg ON msg.id_order=o.id_order
 												LEFT JOIN `"._DB_PREFIX_."customer` AS cust ON cust.id_customer=o.id_customer
 												LEFT JOIN `"._DB_PREFIX_."opensi_order` as osi ON osi.id_order = o.id_order
-												WHERE o.date_add>\"".$since."\" AND o.date_add<=\"".$to."\"
+												WHERE o.date_add>\"".pSQL($since)."\" AND o.date_add<=\"".pSQL($to)."\"
 												AND a1.id_address = o.id_address_invoice AND a2.id_address = o.id_address_delivery 
 												AND	co1.id_country = a1.id_country AND	co2.id_country = a2.id_country
 												AND osi.id_order is null
@@ -140,13 +140,13 @@ class Dao{
 												`"._DB_PREFIX_."country` as co1, `"._DB_PREFIX_."country` as co2,
 												`"._DB_PREFIX_."orders` as o
 												LEFT JOIN `"._DB_PREFIX_."carrier` AS car ON car.id_carrier=o.id_carrier
-												LEFT JOIN `"._DB_PREFIX_."tax_rule` AS tax ON tax.`id_tax_rules_group`=car.`id_tax_rules_group` and tax.`id_country` = \"".$country."\"
+												LEFT JOIN `"._DB_PREFIX_."tax_rule` AS tax ON tax.`id_tax_rules_group`=car.`id_tax_rules_group` and tax.`id_country` = \"".(int)$country."\"
 												LEFT JOIN `"._DB_PREFIX_."tax` AS tx ON tx.id_tax = tax.id_tax
 												LEFT JOIN `"._DB_PREFIX_."message` AS msg ON msg.id_order=o.id_order
 												LEFT JOIN `"._DB_PREFIX_."customer` AS cust ON cust.id_customer=o.id_customer
 												LEFT JOIN `"._DB_PREFIX_."opensi_order` as osi ON osi.id_order = o.id_order
 												LEFT JOIN `ps_socolissimo_delivery_info` as socolissimo ON socolissimo.id_cart = o.Id_cart
-												WHERE o.date_add>\"".$since."\" AND o.date_add<=\"".$to."\"
+												WHERE o.date_add>\"".pSQL($since)."\" AND o.date_add<=\"".pSQL($to)."\"
 												AND a1.id_address = o.id_address_invoice AND a2.id_address = o.id_address_delivery 
 												AND	co1.id_country = a1.id_country AND	co2.id_country = a2.id_country
 												AND osi.id_order is null
@@ -179,7 +179,7 @@ class Dao{
 												LEFT JOIN `"._DB_PREFIX_."customer` AS cust ON cust.id_customer=o.id_customer
 												LEFT JOIN `"._DB_PREFIX_."opensi_order` as osi ON osi.id_order = o.id_order
 												LEFT JOIN `ps_socolissimo_delivery_info` as socolissimo ON socolissimo.id_cart = o.Id_cart
-												WHERE o.date_add>\"".$since."\" AND o.date_add<=\"".$to."\"
+												WHERE o.date_add>\"".pSQL($since)."\" AND o.date_add<=\"".pSQL($to)."\"
 												AND a1.id_address = o.id_address_invoice AND a2.id_address = o.id_address_delivery 
 												AND	co1.id_country = a1.id_country AND	co2.id_country = a2.id_country
 												AND osi.id_order is null
@@ -199,8 +199,8 @@ class Dao{
 											od.reduction_percent, od.reduction_amount, p.reference, pa.reference as attribute_reference
 							    			FROM `"._DB_PREFIX_."product` AS p, `"._DB_PREFIX_."product_lang` AS pl, `"._DB_PREFIX_."order_detail` AS od
 							    			LEFT JOIN `"._DB_PREFIX_."product_attribute` AS pa ON pa.id_product_attribute=od.product_attribute_id
-											WHERE od.id_order=\"".$idOrder."\" AND p.id_product=od.product_id AND pl.id_product = p.id_product
-											AND pl.id_lang = \"".$langId."\" 
+											WHERE od.id_order=\"".(int)$idOrder."\" AND p.id_product=od.product_id AND pl.id_product = p.id_product
+											AND pl.id_lang = \"".(int)$langId."\" 
 											ORDER BY od.id_order_detail ASC");
 	}
 
@@ -217,8 +217,8 @@ class Dao{
 											ON o.id_order=art.id_order
 											LEFT JOIN `"._DB_PREFIX_."opensi_order` as osi
 											ON osi.id_order = o.id_order
-											WHERE ((o.date_add>\"".$since."\" AND o.date_add<=\"".$to."\") OR
-											(o.date_upd>\"".$since."\" AND o.date_upd<=\"".$to."\"))
+											WHERE ((o.date_add>\"".$since."\" AND o.date_add<=\"".pSQL($to)."\") OR
+											(o.date_upd>\"".pSQL($since)."\" AND o.date_upd<=\"".pSQL($to)."\"))
 											AND osi.transaction = '0'
 											AND osi.paid = '0'");
 	}
@@ -231,7 +231,7 @@ class Dao{
 	 */
 	function getLastCustomers($since, $to){
 		return Db::getInstance()->ExecuteS("SELECT *, cu.lastname as customerLastname, cu.firstname as customerFirstname FROM `"._DB_PREFIX_."customer` AS cu, `"._DB_PREFIX_."address` AS a, `"._DB_PREFIX_."country` AS co
-											WHERE cu.date_add>\"".$since."\" AND cu.date_add<=\"".$to."\" AND a.id_customer = cu.id_customer 
+											WHERE cu.date_add>\"".pSQL($since)."\" AND cu.date_add<=\"".pSQL($to)."\" AND a.id_customer = cu.id_customer 
 											AND a.id_country = co.id_country 
 											GROUP BY cu.id_customer");
 	}
@@ -244,7 +244,7 @@ class Dao{
 	 */
 	function getLastUpdateCustomers($since, $to){
 		return Db::getInstance()->ExecuteS("SELECT *, cu.lastname as customerLastname, cu.firstname as customerFirstname FROM `"._DB_PREFIX_."customer` AS cu, `"._DB_PREFIX_."address` AS a, `"._DB_PREFIX_."country` AS co
-											WHERE cu.date_upd>\"".$since."\" AND cu.date_upd<=\"".$to."\" AND cu.date_add<=\"".$since."\"
+											WHERE cu.date_upd>\"".pSQL($since)."\" AND cu.date_upd<=\"".pSQL($to)."\" AND cu.date_add<=\"".pSQL($since)."\"
 											AND a.id_customer = cu.id_customer AND a.id_country = co.id_country 
 											GROUP BY cu.id_customer");
 	}
@@ -263,9 +263,9 @@ class Dao{
 			return Db::getInstance()->ExecuteS("SELECT p.*, pl.*, t.*, tx.id_tax, tx.rate, m.name as manufacturer_name, p.date_add as product_date_add, p.date_upd as product_date_upd, pl.name as product_name
 												FROM  `"._DB_PREFIX_."product_lang` AS pl, `"._DB_PREFIX_."product` AS p
 												LEFT JOIN `"._DB_PREFIX_."manufacturer` AS m ON m.id_manufacturer = p.id_manufacturer
-												LEFT JOIN `"._DB_PREFIX_."tax_rule` AS t ON t.id_tax_rules_group = p.id_tax_rules_group and t.id_country = \"".$countryId."\"
+												LEFT JOIN `"._DB_PREFIX_."tax_rule` AS t ON t.id_tax_rules_group = p.id_tax_rules_group and t.id_country = \"".(int)$countryId."\"
 												LEFT JOIN `"._DB_PREFIX_."tax` AS tx ON tx.id_tax = t.id_tax
-												WHERE (p.date_add>\"".$since."\" AND p.date_add<=\"".$to."\") AND pl.id_product = p.id_product AND pl.id_lang = \"".$langId."\"
+												WHERE (p.date_add>\"".pSQL($since)."\" AND p.date_add<=\"".pSQL($to)."\") AND pl.id_product = p.id_product AND pl.id_lang = \"".(int)$langId."\"
 												GROUP BY p.id_product");
 		} else {
 			// Prestashop 1.3
@@ -273,7 +273,7 @@ class Dao{
 												FROM  `"._DB_PREFIX_."product_lang` AS pl, `"._DB_PREFIX_."product` AS p
 												LEFT JOIN `"._DB_PREFIX_."manufacturer` AS m ON m.id_manufacturer = p.id_manufacturer
 												LEFT JOIN `"._DB_PREFIX_."tax` AS t ON t.id_tax = p.id_tax
-												WHERE (p.date_add>\"".$since."\" AND p.date_add<=\"".$to."\") AND pl.id_product = p.id_product AND pl.id_lang = \"".$langId."\"
+												WHERE (p.date_add>\"".pSQL($since)."\" AND p.date_add<=\"".pSQL($to)."\") AND pl.id_product = p.id_product AND pl.id_lang = \"".(int)$langId."\"
 												GROUP BY p.id_product");
 		}
 	}
@@ -292,9 +292,9 @@ class Dao{
 			return Db::getInstance()->ExecuteS("SELECT p.*, pl.*, t.*, tx.id_tax, tx.rate, m.name as manufacturer_name, p.date_add as product_date_add, p.date_upd as product_date_upd, pl.name as product_name
 												FROM  `"._DB_PREFIX_."product_lang` AS pl, `"._DB_PREFIX_."product` AS p
 												LEFT JOIN `"._DB_PREFIX_."manufacturer` AS m ON m.id_manufacturer = p.id_manufacturer
-												LEFT JOIN `"._DB_PREFIX_."tax_rule` AS t ON t.id_tax_rules_group = p.id_tax_rules_group and t.id_country = \"".$countryId."\"
+												LEFT JOIN `"._DB_PREFIX_."tax_rule` AS t ON t.id_tax_rules_group = p.id_tax_rules_group and t.id_country = \"".(int)$countryId."\"
 												LEFT JOIN `"._DB_PREFIX_."tax` AS tx ON tx.id_tax = t.id_tax
-												WHERE (p.date_upd>\"".$since."\" AND p.date_upd<=\"".$to."\") AND pl.id_product = p.id_product AND pl.id_lang = \"".$langId."\"
+												WHERE (p.date_upd>\"".pSQL($since)."\" AND p.date_upd<=\"".pSQL($to)."\") AND pl.id_product = p.id_product AND pl.id_lang = \"".(int)$langId."\"
 												GROUP BY p.id_product");
 		} else {
 			// Prestashop 1.3
@@ -302,7 +302,7 @@ class Dao{
 												FROM  `"._DB_PREFIX_."product_lang` AS pl, `"._DB_PREFIX_."product` AS p
 												LEFT JOIN `"._DB_PREFIX_."manufacturer` AS m ON m.id_manufacturer = p.id_manufacturer
 												LEFT JOIN `"._DB_PREFIX_."tax` AS t ON t.id_tax = p.id_tax
-												WHERE (p.date_upd>\"".$since."\" AND p.date_upd<=\"".$to."\") AND pl.id_product = p.id_product AND pl.id_lang = \"".$langId."\"
+												WHERE (p.date_upd>\"".pSQL($since)."\" AND p.date_upd<=\"".pSQL($to)."\") AND pl.id_product = p.id_product AND pl.id_lang = \"".(int)$langId."\"
 												GROUP BY p.id_product");
 		}
 	}
@@ -318,9 +318,9 @@ class Dao{
 											pa.wholesale_price, al.name as attribute_name, a.id_attribute_group
 											FROM `"._DB_PREFIX_."attribute_lang` AS al,  `"._DB_PREFIX_."product_attribute` AS pa,
 											`"._DB_PREFIX_."product_attribute_combination` AS pac, `"._DB_PREFIX_."attribute` a
-											WHERE pa.id_product = \"".$idProduct."\" AND pac.id_product_attribute = pa.id_product_attribute AND
+											WHERE pa.id_product = \"".(int)$idProduct."\" AND pac.id_product_attribute = pa.id_product_attribute AND
 											al.id_attribute = pac.id_attribute AND a.id_attribute=pac.id_attribute
-											AND al.id_lang = \"".$langId."\"");
+											AND al.id_lang = \"".(int)$langId."\"");
 	}
 
 
@@ -332,8 +332,8 @@ class Dao{
 	function getCategoriesProduct($idProduct, $langId=2) {
 		return Db::getInstance()->ExecuteS("SELECT fp.id_feature, fvl.value as feature_value
 											FROM `"._DB_PREFIX_."feature_product` AS fp, `"._DB_PREFIX_."feature_value_lang` AS fvl
-											WHERE fp.id_product = \"".$idProduct."\" AND fvl.id_feature_value = fp.id_feature_value AND
-											fvl.id_lang = \"".$langId."\"");
+											WHERE fp.id_product = \"".(int)$idProduct."\" AND fvl.id_feature_value = fp.id_feature_value AND
+											fvl.id_lang = \"".(int)$langId."\"");
 	}
 
 
@@ -342,7 +342,7 @@ class Dao{
 	 * @param $key
 	 */
 	function getInvoice($key) {
-		return Db::getInstance()->ExecuteS('SELECT * FROM '._DB_PREFIX_.'opensi_invoice WHERE url_key = \''.$key.'\' LIMIT 1');
+		return Db::getInstance()->ExecuteS('SELECT * FROM '._DB_PREFIX_.'opensi_invoice WHERE url_key = \''.pSQL($key).'\' LIMIT 1');
 	}
 
 
@@ -366,7 +366,7 @@ class Dao{
 	function setStock($ref, $quantity) {
 		if($ref != ""){
 			return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product` SET `quantity` = "'.intval($quantity).'" 
-											 WHERE `reference` = "'.$ref.'"');
+											 WHERE `reference` = "'.pSQL($ref).'"');
 		}
 	}
 
@@ -379,7 +379,7 @@ class Dao{
 	function setStockAttributes($ref, $quantity) {
 		if($ref != ""){
 			return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product_attribute` SET `quantity` = "'.intval($quantity).'" 
-											 WHERE `reference` = "'.$ref.'"');
+											 WHERE `reference` = "'.pSQL($ref).'"');
 		}
 	}	
 
@@ -391,8 +391,8 @@ class Dao{
 	 */
 	function setOrderTrackingCode($idOrder, $trackingCode) {
 		if($idOrder != ""){
-			return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'orders` SET `shipping_number` = "'.$trackingCode.'" 
-											 WHERE `id_order` = "'.$idOrder.'"');
+			return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'orders` SET `shipping_number` = "'.pSQL($trackingCode).'" 
+											 WHERE `id_order` = "'.(int)$idOrder.'"');
 		}
 	}
 
@@ -405,7 +405,7 @@ class Dao{
 	function setState($idOrder, $idState, $date_add) {
 		Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'order_history` 
 									(`id_employee`, `id_order`, `id_order_state`, `date_add`) 
-									VALUES ("0", "'.$idOrder.'", "'.$idState.'", "'.$date_add.'")');
+									VALUES ("0", "'.(int)$idOrder.'", "'.(int)$idState.'", "'.pSQL($date_add).'")');
 		
 	}
 
@@ -420,13 +420,13 @@ class Dao{
 			if(substr(_PS_VERSION_, 0, 3) > 1.3) {
 				// Prestashop 1.4
 				return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product`
-													SET `price` = "'.floatval($priceHt).'", `id_tax_rules_group` = "'.$tax.'", `wholesale_price` = "'.floatval($purchaseHt).'"
-													WHERE `reference` = "'.$ref.'"');
+													SET `price` = "'.floatval($priceHt).'", `id_tax_rules_group` = "'.pSQL($tax).'", `wholesale_price` = "'.floatval($purchaseHt).'"
+													WHERE `reference` = "'.pSQL($ref).'"');
 			} else {
 				// Prestashop 1.3
 				return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product`
-													SET `price` = "'.floatval($priceHt).'", `id_tax` = "'.$tax.'", `wholesale_price` = "'.floatval($purchaseHt).'"
-													WHERE `reference` = "'.$ref.'"');
+													SET `price` = "'.floatval($priceHt).'", `id_tax` = "'.pSQL($tax).'", `wholesale_price` = "'.floatval($purchaseHt).'"
+													WHERE `reference` = "'.pSQL($ref).'"');
 			}
 		}
 	}
@@ -442,13 +442,13 @@ class Dao{
 			if(substr(_PS_VERSION_, 0, 3) > 1.3) {
 				// Prestashop 1.4
 				return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product_attribute` as pa 
-													SET pa.wholesale_price = "'.$purchaseHt.'", pa.price = ('.$priceHt.' - (SELECT p.price FROM `'._DB_PREFIX_.'product` as p WHERE pa.id_product = p.id_product))
-													WHERE pa.reference = "'.$ref.'"');
+													SET pa.wholesale_price = "'.pSQL($purchaseHt).'", pa.price = ('.pSQL($priceHt).' - (SELECT p.price FROM `'._DB_PREFIX_.'product` as p WHERE pa.id_product = p.id_product))
+													WHERE pa.reference = "'.pSQL($ref).'"');
 			} else {
 				// Prestashop 1.3
 				return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product_attribute` as pa 
-													SET pa.wholesale_price = "'.$purchaseHt.'", pa.price = ('.$priceTtc.' - (SELECT p.price  FROM `'._DB_PREFIX_.'product` as p WHERE pa.id_product = p.id_product) * (1 + (select rate from '._DB_PREFIX_.'tax where id_tax = '.$tax.')/100))
-													WHERE pa.reference = "'.$ref.'"');
+													SET pa.wholesale_price = "'.pSQL($purchaseHt).'", pa.price = ('.pSQL($priceTtc).' - (SELECT p.price  FROM `'._DB_PREFIX_.'product` as p WHERE pa.id_product = p.id_product) * (1 + (select rate from '._DB_PREFIX_.'tax where id_tax = '.pSQL($tax).')/100))
+													WHERE pa.reference = "'.pSQL($ref).'"');
 			}
 		}
 	}
@@ -461,8 +461,8 @@ class Dao{
 	 */
 	function setProductOnline($ref, $isOnline) {
 		if($ref != ""){
-			return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product` SET `active` = "'.(($isOnline)?(1):(0)).'"
-											 WHERE `reference` = "'.$ref.'"');
+			return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product` SET `active` = "'.(int)(($isOnline)?(1):(0)).'"
+											 WHERE `reference` = "'.pSQL($ref).'"');
 		}
 	}
 
@@ -477,7 +477,7 @@ class Dao{
 		$url_key = md5('https://webservices-test.opensi.eu/cows/Gateway?service_id='.$service_id.'&action=get_facture&facture_ref='.$invoice_number.'.pdf');
 		Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'opensi_invoice` 
 									(`id_order`, `number_invoice`, `type`, `url_key`, `date_synchro`) 
-									VALUES ("'.$order.'", "'.$invoice_number.'", "'.$type.'", "'.$url_key.'", "'.date('Y-m-d H:m:s').'")');
+									VALUES ("'.pSQL($order).'", "'.pSQL($invoice_number).'", "'.pSQL($type).'", "'.pSQL($url_key).'", "'.pSQL(date('Y-m-d H:m:s')).'")');
 	}
 
 
@@ -504,7 +504,7 @@ class Dao{
 
 			//add new tax
 			Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tax` (`rate`, `active`)
-										VALUES ("'.$rate.'", "1")');
+										VALUES ("'.pSQL($rate).'", "1")');
 
 			// get tax rule group id
 			$id_tax_rule_group = $this->getTaxRuleGroupId($rate, $countryId);
@@ -514,26 +514,26 @@ class Dao{
 
 			// tax_rules_group
 			Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tax_rules_group` (`name`, `active`)
-										VALUES ("OpenSi ('.$rate.'%)", "1")');
+										VALUES ("OpenSi ('.pSQL($rate).'%)", "1")');
 
 			// tax_rule
 			Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tax_rule` (`id_tax_rules_group`, `id_country`, `id_state`, `id_county`, `id_tax`, `state_behavior`, `county_behavior`)
-										VALUES ("'.$id_tax_rule_group.'", "'.$countryId.'", "0", "0", "'.$id_tax.'", "0", "0")');
+										VALUES ("'.(int)$id_tax_rule_group.'", "'.(int)$countryId.'", "0", "0", "'.(int)$id_tax.'", "0", "0")');
 		} else {
 			// Prestashop 1.3
 
 			//add new tax
-			Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tax` (`rate`) VALUES ("'.$rate.'")');
+			Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tax` (`rate`) VALUES ("'.pSQL($rate).'")');
 
 			// get tax id
 			$id_taxe = $this->getTaxId($rate);
 
 			//add languages
 			Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tax_lang` (`id_tax`, `id_lang`, `name`)
-										VALUES ("'.$id_taxe.'", "1", "tax '.$rate.'%")'); //en
+										VALUES ("'.pSQL($id_taxe).'", "1", "tax '.pSQL($rate).'%")'); //en
 
 			Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tax_lang` (`id_tax`, `id_lang`, `name`)
-										VALUES ("'.$id_taxe.'", "2", "taxe '.$rate.'%")'); //fr
+										VALUES ("'.pSQL($id_taxe).'", "2", "taxe '.pSQL($rate).'%")'); //fr
 		}
 	}	
 
@@ -545,8 +545,8 @@ class Dao{
 	public function getTaxRuleGroupId($rate, $countryId=8) {
 		$rate = Db::getInstance()->getRow("SELECT trule.id_tax_rules_group FROM  `"._DB_PREFIX_."tax` AS tax
 											LEFT JOIN `"._DB_PREFIX_."tax_rule` AS trule ON tax.id_tax = trule.id_tax
-											AND trule.id_country = \"".$countryId."\"
-											WHERE rate = \"".$rate."\"");
+											AND trule.id_country = \"".(int)$countryId."\"
+											WHERE rate = \"".pSQL($rate)."\"");
 		return $rate["id_tax_rules_group"];
 	}
 
@@ -557,7 +557,7 @@ class Dao{
 	 */
 	public function getTaxId($rate) {
 		$rate = Db::getInstance()->getRow("SELECT * FROM  `"._DB_PREFIX_."tax`
-											WHERE rate = \"".$rate."\"");
+											WHERE rate = \"".pSQL($rate)."\"");
 		return $rate["id_tax"];
 	}
 
@@ -567,7 +567,7 @@ class Dao{
 	 */
 	public function isAlwaysInThisState($idOrder, $idState) {
 		$nb = Db::getInstance()->getRow("SELECT count(id_order_history) FROM  `"._DB_PREFIX_."order_history`
-											WHERE id_order = \"".$idOrder."\" AND id_order_state = \"".$idState."\"");
+											WHERE id_order = \"".(int)$idOrder."\" AND id_order_state = \"".(int)$idState."\"");
 		
 		if($nb['count(id_order_history)'] <= 0){
 			return false;
