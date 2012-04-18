@@ -145,7 +145,7 @@ $control->childInfocommande($infocommande);
 $listprod = new ProductList();
 $alldownloadables = true;
 foreach ($products as $product) {
-  $sql = "SELECT * FROM " . _DB_PREFIX_ . "product_download WHERE id_product = '".$product['id_product']."'";
+  $sql = "SELECT * FROM " . _DB_PREFIX_ . "product_download WHERE id_product = '".(int)$product['id_product']."'";
   $res = Db::getInstance()->ExecuteS($sql);
   
   $alldownloadables = $alldownloadables && Db::getInstance()->NumRows() > 0;

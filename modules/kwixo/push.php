@@ -64,7 +64,7 @@ if (!$cart->id) {
 global $cookie;
 
 //récupération de l'order id
-$id_order = Order::getOrderByCartId($cart->id);
+$id_order = Order::getOrderByCartId((int)$cart->id);
 if ($id_order !== false) {
   $order = new Order(intval($id_order));
 }

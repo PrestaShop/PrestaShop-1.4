@@ -133,13 +133,13 @@ class kwixo extends PaymentModule {
       $kw_ow_status = Configuration::get($key);
       if ($kw_ow_status === false) {
         $orderState = new OrderState();
-        $orderState->id_order_state = $key;
+        $orderState->id_order_state = pSQL($key);
       }else
         $orderState = new OrderState(intval($kw_ow_status));
 
       $langs = Language::getLanguages();
       foreach ($langs AS $lang)
-        $orderState->name[$lang['id_lang']] = $value;
+        $orderState->name[$lang['id_lang']] = pSQL($value);
       $orderState->invoice = false;
       $orderState->send_email = false;
       $orderState->logable = false;
@@ -156,13 +156,13 @@ class kwixo extends PaymentModule {
       $kw_ow_status = Configuration::get($key);
       if ($kw_ow_status === false) {
         $orderState = new OrderState();
-        $orderState->id_order_state = $key;
+        $orderState->id_order_state = pSQL($key);
       }else
         $orderState = new OrderState(intval($kw_ow_status));
 
       $langs = Language::getLanguages();
       foreach ($langs AS $lang)
-        $orderState->name[$lang['id_lang']] = $value;
+        $orderState->name[$lang['id_lang']] = pSQL($value);
       $orderState->invoice = true;
       $orderState->send_email = true;
       $orderState->logable = true;
@@ -303,16 +303,16 @@ class kwixo extends PaymentModule {
         //$carriers = Carrier::getCarriers($cookie->id_lang, false, false, false, NULL, false);
         foreach ($carriers as $carrier) {
           if (isset($_POST['carrier_' . $carrier['id_carrier']]))
-            Configuration::updateValue('RNP_CARRIER_TYPE_' . $carrier['id_carrier'], Tools::getValue('carrier_' . $carrier['id_carrier']));
+            Configuration::updateValue('RNP_CARRIER_TYPE_' . (int)$carrier['id_carrier'], Tools::getValue('carrier_' . (int)$carrier['id_carrier']));
           else
             $this->_html .= '<div class="alert error">' . $this->l('Invalid carrier code') . '</div>';
         }
 
 
-        $categories = Category::getSimpleCategories($cookie->id_lang);
+        $categories = Category::getSimpleCategories((int)$cookie->id_lang);
         foreach ($categories as $categorie) {
           if (isset($_POST['cat_' . $categorie['id_category']]))
-            Configuration::updateValue('RNP_CAT_TYPE_' . $categorie['id_category'], Tools::getValue('cat_' . $categorie['id_category']));
+            Configuration::updateValue('RNP_CAT_TYPE_' . (int)$categorie['id_category'], Tools::getValue('cat_' . (int)$categorie['id_category']));
           else
             $this->_html .= '<div class="alert error">' . $this->l('Invalid categorie code') . '</div>';
         }
@@ -464,7 +464,7 @@ class kwixo extends PaymentModule {
 					<select name="cat_' . $category['id_category'] . '" id="cat_' . $category['id_category'] . '">
 						<option value="0">' . $this->l('Choose a type...') . '</option>';
       foreach ($this->categories AS $id => $cat) {
-        $this->_html .= '<option value="' . $id . '"' . ((Configuration::get('RNP_CAT_TYPE_' . $category['id_category']) == $id) ? ' selected="selected"' : '') . '>' . $cat . '</option>';
+        $this->_html .= '<option value="' . $id . '"' . ((Configuration::get('RNP_CAT_TYPE_' . (int)$category['id_category']) == $id) ? ' selected="selected"' : '') . '>' . $cat . '</option>';
       }
       $this->_html .= '</select></div><div class="clear"></div>';
     }
@@ -481,7 +481,7 @@ class kwixo extends PaymentModule {
       $this->_html .= '<tr><td>' . $carrier['name'] . '</td><td><select name="carrier_' . $carrier['id_carrier'] . '" id="carrier_' . $carrier['id_carrier'] . '">
 			<option value="0">' . $this->l('Choose a carrier type...') . '</option>';
       foreach ($this->_carrier_type AS $k => $type)
-        $this->_html .= '<option value="' . $k . '"' . ((Configuration::get('RNP_CARRIER_TYPE_' . $carrier['id_carrier']) == $k) ? ' selected="selected"' : '') . '>' . $type . '</option>';
+        $this->_html .= '<option value="' . $k . '"' . ((Configuration::get('RNP_CARRIER_TYPE_' . (int)$carrier['id_carrier']) == $k) ? ' selected="selected"' : '') . '>' . $type . '</option>';
       $this->_html .= '</select></td>';
     }
     $this->_html .= '</tbody></table></margin>

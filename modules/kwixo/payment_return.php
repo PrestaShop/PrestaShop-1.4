@@ -82,7 +82,7 @@ else
 //si aucune erreur n'a été rencontrée
 if (empty($errors)) {
   //instanciation du panier payé
-  $cart = new Cart($id_cart);
+  $cart = new Cart((int)$id_cart);
 
   //si aucun panier trouvé on enregistre une erreur
   if (!$cart->id)
