@@ -1,0 +1,18 @@
+available: 
+  prod: https://services.kwixo.com/merchant/available
+  test: https://recette.kwixo.com/merchant-ws/available
+frontline: 
+  prod: https://secure.kwixo.com/transaction.htm
+  test: https://recette.kwixo.com/payflow/transaction.htm
+tagline: 
+  prod: https://services.kwixo.com/merchant/tagline
+  test: https://recette.kwixo.com/merchant-ws/tagline
+checkline: 
+  prod: https://recette.kwixo.com/merchant-ws/checkline
+  test: https://recette.kwixo.com/merchant-ws/checkline
+remotecontrol:
+  prod: https://services.kwixo.com/merchant/remotecontrol
+  test: https://recette.kwixo.com/merchant-ws/remotecontrol
+backoffice: 
+  prod: https://business.kwixo.com/
+  test: https://recette.kwixo.com/professionnels/
