@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<module>
+	<name>opensi</name>
+	<displayName><![CDATA[OpenSi]]></displayName>
+	<version><![CDATA[1.0.9]]></version>
+	<description><![CDATA[Connect your shop with OpenSi]]></description>
+	<author><![CDATA[Speedinfo]]></author>
+	<tab><![CDATA[billing_invoicing]]></tab>
+	<is_configurable>1</is_configurable>
+	<need_instance>1</need_instance>
+	<limited_countries></limited_countries>
+</module>
