@@ -525,17 +525,16 @@ class TSBuyerProtection extends AbsTrustedShops
 				// To reset product quantity in database.
 				$query = 'SELECT `id_product` '.
 					'FROM `'._DB_PREFIX_.TSBuyerProtection::DB_ITEMS.'` '.
-					'WHERE `ts_product_id` = "'.(int)$params['tsProductID'].'"';
+					'WHERE `ts_product_id` = "'.$params['tsProductID'].'"
+					AND `ts_id` = "'.$params['tsID'].'"';
 
-				$ts_product = Db::getInstance()->ExecuteS($query);
-
-				if (isset($ts_product[0]))
-					$product = new Product($ts_product[0]['id_product']);
-				else
-					$product = new Product($ts_product['id_product']);
-
-				$product->quantity = 1000;
-				$product->update();
+				if (($id_product = Db::getInstance()->getValue($query)))
+				{
+					$product = new Product($id_product);
+					$product->quantity = 1000;
+					$product->update();
+					unset($product);
+				}
 			}
 		}
 		else
@@ -1445,6 +1444,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		$payment_module = Module::getInstanceByName($params['objOrder']->module);
 		$arr_params = array();
 
+		$arr_params['paymentType'] = '';
 		foreach (TSBuyerProtection::$CERTIFICATES[$lang]['payment_type'] as $payment_type => $id_modules)
 			if (in_array($payment_module->id, $id_modules))
 			{
@@ -1501,11 +1501,12 @@ class TSBuyerProtection extends AbsTrustedShops
 			'cheque' => 'CHEQUE',
 			'gcheckout' => 'GOOGLE_CHECKOUT',
 			'hipay' => 'CREDIT_CARD',
-			'kwixo' => 'CREDIT_CARD',
 			'moneybookers' => 'MONEYBOOKERS',
+			'kwixo' => 'CREDIT_CARD',
 			'paypal' => 'CREDIT_CARD',
 			'paysafecard' => 'CREDIT_CARD',
-			'wexpay' => 'CREDIT_CARD'
+			'wexpay' => 'CREDIT_CARD',
+			'banktransfert' => 'DIRECT DEBIT'
 		);
 
 		if (array_key_exists($params['objOrder']->module, $payment_type_list))
@@ -1535,8 +1536,6 @@ class TSBuyerProtection extends AbsTrustedShops
 		return $this->display(TSBuyerProtection::$module_name, 'order-confirmation-tsbp-classic.tpl');
 	}
 
-
-
 	/**
 	 * Order confirmation displaying and actions depend on the certificate type.
 	 *
@@ -1547,18 +1546,20 @@ class TSBuyerProtection extends AbsTrustedShops
 	 */
 	public function hookOrderConfirmation($params)
 	{
-		$lang = Language::getIsoById($params['objOrder']->id_lang);
-		$lang = strtoupper($lang);
+		$lang = strtoupper(Language::getIsoById($params['objOrder']->id_lang));
 
 		// If certificate is a classic type or certificate login parameters missing
-		if (((TSBuyerProtection::$CERTIFICATES[$lang]['user'] == '' OR TSBuyerProtection::$CERTIFICATES[$lang]['password'] == '') AND TSBuyerProtection::$CERTIFICATES[$lang]['typeEnum'] == 'EXCELLENCE')
-			OR (TSBuyerProtection::$CERTIFICATES[$lang]['stateEnum'] !== 'INTEGRATION' AND TSBuyerProtection::$CERTIFICATES[$lang]['stateEnum'] !== 'PRODUCTION' AND TSBuyerProtection::$CERTIFICATES[$lang]['stateEnum'] !== 'TEST'))
-			return '';
-
-		if (TSBuyerProtection::$CERTIFICATES[$lang]['typeEnum'] == 'CLASSIC')
-			return $this->_orderConfirmationClassic($params, $lang);
-		else
+		if (((TSBuyerProtection::$CERTIFICATES[$lang]['user'] == '' ||
+				TSBuyerProtection::$CERTIFICATES[$lang]['password'] == '') &&
+				TSBuyerProtection::$CERTIFICATES[$lang]['typeEnum'] == 'EXCELLENCE'))
 			return $this->_orderConfirmationExcellence($params, $lang);
+
+		else if ((TSBuyerProtection::$CERTIFICATES[$lang]['stateEnum'] == 'INTEGRATION' ||
+				TSBuyerProtection::$CERTIFICATES[$lang]['stateEnum'] == 'PRODUCTION' ||
+				TSBuyerProtection::$CERTIFICATES[$lang]['stateEnum'] == 'TEST') &&
+				TSBuyerProtection::$CERTIFICATES[$lang]['typeEnum'] == 'CLASSIC')
+			return $this->_orderConfirmationClassic($params, $lang);
+
+		return '';
 	}
 }
-
