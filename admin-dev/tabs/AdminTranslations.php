@@ -1662,9 +1662,8 @@ class AdminTranslations extends AdminTab
 							if ($tab2 && isset($tab2[1]))
 							{
 								$tab2[1] = trim(str_replace('\'', '', $tab2[1]));
-								if (preg_match('/Mail::l\(\''._PS_TRANS_PATTERN_.'\'/s', $tab2[2], $tab3))
-									$tab2[2] = $tab3[1];
-								$subject_mail[$tab2[1]] = $tab2[2];
+								if (preg_match('/Mail::l\(\''._PS_TRANS_PATTERN_.'\'/s', $tab2[2], $matches))
+									$subject_mail[$tab2[1]] = $matches[1];
 							}
 						}
 					}
