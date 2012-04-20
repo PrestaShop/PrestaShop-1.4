@@ -40,8 +40,8 @@ $(document).ready(function()
 <br/>
 {if isset($confirmMessage)}
 <div style="clear:both" class="conf {$confirmMessage['class']}">
-  <img src="../img/admin/{$confirmMessage['img']|escape}" alt="" title="" />
-  {$confirmMessage['text']|escape}
+  <img src="../img/admin/{$confirmMessage['img']|strip_tags}" alt="" title="" />
+  {$confirmMessage['text']|strip_tags}
 </div>
 {/if}
 {if isset($compatibilityIssues)}
@@ -54,7 +54,7 @@ $(document).ready(function()
     <div class="warn">
       <img src="../img/admin/warn2.png" />
       {foreach from=$compatibilityIssues key=i item=message}
-      {if $i > 0}{$i|escape} - {/if}{$message|escape}<br />
+      {if $i > 0}{$i|strip_tags} - {/if}{$message|strip_tags}<br />
       {/foreach}
     </div>
   </p>

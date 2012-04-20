@@ -437,7 +437,7 @@ class CloudCache extends Module
 		$messages = $this->_compatibilityCheck();
 
 		if (count($messages))
-			$this->context->smarty->assign('compatibilityIssues', Tools::safeOutput($messages));
+			$this->context->smarty->assign('compatibilityIssues',$messages);
 
 		$this->context->smarty->assign('allAvailableZones', $this->_api->getAvailableNamespaces(true));
 		$this->context->smarty->assign('prepaidBandwith', $this->getPrepaidBandwidth());
