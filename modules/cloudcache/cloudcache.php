@@ -193,7 +193,6 @@ class CloudCache extends Module
 			Configuration::get('PS_HIGH_HTML_THEME_COMPRESSION'))
 			$messages[] = $this->l('In order to succesfully use Cloudcache, please fix the following:');
 
-		/// @todo check if there is a better way to handle this..
 		if (Configuration::get('PS_CSS_THEME_CACHE'))
 			$messages[] = $this->l('Make sure you check "Keep CSS as original"');
 		if (Configuration::get('PS_JS_THEME_CACHE'))
@@ -594,7 +593,7 @@ class CloudCache extends Module
 
 		// We check the range is correct
 		if (!array_key_exists($range, $allowedRange))
-			return -1; 
+			return -1;
 
 
 		$companyId = Configuration::get('CLOUDCACHE_API_COMPANY_ID');
@@ -602,8 +601,6 @@ class CloudCache extends Module
 		// Retrieve the data from the server
 		$r = $this->_api->getTotalTransferStats('report', $companyId, $zoneId,
 				 $allowedRange[$range], $today);
-
-
 
 		// Check if the transaction went well
 		if ($this->_api->getLastFaultCode())
