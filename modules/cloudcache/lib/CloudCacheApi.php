@@ -93,7 +93,10 @@ class CloudcacheApi
 		$this->apiURL = Configuration::get('CLOUDCACHE_API_URL');
 
 		// Api credentials
-		$this->_cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
+		if (Configuration::get('PS_CIPHER_ALGORITHM'))
+			$this->_cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
+		else
+			$this->_cipherTool = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
 		$this->apiKey = $this->_cipherTool->decrypt(Configuration::get('CLOUDCACHE_API_KEY'));
 		$this->apiUserId = Configuration::get('CLOUDCACHE_API_USER');
 		$this->companyId = Configuration::get('CLOUDCACHE_API_COMPANY_ID');
