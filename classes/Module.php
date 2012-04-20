@@ -396,7 +396,12 @@ abstract class ModuleCore
 			if (substr(realpath($filePath), 0, strlen($realpathModuleDir)) == $realpathModuleDir)
 			{
 				$module_name = substr(dirname($filePath), strlen($realpathModuleDir) + 1);
-				self::$classInModule[$currentClass] = substr($module_name, 0, strpos($module_name, DIRECTORY_SEPARATOR));
+				// check the module name is correct (the name of the module directory, with no subdir)
+				$pos_dir_sep = strpos($module_name, DIRECTORY_SEPARATOR);
+				if (false != $pos_dir_sep)
+					self::$classInModule[$currentClass] = substr($module_name, 0, $pos_dir_sep);
+				else
+					self::$classInModule[$currentClass] = $module_name;
 
 				$id_lang = (!isset($cookie) || !is_object($cookie))?(int)Configuration::get('PS_LANG_DEFAULT'):(int)$cookie->id_lang;
 				$file = _PS_MODULE_DIR_.self::$classInModule[$currentClass].'/'.Language::getIsoById($id_lang).'.php';
