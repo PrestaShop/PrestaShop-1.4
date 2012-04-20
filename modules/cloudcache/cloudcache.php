@@ -594,7 +594,7 @@ class CloudCache extends Module
 
 		// We check the range is correct
 		if (!array_key_exists($range, $allowedRange))
-			return -1; //die('KO '.$this->l('The date range '.pSQL($range).' is invalid.'));
+			return -1; 
 
 
 		$companyId = Configuration::get('CLOUDCACHE_API_COMPANY_ID');
@@ -603,15 +603,12 @@ class CloudCache extends Module
 		$r = $this->_api->getTotalTransferStats('report', $companyId, $zoneId,
 				 $allowedRange[$range], $today);
 
-//		die('<pre>'.print_r($this->_api->getLastRpcRequest(), true));
+
 
 		// Check if the transaction went well
 		if ($this->_api->getLastFaultCode())
-			return -1; //('KO '.$this->l('server fault: ').pSQL($this->_api->getLastFaultString())); // pSQL for XSS
+			return -1;
 
-		/// @todo See with Cloudcache how to get the data
-		/* if (count($r)) */
-		/* 	return array_shift($r); */
 		return 0;
 	}
 
