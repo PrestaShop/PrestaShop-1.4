@@ -56,9 +56,13 @@ class CloudCache extends Module
 		$this->displayName = $this->l('CloudCache');
 		$this->description = $this->l('Supercharge your Shop with the CloudCache.com Content Delivery Network (CDN).');
 
-		$this->_cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
-		$this->_api = new CloudcacheApi();
 
+		if (Configuration::get('PS_CIPHER_ALGORITHM'))
+			$this->_cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
+		else
+			$this->_cipherTool = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
+
+		$this->_api = new CloudcacheApi();
 	}
 
 	/**
