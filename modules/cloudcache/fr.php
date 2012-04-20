@@ -13,8 +13,7 @@ $_MODULE['<{cloudcache}prestashop>cloudcache_610c04b1a22a45228804fbe850e5035c'] 
 $_MODULE['<{cloudcache}prestashop>cloudcache_adf0bfd77f102fb4b793f62efdb52ad8'] = 'Assurez vous que \'Gardez les HTML originaux\'';
 $_MODULE['<{cloudcache}prestashop>cloudcache_936aea1c0611cae3cd3c8b6299d22c28'] = 'Assurez vous que \"Gardez les Javascript dans les HTML originaux\"';
 $_MODULE['<{cloudcache}prestashop>cloudcache_3da4c8edd49a7c69fcd74b31955ec538'] = 'Assurez vous que \'Garder la validation W3C\' soit séléctionné';
-$_MODULE['<{cloudcache}prestashop>cloudcache_7b7cd40d3b0e3b1407cc247217b0c89d'] = 'Vous devez activer l\'extension XML RPC de PHP (php.ini) pour faire fonctionner le module CloudCache';
-$_MODULE['<{cloudcache}prestashop>cloudcache_3804403067fabc46731251817c2fd37c'] = 'Vous devez activer l\'extension CURL de PHP (php.ini) pour faire fonctionner le module CloudCache';
+$_MODULE['<{cloudcache}prestashop>cloudcache_f0c746da3e0a8585f9431752a47f4471'] = 'Vous devez demander à votre hébergeur d\'activer l\'extension PHP CURL (dans php.ini) afin de pouvoir faire fonctionner le module CloudCache.';
 $_MODULE['<{cloudcache}prestashop>cloudcache_108118f45620e45322c3d5862591c418'] = 'Zone ajouté.';
 $_MODULE['<{cloudcache}prestashop>cloudcache_a63636b538337a40fcdd3363c6707f15'] = 'Erreur pendant l\'ajout de la zone:';
 $_MODULE['<{cloudcache}prestashop>cloudcache_58f9c3960361509cf1d68bf643941ca1'] = 'Toutes les zones ont été synchronisé';

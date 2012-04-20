@@ -207,10 +207,8 @@ class CloudCache extends Module
 			$messages[] = $this->l('Make sure you check "Keep inline JavaScript in HTML as original"');
 		if (Configuration::get('PS_HIGH_HTML_THEME_COMPRESSION'))
 			$messages[] = $this->l('Make sure you check "Keep W3C validation"');
-		/*if (!extension_loaded('xmlrpc'))
-			$messages[] = $this->l('You have to enable XML RPC extension in PHP (php.ini) for Cloudcache module to work.');*/
 		if (!extension_loaded('curl'))
-			$messages[] = $this->l('You have to enable CURL extension in PHP (php.ini) for Cloudcache module to work.');
+			$messages[] = $this->l('You should ask your hosting provider to enable CURL extension in PHP (php.ini) for Cloudcache module to work.');
 
 		// If there is any compatibility issue, just deactivate everything
 		if (count($messages))
