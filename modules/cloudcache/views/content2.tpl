@@ -210,7 +210,7 @@ $(document).ready(function()
       </li>
     </ul>
     {/if}
-    <form method="post" action="{$serverRequestUri|escape}&id_tab=4" class="MT20">
+    <form method="post" action="{$serverRequestUri|strip_tags}&id_tab=4" class="MT20">
       <div class="R">
 	<input type="submit" class="button MB10" id="SubmitCloudcacheSync" name="SubmitCloudcacheSync" value="{l s='Sync Zones!' mod='cloudcache'}" />
 	{if !isset($edit_zone_info)}
@@ -222,7 +222,7 @@ $(document).ready(function()
     <div style="margin-bottom: 60px;"></div>
     {if isset($edit_zone_info)}
     <div id="cloudcache_edit_zone_form" class="cloudcache-dialogbox">
-      <form method="post" action="{$serverRequestUri|escape}&id_tab=4">
+      <form method="post" action="{$serverRequestUri|strip_tags}&id_tab=4">
 	<input type="hidden" name="id_zone" id="id_zone" value="{$edit_zone_info['id_zone']|escape}"/>
 	<table border="0" cellspacing="5" class="bold-td">
 	  <tr>
@@ -288,7 +288,7 @@ $(document).ready(function()
     </div>
     {else}
     <div id="cloudcache_add_zone_form" class="cloudcache-dialogbox">
-      <form method="post" action="{$serverRequestUri|escape}&id_tab=4">
+      <form method="post" action="{$serverRequestUri|strip_tags}&id_tab=4">
 	<table border="0" cellspacing="5" class="bold-td">
 	  <tr>
 	    <td>{l s='Pull Zone Name' mod='cloudcache'}<sup> *</sup></td>
@@ -296,7 +296,7 @@ $(document).ready(function()
 	  </tr>
 	  <tr>
 	    <td>{l s='Origin Server Url' mod='cloudcache'}<sup> *</sup></td>
-	    <td><input type="text" name="origin" id="origin" size="20" maxlength="30" value="{$defaultOriginServerURL|escape}"/></td>
+	    <td><input type="text" name="origin" id="origin" size="20" maxlength="30" value="{$defaultOriginServerURL|strip_tags}"/></td>
 	  </tr>
 	  <tr>
 	    <td>{l s='Custom CDN Domain' mod='cloudcache'}</td>
