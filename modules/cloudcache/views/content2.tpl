@@ -108,7 +108,7 @@ $(document).ready(function()
 
   </div>
   <div id="menuTab3Sheet" class="tabItem">
-    <form action="{$serverRequestUri|escape}&id_tab=3" method="post">
+    <form action="{$serverRequestUri|strip_tags}&id_tab=3" method="post">
       {if isset($connectionTestResult)}
       <div id="test_connection" style="background: {$connectionTestResult[1]|escape};" >
 	{$connectionTestResult[0]|escape}<br />
