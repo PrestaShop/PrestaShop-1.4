@@ -197,7 +197,7 @@ $(document).ready(function()
 	    <td>{if $zone.bw_yesterday != -1}{$zone['.bw_yesterday']|escape}{else}{l s='N/A' mod='cloudcache'}{/if}</td>
 
 	    <td>
-	      <form method="post" action="{$serverRequestUri|escape}&id_tab=4">
+	      <form method="post" action="{$serverRequestUri|strip_tags}&id_tab=4">
 		<input type="hidden" value="{$id_zone|escape}" name="id_zone"/>
 		<input type="hidden" value="" name="CloudcacheZone_action" class="CloudcacheZone_action"/>
 		<input type="submit" name="SubmitCloudcacheEditZoneAction" value="Edit" class="button"/>
