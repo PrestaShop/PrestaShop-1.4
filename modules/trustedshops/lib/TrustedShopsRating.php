@@ -36,24 +36,27 @@ class TrustedShopsRating extends AbsTrustedShops
 	const SHOP_SW = 'PrestaShop';
 
 	private $allowed_languages = array();
-	private $available_languages = array('en', 'fr', 'de');
+	private $available_languages = array('en', 'fr', 'de', 'es');
 
 	private $rating_url_base = array(
 		'en' => 'https://www.trustedshops.com/buyerrating/rate_',
 		'de' => 'https://www.trustedshops.com/bewertung/bewerten_',
-		'fr' => 'https://www.trustedshops.com/evaluation/evaluer_'
+		'fr' => 'https://www.trustedshops.com/evaluation/evaluer_',
+		'es' => 'https://www.trustedshops.es/evaluacion/evaluar_'
 	);
 
 	private $apply_url_base = array(
 		'en' => 'https://www.trustedshops.com/buyerrating/signup.html',
 		'de' => 'https://www.trustedshops.com/bewertung/anmeldung.html',
-		'fr' => 'https://www.trustedshops.com/evaluation/inscription.html'
+		'fr' => 'https://www.trustedshops.com/evaluation/inscription.html',
+		'es' => 'https://www.trustedshops.es/comerciante/'
 	);
 
 	private $apply_url_tracker = array(
 		'en' => '&et_cid=53&et_lid=3361',
 		'de' => '',
-		'fr' => '&et_cid=53&et_lid=3362'
+		'fr' => '&et_cid=53&et_lid=3362',
+		'es' => ''
 	);
 
 	public function __construct()
@@ -477,7 +480,10 @@ class TrustedShopsRating extends AbsTrustedShops
 			self::$smarty->assign(array('rating_url' => $this->getRatingUrl(), 'language' => $iso));
 
 		if (Configuration::get('TS_TAB0_ID_'.(int)$id_lang))
+		{
 			return $this->display(self::$module_name, 'widget.tpl');
+				//TrustedShops::display_seal();
+		};
 
 		return '';
 	}

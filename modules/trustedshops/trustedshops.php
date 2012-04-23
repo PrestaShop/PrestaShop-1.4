@@ -48,6 +48,8 @@ class TrustedShops extends Module
 
 	private $confirmations = array();
 
+	public static $seal_displayed = false;
+
 	public function __construct()
 	{
 		global $smarty;
@@ -57,6 +59,9 @@ class TrustedShops extends Module
 		$this->version = '1.3.4';
 
 		parent::__construct();
+
+		/** Backward compatibility */
+		require(_PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php');
 
 		if (empty(self::$objects_list))
 		{
@@ -257,6 +262,17 @@ class TrustedShops extends Module
 				$return .= $object->{$hook_name}($params);
 
 		return $return;
+	}
+
+	public static function display_seal()
+	{
+		if (!TrustedShops::$seal_displayed)
+		{
+			Context::getContext()->smarty->assign('ts_module_dir', __PS_BASE_URI__.'modules/trustedshops/');
+			TrustedShops::$seal_displayed = true;
+			return Context::getContext()->smarty->fetch(dirname(__FILE__).'/seal_of_approval.tpl');
+		}
+		return '';
 	}
 }
 

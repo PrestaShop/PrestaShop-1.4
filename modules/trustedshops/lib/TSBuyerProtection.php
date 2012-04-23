@@ -64,9 +64,9 @@ class TSBuyerProtection extends AbsTrustedShops
 	private static $certificate_link = array(
 		'DE'	=> 'http://www.trustedshops.de/profil/#shop_name#_#shop_id#.html',
 		'EN'	=> 'http://www.trustedshops.com/profile/#shop_name#_#shop_id#.html',
-		'FR'	=> 'http://www.trustedshops.fr',
+		'FR'	=> 'http://www.trustedshops.fr/boutique_en_ligne/profil/#shop_name#_#shop_id#.html',
 		'PL'	=> 'http://www.trustedshops.de/profil/#shop_name#_#shop_id#.html',
-		'ES'	=> ''
+		'ES'	=> 'http://www.trustedshops.es/profil/#shop_name#_#shop_id#.html'
 	);
 
 	/**
@@ -292,6 +292,7 @@ class TSBuyerProtection extends AbsTrustedShops
 	private function _getClient($type = TSBuyerProtection::WEBSERVICE_BO)
 	{
 		$url = TSBuyerProtection::$webservice_urls[$type][TSBuyerProtection::$ENV_API];
+		$client = false;
 
 		try
 		{
@@ -1107,7 +1108,9 @@ class TSBuyerProtection extends AbsTrustedShops
 			<legend><img src="../img/admin/cog.gif" alt="" />'.$this->l('Manage Trusted Shops certificates').'</legend>
 				<table width="100%">
 					<thead>
-						<tr style="text-align:center;">
+						<tr
+					 
+					public $	style="text-align:center;">
 							<th>'.$this->l('Certificate').'</th>
 							<th>'.$this->l('Language').'</th>
 							<th>'.$this->l('State').'</th>
@@ -1317,8 +1320,9 @@ class TSBuyerProtection extends AbsTrustedShops
 			{
 				$certificate = TSBuyerProtection::$CERTIFICATES[$iso_code];
 
-				if (isset($certificate['tsID']) && $certificate['tsID'] !== '' && $certificate['user'] != '')
-					return $this->display(TSBuyerProtection::$module_name, 'seal_of_approval.tpl');
+				if (isset($certificate['tsID']) && ($certificate['typeEnum'] == 'CLASSIC' || 
+					($certificate['typeEnum'] == 'EXCELLENCE' && $certificate['user'] != '' && $certificate['password'] != '')))
+					return TrustedShops::display_seal();
 			}
 		}
 
@@ -1493,7 +1497,7 @@ class TSBuyerProtection extends AbsTrustedShops
 
 		// Payment type for native module list
 		$payment_type_list = array(
-			'bankwire' => 'DIRECT_DEBIT',
+			'bankwire' => 'PREPAYMENT',
 			'authorizeaim' => 'CREDIT_CARD',
 			'buyster' => 'CREDIT_CARD',
 			'cashondelivery' => 'CASH_ON_DELIVERY',
@@ -1547,6 +1551,9 @@ class TSBuyerProtection extends AbsTrustedShops
 	public function hookOrderConfirmation($params)
 	{
 		$lang = strtoupper(Language::getIsoById($params['objOrder']->id_lang));
+
+		if (!isset(TSBuyerProtection::$CERTIFICATES[$lang]))
+			return '';
 
 		// If certificate is a classic type or certificate login parameters missing
 		if (((TSBuyerProtection::$CERTIFICATES[$lang]['user'] == '' ||
