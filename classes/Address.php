@@ -106,7 +106,7 @@ class AddressCore extends ObjectModel
 										'firstname' => 'isName', 'address1' => 'isAddress', 'address2' => 'isAddress', 'postcode'=>'isPostCode',
 										'city' => 'isCityName', 'other' => 'isMessage',
 										'phone' => 'isPhoneNumber', 'phone_mobile' => 'isPhoneNumber', 'deleted' => 'isBool', 'dni' => 'isDniLite');
-
+	protected	$exclude_copy_post = array('id_manufacturer', 'id_supplier', 'date_add', 'date_upd');
 	protected 	$table = 'address';
 	protected 	$identifier = 'id_address';
 	protected	$_includeVars = array('addressType' => 'table');
