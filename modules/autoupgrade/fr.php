@@ -27,7 +27,7 @@ $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_8d8e0207549d32c6f86424640303
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_c62f82b25de72c3b0bb07225c49fe9d0'] = '%1$s fichier(s) du coeur a été modifié  (sur %2$s au total)';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_7b2f224649ef2ad10a2d73595d67a876'] = 'Démarrage mise à niveau ...';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_6b2d0404b7faba0e791e15a52586a149'] = 'Basculer vers svn checkout (useSvn activé)';
-$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_13b35313a987313838f0105902bb6742'] = 'Boutique désactivée. Téléchargement en cours... (ce qui peut prendre un certain temps) ...';
+$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_e783fa78963806b3dfbdf7328e48e73c'] = 'Boutique désactivée. Téléchargement en cours... (ce qui peut prendre un certain temps)';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_aa064774928ad6ebed71b36b9efeee38'] = 'Le répertoire latest a été vidé';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_6824d57b7af37f605bd97d34defc3761'] = 'Exportation svn terminée. Suppression des fichiers exemples...';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_f70307d8297e48a8783d41e6f3313d51'] = 'Erreur lors de l\'export SVN';

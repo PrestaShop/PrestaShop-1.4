@@ -67,14 +67,14 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_37554cc43c645833d6713b9cdd
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_9203aec73d2ea1770f66f065c4069816'] = 'Autre mode de paiement';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_743a602a92e214f08c05442217332938'] = 'Trusted Shops label de qualité et protection acheteur';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_f51dabfce0c8ccc01734ed38d8afe27a'] = 'Les fonctions Json doivent être installées sur votre version de PHP';
+$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_eaf4354c3a17f478859421ac2e33a975'] = 'Code n°';
+$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_d9fd9cab8b813e70e20c615abf036307'] = 'message :';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_b1801eaadecfddd04529313a1e929262'] = 'Le certificat est valide';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_ce323cb3453812434f9abc007ba7a952'] = 'le certificat a expiré';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_98121ffd0d2a0b4bed569a726632f402'] = 'le certificat a été annulé';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_3ec2499357b45a38139485b2b824aa4c'] = 'La boutique est en cours de certification';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_a8fcbddffdaccc6daa529aa9c38d82df'] = 'Aucun certificat n\'a été distribué pour cette Trusted Shops ID';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_5abbd73fc5189212c57adfb43adac459'] = 'Certificat de test';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_eaf4354c3a17f478859421ac2e33a975'] = 'Code n°';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_d9fd9cab8b813e70e20c615abf036307'] = 'message :';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_109715467b74bd66639faa5673f707c1'] = 'Erreur inconnue';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_d4eb1e83b0ea3af3e2b8a6e7b7984d9c'] = 'le champ % est erroné, veuillez vérifier qu\'il a été correctement remplie';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_c230eb5eefd15fa219ff97d42e461a7d'] = 'Certains paramètres envoyés à la méthode \"requestForProtectionV2\" sont faux ou manquant';
@@ -134,9 +134,6 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_12a4fc31ae8a9e4038df56961a
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_f811271eb84f3df1a430c3c78b6e7640'] = 'Lancez le fichier';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_06ec9154ce96a389f7b1d884e021818b'] = 'avec un intervalle de 10 minutes.';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_f89b7100efcc136900c909690e43f008'] = 'La ligne correspondante dans votre fichier cron apparaît ainsi :';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_b40495f7999e31d4abed3183d2e3cd25'] = 'La protection acheteur de Trusted Shops à besoin d\'un login pour fonctionner. Veuillez contacter l\'administrateur de la boutique.';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_9d36bad327b052a9bdec7003f95ce4bd'] = 'Une erreur est apparue avec votre langue :';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_26a7019f9c88a24e63ebc690e9527f31'] = 'Vous allez recevoir un mail de la part de Trusted Shops à propos de votre numéro de garantie.';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_2b83e3a2e08203b9892ad8801d6b2543'] = 'Trusted Shops Système d’évaluation client';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_b20a16afda98421bbf7457ccfa50e311'] = 'Ce module nécessite les droits de lecture et d\'écriture sur le répertoire cache du module.';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_0aa7ce92297d05fc09fb9fdbe5da6be6'] = 'Ce module requiert l\'extension PHP SOAP pour fonctionner correctement.';
