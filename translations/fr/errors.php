@@ -16,6 +16,7 @@ $_ERRORS['08de2fdaabcd120b8ca1388d21179921'] = 'accès interdit';
 $_ERRORS['7eb3eacf05efbe5c577df2f83e663291'] = 'Tous les modules ne peuvent pas être chargé en raison d\'une restriction de mémoire, merci d\'augmenter la valeur du memory_limit dans votre configuration serveur';
 $_ERRORS['4ee13cb828cde6949c31c24478a6069b'] = 'un compte existe déjà avec cette adresse mail :';
 $_ERRORS['c40e77fb4435d6520a59d8778c771b74'] = 'Un compte existe déjà avec cette adresse mail, merci de renseigner le champ mot de passe ou d\'en demander un nouveau';
+$_ERRORS['82a8b3ff9de7c44dcc811b80d6d23189'] = 'Un compte est déjà enregistré avec cet email.';
 $_ERRORS['86de674d7405670db52e79ec1665b0b1'] = 'une adresse localisée dans un pays contenant des états doit en sélectionner un';
 $_ERRORS['82d6830fc99545242c1333aee42d5a17'] = 'Une erreur est survenue pendant la mise à jour du groupe par défaut';
 $_ERRORS['b464b4391b0ed5cc6d35dee9a62c3244'] = 'Une erreur est survenue pendant l\'installation du module :';
