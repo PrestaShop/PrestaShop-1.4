@@ -44,7 +44,7 @@ class ShipwireOrder extends ShipwireApi
 			'<Username>'.$this->_configVars['SHIPWIRE_API_USER'].'</Username>',
 			'<Password>'.$this->_configVars['SHIPWIRE_API_PASSWD'].'</Password>',
 			'<Server>'.$this->_configVars['SHIPWIRE_API_MODE'].'</Server>',
-//			'<AffiliateId>'.$this->_affiliateId.'</AffiliateId>',
+			'<AffiliateId>7403</AffiliateId>',
 		);
 		$this->_xml['body'][] = '';
 		$this->_xml['footer'][] = '</OrderList>';

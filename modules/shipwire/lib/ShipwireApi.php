@@ -70,31 +70,35 @@ class ShipwireApi
 			'prefix' => 'TrackingUpdateXML',
 		),
 	);
-	/*
-	protected $_url = array(
-		'inventoryUpdate' => array(
-			'Test' => 'https://api.beta.shipwire.com/exec/InventoryServices.php',
-			'Production' => 'https://api.beta.shipwire.com/exec/InventoryServices.php',
-			'prefix' => 'InventoryUpdateXML',
-		),
-		'fulfillmentServices' => array(
-			'Test' => 'https://api.beta.shipwire.com/exec/FulfillmentServices.php',
-			'Production' => 'https://api.beta.shipwire.com/exec/FulfillmentServices.php',
-			'prefix' => 'OrderListXML',
-		),
-		'trackingUpdate' => array(
-			'Test' => 'https://api.beta.shipwire.com/exec/TrackingServices.php',
-			'Production' => 'https://api.beta.shipwire.com/exec/TrackingServices.php',
-			'prefix' => 'TrackingUpdateXML',
-		),
-	);*/
+	
+	// protected $_url = array(
+		// 'inventoryUpdate' => array(
+			// 'Test' => 'https://api.beta.shipwire.com/exec/InventoryServices.php',
+			// 'Production' => 'https://api.beta.shipwire.com/exec/InventoryServices.php',
+			// 'prefix' => 'InventoryUpdateXML',
+		// ),
+		// 'fulfillmentServices' => array(
+			// 'Test' => 'https://api.beta.shipwire.com/exec/FulfillmentServices.php',
+			// 'Production' => 'https://api.beta.shipwire.com/exec/FulfillmentServices.php',
+			// 'prefix' => 'OrderListXML',
+		// ),
+		// 'trackingUpdate' => array(
+			// 'Test' => 'https://api.beta.shipwire.com/exec/TrackingServices.php',
+			// 'Production' => 'https://api.beta.shipwire.com/exec/TrackingServices.php',
+			// 'prefix' => 'TrackingUpdateXML',
+		// ),
+	// );
 
 	public function __construct()
 	{
 		foreach ($this->_configVars as $key => $v)
 			$this->_configVars[$key] = Configuration::get($key);
 
-		$this->_cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
+		if (Configuration::get('PS_CIPHER_ALGORITHM'))
+			$this->_cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
+		else
+			$this->_cipherTool = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
+
 		$this->_configVars['SHIPWIRE_API_PASSWD'] = Tools::safeOutput($this->_cipherTool->decrypt($this->_configVars['SHIPWIRE_API_PASSWD']));
 		$this->_configVars['SHIPWIRE_API_MODE'] = $this->_mode;
 	}

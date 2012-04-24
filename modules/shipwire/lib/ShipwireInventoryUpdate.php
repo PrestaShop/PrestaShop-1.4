@@ -40,6 +40,7 @@ class ShipwireInventoryUpdate extends ShipwireApi
 			'<EmailAddress>'.$apiUser.'</EmailAddress>'.
 			'<Password>'.$apiPasswd.'</Password>'.
 			'<Server>'.$this->_configVars['SHIPWIRE_API_MODE'].'</Server>'.
+			'<AffiliateId>7403</AffiliateId>'.
 			'<Warehouse></Warehouse>
 			<ProductCode></ProductCode>
 			<IncludeEmpty/>';

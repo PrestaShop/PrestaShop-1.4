@@ -74,7 +74,11 @@ class Shipwire extends Module
 		$this->displayName = $this->l('Shipwire');
 		$this->description = $this->l('Enterprise logistics for everyone.');
 
-		$this->_cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
+		if (Configuration::get('PS_CIPHER_ALGORITHM'))
+			$this->_cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
+		else
+			$this->_cipherTool = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
+
 		$this->_shipWireInventoryUpdate = new ShipwireInventoryUpdate(Configuration::get('SHIPWIRE_API_USER'), $this->_cipherTool->decrypt(Configuration::get('SHIPWIRE_API_PASSWD')));
 		$this->_shipWireOrder = new ShipwireOrder();
 	}
@@ -271,7 +275,7 @@ class Shipwire extends Module
 									WHERE `id_order` = '.(int)$params['id_order']);
 		if (!(isset($r[0]['transaction_ref']) && !empty($r[0]['transaction_ref'])))
 		{
-			$this->updateOrderStatus((int)$params['id_order']);
+			$this->updateOrderStatus($params['id_order']);
 			ShipwireTracking::updateTracking(true);
 		}
 
@@ -280,7 +284,7 @@ class Shipwire extends Module
 
 	public function updateOrderStatus($idOrder, $refresh = false)
 	{
-		$order = new Order((int)$idOrder);
+		$order = new Order($idOrder);
 		if (!$order->id)
 			return false;
 
@@ -339,7 +343,7 @@ class Shipwire extends Module
 		foreach ($r['OrderInformation'] as $o)
 		{
 			if ($o['@attributes']['number'] != $order->id)
-				$this->_displayConfirmation($this->l('An unkown occured with order Id.'), 'error');
+				$this->_displayConfirmation($this->l('An unkown error occured with order Id.'), 'error');
 			//$val = Db::getInstance()->getValue('SELECT `transaction_ref` FROM `'._DB_PREFIX_.'shipwire_order` WHERE `id_order` = '.(int)$order->id);
 
 			$orderExists = Db::getInstance()->ExecuteS('SELECT `id_order` FROM `'._DB_PREFIX_.'shipwire_order` WHERE `id_order` = '.(int)$order->id.' LIMIT 1');
@@ -744,7 +748,7 @@ class Shipwire extends Module
 				</table>';
 
 				// Get Carriers
-				$carriers = Db::getInstance()->ExecuteS('SELECT `id_carrier`, `name` FROM '._DB_PREFIX_.'carrier');
+				$carriers = Db::getInstance()->ExecuteS('SELECT `id_carrier`, `name` FROM `'._DB_PREFIX_.'carrier` WHERE `deleted` = 0');
 				array_unshift($carriers, array('id_carrier' => 0, 'name' => $this->l('--Select one--')));
 
 				foreach ($carriers as $k => $c)

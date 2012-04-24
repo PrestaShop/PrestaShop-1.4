@@ -46,7 +46,7 @@ class ShipwireTracking extends ShipwireApi
 			'<Username>'.$this->_configVars['SHIPWIRE_API_USER'].'</Username>',
 			'<Password>'.$this->_configVars['SHIPWIRE_API_PASSWD'].'</Password>',
 			'<Server>'.$this->_configVars['SHIPWIRE_API_MODE'].'</Server>',
-//			'<AffiliateId>'.$this->_affiliateId.'</AffiliateId>',
+			'<AffiliateId>7403</AffiliateId>',
 		);
 		$this->_xml['body'] = array();
 		$this->_xml['footer'][] = '</TrackingUpdate>';
@@ -102,6 +102,12 @@ function updateTracking($static = false)
 			if (isset($order['@attributes']))
 				$o = $order['@attributes'];
 			
+			if (!isset($o['id']))
+			{
+				Logger::addLog('Shipwire: Order ID not defined.', 4)
+				continue;
+			}
+			
 			$orderExists = Db::getInstance()->ExecuteS('SELECT `id_order` 
 				FROM `'._DB_PREFIX_.'shipwire_order` 
 				WHERE `id_order` = '.(int)$o['id'].' LIMIT 1');
@@ -156,7 +162,7 @@ function updateTracking($static = false)
 						$history = new OrderHistory();
 						$history->id_order = $o['id'];
 						if (isset($o['shipped']) && $o['shipped'] == 'YES')
-							$history->changeIdOrderState(pSQL(Configuration::get('SHIPWIRE_SENT_ID')), pSQL($o['id']));
+							$history->changeIdOrderState(Configuration::get('SHIPWIRE_SENT_ID'), $o['id']);
 						
 						$history->addWithemail();
 					}
@@ -165,7 +171,11 @@ function updateTracking($static = false)
 		}
 	}
 
-	$cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
+	if (Configuration::get('PS_CIPHER_ALGORITHM'))
+		$cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
+	else
+		$cipherTool = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
+
 	$shipWireInventoryUpdate = new ShipwireInventoryUpdate(Configuration::get('SHIPWIRE_API_USER'), 
 									$cipherTool->decrypt(Configuration::get('SHIPWIRE_API_PASSWD')));
 	$shipWireInventoryUpdate->getInventory();
