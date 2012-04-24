@@ -40,8 +40,8 @@ $(document).ready(function()
 <br/>
 {if isset($confirmMessage)}
 <div style="clear:both" class="conf {$confirmMessage['class']}">
-  <img src="../img/admin/{$confirmMessage['img']|strip_tags}" alt="" title="" />
-  {$confirmMessage['text']|strip_tags}
+  <img src="../img/admin/{$confirmMessage['img']}" alt="" title="" />
+  {$confirmMessage['text']}
 </div>
 {/if}
 {if isset($compatibilityIssues)}
@@ -110,8 +110,8 @@ $(document).ready(function()
   <div id="menuTab3Sheet" class="tabItem">
     <form action="{$serverRequestUri|strip_tags}&id_tab=3" method="post">
       {if isset($connectionTestResult)}
-      <div id="test_connection" style="background: {$connectionTestResult[1]|escape};" >
-	{$connectionTestResult[0]|escape}<br />
+      <div id="test_connection" style="background: {$connectionTestResult[1]};" >
+	{$connectionTestResult[0]}<br />
 	{if $connectionTestResult[1] == '#FFD8D8'}
 	<b style="color: red">{l s='An error occured while testing the connection.' mod='cloudcache'}</b>
 	{elseif isset($connectionTestResult['newZone'])}
