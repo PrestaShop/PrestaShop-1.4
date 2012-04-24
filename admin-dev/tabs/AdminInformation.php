@@ -139,7 +139,6 @@ class AdminInformation extends AdminTab
 	
 	public function display()
 	{
-		global $currentIndex;
 		/* PrestaShop demo mode */
 		if (_PS_MODE_DEMO_)
 			return;
@@ -163,21 +162,21 @@ class AdminInformation extends AdminTab
 			echo '
 			<p>
 				<b>'.$this->l('Server information').':</b> 
-				'.php_uname('s').' '.php_uname('v').' '.php_uname('m').'
+				'.Tools::htmlentitiesUTF8(php_uname('s')).' '.Tools::htmlentitiesUTF8(php_uname('v')).' '.Tools::htmlentitiesUTF8(php_uname('m')).'
 			</p>';
 			
 		echo '
 			<p>
 				<b>'.$this->l('Server software Version').':</b> 
-				'.$_SERVER['SERVER_SOFTWARE'].'
+				'.Tools::htmlentitiesUTF8($_SERVER['SERVER_SOFTWARE']).'
 			</p>
 			<p>
 				<b>'.$this->l('PHP Version').':</b> 
-				'.phpversion().'
+				'.Tools::htmlentitiesUTF8(phpversion()).'
 			</p>
 			<p>
 				<b>'.$this->l('MySQL Version').':</b> 
-				'.mysql_get_server_info().'
+				'.Tools::htmlentitiesUTF8(mysql_get_server_info()).'
 			</p>';
 		if (function_exists('apache_get_modules') AND in_array('mod_instaweb', apache_get_modules()))
 			echo '<p style="color:red;font-weight:700">'.$this->l('PageSpeed module for Apache installed (mod_instaweb)').'</p>';
@@ -205,7 +204,7 @@ class AdminInformation extends AdminTab
 			echo '
 			<p>
 				<b>'.$this->l('SMTP server').':</b> 
-				'.Configuration::get('PS_MAIL_SERVER').'
+				'.Tools::htmlentitiesUTF8(Configuration::get('PS_MAIL_SERVER')).'
 			</p>
 			<p>
 				<b>'.$this->l('SMTP user').':</b> 
@@ -217,11 +216,11 @@ class AdminInformation extends AdminTab
 			</p>
 			<p>
 				<b>'.$this->l('Encryption').':</b> 
-				'.Configuration::get('PS_MAIL_SMTP_ENCRYPTION').'
+				'.Tools::htmlentitiesUTF8(Configuration::get('PS_MAIL_SMTP_ENCRYPTION')).'
 			</p>
 			<p>
 				<b>'.$this->l('Port').':</b> 
-				'.Configuration::get('PS_MAIL_SMTP_PORT').'
+				'.Tools::htmlentitiesUTF8(Configuration::get('PS_MAIL_SMTP_PORT')).'
 			</p>
 			';
 		}
@@ -230,7 +229,7 @@ class AdminInformation extends AdminTab
 			<h3>'.$this->l('Your information').'</h3>
 			<p>
 				<b>'.$this->l('Information from you').':</b> 
-				'.$_SERVER["HTTP_USER_AGENT"].'
+				'.Tools::htmlentitiesUTF8($_SERVER['HTTP_USER_AGENT']).'
 			</p>
 		</fieldset>
 		<br />
