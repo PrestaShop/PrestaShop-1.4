@@ -40,7 +40,7 @@ class PayPal extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'payments_gateways';
-		$this->version = '2.8.6';
+		$this->version = '2.8.7';
 		
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
@@ -876,13 +876,6 @@ class PayPal extends PaymentModule
 	private function _setPayPalSubscription()
 	{
 		$this->_html .= '
-		<div style="float: right; width: 440px; height: 150px; border: dashed 1px #666; padding: 8px; margin-left: 12px;">
-			<h2>'.$this->l('Opening your PayPal account').'</h2>
-			<div style="clear: both;"></div>
-			<p>'.$this->l('When opening your PayPal account by clicking on the following image, you are helping us significantly to improve the PrestaShop software:').'</p>
-			<p style="text-align: center;"><a href="https://www.paypal.com/fr/mrb/pal=TWJHHUL9AEP9C"><img src="../modules/paypal/prestashop_paypal.png" alt="PrestaShop & PayPal" style="margin-top: 12px;" /></a></p>
-			<div style="clear: right;"></div>
-		</div>
 		<img src="../modules/paypal/paypal.gif" style="float:left; margin-right:15px;" />
 		<b>'.$this->l('This module allows you to accept payments by PayPal.').'</b><br /><br />
 		'.$this->l('If the client chooses this payment mode, your PayPal account will be automatically credited.').'<br />
