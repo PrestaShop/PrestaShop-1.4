@@ -249,7 +249,7 @@ tr.PS_MRSelectedCarrier > td
 
 .PS_MRFloatRelayPointSelecteIt
 {
-	display:none;
+	display:block;
 }
 
 .PS_MRRelayPointInfo:hover .PS_MRFloatRelayPointSelecteIt
