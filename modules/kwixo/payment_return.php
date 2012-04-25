@@ -40,6 +40,10 @@ $transactionid = Tools::getValue('TransactionID');
 $payment = new kwixo();
 $fiakwixo = new FiaKwixo();
 $md5 = new HashMD5();
+
+if ($fiakwixo->getAuthKey() == '14c059d00677890ffbb56d9b0759e8b4' || $fiakwixo->getAuthKey() == '')
+	die('Invalid AuthKey');
+
 $waitedhash = $md5->hash($fiakwixo->getAuthKey() . $refid . $transactionid);
 $receivedhash = Tools::getValue('HashControl', '0');
 
