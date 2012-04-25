@@ -182,3 +182,7 @@ $_MODULE['<{mondialrelay}prestashop>settings_0a4ee7474864081af12dba847fafdaa6'] 
 $_MODULE['<{mondialrelay}prestashop>settings_ca57625685f058f54d82c6e05876a131'] = 'Choississez le statut pour la génération d\'étiquette.';
 $_MODULE['<{mondialrelay}prestashop>settings_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{mondialrelay}prestashop>settings_f4f70727dc34561dfde1a3c529b6205c'] = 'Paramètres';
+$_MODULE['<{mondialrelay}prestashop>install-1.8.0_315a8895cf7c458597be5cf3c5b18d0b'] = 'Ne peut pas créer la table contenant les méthodes transporteurs';
+$_MODULE['<{mondialrelay}prestashop>install-1.8.0_e364c3962f360330a5d8084c3ef5cacf'] = 'Ne peut pas changer le nom de la méthode';
+$_MODULE['<{mondialrelay}prestashop>install-1.8.0_6384826d8bae08ec0ca4d1cd386a32c8'] = 'Ne peut pas renommer la table history';
+$_MODULE['<{mondialrelay}prestashop>install-1.8.0_4c74bd0afa2a8ecb894674c9cd942da5'] = 'Ne peut pas mettre à jour la table mr_method_shop';

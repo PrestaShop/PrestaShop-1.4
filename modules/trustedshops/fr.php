@@ -91,6 +91,7 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_259060bb469ed1256c2e758e32
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_8512ae7d57b1396273f76fe6ed341a23'] = 'langue';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_8638c4fb6ff62122acd9927c4edbd22c'] = 'A bien été supprimé';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_a599ec4408db04d4bb9e4edd78b849f4'] = 'Le login du certificat à bien été ajouté';
+$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_07186ff4930c511cd3aebb3f43df2e0c'] = 'Le certificat d\'identification a échoué';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_b18f5630d5ffdfcee5ab0a44ee6e1eb6'] = 'Vous devez définir un nom d\'utilisateur et un mot de passe avant toute modification.';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_068ce643ff39bf2189935d14736fd10b'] = 'Sceau Trusted Shops et protection acheteur';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_e32263743aac776e5e32fc385d8b669a'] = 'Trusted Shops est le label de qualité européen pour sites marchands avec garantie de remboursement pour vos clients. Lors de la certification, votre boutique est soumise à un audit qui regroupe plus de 100 critères différents respectant les exigences des associations de protection des consommateurs, ainsi que les législations nationales et européennes.';
@@ -134,6 +135,7 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_12a4fc31ae8a9e4038df56961a
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_f811271eb84f3df1a430c3c78b6e7640'] = 'Lancez le fichier';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_06ec9154ce96a389f7b1d884e021818b'] = 'avec un intervalle de 10 minutes.';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_f89b7100efcc136900c909690e43f008'] = 'La ligne correspondante dans votre fichier cron apparaît ainsi :';
+$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_92ba00514b9eebdc4506cabecc7df190'] = 'Un acheteur ne peut pas acheter plusieurs uyer Protection Products.';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_2b83e3a2e08203b9892ad8801d6b2543'] = 'Trusted Shops Système d’évaluation client';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_b20a16afda98421bbf7457ccfa50e311'] = 'Ce module nécessite les droits de lecture et d\'écriture sur le répertoire cache du module.';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_0aa7ce92297d05fc09fb9fdbe5da6be6'] = 'Ce module requiert l\'extension PHP SOAP pour fonctionner correctement.';
