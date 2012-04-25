@@ -783,7 +783,7 @@ class MondialRelay extends Module
 			$carrier->external_module_name = 'mondialrelay';
 			$carrier->shipping_method = 1;
 			$carrier->delay = array($this->context->language->id => $delay);
-			$carrier->is_module = (_PS_VERSION_ > '1.3') ? 1 : 0;
+			$carrier->is_module = (_PS_VERSION_ < '1.4') ? 0 : 1;
 
 			$ret = $carrier->add();
 		}
