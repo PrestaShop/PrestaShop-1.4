@@ -70,7 +70,7 @@ function upgrade_module_1_8_0($object)
 	Configuration::updateValue('MONDIAL_RELAY', $object->version);
 
 	$methods = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'mr_method`');
-	if ($count($methods))
+	if (count($methods))
 	{
 		$query = '
 			INSERT INTO `'._DB_PREFIX_.'mr_method_shop`
