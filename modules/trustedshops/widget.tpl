@@ -23,8 +23,7 @@
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
-
-{if $display_widget && isset($filname)}
+{if $display_widget && isset($filename)}
 <div style="text-align: center">
 	<a target="_blank" href="https://www.trustedshops.com/buyerrating/info_{$ts_id}.html" title="See customer ratings of {$shop_name}"><img alt="Customer ratings of {$shop_name}" border="0"  src="{$filename}"/></a>
 </div>
