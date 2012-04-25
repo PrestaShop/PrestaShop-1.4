@@ -988,7 +988,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 						@unlink($tmpName);
 						$this->imgToDisplay = _PS_PROD_IMG_DIR_.$image->getExistingImgPath().'.'.$image->image_format;
 					}
-					elseif ($this->imageType == 'categories')
+					elseif (isset($this->wsObject->urlSegment[1]) && in_array($this->wsObject->urlSegment[1], array('categories', 'manufacturers', 'suppliers', 'stores')))
 					{
 						if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($file['tmp_name'], $tmpName))
 							throw new WebserviceException('An error occurred during the image upload', array(76, 400));
