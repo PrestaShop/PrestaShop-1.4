@@ -682,7 +682,7 @@ class MondialRelay extends Module
 				'MR_LANGUAGE' => Tools::getValue('MR_language'),
 				'MR_ORDER_STATE' => $this->account_shop['MR_ORDER_STATE'],
 				'MR_WEIGHT_COEFFICIENT' => Tools::getValue('MR_weight_coefficient'),
-				'id_shop' => $this->context->shop->id()
+				'id_shop' => $this->context->shop->id
 			);
 
 			if ($this->updateAccountShop())
