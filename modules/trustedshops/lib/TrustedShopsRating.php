@@ -471,7 +471,8 @@ class TrustedShopsRating extends AbsTrustedShops
 			if (!$cache->isFresh())
 				$cache->refresh();
 
-			self::$smarty->assign(array('ts_id' => $tab_id, 'filename' => _MODULE_DIR_.$filename));
+			if (file_exists(_PS_MODULE_DIR_.$filename))
+				self::$smarty->assign(array('ts_id' => $tab_id, 'filename' => _MODULE_DIR_.$filename));
 		}
 
 		self::$smarty->assign('display_rating_link', (int)$display_rating_frontend);
@@ -502,8 +503,8 @@ class TrustedShopsRating extends AbsTrustedShops
 
 	public function hookOrderConfirmation($params)
 	{
-		if (!Configuration::get('TS_TAB0_DISPLAY_RATING_OC'))
-			if (!$this->_isTsIdActive((int)$params['cookie']->id_lang))
+		if (!Configuration::get('TS_TAB0_DISPLAY_RATING_OC') ||
+			!$this->_isTsIdActive((int)$params['cookie']->id_lang))
 				return false;
 
 		self::$smarty->assign(array(

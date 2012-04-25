@@ -66,7 +66,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		'EN'	=> 'http://www.trustedshops.com/profile/#shop_name#_#shop_id#.html',
 		'FR'	=> 'http://www.trustedshops.fr/boutique_en_ligne/profil/#shop_name#_#shop_id#.html',
 		'PL'	=> 'http://www.trustedshops.de/profil/#shop_name#_#shop_id#.html',
-		'ES'	=> 'http://www.trustedshops.es/profil/#shop_name#_#shop_id#.html'
+		'ES'	=> 'http://www.trustedshops.es/perfil/#shop_name#_#shop_id#.html'
 	);
 
 	/**
@@ -1363,14 +1363,25 @@ class TSBuyerProtection extends AbsTrustedShops
 		{
 			$currency = new Currency((int)$params['cookie']->id_currency);
 
-			$query = 'SELECT * '.
+			$query = '
+				SELECT * '.
 				'FROM `'._DB_PREFIX_.TSBuyerProtection::DB_ITEMS.'` '.
 				'WHERE ts_id ="'.TSBuyerProtection::$CERTIFICATES[$lang]['tsID'].'" '.
 				'AND `protected_amount_decimal` >= "'.$params['cart']->getOrderTotal(true, Cart::BOTH).'" '.
 				'AND `currency` = "'.$currency->iso_code.'" '.
 				'ORDER BY `protected_amount_decimal` ASC';
 
-			$item = Db::getInstance()->getRow($query);
+			// If amout is bigger, get the max one requested by TS
+			if (!$item = Db::getInstance()->getRow($query))
+			{
+				$query = '
+					SELECT *, MAX(protected_amount_decimal) '.
+					'FROM `'._DB_PREFIX_.TSBuyerProtection::DB_ITEMS.'` '.
+					'WHERE ts_id ="'.TSBuyerProtection::$CERTIFICATES[$lang]['tsID'].'" '.
+					'AND `currency` = "'.$currency->iso_code.'"';
+
+				$item = Db::getInstance()->getRow($query);
+			}
 
 			if ($item && count($item))
 				TSBuyerProtection::$smarty->assign(array(
