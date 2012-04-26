@@ -180,7 +180,7 @@ class OrderDetailCore extends ObjectModel
 		$fields['product_ean13'] = pSQL($this->product_ean13);
 		$fields['product_upc'] = pSQL($this->product_upc);
 		$fields['product_reference'] = pSQL($this->product_reference);
-		$fields['product_supplier_reference'] = pSQL($this->product_reference);
+		$fields['product_supplier_reference'] = pSQL($this->product_supplier_reference);
 		$fields['product_weight'] = (float)($this->product_weight);
 		$fields['tax_name'] = pSQL($this->tax_name);
 		$fields['tax_rate'] = (float)($this->tax_rate);
