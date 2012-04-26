@@ -519,10 +519,30 @@ class OrderCore extends ObjectModel
 		return $resultArray;
 	}
 
+	/**
+	 * Returns the taxes rates average by using the historized products
+   */
 	public function getTaxesAverageUsed()
-	{
-		return Cart::getTaxesAverageUsed((int)($this->id_cart));
-	}
+	{	
+		$products = $this->getProducts();
+		$total_products_moy = 0;
+		$ratio_tax = 0;
+
+		if (!count($products))
+			return 0;
+
+		foreach ($products as $product)
+		{
+			$product['total_wt'] = Tools::ps_round($product['product_price'] * (float)$product['product_quantity'] * (1 + (float)($product['tax_rate']) / 100), 2);
+			$total_products_moy += $product['total_wt'];
+			$ratio_tax += $product['total_wt'] * $product['tax_rate'];
+		}
+
+		if ($total_products_moy > 0)
+			return $ratio_tax / $total_products_moy;
+
+		return 0;
+	} 
 
 	/**
 	 * Count virtual products in order
