@@ -91,6 +91,15 @@ class MRTools
 			return true;
 		return false;
 	}
+
+	static public function getFormatedPhone($phone_number)
+	{
+		$begin = substr($phone_number, 0, 3);
+		$pad_number = (strpos($begin, '+3') !== false) ? 12 :
+			(strpos($begin, '00') ? 13 : 10);
+
+		return str_pad(substr(preg_replace('/[^0-9+\(\)]*/', '', $phone_number), 0, $pad_number), $pad_number, '0');
+	}
 }
 
 ?>
