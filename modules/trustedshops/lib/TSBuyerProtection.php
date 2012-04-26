@@ -483,23 +483,26 @@ class TSBuyerProtection extends AbsTrustedShops
 		$client = $this->_getClient(TSBuyerProtection::WEBSERVICE_FO);
 		$testing_params = $this->_requestForProtectionV2ParamsValidator($params);
 
-		$query = 'SELECT *'.
+		$query = '
+			SELECT `id_order`'.
 			'FROM `'._DB_PREFIX_.TSBuyerProtection::DB_APPLI.'`'.
 			'WHERE `id_order` = "'.(int)$params['shopOrderID'].'"';
-
-		$order = Db::getInstance()->ExecuteS($query);
 
 		// If an order was already added, no need to continue.
 		// Otherwise a new application is created by TrustedShops.
 		// this can occurred when order confirmation page is reload.
-		if (isset($order[0]))
+		if (Db::getInstance()->getValue($query))
 			return false;
 
 		if ($testing_params)
 		{
 			try
 			{
-				$code = $client->requestForProtectionV2($params['tsID'], $params['tsProductID'], $params['amount'], $params['currency'], $params['paymentType'], $params['buyerEmail'], $params['shopCustomerID'], $params['shopOrderID'], $params['orderDate'], $params['shopSystemVersion'], $params['wsUser'], $params['wsPassword']);
+				$code = $client->requestForProtectionV2(
+					$params['tsID'], $params['tsProductID'], $params['amount'],
+					$params['currency'], $params['paymentType'], $params['buyerEmail'],
+					$params['shopCustomerID'], $params['shopOrderID'], $params['orderDate'],
+					$params['shopSystemVersion'], $params['wsUser'], $params['wsPassword']);
 
 				if ($code < 0)
 					throw new TSBPException($code, TSBPException::FRONT_END);
@@ -828,9 +831,8 @@ class TSBuyerProtection extends AbsTrustedShops
 					$this->errors[] = $e->getMessage();
 				}
 			}
-			return true;
 		}
-		return false;
+		return (bool)$checked_certificate;
 	}
 
 	/**
@@ -1434,26 +1436,12 @@ class TSBuyerProtection extends AbsTrustedShops
 
 		$query = 'SELECT * '.
 			'FROM `'._DB_PREFIX_.TSBuyerProtection::DB_ITEMS.'` '.
-			'WHERE 1 '.
-			'AND `id_product` IN ('.implode(',', $order_item_ids).') '.
+			'WHERE `id_product` IN ('.implode(',', $order_item_ids).') '.
 			'AND `ts_id` ="'.TSBuyerProtection::$CERTIFICATES[$lang]['tsID'].'" '.
 			'AND `currency` = "'.$currency->iso_code.'"';
 
-		$item = Db::getInstance()->ExecuteS($query);
-
-		// No items ? means no buyer protection products was bought.
-		if (empty($item))
+		if (!($item = Db::getInstance()->getRow($query)))
 			return '';
-
-		// In normal context this never occurred,
-		// because of a buyer could never add multiple Buyer protection products.
-		if (count($item) > 1)
-		{
-			$this->errors[] = $this->l('A buyer cannot buy multiple Buyer Protection Products.');
-			die($this->errors);
-		}
-
-		$item = $item[0];
 
 		$customer = new Customer($params['objOrder']->id_customer);
 		$payment_module = Module::getInstanceByName($params['objOrder']->module);
@@ -1563,12 +1551,12 @@ class TSBuyerProtection extends AbsTrustedShops
 	{
 		$lang = strtoupper(Language::getIsoById($params['objOrder']->id_lang));
 
-		if (!isset(TSBuyerProtection::$CERTIFICATES[$lang]))
+		// Security check to avoid any useless warning, a certficate tab will always exist for a configured language
+		if (!isset(TSBuyerProtection::$CERTIFICATES[$lang]) || !count(TSBuyerProtection::$CERTIFICATES[$lang]))
 			return '';
 
-		// If certificate is a classic type or certificate login parameters missing
-		if (((TSBuyerProtection::$CERTIFICATES[$lang]['user'] == '' ||
-				TSBuyerProtection::$CERTIFICATES[$lang]['password'] == '') &&
+		if (((TSBuyerProtection::$CERTIFICATES[$lang]['user'] != '' &&
+				TSBuyerProtection::$CERTIFICATES[$lang]['password'] != '') &&
 				TSBuyerProtection::$CERTIFICATES[$lang]['typeEnum'] == 'EXCELLENCE'))
 			return $this->_orderConfirmationExcellence($params, $lang);
 

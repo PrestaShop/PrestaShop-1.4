@@ -34,6 +34,8 @@ class TrustedShopsRating extends AbsTrustedShops
 	const APPLY_URL = 'https://www.trustedshops.com/buyerrating/signup.html';
 	const PARTNER_PACKAGE = 'presta';
 	const SHOP_SW = 'PrestaShop';
+	const PREFIX_ACTIF_CONF_NAME = 'TS_TAB0_ID_ACTIVE_';
+	const PREFIX_CONF_NAME = 'TS_TAB0_ID_';
 
 	private $allowed_languages = array();
 	private $available_languages = array('en', 'fr', 'de', 'es');
@@ -59,6 +61,8 @@ class TrustedShopsRating extends AbsTrustedShops
 		'es' => ''
 	);
 
+	private $error_soap_call;
+
 	public function __construct()
 	{
 		$this->tab_name = $this->l('Trusted Shops customer rating');
@@ -71,8 +75,8 @@ class TrustedShopsRating extends AbsTrustedShops
 	{
 		foreach ($this->available_languages AS $language)
 		{
-			Configuration::updateValue('TS_TAB0_ID_'.(int)(Language::getIdByIso($language)), '');
-			Configuration::updateValue('TS_TAB0_ID_ACTIVE_'.(int)(Language::getIdByIso($language)), '');
+			Configuration::updateValue(self::PREFIX_CONF_NAME.(int)(Language::getIdByIso($language)), '');
+			Configuration::updateValue(self::PREFIX_ACTIF_CONF_NAME.(int)(Language::getIdByIso($language)), '');
 		}
 
 		Configuration::updateValue('TS_TAB0_DISPLAY_IN_SHOP', '');
@@ -90,8 +94,8 @@ class TrustedShopsRating extends AbsTrustedShops
 	{
 		foreach ($this->available_languages AS $language)
 		{
-			Configuration::deleteByName('TS_TAB0_ID_'.(int)(Language::getIdByIso($language)));
-			Configuration::deleteByName('TS_TAB0_ID_ACTIVE_'.(int)(Language::getIdByIso($language)));
+			Configuration::deleteByName(self::PREFIX_CONF_NAME.(int)(Language::getIdByIso($language)));
+			Configuration::deleteByName(self::PREFIX_ACTIF_CONF_NAME.(int)(Language::getIdByIso($language)));
 		}
 
 		Configuration::deleteByName('TS_TAB0_DISPLAY_IN_SHOP');
@@ -133,9 +137,9 @@ class TrustedShopsRating extends AbsTrustedShops
 	private function _isTsIdActive($id_lang, $ts_id = NULL)
 	{
 		if (is_null($ts_id))
-			$ts_id = Configuration::get('TS_TAB0_ID_'.(int)$id_lang);
+			$ts_id = Configuration::get(self::PREFIX_CONF_NAME.(int)$id_lang);
 
-		return (!empty($ts_id) AND ($ts_id == Configuration::get('TS_TAB0_ID_ACTIVE_'.$id_lang)));
+		return (!empty($ts_id) AND ($ts_id == Configuration::get(self::PREFIX_ACTIF_CONF_NAME.$id_lang)));
 	}
 
 	// Return true if at least one TS_ID is active
@@ -173,13 +177,8 @@ class TrustedShopsRating extends AbsTrustedShops
 		if (is_writable(_PS_MODULE_DIR_.'trustedshops/cache') === FALSE)
 			$this->errors[] = $this->l('This module requires write and read permissions on the module cache directory.');
 
-		if (Tools::isSubmit('submitTrustedShops'))
-		{
-			$this->_validateForm();
-
-			if (empty($this->errors))
+		if (Tools::isSubmit('submitTrustedShops') && $this->_validateForm())
 				$this->_postProcess();
-		}
 
 		$out = $this->displayInformationsPage();
 		$out .= $this->displayForm();
@@ -187,15 +186,23 @@ class TrustedShopsRating extends AbsTrustedShops
 		return $out;
 	}
 
+	/**
+	 * Reset all data for new submited tsid even if it's the same one
+	 * @param $id_lang
+	 */
+	public function resetTSID($id_lang)
+	{
+		Configuration::deleteByName(self::PREFIX_CONF_NAME.(int)$id_lang, '');
+		Configuration::deleteByName(self::PREFIX_ACTIF_CONF_NAME.(int)$id_lang, '');
+	}
+
 	private function _validateForm()
 	{
 		if (!extension_loaded('soap'))
 		{
-			$this->errors[] = $this->l('This module requires the SOAP PHP extension to function properly.');
+			$this->errors[] = $this->l('This module requires the SOAP PHP extension to work properly.');
 			return false;
 		}
-
-		$flag_return = true;
 
 		foreach ($this->allowed_languages AS $language)
 		{
@@ -203,48 +210,51 @@ class TrustedShopsRating extends AbsTrustedShops
 			if (!empty($ts_id))
 			{
 				if (!preg_match('/^[[:alnum:]]{33}$/', $ts_id))
-				{
 					$this->errors[] = $this->l('Invalid Trusted Shops ID').' ['.$language['iso_code'].']';
-					$flag_return = false;
-				}
-				elseif (!$this->_isTsIdActive((int)$language['id_lang'], $ts_id))
+				else if (!$this->_isTsIdActive((int)$language['id_lang'], $ts_id))
 				{
-					$error = $this->_validateTrustedShopId($ts_id, (int)$language['id_lang']);
-					if ($error != '') $this->errors[] = $error;
-					$flag_return = false;
+					$this->_validateTrustedShopId($ts_id, (int)$language['id_lang']);
+					if ($this->hasSOAPCallError())
+					{
+						$this->errors[] = $this->error_soap_call;
+						$this->resetTSID($language['id_lang']);
+					}
 				}
 			}
+			else
+				$this->resetTSID($language['id_lang']);
 		}
 
 		if (Tools::getValue('send_seperate_mail') AND !Validate::isUnsignedInt(Tools::getValue('send_seperate_mail_delay')))
-		{
 			$this->errors[] = $this->l('Invalid delay');
-			$flag_return = false;
-		}
 
-		return $flag_return;
+		return (!count($this->errors));
 	}
 
 	private function _validateTrustedShopId($ts_id, $iso_lang)
 	{
-		$result = TrustedShopsSoapApi::validate(self::PARTNER_PACKAGE, $ts_id);
+		$result = strtoupper(TrustedShopsSoapApi::validate(self::PARTNER_PACKAGE, $ts_id));
 
 		if ($result != TrustedShopsSoapApi::RT_OK)
 			switch($result)
 			{
 				case TrustedShopsSoapApi::RT_INVALID_TSID:
-					$error = $this->l('Invalid Trusted Shops ID').' ['.Language::getIsoById($iso_lang).']. '.$this->l('Please register').' <a href="'.$this->getApplyUrl().'">' .$this->l('here').'</a> '. $this->l('or contact service@trustedshops.co.uk.');
+					$this->error_soap_call = $this->l('Invalid Trusted Shops ID').' ['.Language::getIsoById($iso_lang).']. '.$this->l('Please register').' <a href="'.$this->getApplyUrl().'">' .$this->l('here').'</a> '. $this->l('or contact service@trustedshops.co.uk.');
 					break;
 				case TrustedShopsSoapApi::RT_NOT_REGISTERED:
-					$error = $this->l('Customer Rating has not yet been activated for this Trusted Shops ID').' ['.Language::getIsoById($iso_lang).']. '.$this->l('Please register').' <a href="'.$this->getApplyUrl().'">' .$this->l('here').'</a> '. $this->l('or contact service@trustedshops.co.uk.');
+					$this->error_soap_call = $this->l('Customer Rating has not yet been activated for this Trusted Shops ID').' ['.Language::getIsoById($iso_lang).']. '.$this->l('Please register').' <a href="'.$this->getApplyUrl().'">' .$this->l('here').'</a> '. $this->l('or contact service@trustedshops.co.uk.');
 					break;
 				default:
-					$error = $this->l('An error has occurred');
+					$this->error_soap_call = $this->l('An error has occurred');
 			}
 
-		return isset($error) ? $error : '';
+		return $result;
 	}
 
+	private function hasSOAPCallError()
+	{
+		return (bool)!empty($this->error_soap_call);
+	}
 
 	private function _postProcess()
 	{
@@ -258,11 +268,11 @@ class TrustedShopsRating extends AbsTrustedShops
 		{
 			$id_lang = (int)$language['id_lang'];
 
-			$ts_id = Tools::getValue('trusted_shops_id_'.(int)$id_lang);
-			Configuration::updateValue('TS_TAB0_ID_'.(int)$id_lang, $ts_id);
+			$ts_id = Tools::getValue('trusted_shops_id_'.$id_lang);
+			Configuration::updateValue(self::PREFIX_CONF_NAME.$id_lang, $ts_id);
 
 			if (!empty($ts_id))
-				Configuration::updateValue('TS_TAB0_ID_ACTIVE_'.(int)$id_lang, $ts_id);
+				Configuration::updateValue(self::PREFIX_ACTIF_CONF_NAME.$id_lang, $ts_id);
 		}
 
 		if (Configuration::get('TS_TAB0_SEND_SEPERATE_MAIL'))
@@ -272,12 +282,13 @@ class TrustedShopsRating extends AbsTrustedShops
 
 		$params = '';
 		$delim = '?';
+
 		$key = 1;
 
 		foreach($this->allowed_languages as $language)
 			if ($this->_isTsIdActive($language['id_lang']))
 			{
-				$params .= $delim.'lang'.$key.'='.$language['iso_code'].'&ts_id'.$key.'='.Configuration::get('TS_TAB0_ID_ACTIVE_'.$language['id_lang']);
+				$params .= $delim.'lang'.$key.'='.$language['iso_code'].'&ts_id'.$key.'='.Configuration::get(self::PREFIX_ACTIF_CONF_NAME.$language['id_lang']);
 				$delim = '&';
 				$key++;
 			}
@@ -302,7 +313,7 @@ class TrustedShopsRating extends AbsTrustedShops
 				<div id="trusted_shops_id_'.(int)$language['id_lang'].'">
 					<p style="line-height: 25px;">
 						<img src="'._PS_IMG_.'/l/'.(int)$language['id_lang'].'.jpg" style="vertical-align: middle;" alt="" />'.strtoupper($language['iso_code']).'
-						<input type="text" name="trusted_shops_id_'.(int)$language['id_lang'].'" id="trusted_shops_id_'.(int)$language['id_lang'].'" style="width: 270px;" value="'.Configuration::get('TS_TAB0_ID_'.(int)$language['id_lang']).'" /> <span style="font-size: 10px;">'.($this->_isTsIdActive($language['id_lang']) ? $this->l('Active') : $this->l('Inactive unless you haven\'t specified your Trusted Shops ID')).'</span>
+						<input type="text" name="trusted_shops_id_'.(int)$language['id_lang'].'" id="trusted_shops_id_'.(int)$language['id_lang'].'" style="width: 270px;" value="'.Configuration::get(self::PREFIX_CONF_NAME.(int)$language['id_lang']).'" /> <span style="font-size: 10px;">'.($this->_isTsIdActive($language['id_lang']) ? $this->l('Active') : $this->l('Inactive unless you haven\'t specified your Trusted Shops ID')).'</span>
 					</p>
 				</div>';
 		}
@@ -433,7 +444,7 @@ class TrustedShopsRating extends AbsTrustedShops
 	public function getRatingUrlWithBuyerEmail($id_lang, $id_order = '', $buyer_email = '')
 	{
 		$language = Language::getIsoById((int)$id_lang);
-		$base_url = $this->rating_url_base[$language].Configuration::get('TS_TAB0_ID_'.(int)$id_lang).'.html';
+		$base_url = $this->rating_url_base[$language].Configuration::get(self::PREFIX_CONF_NAME.(int)$id_lang).'.html';
 
 		if (!empty($buyer_email))
 			$base_url .= '&buyerEmail='.urlencode(base64_encode($buyer_email)).($id_order ? '&orderID='.urlencode(base64_encode((int)$id_order)) : '');
@@ -457,7 +468,7 @@ class TrustedShopsRating extends AbsTrustedShops
 
 		$iso = Language::getIsoById((int)$id_lang);
 
-		$tab_id = Configuration::get('TS_TAB0_ID_'.(int)$id_lang);
+		$tab_id = Configuration::get(self::PREFIX_CONF_NAME.(int)$id_lang);
 		$display_in_shop = Configuration::get('TS_TAB0_DISPLAY_IN_SHOP');
 		$display_rating_frontend = Configuration::get('TS_TAB0_DISPLAY_RATING_FRONT_END');
 
@@ -480,7 +491,7 @@ class TrustedShopsRating extends AbsTrustedShops
 		if ($display_rating_frontend)
 			self::$smarty->assign(array('rating_url' => $this->getRatingUrl(), 'language' => $iso));
 
-		if (Configuration::get('TS_TAB0_ID_'.(int)$id_lang))
+		if (Configuration::get(self::PREFIX_CONF_NAME.(int)$id_lang))
 		{
 			return $this->display(self::$module_name, 'widget.tpl');
 				//TrustedShops::display_seal();
@@ -498,7 +509,7 @@ class TrustedShopsRating extends AbsTrustedShops
 	{
 		global $cookie;
 
-		return self::$module_name.'/cache/'.Configuration::get('TS_TAB0_ID_'.(int)$cookie->id_lang).'.gif';
+		return self::$module_name.'/cache/'.Configuration::get(self::PREFIX_CONF_NAME.(int)$cookie->id_lang).'.gif';
 	}
 
 	public function hookOrderConfirmation($params)
