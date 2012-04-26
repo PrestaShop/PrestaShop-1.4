@@ -27,6 +27,7 @@ $_MODULE['<{cloudcache}prestashop>cloudcache_7e185a7cd33a7ec22abaff3f1faa8d28'] 
 $_MODULE['<{cloudcache}prestashop>cloudcache_d5a735d3395d8928332af64d25479273'] = 'Vous avez des erreurs de compatibilité, résolvez les avant d\'utiliser le module.';
 $_MODULE['<{cloudcache}prestashop>cloudcache_63a77eaf9f310dc5def6709c2887dcc4'] = 'Le test de connexion a échoué.';
 $_MODULE['<{cloudcache}prestashop>cloudcache_4dee17e319890f92a2595a308752a1c3'] = 'PrestaShop';
+$_MODULE['<{cloudcache}prestashop>cloudcache_2631b272000ffdc568ad04d7982d1f7c'] = 'Une erreur est survenue, impossible de créer la zone par défault.';
 $_MODULE['<{cloudcache}prestashop>cloudcache_0ba7583639a274c434bbe6ef797115a4'] = 'S\'inscrire';
 $_MODULE['<{cloudcache}prestashop>cloudcache_43bff7159a5c1a845ce6bd00f90b692f'] = 'sur CloudCache';
 $_MODULE['<{cloudcache}prestashop>cloudcache_c888438d14855d7d96a2724ee9c306bd'] = 'Paramètres mis à jour';

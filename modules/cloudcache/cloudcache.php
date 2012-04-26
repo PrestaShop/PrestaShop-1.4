@@ -29,7 +29,18 @@
 if (!defined('_PS_VERSION_'))
 	exit;
 
-require(dirname(__FILE__).'/lib/CloudCacheApi.php');
+if (file_exists(dirname(__FILE__).'/lib/CloudCacheApi.php'))
+  require(dirname(__FILE__).'/lib/CloudCacheApi.php');
+elseif (file_exists(dirname(__FILE__).'/../modules/cloudcache/lib/CloudCacheApi.php'))
+  require(dirname(__FILE__).'/../modules/cloudcache/lib/CloudCacheApi.php');
+
+define('CLOUDCACHE_API_PORT', 80);
+define('CLOUDCACHE_API_HTTP_METHOD', 'http11');
+define('CLOUDCACHE_API_URI', '/xmlrpc/');
+define('CLOUDCACHE_API_URL', 'api.netdna.com');
+define('CLOUDCACHE_API_ZONE_URL', 'netdna-cdn.com');
+define('CLOUDCACHE_API_HASH_TYPE', 'sha256');
+define('CLOUDCACHE_API_PULL_ZONE_TYPE', 1);
 
 class CloudCache extends Module
 {
@@ -44,11 +55,9 @@ class CloudCache extends Module
 	/******************************************************************/
 	public function __construct()
 	{
-		$this->_initContext();
-
 		$this->name = 'cloudcache';
 		$this->tab = 'administration';
-		$this->version = '1.0.1';
+		$this->version = '1.2';
 		$this->author = 'PrestaShop';
 
 		parent::__construct();
@@ -57,30 +66,16 @@ class CloudCache extends Module
 		$this->description = $this->l('Supercharge your Shop with the CloudCache.com Content Delivery Network (CDN).');
 
 
+		/* Backward compatibility */
+		require(_PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php');
+		$this->context->smarty->assign('base_dir', __PS_BASE_URI__);
+
 		if (Configuration::get('PS_CIPHER_ALGORITHM'))
 			$this->_cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
 		else
 			$this->_cipherTool = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
 
 		$this->_api = new CloudcacheApi();
-	}
-
-	/**
-	 * @brief Make the module compatible 1.4/1.5
-	 */
-	private function _initContext()
-	{
-		if (class_exists('Context') && function_exists('getContent'))
-			$this->context = Context::getContent();
-		else
-		{
-			global $smarty, $cookie;
-
-			$this->context = new StdClass();
-			$smarty->assign('base_dir', __PS_BASE_URI__);
-			$this->context->smarty = $smarty;
-			$this->context->cookie = $cookie;
-		}
 	}
 
 	/**
@@ -96,13 +91,6 @@ class CloudCache extends Module
 			'CLOUDCACHE_API_USER' => '',
 			'CLOUDCACHE_API_KEY' => '',
 			'CLOUDCACHE_API_COMPANY_ID' => '',
-			'CLOUDCACHE_API_PORT' => 80,
-			'CLOUDCACHE_API_HTTP_METHOD' => 'http11',
-			'CLOUDCACHE_API_URI' => '/xmlrpc/',
-			'CLOUDCACHE_API_URL' => 'api.netdna.com',
-			'CLOUDCACHE_API_ZONE_URL' => 'netdna-cdn.com',
-			'CLOUDCACHE_API_HASH_TYPE' => 'sha256',
-			'CLOUDCACHE_API_PULL_ZONE_TYPE' => 1,
 			'CLOUDCACHE_API_ACTIVE' => 0,
 		);
 
@@ -114,6 +102,48 @@ class CloudCache extends Module
 				$error += Configuration::deleteByName($varName) ? 0 : 1;
 
 		return $error > 0 ? false : true;
+	}
+
+	private function _installOverride()
+	{
+		// Hash of the empty file in 1.5 => file name
+		$files = array('810f3fa83a88b5019be31d7b80db460d' => 'classes/Tools.php');
+		if (_PS_VERSION_ > '1.5')
+			$files['5b917f57038acb75714cf144c9043bb4'] = 'classes/controller/FrontController.php';
+
+		// Make sure the environment is OK
+		if (!is_dir(dirname(__FILE__).'/../../override/classes/'))
+			mkdir(dirname(__FILE__).'/../../override/classes/', 0777, true);
+		if (_PS_VERSION_ > '1.5' && !is_dir(dirname(__FILE__).'/../../override/classes/controller/'))
+			mkdir(dirname(__FILE__).'/../../override/classes/controller/', 0777);
+
+		$errors = array();
+		foreach ($files as $hash => $path)
+		{
+			if (file_exists(dirname(__FILE__).'/../../override/'.$path))
+			{
+				if (md5_file(dirname(__FILE__).'/../../override/'.$path) == $hash)
+					rename(dirname(__FILE__).'/../../override/'.$path, dirname(__FILE__).'/../../override/'.$path.'.origin.php');
+				elseif (md5_file(dirname(__FILE__).'/../../override/'.$path) == md5_file(dirname(__FILE__).'/override/'.$path))
+					continue ;
+				else
+				{
+					$errors[] = '/override/'.$path;
+					continue ;
+				}
+			}
+			copy(dirname(__FILE__).'/override/'.$path, dirname(__FILE__).'/../../override/'.$path);
+		}
+
+		if (count($errors))
+			die('<div class="conf warn">
+								<img src="../img/admin/warn2.png" alt="" title="" />'.
+				$this->l('The module was successfully installed (').
+				'<a href="?tab=AdminModules&configure=cloudcache&token='.Tools::getAdminTokenLite('AdminModules').'&tab_module=administration&module_name=cloudcache" style="color: blue;">'.$this->l('configure').'</a>'.
+				$this->l(') but the following file already exist. Please, merge the file manually.').'<br />'.
+				implode('<br />', $errors).
+				'</div>');
+		return true;
 	}
 
 	/******************************************************************/
@@ -134,23 +164,7 @@ class CloudCache extends Module
 			if (!Db::getInstance()->execute($s))
 				return false;
 
-		// Check the files to override
-		if (file_exists(dirname(__FILE__).'/../../override/classes/Tools.php'))
-			die('<div class="conf warn">
-								<img src="../img/admin/warn2.png" alt="" title="" />'.
-				$this->l('The module was successfully installed (').
-				'<a href="?tab=AdminModules&configure=cloudcache&token='.Tools::getAdminTokenLite('AdminModules').'&tab_module=administration&module_name=cloudcache" style="color: blue;">'.$this->l('configure').'</a>'.
-				$this->l(') but the following file already exist. Please, merge the file manually.').
-				'<br />/override/classes/Tools.php'.'</div>');
-		else
-		{
-			if (!is_dir(dirname(__FILE__).'/../../override/classes/'))
-				mkdir(dirname(__FILE__).'/../../override/classes/', 0777, true);
-
-			copy(dirname(__FILE__).'/override/classes/Tools.php',
-				dirname(__FILE__).'/../../override/classes/Tools.php');
-		}
-		return true;
+		return $this->_installOverride();;
 	}
 
 	/**
@@ -181,11 +195,11 @@ class CloudCache extends Module
 		return true;
 	}
 
-    /**
-     * @brief Check that everything is alright for Cloudcache usage.
-     *
-     * @return Array empty on success, filled with error messages on failure.
-     */
+	/**
+	 * @brief Check that everything is alright for Cloudcache usage.
+	 *
+	 * @return Array empty on success, filled with error messages on failure.
+	 */
 	private function _compatibilityCheck()
 	{
 		// Compatibility check
@@ -241,7 +255,7 @@ class CloudCache extends Module
 	 */
 	private function _clearTables()
 	{
-		Db::getInstance()->execute('TRUNCATE `'._DB_PREFIX_.'cloudcache_zone`');
+		Db::getInstance()->execute('DELETE FROM `'._DB_PREFIX_.'cloudcache_zone` WHERE `id_shop` = '.(int)$this->context->shop->id);
 	}
 
 	private function _getCouponUrl()
@@ -287,13 +301,13 @@ class CloudCache extends Module
 			// Check http[s]
 			if (substr(Tools::getValue('origin'), 0, 7) != 'http://' &&
 				substr(Tools::getValue('origin'), 0, 8) != 'https://')
-					$origin = 'http://'.Tools::getValue('origin');
+				$origin = 'http://'.Tools::getValue('origin');
 			else
 				$origin = Tools::getValue('origin');
 
 			if (substr(Tools::getValue('vanity_domain'), 0, 7) == 'http://' ||
 				substr(Tools::getValue('vanity_domain'), 0, 8) == 'https://')
-					$vanity = substr(Tools::getValue('vanity_domain'), strpos(':') + 3);
+				$vanity = substr(Tools::getValue('vanity_domain'), strpos(':') + 3);
 			else
 				$vanity = Tools::getValue('vanity_domain');
 
@@ -315,7 +329,7 @@ class CloudCache extends Module
 								`compress` = \''.(isset($_POST['compress']) ? 1: 0).'\',
 								`label` = \''.pSQL($_POST['label']).'\',
 								`file_type` = \''.pSQL(CLOUDCACHE_FILE_TYPE_ALL).'\',
-								`cdn_url` = \''.($_POST['vanity_domain'] ? pSQL($_POST['vanity_domain']) : pSQL($_POST['name'].'.'.Configuration::get('CLOUDCACHE_API_COMPANY_ID').'.'.Configuration::get('CLOUDCACHE_API_ZONE_URL'))).'\'
+								`cdn_url` = \''.($_POST['vanity_domain'] ? pSQL($_POST['vanity_domain']) : pSQL($_POST['name'].'.'.Configuration::get('CLOUDCACHE_API_COMPANY_ID').'.'.CLOUDCACHE_API_ZONE_URL)).'\'
 								WHERE `id_zone` = '.(int)$action['id']);
 
 				$this->context->smarty->assign('confirmMessage',
@@ -338,7 +352,7 @@ class CloudCache extends Module
 		elseif (Tools::isSubmit('SubmitCloudcacheClearAllCache'))
 		{
 			$error = false;
-			foreach (Db::getInstance()->ExecuteS('SELECT `id_zone`, `zone_type`, `name` FROM `'._DB_PREFIX_.'cloudcache_zone`') as $zone)
+			foreach (Db::getInstance()->ExecuteS('SELECT `id_zone`, `zone_type`, `name` FROM `'._DB_PREFIX_.'cloudcache_zone` WHERE `id_shop` = '.(int)$this->context->shop->id.' AND `id_shop` = '.(int)$this->context->shop->id) as $zone)
 				if (!$this->_api->cachePurgeAll('cache', $zone['id_zone']))
 				{
 					$error = true;
@@ -355,7 +369,7 @@ class CloudCache extends Module
 		elseif (Tools::isSubmit('SubmitCloudcacheClearZoneCache'))
 		{
 			$zoneName = Db::getInstance()->ExecuteS('SELECT `name` FROM '._DB_PREFIX_.'cloudcache_zone
-													WHERE `id_zone` = '.(int)Tools::getValue('id_zone'));
+													WHERE `id_zone` = '.(int)Tools::getValue('id_zone').' AND `id_shop` = '.(int)$this->context->shop->id);
 
 			if ($this->_api->cachePurgeAll('cache', Tools::getValue('id_zone')))
 				$this->context->smarty->assign('confirmMessage',
@@ -371,7 +385,7 @@ class CloudCache extends Module
 													`cdn_url`, `bw_yesterday`, `bw_last_week`, `bw_last_month`,
 													`file_type`, `zone_type`
 													FROM `'._DB_PREFIX_.'cloudcache_zone`
-													WHERE `id_zone` = '.(int)Tools::getValue('id_zone'));
+													WHERE `id_zone` = '.(int)Tools::getValue('id_zone').' AND `id_shop` = '.(int)$this->context->shop->id);
 
 			// Clean $zone_info before sending to smarty
 			$zone_info_clean = array();
@@ -428,14 +442,14 @@ class CloudCache extends Module
 		if (isset($confValues['CLOUDCACHE_API_USER']))
 			$this->context->smarty->assign('apiUser',
 				Tools::safeOutput($confValues['CLOUDCACHE_API_USER']));
-		if (isset($confValues['CLOUDCACHE_API_KEY']))
-			$this->context->smarty->assign('apiKey',
-				Tools::safeOutput($this->_cipherTool->decrypt($confValues['CLOUDCACHE_API_KEY'])));
+
+		$this->context->smarty->assign('apiKey',
+			Tools::safeOutput($this->_cipherTool->decrypt($confValues['CLOUDCACHE_API_KEY'])));
 
 		$messages = $this->_compatibilityCheck();
 
 		if (count($messages))
-			$this->context->smarty->assign('compatibilityIssues',$messages);
+			$this->context->smarty->assign('compatibilityIssues', $messages);
 
 		$this->context->smarty->assign('allAvailableZones', $this->_api->getAvailableNamespaces(true));
 		$this->context->smarty->assign('prepaidBandwith', $this->getPrepaidBandwidth());
@@ -455,7 +469,7 @@ class CloudCache extends Module
 		$this->context->smarty->assign('defaultOriginServerURL', (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').Configuration::get('PS_SHOP_DOMAIN'));
 		if (isset($_GET['id_tab']))
 		  $this->context->smarty->assign('cloudcache_id_tab', (int)$_GET['id_tab']);
-		$this->context->smarty->assign('cloudcache_tracking', 'http://www.prestashop.com/modules/'.$this->name.'.png?url_site='.$_SERVER["SERVER_NAME"].'&id_lang='.$this->context->cookie->id_lang);
+		$this->context->smarty->assign('cloudcache_tracking', 'http://www.prestashop.com/modules/'.$this->name.'.png?url_site='.Tools::safeOutput($_SERVER['SERVER_NAME']).'&id_lang='.$this->context->cookie->id_lang);
 		return $this->display(__FILE__, 'views/content2.tpl');
 	}
 
@@ -470,6 +484,8 @@ class CloudCache extends Module
 	 */
 	private function _testConnection()
 	{
+		set_time_limit(0);
+		
 		if (count($this->_compatibilityCheck()))
 			return array('<img src="../img/admin/forbbiden.gif" alt="" /><b style="color: #CC0000;">'.
 				$this->l('You have compatibility issues, please fix them before using the module.').'</b>',
@@ -481,7 +497,7 @@ class CloudCache extends Module
 		{
 			$ret = array('<img src="../img/admin/forbbiden.gif" alt="" />
 			<b style="color: #CC0000;">'.$this->l('Connection Test Failed.').'</b>',
-				'#FFD8D8', false);
+						 '#FFD8D8', false);
 			Configuration::updateValue('CLOUDCACHE_API_ACTIVE', 0);
 			return $ret;
 		}
@@ -515,16 +531,34 @@ class CloudCache extends Module
 				$companyId = substr($tmp, 0, strlen('netdna-cdn.com') * -1 - 1);
 				Configuration::updateValue('CLOUDCACHE_API_COMPANY_ID', pSQL($companyId));
 			}
+			else // If failure, the zonename have probably been taken
+			{
+				$defaultName .= rand(1, 999);
+				$r = $this->createZone('pullzone', array(
+							 'name' => $defaultName,
+							 'origin' => $origin,
+							 'compress' => 1,
+						 ));
+				if (is_array($r))
+				{
+					Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cloudcache_zone` SET `name` = \''.pSQL($defaultName).'\', `origin` = \''.$origin.'\', `compress` = \'1\', `file_type` = \''.pSQL(CLOUDCACHE_FILE_TYPE_ALL).'\', `cdn_url` = \''.pSQL($r['cdn_url']).'\' WHERE `id_zone` = '.(int)$r['id']);
+					$tmp = substr($r['cdn_url'], strlen($defaultName) + 1);
+					$companyId = substr($tmp, 0, strlen('netdna-cdn.com') * -1 - 1);
+					Configuration::updateValue('CLOUDCACHE_API_COMPANY_ID', pSQL($companyId));
+				}
+				else
+					return array('<img src="../img/admin/error.png" /><b style="color: red;">'.$this->l('An error occured, impossible to create a default zone.').'</b>', '#FFD8D8', true);
+			}
 			$newZone = $tmp;
 		}
 
 		Configuration::updateValue('CLOUDCACHE_API_ACTIVE', 1);
 		$ret = array('<img src="../img/admin/ok.gif" alt="" />
 			<b style="color: green;">'.$this->l('Register').' '.
-				Configuration::get('PS_SHOP_DOMAIN').' '.
-				$this->l('on Cloudcache').'<br /></b>
+					 Configuration::get('PS_SHOP_DOMAIN').' '.
+					 $this->l('on Cloudcache').'<br /></b>
 				<img src="http://www.prestashop.com/modules/'.$this->name.'.png?api_user='.urlencode(Configuration::get('CLOUDCACHE_API_COMPANY_ID')).
-				'" style="display: none;" />
+					 '" style="display: none;" />
 				', '#D6F5D6', true);
 		if ($newZone)
 			$ret['newZone'] = $origin;
@@ -640,10 +674,13 @@ class CloudCache extends Module
 				{
 					$exists = false;
 
-					$row = Db::getInstance()->getRow('SELECT `id_zone`, `origin`, `cdn_url`, `file_type` FROM `'._DB_PREFIX_.'cloudcache_zone` WHERE `id_zone` = '.(int)$zone['id']);
+					$row = Db::getInstance()->getRow('SELECT `id_zone`, `id_shop`, `origin`, `cdn_url`, `file_type` FROM `'._DB_PREFIX_.'cloudcache_zone` WHERE `id_zone` = '.(int)$zone['id']);
 
 					if ($row['id_zone'])
 						$exists = true;
+
+					if ($exists && $row['id_shop'] != $this->context->shop->id)
+						continue ;
 
 					$zones[(int)$zone['id']] = array(
 						'id_zone' => (int)$zone['id'],
@@ -655,6 +692,8 @@ class CloudCache extends Module
 						'bw_last_month' => (int)$this->_getZoneTransfer($zone['id'], 'monthly'),
 						'file_type' => ($exists ? pSQL($row['file_type']) : 'none'),
 						'zone_type' => pSQL($namespace),
+						'id_shop' => $this->context->shop->id,
+						'id_group_shop' => $this->context->shop->id_group_shop,
 					);
 				}
 			}
@@ -696,11 +735,10 @@ class CloudCache extends Module
 		if (!$sync)
 		{
 			$d = Db::getInstance()->ExecuteS('
-											SELECT `id_zone`, `name`, `origin`, `compress`, `label`, `cdn_url`,
+											SELECT `id_zone`, `id_shop`, `name`, `origin`, `compress`, `label`, `cdn_url`,
 											   `bw_yesterday`, `bw_last_week`, `bw_last_month`, `file_type`, `zone_type`
 											FROM `'._DB_PREFIX_.'cloudcache_zone`
-											WHERE `zone_type` = \''.pSQL($type).'\'');
-
+											WHERE `zone_type` = \''.pSQL($type).'\' AND `id_shop` = '.(int)$this->context->shop->id);
 			foreach ($d as $line)
 				$zones[$line['id_zone']] = $line;
 		}

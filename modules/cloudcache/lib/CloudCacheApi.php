@@ -51,7 +51,7 @@ class CloudcacheApi
 	private $curDate;
 	private $hashType;
 	private $pullzoneType;
-	private $availableNamespaces = array('pullzone' => 'Pull Zone'); /// @todo : pushzone, vod zone, and live zone will be available later
+	private $availableNamespaces = array('pullzone' => 'Pull Zone');
 
 	private $lastRpcRequest;
 	private $lastRpcResponse;
@@ -87,16 +87,17 @@ class CloudcacheApi
 		);
 
 		// Connection settings
-		$this->port = Configuration::get('CLOUDCACHE_API_PORT');
-		$this->httpMethod = Configuration::get('CLOUDCACHE_API_HTTP_METHOD');
-		$this->apiURI = Configuration::get('CLOUDCACHE_API_URI');
-		$this->apiURL = Configuration::get('CLOUDCACHE_API_URL');
+		$this->port = CLOUDCACHE_API_PORT;
+		$this->httpMethod = CLOUDCACHE_API_HTTP_METHOD;
+		$this->apiURI = CLOUDCACHE_API_URI;
+		$this->apiURL = CLOUDCACHE_API_URL;
 
 		// Api credentials
 		if (Configuration::get('PS_CIPHER_ALGORITHM'))
 			$this->_cipherTool = new Rijndael(_RIJNDAEL_KEY_, _RIJNDAEL_IV_);
 		else
 			$this->_cipherTool = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
+
 		$this->apiKey = $this->_cipherTool->decrypt(Configuration::get('CLOUDCACHE_API_KEY'));
 		$this->apiUserId = Configuration::get('CLOUDCACHE_API_USER');
 		$this->companyId = Configuration::get('CLOUDCACHE_API_COMPANY_ID');
@@ -111,8 +112,8 @@ class CloudcacheApi
 		// Put back user timezone
 		date_default_timezone_set($currentTimezone);
 
-		$this->hashType = Configuration::get('CLOUDCACHE_API_HASH_TYPE');
-		$this->pullzoneType = Configuration::get('CLOUDCACHE_API_PULL_ZONE_TYPE');
+		$this->hashType = CLOUDCACHE_API_HASH_TYPE;
+		$this->pullzoneType = CLOUDCACHE_API_PULL_ZONE_TYPE;
 	}
 
 

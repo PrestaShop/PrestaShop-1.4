@@ -41,11 +41,20 @@ class Tools extends ToolsCore
 	/** @var _activatedModule Flag weither or not the module is active */
 	private static $_activatedModule = false;
 
+	public static $id_group_shop = 1;
+	public static $id_shop = 1;
+
 	/**
 	 * @brief Init the statics needed by getMediaServer
 	 */
 	private static function _initServers()
 	{
+		require_once(dirname(__FILE__).'/../../modules/cloudcache/backward_compatibility/backward.php');
+
+		$context = Context::getContext();
+		self::$id_shop = $context->shop->id;
+		self::$id_group_shop = $context->shop->id_group_shop;
+
 		// Init the statics
 		self::$_servers = array();
 		self::$_serversCount = array();
@@ -64,7 +73,7 @@ class Tools extends ToolsCore
 
 		$d = Db::getInstance()->executeS('SELECT `cdn_url`, `file_type`
 								 FROM `'._DB_PREFIX_.'cloudcache_zone`
-								 WHERE `file_type` != \''.CLOUDCACHE_FILE_TYPE_UNASSOCIATED.'\'');
+								 WHERE `file_type` != \''.CLOUDCACHE_FILE_TYPE_UNASSOCIATED.'\' AND `id_shop` = '.(int)self::$id_shop);
 
 		$allOnly = false;
 		foreach ($d as $line)

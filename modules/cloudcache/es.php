@@ -27,6 +27,7 @@ $_MODULE['<{cloudcache}prestashop>cloudcache_7e185a7cd33a7ec22abaff3f1faa8d28'] 
 $_MODULE['<{cloudcache}prestashop>cloudcache_d5a735d3395d8928332af64d25479273'] = 'Se han encontrado problemas de compatibilidad, por favor corrija los errores antes de usar el modulo.';
 $_MODULE['<{cloudcache}prestashop>cloudcache_63a77eaf9f310dc5def6709c2887dcc4'] = 'Conexión de prueba fallida.';
 $_MODULE['<{cloudcache}prestashop>cloudcache_4dee17e319890f92a2595a308752a1c3'] = 'prestashop';
+$_MODULE['<{cloudcache}prestashop>cloudcache_2631b272000ffdc568ad04d7982d1f7c'] = 'Ha ocurrido un error. Imposible crear una zona predeterminada.';
 $_MODULE['<{cloudcache}prestashop>cloudcache_0ba7583639a274c434bbe6ef797115a4'] = 'Incribirse';
 $_MODULE['<{cloudcache}prestashop>cloudcache_43bff7159a5c1a845ce6bd00f90b692f'] = 'en Cloudcache';
 $_MODULE['<{cloudcache}prestashop>cloudcache_c888438d14855d7d96a2724ee9c306bd'] = 'Opciones actualizadas';

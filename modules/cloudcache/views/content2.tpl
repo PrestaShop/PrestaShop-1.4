@@ -115,7 +115,7 @@ $(document).ready(function()
 	{if $connectionTestResult[1] == '#FFD8D8'}
 	<b style="color: red">{l s='An error occured while testing the connection.' mod='cloudcache'}</b>
 	{elseif isset($connectionTestResult['newZone'])}
-	<b style="color: green;">{l s='Success! That\'s all you have to do!' mod='cloudcache'} {$connectionTestResult['newZone']|escape} {l s='is now accelerated by cloudcache.com' mod='cloudcache'}</b>
+	<b style="color: green;">{l s='Success! That is all you have to do!' mod='cloudcache'} {$connectionTestResult['newZone']|escape} {l s='is now accelerated by cloudcache.com' mod='cloudcache'}</b>
 	{else}
 	<b style="color: green;">{l s='Success! The connection have been established!' mod='cloudcache'}</b>
 	{/if}<br />
@@ -194,7 +194,7 @@ $(document).ready(function()
 	    <td>{if isset($zone['compress']) && $zone['compress'] == 1}{l s='YES' mod='cloudcache'}{else}{l s='NO' mod='cloudcache'}{/if}</td>
     <td>{if $zone.bw_last_month != -1}{$zone['bw_last_month']|escape}{else}{l s='N/A' mod='cloudcache'}{/if}</td>
 	    <td>{if $zone.bw_last_week != -1}{$zone['bw_last_week']|escape}{else}{l s='N/A' mod='cloudcache'}{/if}</td>
-	    <td>{if $zone.bw_yesterday != -1}{$zone['.bw_yesterday']|escape}{else}{l s='N/A' mod='cloudcache'}{/if}</td>
+	    <td>{if $zone.bw_yesterday != -1}{$zone['bw_yesterday']|escape}{else}{l s='N/A' mod='cloudcache'}{/if}</td>
 
 	    <td>
 	      <form method="post" action="{$serverRequestUri|strip_tags}&id_tab=4">
