@@ -80,10 +80,11 @@ function showOrder(mode, var_content, file)
 				$('form#sendOrderMessage').submit(function(){
 					return sendOrderMessage();
 			});
-			$(this).fadeIn('slow');
-			$.scrollTo(this, 1200);
-			if(typeof(resizeAddressesBox) == 'function')
-				resizeAddressesBox();
+			$(this).fadeIn('slow', function() {
+				$.scrollTo(this, 1200);
+				if(typeof(resizeAddressesBox) == 'function')
+					resizeAddressesBox();
+			});
 		});
 	});
 }
