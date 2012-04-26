@@ -66,7 +66,7 @@ class Shipwire extends Module
 
 		$this->name = 'shipwire';
 		$this->tab = 'administration';
-		$this->version = '1.1.2';
+		$this->version = '1.1.3';
 		$this->author = 'PrestaShop';
 
 		parent::__construct();
@@ -676,7 +676,7 @@ class Shipwire extends Module
 
 		$buffer .= '
 		<br />
-			<form action="'.Tools::safeOutput($this->dParams['serverRequestUri']).'" method="post">
+			<form action="'.htmlspecialchars_decode(Tools::safeOutput($this->dParams['serverRequestUri'])).'" method="post">
 			<fieldset class="width2 shipwire_fieldset">
 				<legend><img src="../img/admin/cog.gif" alt="" />'.$this->l('Options').'</legend>
 
