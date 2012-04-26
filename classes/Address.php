@@ -212,9 +212,9 @@ class AddressCore extends ObjectModel
 		return $fields;
 	}
 
-	public function validateController($htmlentities = true)
+	public function validateController($htmlentities = true, $copy_post = false)
 	{
-		$errors = parent::validateController($htmlentities);
+		$errors = parent::validateController($htmlentities, $copy_post);
 		if (!Configuration::get('VATNUMBER_CHECKING'))
 			return $errors;
 		include_once(_PS_MODULE_DIR_.'vatnumber/vatnumber.php');

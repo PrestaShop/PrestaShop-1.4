@@ -166,7 +166,10 @@ class Hipay extends PaymentModule
 
 	public function payment()
 	{
-		global $cookie, $cart;
+		if (!$this->active)
+			return;
+
+		global $cart;
 
 		$id_currency = (int)$this->getModuleCurrency($cart);
 		// If the currency is forced to a different one than the current one, then the cart must be updated
@@ -178,8 +181,7 @@ class Hipay extends PaymentModule
 		$language = new Language($cart->id_lang);
 		$customer = new Customer($cart->id_customer);
 		$carrier = new Carrier($cart->id_carrier, $cart->id_lang);
-		$id_zone = self::MysqlGetValue('SELECT id_zone FROM '._DB_PREFIX_.'address a INNER JOIN '._DB_PREFIX_.'country c ON a.id_country = c.id_country WHERE id_address = '.(int)$cart->id_address_delivery);
-
+		
 		require_once(dirname(__FILE__).'/mapi/mapi_package.php');
 		
 		$hipayAccount = ($this->prod ? Configuration::get('HIPAY_ACCOUNT_'.$currency->iso_code) : Configuration::get('HIPAY_ACCOUNT_TEST_'.$currency->iso_code));
@@ -205,7 +207,7 @@ class Hipay extends PaymentModule
 		$paymentParams->setUrlCancel(self::getHttpHost(true, true).__PS_BASE_URI__.'order.php?step=3');
 		$paymentParams->setUrlNok(self::getHttpHost(true, true).__PS_BASE_URI__.'order-confirmation.php?id_cart='.(int)$cart->id.'&amp;id_module='.(int)$this->id.'&amp;secure_key='.$customer->secure_key);
 		$paymentParams->setUrlOk(self::getHttpHost(true, true).__PS_BASE_URI__.'order-confirmation.php?id_cart='.(int)$cart->id.'&amp;id_module='.(int)$this->id.'&amp;secure_key='.$customer->secure_key);
-		$paymentParams->setUrlAck(self::getHttpHost(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/validation.php?token='.$cart->secure_key);
+		$paymentParams->setUrlAck(self::getHttpHost(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/validation.php?token='.Tools::encrypt($cart->id.$cart->secure_key.Configuration::get('HIPAY_SALT')));
 		$paymentParams->setBackgroundColor('#FFFFFF');
 
 		if (!$paymentParams->check())
@@ -262,6 +264,8 @@ class Hipay extends PaymentModule
 
 	public function validation()
 	{
+		if (!$this->active)
+			return;
 		if (!array_key_exists('xml', $_POST))
 			return;
 
@@ -272,7 +276,7 @@ class Hipay extends PaymentModule
 
 		if (HIPAY_MAPI_COMM_XML::analyzeNotificationXML($_POST['xml'], $operation, $status, $date, $time, $transid, $amount, $currency, $id_cart, $data) === false)
 		{
-			file_put_contents('logs'.Configuration::get('HIPAY_UNIQID').'.txt', '['.date('Y-m-d H:i:s').'] Analysis error: '.htmlentities($_POST['xml'])."\n", FILE_APPEND);
+			file_put_contents('logs'.Configuration::get('HIPAY_UNIQID').'.txt', '['.date('Y-m-d H:i:s').'] Analysis error: '.$_POST['xml']."\n", FILE_APPEND);
 			return false;
 		}
 		
@@ -280,15 +284,15 @@ class Hipay extends PaymentModule
 			Context::getContext()->cart = new Cart((int)$id_cart);
 		
 		$cart = new Cart((int)$id_cart);
-		if ($cart->secure_key != Tools::getValue('token'))
-			file_put_contents('logs'.Configuration::get('HIPAY_UNIQID').'.txt', '['.date('Y-m-d H:i:s').'] Token error: '.htmlentities($_POST['xml'])."\n", FILE_APPEND);
+		if (Tools::encrypt($cart->id.$cart->secure_key.Configuration::get('HIPAY_SALT')) != Tools::getValue('token'))
+			file_put_contents('logs'.Configuration::get('HIPAY_UNIQID').'.txt', '['.date('Y-m-d H:i:s').'] Token error: '.$_POST['xml']."\n", FILE_APPEND);
 		else
 		{
 			if (trim($operation) == 'capture' AND trim(strtolower($status)) == 'ok')
 			{
 				/* Paiement capturé sur Hipay = Paiement accepté sur Prestashop */
 				$orderMessage = $operation.': '.$status.'\ndate: '.$date.' '.$time.'\ntransaction: '.$transid.'\namount: '.(float)$amount.' '.$currency.'\nid_cart: '.(int)$id_cart;
-				$this->validateOrder((int)$id_cart, Configuration::get('PS_OS_PAYMENT'), (float)$amount, $this->displayName, $orderMessage, array(), NULL, false, Tools::getValue('token'));
+				$this->validateOrder((int)$id_cart, Configuration::get('PS_OS_PAYMENT'), (float)$amount, $this->displayName, $orderMessage, array(), NULL, false, $cart->secure_key);
 			}
 			elseif (trim($operation) == 'refund' AND trim(strtolower($status)) == 'ok')
 			{
@@ -335,7 +339,7 @@ class Hipay extends PaymentModule
 	
 	public function getContent()
 	{
-		global $currentIndex, $cookie;
+		global $currentIndex;
 
 		if ($currentIndex == '' && _PS_VERSION_ >= 1.5)
 			$currentIndex = 'index.php?controller='.Tools::safeOutput(Tools::getValue('controller'));

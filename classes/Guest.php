@@ -197,12 +197,12 @@ class GuestCore extends ObjectModel
 	
 	public static function setNewGuest($cookie)
 	{
-		$guest = new Guest(isset($cookie->id_customer) ? Guest::getFromCustomer((int)($cookie->id_customer)) : NULL);
+		$guest = new Guest(isset($cookie->id_customer) ? Guest::getFromCustomer((int)$cookie->id_customer) : null);
 		$guest->userAgent();
 		if ($guest->id_operating_system OR $guest->id_web_browser)
 		{
 			$guest->save();
-			$cookie->id_guest = (int)($guest->id);
+			$cookie->id_guest = (int)$guest->id;
 		}
 	}
 }
