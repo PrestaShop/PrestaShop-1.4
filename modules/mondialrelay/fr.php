@@ -2,7 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{mondialrelay}prestashop>adminmondialrelay_189b865291caeb28362669393c97bed9'] = 'Test de traduction';
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_e82faee1422140edd04b2f94c5051500'] = 'Action réussie';
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_3b2d373418745276ae6e207421245cdc'] = 'Le type de commande a été mis a jour';
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_b4ac3d3f15bc0984d0906aff1202e701'] = 'N\'a pu mettre a jour les infos du compte';

@@ -135,10 +135,9 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_12a4fc31ae8a9e4038df56961a
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_f811271eb84f3df1a430c3c78b6e7640'] = 'Lancez le fichier';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_06ec9154ce96a389f7b1d884e021818b'] = 'avec un intervalle de 10 minutes.';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_f89b7100efcc136900c909690e43f008'] = 'La ligne correspondante dans votre fichier cron apparaît ainsi :';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_92ba00514b9eebdc4506cabecc7df190'] = 'Un acheteur ne peut pas acheter plusieurs uyer Protection Products.';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_2b83e3a2e08203b9892ad8801d6b2543'] = 'Trusted Shops Système d’évaluation client';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_b20a16afda98421bbf7457ccfa50e311'] = 'Ce module nécessite les droits de lecture et d\'écriture sur le répertoire cache du module.';
-$_MODULE['<{trustedshops}prestashop>trustedshopsrating_0aa7ce92297d05fc09fb9fdbe5da6be6'] = 'Ce module requiert l\'extension PHP SOAP pour fonctionner correctement.';
+$_MODULE['<{trustedshops}prestashop>trustedshopsrating_687d745d0dd48ea996cb951d705da4d0'] = 'Ce module requiert l\'extension PHP Soap pour fonctionner.';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_1097e2b0ee70e248749f0d0a9292df56'] = 'Trusted Shops ID non valide';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_086dbc83aa6b78fa9a234d264ba5808a'] = 'Différé invalide';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_24bbca53f91f119c930d147557a4e997'] = 'Veuillez vous enregistrer';
