@@ -9,8 +9,8 @@
 	<taxes>
 		<tax id="1" name="DPH SK 20%" rate="20" />
 		<tax id="2" name="DPH SK 10%" rate="10" />
-
-		<taxRulesGroup name="SK Standard Rate (20%)">
+		
+		<taxRulesGroup name="SK Štandardná sadzba (20%)">
 			<taxRule iso_code_country="be" id_tax="1" />
 			<taxRule iso_code_country="bg" id_tax="1" />
 			<taxRule iso_code_country="cz" id_tax="1" />
@@ -40,7 +40,7 @@
 			<taxRule iso_code_country="uk" id_tax="1" />
 		</taxRulesGroup>
 
-		<taxRulesGroup name="SK Reduced Rate (10%)">
+		<taxRulesGroup name="SK Znížená sadzba (10%)">
 			<taxRule iso_code_country="be" id_tax="2" />
 			<taxRule iso_code_country="bg" id_tax="2" />
 			<taxRule iso_code_country="cz" id_tax="2" />
@@ -70,7 +70,7 @@
 			<taxRule iso_code_country="uk" id_tax="2" />
 		</taxRulesGroup>
 
-		<taxRulesGroup name="SK Foodstuff Rate (20%)">
+		<taxRulesGroup name="SK Potraviny (20%)">
 			<taxRule iso_code_country="be" id_tax="1" />
 			<taxRule iso_code_country="bg" id_tax="1" />
 			<taxRule iso_code_country="cz" id_tax="1" />
@@ -100,7 +100,7 @@
 			<taxRule iso_code_country="uk" id_tax="1" />
 		</taxRulesGroup>
 
-		<taxRulesGroup name="SK Books Rate (10%)">
+		<taxRulesGroup name="SK Knihy (10%)">
 			<taxRule iso_code_country="be" id_tax="2" />
 			<taxRule iso_code_country="bg" id_tax="2" />
 			<taxRule iso_code_country="cz" id_tax="2" />
@@ -138,4 +138,3 @@
 		<unit type="long_distance" value="km" />
 	</units>
 </localizationPack>
-
