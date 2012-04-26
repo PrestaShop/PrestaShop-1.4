@@ -73,7 +73,7 @@ class ShipwireTracking extends ShipwireApi
 	}
 
 	/*
-	 * @brief Updates tracking info in local database. 
+	 * @brief Updates tracking info in local database.
 	 *		Declared as a static method so shipwire.php can access it thru autoload
 	*/
 	public static function updateTracking($static = false)
@@ -87,13 +87,13 @@ function updateTracking($static = false)
 	$api = new ShipwireTracking();
 	$api->retrieveFull();
 	$d = $api->sendData();
-	
+
 	if ($d['Status'])
 		if ($static)
 			return false;
 		else
 			die('KO');
-	
+
 	if ($d['TotalOrders'] > 0)
 	{
 		foreach ($d['Order'] as $order)
@@ -101,17 +101,17 @@ function updateTracking($static = false)
 			$o = array();
 			if (isset($order['@attributes']))
 				$o = $order['@attributes'];
-			
+
 			if (!isset($o['id']))
 			{
-				Logger::addLog('Shipwire: Order ID not defined.', 4)
+				Logger::addLog('Shipwire: Order ID not defined. >>>>'.print_r($d, true).'<<<<', 4);
 				continue;
 			}
-			
-			$orderExists = Db::getInstance()->ExecuteS('SELECT `id_order` 
-				FROM `'._DB_PREFIX_.'shipwire_order` 
+
+			$orderExists = Db::getInstance()->ExecuteS('SELECT `id_order`
+				FROM `'._DB_PREFIX_.'shipwire_order`
 				WHERE `id_order` = '.(int)$o['id'].' LIMIT 1');
-			
+
 			if (isset($orderExists[0]['id_order']) && !empty($orderExists[0]['id_order']))
 			{
 				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'shipwire_order` SET '
@@ -126,7 +126,7 @@ function updateTracking($static = false)
 			}
 			else
 			{
-				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'shipwire_order` 
+				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'shipwire_order`
 				(`id_order`, `tracking_number`, `shipped`, `shipper`, `shipDate`, `expectedDeliveryDate`, `href`, `shipperFullName`)
 				VALUES (
 				\''.pSQL($o['id']).'\''
@@ -139,16 +139,16 @@ function updateTracking($static = false)
 				.(isset($o['shipperFullName']) ? ',\''.pSQL($o['shipperFullName']).'\'' : ',\'\'')
 				.')');
 			}
-			
-			$result = Db::getInstance()->getValue('SELECT `transaction_ref` 
-				FROM `'._DB_PREFIX_.'shipwire_order` 
+
+			$result = Db::getInstance()->getValue('SELECT `transaction_ref`
+				FROM `'._DB_PREFIX_.'shipwire_order`
 				WHERE `id_order` = '.(int)$o['id']);
 			if (empty($result))
 			{
 				$module = new Shipwire();
 				$module->updateOrderStatus((int)$o['id'], true);
 			}
-			
+
 			if (isset($order['TrackingNumber']))
 			{
 				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'orders`
@@ -163,7 +163,7 @@ function updateTracking($static = false)
 						$history->id_order = $o['id'];
 						if (isset($o['shipped']) && $o['shipped'] == 'YES')
 							$history->changeIdOrderState(Configuration::get('SHIPWIRE_SENT_ID'), $o['id']);
-						
+
 						$history->addWithemail();
 					}
 				}
@@ -176,7 +176,7 @@ function updateTracking($static = false)
 	else
 		$cipherTool = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
 
-	$shipWireInventoryUpdate = new ShipwireInventoryUpdate(Configuration::get('SHIPWIRE_API_USER'), 
+	$shipWireInventoryUpdate = new ShipwireInventoryUpdate(Configuration::get('SHIPWIRE_API_USER'),
 									$cipherTool->decrypt(Configuration::get('SHIPWIRE_API_PASSWD')));
 	$shipWireInventoryUpdate->getInventory();
 

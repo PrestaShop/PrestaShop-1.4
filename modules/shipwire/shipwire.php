@@ -66,7 +66,7 @@ class Shipwire extends Module
 
 		$this->name = 'shipwire';
 		$this->tab = 'administration';
-		$this->version = '1.0';
+		$this->version = '1.1.2';
 		$this->author = 'PrestaShop';
 
 		parent::__construct();
@@ -99,6 +99,9 @@ class Shipwire extends Module
 			$this->context = new StdClass();
 			$this->context->smarty = $smarty;
 			$this->context->cookie = $cookie;
+			$this->context->shop = new StdClass();
+			$this->context->shop->id = 1;
+			$this->context->shop->id_group_shop = 1;
 		}
 
 		$this->_loadConfiguration();
@@ -215,8 +218,8 @@ class Shipwire extends Module
 			$(function(){
 				/* Add Shipwire fieldset to Order Details page */
 				html = \'<br /><br /><fieldset>\' +
-						\'<legend><img src="'.$this->_path.'logo.gif" alt="">Shipwire Status</legend>\' +
-							\'<b>Status:</b> '.pSQL($status).'\' +
+						\'<legend><img src="'.$this->_path.'logo.gif" alt="">'.$this->l('Shipwire Status').'</legend>\' +
+							\'<b>Status:</b> '.Tools::safeOutput($status).'\' +
 						\'</fieldset>\';
 
 				if ($(\'#content select[name="id_order_state"]\').size())
@@ -371,12 +374,6 @@ class Shipwire extends Module
 		return true;
 	}
 
-	private function _getSkuName($id_product, $id_product_attr)
-	{
-		$product = new Cart($id_product);
-		die('<pre>'.print_r($product->getProducts(), true));
-	}
-
 	/**
 	 * @brief Empty all tables of the module.
 	 */
@@ -485,7 +482,7 @@ class Shipwire extends Module
 		}
 		elseif (Tools::isSubmit('resend_id_order'))
 		{
-			if ($this->updateOrderStatus((int)$_POST['resend_id_order']))
+			if ($this->updateOrderStatus($_POST['resend_id_order']))
 				$this->dParams['confirmMessage'] = $this->_displayConfirmation($this->l('Order successfully resent.'));
 			else
 				$this->dParams['confirmMessage'] = $this->_displayConfirmation($this->l('Error while sending. Try again later.'), 'error');
@@ -496,7 +493,7 @@ class Shipwire extends Module
 				FROM `'._DB_PREFIX_.'shipwire_order`
 				WHERE `transaction_ref` IS NULL OR `transaction_ref` = \'\'');
 			foreach ($d as $line)
-				$this->updateOrderStatus((int)$line['id_order']);
+				$this->updateOrderStatus($line['id_order']);
 
 			if (ShipwireTracking::updateTracking(true))
 				$this->dParams['confirmMessage'] = $this->_displayConfirmation($this->l('Transactions successfully resent.'));
@@ -616,7 +613,7 @@ class Shipwire extends Module
 	/******************************************************************/
 	private function _displayContent()
 	{
-		global $cookie;
+		$cookie = $this->context->cookie;
 
 		$buffer = '
 		<link rel="stylesheet" type="text/css" href="'.$this->dParams['base_dir'].'modules/shipwire/style.css" />';
@@ -628,18 +625,18 @@ class Shipwire extends Module
 				'.$this->dParams['confirmMessage']['text'].'
 			</div>';
 		$buffer .= '
-			<img src="http://www.prestashop.com/modules/'.$this->name.'.png?url_site='.$_SERVER["SERVER_NAME"].'&id_lang='.$this->context->cookie->id_lang.'" alt="" style="display:none"/>
+			<img src="http://www.prestashop.com/modules/'.$this->name.'.png?url_site='.Tools::safeOutput($_SERVER['SERVER_NAME']).'&id_lang='.(int)$this->context->cookie->id_lang.'" alt="" style="display:none"/>
 			<h2>'.$this->dParams['displayName'].'</h2>
 			<fieldset>
-				<legend><img src="../img/admin/help.png" alt="" />Help</legend>
+				<legend><img src="../img/admin/help.png" alt="" />'.$this->l('Help').'</legend>
 					<a style="float: right;" target="_blank" href="http://www.prestashop.com/en/industry-partners/shipping/shipwire"><img alt="" src="../modules/shipwire/shipwire_logo.png"></a>
 					<h3>'.$this->l('How to configure Shipwire Module:').'</h3>
 					- '.$this->l('Fill the Shipwire Email and Password fields with those provided by Shipwire.').'<br />
 					- '.$this->l('Click on the "Save Settings" button and then Test your connection.').'<br /><br />
 					<h3>'.$this->l('Module purpose:').'</h3>
-					'.$this->l('Shipwire\'s enterprise logistics platform will help lower your cost, grow your sales, and deliver a great experience for your customers. Shipwire ensures your orders ship faster — at a lower cost.
-							Easily connect your sales channels and expand into emerging ones like Social Commerce. Use Shipwire\'s global warehouses to reach more customers faster — at a lower cost.
-							Whatever the volume, Shipwire\'s automated warehouses process your orders quickly and accurately.').'<br /><br />
+					'.$this->l('Shipwire\'s enterprise logistics platform will help lower your cost, grow your sales, and deliver a great experience for your customers. Shipwire ensures your orders ship faster — at a lower cost.').'<br />'.
+			$this->l('Easily connect your sales channels and expand into emerging ones like Social Commerce. Use Shipwire\'s global warehouses to reach more customers faster — at a lower cost.').'<br />'.
+			$this->l('Whatever the volume, Shipwire\'s automated warehouses process your orders quickly and accurately.').'<br /><br />
 					<br />
 			</fieldset>
 			<br />
@@ -679,7 +676,7 @@ class Shipwire extends Module
 
 		$buffer .= '
 		<br />
-			<form action="'.Tools::$this->dParams['serverRequestUri'].'" method="post">
+			<form action="'.Tools::safeOutput($this->dParams['serverRequestUri']).'" method="post">
 			<fieldset class="width2 shipwire_fieldset">
 				<legend><img src="../img/admin/cog.gif" alt="" />'.$this->l('Options').'</legend>
 
@@ -701,7 +698,7 @@ class Shipwire extends Module
 							<select id="shipwire_commit_id" name="shipwire_commit_id">';
 							foreach ($orderStatusList as $k => $name)
 								$buffer .= '
-								<option'.(isset($orderStatusList[Configuration::get('SHIPWIRE_COMMIT_ID')]) && Configuration::get('SHIPWIRE_COMMIT_ID') == $k ? ' selected="selected"' : '' ).' value="'.Tools::safeOutput($k).'">'.Tools::safeOutput($name).'</option>';
+								<option'.(isset($orderStatusList[Configuration::get('SHIPWIRE_COMMIT_ID')]) && Configuration::get('SHIPWIRE_COMMIT_ID') == $k ? ' selected="selected"' : '' ).' value="'.Tools::safeOutput($k).'">'.Tools::safeOutput(html_entity_decode($name, ENT_COMPAT, 'utf-8')).'</option>';
 							$buffer .= '
 							</select>
 						</td>
@@ -712,7 +709,7 @@ class Shipwire extends Module
 							<select id="shipwire_sent_id" name="shipwire_sent_id">';
 							foreach ($orderStatusList as $k => $name)
 								$buffer .= '
-								<option'.(isset($orderStatusList[Configuration::get('SHIPWIRE_SENT_ID')]) && Configuration::get('SHIPWIRE_SENT_ID') == $k ? ' selected="selected"' : '' ).' value="'.Tools::safeOutput($k).'">'.Tools::safeOutput($name).'</option>';
+								<option'.(isset($orderStatusList[Configuration::get('SHIPWIRE_SENT_ID')]) && Configuration::get('SHIPWIRE_SENT_ID') == $k ? ' selected="selected"' : '' ).' value="'.Tools::safeOutput($k).'">'.Tools::safeOutput(html_entity_decode($name, ENT_COMPAT, 'utf-8')).'</option>';
 							$buffer .= '
 							</select>
 						</td>
@@ -771,7 +768,7 @@ class Shipwire extends Module
 							foreach ($carriers as $carrier)
 								$buffer .= '
 								<option value="'.Tools::safeOutput($carrier['id_carrier']).'"'.($carrier['id_carrier'] == Configuration::get('SHIPWIRE_GD') ?
-								' selected="selected"' : '').'>'.Tools::safeOutput($carrier['name']).'</option>';
+								' selected="selected"' : '').'>'.htmlspecialchars_decode(Tools::safeOutput($carrier['name'])).'</option>';
 							$buffer .=
 							'</select>
 						</td>
@@ -783,7 +780,7 @@ class Shipwire extends Module
 							foreach ($carriers as $carrier)
 								$buffer .= '
 								<option value="'.(int)$carrier['id_carrier'].'"'.($carrier['id_carrier'] == Configuration::get('SHIPWIRE_1D') ?
-								' selected="selected"' : '').'>'.Tools::safeOutput($carrier['name']).'</option>';
+								' selected="selected"' : '').'>'.htmlspecialchars_decode(Tools::safeOutput($carrier['name'])).'</option>';
 							$buffer .=
 							'</select>
 						</td>
@@ -795,7 +792,7 @@ class Shipwire extends Module
 							foreach ($carriers as $carrier)
 								$buffer .= '
 								<option value="'.(int)$carrier['id_carrier'].'"'.($carrier['id_carrier'] == Configuration::get('SHIPWIRE_2D') ?
-								' selected="selected"' : '').'>'.Tools::safeOutput($carrier['name']).'</option>';
+								' selected="selected"' : '').'>'.htmlspecialchars_decode(Tools::safeOutput($carrier['name'])).'</option>';
 							$buffer .=
 							'</select>
 						</td>
@@ -807,7 +804,7 @@ class Shipwire extends Module
 							foreach ($carriers as $carrier)
 								$buffer .= '
 								<option value="'.(int)$carrier['id_carrier'].'"'.($carrier['id_carrier'] == Configuration::get('SHIPWIRE_INTL') ?
-								' selected="selected"' : '').'>'.Tools::safeOutput($carrier['name']).'</option>';
+								' selected="selected"' : '').'>'.htmlspecialchars_decode(Tools::safeOutput($carrier['name'])).'</option>';
 							$buffer .=
 							'</select>
 						</td>
@@ -866,7 +863,7 @@ class Shipwire extends Module
 					if (isset($product['@attributes']) && count($product['@attributes']) && is_array($product['@attributes']))
 						foreach ($product['@attributes'] as $k => $p)
 							$buffer .= '
-								<td>'.$p.'</td>';
+								<td>'.Tools::safeOutput($p).'</td>';
 						$buffer .= '
 							</tr>';
 				}
@@ -948,7 +945,7 @@ function shipwireAutoload($className)
 {
 	$className = str_replace(chr(0), '', $className);
 	if (!preg_match('/^\w+$/', $className))
-		die('Invalid classname.');
+		die('In2valid classname.'.$className);
 
 	$moduleDir = dirname(__FILE__).'/';
 
@@ -957,4 +954,3 @@ function shipwireAutoload($className)
 	else
 		__autoload($className);
 }
-

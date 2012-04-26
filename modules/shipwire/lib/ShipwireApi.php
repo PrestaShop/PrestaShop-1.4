@@ -52,7 +52,7 @@ class ShipwireApi
 	protected $_mode = 'Production';
 
 	/** @var _urlConn URL to connect to at Shipwire's end */
-	
+
 	protected $_url = array(
 		'inventoryUpdate' => array(
 			'Test' => 'https://api.beta.shipwire.com/exec/InventoryServices.php',

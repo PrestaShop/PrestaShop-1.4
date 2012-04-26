@@ -52,7 +52,7 @@ class ShipwireInventoryUpdate extends ShipwireApi
 	public function getInventory($field = NULL)
 	{
 		$result = $this->sendData();
-		
+
 		if (!empty($field) && isset($result[$field]))
 			$result = $result[$field];
 
