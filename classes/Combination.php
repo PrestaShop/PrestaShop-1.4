@@ -73,7 +73,7 @@ class CombinationCore extends ObjectModel
 		'wholesale_price' => 'isPrice',
 		'price' => 'isNegativePrice',
 		'ecotax' => 'isPrice',
-		'quantity' => 'isUnsignedInt',
+		'quantity' => 'isInt',
 		'weight' => 'isFloat',
 		'default_on' => 'isBool',
 	);
