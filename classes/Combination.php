@@ -71,7 +71,7 @@ class CombinationCore extends ObjectModel
 		'ean13' => 'isEan13',
 		'upc' => 'isUpc',
 		'wholesale_price' => 'isPrice',
-		'price' => 'isPrice',
+		'price' => 'isNegativePrice',
 		'ecotax' => 'isPrice',
 		'quantity' => 'isUnsignedInt',
 		'weight' => 'isFloat',
