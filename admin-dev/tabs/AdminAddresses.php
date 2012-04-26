@@ -31,7 +31,7 @@ if (Configuration::get('VATNUMBER_MANAGEMENT') AND file_exists(_PS_MODULE_DIR_.'
 class AdminAddresses extends AdminTab
 {
 	/** @var array countries list */
-	private $countriesArray = array();
+	protected $countriesArray = array();
 
 	public function __construct()
 	{
