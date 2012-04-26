@@ -26,12 +26,12 @@
 */
 
 include(dirname(__FILE__). '/../../config/config.inc.php');
-// will include backward file
+/* will include backward file */
 include(dirname(__FILE__). '/authorizeaim.php');
 
-$authorizeaim = new authorizeaim();
+$authorizeaim = new authorizeAIM();
 
-// SSL Tricks to bypass the redirect for the FrontController in 1.5 +
+/* SSL Tricks to bypass the redirect for the FrontController in 1.5 + */
 Configuration::updateValue('PS_SSL_ENABLED', 0);
 include(dirname(__FILE__). '/../../init.php');
 Configuration::updateValue('PS_SSL_ENABLED', 1);
@@ -59,58 +59,75 @@ if (Configuration::get('AUTHORIZE_AIM_DEMO'))
 /* Do the CURL request ro Authorize.net */
 $request = curl_init($url);
 curl_setopt($request, CURLOPT_HEADER, 0);
-curl_setopt($request, CURLOPT_RETURNTRANSFER, 1); 
+curl_setopt($request, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($request, CURLOPT_POSTFIELDS, $postString);
 curl_setopt($request, CURLOPT_SSL_VERIFYPEER, FALSE);
-$postResponse = curl_exec($request); 
+$postResponse = curl_exec($request);
 curl_close($request);
 
 $response = explode('|', $postResponse);
-if (!isset($response[7]) OR !isset($response[3]) OR !isset($response[9]))
+if (!isset($response[7]) || !isset($response[3]) || !isset($response[9]))
 {
-		Logger::addLog('Authorize.net returned a malformed response for cart '.$response[7], 4);
-		die('Authorize.net returned a malformed response, aborted.');
+	$msg = 'Authorize.net returned a malformed response for cart';
+	if (isset($response[7]))
+		$msg .= ' '.(int)$response[7];
+	Logger::addLog($msg, 4);
+	die('Authorize.net returned a malformed response, aborted.');
 }
 
-if ($response[0] != 1)
+/* Does the cart exist and is valid? */
+$cart = new Cart((int)$response[7]);
+if (!Validate::isLoadedObject($cart))
 {
-	$checkout_type = Configuration::get('PS_ORDER_PROCESS_TYPE') ? 'order-opc' : 'opc';
-	$url = _PS_VERSION_ >= '1.5' ? 'index.php?controller='.$checkout_type.'&' : $checkout_type.'.php?';
-	$url .= 'step=3&cgv=1&aimerror=1';
-
-	if (!isset($_SERVER['HTTP_REFERER']) || strstr($_SERVER['HTTP_REFERER'], 'order'))
-		Tools::redirect($url);
-	elseif (strstr($_SERVER['HTTP_REFERER'], '?'))
-		Tools::redirect($_SERVER['HTTP_REFERER'].'&aimerror=1', '');
-	else
-		Tools::redirect($_SERVER['HTTP_REFERER'].'?aimerror=1', '');
+	Logger::addLog('Cart loading failed for cart '.(int)$response[7], 4);
+	die('An unrecoverable error occured with the cart '.(int)$repsonse[7]);
 }
-else 
+$customer = new Customer((int)$cart->id_customer);
+$message = $response[3];
+$payment_method = 'Authorize.net AIM';
+
+switch ($response[0]) // Response code
 {
-	/* Does the cart exist and is valid? */
-	$cart = new Cart((int)$response[7]);
-	if (!Validate::isLoadedObject($cart))
-	{
-		Logger::addLog('Cart loading failed for cart '.$response[7], 4);
+	case 1: // Payment accepted
+		$authorizeaim->setTransactionDetail($response);
+		$authorizeaim->validateOrder((int)$cart->id,
+			Configuration::get('PS_OS_PAYMENT'), (float)$response[9],
+			$payment_method, $message, NULL, NULL, false, $customer->secure_key);
+		break ;
+
+	case 4: // Hold for review
+		$authorizeaim->validateOrder((int)$cart->id,
+			Configuration::get('AUTHORIZE_AIM_HOLD_REVIEW_OS'), (float)$response[9],
+			$authorizeaim->displayName, $response[3]);
+		break ;
+
+	default:
+		$checkout_type = Configuration::get('PS_ORDER_PROCESS_TYPE') ?
+			'order-opc' : 'order';
+		$url = _PS_VERSION_ >= '1.5' ?
+			'index.php?controller='.$checkout_type.'&' : $checkout_type.'.php?';
+		$url .= 'step=3&cgv=1&aimerror=1';
+
+		if (!isset($_SERVER['HTTP_REFERER']) ||
+			strstr($_SERVER['HTTP_REFERER'], 'order'))
+			Tools::redirect($url);
+		elseif (strstr($_SERVER['HTTP_REFERER'], '?'))
+			Tools::redirect($_SERVER['HTTP_REFERER'].'&aimerror=1', '');
+		else
+			Tools::redirect($_SERVER['HTTP_REFERER'].'?aimerror=1', '');
+
 		exit;
-	}
 
-	$customer = new Customer((int)$cart->id_customer);
-
-	/* Loading the object */
-	$message = $response[3];
-	$payment_method = 'Authorize.net AIM';
-	if ($response[0] == 1)
-	{		
-		$authorizeaim->setTransactionDetail($response);	
-		$authorizeaim->validateOrder((int)$cart->id, Configuration::get('PS_OS_PAYMENT'), (float)$response[9], $payment_method, $message, NULL, NULL, false, $customer->secure_key);
-	}
-	else
-		$authorizeaim->validateOrder((int)$cart->id, Configuration::get('PS_OS_ERROR'), (float)$response[9], $payment_method, $message, NULL, NULL, false, $customer->secure_key);
-
-	$url = 'index.php?controller=order-confirmation&';
-	if (_PS_VERSION_ < '1.5')
-		$url = 'order-confirmation.php?';
-	Tools::redirect($url.'id_module='.(int)$authorizeaim->id.'&id_cart='.(int)$cart->id.'&key='.$customer->secure_key);
+		/// @todo check the reason code and determine weither we should retry are
+		///				mark the order as failed.
+		$authorizeaim->validateOrder((int)$cart->id,
+			Configuration::get('PS_OS_ERROR'), (float)$response[9],
+			$payment_method, $message, NULL, NULL, false, $customer->secure_key);
 }
 
+$url = 'index.php?controller=order-confirmation&';
+if (_PS_VERSION_ < '1.5')
+	$url = 'order-confirmation.php?';
+
+Tools::redirect($url.'id_module='.(int)$authorizeaim->id.'&id_cart='.
+	(int)$cart->id.'&key='.$customer->secure_key);

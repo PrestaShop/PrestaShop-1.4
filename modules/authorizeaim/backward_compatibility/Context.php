@@ -124,18 +124,23 @@ class Context
 
 		$this->tab = null;
 
-		$this->cookie = $cookie;
+		if ($cookie)
+			$this->cookie = $cookie;
+
 		$this->cart = $cart;
 		$this->smarty = $smarty;
 		$this->link = $link;
 
 		$this->controller = new ControllerBackwardModule();
-		$this->currency = new Currency((int)$cookie->id_currency);
-		$this->language = new Language((int)$cookie->id_lang);
-		$this->country = new Country((int)$cookie->id_country);
+		if ($cookie)
+		{
+			$this->currency = new Currency((int)$cookie->id_currency);
+			$this->language = new Language((int)$cookie->id_lang);
+			$this->country = new Country((int)$cookie->id_country);
+			$this->customer = new Customer((int)$cookie->id_customer);
+			$this->employee = new Employee((int)$cookie->id_employee);
+		}
 		$this->shop = new ShopBackwardModule();
-		$this->customer = new Customer((int)$cookie->id_customer);
-		$this->employee = new Employee((int)$cookie->id_employee);
 	}
 
 	/**

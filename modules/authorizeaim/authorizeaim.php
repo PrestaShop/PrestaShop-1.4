@@ -34,7 +34,7 @@ class authorizeAIM extends PaymentModule
 	{
 		$this->name = 'authorizeaim';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.3.1';
+		$this->version = '1.3.2';
 		$this->author = 'PrestaShop';
 		//$this->limited_countries = array('us');
 		$this->need_instance = 0;
@@ -72,14 +72,18 @@ class authorizeAIM extends PaymentModule
 		if (!is_callable('curl_exec'))
 			$this->warning = $this->l('cURL extension must be enabled on your server to use this module.');
 
-		/** Backward compatibility */
+		/* Backward compatibility */
 		require(_PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php');
 	}
 
 	public function install()
 	{
-		return (parent::install() && $this->registerHook('orderConfirmation') && $this->registerHook('payment')
-			AND $this->registerHook('header') && Configuration::updateValue('AUTHORIZE_AIM_DEMO', 1));
+		return parent::install() &&
+			$this->registerHook('orderConfirmation') &&
+			$this->registerHook('payment') &&
+			$this->registerHook('header') &&
+			Configuration::updateValue('AUTHORIZE_AIM_DEMO', 1) &&
+			Configuration::updateValue('AUTHORIZE_AIM_HOLD_REVIEW_OS', _PS_OS_ERROR);
 	}
 
 	public function uninstall()
@@ -91,6 +95,8 @@ class authorizeAIM extends PaymentModule
 		Configuration::deleteByName('AUTHORIZE_AIM_CARD_MASTERCARD');
 		Configuration::deleteByName('AUTHORIZE_AIM_CARD_DISCOVER');
 		Configuration::deleteByName('AUTHORIZE_AIM_CARD_AX');
+
+		Configuration::deleteByName('AUTHORIZE_AIM_HOLD_REVIEW_OS');
 
 		return parent::uninstall();
 	}
@@ -121,10 +127,16 @@ class authorizeAIM extends PaymentModule
 			Configuration::updateValue('AUTHORIZE_AIM_CARD_DISCOVER', Tools::getvalue('authorizeaim_card_discover'));
 			Configuration::updateValue('AUTHORIZE_AIM_CARD_AX', Tools::getvalue('authorizeaim_card_ax'));
 
+			Configuration::updateValue('AUTHORIZE_AIM_HOLD_REVIEW_OS', Tools::getvalue('authorizeaim_hold_review_os'));
+
 			$html .= $this->displayConfirmation($this->l('Configuration updated'));
 		}
 
-		return $html.'
+		// For Hold for Review
+		$orderStates = OrderState::getOrderStates((int)$this->context->cookie->id_lang);
+
+
+		$html .= '
 		<h2>'.$this->displayName.'</h2>
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Help').'</legend>
 			<a href="http://api.prestashop.com/partner/authorize.net/" target="_blank" style="float: right;"><img src="../modules/'.$this->name.'/logo_authorize.png" alt="" /></a>
@@ -159,9 +171,25 @@ class authorizeAIM extends PaymentModule
 					<input type="checkbox" name="authorizeaim_card_ax" '.(Configuration::get('AUTHORIZE_AIM_CARD_AX') ? 'checked="checked"' : '').' />
 						<img src="../modules/'.$this->name.'/cards/ax.gif" alt="visa" />
 				</div>
+
+				<label for="authorizeaim_hold_review_os">'.$this->l('"Hold for Review" order state').'</label>
+				<div class="margin-form">
+								<select id="authorizeaim_hold_review_os" name="authorizeaim_hold_review_os">';
+		// Hold for Review order state selection
+		foreach ($orderStates as $os)
+			$html .= '
+				<option value="'.(int)$os['id_order_state'].'"'.((int)$os['id_order_state'] == (int)Configuration::get('AUTHORIZE_AIM_HOLD_REVIEW_OS') ? ' selected' : '').'>'.
+			Tools::stripslashes($os['name']).
+			'</option>'."\n";
+		$html .= '
+				</select></div>
+
+
 				<br /><center><input type="submit" name="submitModule" value="'.$this->l('Update settings').'" class="button" /></center>
 			</fieldset>
 		</form>';
+
+		return $html;
 	}
 
 	public function hookPayment($params)
@@ -197,9 +225,9 @@ class authorizeAIM extends PaymentModule
 			$cards['ax'] = Configuration::get('AUTHORIZE_AIM_CARD_AX') == 'on' ? 1 : 0;
 
 			if (method_exists('Tools', 'getShopDomainSsl'))
-			$url = 'https://'.Tools::getShopDomainSsl().__PS_BASE_URI__.'/modules/'.$this->name.'/';
-		else
-			$url = 'https://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/';
+				$url = 'https://'.Tools::getShopDomainSsl().__PS_BASE_URI__.'/modules/'.$this->name.'/';
+			else
+				$url = 'https://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/';
 
 			$this->context->smarty->assign('p', $authorizeAIMParams);
 			$this->context->smarty->assign('cards', $cards);
@@ -219,11 +247,11 @@ class authorizeAIM extends PaymentModule
   }
 
 	/**
-	* Set the detail of a payment - Call before the validate order init
-	* correctly the pcc object
-	* See Authorize documentation to know the associated key => value
-	* @param array fields
-	*/
+	 * Set the detail of a payment - Call before the validate order init
+	 * correctly the pcc object
+	 * See Authorize documentation to know the associated key => value
+	 * @param array fields
+	 */
 	public function setTransactionDetail($response)
 	{
 		// If Exist we can store the details
