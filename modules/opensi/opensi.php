@@ -137,11 +137,7 @@ class opensi extends Module
 		}
 
 		/* Loading config for this module */
-		if(__PS_BASE_URI__ == "/") {
-			include_once($_SERVER['DOCUMENT_ROOT']."/modules/".$this->name."/config.inc.php");
-		} else {
-			include_once($_SERVER['DOCUMENT_ROOT'].__PS_BASE_URI__."/modules/".$this->name."/config.inc.php");
-		}
+		include_once(_PS_MODULE_DIR_.$this->name."/config.inc.php");
 
 		/* Definition */
 		if(isset($CONF_CachetimeLbl)) {
