@@ -132,7 +132,8 @@ class CloudCache extends Module
 					continue ;
 				}
 			}
-			copy(dirname(__FILE__).'/override/'.$path, dirname(__FILE__).'/../../override/'.$path);
+			if (!copy(dirname(__FILE__).'/override/'.$path, dirname(__FILE__).'/../../override/'.$path))
+				$errors[] = '/override/'.$path;
 		}
 
 		if (count($errors))
@@ -164,7 +165,7 @@ class CloudCache extends Module
 			if (!Db::getInstance()->execute($s))
 				return false;
 
-		return $this->_installOverride();;
+		return $this->_installOverride();
 	}
 
 	/**
@@ -176,10 +177,6 @@ class CloudCache extends Module
 	{
 		// Uninstall parent and unregister Configuration
 		if (!parent::uninstall())
-			return false;
-
-		// Unregister hook
-		if (!$this->unregisterHook('backOfficeTop'))
 			return false;
 
 		// Remove configuration variable with 'install' flag off
@@ -262,7 +259,6 @@ class CloudCache extends Module
 	{
 		$curLang = $this->context->cookie->id_lang;
 
-//		$prestaBaseUrl = 'http://www.prestashop.com/modules/cloudcache.png?source='.urlencode($_SERVER['HTTP_HOST']);
 		$prestaBaseUrl = __PS_BASE_URI__.'modules/cloudcache/coupon.php?lang='.$curLang.'&source='.urlencode($_SERVER['HTTP_HOST']);
 		if (Configuration::get('CLOUDCACHE_API_ACTIVE'))
 			return $prestaBaseUrl.'&userId='.((int)Configuration::get('CLOUDCACHE_API_USER')).
@@ -326,7 +322,7 @@ class CloudCache extends Module
 				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cloudcache_zone` SET
 								`name` = \''.pSQL($_POST['name']).'\',
 								`origin` = \''.pSQL($_POST['origin']).'\',
-								`compress` = \''.(isset($_POST['compress']) ? 1: 0).'\',
+								`compress` = \''.(isset($_POST['compress']) ? 1 : 0).'\',
 								`label` = \''.pSQL($_POST['label']).'\',
 								`file_type` = \''.pSQL(CLOUDCACHE_FILE_TYPE_ALL).'\',
 								`cdn_url` = \''.($_POST['vanity_domain'] ? pSQL($_POST['vanity_domain']) : pSQL($_POST['name'].'.'.Configuration::get('CLOUDCACHE_API_COMPANY_ID').'.'.CLOUDCACHE_API_ZONE_URL)).'\'
@@ -347,12 +343,12 @@ class CloudCache extends Module
 					$this->_displayConfirmation($this->l('All zones were synced.')));
 			else
 				$this->context->smarty->assign('confirmMessage',
-					$this->_displayConfirmation($this->l('Error syncing zones: ').' '.pSQL($action), 'error'));
+					$this->_displayConfirmation($this->l('Error syncing zones.'), 'error'));
 		}
 		elseif (Tools::isSubmit('SubmitCloudcacheClearAllCache'))
 		{
 			$error = false;
-			foreach (Db::getInstance()->ExecuteS('SELECT `id_zone`, `zone_type`, `name` FROM `'._DB_PREFIX_.'cloudcache_zone` WHERE `id_shop` = '.(int)$this->context->shop->id.' AND `id_shop` = '.(int)$this->context->shop->id) as $zone)
+			foreach (Db::getInstance()->ExecuteS('SELECT `id_zone`, `zone_type`, `name` FROM `'._DB_PREFIX_.'cloudcache_zone` WHERE `id_shop` = '.(int)$this->context->shop->id) as $zone)
 				if (!$this->_api->cachePurgeAll('cache', $zone['id_zone']))
 				{
 					$error = true;
@@ -368,15 +364,15 @@ class CloudCache extends Module
 		}
 		elseif (Tools::isSubmit('SubmitCloudcacheClearZoneCache'))
 		{
-			$zoneName = Db::getInstance()->ExecuteS('SELECT `name` FROM '._DB_PREFIX_.'cloudcache_zone
+			$zoneName = Db::getInstance()->getValue('SELECT `name` FROM '._DB_PREFIX_.'cloudcache_zone
 													WHERE `id_zone` = '.(int)Tools::getValue('id_zone').' AND `id_shop` = '.(int)$this->context->shop->id);
 
 			if ($this->_api->cachePurgeAll('cache', Tools::getValue('id_zone')))
 				$this->context->smarty->assign('confirmMessage',
-					$this->_displayConfirmation($this->l('The cache was purged for zone:').' '.Tools::safeOutput($zoneName[0]['name'])));
+					$this->_displayConfirmation($this->l('The cache was purged for zone:').' '.Tools::safeOutput($zoneName)));
 			else
 				$this->context->smarty->assign('confirmMessage',
-					$this->_displayConfirmation($this->l('Error purging cache for zone:').' '.Tools::safeOutput($zoneName[0]['name']), 'error'));
+					$this->_displayConfirmation($this->l('Error purging cache for zone:').' '.Tools::safeOutput($zoneName), 'error'));
 		}
 		elseif (Tools::isSubmit('SubmitCloudcacheEditZoneAction')) // display the form to edit the zone
 		{
@@ -390,7 +386,7 @@ class CloudCache extends Module
 			// Clean $zone_info before sending to smarty
 			$zone_info_clean = array();
 			foreach ($zone_info as $key => $z)
-				$zone_info_clean[$key] = pSQL($z);
+				$zone_info_clean[$key] = Tools::safeOutput($z);
 
 			$this->context->smarty->assign('edit_zone_info', $zone_info_clean);
 		}
@@ -399,7 +395,7 @@ class CloudCache extends Module
 			Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cloudcache_zone` SET
 								`name` = \''.pSQL($_POST['name']).'\',
 								`origin` = \''.pSQL($_POST['origin']).'\',
-								`compress` = \''.(isset($_POST['compress']) ? 1: 0).'\',
+								`compress` = \''.(isset($_POST['compress']) ? 1 : 0).'\',
 								`label` = \''.pSQL($_POST['label']).'\',
 								`cdn_url` = \''.pSQL($_POST['vanity_domain']).'\',
 								`file_type` = \''.pSQL($_POST['file_type']).'\'
@@ -415,10 +411,10 @@ class CloudCache extends Module
 
 			if (!$this->updateZone(Tools::getValue('type'), $zone_info)) // 0 : good | 1 : bad
 				$this->context->smarty->assign('confirmMessage',
-					$this->_displayConfirmation($this->l('The following zone was updated:').' '.pSQL(Tools::getValue('name'))));
+					$this->_displayConfirmation($this->l('The following zone was updated:').' '.Tools::safeOutput(Tools::getValue('name'))));
 			else
 				$this->context->smarty->assign('confirmMessage',
-					$this->_displayConfirmation($this->l('Error updating zone:').' '.pSQL(Tools::getValue('name')), 'error'));
+					$this->_displayConfirmation($this->l('Error updating zone:').' '.Tools::safeOutput(Tools::getValue('name')), 'error'));
 		}
 
 		$confValues = Configuration::getMultiple(array(
@@ -438,13 +434,13 @@ class CloudCache extends Module
 
 		if (isset($confValues['CLOUDCACHE_API_COMPANY_ID']))
 			$this->context->smarty->assign('companyId',
-				Tools::safeOutput($confValues['CLOUDCACHE_API_COMPANY_ID']));
+				$confValues['CLOUDCACHE_API_COMPANY_ID']);
 		if (isset($confValues['CLOUDCACHE_API_USER']))
 			$this->context->smarty->assign('apiUser',
-				Tools::safeOutput($confValues['CLOUDCACHE_API_USER']));
+				$confValues['CLOUDCACHE_API_USER']);
 
 		$this->context->smarty->assign('apiKey',
-			Tools::safeOutput($this->_cipherTool->decrypt($confValues['CLOUDCACHE_API_KEY'])));
+			$this->_cipherTool->decrypt($confValues['CLOUDCACHE_API_KEY']));
 
 		$messages = $this->_compatibilityCheck();
 
@@ -455,8 +451,6 @@ class CloudCache extends Module
 		$this->context->smarty->assign('prepaidBandwith', $this->getPrepaidBandwidth());
 
 		// Get the zones
-		//$zones = array('zone2' => array('name' => '','type' => 'css'));
-
 		$zones = array();
 		if (Configuration::get('CLOUDCACHE_API_USER'))
 			$zones = $this->getZones('pullzone');
@@ -468,8 +462,8 @@ class CloudCache extends Module
 		$this->context->smarty->assign('couponUrl', $this->_getCouponUrl());
 		$this->context->smarty->assign('defaultOriginServerURL', (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').Configuration::get('PS_SHOP_DOMAIN'));
 		if (isset($_GET['id_tab']))
-		  $this->context->smarty->assign('cloudcache_id_tab', (int)$_GET['id_tab']);
-		$this->context->smarty->assign('cloudcache_tracking', 'http://www.prestashop.com/modules/'.$this->name.'.png?url_site='.Tools::safeOutput($_SERVER['SERVER_NAME']).'&id_lang='.$this->context->cookie->id_lang);
+			$this->context->smarty->assign('cloudcache_id_tab', (int)$_GET['id_tab']);
+		$this->context->smarty->assign('cloudcache_tracking', 'http://www.prestashop.com/modules/'.$this->name.'.png?url_site='.Tools::safeOutput($_SERVER['SERVER_NAME']).'&id_lang='.(int)$this->context->cookie->id_lang);
 		return $this->display(__FILE__, 'views/content2.tpl');
 	}
 
@@ -484,7 +478,7 @@ class CloudCache extends Module
 	 */
 	private function _testConnection()
 	{
-		set_time_limit(0);
+		set_time_limit(300);
 		
 		if (count($this->_compatibilityCheck()))
 			return array('<img src="../img/admin/forbbiden.gif" alt="" /><b style="color: #CC0000;">'.
@@ -502,7 +496,7 @@ class CloudCache extends Module
 			return $ret;
 		}
 
-		$defaultName = pSQL($this->l('prestashop'));
+		$defaultName = $this->l('prestashop');
 		// Check if default zone exists
 		for ($i = 0; $i < count($zones); $i++)
 			if ($zones[$i]['name'] == $defaultName)
@@ -516,7 +510,7 @@ class CloudCache extends Module
 		// If there is no zones, then create the default one
 		if (!count($zones) || !Configuration::get('CLOUDCACHE_API_COMPANY_ID'))
 		{
-			$origin = pSQL((Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').Configuration::get('PS_SHOP_DOMAIN'));
+			$origin = (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').Configuration::get('PS_SHOP_DOMAIN');
 			$r = $this->createZone('pullzone', array(
 						 'name' => $defaultName,
 						 'origin' => $origin,
@@ -525,13 +519,13 @@ class CloudCache extends Module
 
 			if (is_array($r))
 			{
-				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cloudcache_zone` SET `name` = \''.pSQL($defaultName).'\', `origin` = \''.$origin.'\', `compress` = \'1\', `file_type` = \''.pSQL(CLOUDCACHE_FILE_TYPE_ALL).'\', `cdn_url` = \''.pSQL($r['cdn_url']).'\' WHERE `id_zone` = '.(int)$r['id']);
+				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cloudcache_zone` SET `name` = \''.pSQL($defaultName).'\', `origin` = \''.pSQL($origin).'\', `compress` = \'1\', `file_type` = \''.pSQL(CLOUDCACHE_FILE_TYPE_ALL).'\', `cdn_url` = \''.pSQL($r['cdn_url']).'\' WHERE `id_zone` = '.(int)$r['id']);
 
 				$tmp = substr($r['cdn_url'], strlen($defaultName) + 1);
 				$companyId = substr($tmp, 0, strlen('netdna-cdn.com') * -1 - 1);
-				Configuration::updateValue('CLOUDCACHE_API_COMPANY_ID', pSQL($companyId));
+				Configuration::updateValue('CLOUDCACHE_API_COMPANY_ID', $companyId);
 			}
-			else // If failure, the zonename have probably been taken
+			else // If failure, the zonename has probably been taken
 			{
 				$defaultName .= rand(1, 999);
 				$r = $this->createZone('pullzone', array(
@@ -541,10 +535,10 @@ class CloudCache extends Module
 						 ));
 				if (is_array($r))
 				{
-					Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cloudcache_zone` SET `name` = \''.pSQL($defaultName).'\', `origin` = \''.$origin.'\', `compress` = \'1\', `file_type` = \''.pSQL(CLOUDCACHE_FILE_TYPE_ALL).'\', `cdn_url` = \''.pSQL($r['cdn_url']).'\' WHERE `id_zone` = '.(int)$r['id']);
+					Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'cloudcache_zone` SET `name` = \''.pSQL($defaultName).'\', `origin` = \''.pSQL($origin).'\', `compress` = \'1\', `file_type` = \''.pSQL(CLOUDCACHE_FILE_TYPE_ALL).'\', `cdn_url` = \''.pSQL($r['cdn_url']).'\' WHERE `id_zone` = '.(int)$r['id']);
 					$tmp = substr($r['cdn_url'], strlen($defaultName) + 1);
 					$companyId = substr($tmp, 0, strlen('netdna-cdn.com') * -1 - 1);
-					Configuration::updateValue('CLOUDCACHE_API_COMPANY_ID', pSQL($companyId));
+					Configuration::updateValue('CLOUDCACHE_API_COMPANY_ID', $companyId);
 				}
 				else
 					return array('<img src="../img/admin/error.png" /><b style="color: red;">'.$this->l('An error occured, impossible to create a default zone.').'</b>', '#FFD8D8', true);
@@ -685,15 +679,15 @@ class CloudCache extends Module
 					$zones[(int)$zone['id']] = array(
 						'id_zone' => (int)$zone['id'],
 						'name' => pSQL($zone['name']),
-						'origin' => ($exists ? pSQL($row['origin']) : $this->l('no data')),
-						'cdn_url' => ($exists ? pSQL($row['cdn_url']) : $this->l('no data')),
+						'origin' => pSQL($exists ? $row['origin'] : $this->l('no data')),
+						'cdn_url' => pSQL($exists ? $row['cdn_url'] : $this->l('no data')),
 						'bw_yesterday' => (int)$this->_getZoneTransfer($zone['id'], 'daily'),
 						'bw_last_week' => (int)$this->_getZoneTransfer($zone['id'], 'weekly'),
 						'bw_last_month' => (int)$this->_getZoneTransfer($zone['id'], 'monthly'),
-						'file_type' => ($exists ? pSQL($row['file_type']) : 'none'),
+						'file_type' => pSQL($exists ? $row['file_type'] : 'none'),
 						'zone_type' => pSQL($namespace),
-						'id_shop' => $this->context->shop->id,
-						'id_group_shop' => $this->context->shop->id_group_shop,
+						'id_shop' => (int)$this->context->shop->id,
+						'id_group_shop' => (int)$this->context->shop->id_group_shop,
 					);
 				}
 			}
