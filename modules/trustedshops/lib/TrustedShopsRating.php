@@ -495,7 +495,7 @@ class TrustedShopsRating extends AbsTrustedShops
 		{
 			return $this->display(self::$module_name, 'widget.tpl');
 				//TrustedShops::display_seal();
-		};
+		}
 
 		return '';
 	}
