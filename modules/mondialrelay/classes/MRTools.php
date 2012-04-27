@@ -38,7 +38,7 @@ class MRTools
 	** Replace all accented chars to normal
 	*/
 	static public function replaceAccentedCharacters($string)
-	{;
+	{
 		if (function_exists('iconv'))
 		{
 			$currentLocale = setlocale(LC_ALL, NULL);
@@ -58,7 +58,7 @@ class MRTools
 	{
 		return (method_exists('Tools', 'jsonEncode')) ?
 			Tools::jsonEncode($result) : json_encode($result);
-	}	
+	}
 	
 	/*
 	** Fix security and compatibility for PS < 1.4.5
