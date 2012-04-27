@@ -522,15 +522,15 @@ class TSBuyerProtection extends AbsTrustedShops
 
 				$query = 'INSERT INTO `'._DB_PREFIX_.TSBuyerProtection::DB_APPLI.'` '.
 					'(`id_application`, `ts_id`, `id_order`, `creation_date`, `last_update` ) '.
-					'VALUES ("'.pSQL($code).'", "'.pSQL($params['tsID']).'", "'.pSQL($params['shopOrderID']).'", "'.$date.'", "'.$date.'")';
+					'VALUES ("'.pSQL($code).'", "'.pSQL($params['tsID']).'", "'.pSQL($params['shopOrderID']).'", "'.pSQL($date).'", "'.pSQL($date).'")';
 
 				Db::getInstance()->Execute($query);
 
 				// To reset product quantity in database.
 				$query = 'SELECT `id_product` '.
 					'FROM `'._DB_PREFIX_.TSBuyerProtection::DB_ITEMS.'` '.
-					'WHERE `ts_product_id` = "'.$params['tsProductID'].'"
-					AND `ts_id` = "'.$params['tsID'].'"';
+					'WHERE `ts_product_id` = "'.pSQL($params['tsProductID']).'"
+					AND `ts_id` = "'.pSQL($params['tsID']).'"';
 
 				if (($id_product = Db::getInstance()->getValue($query)))
 				{
@@ -607,7 +607,7 @@ class TSBuyerProtection extends AbsTrustedShops
 
 		$query = 'SELECT * '.
 			'FROM `'.$db_name.'` '.
-			'WHERE `last_update` >= "'.$date.'" '.
+			'WHERE `last_update` >= "'.pSQL($date).'" '.
 			'OR `statut_number` <= 0';
 
 		$to_check = Db::getInstance()->ExecuteS($query);
@@ -1368,9 +1368,9 @@ class TSBuyerProtection extends AbsTrustedShops
 			$query = '
 				SELECT * '.
 				'FROM `'._DB_PREFIX_.TSBuyerProtection::DB_ITEMS.'` '.
-				'WHERE ts_id ="'.TSBuyerProtection::$CERTIFICATES[$lang]['tsID'].'" '.
-				'AND `protected_amount_decimal` >= "'.$params['cart']->getOrderTotal(true, Cart::BOTH).'" '.
-				'AND `currency` = "'.$currency->iso_code.'" '.
+				'WHERE ts_id ="'.pSQL(TSBuyerProtection::$CERTIFICATES[$lang]['tsID']).'" '.
+				'AND `protected_amount_decimal` >= "'.(int)$params['cart']->getOrderTotal(true, Cart::BOTH).'" '.
+				'AND `currency` = "'.pSQL($currency->iso_code).'" '.
 				'ORDER BY `protected_amount_decimal` ASC';
 
 			// If amout is bigger, get the max one requested by TS
@@ -1379,8 +1379,8 @@ class TSBuyerProtection extends AbsTrustedShops
 				$query = '
 					SELECT *, MAX(protected_amount_decimal) '.
 					'FROM `'._DB_PREFIX_.TSBuyerProtection::DB_ITEMS.'` '.
-					'WHERE ts_id ="'.TSBuyerProtection::$CERTIFICATES[$lang]['tsID'].'" '.
-					'AND `currency` = "'.$currency->iso_code.'"';
+					'WHERE ts_id ="'.pSQL(TSBuyerProtection::$CERTIFICATES[$lang]['tsID']).'" '.
+					'AND `currency` = "'.pSQL($currency->iso_code).'"';
 
 				$item = Db::getInstance()->getRow($query);
 			}
@@ -1432,13 +1432,13 @@ class TSBuyerProtection extends AbsTrustedShops
 		$order_item_ids = array();
 
 		foreach ($order_products as $product)
-			$order_item_ids[] = $product['product_id'];
+			$order_item_ids[] = (int)$product['product_id'];
 
 		$query = 'SELECT * '.
 			'FROM `'._DB_PREFIX_.TSBuyerProtection::DB_ITEMS.'` '.
 			'WHERE `id_product` IN ('.implode(',', $order_item_ids).') '.
-			'AND `ts_id` ="'.TSBuyerProtection::$CERTIFICATES[$lang]['tsID'].'" '.
-			'AND `currency` = "'.$currency->iso_code.'"';
+			'AND `ts_id` ="'.pSQL(TSBuyerProtection::$CERTIFICATES[$lang]['tsID']).'" '.
+			'AND `currency` = "'.pSQL($currency->iso_code).'"';
 
 		if (!($item = Db::getInstance()->getRow($query)))
 			return '';
