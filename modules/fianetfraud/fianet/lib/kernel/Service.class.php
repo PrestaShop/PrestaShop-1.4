@@ -116,7 +116,7 @@ abstract class SACService extends Mother {
         return $written;
     }
 
-    public function __call($name, $params) {
+    public function __call($name, array $params) {
         //si la fonction appelée est préfixée par "getUrl"
         if (preg_match('#^getUrl.+$#', $name) > 0) {
             return $this->getUrl(preg_replace('#^getUrl(.+)$#', '$1', $name));
