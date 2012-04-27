@@ -17,6 +17,7 @@ $_MODULE['<{authorizeaim}prestashop>authorizeaim_1ee1c44c2dc81681f961235604247b8
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_756d97bb256b8580d4d71ee0c547804e'] = 'Production';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_0cbc6611f5540bd0809a388dc95a615b'] = 'Test';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_291cdb0a8abb42484f5d44dc20540ce6'] = 'Cartes';
+$_MODULE['<{authorizeaim}prestashop>authorizeaim_7c413866cd5708e4c390273762b5c479'] = '\"Procéder à une révision\" statut de commande';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_b17f3f4dcf653a5776792498a9b44d6a'] = 'Mettre à jour la configuration';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_f745351b1387473d3d2de5bfe18d3562'] = 'Erreur, veuillez verifier vos informations bancaires';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_1814fc250eea61e13aa95e81b61bf72a'] = 'Payer avec AuthorizeAIM';
