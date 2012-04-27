@@ -160,7 +160,7 @@ class GAnalytics extends Module
 		if (!($file = basename(Tools::getValue('controller'))))
 			$file = str_replace(array('.php', '-'), '', basename($_SERVER['SCRIPT_NAME']));
 
-		#PNM-30 - Order confirmation wasn't tracked
+		//#PNM-30 - Order confirmation wasn't tracked
 			// If other controller / file name need to be done, add it to the array
 			// if (in_array(v, array('orderconfirmation')))
 				// return '';
