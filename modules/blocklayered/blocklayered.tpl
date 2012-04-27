@@ -51,9 +51,9 @@ param_product_url = '';
 										{if $smarty.foreach.f_values.first}
 											<li>
 												<a href="#" rel="layered_{$filter.type}_slider" title="{l s='Cancel' mod='blocklayered'}">x</a>
-												{$filter.name|escape:html:'UTF-8'}{l s=':' mod='blocklayered'}
-												{$filter.values[0]|escape:html:'UTF-8'}{$filter.unit|escape:html:'UTF-8'} - 
-												{$filter.values[1]|escape:html:'UTF-8'}{$filter.unit|escape:html:'UTF-8'}
+												{$filter.name|escape:html:'UTF-8'} ({$filter.unit|escape:html:'UTF-8'}){l s=':' mod='blocklayered'}
+												{$filter.values[0]|escape:html:'UTF-8'} - 
+												{$filter.values[1]|escape:html:'UTF-8'}
 											</li>
 										{/if}
 									{else}
@@ -80,7 +80,7 @@ param_product_url = '';
 						{else}
 						<div>
 						{/if}
-						<span class="layered_subtitle">{$filter.name|escape:html:'UTF-8'}</span>
+						<span class="layered_subtitle">{$filter.name|escape:html:'UTF-8'} {if isset($filter.unit)}({$filter.unit|escape:html:'UTF-8'}){/if}</span>
 						<span class="layered_close"><a href="#" rel="ul_layered_{$filter.type}_{$filter.id_key}">v</a></span>
 						<div class="clear"></div>
 						<ul id="ul_layered_{$filter.type}_{$filter.id_key}">
@@ -159,7 +159,7 @@ param_product_url = '';
 										values: [ {/literal}{$filter.values[0]}{literal}, {/literal}{$filter.values[1]}{literal}],
 										slide: function( event, ui ) {
 											stopAjaxQuery();
-											$('#layered_{/literal}{$filter.type}{literal}_range').html(ui.values[ 0 ] + '{/literal}{$filter.unit}{literal}' + ' - ' + ui.values[ 1 ] + '{/literal}{$filter.unit}{literal}');
+											$('#layered_{/literal}{$filter.type}{literal}_range').html(ui.values[ 0 ] + ' - ' + ui.values[ 1 ]);
 										},
 										stop: function () {
 											reloadContent();
