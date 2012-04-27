@@ -3,7 +3,7 @@
 CRONSCRIPT=cron.php
 PHP_BIN=`which php`
 
-# Absolute path to magento installation
+# Absolute path to prestashop installation
 INSTALLDIR=`echo $0 | sed 's/cron\.sh//g'`
 
 # Prepend the intallation path if not given an absolute path

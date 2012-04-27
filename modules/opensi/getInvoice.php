@@ -51,7 +51,7 @@ $return = $dao->getInvoice($key);
 if(isset($return[0]['number_invoice'])) {
 	/* Call webservice - curl */
 	$c = curl_init();
-	curl_setopt($c, CURLOPT_URL, 'https://webservices-test.opensi.eu/cows/Gateway?service_id='.Configuration::get('OSI_SERVICE_CODE').'&action=get_facture&facture_ref='.$return[0]['number_invoice'].'.pdf');
+	curl_setopt($c, CURLOPT_URL, Configuration::get('OSI_WS_URL').'?service_id='.Configuration::get('OSI_SERVICE_CODE').'&action=get_facture&facture_ref='.$return[0]['number_invoice'].'.pdf');
 	curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($c, CURLOPT_HEADERFUNCTION, "readHeader");
 	curl_setopt($c, CURLOPT_USERPWD, Configuration::get('OSI_WS_LOGIN').':'.Configuration::get('OSI_WS_PASSWD'));

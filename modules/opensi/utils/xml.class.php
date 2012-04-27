@@ -396,7 +396,13 @@ class Xml {
 				$priceUnit = $priceUnit - floatval($reduction_amount);
 				$priceUnit = round($priceUnit, 4);
 			}
-			$priceUnitTTC = round(floatval($priceUnit + ($priceUnit * $tax / 100)), 4);
+			if($orderDetail['group_reduction'] > 0) {
+				// discount group of customer
+				$priceUnit = $priceUnit * (1 - $orderDetail['group_reduction'] /100);
+				$priceUnitTTC = round(floatval($priceUnit + ($priceUnit * $tax / 100)), 4);
+			} else {
+				$priceUnitTTC = round(floatval($priceUnit + ($priceUnit * $tax / 100)), 4);
+			}
 			$OrderDetailElem->setAttribute('Prix_Unitaire', $priceUnitTTC);
 			$OrderDetailElem->setAttribute('Remise_Pourc', 0);
 			$OrderElem->appendChild($OrderDetailElem);

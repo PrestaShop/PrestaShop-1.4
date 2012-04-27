@@ -194,9 +194,9 @@ class Dao{
 	 * @param $idOrder
 	 */
 	function getOrderDetails($idOrder, $langId=2){
-		return Db::getInstance()->ExecuteS("SELECT p.id_supplier, pl.description_short, od.id_order_detail, od.id_order, od.product_id, od.product_name, 
-											od.product_quantity, od.product_price, od.product_quantity_discount, od.tax_rate, od.product_attribute_id,
-											od.reduction_percent, od.reduction_amount, p.reference, pa.reference as attribute_reference
+		return Db::getInstance()->ExecuteS("SELECT p.id_supplier, pl.description_short, od.group_reduction, od.id_order_detail, od.id_order, od.product_id,
+											od.product_name, od.product_quantity, od.product_price, od.product_quantity_discount, od.tax_rate,
+											od.product_attribute_id, od.reduction_percent, od.reduction_amount, p.reference, pa.reference as attribute_reference
 							    			FROM `"._DB_PREFIX_."product` AS p, `"._DB_PREFIX_."product_lang` AS pl, `"._DB_PREFIX_."order_detail` AS od
 							    			LEFT JOIN `"._DB_PREFIX_."product_attribute` AS pa ON pa.id_product_attribute=od.product_attribute_id
 											WHERE od.id_order=\"".(int)$idOrder."\" AND p.id_product=od.product_id AND pl.id_product = p.id_product
@@ -217,7 +217,7 @@ class Dao{
 											ON o.id_order=art.id_order
 											LEFT JOIN `"._DB_PREFIX_."opensi_order` as osi
 											ON osi.id_order = o.id_order
-											WHERE ((o.date_add>\"".$since."\" AND o.date_add<=\"".pSQL($to)."\") OR
+											WHERE ((o.date_add>\"".pSQL($since)."\" AND o.date_add<=\"".pSQL($to)."\") OR
 											(o.date_upd>\"".pSQL($since)."\" AND o.date_upd<=\"".pSQL($to)."\"))
 											AND osi.transaction = '0'
 											AND osi.paid = '0'");
@@ -442,12 +442,12 @@ class Dao{
 			if(substr(_PS_VERSION_, 0, 3) > 1.3) {
 				// Prestashop 1.4
 				return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product_attribute` as pa 
-													SET pa.wholesale_price = "'.pSQL($purchaseHt).'", pa.price = ('.pSQL($priceHt).' - (SELECT p.price FROM `'._DB_PREFIX_.'product` as p WHERE pa.id_product = p.id_product))
+													SET pa.wholesale_price = "'.pSQL($purchaseHt).'", pa.price = ("'.pSQL($priceHt).'" - (SELECT p.price FROM `'._DB_PREFIX_.'product` as p WHERE pa.id_product = p.id_product))
 													WHERE pa.reference = "'.pSQL($ref).'"');
 			} else {
 				// Prestashop 1.3
 				return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product_attribute` as pa 
-													SET pa.wholesale_price = "'.pSQL($purchaseHt).'", pa.price = ('.pSQL($priceTtc).' - (SELECT p.price  FROM `'._DB_PREFIX_.'product` as p WHERE pa.id_product = p.id_product) * (1 + (select rate from '._DB_PREFIX_.'tax where id_tax = '.pSQL($tax).')/100))
+													SET pa.wholesale_price = "'.pSQL($purchaseHt).'", pa.price = ("'.pSQL($priceTtc).'" - (SELECT p.price  FROM `'._DB_PREFIX_.'product` as p WHERE pa.id_product = p.id_product) * (1 + (select rate from '._DB_PREFIX_.'tax where id_tax = "'.pSQL($tax).'")/100))
 													WHERE pa.reference = "'.pSQL($ref).'"');
 			}
 		}

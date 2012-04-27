@@ -90,41 +90,50 @@ function doPostSynch($wsName, $dateFrom, $dateTo) {
 		 */
 		case "WSO-P005":
 			Log::write("###### Do request ".$wsName." - action=create_article ######", "info");
-			$newProducts = $dao->getLastCreateProducts($dateFrom, $dateTo, GlobalConfig::getDefaultLangId(), GlobalConfig::getDefaultCountryId());
 
-			$isOkResponses = true;
+			$offset = 0;
+			$limit = 1000;
 
-			$nbMainProducts = 0;
-			$nbChildrenProducts = 0;
-			$nbResponse200 = 0;
-			$nbResponseError = 0;
-			$nbResponse409 = 0;
-			$nbNoReference = 0;
+			do {
 
-			if($newProducts) {
-				$nbMainProducts = count($newProducts);
+				$newProducts = $dao->getLastCreateProducts($dateFrom, $dateTo, GlobalConfig::getDefaultLangId(), GlobalConfig::getDefaultCountryId(), $offset, $limit);
+				$isOkResponses = true;
 
-				foreach($newProducts as $product) {
-					/*
-					 * Create main product
-					 * @param $product => array
-					 * @param create child products
-					 * @param send publication
-					 */
-					 createMainProduct($product, true, true);
+				$nbMainProducts = 0;
+				$nbChildrenProducts = 0;
+				$nbResponse200 = 0;
+				$nbResponseError = 0;
+				$nbResponse409 = 0;
+				$nbNoReference = 0;
+
+				if($newProducts) {
+					$nbMainProducts = count($newProducts);
+
+					foreach($newProducts as $product) {
+						/*
+						 * Create main product
+						 * @param $product => array
+						 * @param create child products
+						 * @param send publication
+						 */
+						 createMainProduct($product, true, true);
+					}
+
+					Log::write("Nb total main products = ".$nbMainProducts, "info");
+					Log::write("Nb total children products = ".$nbChildrenProducts, "info");
+					Log::write("Nb without reference = ".$nbNoReference, "info");
+					Log::write("Nb sent products = ".($nbMainProducts+$nbChildrenProducts-$nbNoReference), "info");
+					Log::write("Nb response 200 (ok) = ".$nbResponse200, "info");
+					Log::write("Nb response 409 (duplicate) = ".$nbResponse409, "info");
+					Log::write("Nb response error = ".$nbResponseError, "info");
+
+				} else {
+					Log::write("No request to send", "info");
 				}
 
-				Log::write("Nb total main products = ".$nbMainProducts, "info");
-				Log::write("Nb total children products = ".$nbChildrenProducts, "info");
-				Log::write("Nb without reference = ".$nbNoReference, "info");
-				Log::write("Nb sent products = ".($nbMainProducts+$nbChildrenProducts-$nbNoReference), "info");
-				Log::write("Nb response 200 (ok) = ".$nbResponse200, "info");
-				Log::write("Nb response 409 (duplicate) = ".$nbResponse409, "info");
-				Log::write("Nb response error = ".$nbResponseError, "info");
+				$offset += $limit;
 
-			} else {
-				Log::write("No request to send", "info");
-			}
+			} while (count($newProducts) == $limit);
 
 			if($isOkResponses && !ForceRequest::isForcedRequest()){
 				Configuration::updateValue($CONF_LastrequestLbl.$wsName, Scheduler::getTimeOnInit());
@@ -140,35 +149,44 @@ function doPostSynch($wsName, $dateFrom, $dateTo) {
 		 */
 		case "WSO-P006":
 			Log::write("###### Do request ".$wsName." - action=update_article ######", "info");
-			$updateProducts = $dao->getLastUpdateProducts($dateFrom, $dateTo, GlobalConfig::getDefaultLangId(), GlobalConfig::getDefaultCountryId());
 
-			$isOkResponses = true;
+			$offset = 0;
+			$limit = 1000;
 
-			$nbMainProducts = 0;
-			$nbChildrenProducts = 0;
-			$nbResponse200 = 0;
-			$nbResponseError = 0;
-			$nbResponse409 = 0;
-			$nbNoReference = 0;
+			do {
 
-			if($updateProducts) {
-				$nbMainProducts = count($updateProducts);
+				$updateProducts = $dao->getLastUpdateProducts($dateFrom, $dateTo, GlobalConfig::getDefaultLangId(), GlobalConfig::getDefaultCountryId(), $offset, $limit);
+				$isOkResponses = true;
 
-				foreach($updateProducts as $product) {
-					updateMainProduct($product);
+				$nbMainProducts = 0;
+				$nbChildrenProducts = 0;
+				$nbResponse200 = 0;
+				$nbResponseError = 0;
+				$nbResponse409 = 0;
+				$nbNoReference = 0;
+
+				if($updateProducts) {
+					$nbMainProducts = count($updateProducts);
+
+					foreach($updateProducts as $product) {
+						updateMainProduct($product);
+					}
+
+					Log::write("Nb total main products = ".$nbMainProducts, "info");
+					Log::write("Nb total children products = ".$nbChildrenProducts, "info");
+					Log::write("Nb without reference = ".$nbNoReference, "info");
+					Log::write("Nb sent products = ".($nbMainProducts+$nbChildrenProducts-$nbNoReference), "info");
+					Log::write("Nb response 200 (ok) = ".$nbResponse200, "info");
+					Log::write("Nb response 409 (duplicate) = ".$nbResponse409, "info");
+					Log::write("Nb response error = ".$nbResponseError, "info");
+
+				} else {
+					Log::write("No request to send", "info");
 				}
 
-				Log::write("Nb total main products = ".$nbMainProducts, "info");
-				Log::write("Nb total children products = ".$nbChildrenProducts, "info");
-				Log::write("Nb without reference = ".$nbNoReference, "info");
-				Log::write("Nb sent products = ".($nbMainProducts+$nbChildrenProducts-$nbNoReference), "info");
-				Log::write("Nb response 200 (ok) = ".$nbResponse200, "info");
-				Log::write("Nb response 409 (duplicate) = ".$nbResponse409, "info");
-				Log::write("Nb response error = ".$nbResponseError, "info");
+				$offset += $limit;
 
-			} else {
-				Log::write("No request to send", "info");
-			}
+			} while (count($updateProducts) == $limit);
 
 			if($isOkResponses && !ForceRequest::isForcedRequest()){
 				Configuration::updateValue($CONF_LastrequestLbl.$wsName, Scheduler::getTimeOnInit());
@@ -253,8 +271,8 @@ function doPostSynch($wsName, $dateFrom, $dateTo) {
 						}
 
 						$xmlProduct = XML::createOrderXml($order, $orderDetails);
-						$reference = $product['reference'];
-						Log::write("Send request for reference =  ".$reference." - ", "info");
+						$orderNumber = $order['id_order'];
+						Log::write("Send request for order = ".$orderNumber." - ", "info");
 						$response = $postOSIReq->wso_p011($xmlProduct, $reference);
 
 						if(!isOkPostResult($response->getCode())){

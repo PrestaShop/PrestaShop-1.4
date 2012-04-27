@@ -384,9 +384,9 @@ class GlobalConfig {
 	/*
 	 * return OpenSi version
 	 */
-	public function checkOpenSiVersion() {
+	public static function checkOpenSiVersion($version) {
 		libxml_set_streams_context(stream_context_create(array('http' => array('timeout' => 3))));
-		if ($feed = @simplexml_load_file('http://www.opensi.fr/connect/version.xml') AND $this->version < $feed->version->num)
+		if ($feed = @simplexml_load_file('http://www.opensi.fr/connect/version.xml') AND $version < $feed->version->num)
 			return array('name' => $feed->version->name, 'link' => $feed->download->link);
 		return false;
 	}

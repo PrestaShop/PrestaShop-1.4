@@ -61,7 +61,7 @@ class opensi extends Module
 	public function __construct() {
 		$this->name = 'opensi';
 		$this->tab = "billing_invoicing";
-		$this->version = '1.0.10';
+		$this->version = '1.1.0';
 		$this->author = "Speedinfo";
 		$this->displayName = $this->l('OpenSi connector');
 		$this->description = $this->l('Self-made Management Accounting Software for PrestaShop');
@@ -137,6 +137,11 @@ class opensi extends Module
 		}
 
 		/* Loading config for this module */
+		/*if(__PS_BASE_URI__ == "/") {
+			include_once($_SERVER['DOCUMENT_ROOT']."/modules/".$this->name."/config.inc.php");
+		} else {
+			include_once($_SERVER['DOCUMENT_ROOT'].__PS_BASE_URI__."/modules/".$this->name."/config.inc.php");
+		}*/
 		include_once(_PS_MODULE_DIR_.$this->name."/config.inc.php");
 
 		/* Definition */
@@ -316,7 +321,7 @@ class opensi extends Module
 		 * Check if upgrade is available
 		 * Define global $upgrade to skip loop display on the installation (class loaded 2x on install)
 		 */
-		if (@ini_get('allow_url_fopen') AND $update = GlobalConfig::checkOpenSiVersion())
+		if (@ini_get('allow_url_fopen') AND $update = GlobalConfig::checkOpenSiVersion($this->version))
 			$this->_html .= '<div class="warn"><h3>'.$this->l('New OpenSi version available').'<br /><a style="text-decoration: underline;" href="'.$update['link'].'">'.$this->l('Download').'&nbsp;'.$update['name'].'</a> !</h3></div>';
 
 		/* html */
@@ -380,13 +385,6 @@ class opensi extends Module
 				Configuration::updateValue('OSI_WS_PASSWD', Tools::getValue('osi_ws_passwd'));
 				Configuration::updateValue('OSI_WS_PORT', Tools::getValue('osi_ws_port'));
 				Configuration::updateValue('OSI_WS_URL', Tools::getValue('osi_ws_url'));
-
-				/* If OpenSi invoices are enabled, then disable the Prestashop invoices (and vice versa) */
-				if(Tools::getValue('osi_invoice') == 1) {
-					Configuration::updateValue('PS_INVOICE',0);
-				} else {
-					Configuration::updateValue('PS_INVOICE',1);
-				}
 
 				foreach($this->wsGetList as $wsName){
 					Configuration::updateValue($this->cachetimeLbl.$wsName, Tools::getValue(strtolower($this->cachetimeLbl.$wsName))); 
@@ -955,17 +953,17 @@ class opensi extends Module
 		$db = Db::getInstance();
 
 		/* Get list features */
-		$query = 'SELECT fl.id_feature, fl.name FROM `'._DB_PREFIX_.'feature` as f, `'._DB_PREFIX_.'feature_lang` as fl WHERE f.id_feature=fl.id_feature AND fl.id_lang = 2';
+		$query = 'SELECT fl.id_feature, fl.name FROM `'._DB_PREFIX_.'feature` as f, `'._DB_PREFIX_.'feature_lang` as fl WHERE f.id_feature=fl.id_feature AND fl.id_lang = "'.(int)GlobalConfig::getDefaultLangId().'"';
 		$result = $db->ExecuteS($query);
 		$this->listFeatures = $result;
 
 		/* Get list Groups attributes */
-		$query = 'SELECT agl.id_attribute_group, agl.public_name FROM `'._DB_PREFIX_.'attribute_group` as ag, `'._DB_PREFIX_.'attribute_group_lang` as agl WHERE ag.id_attribute_group=agl.id_attribute_group AND agl.id_lang = 2';
+		$query = 'SELECT agl.id_attribute_group, agl.public_name FROM `'._DB_PREFIX_.'attribute_group` as ag, `'._DB_PREFIX_.'attribute_group_lang` as agl WHERE ag.id_attribute_group=agl.id_attribute_group AND agl.id_lang = "'.(int)GlobalConfig::getDefaultLangId().'"';
 		$result = $db->ExecuteS($query);
 		$this->listAttributesGp = $result;
 
 		/* Get list Order states */
-		$query = 'SELECT osl.id_order_state, osl.name FROM `'._DB_PREFIX_.'order_state` as os, `'._DB_PREFIX_.'order_state_lang` as osl WHERE os.id_order_state=osl.id_order_state AND osl.id_lang = 2';
+		$query = 'SELECT osl.id_order_state, osl.name FROM `'._DB_PREFIX_.'order_state` as os, `'._DB_PREFIX_.'order_state_lang` as osl WHERE os.id_order_state=osl.id_order_state AND osl.id_lang = "'.(int)GlobalConfig::getDefaultLangId().'"';
 		$result = $db->ExecuteS($query);
 		$this->listOrderStates = $result;
 
@@ -1494,7 +1492,7 @@ class opensi extends Module
 			/*
 			 * Check if upgrade is available
 			 */
-			if (@ini_get('allow_url_fopen') AND $update = GlobalConfig::checkOpenSiVersion())
+			if (@ini_get('allow_url_fopen') AND $update = GlobalConfig::checkOpenSiVersion($this->version))
 				$html .= '<div class="warn">'.$this->l('New OpenSi version available').'<br /><a style="text-decoration: underline;" href="'.$update['link'].'">'.$this->l('Download').'&nbsp;'.$update['name'].'</a> !</div>';
 
 			/*
