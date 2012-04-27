@@ -281,11 +281,11 @@ class CloudCache extends Module
 			$this->_clearTables();
 
 			Configuration::updateValue('CLOUDCACHE_API_USER',
-				Tools::getValue('cloudcache_api_user'));
+				trim(Tools::getValue('cloudcache_api_user')));
 			Configuration::updateValue('CLOUDCACHE_API_COMPANY_ID',
-				Tools::getValue('cloudcache_api_company_id'));
+				trim(Tools::getValue('cloudcache_api_company_id')));
 			Configuration::updateValue('CLOUDCACHE_API_KEY',
-				$this->_cipherTool->encrypt(Tools::getValue('cloudcache_api_key')));
+				$this->_cipherTool->encrypt(trim(Tools::getValue('cloudcache_api_key'))));
 
 			$this->context->smarty->assign('confirmMessage',
 				$this->_displayConfirmation());
