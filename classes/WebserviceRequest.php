@@ -207,6 +207,9 @@ class WebserviceRequestCore
 	{
 		switch ($type)
 		{
+			case 'JSON' :
+				$obj_render = new WebserviceOutputJSON();
+				break;
 			case 'XML' :
 			default :
 				$obj_render = new WebserviceOutputXML();
@@ -1418,7 +1421,15 @@ class WebserviceRequestCore
 										$fields = $assocItem->children();
 										$entry = array();
 										foreach ($fields as $fieldName => $fieldValue)
-											$entry[$fieldName] = (string)$fieldValue;
+										{
+											if (isset($fieldValue->language))
+											{
+												foreach ($fieldValue->language as $lang)
+													$entry[$fieldName][(int)$lang->attributes()->id] = (string)$lang;
+											}
+											else
+												$entry[$fieldName] = (string)$fieldValue;
+										}
 										$values[] = $entry;
 									}
 									$setter = $this->resourceConfiguration['associations'][$association->getName()]['setter'];

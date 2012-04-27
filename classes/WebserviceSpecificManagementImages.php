@@ -987,6 +987,11 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 						}
 						@unlink($tmpName);
 						$this->imgToDisplay = _PS_PROD_IMG_DIR_.$image->getExistingImgPath().'.'.$image->image_format;
+						if (!count($this->_errors))
+						{
+							header('Location: '.$this->wsObject->wsUrl.$this->wsObject->urlSegment[0].'/products/'.$product->id.'/'.$image->id);
+							die;
+						}
 					}
 					elseif (isset($this->wsObject->urlSegment[1]) && in_array($this->wsObject->urlSegment[1], array('categories', 'manufacturers', 'suppliers', 'stores')))
 					{

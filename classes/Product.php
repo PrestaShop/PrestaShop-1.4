@@ -70,7 +70,7 @@ class ProductCore extends ObjectModel
 	public 		$quantity = 0;
 
 	/** @var integer Minimal quantity for add to cart */
-	public      $minimal_quantity = 1;
+	public	$minimal_quantity = 1;
 
 	/** @var string available_now */
 	public 		$available_now;
@@ -271,7 +271,10 @@ class ProductCore extends ObjectModel
 			'categories' => array('resource' => 'category', 'fields' => array(
 				'id' => array('required' => true),
 			)),
-			'images' => array('resource' => 'image', 'fields' => array('id' => array())
+			'images' => array('resource' => 'image', 'fields' => array(
+				'id' => array(),
+				'legend' => array('i18n' => true)
+				)
 			),
 			'combinations' => array('resource' => 'combinations', 'fields' => array(
 				'id' => array('required' => true),
@@ -3375,11 +3378,8 @@ class ProductCore extends ObjectModel
 	*/
 	public function setCoverWs($id_image)
 	{
-		Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'image`
-									SET `cover` = 0 WHERE `id_product` = '.(int)($this->id).'
-									');
-		Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'image`
-									SET `cover` = 1 WHERE `id_product` = '.(int)($this->id).' AND `id_image` = '.(int)$id_image);
+		Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'image` SET `cover` = 0 WHERE `id_product` = '.(int)($this->id));
+		Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'image` SET `cover` = 1 WHERE `id_product` = '.(int)($this->id).' AND `id_image` = '.(int)$id_image);
 		return true;
 	}
 
@@ -3390,13 +3390,35 @@ class ProductCore extends ObjectModel
 	*/
 	public function	getWsImages()
 	{
-		return Db::getInstance()->ExecuteS('
-		SELECT `id_image` as id
-		FROM `'._DB_PREFIX_.'image`
+		$result = Db::getInstance()->ExecuteS('
+		SELECT `id_image` as id, id_lang, legend
+		FROM `'._DB_PREFIX_.'image` LEFT JOIN `'._DB_PREFIX_.'image_lang` USING (id_image)
 		WHERE `id_product` = '.(int)($this->id).'
 		ORDER BY `position`');
+		$images = array();
+		foreach ($result as &$row)
+		{
+			if (!isset($images[$row['id']]))
+				$images[$row['id']] = array('id' => $row['id']);
+			$images[$row['id']]['legend'][$row['id_lang']] = $row['legend'];
+		}
+		return $images;
 	}
-
+	
+	public function setWsImages($images)
+	{
+		$result = true;
+		foreach ($images as $image)
+		{
+			$img = new Image($image['id']);
+			if (!Validate::isLoadedObject($img))
+				return false;
+			$img->legend = $image['legend'];
+			$result &= $img->save();
+		}
+		return $result;
+	}
+	
 	public function getWsTags()
 	{
 		return Db::getInstance()->ExecuteS('
