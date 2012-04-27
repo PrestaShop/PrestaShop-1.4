@@ -3,6 +3,9 @@
 include(dirname(__FILE__). '/../../config/config.inc.php');
 include(dirname(__FILE__).'/dibs.php');
 
+if (!isset(dibs::$MORE_SETTINGS['k2']) || !isset(dibs::$MORE_SETTINGS['k1']))
+	die('Module is not installed');
+
 $posted_values = array();
 $errors = array();
 $obj_dibs = new dibs();
