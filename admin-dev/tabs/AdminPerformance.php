@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2011 PrestaShop 
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2011 PrestaShop SA
 *  @version  Release: $Revision$
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
@@ -215,6 +215,16 @@ class AdminPerformance extends AdminTab
 		return parent::postProcess();
 	}
 
+	private function _checkCloudCacheActive()
+	{
+		if (!class_exists('CloudCache'))
+			return -1;
+		$cc = new CloudCache();
+		if (!$cc->active)
+			return -2;
+		return 0;
+	}
+
 	public function display()
 	{
 		global $currentIndex;
@@ -224,12 +234,17 @@ class AdminPerformance extends AdminTab
 			$warnings[] = $this->l('To use Memcached, you must install the Memcache PECL extension on your server.').' <a href="http://www.php.net/manual/en/memcache.installation.php">http://www.php.net/manual/en/memcache.installation.php</a>';
 		if (!is_writable(_PS_CACHEFS_DIRECTORY_))
 			$warnings[] = $this->l('To use CacheFS the directory').' '.realpath(_PS_CACHEFS_DIRECTORY_).' '.$this->l('must be writable');
-	
+
 		if ($warnings)
 			$this->displayWarning($warnings);
-	
+
 		echo '<script type="text/javascript">
 						$(document).ready(function() {
+
+							$(\'#installCloudCache\').click(function() {
+								$(\'#filternameForm\').submit();
+							});
+
 							showMemcached();
 							$(\'#caching_system\').change(function() {
 								showMemcached();
@@ -335,6 +350,25 @@ class AdminPerformance extends AdminTab
 			</fieldset>
 		</form>';
 		
+		if (($cloudcacheStatus = $this->_checkCloudCacheActive()) < 0)
+		{
+			echo '<br /><fieldset>'.
+				'<legend><img src="'.($cloudcacheStatus == -2 ? '../modules/cloudcache/logo.gif' : '../img/admin/subdomain.gif').'" />CloudCache</legend>'.
+				$this->l('Performance matters! Improve speed and conversions the easy way.').'<br />'.
+				$this->l('CloudCache supercharges your site in minutes through its state-of-the-art content delivery network.').'<br /><br />'.
+				$this->l('Subscribe now using the code "presta25" and get an exclusive discount of 25% per month on every available package.').'<br /><br />';
+
+			if ($cloudcacheStatus == -2)
+				echo '<a style="color: blue" href="#" id="installCloudCache">&gt; '.$this->l('Click here to install the CloudCache module for PrestaShop').'</a>'.'<br />';
+			else
+				echo '<a style="color: blue" href="http://addons.prestashop.com/en/content-management/5094-cloudcache.html" target="_blank">&gt; '.$this->l('Click here to download the CloudCache module for PrestaShop').'</a>'.'<br />';
+
+			echo '</fieldset><br />';
+
+			echo '<form style="display: none;" id="filternameForm" method="post" action="index.php?tab=AdminModules&token='.Tools::getAdminTokenLite('AdminModules').'">'.
+				'<input type="hidden" value="CloudCache" name="filtername"> <input type="hidden" class="button" value="Search"></form>';
+	 }
+
 		echo '<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post" style="margin-top:10px;">
 			<fieldset>
 				<legend><img src="../img/admin/subdomain.gif" /> '.$this->l('Media servers (used only with CCC)').'</legend>
