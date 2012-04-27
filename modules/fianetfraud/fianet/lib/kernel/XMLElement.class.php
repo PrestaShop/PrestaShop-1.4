@@ -246,7 +246,7 @@ class XMLElement extends Mother {
      */
     public function toSimpleXMLElement($recursive = false) {
         //on créé simplement l'objet SimpleXMLElement
-        $simplexlmelementobject = new SimpleXMLElement('<' . $this->getName() . '>' . $this->getValue() . '</' . $this->getName() . '>');
+        $simplexlmelementobject = new SimpleXMLElement('<XMLElement>' . $this->getValue() . '</XMLElement>');
 
         //on ajoute les attributs
         foreach ($this->getAttributes() as $name => $value) {
@@ -392,4 +392,29 @@ class XMLElement extends Mother {
         }
     }
 
+}
+
+
+if (!function_exists('mb_convert_encoding'))
+{
+	function mb_convert_encoding($string, $to, $from = '')
+	{
+        // Convert string to ISO_8859-1
+        if ($from == "UTF-8")
+                $iso_string = utf8_decode($string);
+        else
+                if ($from == "UTF7-IMAP")
+                        $iso_string = imap_utf7_decode($string);
+                else
+                        $iso_string = $string;
+
+        // Convert ISO_8859-1 string to result coding
+        if ($to == "UTF-8")
+                return(utf8_encode($iso_string));
+        else
+                if ($to == "UTF7-IMAP")
+                        return(imap_utf7_encode($iso_string));
+                else
+                        return($iso_string); 
+	}
 }
