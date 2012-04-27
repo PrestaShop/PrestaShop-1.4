@@ -324,6 +324,7 @@ class MRCreateTickets implements IMondialRelayWSMethod
 						$tmp['Poids']['value'] = $this->_weightFormat($detail[0]);
 				}
 
+
 				$dest_tel = (!empty($deliveriesAddress->phone)) ? MRTools::getFormatedPhone($deliveriesAddress->phone) : '';
 
 				$dest_tel2 = (!empty($deliveriesAddress->phone_mobile)) ? MRTools::getFormatedPhone($deliveriesAddress->phone_mobile) : '';
@@ -334,9 +335,9 @@ class MRCreateTickets implements IMondialRelayWSMethod
 				$tmp['NDossier']['value'] = $orderDetail['id_order'];
 				$tmp['NClient']['value'] = $orderDetail['id_customer'];
 				$tmp['Dest_Langage']['value'] = 'FR'; //Language::getIsoById($orderDetail['id_lang']);
-				$tmp['Dest_Ad1']['value'] = substr($deliveriesAddress->firstname.' '.$deliveriesAddress->lastname, 0, 32);;
-				$tmp['Dest_Ad2']['value'] = substr($deliveriesAddress->address2, 0, 32);
-				$tmp['Dest_Ad3']['value'] = substr($deliveriesAddress->address1, 0, 32);
+				$tmp['Dest_Ad1']['value'] = preg_replace(MRTools::REGEX_CLEAN_ADDR, '', substr($deliveriesAddress->firstname.' '.$deliveriesAddress->lastname, 0, 32));
+				$tmp['Dest_Ad2']['value'] = preg_replace(MRTools::REGEX_CLEAN_ADDR, '', substr($deliveriesAddress->address2, 0, 32));
+				$tmp['Dest_Ad3']['value'] = preg_replace(MRTools::REGEX_CLEAN_ADDR, '', substr($deliveriesAddress->address1, 0, 32));
 				$tmp['Dest_Ville']['value'] = $deliveriesAddress->city;
 				$tmp['Dest_CP']['value'] = $deliveriesAddress->postcode;
 				$tmp['Dest_CP']['params']['id_country'] = $deliveriesAddress->id_country;

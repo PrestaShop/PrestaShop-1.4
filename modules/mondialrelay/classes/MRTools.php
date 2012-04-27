@@ -30,11 +30,15 @@
 */
 class MRTools
 {
+	const REGEX_CLEAN_ADDR = '/[^a-zA-Z0-9-\s\'\!\,\|\(\)\.\*\&\#\/\:]/';
+
+	const REGEX_CLEAN_PHONE = '/[^0-9+\(\)]*/';
+
 	/*
 	** Replace all accented chars to normal
 	*/
 	static public function replaceAccentedCharacters($string)
-	{
+	{;
 		if (function_exists('iconv'))
 		{
 			$currentLocale = setlocale(LC_ALL, NULL);
@@ -54,7 +58,7 @@ class MRTools
 	{
 		return (method_exists('Tools', 'jsonEncode')) ?
 			Tools::jsonEncode($result) : json_encode($result);
-	}
+	}	
 	
 	/*
 	** Fix security and compatibility for PS < 1.4.5
@@ -98,7 +102,7 @@ class MRTools
 		$pad_number = (strpos($begin, '+3') !== false) ? 12 :
 			(strpos($begin, '00') ? 13 : 10);
 
-		return str_pad(substr(preg_replace('/[^0-9+\(\)]*/', '', $phone_number), 0, $pad_number), $pad_number, '0');
+		return str_pad(substr(preg_replace(MRTools::REGEX_CLEAN_PHONE, '', $phone_number), 0, $pad_number), $pad_number, '0');
 	}
 }
 
