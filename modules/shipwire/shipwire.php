@@ -482,7 +482,7 @@ class Shipwire extends Module
 		}
 		elseif (Tools::isSubmit('resend_id_order'))
 		{
-			if ($this->updateOrderStatus($_POST['resend_id_order']))
+			if ($this->updateOrderStatus(Tools::getValue('resend_id_order')))
 				$this->dParams['confirmMessage'] = $this->_displayConfirmation($this->l('Order successfully resent.'));
 			else
 				$this->dParams['confirmMessage'] = $this->_displayConfirmation($this->l('Error while sending. Try again later.'), 'error');
@@ -676,7 +676,7 @@ class Shipwire extends Module
 
 		$buffer .= '
 		<br />
-			<form action="'.htmlspecialchars_decode(Tools::safeOutput($this->dParams['serverRequestUri'])).'" method="post">
+			<form action="'.Tools::safeOutput($this->dParams['serverRequestUri']).'" method="post">
 			<fieldset class="width2 shipwire_fieldset">
 				<legend><img src="../img/admin/cog.gif" alt="" />'.$this->l('Options').'</legend>
 
@@ -698,7 +698,7 @@ class Shipwire extends Module
 							<select id="shipwire_commit_id" name="shipwire_commit_id">';
 							foreach ($orderStatusList as $k => $name)
 								$buffer .= '
-								<option'.(isset($orderStatusList[Configuration::get('SHIPWIRE_COMMIT_ID')]) && Configuration::get('SHIPWIRE_COMMIT_ID') == $k ? ' selected="selected"' : '' ).' value="'.Tools::safeOutput($k).'">'.Tools::safeOutput(html_entity_decode($name, ENT_COMPAT, 'utf-8')).'</option>';
+								<option'.(isset($orderStatusList[Configuration::get('SHIPWIRE_COMMIT_ID')]) && Configuration::get('SHIPWIRE_COMMIT_ID') == $k ? ' selected="selected"' : '' ).' value="'.Tools::safeOutput($k).'">'.Tools::safeOutput($name).'</option>';
 							$buffer .= '
 							</select>
 						</td>
@@ -709,7 +709,7 @@ class Shipwire extends Module
 							<select id="shipwire_sent_id" name="shipwire_sent_id">';
 							foreach ($orderStatusList as $k => $name)
 								$buffer .= '
-								<option'.(isset($orderStatusList[Configuration::get('SHIPWIRE_SENT_ID')]) && Configuration::get('SHIPWIRE_SENT_ID') == $k ? ' selected="selected"' : '' ).' value="'.Tools::safeOutput($k).'">'.Tools::safeOutput(html_entity_decode($name, ENT_COMPAT, 'utf-8')).'</option>';
+								<option'.(isset($orderStatusList[Configuration::get('SHIPWIRE_SENT_ID')]) && Configuration::get('SHIPWIRE_SENT_ID') == $k ? ' selected="selected"' : '' ).' value="'.Tools::safeOutput($k).'">'.Tools::safeOutput($name).'</option>';
 							$buffer .= '
 							</select>
 						</td>
@@ -768,7 +768,7 @@ class Shipwire extends Module
 							foreach ($carriers as $carrier)
 								$buffer .= '
 								<option value="'.Tools::safeOutput($carrier['id_carrier']).'"'.($carrier['id_carrier'] == Configuration::get('SHIPWIRE_GD') ?
-								' selected="selected"' : '').'>'.htmlspecialchars_decode(Tools::safeOutput($carrier['name'])).'</option>';
+								' selected="selected"' : '').'>'.Tools::safeOutput($carrier['name']).'</option>';
 							$buffer .=
 							'</select>
 						</td>
@@ -780,7 +780,7 @@ class Shipwire extends Module
 							foreach ($carriers as $carrier)
 								$buffer .= '
 								<option value="'.(int)$carrier['id_carrier'].'"'.($carrier['id_carrier'] == Configuration::get('SHIPWIRE_1D') ?
-								' selected="selected"' : '').'>'.htmlspecialchars_decode(Tools::safeOutput($carrier['name'])).'</option>';
+								' selected="selected"' : '').'>'.Tools::safeOutput($carrier['name']).'</option>';
 							$buffer .=
 							'</select>
 						</td>
@@ -792,7 +792,7 @@ class Shipwire extends Module
 							foreach ($carriers as $carrier)
 								$buffer .= '
 								<option value="'.(int)$carrier['id_carrier'].'"'.($carrier['id_carrier'] == Configuration::get('SHIPWIRE_2D') ?
-								' selected="selected"' : '').'>'.htmlspecialchars_decode(Tools::safeOutput($carrier['name'])).'</option>';
+								' selected="selected"' : '').'>'.Tools::safeOutput($carrier['name']).'</option>';
 							$buffer .=
 							'</select>
 						</td>
@@ -804,7 +804,7 @@ class Shipwire extends Module
 							foreach ($carriers as $carrier)
 								$buffer .= '
 								<option value="'.(int)$carrier['id_carrier'].'"'.($carrier['id_carrier'] == Configuration::get('SHIPWIRE_INTL') ?
-								' selected="selected"' : '').'>'.htmlspecialchars_decode(Tools::safeOutput($carrier['name'])).'</option>';
+								' selected="selected"' : '').'>'.Tools::safeOutput($carrier['name']).'</option>';
 							$buffer .=
 							'</select>
 						</td>
@@ -945,7 +945,7 @@ function shipwireAutoload($className)
 {
 	$className = str_replace(chr(0), '', $className);
 	if (!preg_match('/^\w+$/', $className))
-		die('In2valid classname.'.$className);
+		die('Invalid classname.'.$className);
 
 	$moduleDir = dirname(__FILE__).'/';
 
