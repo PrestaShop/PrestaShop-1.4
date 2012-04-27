@@ -48,6 +48,7 @@ class RatingAlert
 	
 	public static function removeAlerts($ids)
 	{
+		$ids = array_map('intval', $ids);
 		$query = 'DELETE '.
             'FROM `'._DB_PREFIX_.self::TABLE_NAME.'` '.
             'WHERE `id_alert` '.
