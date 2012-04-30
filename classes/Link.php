@@ -333,10 +333,12 @@ class LinkCore
 		if (!$this->allow)
 			if ($id_lang != $cookie->id_lang)
 			{
-				if (strpos($switchLangLink,'id_lang'))
-					$switchLangLink = preg_replace('`id_lang=[0-9]*`','id_lang='.$id_lang,$switchLangLink);
-				else
-					$switchLangLink = $switchLangLink.'&amp;id_lang='.$id_lang;
+				if (strpos($switchLangLink, 'id_lang')) // Replace the param id_lang from the url is already present
+					$switchLangLink = preg_replace('`id_lang=[0-9]*`', 'id_lang='.$id_lang, $switchLangLink);
+				elseif ($query != '?') // Add the parameter id_lang if there is other parameters on the url
+					$switchLangLink = $switchLangLink.'&id_lang='.$id_lang;
+				else // Add the parameter id_lang if there is no other parameters on the url
+					$switchLangLink = $switchLangLink.'id_lang='.$id_lang;
 			}
 		return $switchLangLink;
 	}
