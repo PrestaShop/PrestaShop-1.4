@@ -444,3 +444,7 @@ div#PS_MRPersonalizedFields
 {
 	display: none;
 }
+
+.send_disable_carrier_form {
+	cursor: pointer;
+}

@@ -55,21 +55,21 @@
 		{literal}}{/literal});
 </script>
 {* 1.5 way *}
-	{elseif $MR_carrier}
-<script type="text/javascript">
-	$(document).ready(function() {literal}{{/literal}
-		var carrier_block = $('input[class=delivery_option_radio]:checked').parent('div.delivery_option');
+{elseif $MR_carrier}
+	<script type="text/javascript">
+		$(document).ready(function() {literal}{{/literal}
+			var carrier_block = $('input[class=delivery_option_radio]:checked').parent('div.delivery_option');
 
-		// Simulate 1.4 table to store the relay point fetched
-		$(carrier_block).append(
-			'<div><table width="' + $(carrier_block).width() + '"><tr>'
-				+	  '<td><input type="hidden" id="id_carrier' + {$MR_carrier.id_carrier} + '" value="{$MR_carrier.id_carrier}" /></td>'
-				+ '</tr></table></div>');
+			// Simulate 1.4 table to store the relay point fetched
+			$(carrier_block).append(
+				'<div><table width="' + $(carrier_block).width() + '"><tr>'
+					+	  '<td><input type="hidden" id="id_carrier' + {$MR_carrier.id_carrier} + '" value="{$MR_carrier.id_carrier}" /></td>'
+					+ '</tr></table></div>');
 
-		PS_MRCarrierMethodList[{$MR_carrier.id_carrier}] = {$MR_carrier.id_mr_method};
-		PS_MRCarrierSelectedProcess($('#id_carrier' + {$MR_carrier.id_carrier}), {$MR_carrier.id_carrier}, "{$MR_dlv_mode}");
-		{literal}}{/literal});
-</script>
-	{else}
+			PS_MRCarrierMethodList[{$MR_carrier.id_carrier}] = {$MR_carrier.id_mr_method};
+			PS_MRCarrierSelectedProcess($('#id_carrier' + {$MR_carrier.id_carrier}), {$MR_carrier.id_carrier}, "{$MR_dlv_mode}");
+			{literal}}{/literal});
+	</script>
+{else}
 	{l s='Mondial relay can\'t fetch any replay point due to prestashop error' mod='mondialrelay'}
 {/if}

@@ -101,7 +101,7 @@ function upgrade_module_1_8_0($object)
 						FROM `'._DB_PREFIX_.'mr_method`)');
 	}
 
-	// Try to register the new hook since 1.7 / 1.8
+	// Try to register the new hook since 1.7
 	if (!$object->isRegisteredInHook('newOrder'))
 		$object->registerHook('newOrder');
 	if (!$object->isRegisteredInHook('BackOfficeHeader'))

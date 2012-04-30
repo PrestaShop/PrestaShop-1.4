@@ -1021,6 +1021,11 @@ $(document).ready(function()
 		deleteSelectedHistories();
 	});
 
+	// Shipping method list
+	$('.send_disable_carrier_form').click(function() {
+		$(this).parent('form').submit();
+	});
+
 	// Configuration form page
 	$('#MR_config_menu a').each(function() {
 		$(this).click(function() {

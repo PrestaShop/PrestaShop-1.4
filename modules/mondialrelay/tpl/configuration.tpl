@@ -259,7 +259,6 @@
 {*
  ** Shipping List
  *}
-	<form action="{$smarty.server.REQUEST_URI}&MR_tab_name=supplier_form" method="post">
 		<fieldset class="shippingList">
 			<legend><img src="../modules/mondialrelay/images/logo.gif" />{l s='Shipping Method\'s list' mod='mondialrelay'}</legend>
 			<ul>
@@ -268,9 +267,13 @@
 					{else}
 					{foreach from=$MR_carriers_list key=num_carrier item=carrier}
 						<li>
-							<a href="index.php?tab=AdminModules&configure=mondialrelay&token={$MR_token_admin_module}&delete_mr={$carrier.id_mr_method}">
-								<img src="../img/admin/disabled.gif" alt="Delete" title="Delete" />
-							</a>
+							<form action="{$smarty.server.REQUEST_URI}&MR_tab_name=supplier_form" method="post">
+								<input type="hidden" name="delete_mr" value="{$carrier.id_mr_method}" >
+								<inpu
+								<a class="send_disable_carrier_form" href="javascript:void(0)">
+									<img src="../img/admin/disabled.gif" alt="Delete" title="Delete" />
+								</a>
+							</form>
 							{$carrier.name} ({$carrier.col_mode}-{$carrier.dlv_mode} - {$carrier.insurance} : {$carrier.country_list})
 							<div style="float:right;">
 								<a href="index.php?tab=AdminCarriers&id_carrier={$carrier.id_carrier}&updatecarrier&token={$MR_token_admin_carriers}">
@@ -282,6 +285,5 @@
 				{/if}
 			</ul>
 		</fieldset>
-	</form>
 </div>
 {/if}
