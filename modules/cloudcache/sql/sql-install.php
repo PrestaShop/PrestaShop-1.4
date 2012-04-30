@@ -17,5 +17,5 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'cloudcache_zone` (
 		`file_type` varchar(16) NOT NULL,
 		`zone_type` varchar(16) NOT NULL,
 		PRIMARY KEY (`id_zone`, `id_shop`),
-		UNIQUE (`id_zone`, `name`, `cdn_url`))
+		UNIQUE (`cdn_url`))
 		ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
