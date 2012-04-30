@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS `PREFIX_mr_method` (
   `dlv_mode` varchar(3) NOT NULL,
   `insurance` varchar(3) NOT NULL DEFAULT '0',
   `id_carrier` int(10) NOT NULL,
+  `is_deleted` int(10) NOT NULL,
 	PRIMARY KEY  (`id_mr_method`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
