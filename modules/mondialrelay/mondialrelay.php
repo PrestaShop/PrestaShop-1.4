@@ -336,16 +336,7 @@ class MondialRelay extends Module
 		MondialRelay::$modulePath =	_PS_MODULE_DIR_. 'mondialrelay/';
 		MondialRelay::$MRFrontToken = sha1('mr'._COOKIE_KEY_.'Front');
 		MondialRelay::$MRBackToken = sha1('mr'._COOKIE_KEY_.'Back');
-
-		$protocol = (Configuration::get('PS_SSL_ENABLED') || (!empty($_SERVER['HTTPS'])
-			&& strtolower($_SERVER['HTTPS']) != 'off')) ? 'https://' : 'http://';
-
-		$endURL = __PS_BASE_URI__.'modules/mondialrelay/';
-
-		if (method_exists('Tools', 'getShopDomainSsl'))
-			MondialRelay::$moduleURL = $protocol.Tools::getShopDomainSsl().$endURL;
-		else
-			MondialRelay::$moduleURL = $protocol.$_SERVER['HTTP_HOST'].$endURL;
+		MondialRelay::$moduleURL = __PS_BASE_URI__.'modules/mondialrelay/';
 	}
 
 	public function fetchTemplate($path, $name)
