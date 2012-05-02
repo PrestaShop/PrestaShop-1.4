@@ -90,7 +90,7 @@ class Tax extends TaxCore
 		/******************** Avalara ********************/
 		ini_set('max_execution_time', 0);
 
-		$total_tax = isset($getTaxResult) && isset($getTaxResult['TotalTax']) ? $getTaxResult['TotalTax'] : 0.0;
+		$total_tax = isset($getTaxResult) && isset($getTaxResult['TotalTax']) ? (float)$getTaxResult['TotalTax'] : 0.0;
 		if ($avalaraModule->active && $getCarrierRate)
 			return $total_tax;
 		/********************************************/

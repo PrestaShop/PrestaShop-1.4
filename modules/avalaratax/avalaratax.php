@@ -67,7 +67,7 @@ class AvalaraTax extends Module
 		Configuration::updateValue('AVALARATAX_TAX_CALCULATION', 1);
 		Configuration::updateValue('AVALARATAX_TIMEOUT', 300);
 
-		// Value possibe : Development / Production
+		// Value possible : Development / Production
 		Configuration::updateValue('AVALARATAX_MODE', 'Development'); /* @todo : Before module release, change to: Production */
 		Configuration::updateValue('AVALARATAX_ADDRESS_NORMALIZATION', 1);
 		Configuration::updateValue('AVALARATAX_COMMIT_ID', 5);
