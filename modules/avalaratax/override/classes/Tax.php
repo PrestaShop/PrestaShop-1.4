@@ -36,6 +36,13 @@ class Tax extends TaxCore
 	 */
 	public static function getProductTaxRate($id_product, $id_address = NULL, $getCarrierRate = false)
 	{
+		// Check if the module is active (Check the DB directly just in case the module was deleted from the site)
+		$moduleActive = Db::getInstance()->getValue('SELECT `active` 
+													FROM '._DB_PREFIX_.'module 
+													WHERE `name` = \'avalaratax\'');
+		if (!$moduleActive)
+			return parent::getProductTaxRate($id_product, $id_address, $getCarrierRate);
+		
 		global $cart;
 		
 		/* Check cache first */
@@ -80,12 +87,12 @@ class Tax extends TaxCore
 		}
 
 		// Use PS_DEFAULT_LANG instead of '1'
-		/* The tax rate for the requested product was not found in cache, or cache expired, or tax_rate is 0. Then cache it again using getTax() */
-		//$id_lang = isset($cookie->id_lang) ? (int)$cookie->id_lang : 1;
+		// The tax rate for the requested product was not found in cache, or cache expired, or tax_rate is 0. Then cache it again using getTax()
+		// $id_lang = isset($cookie->id_lang) ? (int)$cookie->id_lang : 1;
 
-	// $product not used ? why ?
-	//	if (!$getCarrierRate)
-		//	$product = new Product((int)$id_product, false, (int)$id_lang);
+		// $product not used ? why ?
+		// if (!$getCarrierRate)
+		// $product = new Product((int)$id_product, false, (int)$id_lang);
 		
 		/******************** Avalara ********************/
 		ini_set('max_execution_time', 0);

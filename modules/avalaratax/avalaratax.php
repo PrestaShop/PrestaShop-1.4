@@ -33,6 +33,12 @@ spl_autoload_register('avalaraAutoload');
 
 class AvalaraTax extends Module
 {
+	private $_overrideFilesInModule = array(
+									'Tax.php' => 'override/classes/Tax.php',
+									'AddressController.php' => 'override/controllers/AddressController.php',
+									'AuthController.php' => 'override/controllers/AuthController.php',
+								);
+
 	/******************************************************************/
 	/** Construct Method **********************************************/
 	/******************************************************************/
@@ -77,6 +83,13 @@ class AvalaraTax extends Module
 		Configuration::updateValue('AVALARATAX_STATE', 0);
 		Configuration::updateValue('AVALARATAX_COUNTRY', 0);
 		Configuration::updateValue('AVALARA_CACHE_MAX_LIMIT', 1); /* The values in cache will be refreshed every 1 minute by default */
+		
+		// Make sure Avalara Tables don't exist before installation
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'avalara_product_cache`;');
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'avalara_carrier_cache`;');
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'avalara_returned_products`;');
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'avalara_temp`;');
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'avalara_taxcodes`;');
 		
 		if (!Db::getInstance()->Execute('
 		CREATE TABLE `'._DB_PREFIX_.'avalara_product_cache` (
@@ -152,18 +165,20 @@ class AvalaraTax extends Module
 			if (!is_dir(dirname(__FILE__).'/../../override/controllers/'))
 				mkdir(dirname(__FILE__).'/../../override/controllers/', 0777, true);
 			
-			copy(dirname(__FILE__).'/override/classes/Tax.php', dirname(__FILE__).'/../../override/classes/Tax.php');
-			copy(dirname(__FILE__).'/override/controllers/AddressController.php', dirname(__FILE__).'/../../override/controllers/AddressController.php');
-			copy(dirname(__FILE__).'/override/controllers/AuthController.php', dirname(__FILE__).'/../../override/controllers/AuthController.php');
+			foreach ($this->_overrideFilesInModule as $path)
+				copy(dirname(__FILE__).'/'.$path, dirname(__FILE__).'/../../'.$path);
 		}
 		return true;
 	}
 
 	public function uninstall()
 	{
-		@unlink(_PS_ROOT_DIR_.'/override/classes/Tax.php');
-		@unlink(_PS_ROOT_DIR_.'/override/controllers/AddressController.php');
-		@unlink(_PS_ROOT_DIR_.'/override/controllers/AuthController.php');
+		// Before deleting the files, make sure the md5_file matches
+		// We don't want to delete a file that might have other custom modifications that the user
+		// might have done.
+		foreach ($this->_overrideFilesInModule as $path)
+			if (md5_file(dirname(__FILE__).'/'.$path) == md5_file(dirname(__FILE__).'/../../'.$path))
+				@unlink(dirname(__FILE__).'/../../'.$path);
 
 		if (!parent::uninstall() OR
 		!Configuration::deleteByName('AVALARATAX_URL') OR
@@ -1235,6 +1250,6 @@ function avalaraAutoload($className)
 		require_once($moduleDir.'sdk/classes/'.$className.'.class.php');
 	elseif (file_exists($moduleDir.'sdk/classes/BatchSvc/'.$className.'.class.php'))
 		require_once($moduleDir.'sdk/classes/BatchSvc/'.$className.'.class.php');
-	else
+	elseif (function_exists('__autoload'))
 		__autoload($className);
 }
