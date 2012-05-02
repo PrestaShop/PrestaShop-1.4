@@ -39,8 +39,8 @@ if (isset($_GET['secure_key']) || isset($_ARGV[1]))
 		if (!class_exists('Shipwire'))
 			require(dirname(__FILE__).'/shipwire.php');
 
-		require(dirname(__FILE__).'/lib/ShipwireApi.php');
-		require(dirname(__FILE__).'/lib/ShipwireTracking.php');
+		require_once(dirname(__FILE__).'/lib/ShipwireApi.php');
+		require_once(dirname(__FILE__).'/lib/ShipwireTracking.php');
 
 		$m = new Shipwire();
 		$d = Db::getInstance()->ExecuteS('SELECT `id_order` FROM `'._DB_PREFIX_.'shipwire_order` WHERE `transaction_ref` IS NULL OR `transaction_ref` = \'\'');

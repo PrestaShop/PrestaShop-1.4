@@ -76,13 +76,13 @@ class ShipwireTracking extends ShipwireApi
 	 * @brief Updates tracking info in local database.
 	 *		Declared as a static method so shipwire.php can access it thru autoload
 	*/
-	public static function updateTracking($static = false)
+	public static function updateTracking($static = false, $idShop = 0, $idGroupShop = 0)
 	{
-		return updateTracking($static);
+		return updateTracking($static, $idShop, $idGroupShop);
 	}
 }
 
-function updateTracking($static = false)
+function updateTracking($static = false, $idShop = 0, $idGroupShop = 0)
 {
 	$api = new ShipwireTracking();
 	$api->retrieveFull();
@@ -127,9 +127,11 @@ function updateTracking($static = false)
 			else
 			{
 				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'shipwire_order`
-				(`id_order`, `tracking_number`, `shipped`, `shipper`, `shipDate`, `expectedDeliveryDate`, `href`, `shipperFullName`)
+				(`id_order`, `id_shop`, `id_group_shop`, `tracking_number`, `shipped`, `shipper`, `shipDate`, `expectedDeliveryDate`, `href`, `shipperFullName`)
 				VALUES (
 				\''.pSQL($o['id']).'\''
+				.','.(int)$idShop
+				.','.(int)$idGroupShop
 				.(isset($order['TrackingNumber']) ? ',\''.pSQL($order['TrackingNumber']).'\'' : ',\'\'')
 				.(isset($o['shipped']) ? ',\''.pSQL($o['shipped']).'\'' : ',\'\'')
 				.(isset($o['shipper']) ? ',\''.pSQL($o['shipper']).'\'' : ',\'\'')

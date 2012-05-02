@@ -50,7 +50,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'shipwire_stock` (
 		`ordered_last_day` int(10) unsigned default 0,
 		`ordered_last_week` int(10) unsigned default 0,
 		`ordered_last_4_weeks` int(10) unsigned default 0,
-		PRIMARY KEY (`id_stock`, `id_shop`),
+		PRIMARY KEY (`id_stock`),
 		UNIQUE (`id_stock`))
 		ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
@@ -68,7 +68,7 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'shipwire_order` (
 		`expectedDeliveryDate` varchar(32) NULL,
 		`href` varchar(255) NULL,
 		`shipperFullName` varchar(255) NULL,
-		PRIMARY KEY (`id_order`, `id_shop`),
+		PRIMARY KEY (`id_order`),
 		UNIQUE (`id_order`))
 		ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 
@@ -78,6 +78,6 @@ $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'shipwire_log` (
 		`id_group_shop` int(10) unsigned NOT NULL,
 		`transaction_ref` varchar(255) NULL,
 		`date_added` datetime,
-		PRIMARY KEY (`id_order`, `id_shop`),
+		PRIMARY KEY (`id_order`),
 		UNIQUE (`id_order`, `transaction_ref`))
 		ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';

@@ -29,7 +29,29 @@
 if (!defined('_PS_VERSION_'))
 	exit;
 
-spl_autoload_register('shipwireAutoload');
+if (file_exists(dirname(__FILE__).'/HelperFn.php'))
+	include(dirname(__FILE__).'/HelperFn.php');
+elseif (file_exists(dirname(__FILE__).'/../modules/shipwire/HelperFn.php'))
+	include(dirname(__FILE__).'/../modules/shipwire/HelperFn.php');
+
+$includeFiles = array(
+					'ShipwireApi.php', 
+					'ShipwireInventoryUpdate.php', 
+					'ShipwireOrder.php',
+					'ShipwireTracking.php',
+					'SWCurl.php',
+				);
+
+foreach ($includeFiles as $file)
+{
+	if (!HelperFn::safeFileName($file))
+		die();
+	
+	if (file_exists(dirname(__FILE__).'/lib/'.$file))
+		require(dirname(__FILE__).'/lib/'.$file);
+	elseif (file_exists(dirname(__FILE__).'/../modules/shipwire/lib/'.$file))
+		require(dirname(__FILE__).'/../modules/shipwire/lib/'.$file);
+}
 
 class Shipwire extends Module
 {
@@ -62,12 +84,12 @@ class Shipwire extends Module
 	/******************************************************************/
 	public function __construct()
 	{
-		$this->_initContext();
-
 		$this->name = 'shipwire';
-		$this->tab = 'administration';
-		$this->version = '1.1.3';
+		$this->tab = 'shipping_logistics';
+		$this->version = '1.1.5';
 		$this->author = 'PrestaShop';
+		
+		$this->_initContext();
 
 		parent::__construct();
 
@@ -88,6 +110,10 @@ class Shipwire extends Module
 	 */
 	private function _initContext()
 	{
+		/* Backward compatibility */
+		require(_PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php');
+		$this->context->smarty->assign('base_dir', __PS_BASE_URI__);
+
 		$this->dParams['base_dir'] = __PS_BASE_URI__;
 
 		if (class_exists('Context') && function_exists('getContent'))
@@ -209,54 +235,64 @@ class Shipwire extends Module
 		if (isset($_GET['id_order']))
 			$r = Db::getInstance()->ExecuteS('SELECT `id_order`, `transaction_ref`, `order_ref`, `status`
 									FROM `'._DB_PREFIX_.'shipwire_order`
-									WHERE `id_order` = '.(int)$_GET['id_order']);
+									WHERE `id_order` = '.(int)$_GET['id_order'].'
+									AND `id_shop` = \''.(int)$this->context->shop->id.'\'');
 
 		$status = isset($r[0]['status']) && !empty($r[0]['status']) ? ucfirst($r[0]['status']) : $this->l('Not sent to Shipwire.');
 
-		echo '
+		$buffer = '
 		<script type="text/javascript">
 			$(function(){
 				/* Add Shipwire fieldset to Order Details page */
 				html = \'<br /><br /><fieldset>\' +
-						\'<legend><img src="'.$this->_path.'logo.gif" alt="">'.$this->l('Shipwire Status').'</legend>\' +
+						\'<legend><img src="'.Tools::safeOutput($this->_path).'logo.gif" alt="">'.$this->l('Shipwire Status').'</legend>\' +
 							\'<b>Status:</b> '.Tools::safeOutput($status).'\' +
-						\'</fieldset>\';
+						\'</fieldset>\';';
 
-				if ($(\'#content select[name="id_order_state"]\').size())
-					$(\'#content div:eq(3)\').append(html);
-
+				if (version_compare(_PS_VERSION_, '1.5.0.0', '<'))
+					$buffer .= '
+						if ($(\'#content select[name="id_order_state"]\').size())
+							$(\'#content div:eq(3)\').append(html);
+						';
+				else
+					$buffer .= '
+						if (help_class_name == "adminorders")
+							$(\'.container-command div:eq(0)\').append(html);
+						';
+				
+				$buffer .= '
 				$(\'.link-submit-form\').click(function(){
 					$(this).parent(\'form\').submit();
 				});
 
-				/* jExcerpt v1.1 */
+				/* jExcerpt v1.1.2 */
 				length = 20;
-				$(\'.jexcerpt\').each(function(){
+				jExcerptClass = \'.jexcerpt\';
+				$(jExcerptClass).each(function(){
 					if ($(this).text().length > length)
 					{
 						// Create the .jexcerpt-long
-						$(\'<div class="jexcerpt-long">\' + $(this).text() + \'</div>\').appendTo($(this).parent());
-
+						$(\'<div class="jexcerpt-long">\' + $(this).text() + \'</div>\').insertAfter($(this));
 						excerpt = $(this).text().substring(0, length);
 						$(this).text(excerpt + \'...\');
 					}
 				});
-
-				$(\'.jexcerpt\').mouseover(function(){
+				$(jExcerptClass).live(\'mouseover\', function(){
 					$(\'.jexcerpt-long\').hide();
 					$(this).parent().attr(\'width\', $(this).parent().width());
 					$(this).parent().find(\'.jexcerpt-long\')
-						.css(\'left\', $(this).parent().offset().left)
-						.css(\'top\', $(this).parent().offset().top)
+						.css(\'left\', $(this).parent().offset().left + 4 + \'px\')
+						.css(\'top\', $(this).parent().offset().top + 9 + \'px\')
 						.show();
 				});
-
 				$(\'.jexcerpt-long\').live(\'mouseout\', function(){
-					$(this).parent().find(\'.jexcerpt\').show();
+					$(this).parent().find(jExcerptClass).show();
 					$(this).hide();
 				});
 			});
 		</script>';
+		
+		echo $buffer;
 	}
 
 	/**
@@ -275,11 +311,12 @@ class Shipwire extends Module
 		// Check that the order was not already commited to Shipwire
 		$r = Db::getInstance()->ExecuteS('SELECT `id_order`, `transaction_ref`, `order_ref`, `status`
 									FROM `'._DB_PREFIX_.'shipwire_order`
-									WHERE `id_order` = '.(int)$params['id_order']);
+									WHERE `id_order` = '.(int)$params['id_order'].'
+									AND `id_shop` = \''.(int)$this->context->shop->id.'\'');
 		if (!(isset($r[0]['transaction_ref']) && !empty($r[0]['transaction_ref'])))
 		{
 			$this->updateOrderStatus($params['id_order']);
-			ShipwireTracking::updateTracking(true);
+			ShipwireTracking::updateTracking(true, (int)$this->context->shop->id, (int)$this->context->shop->id_group_shop);
 		}
 
 		return true;
@@ -343,46 +380,40 @@ class Shipwire extends Module
 		if ($r['Status'])
 			$this->_displayConfirmation($this->l('An error occured on the remote server: ').$r['ErrorMessage'], 'error');
 
-		foreach ($r['OrderInformation'] as $o)
-		{
-			if ($o['@attributes']['number'] != $order->id)
-				$this->_displayConfirmation($this->l('An unkown error occured with order Id.'), 'error');
-			//$val = Db::getInstance()->getValue('SELECT `transaction_ref` FROM `'._DB_PREFIX_.'shipwire_order` WHERE `id_order` = '.(int)$order->id);
-
-			$orderExists = Db::getInstance()->ExecuteS('SELECT `id_order` FROM `'._DB_PREFIX_.'shipwire_order` WHERE `id_order` = '.(int)$order->id.' LIMIT 1');
-			if (isset($orderExists[0]['id_order']) && !empty($orderExists[0]['id_order']))
+		if (isset($r['OrderInformation']))
+			foreach ($r['OrderInformation'] as $o)
 			{
-				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'shipwire_order`
-									SET `transaction_ref` = \''.pSQL($o['@attributes']['id']).'\',
-									`order_ref` = \''.pSQL($o['@attributes']['number']).'\',
-									`status` = \''.pSQL($o['@attributes']['status']).'\'
-									WHERE `id_order` = '.(int)$order->id);
-			}
-			else
-			{
-				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'shipwire_order`
-				(`id_order`, `transaction_ref`, `status`)
-				VALUES (
-				\''.pSQL($order->id).'\''
-				.(isset($o['id']) ? ',\''.pSQL($o['id']).'\'' : ',\'\'')
-				.(isset($o['status']) ? ',\''.pSQL($o['status']).'\'' : ',\'\'')
-				.')');
-			}
-				$this->log((int)$order->id, $o['@attributes']['id']);
-		}
+				if ($o['@attributes']['number'] != $order->id)
+					$this->_displayConfirmation($this->l('An unkown error occured with order Id.'), 'error');
+				//$val = Db::getInstance()->getValue('SELECT `transaction_ref` FROM `'._DB_PREFIX_.'shipwire_order` 
+				//										WHERE `id_order` = '.(int)$order->id);
 
-		return true;
-	}
+				$orderExists = Db::getInstance()->ExecuteS('SELECT `id_order` FROM `'._DB_PREFIX_.'shipwire_order` 
+															WHERE `id_order` = '.(int)$order->id.' LIMIT 1');
+															
+				if (isset($orderExists[0]['id_order']) && $orderExists[0]['id_order'])
+				{
+					Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'shipwire_order`
+										SET `transaction_ref` = \''.pSQL($o['@attributes']['id']).'\',
+										`order_ref` = \''.pSQL($o['@attributes']['number']).'\',
+										`status` = \''.pSQL($o['@attributes']['status']).'\'
+										WHERE `id_order` = '.(int)$order->id);
+				}
+				else
+				{
+					Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'shipwire_order`
+					(`id_order`, `transaction_ref`, `status`, `id_shop`, `id_group_shop`)
+					VALUES (
+					\''.pSQL($order->id).'\''
+					.(isset($o['id']) ? ',\''.pSQL($o['id']).'\'' : ',\'\'')
+					.(isset($o['status']) ? ',\''.pSQL($o['status']).'\'' : ',\'\'')
+					.(isset($this->context->shop->id_group_shop) ? ',\''.(int)$this->context->shop->id_group_shop.'\'' : ',\'\'')
+					.(isset($this->context->shop->id) ? ',\''.(int)$this->context->shop->id.'\'' : ',\'\'').'
+					)');
+				}
+					$this->log((int)$order->id, $o['@attributes']['id']);
+			}
 
-	/**
-	 * @brief Empty all tables of the module.
-	 */
-	private function _clearTables()
-	{
-		/// @todo : check if this method is used
-		if (!Db::getInstance()->Execute('TRUNCATE `'._DB_PREFIX_.'shipwire_order`') ||
-			Db::getInstance()->Execute('TRUNCATE `'._DB_PREFIX_.'shipwire_stock`'))
-			return false;
 		return true;
 	}
 
@@ -392,7 +423,10 @@ class Shipwire extends Module
 	 * @return Rendered form
 	 */
 	public function getContent()
-	{
+	{	
+		$idShop = isset($this->context->shop->id) ? $this->context->shop->id : 1;
+		$idGroupShop = isset($this->context->shop->id_group_shop) ? $this->context->shop->id_group_shop : 1;
+		
 		if (Tools::isSubmit('SubmitShipwireSettings'))
 		{
 			if (Validate::isEmail(Tools::getValue('shipwire_api_user')))
@@ -404,8 +438,14 @@ class Shipwire extends Module
 					$this->_cipherTool->encrypt(Tools::getValue('shipwire_api_passwd')));
 
 				$this->dParams['confirmMessage'] = $this->_displayConfirmation();
-				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'shipwire_order`');
-				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'shipwire_stock`');
+				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'shipwire_order` '.
+					(isset($this->context->shop->id) && isset($this->context->shop->id_group_shop) ? 
+						'WHERE `id_shop` = '.(int)$this->context->shop->id.' 
+						AND `id_group_shop` = '.(int)$this->context->shop->id_group_shop : ''));
+				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'shipwire_stock` '.
+					(isset($this->context->shop->id) && isset($this->context->shop->id_group_shop) ? 
+						'WHERE `id_shop` = '.(int)$this->context->shop->id.' 
+						AND `id_group_shop` = '.(int)$this->context->shop->id_group_shop : ''));
 			}
 			else
 				$this->dParams['confirmMessage'] = $this->_displayConfirmation($this->l('Please enter a valid email address.'), 'error');
@@ -475,7 +515,8 @@ class Shipwire extends Module
 		}
 		elseif (Tools::isSubmit('SubmitUpdateTracking'))
 		{
-			if (ShipwireTracking::updateTracking(true))
+			
+			if (ShipwireTracking::updateTracking(true, $idShop, $idGroupShop))
 				$this->dParams['confirmMessage'] = $this->_displayConfirmation($this->l('Transactions updated.'));
 			else
 				$this->dParams['confirmMessage'] = $this->_displayConfirmation($this->l('Transactions update failed.'), 'error');
@@ -491,11 +532,12 @@ class Shipwire extends Module
 		{
 			$d = Db::getInstance()->ExecuteS('SELECT `id_order`
 				FROM `'._DB_PREFIX_.'shipwire_order`
-				WHERE `transaction_ref` IS NULL OR `transaction_ref` = \'\'');
+				WHERE `transaction_ref` IS NULL OR `transaction_ref` = \'\''
+				.(isset($this->context->shop->id) ? 'AND `id_shop` = \''.(int)$this->context->shop->id.'\'' : ''));
 			foreach ($d as $line)
 				$this->updateOrderStatus($line['id_order']);
 
-			if (ShipwireTracking::updateTracking(true))
+			if (ShipwireTracking::updateTracking(true, (int)$idShop, (int)$idGroupShop))
 				$this->dParams['confirmMessage'] = $this->_displayConfirmation($this->l('Transactions successfully resent.'));
 			else
 				$this->dParams['confirmMessage'] = $this->_displayConfirmation($this->l('Error resending transactions.'), 'error');
@@ -513,7 +555,7 @@ class Shipwire extends Module
 										'SHIPWIRE_API_PASSWD'));
 
 		/// @todo : check if these assigns are necessary
-		$this->dParams['defaultOriginServerURL'] = 'http://'.Configuration::get('PS_SHOP_DOMAIN').__PS_BASE_URI__;
+		$this->dParams['defaultOriginServerURL'] = 'http://'.Tools::safeOutput(Configuration::get('PS_SHOP_DOMAIN')).__PS_BASE_URI__;
 
 		$this->dParams['serverRequestUri'] = Tools::safeOutput($_SERVER['REQUEST_URI']);
 		$this->dParams['displayName'] = Tools::safeOutput($this->displayName);
@@ -539,7 +581,6 @@ class Shipwire extends Module
 	 */
 	private function _testConnection()
 	{
-
 		if ($this->_shipWireInventoryUpdate->getInventory('Status') == 'Error')
 			return array('<img src="../img/admin/forbbiden.gif" alt="" />
 			<b style="color: #CC0000;">'.$this->l('Connection Test Failed.').'</b>',
@@ -548,11 +589,10 @@ class Shipwire extends Module
 		Configuration::updateValue('SHIPWIRE_API_CONNECTED', 1);
 		return array('<img src="../img/admin/ok.gif" alt="" />
 			<b style="color: green;">'.$this->l('Congratulations! Your store is now linked to Shipwire.').'
-			<img src="http://www.prestashop.com/modules/'.$this->name.'.png?api_user='.urlencode(Configuration::get('SHIPWIRE_API_USER')).
+			<img src="http://www.prestashop.com/modules/'.Tools::safeOutput($this->name).'.png?api_user='.urlencode(Configuration::get('SHIPWIRE_API_USER')).
 			'" style="display: none;" />
 			</b>',
 			'#D6F5D6', true);
-
 	}
 
 	/*
@@ -580,8 +620,8 @@ class Shipwire extends Module
 
 		return array(
 			'class' => Tools::safeOutput($type),
-			'img' => Tools::safeOutput($img),
-			'text' => (empty($text) ? $this->l('Settings updated') : $text)
+			'img' => (version_compare(_PS_VERSION_, '1.5', '<') ? Tools::safeOutput($img) : false),
+			'text' => (empty($text) ? $this->l('Settings updated') : Tools::safeOutput($text))
 		);
 	}
 
@@ -602,10 +642,13 @@ class Shipwire extends Module
 	public function log($orderId, $transactionId)
 	{
 		return Db::getInstance()->Execute('REPLACE INTO `'._DB_PREFIX_.'shipwire_log`
-					(`transaction_ref`, `id_order`, `date_added`)
+					(`transaction_ref`, `id_order`, `date_added`, `id_shop`, `id_group_shop`)
 					VALUES (\''.pSQL($transactionId).'\',
-					'.(int)$orderId.',
-					\''.date('Y-m-d H:i:s').'\')');
+					'.(int)$orderId.'
+					,\''.date('Y-m-d H:i:s').'\'
+					,'.(isset($this->context->shop->id) ? '\''.(int)$this->context->shop->id.'\'' : '\'\'').'
+					,'.(isset($this->context->shop->id_group_shop) ? ',\''.(int)$this->context->shop->id_group_shop.'\'' : '\'\'').'
+					)');
 	}
 
 	/******************************************************************/
@@ -621,12 +664,12 @@ class Shipwire extends Module
 		if (isset($this->dParams['confirmMessage']))
 			$buffer .= '
 			<div class="conf '.$this->dParams['confirmMessage']['class'].'">
-				<img src="../img/admin/'.$this->dParams['confirmMessage']['img'].'" alt="" title="" />
-				'.$this->dParams['confirmMessage']['text'].'
+				'.($this->dParams['confirmMessage']['img'] ? '<img src="../img/admin/'.$this->dParams['confirmMessage']['img'].'" alt="" title="" />' : '').
+				$this->dParams['confirmMessage']['text'].'
 			</div>';
 		$buffer .= '
-			<img src="http://www.prestashop.com/modules/'.$this->name.'.png?url_site='.Tools::safeOutput($_SERVER['SERVER_NAME']).'&id_lang='.(int)$this->context->cookie->id_lang.'" alt="" style="display:none"/>
-			<h2>'.$this->dParams['displayName'].'</h2>
+			<img src="http://www.prestashop.com/modules/'.Tools::safeOutput($this->name).'.png?url_site='.Tools::safeOutput($_SERVER['SERVER_NAME']).'&id_lang='.(int)$this->context->cookie->id_lang.'" alt="" style="display:none"/>
+			<h2>'.Tools::safeOutput($this->dParams['displayName']).'</h2>
 			<fieldset>
 				<legend><img src="../img/admin/help.png" alt="" />'.$this->l('Help').'</legend>
 					<a style="float: right;" target="_blank" href="http://www.prestashop.com/en/industry-partners/shipping/shipwire"><img alt="" src="../modules/shipwire/shipwire_logo.png"></a>
@@ -640,7 +683,7 @@ class Shipwire extends Module
 					<br />
 			</fieldset>
 			<br />
-			<form action="'.$this->dParams['serverRequestUri'].'" method="post">
+			<form action="'.HelperFn::noXSS($this->dParams['serverRequestUri'], true).'" method="post">
 				<fieldset class="width2 shipwire_fieldset">
 					<legend><img src="../img/admin/cog.gif" alt="" />'.$this->l('Shipwire Credentials').'</legend>';
 
@@ -676,7 +719,7 @@ class Shipwire extends Module
 
 		$buffer .= '
 		<br />
-			<form action="'.Tools::safeOutput($this->dParams['serverRequestUri']).'" method="post">
+			<form action="'.HelperFn::noXSS($this->dParams['serverRequestUri'], true).'" method="post">
 			<fieldset class="width2 shipwire_fieldset">
 				<legend><img src="../img/admin/cog.gif" alt="" />'.$this->l('Options').'</legend>
 
@@ -684,7 +727,7 @@ class Shipwire extends Module
 				<span style="font-style: italic; font-size: 11px; color: #888;">'.$this->l('When an order status is updated in Shipwire, the following statuses will be applied to the order in your store.').'</span><br /><br />';
 
 				/* Check if the order status exist */
-				$orderStatus = Db::getInstance()->ExecuteS('SELECT `id_order_state`, `name` FROM '._DB_PREFIX_.'order_state_lang WHERE `id_lang` = '.(int)$cookie->id_lang);
+				$orderStatus = Db::getInstance()->ExecuteS('SELECT `id_order_state`, `name` FROM '._DB_PREFIX_.'order_state_lang WHERE `id_lang` = '.(int)$this->context->cookie->id_lang);
 				$orderStatusList = array();
 				foreach ($orderStatus as $v)
 					$orderStatusList[$v['id_order_state']] = Tools::safeOutput($v['name']);
@@ -698,7 +741,7 @@ class Shipwire extends Module
 							<select id="shipwire_commit_id" name="shipwire_commit_id">';
 							foreach ($orderStatusList as $k => $name)
 								$buffer .= '
-								<option'.(isset($orderStatusList[Configuration::get('SHIPWIRE_COMMIT_ID')]) && Configuration::get('SHIPWIRE_COMMIT_ID') == $k ? ' selected="selected"' : '' ).' value="'.Tools::safeOutput($k).'">'.Tools::safeOutput($name).'</option>';
+								<option'.(isset($orderStatusList[Configuration::get('SHIPWIRE_COMMIT_ID')]) && Configuration::get('SHIPWIRE_COMMIT_ID') == $k ? ' selected="selected"' : '' ).' value="'.Tools::safeOutput($k).'">'.Tools::safeOutput(html_entity_decode($name, ENT_COMPAT, 'utf-8')).'</option>';
 							$buffer .= '
 							</select>
 						</td>
@@ -709,7 +752,7 @@ class Shipwire extends Module
 							<select id="shipwire_sent_id" name="shipwire_sent_id">';
 							foreach ($orderStatusList as $k => $name)
 								$buffer .= '
-								<option'.(isset($orderStatusList[Configuration::get('SHIPWIRE_SENT_ID')]) && Configuration::get('SHIPWIRE_SENT_ID') == $k ? ' selected="selected"' : '' ).' value="'.Tools::safeOutput($k).'">'.Tools::safeOutput($name).'</option>';
+								<option'.(isset($orderStatusList[Configuration::get('SHIPWIRE_SENT_ID')]) && Configuration::get('SHIPWIRE_SENT_ID') == $k ? ' selected="selected"' : '' ).' value="'.Tools::safeOutput($k).'">'.Tools::safeOutput(html_entity_decode($name, ENT_COMPAT, 'utf-8')).'</option>';
 							$buffer .= '
 							</select>
 						</td>
@@ -768,7 +811,7 @@ class Shipwire extends Module
 							foreach ($carriers as $carrier)
 								$buffer .= '
 								<option value="'.Tools::safeOutput($carrier['id_carrier']).'"'.($carrier['id_carrier'] == Configuration::get('SHIPWIRE_GD') ?
-								' selected="selected"' : '').'>'.Tools::safeOutput($carrier['name']).'</option>';
+								' selected="selected"' : '').'>'.htmlspecialchars_decode(Tools::safeOutput($carrier['name'])).'</option>';
 							$buffer .=
 							'</select>
 						</td>
@@ -780,7 +823,7 @@ class Shipwire extends Module
 							foreach ($carriers as $carrier)
 								$buffer .= '
 								<option value="'.(int)$carrier['id_carrier'].'"'.($carrier['id_carrier'] == Configuration::get('SHIPWIRE_1D') ?
-								' selected="selected"' : '').'>'.Tools::safeOutput($carrier['name']).'</option>';
+								' selected="selected"' : '').'>'.htmlspecialchars_decode(Tools::safeOutput($carrier['name'])).'</option>';
 							$buffer .=
 							'</select>
 						</td>
@@ -792,7 +835,7 @@ class Shipwire extends Module
 							foreach ($carriers as $carrier)
 								$buffer .= '
 								<option value="'.(int)$carrier['id_carrier'].'"'.($carrier['id_carrier'] == Configuration::get('SHIPWIRE_2D') ?
-								' selected="selected"' : '').'>'.Tools::safeOutput($carrier['name']).'</option>';
+								' selected="selected"' : '').'>'.htmlspecialchars_decode(Tools::safeOutput($carrier['name'])).'</option>';
 							$buffer .=
 							'</select>
 						</td>
@@ -804,7 +847,7 @@ class Shipwire extends Module
 							foreach ($carriers as $carrier)
 								$buffer .= '
 								<option value="'.(int)$carrier['id_carrier'].'"'.($carrier['id_carrier'] == Configuration::get('SHIPWIRE_INTL') ?
-								' selected="selected"' : '').'>'.Tools::safeOutput($carrier['name']).'</option>';
+								' selected="selected"' : '').'>'.htmlspecialchars_decode(Tools::safeOutput($carrier['name'])).'</option>';
 							$buffer .=
 							'</select>
 						</td>
@@ -825,11 +868,10 @@ class Shipwire extends Module
 			$buffer .= '
 				<br /><br />
 				<input type="submit" id="SubmitUpdateStock" name="SubmitUpdateStock" value="'.$this->l('Update Stock').'" class="button R" />
+				<div class="clear"></div>
 				<fieldset>
 					<legend><img src="../img/admin/statsettings.gif" alt="" />'.$this->l('Shipwire Stock').'</legend>
 					<div style="overflow-x: scroll; width: 870px; padding-bottom: 20px;">';
-
-
 					$buffer .= '
 						<table align="left" border="0" cellspacing="0" cellpadding="0" width="100%" class="spaced-table2">
 							<tr align="left" valign="top">
@@ -868,21 +910,16 @@ class Shipwire extends Module
 							</tr>';
 				}
 
-			$buffer .= '</table>';
-
-			$buffer .= '';
-
-			$buffer .='
+			$buffer .= '</table>
 					</div>
 				</fieldset>
-				</form>';
-
-			$buffer .= '
+				</form>
 				<br /><br />
-				<form action="'.$this->dParams['serverRequestUri'].'" method="post">
+				<form action="'.HelperFn::noXSS($this->dParams['serverRequestUri'], true).'" method="post">
 				<input type="submit" id="SubmitUpdateTracking" name="SubmitUpdateTracking" value="'.$this->l('Refresh Transactions').'" class="button R ML10" />
 				<input type="submit" id="SubmitResendFailedTransactions" name="SubmitResendFailedTransactions" value="'.$this->l('Resend Failed Transactions').'" class="button R" />
 				</form>
+				<div class="clear"></div>
 				<fieldset>
 					<legend><img src="../img/admin/statsettings.gif" alt="" />'.$this->l('Shipwire Transactions').'</legend>
 					<div style="overflow-x: scroll; width: 870px; padding-bottom: 20px;">';
@@ -890,11 +927,11 @@ class Shipwire extends Module
 			$r = Db::getInstance()->ExecuteS('SELECT `id_order`, `transaction_ref`, `tracking_number`,
 											`status`, `shipped`, `shipper`, `shipDate`, `expectedDeliveryDate`,
 											`href`, `shipperFullName`
-									FROM `'._DB_PREFIX_.'shipwire_order`');
+											FROM `'._DB_PREFIX_.'shipwire_order`
+											WHERE `id_shop` = \''.(int)$this->context->shop->id.'\'');
 			if (count($r))
 			{
 				$buffer .= '
-
 						<table align="left" border="0" cellspacing="0" cellpadding="0" width="100%" class="spaced-table3">
 							<tr align="left" valign="top">
 								<th class="small"></th>
@@ -912,7 +949,7 @@ class Shipwire extends Module
 
 				foreach ($r as $k => $d)
 				{
-					$buffer .= '<tr><td class="small"><form action="'.$this->dParams['serverRequestUri'].'" method="post">'.(empty($r[$k]['transaction_ref']) ? '<input type="hidden" value="'.$r[$k]['id_order'].'" name="resend_id_order" /><a href="Javascript:void(0)" class="link-submit-form"><img src="../img/admin/warning.gif" alt="" title="'.$this->l('Click here to resend the order to Shipwire.').'" /></a>' : '<img src="../img/admin/enabled-2.gif" alt="" />').'</form></td>';
+					$buffer .= '<tr><td class="small"><form action="'.HelperFn::noXSS($this->dParams['serverRequestUri'], true).'" method="post">'.(empty($r[$k]['transaction_ref']) ? '<input type="hidden" value="'.$r[$k]['id_order'].'" name="resend_id_order" /><a href="Javascript:void(0)" class="link-submit-form"><img src="../img/admin/warning.gif" alt="" title="'.$this->l('Click here to resend the order to Shipwire.').'" /></a>' : '<img src="../img/admin/enabled-2.gif" alt="" />').'</form></td>';
 					foreach ($d as $key => $value)
 							$buffer .= '<td'.($key == 'id_order' ? ' class="medium"' : '').'><div class="jexcerpt">'.($key == 'id_order' ? '<a href="?tab=AdminOrders&id_order='.Tools::safeOutput($value).'&vieworder&token='.Tools::getAdminTokenLite('AdminOrders').'">'.Tools::safeOutput($value).'</a>' : (empty($value) ? 'N/A' : Tools::safeOutput($value))).'</div></td>';
 					$buffer .= '</tr>';
@@ -930,27 +967,12 @@ class Shipwire extends Module
 				<fieldset>
 					<legend><img src="../img/admin/tab-tools.gif" alt="" />'.$this->l('Shipwire Cronjob').'</legend>
 					'.$this->l('Use PrestaShop\'s web-service to update your stock and order statuses. Place this URL in crontab (suggested frequency: every 5 hrs.) or access it manually daily:').'<br />
-					<b><a href="'.(Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').Configuration::get('PS_SHOP_DOMAIN').'/modules/shipwire/cronjob_update.php?secure_key='.md5(_COOKIE_KEY_.Configuration::get('PS_SHOP_NAME')).'" target="_blank">
-					'.(Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').Configuration::get('PS_SHOP_DOMAIN').'/modules/shipwire/cronjob_update.php?secure_key='.md5(_COOKIE_KEY_.Configuration::get('PS_SHOP_NAME')).'</a></b>
+					<b><a href="'.(Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').Tools::htmlentitiesUTF8(Configuration::get('PS_SHOP_DOMAIN')).'/modules/shipwire/cronjob_update.php?secure_key='.md5(_COOKIE_KEY_.Configuration::get('PS_SHOP_NAME')).'" target="_blank">
+					'.(Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').Tools::htmlentitiesUTF8(Configuration::get('PS_SHOP_DOMAIN')).'/modules/shipwire/cronjob_update.php?secure_key='.md5(_COOKIE_KEY_.Configuration::get('PS_SHOP_NAME')).'</a></b>
 				</fieldset>
 				';
 		}
-
 		return $buffer;
 	}
 
-}
-
-function shipwireAutoload($className)
-{
-	$className = str_replace(chr(0), '', $className);
-	if (!preg_match('/^\w+$/', $className))
-		die('Invalid classname.'.$className);
-
-	$moduleDir = dirname(__FILE__).'/';
-
-	if (file_exists($moduleDir.'lib/'.$className.'.php'))
-		require_once($moduleDir.'lib/'.$className.'.php');
-	else
-		__autoload($className);
 }
