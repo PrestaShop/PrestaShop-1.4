@@ -66,6 +66,8 @@ class AvalaraTax extends Module
 		Configuration::updateValue('AVALARATAX_ADDRESS_VALIDATION', 1);
 		Configuration::updateValue('AVALARATAX_TAX_CALCULATION', 1);
 		Configuration::updateValue('AVALARATAX_TIMEOUT', 300);
+
+		// Value possibe : Development / Production
 		Configuration::updateValue('AVALARATAX_MODE', 'Development'); /* @todo : Before module release, change to: Production */
 		Configuration::updateValue('AVALARATAX_ADDRESS_NORMALIZATION', 1);
 		Configuration::updateValue('AVALARATAX_COMMIT_ID', 5);
@@ -159,6 +161,10 @@ class AvalaraTax extends Module
 
 	public function uninstall()
 	{
+		@unlink(_PS_ROOT_DIR_.'/override/classes/Tax.php');
+		@unlink(_PS_ROOT_DIR_.'/override/controllers/AddressController.php');
+		@unlink(_PS_ROOT_DIR_.'/override/controllers/AuthController.php');
+
 		if (!parent::uninstall() OR
 		!Configuration::deleteByName('AVALARATAX_URL') OR
 		!Configuration::deleteByName('AVALARATAX_ADDRESS_VALIDATION') OR
@@ -186,6 +192,7 @@ class AvalaraTax extends Module
 		!Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'avalara_temp`') OR
 		!Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'avalara_taxcodes`'))
 			return false;
+
 		return true;
 	}
 	
@@ -779,6 +786,7 @@ class AvalaraTax extends Module
 	public function getTax($products = array(), $params = array())
 	{
 		global $cookie;
+		$addressDest = array();
 		
 		$confValues = Configuration::getMultiple(array('AVALARATAX_COMPANY_CODE', 'AVALARATAX_ADDRESS_LINE1', 
 			'AVALARATAX_ADDRESS_LINE2', 'AVALARATAX_CITY', 'AVALARATAX_STATE', 'AVALARATAX_ZIP_CODE'));
@@ -802,7 +810,7 @@ class AvalaraTax extends Module
 			$addressDest['Line1'] = $address->address1;
 			$addressDest['Line2'] = $address->address2;
 			$addressDest['City'] = $address->city;
-			$addressDest['Region'] = $state->iso_code;
+			$addressDest['Region'] = (isset($state)) ? $state->iso_code : '';
 			$addressDest['PostalCode'] = $address->postcode;
 			
 			// Try to normalize the address depending on option in the BO
@@ -823,14 +831,14 @@ class AvalaraTax extends Module
 		
 		// Origin Address (Store Address or address setup in BO)
 		$origin = new AvalaraAddress();
-		$origin->setLine1($confValues['AVALARATAX_ADDRESS_LINE1']); 
-		$origin->setLine2($confValues['AVALARATAX_ADDRESS_LINE2']); 
-		$origin->setCity($confValues['AVALARATAX_CITY']);
-		$origin->setRegion($confValues['AVALARATAX_STATE']);
-		$origin->setPostalCode($confValues['AVALARATAX_ZIP_CODE']);
+		$origin->setLine1(isset($confValues['AVALARATAX_ADDRESS_LINE1']) ? $confValues['AVALARATAX_ADDRESS_LINE1'] : '');
+		$origin->setLine2(isset($confValues['AVALARATAX_ADDRESS_LINE2']) ? $confValues['AVALARATAX_ADDRESS_LINE2'] : '');
+		$origin->setCity(isset($confValues['AVALARATAX_CITY']) ? $confValues['AVALARATAX_CITY'] : '');
+		$origin->setRegion(isset($confValues['AVALARATAX_STATE']) ? $confValues['AVALARATAX_STATE'] : '');
+		$origin->setPostalCode(isset($confValues['AVALARATAX_ZIP_CODE']) ? $confValues['AVALARATAX_ZIP_CODE'] : '');
 		$request->setOriginAddress($origin);
 		
-		$request->setCompanyCode($confValues['AVALARATAX_COMPANY_CODE']);
+		$request->setCompanyCode(isset($confValues['AVALARATAX_COMPANY_CODE']) ? $confValues['AVALARATAX_COMPANY_CODE'] : '');
 		$orderId = isset($params['cart']) ? $params['cart']->id : (int)$params['DocCode'];
 		$nowTime = date('mdHis');
 		

@@ -36,7 +36,7 @@ class Tax extends TaxCore
 	 */
 	public static function getProductTaxRate($id_product, $id_address = NULL, $getCarrierRate = false)
 	{
-		global $cookie, $cart;
+		global $cart;
 		
 		/* Check cache first */
 		if ($id_address)
@@ -78,17 +78,21 @@ class Tax extends TaxCore
 			$avalaraProducts[] = array('id_product' => 0, 'quantity' => 0, 'tax_code' => '', 'name' => '', 'description_short' => '', 'total' => 0);
 			$getTaxResult = $avalaraModule->getTax($avalaraProducts, array('type' => 'SalesOrder', 'DocCode' => 1, 'cart' => $cart));
 		}
-		
+
+		// Use PS_DEFAULT_LANG instead of '1'
 		/* The tax rate for the requested product was not found in cache, or cache expired, or tax_rate is 0. Then cache it again using getTax() */
-		$id_lang = isset($cookie->id_lang) ? (int)$cookie->id_lang : 1;
-		if (!$getCarrierRate)
-			$product = new Product((int)$id_product, false, (int)$id_lang);
+		//$id_lang = isset($cookie->id_lang) ? (int)$cookie->id_lang : 1;
+
+	// $product not used ? why ?
+	//	if (!$getCarrierRate)
+		//	$product = new Product((int)$id_product, false, (int)$id_lang);
 		
 		/******************** Avalara ********************/
 		ini_set('max_execution_time', 0);
-	
+
+		$total_tax = isset($getTaxResult) && isset($getTaxResult['TotalTax']) ? $getTaxResult['TotalTax'] : 0.0;
 		if ($avalaraModule->active && $getCarrierRate)
-			return $getCarrierRate ? (float)$getTaxResult['TotalTax'] : 0;
+			return $total_tax;
 		/********************************************/
 		
 		if ($getCarrierRate) /* If we got to this point asking for the carrier rate means that the Avalara Module is not active, then use PrestaShop's default Tax System */
