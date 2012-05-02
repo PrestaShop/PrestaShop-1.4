@@ -381,6 +381,9 @@ class MondialRelay extends Module
 
 	public function hookOrderDetail($params)
 	{
+		if (!Mondialrelay::isMondialRelayCarrier($params['order']->id_carrier))
+			return ;
+
 		$order = $params['order'];
 
 		if (!empty($order->shipping_number))
@@ -389,6 +392,9 @@ class MondialRelay extends Module
 
 	public function hookOrderDetailDisplayed($params)
 	{
+		if (!Mondialrelay::isMondialRelayCarrier($params['order']->id_carrier))
+			return '';
+
 		$res = Db::getInstance()->getRow('
 			SELECT s.`MR_Selected_LgAdr1`, s.`MR_Selected_LgAdr2`, s.`MR_Selected_LgAdr3`, s.`MR_Selected_LgAdr4`,
 			 s.`MR_Selected_CP`, s.`MR_Selected_Ville`, s.`MR_Selected_Pays`, s.`MR_Selected_Num`, s.`url_suivi`
