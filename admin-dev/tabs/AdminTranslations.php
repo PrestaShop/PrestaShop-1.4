@@ -1904,13 +1904,13 @@ class AdminTranslations extends AdminTab
 		global $currentIndex;
 
 		$lang = Tools::strtolower(Tools::getValue('lang'));
-		$_LANG = array();
+		$_LANGPDF = array();
 		$str_output = '';
 		if (!Validate::isLangIsoCode($lang))
 			die(Tools::displayError());
 		if (!file_exists(_PS_TRANSLATIONS_DIR_.$lang))
 			if (!mkdir(_PS_TRANSLATIONS_DIR_.$lang, 0700))
-				die('Please create a "'.$iso.'" directory in '._PS_TRANSLATIONS_DIR_);
+				die('Please create a "'.$lang.'" directory in '._PS_TRANSLATIONS_DIR_);
 		if (!file_exists(_PS_TRANSLATIONS_DIR_.$lang.'/pdf.php'))
 			if (!file_put_contents(_PS_TRANSLATIONS_DIR_.$lang.'/pdf.php', "<?php\n\nglobal \$_LANGPDF;\n\$_LANGPDF = array();\n\n?>"))
 				die('Please create a "'.Tools::strtolower($lang).'.php" file in '.realpath(PS_ADMIN_DIR.'/'));
