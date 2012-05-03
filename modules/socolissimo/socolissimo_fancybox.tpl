@@ -25,9 +25,8 @@
 *}
 
 <style type="text/css">
-	.soBackward_compat_tab { text-align: center; }
-	.soBackward_compat_tab a { margin: 10px; }
-
+	.soBackward_compat_tab {literal}{ text-align: center; }{/literal}
+	.soBackward_compat_tab a {literal}{ margin: 10px; }{/literal}
 </style>
 
 <a href="#" class="iframe" style="display:none" id="soLink"></a>
@@ -53,6 +52,7 @@
 var soInputs = new Object();
 var soBwdCompat = "{$SOBWD_C}";
 var soCarrierId = "{$id_carrier}";
+var soToken = "{$token}";
 
 {foreach from=$inputs item=input key=name name=myLoop}
 		soInputs.{$name} = "{$input|strip_tags|addslashes}";
@@ -74,7 +74,7 @@ var soCarrierId = "{$id_carrier}";
 			'enableEscapeButton' : true,
 			'type'				: 'iframe',
 			onStart: function () {
-				$('#soLink').attr('href', 'modules/socolissimo/redirect.php'+serialiseInput(soInputs));
+				$('#soLink').attr('href', 'modules/socolissimo/redirect.php' + serialiseInput(soInputs));
 			},
 			onClosed    :   function() {
          	   $.ajax({
@@ -83,11 +83,16 @@ var soCarrierId = "{$id_carrier}";
 			       async: false,
 			       cache: false,
 			       dataType : "json",
-			       data: 'token={$token"}',
+			       data: "token=" + soToken,
 			       success: function(jsonData)
 			       {
-			       		if (jsonData.result && !opc)
-			       			$('#form').submit();
+			       		if (jsonData && typeof jsonData.answer != undefined && !opc)
+					      {
+						      if (jsonData.answer)
+							      $('#form').submit();
+						      else if (jsonData.msg.length)
+						        alert(jsonData.msg);
+					      }
 			       },
 			       error: function(XMLHttpRequest, textStatus, errorThrown)
 				   {
@@ -130,7 +135,7 @@ var soCarrierId = "{$id_carrier}";
 						modifyCarrierLine(true);
 					},10);
 		}
-		else if ((!soBwdCompat && $('#id_carrier{/literal}{$id_carrier}{literal}').is(':not(:checked)')) ||
+		else if ((!soBwdCompat && $('#id_carrier' + soCarrierId).is(':not(:checked)')) ||
 			(soBwdCompat && soCarrierId == 0))
 		{
 			$('[name=processCarrier]').unbind('click').click(function () {
@@ -149,6 +154,8 @@ var soCarrierId = "{$id_carrier}";
 
 function modifyCarrierLine(edit)
 {
+	var container = '#id_carrier' + soCarrierId;
+
 	if (soBwdCompat && soCarrierId > 0)
 	{
 		var carrier_block = $('input[class=delivery_option_radio]:checked').parent('div.delivery_option');
@@ -168,20 +175,20 @@ function modifyCarrierLine(edit)
 	}
 	
 	$('#button_socolissimo').remove();
-	if (edit && $('input[name=id_carrier]:checked').attr('value') == {/literal}{$id_carrier}{literal})
-		$('#id_carrier{/literal}{$id_carrier}{literal}').parent().prepend('<a style="margin-left:5px;" class="button" id="button_socolissimo" href="#" onclick="redirect();return;" >{/literal}{$edit_label}{literal}</a>');
+
+	if (edit && $('input[name=id_carrier]:checked').attr('value') == soCarrierId)
+		$(container).parent().prepend('<a style="margin-left:5px;" class="button" id="button_socolissimo" href="#" onclick="redirect();return;" >{/literal}{$edit_label}{literal}</a>');
 	else
-		$('#id_carrier{/literal}{$id_carrier}{literal}').parent().prepend('<a style="margin-left:5px;" class="exclusive" id="button_socolissimo" href="#" onclick="redirect();return;" >{/literal}{$select_label}{literal}</a>');
-		
+		$(container).parent().prepend('<a style="margin-left:5px;" class="exclusive" id="button_socolissimo" href="#" onclick="redirect();return;" >{/literal}{$select_label}{literal}</a>');
+
 	if (already_select_delivery)
 	{
-		$('#id_carrier{/literal}{$id_carrier}{literal}').css('display', 'block');
-		$('#id_carrier{/literal}{$id_carrier}{literal}').css('margin', 'auto');
-		$('#id_carrier{/literal}{$id_carrier}{literal}').css('margin-top', '5px');
+		$(container).css('display', 'block');
+		$(container).css('margin', 'auto');
+		$(container).css('margin-top', '5px');
 	}
 	else
-		$('#id_carrier{/literal}{$id_carrier}{literal}').css('display', 'none');	
-	
+		$(container).css('display', 'none');
 }
 
 function redirect()
@@ -189,14 +196,13 @@ function redirect()
 	document.location.href = '{/literal}{$urlSo}{literal}'+serialiseInput(soInputs);
 }
 
-
 function serialiseInput(inputs)
 {
 	updateGiftData();
-	soInputs.TRPARAMPLUS = soInputs.carrier_id+'|'+soInputs.gift+'|'+soInputs.gift_message;
-	str = '?firstcall=1&';
+	soInputs.TRPARAMPLUS = soInputs.carrier_id + '|' + soInputs.gift + '|' + soInputs.gift_message;
+	var str = '?firstcall=1&';
 	for ( var cle in inputs )
-   		str += cle+'='+inputs[cle]+'&';
+   		str += cle + '=' + inputs[cle] + '&';
    	
 	return str;
 }
