@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2011 PrestaShop 
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2011 PrestaShop SA
 *  @version  Release: $Revision$
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
@@ -283,7 +283,7 @@ class WebserviceOutputBuilderCore
 		if (is_null($this->wsResource))
 			throw new WebserviceException ('You must set web service resource for get the resources list.', array(82, 500));
 		$output = '';
-		$more_attr = array('shop_name' => Configuration::get('PS_SHOP_NAME'));
+		$more_attr = array('shop_name' => htmlentities(Configuration::get('PS_SHOP_NAME')));
 		$output .= $this->objectRender->renderNodeHeader('api', array(), $more_attr);
 		foreach ($this->wsResource as $resourceName => $resource)
 		{
@@ -596,11 +596,17 @@ class WebserviceOutputBuilderCore
 					{
 						$association_resources = $object->$getter();
 						if (is_array($association_resources) && !empty($association_resources))
+						{
 							foreach ($association_resources as $association_resource)
+							{
 								$objects_assoc[] = $association_resource;
+							}
+						}
 					}
 					else
+					{
 						$objects_assoc[] = '';
+					}
 				}
 				
 				$class_name = null;
