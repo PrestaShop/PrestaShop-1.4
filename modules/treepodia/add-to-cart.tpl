@@ -47,7 +47,7 @@
 		});
 		
 		//for product page 'add' button...
-		$('body#product p#add_to_cart input').mouseup(function(){
+		$('body#product #add_to_cart input').mouseup(function(){
 			sendProductToTreepodia($(this).attr('rel'));
 			return false;
 		});
