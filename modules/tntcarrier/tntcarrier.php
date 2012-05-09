@@ -17,7 +17,7 @@ class TntCarrier extends CarrierModule
 	private $_postErrors = array();
 	private $_moduleName = 'tntcarrier';
 	private $_fieldsList = array();
-	
+
 	/*
 	** Construct Method
 	**
@@ -27,7 +27,7 @@ class TntCarrier extends CarrierModule
 	{
 		$this->name = 'tntcarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.6.7';
+		$this->version = '1.7.0';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 		$this->module_key = 'd4dcfde9937b67002235598ac35cbdf8';
@@ -38,7 +38,7 @@ class TntCarrier extends CarrierModule
 		$this->description = $this->l('Offer your customers, different delivery methods with TNT');
 
 		if (self::isInstalled($this->name))
-		{	
+		{
 			global $cookie;
 			$warning = array();
 			$this->loadingVar();
@@ -47,19 +47,19 @@ class TntCarrier extends CarrierModule
 			foreach ($this->_fieldsList as $keyConfiguration => $name)
 				if (!Configuration::get($keyConfiguration) && !empty($name))
 					$warning[] = '\''.$name.'\' ';
-					
+
 			// Saving id carrier list
 			$id_carrier_list = array();
 			foreach($carriers as $carrier)
 				$id_carrier_list[] .= $carrier['id_carrier'];
-			
+
 			if (count($warning) > 1)
 				$this->warning .= implode(' , ',$warning).$this->l('must be configured to use this module correctly.').' ';
-            if (count($warning) == 1)
+			if (count($warning) == 1)
 				$this->warning .= implode(' , ',$warning).$this->l('has to be configured to use this module correctly.').' ';
 		}
 	}
-	
+
 	public function bqSQL($string)
 	{
 		return str_replace('`', '\`', pSQL($string));
@@ -89,7 +89,7 @@ class TntCarrier extends CarrierModule
 			'TNT_CARRIER_CORSE_OVERCOST' => '',
 			'TNT_CARRIER_TOKEN' => ''
 		);
-		
+
 		$option = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'tnt_carrier_option`');
 		foreach($option as $k => $v)
 		{
@@ -103,7 +103,7 @@ class TntCarrier extends CarrierModule
 	*/
 
 	public function install()
-	{	
+	{
 		// Install SQL
 		include(dirname(__FILE__).'/sql-install.php');
 		foreach ($sql as $s)
@@ -147,12 +147,12 @@ class TntCarrier extends CarrierModule
 			else
 				copy(dirname(__FILE__).'/carrier.jpg', _PS_SHIP_IMG_DIR_.'/'.(int)$carrier->id.'.jpg');
 		}
-		
+
 		Configuration::updateValue('TNT_CARRIER_TOKEN', md5(rand()));
-		
+
 		return true;
 	}
-	
+
 	public static function installExternalCarrier($config)
 	{
 		$carrier = new Carrier();
@@ -212,7 +212,7 @@ class TntCarrier extends CarrierModule
 
 		return false;
 	}
-	
+
 	public function uninstall()
 	{
 		// Uninstall Carriers
@@ -261,26 +261,26 @@ class TntCarrier extends CarrierModule
 		$shop = (_PS_VERSION_ >= 1.5 ? Context::getContext()->shop->id : '');
 
 		$globalVar = array(
-		'tab' => htmlentities(Tools::getValue('tab')),
-		'configure' => htmlentities(Tools::getValue('configure')),
-		'token' => htmlentities(Tools::getValue('token')),
-		'tab_module' => htmlentities(Tools::getValue('tab_module')),
-		'module_name' => htmlentities(Tools::getValue('module_name')),
-		'tnt_token' => Configuration::get('TNT_CARRIER_TOKEN'),
-		'shop' => $shop);
-		
+			'tab' => htmlentities(Tools::getValue('tab')),
+			'configure' => htmlentities(Tools::getValue('configure')),
+			'token' => htmlentities(Tools::getValue('token')),
+			'tab_module' => htmlentities(Tools::getValue('tab_module')),
+			'module_name' => htmlentities(Tools::getValue('module_name')),
+			'tnt_token' => Configuration::get('TNT_CARRIER_TOKEN'),
+			'shop' => $shop);
+
 		$smarty->assign('glob', $globalVar);
-		
+
 		$this->_html .= '<fieldset>
 		<legend>'.$this->l('TNT Carrier Module Status').'</legend>';
-		
+
 		$alert = array();
 		if (!Configuration::get('TNT_CARRIER_LOGIN') || !Configuration::get('TNT_CARRIER_PASSWORD') || !Configuration::get('TNT_CARRIER_NUMBER_ACCOUNT'))
 			$alert['account'] = 1;
-		if ( 
-			!Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS1') || 
-			!Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE') || 
-			!Configuration::get('TNT_CARRIER_SHIPPING_CITY') || 
+		if (
+			!Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS1') ||
+			!Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE') ||
+			!Configuration::get('TNT_CARRIER_SHIPPING_CITY') ||
 			!Configuration::get('TNT_CARRIER_SHIPPING_EMAIL') ||
 			!Configuration::get('TNT_CARRIER_SHIPPING_PHONE'))
 			$alert['shipping'] = 1;
@@ -289,35 +289,35 @@ class TntCarrier extends CarrierModule
 		if (!extension_loaded('soap'))
 			$alert['soap'] = 1;
 		if (count($alert) < 4)
-        {
+		{
 			$this->_html .= '<img src="'._PS_IMG_.'admin/module_install.png" /><strong>'.$this->l('The following parameters are correctly configured and activated on your online store :').'</strong>';
-            $this->_html .= '<ul>';
+			$this->_html .= '<ul>';
 			$this->_html .= (!isset($alert['account']) ? '<li>'.$this->l('TNT account. (Account setting tab)').'</li>' : '');
 			$this->_html .= (!isset($alert['shipping']) ? '<li>'.$this->l('Shipping address. (Shipping settings tab)').'</li>' : '');
 			$this->_html .= (!isset($alert['service']) ? '<li>'.$this->l('Choice of specific TNT delivery mode you want to offer to your customers. (Service settings tab)').'</li>' : '');
 			$this->_html .= (!isset($alert['soap']) ? '<li>'.$this->l('Soap is enable').'</li>' : '');
-            $this->_html .= '</ul>';
-        }
+			$this->_html .= '</ul>';
+		}
 		if (count($alert) > 0)
 		{
 			$this->_html .= '<img src="'._PS_IMG_.'admin/warn2.png" /><strong>'.$this->l('The following parameters have to be configured to be able to use correctly the TNT module :').'</strong>';
-            $this->_html .= '<ul>';
+			$this->_html .= '<ul>';
 			$this->_html .= (isset($alert['account']) ? '<li>'.$this->l('TNT account. (Account setting tab)').'</li>' : '');
 			$this->_html .= (isset($alert['shipping']) ? '<li>'.$this->l('Shipping address. (Shipping settings tab)').'</li>' : '');
 			$this->_html .= (isset($alert['service']) ? '<li>'.$this->l('Choice of specific TNT delivery mode you want to offer to your customers. (Service settings tab)').'</li>' : '');
 			$this->_html .= (isset($alert['soap']) ? '<li>'.$this->l('Soap is disable').'</li>' : '');
-            $this->_html .= '</ul>';
+			$this->_html .= '</ul>';
 		}
 
 		$this->_html .= '</fieldset><div class="clear">&nbsp;</div>';
 		$this->_html .= $this->_displayFormConfig();
 	}
-	
+
 	private function _displayFormConfig()
 	{
 		global $smarty;
 		$var = array('account' => $this->_displayFormAccount(), 'shipping' => $this->_displayFormShipping(), 'service' => $this->_displayService(),
-					'country' => $this->_displayCountry('Corse'), 'info' => $this->_displayInfo('weight'));
+					 'country' => $this->_displayCountry('Corse'), 'info' => $this->_displayInfo('weight'));
 		$smarty->assign('varMain', $var);
 		$html = $this->display( __FILE__, 'tpl/main.tpl' );
 		if (isset($_GET['id_tab']))
@@ -329,60 +329,60 @@ class TntCarrier extends CarrierModule
 			</script>';
 		return $html;
 	}
-	
+
 	private function _displayFormAccount()
-	{		
+	{
 		global $smarty;
 		$var = array('login' => Tools::getValue('tnt_carrier_login', Configuration::get('TNT_CARRIER_LOGIN')), 'password' => Tools::getValue('tnt_carrier_password', Configuration::get('TNT_CARRIER_PASSWORD')),
-					'account' => Tools::getValue('tnt_carrier_number_account', Configuration::get('TNT_CARRIER_NUMBER_ACCOUNT')));
+					 'account' => Tools::getValue('tnt_carrier_number_account', Configuration::get('TNT_CARRIER_NUMBER_ACCOUNT')));
 		$smarty->assign('varAccount', $var);
 		return $this->display( __FILE__, 'tpl/accountForm.tpl' );
 	}
-	
+
 	private function _displayFormShipping()
 	{
 		global $cookie, $smarty;
-		
+
 		$var = array('moduleName' => $this->_moduleName, 'collect' => Configuration::get('TNT_CARRIER_SHIPPING_COLLECT'), 'pex' => Configuration::get('TNT_CARRIER_SHIPPING_PEX'), 'company' => Configuration::get('TNT_CARRIER_SHIPPING_COMPANY'),
-					'lastName' => Configuration::get('TNT_CARRIER_SHIPPING_LASTNAME'), 'firstName' => Configuration::get('TNT_CARRIER_SHIPPING_FIRSTNAME'), 'address1' => Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS1'),
-					'address2' => Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS2'), 'zipCode' => Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE'), 'city' => Configuration::get('TNT_CARRIER_SHIPPING_CITY'), 'email' => Configuration::get('TNT_CARRIER_SHIPPING_EMAIL'),
-					'phone' => Configuration::get('TNT_CARRIER_SHIPPING_PHONE'), 'closing' => Configuration::get('TNT_CARRIER_SHIPPING_CLOSING'), 'delivery' => Configuration::get('TNT_CARRIER_SHIPPING_DELIVERY'), 'sticker' => Configuration::get('TNT_CARRIER_PRINT_STICKER'));
+					 'lastName' => Configuration::get('TNT_CARRIER_SHIPPING_LASTNAME'), 'firstName' => Configuration::get('TNT_CARRIER_SHIPPING_FIRSTNAME'), 'address1' => Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS1'),
+					 'address2' => Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS2'), 'zipCode' => Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE'), 'city' => Configuration::get('TNT_CARRIER_SHIPPING_CITY'), 'email' => Configuration::get('TNT_CARRIER_SHIPPING_EMAIL'),
+					 'phone' => Configuration::get('TNT_CARRIER_SHIPPING_PHONE'), 'closing' => Configuration::get('TNT_CARRIER_SHIPPING_CLOSING'), 'delivery' => Configuration::get('TNT_CARRIER_SHIPPING_DELIVERY'), 'sticker' => Configuration::get('TNT_CARRIER_PRINT_STICKER'));
 		$smarty->assign('varShipping', $var);
 		$smarty->assign('soap', (!extension_loaded('soap') ? $this->l('Soap is disable') : ''));
 		return $this->display( __FILE__, 'tpl/shippingForm.tpl' );
 	}
-	
+
 	private function _displayService()
 	{
 		global $smarty;
 		if (Tools::getValue('action') == 'del' && Tools::getValue('service') != '')
 		{
-				$id = htmlentities(Tools::getValue('service'));
-				Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'carrier` SET `deleted` = "1" WHERE `id_carrier` = '.(int)($id).'');
-				$option = Db::getInstance()->getRow('SELECT `option` FROM `'._DB_PREFIX_.'tnt_carrier_option` WHERE `id_carrier` = "'.(int)($id).'"');
-				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'tnt_carrier_option` WHERE `id_carrier` = '.(int)($id).'');
-				Configuration::deleteByName('TNT_CARRIER_'.pSQL($option['option']).'_ID');
-				Configuration::deleteByName('TNT_CARRIER_'.pSQL($option['option']).'_OVERCOST');
+			$id = htmlentities(Tools::getValue('service'));
+			Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'carrier` SET `deleted` = "1" WHERE `id_carrier` = '.(int)($id).'');
+			$option = Db::getInstance()->getRow('SELECT `option` FROM `'._DB_PREFIX_.'tnt_carrier_option` WHERE `id_carrier` = "'.(int)($id).'"');
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'tnt_carrier_option` WHERE `id_carrier` = '.(int)($id).'');
+			Configuration::deleteByName('TNT_CARRIER_'.pSQL($option['option']).'_ID');
+			Configuration::deleteByName('TNT_CARRIER_'.pSQL($option['option']).'_OVERCOST');
 		}
 		$irow = 0;
 		$serviceList = Db::getInstance()->ExecuteS('SELECT c.deleted, c.name, cl.delay, o.option
 													FROM `'._DB_PREFIX_.'carrier` c, `'._DB_PREFIX_.'carrier_lang` cl, `'._DB_PREFIX_.'tnt_carrier_option` o , `'._DB_PREFIX_.'lang` l
 													WHERE c.external_module_name = "'.pSQL($this->_moduleName).'" AND c.id_carrier = cl.id_carrier AND cl.id_lang = l.id_lang AND l.iso_code = "'.pSQL(Language::getIsoById(Configuration::get('PS_LANG_DEFAULT'))).'" AND o.id_carrier = c.id_carrier');
-													
+
 		foreach ($serviceList as $k => $v)
-			{
-				$serviceList[$k]['optionId'] = Configuration::get('TNT_CARRIER_'.pSQL($v['option']).'_ID');
-				$serviceList[$k]['optionOvercost'] = (Configuration::get('TNT_CARRIER_'.pSQL($v['option']).'_OVERCOST') ? Configuration::get('TNT_CARRIER_'.pSQL($v['option']).'_OVERCOST') : '0');
-			}
-		
+		{
+			$serviceList[$k]['optionId'] = Configuration::get('TNT_CARRIER_'.pSQL($v['option']).'_ID');
+			$serviceList[$k]['optionOvercost'] = (Configuration::get('TNT_CARRIER_'.pSQL($v['option']).'_OVERCOST') ? Configuration::get('TNT_CARRIER_'.pSQL($v['option']).'_OVERCOST') : '0');
+		}
+
 		$var = array('serviceList' => $serviceList,
-					'action' => htmlentities(Tools::getValue('action')),
-					'section' => htmlentities(Tools::getValue('section')),
-					'form' => $this->_displayFormService(htmlentities(Tools::getValue('service'))));
+					 'action' => htmlentities(Tools::getValue('action')),
+					 'section' => htmlentities(Tools::getValue('section')),
+					 'form' => $this->_displayFormService(htmlentities(Tools::getValue('service'))));
 		$smarty->assign('varService', $var);
 		return $this->display( __FILE__, 'tpl/service.tpl' );
 	}
-	
+
 	private function _displayInfo($cat)
 	{
 		if (Tools::getValue('action') == 'del' && Tools::getValue($cat) != '')
@@ -390,7 +390,7 @@ class TntCarrier extends CarrierModule
 			$id = Tools::getValue($cat);
 			Db::getInstance()->ExecuteS('DELETE FROM `'._DB_PREFIX_.'tnt_carrier_'.$this->bqSQL($cat).'` WHERE `id_'.$this->bqSQL($cat).'` = '.(int)$id.'');
 		}
-		
+
 		$html = '
 		<a href="index.php?tab='.htmlentities(Tools::getValue('tab')).'&configure='.htmlentities(Tools::getValue('configure')).'&token='.htmlentities(Tools::getValue('token')).'&tab_module='.htmlentities(Tools::getValue('tab_module')).'&module_name='.htmlentities(Tools::getValue('module_name')).'&id_tab=3&section='.htmlentities($cat).'&action=new">
 		<img src="../img/admin/add.gif" alt="add"/> '.$this->l('Add additional charges depending on the package weight').'</a></br><br/>
@@ -419,26 +419,26 @@ class TntCarrier extends CarrierModule
 		</table><br/>
 		<div id="divForm'.htmlentities($cat).'Service">'.((Tools::getValue('action') == 'edit' || Tools::getValue('action') == 'new') && Tools::getValue('section') == $cat ? $this->_displayFormInfo($cat, htmlentities(Tools::getValue($cat))) : '').'</div>
 		';
-		
+
 		return $html;
 	}
-	
+
 	private function _displayCountry($country)
-	{	
+	{
 		global $smarty;
-		
+
 		$var = array(
-		'country' => $country,
-                     'overcost' => (Configuration::get('TNT_CARRIER_'.strtoupper(pSQL($country)).'_OVERCOST') ? Configuration::get('TNT_CARRIER_'.strtoupper(pSQL($country)).'_OVERCOST') : '0'),
-		'action' => htmlentities(Tools::getValue('action')),
-		'section' => htmlentities(Tools::getValue('section')),
-		'getCountry' => htmlentities(Tools::getValue('country')),
-		'form' => (htmlentities(Tools::getValue('country')) != '' ? $this->_displayFormCountry(htmlentities(Tools::getValue('country'))) : '')
+			'country' => $country,
+			'overcost' => (Configuration::get('TNT_CARRIER_'.strtoupper(pSQL($country)).'_OVERCOST') ? Configuration::get('TNT_CARRIER_'.strtoupper(pSQL($country)).'_OVERCOST') : '0'),
+			'action' => htmlentities(Tools::getValue('action')),
+			'section' => htmlentities(Tools::getValue('section')),
+			'getCountry' => htmlentities(Tools::getValue('country')),
+			'form' => (htmlentities(Tools::getValue('country')) != '' ? $this->_displayFormCountry(htmlentities(Tools::getValue('country'))) : '')
 		);
 		$smarty->assign('varCountry', $var);
 		return $this->display( __FILE__, 'tpl/country.tpl' );
 	}
-	
+
 	private function _displayFormService($id = null)
 	{
 		global $smarty;
@@ -447,11 +447,11 @@ class TntCarrier extends CarrierModule
 		$code = '';
 		$charge = '';
 		$display = '';
-		
+
 		if ($id != null)
-		{			
+		{
 			$service = Db::getInstance()->getRow('SELECT c.deleted, c.name, l.delay, o.option, o.additionnal_charges
-													FROM `'._DB_PREFIX_.'carrier` c, `'._DB_PREFIX_.'carrier_lang` l, `'._DB_PREFIX_.'tnt_carrier_option` o 
+													FROM `'._DB_PREFIX_.'carrier` c, `'._DB_PREFIX_.'carrier_lang` l, `'._DB_PREFIX_.'tnt_carrier_option` o
 													WHERE c.id_carrier = "'.(int)$id.'" AND c.id_carrier = l.id_carrier AND l.id_lang = "1" AND o.id_carrier = c.id_carrier');
 			if ($service != NULL)
 			{
@@ -466,13 +466,13 @@ class TntCarrier extends CarrierModule
 		$smarty->assign('varServiceForm', $var);
 		return $this->display( __FILE__, 'tpl/serviceForm.tpl' );
 	}
-		
+
 	private function _displayFormInfo($cat, $id = null)
 	{
 		$info_min = '';
 		$info_max = '';
 		$charge = '';
-		
+
 		if ($id != null)
 		{
 			$info = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'tnt_carrier_'.$this->bqSQL($cat).'` WHERE `id_'.$this->bqSQL($cat).'` = "'.(int)$id.'"');
@@ -480,7 +480,7 @@ class TntCarrier extends CarrierModule
 			$info_max = ((float)$info[$cat.'_max'] == 0 ? '': $info[$cat.'_max']);
 			$charge = $info['additionnal_charges'];
 		}
-		
+
 		$html = '
 		<form action="index.php?tab='.htmlentities(Tools::getValue('tab')).'&configure='.htmlentities(Tools::getValue('configure')).'&token='.htmlentities(Tools::getValue('token')).'&tab_module='.htmlentities(Tools::getValue('tab_module')).'&module_name='.htmlentities(Tools::getValue('module_name')).'&id_tab=3&section='.$cat.'&action=new" method="post" class="form" id="configForm'.$cat.'">
 			'.($id != null ? '<input type="hidden" name="'.$cat.'_id" value="'.$id.'"/>' : '').'
@@ -496,21 +496,21 @@ class TntCarrier extends CarrierModule
 				</tr>
 			</table>
 		</form>';
-		
+
 		return $html;
 	}
-	
+
 	private function _displayFormCountry($country)
 	{
 		global $smarty;
 		$var = array(
-		'country' => htmlentities($country),
-		'overcost' => Configuration::get('TNT_CARRIER_'.strtoupper(pSQL($country)).'_OVERCOST')
+			'country' => htmlentities($country),
+			'overcost' => Configuration::get('TNT_CARRIER_'.strtoupper(pSQL($country)).'_OVERCOST')
 		);
 		$smarty->assign('varCountryForm', $var);
 		return $this->display( __FILE__, 'tpl/countryForm.tpl' );
 	}
-	
+
 	private function _postValidation()
 	{
 		if (htmlentities(Tools::getValue('section')) == 'account')
@@ -529,7 +529,7 @@ class TntCarrier extends CarrierModule
 	{
 
 	}
-	
+
 	private function _postValidationAccount()
 	{
 		$login = pSQL(Tools::getValue('tnt_carrier_login'));
@@ -541,7 +541,7 @@ class TntCarrier extends CarrierModule
 		Configuration::updateValue('TNT_CARRIER_PASSWORD', $password);
 		Configuration::updateValue('TNT_CARRIER_NUMBER_ACCOUNT', $number);
 	}
-	
+
 	private function _postValidationShipping()
 	{
 		$collect = (Tools::getValue('tnt_carrier_shipping_collect') == 'on' ? 1 : 0);
@@ -558,7 +558,7 @@ class TntCarrier extends CarrierModule
 		$closing = pSQL(Tools::getValue('tnt_carrier_shipping_closing'));
 		$delivery = pSQL(Tools::getValue('tnt_carrier_shipping_delivery'));
 		$print = pSQL(Tools::getValue('tnt_carrier_print_sticker'));
-		
+
 		if (!Configuration::get('TNT_CARRIER_LOGIN') || !Configuration::get('TNT_CARRIER_PASSWORD') || !Configuration::get('TNT_CARRIER_NUMBER_ACCOUNT'))
 			$this->_postErrors[] = $this->l('You need a TNT account to complete your shipping address');
 		/*if (!$collect && $pex == '')
@@ -591,10 +591,18 @@ class TntCarrier extends CarrierModule
 				$postal_code = $department.'0'.$code;
 			}
 			$tntWebService = new TntWebService();
-			if (!$tntWebService->verifCity($postal_code, $city))
+			try
+			{
+				$verif = $tntWebService->verifCity($postal_code, $city);
+			}
+			catch (SoapFault $e)
+			{
+				$this->_postErrors[] = $this->l('Verify your authentication');
+			}
+			if (!$verif)
 				$this->_postErrors[] = $this->l('The city is not compatible with the postal code');
 		}
-		
+
 		Configuration::updateValue('TNT_CARRIER_SHIPPING_COLLECT', $collect);
 		Configuration::updateValue('TNT_CARRIER_SHIPPING_COMPANY', $company);
 		Configuration::updateValue('TNT_CARRIER_SHIPPING_LASTNAME', $lname);
@@ -610,7 +618,7 @@ class TntCarrier extends CarrierModule
 		Configuration::updateValue('TNT_CARRIER_SHIPPING_PEX', $pex);
 		Configuration::updateValue('TNT_CARRIER_PRINT_STICKER', $print);
 	}
-	
+
 	private function _postValidationService()
 	{
 		if (htmlentities(Tools::getValue('action')) == 'new' && htmlentities(Tools::getValue('service_id')) != null )
@@ -618,7 +626,7 @@ class TntCarrier extends CarrierModule
 		elseif (htmlentities(Tools::getValue('action')) == 'new' && htmlentities(Tools::getValue('service_id')) == null)
 			$this->_postValidationNewService();
 	}
-	
+
 	private function _postValidationInfo($cat)
 	{
 		if (htmlentities(Tools::getValue('action')) == 'new' && htmlentities(Tools::getValue($cat.'_id')) != null )
@@ -626,15 +634,15 @@ class TntCarrier extends CarrierModule
 		elseif (htmlentities(Tools::getValue('action')) == 'new' && htmlentities(Tools::getValue($cat.'_id')) == null)
 			$this->_postValidationNewInfo($cat);
 	}
-	
+
 	private function _postValidationNewService()
-	{	
+	{
 		$name = pSQL(Tools::getValue('tnt_carrier_service_name'));
 		$description = pSQL(Tools::getValue('tnt_carrier_service_description'));
 		$code = pSQL(Tools::getValue('tnt_carrier_service_code'));
 		$charge = pSQL(Tools::getValue('tnt_carrier_service_charge'));
 		$display = pSQL(Tools::getValue('tnt_carrier_service_display'));
-		
+
 		if ($name == '')
 			$this->_postErrors[]  = $this->l('You have to give a name service');
 		if ($code == '')
@@ -647,7 +655,7 @@ class TntCarrier extends CarrierModule
 			$delete = false;
 		else
 			$delete = true;
-		
+
 		if (!$this->_postErrors)
 		{
 			$carrierConfig = array(
@@ -665,11 +673,11 @@ class TntCarrier extends CarrierModule
 				'need_range' => true
 			);
 			$id_carrier = $this->installExternalCarrier($carrierConfig);
-		
-			Db::getInstance()->autoExecute(_DB_PREFIX_.'tnt_carrier_option', 
-										array('id_carrier' => (int)($id_carrier), 
-										'option' => $code, 
-										'additionnal_charges' => (float)($charge)),'INSERT');
+
+			Db::getInstance()->autoExecute(_DB_PREFIX_.'tnt_carrier_option',
+				array('id_carrier' => (int)($id_carrier),
+					'option' => $code,
+					'additionnal_charges' => (float)($charge)),'INSERT');
 			Configuration::updateValue('TNT_CARRIER_'.$code.'_ID', (int)($id_carrier));
 			Configuration::updateValue('TNT_CARRIER_'.$code.'_OVERCOST', (float)($charge));
 			$this->_fieldsList['TNT_CARRIER_'.$code.'_OVERCOST'] = (float)($charge);
@@ -677,7 +685,7 @@ class TntCarrier extends CarrierModule
 			$this->_html .= $this->displayConfirmation($this->l('Service updated'));
 		}
 	}
-	
+
 	private function _postValidationEditService()
 	{
 		$id = (int)(Tools::getValue('service_id'));
@@ -686,7 +694,7 @@ class TntCarrier extends CarrierModule
 		$code = pSQL(Tools::getValue('tnt_carrier_service_code'));
 		$charge = pSQL(Tools::getValue('tnt_carrier_service_charge'));
 		$display = pSQL(Tools::getValue('tnt_carrier_service_display'));
-		
+
 		if ($name == '')
 			$this->_postErrors[]  = $this->l('You have to give a name service');
 		if ($code == '')
@@ -695,9 +703,9 @@ class TntCarrier extends CarrierModule
 			$this->_postErrors[]  = $this->l('You have to give a description of the service');
 		if ($display == '1')
 			$display = '0';
-		else	
+		else
 			$display = '1';
-		
+
 		if (!$this->_postErrors)
 		{
 			Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'carrier` SET `name` = "'.$name.'", `deleted` = "'.(int)($display).'" WHERE `id_carrier` = '.(int)($id).'');
@@ -710,54 +718,54 @@ class TntCarrier extends CarrierModule
 			$this->_html .= $this->displayConfirmation($this->l('Service updated'));
 		}
 	}
-	
+
 	private function _postValidationNewInfo($cat)
 	{
 		$info_min = Tools::getValue('tnt_carrier_'.$cat.'_min');
 		$info_max = Tools::getValue('tnt_carrier_'.$cat.'_max');
 		$charge = Tools::getValue('tnt_carrier_'.$cat.'_charge');
-		Db::getInstance()->autoExecute(_DB_PREFIX_.'tnt_carrier_'.$cat.'', 
-										array( 
-										''.$cat.'_min' => (float)($info_min),
-										''.$cat.'_max' => (float)($info_max),
-										'additionnal_charges' => (float)($charge)),'INSERT');									
+		Db::getInstance()->autoExecute(_DB_PREFIX_.'tnt_carrier_'.$cat.'',
+			array(
+				''.$cat.'_min' => (float)($info_min),
+				''.$cat.'_max' => (float)($info_max),
+				'additionnal_charges' => (float)($charge)),'INSERT');
 		$this->_html .= $this->displayConfirmation($this->l('Service updated'));
 	}
-	
+
 	private function _postValidationEditInfo($cat)
 	{
 		$id = (int)Tools::getValue($cat.'_id');
 		$info_min = Tools::getValue('tnt_carrier_'.$cat.'_min');
 		$info_max = Tools::getValue('tnt_carrier_'.$cat.'_max');
 		$charge = Tools::getValue('tnt_carrier_'.$cat.'_charge');
-		
-		Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'tnt_carrier_'.$cat.'` 
+
+		Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'tnt_carrier_'.$cat.'`
 									SET `'.$cat.'_min` = "'.(float)($info_min).'",
 									`'.$cat.'_max` = "'.(float)($info_max).'",
 									`additionnal_charges` = "'.(float)$charge.'"
 									WHERE `id_'.$cat.'` = '.(int)($id).'');
-									
+
 		$this->_html .= $this->displayConfirmation($this->l('Service updated'));
 	}
-	
+
 	private function _postValidationCountry()
 	{
 		$country = pSQL(Tools::getValue('tnt_carrier_country'));
 		$overcost = pSQL(Tools::getValue('tnt_carrier_'.$country.'_overcost'));
-		
+
 		Configuration::updateValue('TNT_CARRIER_'.strtoupper($country).'_OVERCOST', $overcost);
 	}
-	
-    public function get_followup($shipping_number)
+
+	public function get_followup($shipping_number)
 	{
 		return false;
 	}
-    
+
 	/*
 	** Hook update carrier
 	**
 	*/
-	
+
 	public function hooknewOrder($params)
 	{
 		if (!$this->active)
@@ -791,7 +799,7 @@ class TntCarrier extends CarrierModule
 				$address_new->phone_mobile = $address_old->phone_mobile;
 				$address_new->alias = $alias;
 			}
-			
+
 			if (strlen($dropOff['name']) >= 32)
 				$address_new->company = substr($dropOff['name'], 0, 31);
 			else
@@ -801,17 +809,17 @@ class TntCarrier extends CarrierModule
 			$address_new->city = $dropOff['city'];
 			$address_new->deleted = 1;
 			$address_new->save();
-			
+
 			$cart->id_address_delivery = $address_new->id;
 			$cart->save();
-			
+
 			$order->id_address_delivery = $address_new->id;
 			$order->save();
 		}
 	}
-	
+
 	public function hookextraCarrier($params)
-	{	
+	{
 		if (!$this->active)
 			return ;
 		if (!Configuration::get('TNT_CARRIER_LOGIN') || !Configuration::get('TNT_CARRIER_PASSWORD') || !Configuration::get('TNT_CARRIER_NUMBER_ACCOUNT'))
@@ -820,7 +828,7 @@ class TntCarrier extends CarrierModule
 		$id_cart = $params['cart']->id;
 		$city = $this->putCityInNormeTnt($params['address']->city);
 		$postal_code = $params['address']->postcode;
-		
+
 		if (serviceCache::getError($id_cart))
 		{
 			$smarty->assign('error', $this->l('The postal Code entered does not correspond to the city.').'<br/>'.$this->l('Please confirm the city below :'));
@@ -831,13 +839,13 @@ class TntCarrier extends CarrierModule
 			if ($postal == '75000')
 			{
 				for ($i = 1; $i <= 20; $i++)
-					{
-						if ($i < 10)
-							$nb = '0'.$i;
-						else
-							$nb = $i;
-						$cities[] = "PARIS ".$nb;
-					}
+				{
+					if ($i < 10)
+						$nb = '0'.$i;
+					else
+						$nb = $i;
+					$cities[] = "PARIS ".$nb;
+				}
 			}
 			else if ($postal == '69000')
 			{
@@ -850,7 +858,7 @@ class TntCarrier extends CarrierModule
 				{
 					if ($i < 10)
 						$nb = '0'.$i;
-					else	
+					else
 						$nb = $i;
 					$cities[] = "MARSEILLE ".$nb;
 				}
@@ -861,12 +869,12 @@ class TntCarrier extends CarrierModule
 				{
 					$tntWebService = new TntWebService();
 					$city = $tntWebService->getCity($postal);
-				} 
-				catch( SoapFault $e ) 
+				}
+				catch( SoapFault $e )
 				{
 					$erreur = $e->faultstring;
 				}
-					catch( Exception $e ) 
+				catch( Exception $e )
 				{
 					$erreur = "Problem : follow failed";
 				}
@@ -876,7 +884,7 @@ class TntCarrier extends CarrierModule
 					{
 						foreach ($city->City as $v)
 							$cities[] = $v->name;
-					}	
+					}
 					else
 						$cities[] = $city->City->name;
 				}
@@ -885,15 +893,17 @@ class TntCarrier extends CarrierModule
 			$redirect = $link->getPageLink('order.php?step=2');
 			$smarty->assign('redirect' , $redirect);
 			$smarty->assign('cities', $cities);
-		}		
+		}
 		$services = Db::getInstance()->ExecuteS('SELECT `id_carrier`, `option` FROM `'._DB_PREFIX_.'tnt_carrier_option`');
+		$dueDate = serviceCache::getDueDate($id_cart, $services);
 		$smarty->assign('id_cart', $id_cart);
 		$smarty->assign('tnt_token', Configuration::get('TNT_CARRIER_TOKEN'));
 		$smarty->assign('version', _PS_VERSION_);
 		$smarty->assign('services', $services);
+		$smarty->assign('dueDate', $dueDate);
 		return $this->display( __FILE__, 'tpl/relaisColis.tpl' );
 	}
-	
+
 	public function hookadminOrder($params)
 	{
 		if (!$this->active)
@@ -910,24 +920,24 @@ class TntCarrier extends CarrierModule
 		if (!Configuration::get('TNT_CARRIER_LOGIN') || !Configuration::get('TNT_CARRIER_PASSWORD') || !Configuration::get('TNT_CARRIER_NUMBER_ACCOUNT'))
 		{
 			$var = array("error" => $this->l("You don't have a TNT account"),
-						'shipping_numbers' => '',
-						'sticker' => '');
+						 'shipping_numbers' => '',
+						 'sticker' => '');
 			$smarty->assign('var', $var);
 			return $this->display( __FILE__, 'tpl/shippingNumber.tpl' );
 		}
-		if (!Configuration::get('TNT_CARRIER_SHIPPING_COMPANY') || !Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS1') || !Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE') || !Configuration::get('TNT_CARRIER_SHIPPING_CITY') || !Configuration::get('TNT_CARRIER_SHIPPING_EMAIL') 
+		if (!Configuration::get('TNT_CARRIER_SHIPPING_COMPANY') || !Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS1') || !Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE') || !Configuration::get('TNT_CARRIER_SHIPPING_CITY') || !Configuration::get('TNT_CARRIER_SHIPPING_EMAIL')
 			|| !Configuration::get('TNT_CARRIER_SHIPPING_PHONE') || !Configuration::get('TNT_CARRIER_SHIPPING_CLOSING'))
-				$errorShipping = 1;
+			$errorShipping = 1;
 
 		if ($errorShipping)
 		{
 			$var = array("error" => $this->l("You didn't give a collect address in the TNT module configuration"),
-						'shipping_numbers' => '',
-						'sticker' => '');
+						 'shipping_numbers' => '',
+						 'sticker' => '');
 			$smarty->assign('var', $var);
 			return $this->display( __FILE__, 'tpl/shippingNumber.tpl' );
 		}
-		
+
 		$orderInfoTnt = new OrderInfoTnt((int)($params['id_order']));
 		$info = $orderInfoTnt->getInfo();
 		if (isset($info[3]) && (strlen($info[3]['option']) == 1 || substr($info[3]['option'], 1, 1) == 'S'))
@@ -935,12 +945,12 @@ class TntCarrier extends CarrierModule
 		else
 			$smarty->assign('weight', '20');
 		if (!is_array($info) && $info != false)
-			{
-				$var = array("error" => $info, "weight" => '',
-					"weightHidden" => '1', "date" => '', "dateHidden" => '1', 'currentIndex' => $currentIndex, 'table' => $table, 'token' => $token);
-				$smarty->assign('var', $var);
-				return $this->display( __FILE__, 'tpl/formerror.tpl' );
-			}
+		{
+			$var = array("error" => $info, "weight" => '',
+						 "weightHidden" => '1', "date" => '', "dateHidden" => '1', 'currentIndex' => $currentIndex, 'table' => $table, 'token' => $token);
+			$smarty->assign('var', $var);
+			return $this->display( __FILE__, 'tpl/formerror.tpl' );
+		}
 		$dataWeight = (float)(Tools::getValue('weightErrorOrder'));
 		if ($dataWeight != 0)
 			$info[1]['weight'][0] = $dataWeight;
@@ -948,28 +958,28 @@ class TntCarrier extends CarrierModule
 		if ($info[0]['shipping_number'] == '' && $pack->getOrder()->hasBeenShipped())
 		{
 			$tntWebService = new TntWebService();
-			try 
-				{
-					$package = $tntWebService->getPackage($info);
-				} 
-			catch(SoapFault $e) 
-				{
+			try
+			{
+				$package = $tntWebService->getPackage($info);
+			}
+			catch(SoapFault $e)
+			{
 				//var_dump($e);
 				//var_dump($info);
-					if (strrpos($e->faultstring, "weight"))
-						$weightError = 1;
-					if (strrpos($e->faultstring, "shippingDate"))
-						$dateError = date("Y-m-d");
-					$error = $this->l("Problem : ") . $e->faultstring;
-					$var = array("error" => $error, "weight" => (isset($weightError) ? $weightError : ''), "weightHidden" => (!isset($weightError) ? $info[1]['weight'] : ''),
-								"date" => (isset($dateError) ? $dateError : ''), "dateHidden" => (!isset($dateError) ? $info[2]['delivery_date'] : ''),
-								'currentIndex' => $currentIndex, 'table' => $table, 'token' => $token);
-					$smarty->assign('var', $var);
-					return $this->display( __FILE__, 'tpl/formerror.tpl' );
-				}
+				if (strrpos($e->faultstring, "weight"))
+					$weightError = 1;
+				if (strrpos($e->faultstring, "shippingDate"))
+					$dateError = date("Y-m-d");
+				$error = $this->l("Problem : ") . $e->faultstring;
+				$var = array("error" => $error, "weight" => (isset($weightError) ? $weightError : ''), "weightHidden" => (!isset($weightError) ? $info[1]['weight'] : ''),
+							 "date" => (isset($dateError) ? $dateError : ''), "dateHidden" => (!isset($dateError) ? $info[2]['delivery_date'] : ''),
+							 'currentIndex' => $currentIndex, 'table' => $table, 'token' => $token);
+				$smarty->assign('var', $var);
+				return $this->display( __FILE__, 'tpl/formerror.tpl' );
+			}
 			catch(Exception $e) {
-					$error = $this->l("Problem : failed");      
-				}
+				$error = $this->l("Problem : failed");
+			}
 			if (isset($package->Expedition->parcelResponses->parcelNumber))
 				$pack->setShippingNumber($package->Expedition->parcelResponses->parcelNumber);
 			else
@@ -983,8 +993,8 @@ class TntCarrier extends CarrierModule
 			$var = array(
 				'error' => '',
 				'shipping_numbers' => $pack->getShippingNumber(),
-                'sticker' => "../modules/".$this->_moduleName.'/pdf/'.$pack->getOrder()->shipping_number.'.pdf',
-                'date' => $info[2]['delivery_date'],
+				'sticker' => "../modules/".$this->_moduleName.'/pdf/'.$pack->getOrder()->shipping_number.'.pdf',
+				'date' => $info[2]['delivery_date'],
 				//'customer' => $info[0]['address1'].' '.$info[0]['address2'].'<br/>'.$info[0]['postcode'].' '.$info[0]['city'],
 				'relay' => (isset($info[4]) ? $info[4]['name'].'<br/>'.$info[4]['address'].'<br/>'.$info[4]['zipcode'].' '.$info[4]['city']: ''),
 				'place' => Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS1')." ".Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS2')."<br/>".Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE')." ".$this->putCityInNormeTnt(Configuration::get('TNT_CARRIER_SHIPPING_CITY')));
@@ -993,20 +1003,20 @@ class TntCarrier extends CarrierModule
 		}
 		return false;
 	}
-	
+
 	public function hookorderDetailDisplayed($params)
 	{
 		if (!$this->active)
 			return ;
 		global $smarty;
-		
+
 		$tab = $params['order']->getFields();
 		$shipping_number = $tab['shipping_number'];
 		$id_carrier = $tab['id_carrier'];
 		$erreur = null;
 		$follow = array();
 		$carrierName = Db::getInstance()->getRow('SELECT external_module_name FROM `'._DB_PREFIX_.'carrier` WHERE `id_carrier` = "'.(int)($id_carrier).'"');
-        
+
 		if ($carrierName != null && $carrierName['external_module_name'] == $this->_moduleName && $shipping_number != '')
 		{
 			$pack = new PackageTnt($params['order']->id);
@@ -1015,7 +1025,7 @@ class TntCarrier extends CarrierModule
 			return $this->display( __FILE__, 'tpl/waitingFollow.tpl' );
 		}
 	}
-	
+
 	public function hookupdateCarrier($params)
 	{
 		if ((int)($params['id_carrier']) != (int)($params['carrier']->id))
@@ -1037,10 +1047,9 @@ class TntCarrier extends CarrierModule
 	** $shipping_cost var contains the price calculated by the range in carrier tab
 	**
 	*/
-	
+
 	public function getOrderShippingCost($params, $shipping_cost)
 	{
-
 		if (!$this->active)
 			return false;
 		if (!Configuration::get('TNT_CARRIER_LOGIN') || !Configuration::get('TNT_CARRIER_PASSWORD') || !Configuration::get('TNT_CARRIER_NUMBER_ACCOUNT'))
@@ -1054,55 +1063,39 @@ class TntCarrier extends CarrierModule
 		$weight = 0;
 		$add = 0;
 		$id_customer = $params->id_customer;
-		$date_exp = $params->date_upd;
 		$id_adress_delivery = $params->id_address_delivery;
 		$info = Db::getInstance()->getRow('SELECT postcode, city, company FROM `'._DB_PREFIX_.'address` WHERE `id_address` = "'.(int)($id_adress_delivery).'"');
-
 		foreach($product as $k => $v)
-				$weight += (float)($v['weight'] * (int)$v['cart_quantity']);
+			$weight += (float)($v['weight'] * (int)$v['cart_quantity']);
 		$serviceCache = new serviceCache($params->id, $info['postcode'], $info['city'], $info['company'], Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE'), Configuration::get('TNT_CARRIER_SHIPPING_CITY'));
 		$serviceCache->clean();
 		if (!$serviceCache->getFaisabilityAtThisTime())
-			{
-				$serviceCache->deletePreviousServices();
-				$tntWebService = new TntWebService();
-				if (date("N") == 6)
-					$date_exp = date("Y-m-d", strtotime("now + 2 days"));
-				elseif (date("N") == 7)
-					$date_exp = date("Y-m-d", strtotime("now + 1 day"));
-				try {
-						$service = $tntWebService->faisabilite($date_exp, Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE'), $this->putCityInNormeTnt(Configuration::get('TNT_CARRIER_SHIPPING_CITY')), 
-										$info['postcode'], $this->putCityInNormeTnt($info['city']), 'INDIVIDUAL');
-						$serviceRelais = $tntWebService->faisabilite($date_exp, Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE'),	$this->putCityInNormeTnt(Configuration::get('TNT_CARRIER_SHIPPING_CITY')), 
-										$info['postcode'], $this->putCityInNormeTnt($info['city']), "DROPOFFPOINT");
-						if ($info['company'] != '')
-							$serviceEntreprise = $tntWebService->faisabilite($date_exp, Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE'), $this->putCityInNormeTnt(Configuration::get('TNT_CARRIER_SHIPPING_CITY')), 
-												$info['postcode'], $this->putCityInNormeTnt($info['city']), "ENTERPRISE");
-					} 
-				catch( SoapFault $e ) {
-						$erreur = $this->l("Problem : ") . $e->faultstring;
-						if (strrpos($e->faultstring, "(zip code / city)") === 0)
-							$serviceCache->errorCodePostal();
-					}
-				catch( Exception $e ) {
-						$erreur = $this->l("Problem : follow failed");
-					}
-				if (!isset($erreur))
-				{
-					if ($info['company'] != '')
-						$serviceCache->putInCache($service, $serviceRelais, $serviceEntreprise);
-					else
-						$serviceCache->putInCache($service, $serviceRelais);
-				}
-			}
+		{
+			$serviceCache->deletePreviousServices();
+			$tntWebService = new TntWebService();
+			$typeDestinataire = array();
+			$typeDestinataire[] = 'INDIVIDUAL';
+			$typeDestinataire[] = 'DROPOFFPOINT';
+			if ($info['company'] != '')
+				$typeDestinataire[] = 'ENTERPRISE';
+
+			$faisability = $tntWebService->getFaisability($typeDestinataire, $info['postcode'], $this->putCityInNormeTnt($info['city']), date("Y-m-d", strtotime("now")));//"2012-05-02");
+
+			if (!is_array($faisability) && strrpos($faisability, "(zip code / city)") === 0)
+				$serviceCache->errorCodePostal();
+			else if (is_array($faisability))
+				$serviceCache->putInCache($faisability);
+			if ($faisability == null)
+				return false;
+		}
 		$service = $serviceCache->getServices();
 		if ($service != NULL)
 			foreach ($service as $v)
-				{
-					if (Configuration::get('TNT_CARRIER_'.pSQL($v['code']).'_ID'))
-						if (Configuration::get('TNT_CARRIER_'.pSQL($v['code']).'_ID') == $this->id_carrier)
-							$priceCarrier = Configuration::get('TNT_CARRIER_'.pSQL($v['code']).'_OVERCOST');
-				}
+			{
+				if (Configuration::get('TNT_CARRIER_'.pSQL($v['code']).'_ID'))
+					if (Configuration::get('TNT_CARRIER_'.pSQL($v['code']).'_ID') == $this->id_carrier)
+						$priceCarrier = Configuration::get('TNT_CARRIER_'.pSQL($v['code']).'_OVERCOST');
+			}
 		$zero = 0;
 		$weightLimit = Db::getInstance()->getRow('SELECT additionnal_charges FROM `'._DB_PREFIX_.'tnt_carrier_weight` WHERE `weight_min` < "'.(float)($weight).'" AND (`weight_max` > "'.(float)($weight).'" OR `weight_max` = "'.(float)$zero.'")');
 		$currency = Db::getInstance()->getRow('SELECT conversion_rate FROM `'._DB_PREFIX_.'currency` WHERE `id_currency` = "'.(int)($params->id_currency).'"');
@@ -1114,19 +1107,19 @@ class TntCarrier extends CarrierModule
 			return ((($priceCarrier + $add) * $currency['conversion_rate']) + $shipping_cost);
 		return false;
 	}
-	
+
 	public function getOrderShippingCostExternal($params)
 	{
 		return getOrderShippingCost($params, null);
 	}
-	
+
 	public function putCityInNormeTnt($city)
 	{
-		$city = iconv("utf-8", 'ASCII//TRANSLIT', $city);
-		$city = mb_strtoupper($city, 'utf-8');
-		$table = array('`' => '','\''=> '', '^' => '','�'=>'A', '�'=>'A', '�'=>'A', '�'=>'A', '�'=>'A', '�'=>'A', '�'=>'A', '�'=>'C', '�'=>'E', '�'=>'E',
-        '�'=>'E', '�'=>'E', '�'=>'I', '�'=>'I', '�'=>'I', '�'=>'I', '�'=>'N', '�'=>'O', '�'=>'O', '�'=>'O',
-        '�'=>'O', '�'=>'O', '�'=>'O', '�'=>'U', '�'=>'U', '�'=>'U', '�'=>'U', '�'=>'Y', '�'=>'B');
+		$table = array('Š'=>'S', 'š'=>'s', 'Đ'=>'Dj', 'đ'=>'dj', 'Ž'=>'Z', 'ž'=>'z', 'Č'=>'C', 'č'=>'c', 'Ć'=>'C', 'ć'=>'c',
+						 'À'=>'A', 'Á'=>'A', 'Â'=>'A', 'Ã'=>'A', 'Ä'=>'A', 'Å'=>'A', 'Æ'=>'A', 'Ç'=>'C', 'È'=>'E', 'É'=>'E',
+						 'Ê'=>'E', 'Ë'=>'E', 'Ì'=>'I', 'Í'=>'I', 'Î'=>'I', 'Ï'=>'I', 'Ñ'=>'N', 'Ò'=>'O', 'Ó'=>'O', 'Ô'=>'O',
+						 'Õ'=>'O', 'Ö'=>'O', 'Ø'=>'O', 'Ù'=>'U', 'Ú'=>'U', 'Û'=>'U', 'Ü'=>'U', 'Ý'=>'Y', 'Þ'=>'B');
+	  $city =  mb_strtoupper($city);
 		$city = strtr($city, $table);
 		$old = array("SAINT", "-");
 		$new = array("ST", " ");

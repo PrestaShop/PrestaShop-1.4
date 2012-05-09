@@ -20,7 +20,8 @@
 				`company` text DEFAULT NULL,
 				`company_city` text DEFAULT NULL,
 				`ship_zip_code` varchar(10) DEFAULT NULL,
-				`error` int(1) DEFAULT NULL
+				`error` int(1) DEFAULT NULL,
+        `due_date` datetime NOT NULL
 		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 	
 	$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'tnt_carrier_drop_off` (
@@ -29,7 +30,8 @@
 			  `name` text DEFAULT NULL,
 			  `address` text DEFAULT NULL,
 			  `zipcode` varchar(10) DEFAULT NULL,
-			  `city` text DEFAULT NULL
+			  `city` text DEFAULT NULL,
+        `due_date` datetime NOT NULL
 		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;';
 		
 	$sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'tnt_carrier_shipping_number` (

@@ -41,6 +41,7 @@ $_MODULE['<{tntcarrier}prestashop>tntcarrier_4a91c15e73f1a22615882f7abf71be7c'] 
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_e7cac4ccbcb0f12c54b145b5900ef8ac'] = 'L\'adresse email de contact est manquante';
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_57a6a3f27119fc2f8af8e923b9be3de1'] = 'Le numéro de téléphone de contact est manquant';
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_83b5db62e8c7e3f85da58cdf158a484d'] = 'L\'heure de fermeture de la société est manquante';
+$_MODULE['<{tntcarrier}prestashop>tntcarrier_ce4f1f28b2704ebd19a8a3b53a56a3c8'] = 'Vérifier vos authentifications';
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_9bb8de9eec753fcbf4d14b7ecc7043da'] = 'La ville n\'est pas compatible avec le code postal';
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_69d865b41dc0e6611be76776c4a9456d'] = 'Vous devez donner un nom au service';
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_e71361626c48f42620b92cc81fd41ba2'] = 'Vous devez donner un code au service';
@@ -81,7 +82,7 @@ $_MODULE['<{tntcarrier}prestashop>formerror_c3f15ecc6da0827a8da712cb43a0b596'] =
 $_MODULE['<{tntcarrier}prestashop>formerror_0314f8535c9735ed5dbd2caf2def5a4d'] = 'Le poids de l\'emballage doit être compris entre 0,1 et ';
 $_MODULE['<{tntcarrier}prestashop>formerror_fd0cf817352277aaa7fba5e8f4e6e053'] = 'kg ou appelez votre commerçant TNT.';
 $_MODULE['<{tntcarrier}prestashop>formerror_8c489d0946f66d17d73f26366a4bf620'] = 'Poids';
-$_MODULE['<{tntcarrier}prestashop>formerror_7423cbf15a98a1e3eb9cd4d3f8333776'] = 'Vous devez changer la date d\'expédition';
+$_MODULE['<{tntcarrier}prestashop>formerror_f148fec7bf65642697b9cf990f0d2707'] = 'Vous devez changer la date d\'expédition. Veuillez ne pas indiquer de jours fériés.';
 $_MODULE['<{tntcarrier}prestashop>formerror_44749712dbec183e983dcd78a7736c41'] = 'Date';
 $_MODULE['<{tntcarrier}prestashop>formerror_7f090bbab1cc7f9c08bf4e54d932d3c0'] = 'Modifier';
 $_MODULE['<{tntcarrier}prestashop>getshippingnumber_c3f15ecc6da0827a8da712cb43a0b596'] = 'Information de livraison';

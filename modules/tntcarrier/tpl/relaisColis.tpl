@@ -3,12 +3,14 @@
 <script type="text/javascript">
 var id_carrier = new Array();
 var option_carrier = new Array();
+var date_carrier = new Array();
 var i = 0;
-	{foreach from=$services item=foo}
-	id_carrier[i] = '{$foo.id_carrier}';
-	option_carrier[i] = '{$foo.option}';
-	i++;
-	{/foreach}
+{foreach from=$services item=foo}
+id_carrier[i] = '{$foo.id_carrier}';
+option_carrier[i] = '{$foo.option}';
+date_carrier[{$foo.id_carrier}] = '{$dueDate[$foo.id_carrier]}';
+i++;
+{/foreach}
 
 {if $version < '1.5'}
 {literal}
@@ -22,26 +24,36 @@ $().ready(function()
 				if(option_carrier[indexTab].length > 1)
 				{
 					if (option_carrier[indexTab].charAt(1) == 'Z')
-						$("#id_carrier"+$(this).val()).parent().parent().children(".carrier_infos").append(" <span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_domicile.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
+						$("#id_carrier"+$(this).val()).parent().parent().children(".carrier_infos").append("<br/>"+date_carrier[$(this).val()]+" <span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_domicile.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
 					else if (option_carrier[indexTab].charAt(1) == 'D')
-						$("#id_carrier"+$(this).val()).parent().parent().children(".carrier_infos").append(" <span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_relais-colis.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
-				
+						$("#id_carrier"+$(this).val()).parent().parent().children(".carrier_infos").append("<br/>"+date_carrier[$(this).val()]+" <span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_relais-colis.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
+
 					else
-						$("#id_carrier"+$(this).val()).parent().parent().children(".carrier_infos").append(" <span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_popup.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
+						$("#id_carrier"+$(this).val()).parent().parent().children(".carrier_infos").append("<br/>"+date_carrier[$(this).val()]+" <span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_popup.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
 				}
 				else
-					$("#id_carrier"+$(this).val()).parent().parent().children(".carrier_infos").append(" <span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_popup.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
+					$("#id_carrier"+$(this).val()).parent().parent().children(".carrier_infos").append("<br/>"+date_carrier[$(this).val()]+" <span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_popup.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
 			}
 		});
 });
 $("input[name='id_carrier']").click(function() {
-	getAjaxRelais($("input[name='id_carrier']:checked").val());
-	if (document.getElementById("tr_carrier_relais"))
-            {
-                var node = document.getElementById("tr_carrier_relais").parentNode;
-                var father = node.parentNode;
-                father.removeChild(node);
-            }
+    id_carrier = $(this).val();
+    if (date_carrier[id_carrier] != undefined)
+    {
+	idCart = document.getElementById("cartRelaisColis").value;
+	$.ajax({
+	    type: "POST",
+	    url: "./modules/tntcarrier/relaisColis/postRelaisData.php",
+	    data: "id_cart="+idCart+"&due_date="+date_carrier[id_carrier]
+	});
+    }
+    getAjaxRelais($("input[name='id_carrier']:checked").val());
+    if (document.getElementById("tr_carrier_relais"))
+    {
+        var node = document.getElementById("tr_carrier_relais").parentNode;
+        var father = node.parentNode;
+        father.removeChild(node);
+    }
 });
 
 function displayNewTable(response, id)

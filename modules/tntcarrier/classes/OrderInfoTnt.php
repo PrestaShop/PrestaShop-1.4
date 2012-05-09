@@ -23,9 +23,10 @@ class OrderInfoTnt
 												FROM `'._DB_PREFIX_.'tnt_carrier_option` as t , `'._DB_PREFIX_.'orders` as o
 												WHERE t.id_carrier = o.id_carrier AND o.id_order = "'.(int)$this->_idOrder.'"');
 		if ($option != null && strpos($option['option'], "D") !== false)
-			$dropOff = Db::getInstance()->getRow('SELECT d.code, d.name, d.address, d.zipcode, d.city
+			$dropOff = Db::getInstance()->getRow('SELECT d.code, d.name, d.address, d.zipcode, d.city, d.due_date
 												FROM `'._DB_PREFIX_.'tnt_carrier_drop_off` as d , `'._DB_PREFIX_.'orders` as o
 												WHERE d.id_cart = o.id_cart AND o.id_order = "'.(int)$this->_idOrder.'"');
+		$dropDate = Db::getInstance()->getValue('SELECT d.due_date FROM `'._DB_PREFIX_.'tnt_carrier_drop_off` as d, `'._DB_PREFIX_.'orders` as o WHERE o.id_order = "'.(int)$this->_idOrder.'" AND d.id_cart = o.id_cart');
 		$w = 0;
 		$tooBig = false;
 		foreach ($weight as $key => $val)
@@ -44,30 +45,35 @@ class OrderInfoTnt
 				$val['product_quantity']--;
 			}
 		}
-		
+
 		$info[1]['weight'][] = (string)($w);
-		
-		if (date("N") == 5 && strpos($option['option'], 'S') === false)
-			$next_day = date("Y-m-d", mktime(0, 0, 0, date("m")  , date("d")+3, date("Y")));
-        if (date("N") == 6)
-            $next_day = date("Y-m-d", mktime(0, 0, 0, date("m")  , date("d")+2, date("Y")));
+
+		$info[5] = array('saturday' => false);
+
+		if ($dropDate != null)
+		{
+			if (date("w", strtotime($dropDate)) == 6 && date('w', strtotime('now')) == 5)
+			{
+				$next_day = date("Y-m-d", strtotime('now'));
+				$info[5] = array('saturday' => true);
+			}
+			else if (date("w", strtotime($dropDate)) == 6)
+				$next_day = date("Y-m-d", strtotime($dropDate.' + 2 days'));
+			else if (date("w", strtotime($dropDate)) == 0)
+				$next_day = date("Y-m-d", strtotime($dropDate.' + 1 day'));
+			else
+				$next_day = date("Y-m-d", strtotime($dropDate));
+		}
 		else
-			$next_day  = date("Y-m-d", mktime(0, 0, 0, date("m")  , date("d")+1, date("Y")));
+			$next_day = '';
 		$newDate = Tools::getValue('dateErrorOrder');
 		$info[2] = array('delivery_date' => ($newDate != '' ? $newDate : $next_day));
 		if ($option)
 		{
 			if (strpos($option['option'], 'S') !== false)
-			{
 				$info[3] = array('option' => str_replace('S', '', $option['option']));
-				$info[5] = array('saturday' => true);
-			}
 			else
-			{
 				$info[3] = array('option' => $option['option']);
-				$info[5] = array('saturday' => false);
-			}
-			
 		}
 		if (isset($dropOff) && !empty($dropOff))
 			$info[4] = $dropOff;

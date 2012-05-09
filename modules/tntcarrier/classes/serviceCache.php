@@ -63,19 +63,25 @@ class serviceCache
 	{
 		return (Db::getInstance()->getValue('SELECT error FROM `'._DB_PREFIX_.'tnt_carrier_cache_service` WHERE `id_card` = "'.(int)($idCart).'"'));
 	}
-	
-	public function putInCache($service, $serviceRelais, $serviceEntreprise = null)
+
+	public static function getDueDate($idCart, $services)
 	{
-		$tab = array();
-		
-		if (isset($service))
-			$tab[] = $service;
-		if (isset($serviceRelais))
-			$tab[] = $serviceRelais;
-		if (isset($serviceEntreprise))
-			$tab[] = $serviceEntreprise;
-		
-		foreach ($tab as $key => $val)
+		$duedate = array();
+		foreach ($services as $key => $val)
+		{
+			$date  = Db::getInstance()->getValue('SELECT due_date FROM `'._DB_PREFIX_.'tnt_carrier_cache_service` WHERE `code` = "'.pSQL($val['option']).'"');
+			$dateSaturday = Db::getInstance()->getValue('SELECT due_date FROM `'._DB_PREFIX_.'tnt_carrier_cache_service` WHERE `code` = "'.pSQL($val['option']).'S"');
+			if ($dateSaturday == null)
+				$duedate[$val['id_carrier']] = date("d/m/Y", strtotime($date));
+			else
+				$duedate[$val['id_carrier']] = date("d/m/Y", strtotime($dateSaturday));
+		}
+		return $duedate;
+	}
+
+	public function putInCache($s)
+	{
+		foreach ($s as $key => $val)
 		{
 			if (is_array($val->Service))
 				foreach ($val->Service as $k => $v)
@@ -84,8 +90,8 @@ class serviceCache
 						$serviceCode = $v->serviceCode;
 					else
 						$serviceCode = $v->serviceCode.'S';
-					Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tnt_carrier_cache_service` (`id_card`, `code`, `date`, `zipcode`, `city`, `company`, `company_city`, `ship_zip_code`) 
-												VALUES ("'.(int)($this->_idCard).'", "'.pSQL($serviceCode).'","'.$this->_dateNow.'", "'.$this->_zipCode.'", "'.$this->_city.'", "'.$this->_company.'", "'.$this->_companyCity.'","'.$this->_shipZipCode.'")');			
+					Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tnt_carrier_cache_service` (`id_card`, `code`, `date`, `zipcode`, `city`, `company`, `company_city`, `ship_zip_code`, `due_date`)
+												VALUES ("'.(int)($this->_idCard).'", "'.pSQL($serviceCode).'","'.$this->_dateNow.'", "'.$this->_zipCode.'", "'.$this->_city.'", "'.$this->_company.'", "'.$this->_companyCity.'","'.$this->_shipZipCode.'", "'.$v->dueDate.'")');
 				}
 			else
 			{
@@ -93,8 +99,8 @@ class serviceCache
 					$serviceCode = $val->Service->serviceCode;
 				else
 					$serviceCode = $val->Service->serviceCode.'S';
-				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tnt_carrier_cache_service` (`id_card`, `code`, `date`, `zipcode`, `city`, `company`, `company_city`, `ship_zip_code`) 
-											VALUES ("'.(int)($this->_idCard).'", "'.pSQL($serviceCode).'","'.$this->_dateNow.'", "'.$this->_zipCode.'", "'.$this->_city.'", "'.$this->_company.'", "'.$this->_companyCity.'", "'.$this->_shipZipCode.'")');
+				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tnt_carrier_cache_service` (`id_card`, `code`, `date`, `zipcode`, `city`, `company`, `company_city`, `ship_zip_code`, `due_date`)
+											VALUES ("'.(int)($this->_idCard).'", "'.pSQL($serviceCode).'","'.$this->_dateNow.'", "'.$this->_zipCode.'", "'.$this->_city.'", "'.$this->_company.'", "'.$this->_companyCity.'", "'.$this->_shipZipCode.'", "'.$val->Service->dueDate.'")');
 			}
 		}
 	}
