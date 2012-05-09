@@ -1687,7 +1687,6 @@ class UspsCarrier extends CarrierModule
 				$this->_webserviceError = $this->l('Error').' '.$resultTab['Error'];
 			else
 			{
-			print_r($resultTab);
 				$this->_webserviceError = $this->l('USPS Webservice seems to be down, please wait a few minutes and try again.');
 				return false;
 			}
