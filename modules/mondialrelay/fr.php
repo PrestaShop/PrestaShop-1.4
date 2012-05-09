@@ -23,7 +23,7 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_672facd73d4aee44c116cfd95298db8
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_b4ac3d3f15bc0984d0906aff1202e701'] = 'Impossibilité de mettre à jour les infos du compte pour cette boutique';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_ea50be3d60be594e10e9e3560cb9159f'] = 'Nouvelle méthode de transport ajoutée';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_d0cfdfcfb71029b561f5ebdc176d87ca'] = 'Le statu de la commande à été mise à jour';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_d4359accf9c917bb57954dafa577b877'] = 'Le transporteur est actuellement désactivée';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_7534411af2e35bed1f79df5938f077f9'] = 'La methode de transporteur a été suprimé (désactivé dans la base de donnée de prestashop)';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_2673bca5ba0a7871770e69c962e6ce38'] = 'Nb d\'expédition';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_0dbe844fb964d5eca2f51be724e43294'] = 'Label de l\'URL';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_c6aefd5e2191e1210a2f50416812b517'] = 'URL de suivie';

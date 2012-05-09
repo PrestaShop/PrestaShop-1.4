@@ -269,7 +269,6 @@
 						<li>
 							<form action="{$smarty.server.REQUEST_URI}&MR_tab_name=supplier_form" method="post">
 								<input type="hidden" name="delete_mr" value="{$carrier.id_mr_method}" >
-								<inpu
 								<a class="send_disable_carrier_form" href="javascript:void(0)">
 									<img src="../img/admin/disabled.gif" alt="Delete" title="Delete" />
 								</a>
@@ -277,7 +276,7 @@
 							{$carrier.name} ({$carrier.col_mode}-{$carrier.dlv_mode} - {$carrier.insurance} : {$carrier.country_list})
 							<div style="float:right;">
 								<a href="index.php?tab=AdminCarriers&id_carrier={$carrier.id_carrier}&updatecarrier&token={$MR_token_admin_carriers}">
-									<b><u>{l s='Config Shipping' mod='mondialrelay'}</u></b>
+									<b>{l s='Config Shipping' mod='mondialrelay'}</b>
 								</a>
 							</div>
 						</li>

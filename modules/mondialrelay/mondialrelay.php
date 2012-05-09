@@ -569,7 +569,7 @@ class MondialRelay extends Module
 		}
 
 		if ($id_carrier && MondialRelay::getMethodByIdCarrier($id_carrier))
-			$carrier = new Carrier($id_carrier);
+			$carrier = new Carrier((int)$id_carrier);
 
 		$this->context->smarty->assign(array(
 			'carriersextra' => $carriersList,
