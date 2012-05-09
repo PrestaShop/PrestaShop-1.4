@@ -1687,6 +1687,7 @@ class UspsCarrier extends CarrierModule
 				$this->_webserviceError = $this->l('Error').' '.$resultTab['Error'];
 			else
 			{
+			print_r($resultTab);
 				$this->_webserviceError = $this->l('USPS Webservice seems to be down, please wait a few minutes and try again.');
 				return false;
 			}
@@ -1726,7 +1727,7 @@ class UspsCarrier extends CarrierModule
 		// POST Request
 		$errno = $errstr = $result = '';
 		$xmlTab = $this->getXml($wsParams);
-		$resultTab = array();
+		$resultTab = array('Error' => '');
 
 		// Debug Xml
 		if ($this->debug == true)
@@ -1758,27 +1759,34 @@ class UspsCarrier extends CarrierModule
 
 
 			// Get xml from HTTP Result
-			$data = strstr($result, '<?');
+			$data = trim($result);
+			if (strpos($result, '<?'))
+				$data = strstr($result, '<?');
 
 			// Parsing XML
 			$resultTabTmp = simplexml_load_string($data);
 			$resultTabTmpDebug[] = $resultTabTmp;
-			foreach ($resultTabTmp->Package as $package)
-			{
-				if (isset($package->Error))
+
+			if (!isset($resultTabTmp->Package) && isset($resultTabTmp->Description) && isset($resultTabTmp->Number))
+				$resultTab['Error'] .= '<b>'.(string)$resultTabTmp->Number.'</b> : '.(string)$resultTabTmp->Description."\n";
+
+			if (isset($resultTabTmp->Package))
+				foreach ($resultTabTmp->Package as $package)
 				{
-					if (!isset($resultTab['Error']))
-						$resultTab['Error'] = '';
-					$tmp = (array)$package;
-					$resultTab['Error'] .= (isset($package->Error->Description) ? 'Error <b>'.(string)$package->Error->HelpContext.'</b> on package <b>'.(string)$tmp['@attributes']['ID'].'</b> : '.(string)$package->Error->Description : 'Error')."\n";
+					if (isset($package->Error))
+					{
+						if (!isset($resultTab['Error']))
+							$resultTab['Error'] = '';
+						$tmp = (array)$package;
+						$resultTab['Error'] .= (isset($package->Error->Description) ? 'Error <b>'.(string)$package->Error->HelpContext.'</b> on package <b>'.(string)$tmp['@attributes']['ID'].'</b> : '.(string)$package->Error->Description : 'Error')."\n";
+					}
+					if (isset($package->Postage->Rate))
+					{
+						if (!isset($resultTab['Rate']))
+							$resultTab['Rate'] = 0;
+						$resultTab['Rate'] += (string)$package->Postage->Rate;
+					}
 				}
-				if (isset($package->Postage->Rate))
-				{
-					if (!isset($resultTab['Rate']))
-						$resultTab['Rate'] = 0;
-					$resultTab['Rate'] += (string)$package->Postage->Rate;
-				}
-			}
 		}
 
 		// Log
