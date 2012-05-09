@@ -1726,7 +1726,7 @@ class UspsCarrier extends CarrierModule
 		// POST Request
 		$errno = $errstr = $result = '';
 		$xmlTab = $this->getXml($wsParams);
-		$resultTab = array('Error' => '');
+		$resultTab = array();
 
 		// Debug Xml
 		if ($this->debug == true)
@@ -1767,7 +1767,11 @@ class UspsCarrier extends CarrierModule
 			$resultTabTmpDebug[] = $resultTabTmp;
 
 			if (!isset($resultTabTmp->Package) && isset($resultTabTmp->Description) && isset($resultTabTmp->Number))
+			{
+				if (!isset($resultTab['Error']))
+					$resultTab['Error'] = '';
 				$resultTab['Error'] .= '<b>'.(string)$resultTabTmp->Number.'</b> : '.(string)$resultTabTmp->Description."\n";
+			}
 
 			if (isset($resultTabTmp->Package))
 				foreach ($resultTabTmp->Package as $package)
