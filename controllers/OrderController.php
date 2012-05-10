@@ -95,6 +95,8 @@ class OrderControllerCore extends ParentOrderController
 
 	public function process()
 	{
+		global $cookie;
+
 		parent::process();
 
 		/* 4 steps to the order */
@@ -114,8 +116,13 @@ class OrderControllerCore extends ParentOrderController
 				$this->_assignCarrier();
 				break;
 			case 3:
+
 				//Test that the conditions (so active) were accepted by the customer
-				$cgv = Tools::getValue('cgv');
+				if ($cgv = Tools::getValue('cgv'))
+					$cookie->cgv = $cgv;
+				else
+					$cgv = (isset($cookie->cgv) ? $cookie->cgv : false);
+
 				if (Configuration::get('PS_CONDITIONS') AND (!Validate::isBool($cgv) OR $cgv == false))
 					Tools::redirect('order.php?step=2');
 
