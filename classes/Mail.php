@@ -63,20 +63,20 @@ class MailCore
 	 		Tools::dieOrLog(Tools::displayError('Error: parameter "templateVars" is not an array'), $die);
 	 		return false;
 		}
-		
+
 		// Do not crash for this error, that may be a complicated customer name
 		if (is_string($toName))
 		{
 			if (!empty($toName) && !Validate::isMailName($toName))
 	 			$toName = null;
 		}
-			
+
 		if (!Validate::isTplName($template))
 		{
 	 		Tools::dieOrLog(Tools::displayError('Error: invalid email template'), $die);
 	 		return false;
 		}
-			
+
 		if (!Validate::isMailSubject($subject))
 		{
 	 		Tools::dieOrLog(Tools::displayError('Error: invalid email subject'), $die);
@@ -101,6 +101,8 @@ class MailCore
 					if ($toName && is_array($toName) && Validate::isGenericName($toName[$key]))
 						$to_name = $toName[$key];
 				}
+				if ($to_name == null)
+					$to_name = $addr;
                 /* Encode accentuated chars */
 				$to_list->addTo($addr, '=?UTF-8?B?'.base64_encode($to_name).'?=');
 			}
@@ -109,6 +111,8 @@ class MailCore
 		} else {
 			/* Simple recipient, one address */
 			$to_plugin = $to;
+			if ($toName == null)
+				$toName = $to;
             /* Encode accentuated chars */
 			$to = new Swift_Address($to, '=?UTF-8?B?'.base64_encode($toName).'?=');
 		}
@@ -122,7 +126,7 @@ class MailCore
 					return false;
 				}
 				$connection = new Swift_Connection_SMTP($configuration['PS_MAIL_SERVER'], $configuration['PS_MAIL_SMTP_PORT'],
-								($configuration['PS_MAIL_SMTP_ENCRYPTION'] == 'ssl') ? Swift_Connection_SMTP::ENC_SSL : 
+								($configuration['PS_MAIL_SMTP_ENCRYPTION'] == 'ssl') ? Swift_Connection_SMTP::ENC_SSL :
 								(($configuration['PS_MAIL_SMTP_ENCRYPTION'] == 'tls') ? Swift_Connection_SMTP::ENC_TLS : Swift_Connection_SMTP::ENC_OFF));
 				$connection->setTimeout(20);
 				if (!$connection)
@@ -180,8 +184,8 @@ class MailCore
 			/* Create mail && attach differents parts */
 			$message = new Swift_Message('['.Configuration::get('PS_SHOP_NAME').'] '.$subject);
 			$message->headers->setEncoding('Q');
-			$templateVars['{shop_logo}'] = (file_exists(_PS_IMG_DIR_.'logo_mail.jpg')) ? 
-				$message->attach(new Swift_Message_Image(new Swift_File(_PS_IMG_DIR_.'logo_mail.jpg'))) : ((file_exists(_PS_IMG_DIR_.'logo.jpg')) ? 
+			$templateVars['{shop_logo}'] = (file_exists(_PS_IMG_DIR_.'logo_mail.jpg')) ?
+				$message->attach(new Swift_Message_Image(new Swift_File(_PS_IMG_DIR_.'logo_mail.jpg'))) : ((file_exists(_PS_IMG_DIR_.'logo.jpg')) ?
 					$message->attach(new Swift_Message_Image(new Swift_File(_PS_IMG_DIR_.'logo.jpg'))) : '');
 			$templateVars['{shop_name}'] = Tools::safeOutput(Configuration::get('PS_SHOP_NAME'));
 			$templateVars['{shop_url}'] = Tools::getShopDomain(true, true).__PS_BASE_URI__;
@@ -212,7 +216,7 @@ class MailCore
 		{
 			if ($smtpChecked)
 			{
-				$smtp = new Swift_Connection_SMTP($smtpServer, $smtpPort, ($smtpEncryption == 'off') ? 
+				$smtp = new Swift_Connection_SMTP($smtpServer, $smtpPort, ($smtpEncryption == 'off') ?
 					Swift_Connection_SMTP::ENC_OFF : (($smtpEncryption == 'tls') ? Swift_Connection_SMTP::ENC_TLS : Swift_Connection_SMTP::ENC_SSL));
 				$smtp->setUsername($smtpLogin);
 				$smtp->setpassword($smtpPassword);
@@ -245,13 +249,13 @@ class MailCore
 	 * This method is used to get the translation for email Object.
 	 * For an object is forbidden to use htmlentities,
 	 * we have to return a sentence with accents.
-	 * 
+	 *
 	 * @param string $string raw sentence (write directly in file)
 	 */
 	public static function l($string, $id_lang = null)
 	{
 		global $_LANGMAIL, $cookie;
-		
+
 		$key = str_replace('\'', '\\\'', $string);
 
 		if ($id_lang == null)
