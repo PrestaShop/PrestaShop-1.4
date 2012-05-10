@@ -1,7 +1,11 @@
 <?php
 
 include(dirname(__FILE__). '/../../config/config.inc.php');
+include(_PS_ROOT_DIR_.'/init.php');
 include(dirname(__FILE__).'/dibs.php');
+
+// Construct object to get the static values
+$dibs = new Dibs();
 
 if (!isset(dibs::$MORE_SETTINGS['k2']) || !isset(dibs::$MORE_SETTINGS['k1']))
 	die('Module is not installed');
@@ -45,7 +49,7 @@ if (count($_POST))
 	$message = nl2br(strip_tags($message));
 	if ($valid_order === true)
 	{
-    $obj_dibs->setTransactionDetail($posted_values);
+		$obj_dibs->setTransactionDetail($posted_values);
 		$obj_dibs->validateOrder((int)$posted_values['orderid'], Configuration::get('PS_OS_PAYMENT'),
 			(float)((int)$posted_values['amount'] / 100), $obj_dibs->displayName, $message, array(), NULL, false, $secure_cart[2]);
 	}
