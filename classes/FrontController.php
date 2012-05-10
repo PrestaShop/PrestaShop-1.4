@@ -395,7 +395,7 @@ class FrontControllerCore
 			/* Check if Maxmind Database exists */
 			if (file_exists(_PS_GEOIP_DIR_.'GeoLiteCity.dat'))
 			{
-				if (!isset($cookie->iso_code_country) OR (isset($cookie->iso_code_country) AND !in_array(strtoupper($cookie->iso_code_country), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES')))))
+				if (!isset($cookie->iso_code_country) || (isset($cookie->iso_code_country) && !in_array(strtoupper($cookie->iso_code_country), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES')))))
 				{
           			include_once(_PS_GEOIP_DIR_.'geoipcity.inc');
 					include_once(_PS_GEOIP_DIR_.'geoipregionvars.php');
@@ -403,7 +403,7 @@ class FrontControllerCore
 					$gi = geoip_open(realpath(_PS_GEOIP_DIR_.'GeoLiteCity.dat'), GEOIP_STANDARD);
 					$record = geoip_record_by_addr($gi, Tools::getRemoteAddr());
 
-					if (is_object($record) AND !in_array(strtoupper($record->country_code), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))) AND !self::isInWhitelistForGeolocation())
+					if (is_object($record) && !in_array(strtoupper($record->country_code), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))) && !self::isInWhitelistForGeolocation())
 					{
 						if (Configuration::get('PS_GEOLOCATION_BEHAVIOR') == _PS_GEOLOCATION_NO_CATALOG_)
 							$this->restrictedCountry = true;
@@ -415,16 +415,16 @@ class FrontControllerCore
 					}
 					elseif (is_object($record))
 					{
+						$has_been_set = !isset($cookie->iso_code_country);
 						$cookie->iso_code_country = strtoupper($record->country_code);
-						$hasBeenSet = true;
 					}
 				}
 
-				if (isset($cookie->iso_code_country) AND (int)($id_country = Country::getByIso(strtoupper($cookie->iso_code_country))))
+				if (isset($cookie->iso_code_country) && (int)($id_country = Country::getByIso(strtoupper($cookie->iso_code_country))))
 				{
 					/* Update defaultCountry */
 					$defaultCountry = new Country($id_country);
-					if (isset($hasBeenSet) AND $hasBeenSet)
+					if (isset($has_been_set) && $has_been_set)
 						$cookie->id_currency = (int)(Currency::getCurrencyInstance($defaultCountry->id_currency ? (int)$defaultCountry->id_currency : Configuration::get('PS_CURRENCY_DEFAULT'))->id);
 				}
 				elseif (Configuration::get('PS_GEOLOCATION_NA_BEHAVIOR') == _PS_GEOLOCATION_NO_CATALOG_)
