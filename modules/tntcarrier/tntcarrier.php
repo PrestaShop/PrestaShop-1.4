@@ -245,7 +245,10 @@ class TntCarrier extends CarrierModule
 		{
 			$this->_postValidation();
 			if (!sizeof($this->_postErrors))
+			{
+				$this->_html .= $this->_displayValidation();
 				$this->_postProcess();
+			}
 			else
 				foreach ($this->_postErrors AS $err)
 					$this->_html .= '<div class="error"><img src="'._PS_IMG_.'admin/forbbiden.gif" alt="nok" />&nbsp;'.$err.'</div>';
@@ -509,6 +512,15 @@ class TntCarrier extends CarrierModule
 		);
 		$smarty->assign('varCountryForm', $var);
 		return $this->display( __FILE__, 'tpl/countryForm.tpl' );
+	}
+
+	private function _displayValidation()
+	{
+		$this->_html .= '
+		<div class="conf confirm">
+			<img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />
+			'.$this->l('Settings updated').'
+		</div>';
 	}
 
 	private function _postValidation()
