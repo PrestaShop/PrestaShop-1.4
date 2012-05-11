@@ -46,6 +46,7 @@ class PayPalConnect extends Paypal
 			@curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 			@curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 			@curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+			@curl_setopt($ch, CURLOPT_SSLVERSION, 3); 
 			@curl_setopt($ch, CURLOPT_VERBOSE, true);
 			$result = @curl_exec($ch);
 			if (!$result)
@@ -59,7 +60,7 @@ class PayPalConnect extends Paypal
 
 	private function _connectByFSOCK($host, $script, $body)
 	{
-		$fp = @fsockopen('ssl://'.$host, 443, $errno, $errstr, 4);
+		$fp = @fsockopen('sslv3://'.$host, 443, $errno, $errstr, 4);
 		if (!$fp)
 			$this->_logs[] = $this->l('Connect failed with fsockopen method');
 		else
