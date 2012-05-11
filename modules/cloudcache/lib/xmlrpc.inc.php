@@ -1423,7 +1423,7 @@
 		* NB: CURL versions before 7.11.10 cannot use proxy to talk to https servers!
 		* @access private
 		*/
-		function &sendPayloadCURL($msg, $server, $port, $timeout=0, $username='',
+		function sendPayloadCURL($msg, $server, $port, $timeout=0, $username='',
 			$password='', $authtype=1, $cert='', $certpass='', $cacert='', $cacertdir='',
 			$proxyhost='', $proxyport=0, $proxyusername='', $proxypassword='', $proxyauthtype=1, $method='https',
 			$keepalive=false, $key='', $keypass='')
