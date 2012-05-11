@@ -6,7 +6,7 @@
 <Files getInvoice.php>
 		order allow,deny
 		allow from all
-</Files>s
+</Files>
 
 <Files cron.php>
 		order deny,allow
