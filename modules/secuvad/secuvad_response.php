@@ -55,7 +55,7 @@ if (in_array($secuvad->getRemoteIPaddress(), $secuvad->get_secuvad_ip()))
     		$secuvad->secuvad_log('secuvad_response.php '."\n\t".' Error: '.$erreur);					
     		Db::getInstance()->Execute('
     		UPDATE `'._DB_PREFIX_.'secuvad_order` 
-    		SET `secuvad_status` = 4, `error` = '.pSQL($erreur).' 
+    		SET `secuvad_status` = 4, `error` = \''.pSQL($erreur).'\'
 			WHERE `id_secuvad_order` = '.(int)($idtransaction));  
     	}
     	else
