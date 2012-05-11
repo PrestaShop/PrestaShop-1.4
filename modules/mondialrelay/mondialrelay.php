@@ -435,7 +435,7 @@ class MondialRelay extends Module
 				(name, country_list, col_mode, dlv_mode, insurance, id_carrier)
 				(
 					SELECT
-						name,
+						"'.pSQL($params['carrier']->name).'",
 						country_list,
 						col_mode,
 						dlv_mode,
@@ -456,6 +456,11 @@ class MondialRelay extends Module
 					FROM `'._DB_PREFIX_.'mr_method_shop`
 					WHERE id_mr_method ='.(int)$id_mr_method.')';
 			Db::getInstance()->execute($query);
+
+			// Set the last mr_method to delete
+			Db::getInstance()->execute('
+				UPDATE `'._DB_PREFIX_.'mr_method` SET `is_deleted` = 1
+					WHERE `id_mr_method` = '.(int)$id_mr_method);
 		}
 	}
 
