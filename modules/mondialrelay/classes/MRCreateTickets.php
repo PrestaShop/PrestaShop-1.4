@@ -379,7 +379,7 @@ class MRCreateTickets implements IMondialRelayWSMethod
 				{
 					// Mac server make an empty string instead of a cleaned string
 					// TODO : test on windows and linux server
-					$cleanedString = MRTools::replaceAccentedCharacters($valueDetailed['value']);
+					$cleanedString = MRTools::removeAccents($valueDetailed['value']);
 					$valueDetailed['value'] = !empty($cleanedString) ? strtoupper($cleanedString) : strtoupper($valueDetailed['value']);
 
 					// Call a pointer function if exist to do different test
@@ -549,7 +549,7 @@ class MRCreateTickets implements IMondialRelayWSMethod
 		{
 			// Mac server make an empty string instead of a cleaned string
 			// TODO : test on windows and linux server
-			$cleanedString = MRTools::replaceAccentedCharacters($tab['value']);
+			$cleanedString = MRTools::removeAccents($tab['value']);
 			$tab['value'] = !empty($cleanedString) ? strtoupper($cleanedString) : strtoupper($tab['value']);
 
 			if ($name == 'Expe_CP')

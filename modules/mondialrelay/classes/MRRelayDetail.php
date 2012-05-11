@@ -119,7 +119,7 @@ class MRRelayDetail implements IMondialRelayWSMethod
 				{
 					// Mac server make an empty string instead of a cleaned string
 					// TODO : test on windows and linux server
-					$cleanedString = MRTools::replaceAccentedCharacters($valueDetailed['value']);
+					$cleanedString = MRTools::removeAccents($valueDetailed['value']);
 					$valueDetailed['value'] = !empty($cleanedString) ? strtoupper($cleanedString) : strtoupper($valueDetailed['value']);
 					
 					// Call a pointer function if exist to do different test
