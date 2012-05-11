@@ -102,7 +102,7 @@ $_MODULE['<{mondialrelay}prestashop>configuration_5a2355a42ba3ab265701183c914467
 $_MODULE['<{mondialrelay}prestashop>configuration_3de769f9a81eed916583d5b35c58dbdd'] = 'si vous rencontrez le moindre problème après une mise à jour du module';
 $_MODULE['<{mondialrelay}prestashop>configuration_8f8b21bd013b38d1e3059557c22a57e7'] = 'Consulter le manuel pour vous guider dans la configuration de Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>configuration_d21a9f93917604d5490ad529a7cf1ff9'] = 'Pour créer un transporteur Mondial Relay';
-$_MODULE['<{mondialrelay}prestashop>configuration_c6a2e6af5fff47adb3afd780b97d9b4b'] = 'Remplissez et sauvegarder vos paramètres Mondial Relay';
+$_MODULE['<{mondialrelay}prestashop>configuration_c6a2e6af5fff47adb3afd780b97d9b4b'] = 'Remplissez et sauvegardez vos paramètres Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>configuration_b29c4694f835ad29b9893cd3fed36fbc'] = 'Créez un transporteur en utilisant le bouton \'Transporteur\'';
 $_MODULE['<{mondialrelay}prestashop>configuration_b962d8fb95f5a439f50502152f3bad71'] = 'Définissez un prix pour votre transporteur sur';
 $_MODULE['<{mondialrelay}prestashop>configuration_faf1247ae6846a9955a466d4f301bbe4'] = 'La page Transporteurs';
