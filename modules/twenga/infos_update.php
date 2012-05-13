@@ -9,6 +9,9 @@ if (file_exists($configPath))
 	$controller = new FrontController();
 	$controller->init();
 
+	if (Tools::getValue('twenga_token') != sha1(Configuration::get('TWENGA_TOKEN')._COOKIE_KEY_))
+		die('Invalid Token');
+
 	if (file_exists(dirname(__FILE__).'/twenga.php'))
 	{
 		include(dirname(__FILE__).'/twenga.php');
@@ -22,6 +25,4 @@ if (file_exists($configPath))
 }
 else
 	echo 'Config file is missing';
-
-?>
 
