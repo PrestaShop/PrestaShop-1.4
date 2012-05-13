@@ -1,8 +1,11 @@
 <?php
 
 require('../../../config/config.inc.php');
+require('../../../init.php');
 
-$id_cart = (int)$_POST['id_cart'];
+//$id_cart = (int)$_POST['id_cart'];
+global $cookie;
+$id_cart = (int)$cookie->id_cart;
 
 $data = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'tnt_carrier_drop_off` WHERE `id_cart` = "'.(int)($id_cart).'"');
 
