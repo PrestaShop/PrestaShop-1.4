@@ -4,7 +4,7 @@
 	<displayName><![CDATA[OpenSi connector]]></displayName>
 	<version><![CDATA[1.1.0]]></version>
 	<description><![CDATA[Self-made Management Accounting Software for PrestaShop]]></description>
-	<author><![CDATA[Speedinfo]]></author>
+	<author><![CDATA[PrestaShop]]></author>
 	<tab><![CDATA[billing_invoicing]]></tab>
 	<confirmUninstall>Are you sure you want to delete OpenSi connector ?</confirmUninstall>
 	<is_configurable>1</is_configurable>

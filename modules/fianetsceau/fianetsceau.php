@@ -40,7 +40,8 @@ class FianetSceau extends Module
 		$this->limited_countries = array('fr');
 		
 	 	parent::__construct();
-		
+
+		$this->author = 'PrestaShop';
 		$this->displayName = $this->l('FIA-NET Seal of Confidence');
 		$this->description = $this->l('Turn your visitors into buyers by creating confidence in your site.');
 		if (!Configuration::get('FIANET_SCEAU_PRIVATEKEY'))

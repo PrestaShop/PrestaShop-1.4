@@ -4,7 +4,7 @@
 	<displayName><![CDATA[Mondial Relay]]></displayName>
 	<version><![CDATA[1.8.3]]></version>
 	<description><![CDATA[Deliver in Relay points]]></description>
-	<author><![CDATA[]]></author>
+	<author><![CDATA[PrestaShop]]></author>
 	<tab><![CDATA[shipping_logistics]]></tab>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>

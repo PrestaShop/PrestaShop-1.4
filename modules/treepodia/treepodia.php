@@ -49,6 +49,7 @@ class Treepodia extends Module
 	 	$this->tab = 'front_office_features';
 	 	$this->version = '1.6.1';
 		$this->displayName = 'Treepodia';
+		$this->author = 'PrestaShop';
 
 	 	parent::__construct();
 		$this->description = $this->l('Cover your entire catalog with product videos in 24 hours.');

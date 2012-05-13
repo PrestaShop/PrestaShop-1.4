@@ -4,7 +4,7 @@
 	<displayName><![CDATA[Export Shopping Flux]]></displayName>
 	<version><![CDATA[1.5.1]]></version>
 	<description><![CDATA[Exportez vos produits vers plus de 100 comparateurs de prix et places de march&eacute;]]></description>
-	<author><![CDATA[]]></author>
+	<author><![CDATA[PrestaShop]]></author>
 	<tab><![CDATA[smart_shopping]]></tab>
 	<confirmUninstall>Êtes-vous sur de vouloir supprimer ce module ?</confirmUninstall>
 	<is_configurable>1</is_configurable>

@@ -36,6 +36,7 @@ class Criteo extends Module
 	 	$this->tab = 'advertising_marketing';
 	 	$this->version = '1.0';
 		$this->need_instance = 0;
+		$this->author = 'PrestaShop';
 
 	 	parent::__construct();
 

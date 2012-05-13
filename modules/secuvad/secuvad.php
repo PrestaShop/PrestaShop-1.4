@@ -47,8 +47,9 @@ class Secuvad extends Module
   		$this->currencies = NULL;
   		$this->currencies_mode = NULL;
 		$this->need_instance = 0;
-		
+
 		parent::__construct();
+		$this->author = 'PrestaShop';
   		$this->displayName = $this->l('Secuvad module');
   		$this->description = $this->l('Solution fighting against online fraud');
   		$this->confirmUninstall = $this->l('Are you sure you want to delete this module?');

@@ -52,7 +52,7 @@ class Jirafe extends Module
 
         $this->page = basename(__FILE__, '.php');
 
-        $this->author = $this->l('Jirafe Inc.');
+		$this->author = 'PrestaShop';
         $this->displayName = $this->l('Analytics for ecommerce');
         $this->description = $this->l('The best analytics for ecommerce merchants.  Deeply integrated into the Prestashop platform.');
 

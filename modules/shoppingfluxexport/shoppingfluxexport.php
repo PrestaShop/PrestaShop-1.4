@@ -36,6 +36,7 @@ class shoppingfluxexport extends Module
 	 	$this->name = 'shoppingfluxexport';
 	 	$this->tab = 'smart_shopping';
 	 	$this->version = '1.5.1';
+		$this->author = 'PrestaShop';
 
 	 	parent::__construct();
 

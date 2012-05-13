@@ -4,7 +4,7 @@
 	<displayName><![CDATA[Autoupgrade module]]></displayName>
 	<version><![CDATA[0.3.4]]></version>
 	<description><![CDATA[Provides an automated method to upgrade your shop to the last PrestaShop version. Caution : custom theme are not updated.]]></description>
-	<author><![CDATA[]]></author>
+	<author><![CDATA[PrestaShop]]></author>
 	<tab><![CDATA[administration]]></tab>
 	<is_configurable>0</is_configurable>
 	<need_instance>1</need_instance>

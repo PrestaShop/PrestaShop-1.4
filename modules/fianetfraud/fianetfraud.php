@@ -87,6 +87,7 @@ class Fianetfraud extends Module
 
 		parent::__construct();
 
+		$this->author = 'PrestaShop';
 		$this->displayName = 'FIA-NET - Certissim';
 		$this->description = "Protégez vous contre la fraude à la carte bancaire sans perturber l'acte d'achat";
 		self::$token = sha1('fianetfraud' . _COOKIE_KEY_ . 'token');

@@ -123,6 +123,7 @@ class Twenga extends PaymentModule
 	 	$this->name = 'twenga';
 	 	$this->tab = 'smart_shopping';
 	 	$this->version = '1.8';
+		$this->author = 'PrestaShop';
 		
 	 	parent::__construct();
 	

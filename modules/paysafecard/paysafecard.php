@@ -62,6 +62,7 @@ class PaysafeCard extends PSCPrepaidServices
 		$this->module_dir = dirname(__FILE__);
 		$this->certificat_dir = dirname(__FILE__).'/keyring/';
 		$this->need_instance = 0;
+		$this->author = 'PrestaShop';
 
 		parent::__construct();
 

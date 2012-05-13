@@ -41,6 +41,7 @@ class Hipay extends PaymentModule
 
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
+		$this->author = 'PrestaShop';
 
 		parent::__construct();
 		

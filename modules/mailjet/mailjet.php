@@ -46,6 +46,7 @@ class Mailjet extends Module
 		$this->tab = 'front_office_features';
 		$this->version = '1.0';
 		$this->displayName = 'Mailjet';
+		$this->author = 'PrestaShop';
 
 		parent::__construct();
 

@@ -39,6 +39,7 @@ class MoneyBookers extends PaymentModule
 		$this->name = 'moneybookers';
 		$this->tab = 'payments_gateways';
 		$this->version = '1.6.3';
+		$this->author = 'PrestaShop';
 
 		parent::__construct();
 

@@ -31,6 +31,7 @@ class Autoupgrade extends Module
 	{
 		$this->name = 'autoupgrade';
 		$this->tab = 'administration';
+		$this->author = 'PrestaShop';
 		// version number x.y.z 
 		// x=0 means not yet considered as fully stable
 		// y+1 means a major bugfix or improvement

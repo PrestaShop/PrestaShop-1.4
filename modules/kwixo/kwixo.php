@@ -92,6 +92,7 @@ class kwixo extends PaymentModule {
       $this->tab = 'payments_gateways';
     else
       $this->tab = 'Payment';
+  	$this->author = 'PrestaShop';
     parent::__construct();
 
     $this->displayName = $this->l('Kwixo');

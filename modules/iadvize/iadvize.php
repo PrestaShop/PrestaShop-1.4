@@ -37,7 +37,8 @@ class iAdvize extends Module
 		$this->version = '1.0';
 		$this->displayName = 'iAdvize';
 		$this->need_instance = 0;
-		
+		$this->author = 'PrestaShop';
+
 		parent::__construct();
 		
 		$this->description = $this->l('Offer an interactive live chat to your customers');

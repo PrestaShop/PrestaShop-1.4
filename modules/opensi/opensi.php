@@ -62,7 +62,7 @@ class opensi extends Module
 		$this->name = 'opensi';
 		$this->tab = "billing_invoicing";
 		$this->version = '1.1.0';
-		$this->author = "Speedinfo";
+		$this->author = 'PrestaShop';
 		$this->displayName = $this->l('OpenSi connector');
 		$this->description = $this->l('Self-made Management Accounting Software for PrestaShop');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete OpenSi connector ?');

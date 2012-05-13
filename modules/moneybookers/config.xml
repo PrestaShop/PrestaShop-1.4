@@ -4,7 +4,7 @@
 	<displayName><![CDATA[Moneybookers]]></displayName>
 	<version><![CDATA[1.6.3]]></version>
 	<description><![CDATA[Accepts payments by Moneybookers.]]></description>
-	<author><![CDATA[]]></author>
+	<author><![CDATA[PrestaShop]]></author>
 	<tab><![CDATA[payments_gateways]]></tab>
 	<confirmUninstall>Are you sure you want to delete your details ?</confirmUninstall>
 	<is_configurable>1</is_configurable>
