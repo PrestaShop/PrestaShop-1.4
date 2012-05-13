@@ -97,6 +97,12 @@ class Jirafe extends Module
 
     public function install()
     {
+		// Check configurations
+		if (in_array(ini_get('allow_url_fopen'), array('On', 'on', '1')))
+			return false;
+		if (!extension_loaded('curl'))
+			return false;
+
         $ps = $this->getPrestashopClient();
         $jf = $this->getjirafeClient();
 
