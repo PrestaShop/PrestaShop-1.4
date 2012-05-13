@@ -93,18 +93,11 @@ class Jirafe extends Module
 
     public function install()
     {
+		// Check configurations
 		if (in_array(ini_get('allow_url_fopen'), array('On', 'on', '1')))
-		{
-			$this->_errors[] = $this->l('You have to enable "allow_url_fopen" to install this module. Ask your hosting provider for help.');
-			$this->warning .= $this->l('You have to enable "allow_url_fopen" to install this module. Ask your hosting provider for help.');
 			return false;
-		}
 		if (!extension_loaded('curl'))
-		{
-			$this->_errors[] = $this->l('You have to enable cURL to install this module. Ask your hosting provider for help.');
-			$this->warning .= $this->l('You have to enable cURL to install this module. Ask your hosting provider for help.');
 			return false;
-		}
 
         $ps = $this->getPrestashopClient();
         $jf = $this->getjirafeClient();
