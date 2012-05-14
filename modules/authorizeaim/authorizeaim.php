@@ -244,7 +244,7 @@ class authorizeAIM extends PaymentModule
 			Tools::addJS(_PS_JS_DIR_.'jquery/jquery.validate.creditcard2-1.0.1.js');
 		else
 			$this->context->controller->addJqueryPlugin('validate-creditcard');
-  }
+	}
 
 	/**
 	 * Set the detail of a payment - Call before the validate order init

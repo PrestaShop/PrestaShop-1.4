@@ -26,15 +26,15 @@
 */
 
 include(dirname(__FILE__). '/../../config/config.inc.php');
+
+/* SSL Tricks to bypass the redirect for the FrontController in 1.5 + */
+include(dirname(__FILE__). '/../../init.php');
+
 /* will include backward file */
 include(dirname(__FILE__). '/authorizeaim.php');
 
 $authorizeaim = new authorizeAIM();
 
-/* SSL Tricks to bypass the redirect for the FrontController in 1.5 + */
-Configuration::updateValue('PS_SSL_ENABLED', 0);
-include(dirname(__FILE__). '/../../init.php');
-Configuration::updateValue('PS_SSL_ENABLED', 1);
 
 /* Transform the POST from the template to a GET for the CURL */
 if (isset($_POST['x_exp_date_m']) && isset($_POST['x_exp_date_y']))
@@ -76,7 +76,8 @@ if (!isset($response[7]) || !isset($response[3]) || !isset($response[9]))
 }
 
 /* Does the cart exist and is valid? */
-$cart = new Cart((int)$response[7]);
+$cart = Context::getContext()->cart;
+
 if (!Validate::isLoadedObject($cart))
 {
 	Logger::addLog('Cart loading failed for cart '.(int)$response[7], 4);
