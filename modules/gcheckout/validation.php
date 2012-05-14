@@ -43,8 +43,10 @@ $merchant_id = Configuration::get('GCHECKOUT_MERCHANT_ID');
 $merchant_key = Configuration::get('GCHECKOUT_MERCHANT_KEY');
 $server_type = Configuration::get('GCHECKOUT_MODE');
 
+if (!$merchant_id || !$merchant_key)
+	die(Tools::displayError())
+
 $Gresponse = new GoogleResponse($merchant_id, $merchant_key);
-//$Grequest = new GoogleRequest($merchant_id, $merchant_key, $server_type, $currency);
 
 //Setup the log file
 if (Configuration::get('GCHECKOUT_LOGS'))
