@@ -399,12 +399,12 @@ class kwixo extends PaymentModule {
 
   public function displayFormSettings() {
     $conf = Configuration::getMultiple(array('RNP_MERCHID', 'RNP_TYPE_DISPLAY', 'RNP_CRYPTKEY', 'RNP_DEFAULTCATEGORYID', 'RNP_NBDELIVERYDAYS', 'RNP_AVAILABILITY', 'RNP_PRODUCTION'));
-    $production = array_key_exists('rnp_production', $_POST) ? $_POST['rnp_production'] : (array_key_exists('RNP_PRODUCTION', $conf) ? Tools::htmlentitiesUTF8($conf['RNP_PRODUCTION']) : '');
-    $merchid = array_key_exists('merchid', $_POST) ? $_POST['merchid'] : (array_key_exists('RNP_MERCHID', $conf) ? Tools::htmlentitiesUTF8($conf['RNP_MERCHID']) : '');
-    $typeihm = array_key_exists('typeihm', $_POST) ? $_POST['typeihm'] : (array_key_exists('RNP_TYPE_DISPLAY', $conf) ? explode(",", Tools::htmlentitiesUTF8($conf['RNP_TYPE_DISPLAY'])) : '');
-    $cryptkey = array_key_exists('cryptkey', $_POST) ? $_POST['cryptkey'] : (array_key_exists('RNP_CRYPTKEY', $conf) ? Tools::htmlentitiesUTF8($conf['RNP_CRYPTKEY']) : '');
-    $category_id = array_key_exists('category_id', $_POST) ? $_POST['category_id'] : (array_key_exists('RNP_DEFAULTCATEGORYID', $conf) ? Tools::htmlentitiesUTF8($conf['RNP_DEFAULTCATEGORYID']) : '');
-    $nb_delivery_days = array_key_exists('nb_delivery_days', $_POST) ? $_POST['nb_delivery_days'] : (array_key_exists('RNP_NBDELIVERYDAYS', $conf) ? Tools::htmlentitiesUTF8($conf['RNP_NBDELIVERYDAYS']) : '');
+    $production = array_key_exists('rnp_production', $_POST) ? Tools::htmlentitiesUTF8($_POST['rnp_production']) : (array_key_exists('RNP_PRODUCTION', $conf) ? Tools::htmlentitiesUTF8($conf['RNP_PRODUCTION']) : '');
+    $merchid = array_key_exists('merchid', $_POST) ? Tools::htmlentitiesUTF8($_POST['merchid']) : (array_key_exists('RNP_MERCHID', $conf) ? Tools::htmlentitiesUTF8($conf['RNP_MERCHID']) : '');
+    $typeihm = array_key_exists('typeihm', $_POST) ? Tools::htmlentitiesUTF8($_POST['typeihm']) : (array_key_exists('RNP_TYPE_DISPLAY', $conf) ? explode(",", Tools::htmlentitiesUTF8($conf['RNP_TYPE_DISPLAY'])) : '');
+    $cryptkey = array_key_exists('cryptkey', $_POST) ? Tools::htmlentitiesUTF8($_POST['cryptkey']) : (array_key_exists('RNP_CRYPTKEY', $conf) ? Tools::htmlentitiesUTF8($conf['RNP_CRYPTKEY']) : '');
+    $category_id = array_key_exists('category_id', $_POST) ? Tools::htmlentitiesUTF8($_POST['category_id']) : (array_key_exists('RNP_DEFAULTCATEGORYID', $conf) ? Tools::htmlentitiesUTF8($conf['RNP_DEFAULTCATEGORYID']) : '');
+    $nb_delivery_days = array_key_exists('nb_delivery_days', $_POST) ? Tools::htmlentitiesUTF8($_POST['nb_delivery_days']) : (array_key_exists('RNP_NBDELIVERYDAYS', $conf) ? Tools::htmlentitiesUTF8($conf['RNP_NBDELIVERYDAYS']) : '');
     $id_lang = Configuration::get('PS_LANG_DEFAULT');
     $categories = Category::getSimpleCategories($id_lang);
     $carriers = Carrier::getCarriers($id_lang, false, false, false, NULL, false);
