@@ -733,7 +733,7 @@ class opensi extends Module
 					<tr>
 						<td>'.$this->l('Create products').' <sup>*</sup></td>
 						<td class="sync-p">
-							<input type="text" class="ws-freq" name="'.strtolower($this->cachetimeLbl.'WSO-P005').'" value="'.configuration::get($this->cachetimeLbl.'WSO-P005',2).'" /> <span class="mini grey">(Min : 1)</span>
+							<input type="text" class="ws-freq" name="'.Tools::htmlentitiesUTF8(strtolower($this->cachetimeLbl.'WSO-P005')).'" value="'.Tools::htmlentitiesUTF8(configuration::get($this->cachetimeLbl.'WSO-P005',2)).'" /> <span class="mini grey">(Min : 1)</span>
 						</td>
 						<td width="120">
 							<select name="active_wso_p005" class="tinysel active_wso">
@@ -751,7 +751,7 @@ class opensi extends Module
 					<tr>
 						<td>'.$this->l('Update products').' <sup>*</sup></td>
 						<td class="sync-p">
-							<input type="text" class="ws-freq" name="'.strtolower($this->cachetimeLbl.'WSO-P006').'" value="'.configuration::get($this->cachetimeLbl.'WSO-P006',2).'" /> <span class="mini grey">(Min : 1)</span>
+							<input type="text" class="ws-freq" name="'.Tools::htmlentitiesUTF8(strtolower($this->cachetimeLbl.'WSO-P006')).'" value="'.Tools::htmlentitiesUTF8(configuration::get($this->cachetimeLbl.'WSO-P006',2)).'" /> <span class="mini grey">(Min : 1)</span>
 						</td>
 						<td width="120">
 							<select name="active_wso_p006" class="tinysel active_wso">
@@ -769,7 +769,7 @@ class opensi extends Module
 					<tr>
 						<td width="300">'.$this->l('Update stocks').' <sup>*</sup></td>
 						<td class="sync-o">
-							<input type="text" class="ws-freq" name="'.strtolower($this->cachetimeLbl.'WSO-G002').'" value="'.configuration::get($this->cachetimeLbl.'WSO-G002',2).'" /> <span class="mini grey">(Min : 1)</span>
+							<input type="text" class="ws-freq" name="'.Tools::htmlentitiesUTF8(strtolower($this->cachetimeLbl.'WSO-G002')).'" value="'.Tools::htmlentitiesUTF8(configuration::get($this->cachetimeLbl.'WSO-G002',2)).'" /> <span class="mini grey">(Min : 1)</span>
 						</td>
 						<td width="120">
 							<select name="active_wso_g002" class="tinysel active_wso">
@@ -787,7 +787,7 @@ class opensi extends Module
 					<tr>
 						<td>'.$this->l('Update prices').' <sup>*</sup></td>
 						<td  class="sync-o">
-							<input type="text" class="ws-freq" name="'.strtolower($this->cachetimeLbl.'WSO-G009').'" value="'.configuration::get($this->cachetimeLbl.'WSO-G009',2).'" /> <span class="mini grey">(Min : 1)</span>
+							<input type="text" class="ws-freq" name="'.Tools::htmlentitiesUTF8(strtolower($this->cachetimeLbl.'WSO-G009')).'" value="'.Tools::htmlentitiesUTF8(configuration::get($this->cachetimeLbl.'WSO-G009',2)).'" /> <span class="mini grey">(Min : 1)</span>
 						</td>
 						<td width="120">
 							<select name="active_wso_g009" class="tinysel active_wso">
@@ -813,7 +813,7 @@ class opensi extends Module
 					<tr>
 						<td width="300">'.$this->l('Create orders').' <sup>*</sup></td>
 						<td class="sync-p">
-							<input type="text" class="ws-freq" name="'.strtolower($this->cachetimeLbl.'WSO-P011').'" value="'.configuration::get($this->cachetimeLbl.'WSO-P011',2).'" /> <span class="mini grey">(Min : 1)</span>
+							<input type="text" class="ws-freq" name="'.Tools::htmlentitiesUTF8(strtolower($this->cachetimeLbl.'WSO-P011')).'" value="'.Tools::htmlentitiesUTF8(configuration::get($this->cachetimeLbl.'WSO-P011',2)).'" /> <span class="mini grey">(Min : 1)</span>
 						</td>
 						<td width="120">
 							<select name="active_wso_p011" class="tinysel active_wso">
@@ -831,7 +831,7 @@ class opensi extends Module
 					<tr>
 						<td>'.$this->l('Create transactions').' <sup>*</sup></td>
 						<td class="sync-p">
-							<input type="text" class="ws-freq" name="'.strtolower($this->cachetimeLbl.'WSO-P015').'" value="'.configuration::get($this->cachetimeLbl.'WSO-P015',2).'" /> <span class="mini grey">(Min : 1)</span>
+							<input type="text" class="ws-freq" name="'.Tools::htmlentitiesUTF8(strtolower($this->cachetimeLbl.'WSO-P015')).'" value="'.Tools::htmlentitiesUTF8(configuration::get($this->cachetimeLbl.'WSO-P015',2)).'" /> <span class="mini grey">(Min : 1)</span>
 						</td>
 						<td width="120">
 							<select name="active_wso_p015" class="tinysel active_wso">
@@ -849,7 +849,7 @@ class opensi extends Module
 					<tr>
 						<td>'.$this->l('Update states orders').' <sup>*</sup></td>
 						<td class="sync-o">
-							<input type="text" class="ws-freq" name="'.strtolower($this->cachetimeLbl.'WSO-G008').'" value="'.configuration::get($this->cachetimeLbl.'WSO-G008',2).'" /> <span class="mini grey">(Min : 1)</span>
+							<input type="text" class="ws-freq" name="'.Tools::htmlentitiesUTF8(strtolower($this->cachetimeLbl.'WSO-G008')).'" value="'.Tools::htmlentitiesUTF8(configuration::get($this->cachetimeLbl.'WSO-G008',2)).'" /> <span class="mini grey">(Min : 1)</span>
 						</td>
 						<td width="120">
 							<select name="active_wso_g008" class="tinysel active_wso">
@@ -867,7 +867,7 @@ class opensi extends Module
 					<tr>
 						<td>'.$this->l('Update orders tracking codes').' <sup>*</sup></<td>
 						<td class="sync-o">
-							<input type="text" class="ws-freq" name="'.strtolower($this->cachetimeLbl.'WSO-G003').'" value="'.configuration::get($this->cachetimeLbl.'WSO-G003',2).'" /> <span class="mini grey">(Min : 1)</span>
+							<input type="text" class="ws-freq" name="'.Tools::htmlentitiesUTF8(strtolower($this->cachetimeLbl.'WSO-G003')).'" value="'.Tools::htmlentitiesUTF8(configuration::get($this->cachetimeLbl.'WSO-G003',2)).'" /> <span class="mini grey">(Min : 1)</span>
 						</td>
 						<td width="120">
 							<select name="active_wso_g003" class="tinysel active_wso">
@@ -893,7 +893,7 @@ class opensi extends Module
 					<tr>
 						<td width="300">'.$this->l('Create customers').' <sup>*</sup></td>
 						<td class="sync-p">
-							<input type="text" class="ws-freq" name="'.strtolower($this->cachetimeLbl.'WSO-P010').'" value="'.configuration::get($this->cachetimeLbl.'WSO-P010',2).'" /> <span class="mini grey">(Min : 1)</span>
+							<input type="text" class="ws-freq" name="'.Tools::htmlentitiesUTF8(strtolower($this->cachetimeLbl.'WSO-P010')).'" value="'.Tools::htmlentitiesUTF8(configuration::get($this->cachetimeLbl.'WSO-P010',2)).'" /> <span class="mini grey">(Min : 1)</span>
 						</td>
 						<td width="120">
 							<select name="active_wso_p010" class="tinysel active_wso">
@@ -911,7 +911,7 @@ class opensi extends Module
 					<tr>
 						<td>'.$this->l('Update customers').' <sup>*</sup></td>
 						<td class="sync-p">
-							<input type="text" class="ws-freq" name="'.strtolower($this->cachetimeLbl.'WSO-P025').'" value="'.configuration::get($this->cachetimeLbl.'WSO-P025',2).'" /> <span class="mini grey">(Min : 1)</span>
+							<input type="text" class="ws-freq" name="'.Tools::htmlentitiesUTF8(strtolower($this->cachetimeLbl.'WSO-P025')).'" value="'.Tools::htmlentitiesUTF8(configuration::get($this->cachetimeLbl.'WSO-P025',2)).'" /> <span class="mini grey">(Min : 1)</span>
 						</td>
 						<td width="120">
 							<select name="active_wso_p025" class="tinysel active_wso">
