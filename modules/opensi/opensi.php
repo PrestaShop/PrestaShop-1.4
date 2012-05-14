@@ -579,23 +579,23 @@ class opensi extends Module
 				<legend><img src="'.$this->_path.'img/access.png" alt="" />'.$this->l('Access configuration').'</legend>
 				<label>'.$this->l('Login').' <sup>*</sup></label>
 				<div class="margin-form">
-					<input type="text" name="osi_ws_login" class="biginp" value="'.GlobalConfig::getWsLogin().'" />
+					<input type="text" name="osi_ws_login" class="biginp" value="'.Tools::htmlentitiesUTF8(GlobalConfig::getWsLogin()).'" />
 				</div>	
 				<label>'.$this->l('Password').' <sup>*</sup></label>
 				<div class="margin-form">
-					<input type="password" name="osi_ws_passwd" class="biginp" value="'.GlobalConfig::getWsPasswd().'" />
+					<input type="password" name="osi_ws_passwd" class="biginp" value="'.Tools::htmlentitiesUTF8(GlobalConfig::getWsPasswd()).'" />
 				</div>
 				<label>'.$this->l('Service code').' <sup>*</sup></label>
 				<div class="margin-form">
-					<input type="text" name="osi_service_code" class="biginp" value="'.GlobalConfig::getServiceCode().'" />
+					<input type="text" name="osi_service_code" class="biginp" value="'.Tools::htmlentitiesUTF8(GlobalConfig::getServiceCode()).'" />
 				</div>
 				<label>'.$this->l('website code').' <sup>*</sup></label>
 				<div class="margin-form">
-					<input type="text" name="osi_website_code" class="biginp" value="'.GlobalConfig::getWebSiteCode().'" />
+					<input type="text" name="osi_website_code" class="biginp" value="'.Tools::htmlentitiesUTF8(GlobalConfig::getWebSiteCode()).'" />
 				</div>
 				<label>'.$this->l('deposit code').' <sup>*</sup></label>
 				<div class="margin-form">
-					<input type="text" name="osi_deposit_code" class="biginp" value="'.GlobalConfig::getDepositCode().'" />
+					<input type="text" name="osi_deposit_code" class="biginp" value="'.Tools::htmlentitiesUTF8(GlobalConfig::getDepositCode()).'" />
 				</div>																		
 			</fieldset>
 
@@ -641,11 +641,11 @@ class opensi extends Module
 				<span class="mini brown"><img src="'.$this->_path.'img/warning.png" alt="" />'.$this->l('Do not change the value of the fields below.').'</span><br /><br />
 				<label>'.$this->l('Url').' <sup>*</sup></label>
 				<div class="margin-form">
-					<input type="text" name="osi_ws_url" class="biginp" id="ws_url" value="'.GlobalConfig::getWsUrl().'" />
+					<input type="text" name="osi_ws_url" class="biginp" id="ws_url" value="'.Tools::htmlentitiesUTF8(GlobalConfig::getWsUrl()).'" />
 				</div>
 				<label>'.$this->l('Port').' <sup>*</sup></label>
 				<div class="margin-form">
-					<input type="text" name="osi_ws_port" class="biginp" value="'.GlobalConfig::getWsPort().'" />
+					<input type="text" name="osi_ws_port" class="biginp" value="'.Tools::htmlentitiesUTF8(GlobalConfig::getWsPort()).'" />
 				</div>
 			</fieldset>
 		';
