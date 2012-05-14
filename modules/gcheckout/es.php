@@ -42,5 +42,3 @@ $_MODULE['<{gcheckout}prestashop>gcheckout_dba727a9adc372723baef4533a7fc9da'] = 
 $_MODULE['<{gcheckout}prestashop>gcheckout_0d46d15f70a7cfa670545b308c022840'] = 'Los pedidos deben pasarse con la misma moneda que la cuenta del vendedor. Los carritos en otras monedas serán convertidas si el cliente elige pagar con este módulo.';
 $_MODULE['<{gcheckout}prestashop>gcheckout_8dd85f4218069de952672fe3180dacdb'] = 'Pagar con GoogleCheckout';
 $_MODULE['<{gcheckout}prestashop>gcheckout_ba794350deb07c0c96fe73bd12239059'] = 'Embalaje ';
-
-?>

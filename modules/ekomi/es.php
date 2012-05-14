@@ -16,5 +16,3 @@ $_MODULE['<{ekomi}prestashop>ekomi_b9f5c797ebbf55adccdd8539a65a0241'] = 'Ocultar
 $_MODULE['<{ekomi}prestashop>ekomi_ced21fe73878a0139d427ab2927f6772'] = 'Mostrar o no el bloque (los pedidos serán enviados a eKomi independientemente de que usted elija ocultar o mostrar el bloque).';
 $_MODULE['<{ekomi}prestashop>ekomi_6a794dc942b2e8b4716dbc654e83d094'] = 'Por favor, rellene el formulario con los datos básicos que eKomi le da.';
 $_MODULE['<{ekomi}prestashop>ekomi_c9cc8cce247e49bae79f15173ce97354'] = 'Guardar';
-
-?>

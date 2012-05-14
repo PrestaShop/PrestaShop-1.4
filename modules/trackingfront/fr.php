@@ -42,7 +42,7 @@ $_MODULE['<{trackingfront}prestashop>trackingfront_d7e637a6e9ff116de2fa89551240a
 $_MODULE['<{trackingfront}prestashop>trackingfront_d3139f39f1ad6324c80a9ddd50cc7867'] = 'Pages vues';
 $_MODULE['<{trackingfront}prestashop>trackingfront_a28735af01fbb1e35371cb120985ac47'] = 'Inscriptions';
 $_MODULE['<{trackingfront}prestashop>trackingfront_7442e29d7d53e549b78d93c46b8cdcfc'] = 'Commandes';
-$_MODULE['<{trackingfront}prestashop>trackingfront_2e27c4006a026eacfc1f85b41bf9bc4c'] = 'Commission €';
+$_MODULE['<{trackingfront}prestashop>trackingfront_2e27c4006a026eacfc1f85b41bf9bc4c'] = 'Commission ';
 $_MODULE['<{trackingfront}prestashop>trackingfront_86190054fc32554662ffbb12b717e8d0'] = 'Commission %';
 $_MODULE['<{trackingfront}prestashop>trackingfront_51d53cd2ecdae6b5dd3397875197e898'] = 'Commission au clic';
 $_MODULE['<{trackingfront}prestashop>trackingfront_11ff9f68afb6b8b5b8eda218d7c83a65'] = 'Ventes';

@@ -17,7 +17,7 @@ $_MODULE['<{cloudcache}prestashop>cloudcache_f0c746da3e0a8585f9431752a47f4471'] 
 $_MODULE['<{cloudcache}prestashop>cloudcache_108118f45620e45322c3d5862591c418'] = 'Zone ajouté.';
 $_MODULE['<{cloudcache}prestashop>cloudcache_a63636b538337a40fcdd3363c6707f15'] = 'Erreur pendant l\'ajout de la zone:';
 $_MODULE['<{cloudcache}prestashop>cloudcache_58f9c3960361509cf1d68bf643941ca1'] = 'Toutes les zones ont été synchronisé';
-$_MODULE['<{cloudcache}prestashop>cloudcache_c72fd9c59ceba8b6724e2fd47823a371'] = 'Erreur pendant la synchronisation des zones:';
+$_MODULE['<{cloudcache}prestashop>cloudcache_d94adc30711fa8a860d1da817844312a'] = 'Erreur lors de la synchronisation des zones.';
 $_MODULE['<{cloudcache}prestashop>cloudcache_3d015f6519d6a4266d58735cbb0646aa'] = 'Le cache a été purgé pour toutes les zones.';
 $_MODULE['<{cloudcache}prestashop>cloudcache_927a80bfb795058dd0d56b910ce75182'] = 'Erreur pendant la purge du cache pour toutes els zones.';
 $_MODULE['<{cloudcache}prestashop>cloudcache_0784546200bf0e0b692ce92fca030051'] = 'Le cache a été purgé pour la zone:';

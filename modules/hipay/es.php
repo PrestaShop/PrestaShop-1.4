@@ -2,9 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{hipay}prestashop>payment_cb047ebd77ec02c36fbac405f8c9922c'] = 'Pagar con Hipay';
-$_MODULE['<{hipay}prestashop>payment_35d5d65e0fb908f81b8c36820ddd7cc6'] = 'Importe mínimo para pagar con Hipay:';
-$_MODULE['<{hipay}prestashop>payment_e755d43d98e3d597b4492d2e6493ffed'] = 'sandbox / modo test';
 $_MODULE['<{hipay}prestashop>hipay_50089d40ef4536271e8b16dbe5763c01'] = 'Hipay';
 $_MODULE['<{hipay}prestashop>hipay_035ab5edb2d8af86d51f6a92e65b4c0f'] = 'Asegure los pagos de Visa Mastercard y soluciones europeas.';
 $_MODULE['<{hipay}prestashop>hipay_5063b1c7402ff93d09defb875fa0085b'] = '[Hipay] Error: imposible crear PaymentParams';
@@ -48,5 +45,6 @@ $_MODULE['<{hipay}prestashop>hipay_c6eb6bc44fbc78b79cc40f8012eb7634'] = 'Selecci
 $_MODULE['<{hipay}prestashop>hipay_b718adec73e04ce3ec720dd11a06a308'] = 'Identificación';
 $_MODULE['<{hipay}prestashop>hipay_dad1f8d794ee0dd7753fe75e73b78f31'] = 'Zonas';
 $_MODULE['<{hipay}prestashop>hipay_646ac4a2df12eae08dd8e3e749fd9daa'] = 'Actualizar las zonas';
-
-?>
+$_MODULE['<{hipay}prestashop>payment_cb047ebd77ec02c36fbac405f8c9922c'] = 'Pagar con Hipay';
+$_MODULE['<{hipay}prestashop>payment_35d5d65e0fb908f81b8c36820ddd7cc6'] = 'Importe mínimo para pagar con Hipay:';
+$_MODULE['<{hipay}prestashop>payment_e755d43d98e3d597b4492d2e6493ffed'] = 'sandbox / modo test';

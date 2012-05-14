@@ -94,7 +94,7 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_ce135482b30deedcc0046df41c12de7
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_9a361a1f786db3dfe07aae42752d3446'] = 'Type de colis par défaut';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_4664d1ae1832bed2246e8a6850365075'] = 'Choississez un type de colis par défaut';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_8d6bd50f3fe3ee2f4513066c25e5fb4a'] = 'Méthode de calcul';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c5238c5f72dee585afdf4bddf6de518e'] = 'Utiliser la méthode de calcul \"Tous les produits dans un colis\" utilisera automatiquement la taille de colis, le type de colis et les services de livraison par défaut. Les configurations spécifiques des catégories et des produits ne seront pas utilisés.';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c5238c5f72dee585afdf4bddf6de518e'] = 'Utiliser la méthode de calcul \"Tous les produits dans un colis\" utilisera automatiquement la taille de colis, le type de colis et les services de livraison par défaut. Les configurations spécifiques des catégories et des produits ne seront pas utilisés.\"';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_5cdd307ba6e260beb4801c0c10e22a3a'] = 'Services de livraison';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_d63e135774e62574e2a1921267dad142'] = 'Choissisez les services de livraison qui seront disponibles pour vos clients';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_f1206f9fadc5ce41694f69129aecac26'] = 'Configurer';
@@ -111,8 +111,8 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_729d4f7143a3de7b0ed18de667fdf4d
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_9d1b485edd50e6fbd288b340b386b07d'] = 'Aucune description d\'erreur correspondante';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c888438d14855d7d96a2724ee9c306bd'] = 'Configuration mise à jour';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_b9284bff13acffdd879ef4ac7fca5234'] = 'Configuration non mise à jour';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_67e19ffdaa0a11e69349810403a9727e'] = 'Vous devez configurer l\'onglet \"Configuration Générale\" avant d\'utiliser cet onglet';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_a37b48e8684078c0620a997b3baeee9f'] = 'Vous devez configurer l\'onglet \"Configuration Générale\" avant d\'utiliser cet onglet';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_67e19ffdaa0a11e69349810403a9727e'] = 'Vous devez configurer l\'onglet \"Configuration Générale\" avant d\'utiliser cet onglet\"';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_a37b48e8684078c0620a997b3baeee9f'] = 'Vous devez configurer l\'onglet \"Configuration Générale\" avant d\'utiliser cet onglet\"';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_f421827ff72ef9a61fb27aa0de62f1e4'] = 'Configuration ID';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_3adbdb3ac060038aa0e6e6c138ef9873'] = 'Catégorie';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_ca2fb7f67355c05d2ffa963fac6e91e1'] = 'Type de ramassage';

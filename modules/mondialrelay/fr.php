@@ -2,9 +2,9 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{mondialrelay}prestashop>adminmondialrelay_e82faee1422140edd04b2f94c5051500'] = 'Action réussie';
-$_MODULE['<{mondialrelay}prestashop>adminmondialrelay_3b2d373418745276ae6e207421245cdc'] = 'Le type de commande a été mis a jour';
-$_MODULE['<{mondialrelay}prestashop>adminmondialrelay_b4ac3d3f15bc0984d0906aff1202e701'] = 'N\'a pu mettre a jour les infos du compte';
+$_MODULE['<{mondialrelay}prestashop>adminmondialrelay_e82faee1422140edd04b2f94c5051500'] = 'Action terminée avec succès!';
+$_MODULE['<{mondialrelay}prestashop>adminmondialrelay_3b2d373418745276ae6e207421245cdc'] = 'Le statut de la commande a été mis à jour';
+$_MODULE['<{mondialrelay}prestashop>adminmondialrelay_b4ac3d3f15bc0984d0906aff1202e701'] = 'Impossible de mettre à jour le compte';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_44585fcd617dce6416d8283b026714c1'] = 'Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_ed4a3b96dc1f38c160775cac1f7bcd6d'] = 'Livrez vos colis en point relais';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_d2286c9c8c8f92cb0e805b17834591b0'] = 'Enseigne invalide';
@@ -23,11 +23,11 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_672facd73d4aee44c116cfd95298db8
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_b4ac3d3f15bc0984d0906aff1202e701'] = 'Impossibilité de mettre à jour les infos du compte pour cette boutique';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_ea50be3d60be594e10e9e3560cb9159f'] = 'Nouvelle méthode de transport ajoutée';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_d0cfdfcfb71029b561f5ebdc176d87ca'] = 'Le statu de la commande à été mise à jour';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_7534411af2e35bed1f79df5938f077f9'] = 'La methode de transporteur a été suprimé (désactivé dans la base de donnée de prestashop)';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_2673bca5ba0a7871770e69c962e6ce38'] = 'Nb d\'expédition';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_0dbe844fb964d5eca2f51be724e43294'] = 'Label de l\'URL';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_c6aefd5e2191e1210a2f50416812b517'] = 'URL de suivie';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_61e70b58e38fd01daa254f44c4fa264b'] = 'Nb de point relay';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_7534411af2e35bed1f79df5938f077f9'] = 'Le transporteur a été supprimé (désactivé dans la base de données de PrestaShop)';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_2673bca5ba0a7871770e69c962e6ce38'] = 'Numéro d\'expédition';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_0dbe844fb964d5eca2f51be724e43294'] = 'URL de l\'étiquette';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_c6aefd5e2191e1210a2f50416812b517'] = 'URL de suivi';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_61e70b58e38fd01daa254f44c4fa264b'] = 'Numéro du point relai:';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_aa625fced6f01ae595b6a9ac499c2ecf'] = 'La tranche de poids ne peut être ajouté';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_63d15383121b5bb5c53323f3f96bd1f2'] = 'La tranche de prix ne peux être ajouté';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_d4d197dd028e28ae56208971b564921a'] = 'La zone par défaut ne peut être ajouté';
@@ -102,7 +102,7 @@ $_MODULE['<{mondialrelay}prestashop>configuration_5a2355a42ba3ab265701183c914467
 $_MODULE['<{mondialrelay}prestashop>configuration_3de769f9a81eed916583d5b35c58dbdd'] = 'si vous rencontrez le moindre problème après une mise à jour du module';
 $_MODULE['<{mondialrelay}prestashop>configuration_8f8b21bd013b38d1e3059557c22a57e7'] = 'Consulter le manuel pour vous guider dans la configuration de Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>configuration_d21a9f93917604d5490ad529a7cf1ff9'] = 'Pour créer un transporteur Mondial Relay';
-$_MODULE['<{mondialrelay}prestashop>configuration_c6a2e6af5fff47adb3afd780b97d9b4b'] = 'Remplissez et sauvegardez vos paramètres Mondial Relay';
+$_MODULE['<{mondialrelay}prestashop>configuration_c6a2e6af5fff47adb3afd780b97d9b4b'] = 'Remplissez et sauvegarder vos paramètres Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>configuration_b29c4694f835ad29b9893cd3fed36fbc'] = 'Créez un transporteur en utilisant le bouton \'Transporteur\'';
 $_MODULE['<{mondialrelay}prestashop>configuration_b962d8fb95f5a439f50502152f3bad71'] = 'Définissez un prix pour votre transporteur sur';
 $_MODULE['<{mondialrelay}prestashop>configuration_faf1247ae6846a9955a466d4f301bbe4'] = 'La page Transporteurs';
@@ -181,7 +181,8 @@ $_MODULE['<{mondialrelay}prestashop>settings_0a4ee7474864081af12dba847fafdaa6'] 
 $_MODULE['<{mondialrelay}prestashop>settings_ca57625685f058f54d82c6e05876a131'] = 'Choississez le statut pour la génération d\'étiquette.';
 $_MODULE['<{mondialrelay}prestashop>settings_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{mondialrelay}prestashop>settings_f4f70727dc34561dfde1a3c529b6205c'] = 'Paramètres';
-$_MODULE['<{mondialrelay}prestashop>install-1.8.0_315a8895cf7c458597be5cf3c5b18d0b'] = 'Ne peut pas créer la table contenant les méthodes transporteurs';
-$_MODULE['<{mondialrelay}prestashop>install-1.8.0_e364c3962f360330a5d8084c3ef5cacf'] = 'Ne peut pas changer le nom de la méthode';
-$_MODULE['<{mondialrelay}prestashop>install-1.8.0_6384826d8bae08ec0ca4d1cd386a32c8'] = 'Ne peut pas renommer la table history';
-$_MODULE['<{mondialrelay}prestashop>install-1.8.0_4c74bd0afa2a8ecb894674c9cd942da5'] = 'Ne peut pas mettre à jour la table mr_method_shop';
+$_MODULE['<{mondialrelay}prestashop>install-1.8.0_315a8895cf7c458597be5cf3c5b18d0b'] = 'Impossible de créer la méthode \"shop table\"';
+$_MODULE['<{mondialrelay}prestashop>install-1.8.0_e364c3962f360330a5d8084c3ef5cacf'] = 'Impossible de changer le nom de la table de méthodes';
+$_MODULE['<{mondialrelay}prestashop>install-1.8.0_6384826d8bae08ec0ca4d1cd386a32c8'] = 'Impossible de renommer la table d\'historique';
+$_MODULE['<{mondialrelay}prestashop>install-1.8.0_4c74bd0afa2a8ecb894674c9cd942da5'] = 'Impossible de mettre à jour la table \"mr_method_shop\"';
+$_MODULE['<{mondialrelay}prestashop>install-1.8.3_665cc27f3a529d80315dd49378a6c2bf'] = 'Impossible d\'ajouter un nouveau champ dans la table de méthodes';

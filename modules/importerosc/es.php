@@ -25,5 +25,3 @@ $_MODULE['<{importerosc}prestashop>importerosc_16f35420186575c2a1d9c0b59edf6ad3'
 $_MODULE['<{importerosc}prestashop>importerosc_fced104d747e0855ceff3020653104ab'] = 'El campo NIVEL ha sido creado y calculado, ahora puede continuar';
 $_MODULE['<{importerosc}prestashop>importerosc_b405d0bebeedbdc1773a44ac36b8ffc4'] = 'Es altamente recomendable que haga un backup de su base de datos antes de continuar. Ha hecho un backup?';
 $_MODULE['<{importerosc}prestashop>importerosc_9f95fc55011203d91d50a0ed512f805f'] = 'No se puede ALTERAR LA TABLA';
-
-?>

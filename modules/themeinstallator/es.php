@@ -52,7 +52,7 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_a33388a338ee2b199d66112
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_cd8d9cc19984ccf9d314eee5eebfc2cc'] = 'Importar a partir del FTP';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_94f2371003860a92b12bf4c66b2851ac'] = 'Seleccionar el archivo';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_1031371f906a92891140f384d04b3421'] = 'Se ha producido un error al general el archivo';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_2c19b34eebed37ccc288c518006615b3'] = '¡Hay un error de sintaxis en el campo \"email\"!';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_2c19b34eebed37ccc288c518006615b3'] = '¡Hay un error de sintaxis en el campo \"email\"!\"';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_129b7dae66f0029381da64578a351198'] = '¡Hay un error de sintaxis en el campo \"url\"!';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_87e0eaf3f9614cb904fafb0d4f4c1f56'] = 'La extensión del archivo debe ser .txt o .pdf';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_550a06d4fd147c22a4c921036003abf6'] = 'Se ha producido un error al enviar la documentación';
@@ -85,5 +85,3 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_5da618e8e4b89c66fe86e32
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_3271e801d0a5db9dc2963a19ed9695d6'] = 'El nombre de su tienda';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_ea4788705e6873b424c65e91c2846b19'] = 'Anular';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_abb381ee4077396e5d5d475b9022ba86'] = '¡Generar el archivo ahora!';
-
-?>

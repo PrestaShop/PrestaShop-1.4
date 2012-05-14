@@ -2,6 +2,25 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{bankwire}prestashop>bankwire_85ee0d0492a4e37e6c183520f5d59c40'] = 'Trasferencia bancaria';
+$_MODULE['<{bankwire}prestashop>bankwire_f652b92eefd4ecfe61ef5fb118157a05'] = 'Se aceptan pagos por trasferencia bancaria';
+$_MODULE['<{bankwire}prestashop>bankwire_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = '¿Está seguro de querer borrar los detalles?';
+$_MODULE['<{bankwire}prestashop>bankwire_f05d09f37c9a02f0737c1e71142028a9'] = 'El propietario y detalles de la cuenta deben configurarse para usar el módulo correctamente';
+$_MODULE['<{bankwire}prestashop>bankwire_4402acab1c8f90dcf4a31dc96833bd86'] = 'No hay moneda asignada a este módulo';
+$_MODULE['<{bankwire}prestashop>bankwire_bfa43217dfe8261ee7cb040339085677'] = 'se necesitan los detalles de la cuenta.';
+$_MODULE['<{bankwire}prestashop>bankwire_ccab155f173ac76f79eb192703f86b18'] = 'Se necesita el propietario de la cuenta.';
+$_MODULE['<{bankwire}prestashop>bankwire_444bcb3a3fcf8389296c49467f27e1d6'] = 'ok';
+$_MODULE['<{bankwire}prestashop>bankwire_c888438d14855d7d96a2724ee9c306bd'] = 'configuración actualizada';
+$_MODULE['<{bankwire}prestashop>bankwire_fcec4d73cccd149a2d18695fd8785f88'] = 'Este módulo permite aceptar pagos por trasferencia bancaria.';
+$_MODULE['<{bankwire}prestashop>bankwire_b6af2d31afe71aedcceca73cc27fec29'] = 'si el cliente elije este modo de pago, el pedido cambiará su estado a \"pendiente de pago\".';
+$_MODULE['<{bankwire}prestashop>bankwire_0daeb8f6c1874ec9442e821b524d37c1'] = 'Por lo tanto, deberá confirmar el pedido en cuanto reciba la trasferencia.';
+$_MODULE['<{bankwire}prestashop>bankwire_5dd532f0a63d89c5af0243b74732f63c'] = 'Detalles contacto';
+$_MODULE['<{bankwire}prestashop>bankwire_17e6954ea60d238857324fea1f10b8f3'] = 'Por favor, especifique los detalles de la cuenta para sus clientes';
+$_MODULE['<{bankwire}prestashop>bankwire_857216dd1b374de9bf54068fcd78a8f3'] = 'Propietario de la cuenta';
+$_MODULE['<{bankwire}prestashop>bankwire_3ec365dd533ddb7ef3d1c111186ce872'] = 'Detalles';
+$_MODULE['<{bankwire}prestashop>bankwire_6b154cafbab54ba3a1e76a78c290c02a'] = 'tales como: sucursal bancaria, código IBAN, BIC, etc.';
+$_MODULE['<{bankwire}prestashop>bankwire_f9a1a1bb716cbae0503d351ea2af4b34'] = 'Dirección agencia bancaria';
+$_MODULE['<{bankwire}prestashop>bankwire_b17f3f4dcf653a5776792498a9b44d6a'] = 'Actualizar configuración';
 $_MODULE['<{bankwire}prestashop>payment_5e1695822fc5af98f6b749ea3cbc9b4c'] = 'Pago por transferencia bancaria';
 $_MODULE['<{bankwire}prestashop>payment_eb1d50032721fa4c9d3518c417f91b9d'] = 'Pago por transferencia bancaria (el proceso llevará más tiempo)';
 $_MODULE['<{bankwire}prestashop>payment_execution_c5e8668ba5e211603955f0b5e913d83d'] = 'Pago por transferencia bancaria';
@@ -33,24 +52,3 @@ $_MODULE['<{bankwire}prestashop>payment_return_c4457a9f2f20e39386008bbb2cd3a78f'
 $_MODULE['<{bankwire}prestashop>payment_return_0db71da7150c27142eef9d22b843b4a9'] = 'Para cualquier duda, por favor contacte con nosotros';
 $_MODULE['<{bankwire}prestashop>payment_return_64430ad2835be8ad60c59e7d44e4b0b1'] = 'atención al cliente';
 $_MODULE['<{bankwire}prestashop>payment_return_8de637e24570c1edb0357826a2ad5aea'] = 'Hemos detectado un problema con su pedido. Si considera que hay un error, por favor, contacte con nosotros';
-$_MODULE['<{bankwire}prestashop>bankwire_85ee0d0492a4e37e6c183520f5d59c40'] = 'Trasferencia bancaria';
-$_MODULE['<{bankwire}prestashop>bankwire_f652b92eefd4ecfe61ef5fb118157a05'] = 'Se aceptan pagos por trasferencia bancaria';
-$_MODULE['<{bankwire}prestashop>bankwire_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = '¿Está seguro de querer borrar los detalles?';
-$_MODULE['<{bankwire}prestashop>bankwire_f05d09f37c9a02f0737c1e71142028a9'] = 'El propietario y detalles de la cuenta deben configurarse para usar el módulo correctamente';
-$_MODULE['<{bankwire}prestashop>bankwire_4402acab1c8f90dcf4a31dc96833bd86'] = 'No hay moneda asignada a este módulo';
-$_MODULE['<{bankwire}prestashop>bankwire_bfa43217dfe8261ee7cb040339085677'] = 'se necesitan los detalles de la cuenta.';
-$_MODULE['<{bankwire}prestashop>bankwire_ccab155f173ac76f79eb192703f86b18'] = 'Se necesita el propietario de la cuenta.';
-$_MODULE['<{bankwire}prestashop>bankwire_444bcb3a3fcf8389296c49467f27e1d6'] = 'ok';
-$_MODULE['<{bankwire}prestashop>bankwire_c888438d14855d7d96a2724ee9c306bd'] = 'configuración actualizada';
-$_MODULE['<{bankwire}prestashop>bankwire_fcec4d73cccd149a2d18695fd8785f88'] = 'Este módulo permite aceptar pagos por trasferencia bancaria.';
-$_MODULE['<{bankwire}prestashop>bankwire_b6af2d31afe71aedcceca73cc27fec29'] = 'si el cliente elije este modo de pago, el pedido cambiará su estado a \"pendiente de pago\".';
-$_MODULE['<{bankwire}prestashop>bankwire_0daeb8f6c1874ec9442e821b524d37c1'] = 'Por lo tanto, deberá confirmar el pedido en cuanto reciba la trasferencia.';
-$_MODULE['<{bankwire}prestashop>bankwire_5dd532f0a63d89c5af0243b74732f63c'] = 'Detalles contacto';
-$_MODULE['<{bankwire}prestashop>bankwire_17e6954ea60d238857324fea1f10b8f3'] = 'Por favor, especifique los detalles de la cuenta para sus clientes';
-$_MODULE['<{bankwire}prestashop>bankwire_857216dd1b374de9bf54068fcd78a8f3'] = 'Propietario de la cuenta';
-$_MODULE['<{bankwire}prestashop>bankwire_3ec365dd533ddb7ef3d1c111186ce872'] = 'Detalles';
-$_MODULE['<{bankwire}prestashop>bankwire_6b154cafbab54ba3a1e76a78c290c02a'] = 'tales como: sucursal bancaria, código IBAN, BIC, etc.';
-$_MODULE['<{bankwire}prestashop>bankwire_f9a1a1bb716cbae0503d351ea2af4b34'] = 'Dirección agencia bancaria';
-$_MODULE['<{bankwire}prestashop>bankwire_b17f3f4dcf653a5776792498a9b44d6a'] = 'Actualizar configuración';
-
-?>

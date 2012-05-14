@@ -11,5 +11,3 @@ $_MODULE['<{statssearch}prestashop>statssearch_998e4c5c80f27dec552e99dfed34889a'
 $_MODULE['<{statssearch}prestashop>statssearch_df7e8db30f72561b6c3f3941ce88722a'] = 'ninguna palabra clave buscada más de una vez';
 $_MODULE['<{statssearch}prestashop>statssearch_6b4d88dce7077cd4181a692a1678b60a'] = '10 primeras palabras clave';
 $_MODULE['<{statssearch}prestashop>statssearch_52ef9633d88a7480b3a938ff9eaa2a25'] = 'Otros';
-
-?>

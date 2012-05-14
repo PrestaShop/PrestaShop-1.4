@@ -35,7 +35,7 @@ $_MODULE['<{bankwire}prestashop>payment_execution_e2c147f82d998eeeb147ae172a31a8
 $_MODULE['<{bankwire}prestashop>payment_execution_a7a08622ee5c8019b57354b99b7693b2'] = 'Merci de choisir parmi les suivantes :';
 $_MODULE['<{bankwire}prestashop>payment_execution_2c1ce705702e11fd5e2188c2353c0c86'] = 'Nous acceptons la devise suivante pour votre paiement :';
 $_MODULE['<{bankwire}prestashop>payment_execution_3dd021316505c0204989f984246c6ff1'] = 'Nos coordonnées bancaires seront affichées sur la page suivante.';
-$_MODULE['<{bankwire}prestashop>payment_execution_0881a11f7af33bc1b43e437391129d66'] = 'Merci de confirmer votre commande en cliquant sur \"Je confirme ma commande\"';
+$_MODULE['<{bankwire}prestashop>payment_execution_0881a11f7af33bc1b43e437391129d66'] = 'Merci de confirmer votre commande en cliquant sur « Je confirme ma commande »';
 $_MODULE['<{bankwire}prestashop>payment_execution_569fd05bdafa1712c4f6be5b153b8418'] = 'Autres moyens de paiement';
 $_MODULE['<{bankwire}prestashop>payment_execution_46b9e3665f187c739c55983f757ccda0'] = 'Je confirme ma commande';
 $_MODULE['<{bankwire}prestashop>payment_return_2e2117b7c81aa9ea6931641ea2c6499f'] = 'Votre commande sur';

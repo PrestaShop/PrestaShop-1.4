@@ -11,7 +11,6 @@ $_MODULE['<{moneybookers}prestashop>confirmation_df194447dfecf36bb8043bd8d94feed
 $_MODULE['<{moneybookers}prestashop>confirmation_047e219d25b398033511b18041dbfd7a'] = 'Su pedido será enviado tan pronto como recibamos su transferencia bancaria.';
 $_MODULE['<{moneybookers}prestashop>confirmation_8de637e24570c1edb0357826a2ad5aea'] = 'Nos hemos dado cuenta de un problema con su pedido.  Si usted piensa que esto es un error, puede contactar con nuestro';
 $_MODULE['<{moneybookers}prestashop>moneybookers-currency-error_6484c945379d81c37ac734c9768605cf'] = 'rnNo puede efectuar el pago de su pedido con Moneybookers ya que su divisa actual no está autorizada. Por favor, elija otra.';
-$_MODULE['<{moneybookers}prestashop>moneybookers_27266fe4d37bf06589c7c6dbf2d5c067'] = 'Pagar por';
 $_MODULE['<{moneybookers}prestashop>moneybookers_6861a58e2be4956b3f2fd6420fe6c28c'] = 'Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_a356736cbcf740f8648d71067fca090d'] = 'Acepta pagos por Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_fa214007826415a21a8456e3e09f999d'] = '¿Está seguro de que quiere eliminar sus datos?';
@@ -50,7 +49,7 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_d5086eeb1bc1994c5abf945fd79d424
 $_MODULE['<{moneybookers}prestashop>moneybookers_fd90882b9b7c8653dd645f5e986b5402'] = 'Comisión disponible desde el 21 de Marzo  del 2011';
 $_MODULE['<{moneybookers}prestashop>moneybookers_68db2cda800ddb2ae307c60b0a96252f'] = 'Solución de pago en línea  de Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_b9c758264b134743b13a85ca4055c629'] = 'Estimación del volumen mensual de los pagos realizados a través de Moneybookers';
-$_MODULE['<{moneybookers}prestashop>moneybookers_7d294d4900ff1a38f5b0a89612916eac'] = 'Para los comerciantes que sobrepasan 100 000€ se pueden establecer tarifas especiales.';
+$_MODULE['<{moneybookers}prestashop>moneybookers_7d294d4900ff1a38f5b0a89612916eac'] = 'Para los comerciantes que sobrepasan 100 000 se pueden establecer tarifas especiales.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_1467fcd161d2aee8146c7808c9377852'] = 'Para mirar la ultima actualización de las comisiones';
 $_MODULE['<{moneybookers}prestashop>moneybookers_936ccdb97115e9f35a11d35e3d5b5cad'] = 'Cliquear aqui';
 $_MODULE['<{moneybookers}prestashop>moneybookers_11c8ff1cde03aa19406dfe5971b92553'] = 'Monedero electrónico Moneybookers';
@@ -87,5 +86,4 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_554fd8768f165251646ce21ba499820
 $_MODULE['<{moneybookers}prestashop>moneybookers_a190bc880b04cf478e0370d1b315a5a3'] = 'Todos los logos en un bloque';
 $_MODULE['<{moneybookers}prestashop>moneybookers_852d04b5f455aaf5264e9a8c561ced71'] = 'Un bloque para cada logo';
 $_MODULE['<{moneybookers}prestashop>moneybookers_d4dccb8ca2dac4e53c01bd9954755332'] = 'Guardar los parámetros';
-
-?>
+$_MODULE['<{moneybookers}prestashop>moneybookers_27266fe4d37bf06589c7c6dbf2d5c067'] = 'Pagar por';

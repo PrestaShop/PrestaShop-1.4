@@ -24,7 +24,7 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_d14afc3f67d2457d29f0aa0db98e2c9d'
 $_MODULE['<{socolissimo}prestashop>socolissimo_f9733e52e8841f1e45d015d5af5e8655'] = 'Format url retour Validation incorrect';
 $_MODULE['<{socolissimo}prestashop>socolissimo_417434a4e55adbc67c9c391902cea7f3'] = 'Format url retour Echec incorrect';
 $_MODULE['<{socolissimo}prestashop>socolissimo_140c34f0b21b932e34d11575509d093b'] = 'ID de la transaction invalide';
-$_MODULE['<{socolissimo}prestashop>socolissimo_28ee1015b475a3a70613ea9c98d712b6'] = 'Format des frais d’expédition incorrect';
+$_MODULE['<{socolissimo}prestashop>socolissimo_28ee1015b475a3a70613ea9c98d712b6'] = 'Format des frais dexpédition incorrect';
 $_MODULE['<{socolissimo}prestashop>socolissimo_afa50e8b2fc14bf578331b2b8e98179d'] = 'Serveur Socolissimo non disponible';
 $_MODULE['<{socolissimo}prestashop>socolissimo_b5a7adde1af5c87d7fd797b6245c2a39'] = 'Description';
 $_MODULE['<{socolissimo}prestashop>socolissimo_d0b34d3e1cb0cc1150ae6bf650e9b569'] = 'So Colissimo est un service proposé par La Poste, qui vous permet d\'offrir à vos acheteurs 5 modes de livraison :';
@@ -37,7 +37,7 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_9fbff0971c06ee404f638e9abcbd9446'
 $_MODULE['<{socolissimo}prestashop>socolissimo_5b6cf869265c13af8566f192b4ab3d2a'] = 'Documentation';
 $_MODULE['<{socolissimo}prestashop>socolissimo_f4f70727dc34561dfde1a3c529b6205c'] = 'Configuration';
 $_MODULE['<{socolissimo}prestashop>socolissimo_0ab984d91ab0a037bdf692bf0e73c349'] = 'Important';
-$_MODULE['<{socolissimo}prestashop>socolissimo_58f73ae759adc826a9e15e26280cdaa4'] = 'Pour ouvrir un compte SoColissimo, merci de contacter \"La poste\" à ce numéro: 3634.';
+$_MODULE['<{socolissimo}prestashop>socolissimo_58f73ae759adc826a9e15e26280cdaa4'] = 'Pour ouvrir un compte SoColissimo, merci de contacter \"La poste\" à ce numéro: 3634.\"';
 $_MODULE['<{socolissimo}prestashop>socolissimo_9c85d4c2bae6ab548fe23e57bd89ddc4'] = 'Identifiant FO';
 $_MODULE['<{socolissimo}prestashop>socolissimo_7b95472e0575adc1e3d90a2d7b51e496'] = 'Utilisateur So Colissimo';
 $_MODULE['<{socolissimo}prestashop>socolissimo_897356954c2cd3d41b221e3f24f99bba'] = 'Clé de cryptage';
@@ -48,7 +48,7 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_1fb031ceef337d6c513315dc5ec98a27'
 $_MODULE['<{socolissimo}prestashop>socolissimo_e986d627f454602880075fe556378073'] = 'Le délai de préparation de commande doit être identique à celui saisi dans le Back Office ColiPoste';
 $_MODULE['<{socolissimo}prestashop>socolissimo_31e3fd47be6f64fb2e0a4f85cb63a069'] = 'Surcoût';
 $_MODULE['<{socolissimo}prestashop>socolissimo_a68e8fd6d255edb0ca099c7400252694'] = 'Surcoût à appliquer pour la livraison à domicile sur rendez-vous';
-$_MODULE['<{socolissimo}prestashop>socolissimo_d38ac03101faea9ed5f9ea96bf8627b4'] = 'Le \"surcoût\" doit être identique à celui saisi dans le Back Office ColiPoste';
+$_MODULE['<{socolissimo}prestashop>socolissimo_d38ac03101faea9ed5f9ea96bf8627b4'] = 'Le \"surcoût\" doit être identique à celui saisi dans le Back Office ColiPoste\"';
 $_MODULE['<{socolissimo}prestashop>socolissimo_9954970bc5804ff557ced19516e2a55c'] = 'Soyez très prudent avec ces paramètres, le changement peut provoquer un dysfonctionnement du module';
 $_MODULE['<{socolissimo}prestashop>socolissimo_b0b2896e75025245cbb05e96bd1466d6'] = 'Adresse FO';
 $_MODULE['<{socolissimo}prestashop>socolissimo_ce88aabea3b363c753b02ddcb2fbafff'] = 'Url de l\'administration de So Colissimo';

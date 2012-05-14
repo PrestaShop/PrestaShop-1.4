@@ -46,7 +46,7 @@ $_MODULE['<{canadapost}prestashop>canadapost_cf1580798f7aba85d519afadf1ffd886'] 
 $_MODULE['<{canadapost}prestashop>canadapost_02546d525ab356bd43c91e6b07447496'] = 'Il n\'y a pas d\'état pour ce pays';
 $_MODULE['<{canadapost}prestashop>canadapost_0ddc2a5660f7d095fff34d6b93077c80'] = 'Configuration du service';
 $_MODULE['<{canadapost}prestashop>canadapost_8d6bd50f3fe3ee2f4513066c25e5fb4a'] = 'Mode de calcul';
-$_MODULE['<{canadapost}prestashop>canadapost_79a7b64f7e16759d93ef3e74f1916815'] = 'Utilisation du mode calcul \"Tous les produits dans un seul colis\" utilisera automatiquement la taille et les services de livraison par défaut. Les configurations spécifiques pour les catégories et les produits ne seront pas utilisées.';
+$_MODULE['<{canadapost}prestashop>canadapost_79a7b64f7e16759d93ef3e74f1916815'] = 'Utilisation du mode calcul \"Tous les produits dans un seul colis\" utilisera automatiquement la taille et les services de livraison par défaut. Les configurations spécifiques pour les catégories et les produits ne seront pas utilisées.\"';
 $_MODULE['<{canadapost}prestashop>canadapost_5cdd307ba6e260beb4801c0c10e22a3a'] = 'Service de livraison';
 $_MODULE['<{canadapost}prestashop>canadapost_78945de8de090e90045d299651a68a9b'] = 'Disponible';
 $_MODULE['<{canadapost}prestashop>canadapost_2d25c72c1b18e562f6654fff8e11711e'] = 'Indisponible';

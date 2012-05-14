@@ -26,7 +26,6 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_417434a4e55adbc67c9c391902cea7f3'
 $_MODULE['<{socolissimo}prestashop>socolissimo_140c34f0b21b932e34d11575509d093b'] = 'ID de la transacción no válida';
 $_MODULE['<{socolissimo}prestashop>socolissimo_28ee1015b475a3a70613ea9c98d712b6'] = 'Formato de gastos de envío incorrecto';
 $_MODULE['<{socolissimo}prestashop>socolissimo_afa50e8b2fc14bf578331b2b8e98179d'] = 'Servidor SoColissimo no disponible';
-$_MODULE['<{socolissimo}prestashop>socolissimo_27e0a4f1ce5bb4ad9687a021e95367df'] = 'So Colissimo no es compatible con la función One Page Checkout, con el fin de utilizar este módulo, por favor, activa el proceso de compra estándar (Preferencias> \"Tipo de proceso de pedidos\")';
 $_MODULE['<{socolissimo}prestashop>socolissimo_b5a7adde1af5c87d7fd797b6245c2a39'] = 'Descripción';
 $_MODULE['<{socolissimo}prestashop>socolissimo_d0b34d3e1cb0cc1150ae6bf650e9b569'] = 'SoColissimo es un servicio propuesto Por La Poste, que le permite proponer a sus compradores cinco modos de entrega:';
 $_MODULE['<{socolissimo}prestashop>socolissimo_e5c7c47a2cc967ae4834ad5c076734df'] = 'Entrega a domicilio';
@@ -90,5 +89,3 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_e937c6393ce858786bd31a279b50572d'
 $_MODULE['<{socolissimo}prestashop>socolissimo_f109a88feec5ad3aeb82580c7a20ec31'] = 'Punto de entrega';
 $_MODULE['<{socolissimo}prestashop>socolissimo_021944549c2795a6e4db23b92f198a5e'] = 'Dirección del punto de entrega';
 $_MODULE['<{socolissimo}prestashop>socolissimo_ce8ae9da5b7cd6c3df2929543a9af92d'] = 'Email';
-
-?>
