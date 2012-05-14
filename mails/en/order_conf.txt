@@ -1,28 +1,41 @@
-﻿Hi {firstname} {lastname},
+﻿Hello {firstname} {lastname}, thank you for your order on {shop_name}!
 
-Thank you for your order on {shop_name}!
+Order details
 
-Order: {order_name} placed on {date}
-Payment: {payment}
+	Order: {order_name} placed on {date}
+	Payment: {payment}
 
-Products: {total_products}
-Discounts: {total_discounts}
-Shipping: {total_shipping}
-Gift-wrapping: {total_wrapping}
-Total paid: {total_paid}
+	Products: {total_products}
+	Discounts: {total_discounts}
+	Shipping: {total_shipping}
+	Gift-wrapping: {total_wrapping}
+	Total paid: {total_paid}
 
-Carrier: {carrier}
 
-Delivery address:
+Shipping
 
-{delivery_block_txt}
+	Carrier: {carrier}
 
-Billing address:
+	Delivery address:
 
-{invoice_block_txt}
+	{delivery_company}
+	{delivery_firstname} {delivery_lastname}
+	{delivery_address1}
+	{delivery_address2}
+	{delivery_postal_code} {delivery_city}
+	{delivery_country} {delivery_state}
+	{delivery_other}
 
-You can review your order and download your invoice from the "Order history" section of your customer account by clicking "My account" on our shop.
+	Billing address:
 
-If you have guest account, you can follow your order using this link: {shop_url}guest-tracking.php
+	{invoice_company}
+	{invoice_firstname} {invoice_lastname}
+	{invoice_address1}
+	{invoice_address2}
+	{invoice_postal_code} {invoice_city}
+	{invoice_country} {invoice_state}
+	{invoice_other}
+
+You can review this order and download your invoice from the "Order history" section of your account by clicking "My account" on our Website. 
 
 {shop_url} powered by PrestaShop™

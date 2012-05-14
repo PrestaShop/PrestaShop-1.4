@@ -1,11 +1,4 @@
-Hello,
-
-{employee} wanted to forward this discussion to you.
-
-Internal comments: {comment}
+{employee} wanted to forward this chat to you.
+Comment: {comment}
  
-Discussion history:
 {messages}
-
-Regards,
-{shop_name} powered by PrestaShop™

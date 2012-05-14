@@ -1,8 +1,3 @@
-Hello,
+	Hello,
 	
-This is a test e-mail from your PrestaShop™ online shop.
-
-If you can read this, the test was successful!
-
-Regards,
-{shop_name} powered by PrestaShop™
+	This is a test mail from your PrestaShop™ online shop.
