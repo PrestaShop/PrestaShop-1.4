@@ -145,7 +145,7 @@ class Dao{
 												LEFT JOIN `"._DB_PREFIX_."message` AS msg ON msg.id_order=o.id_order
 												LEFT JOIN `"._DB_PREFIX_."customer` AS cust ON cust.id_customer=o.id_customer
 												LEFT JOIN `"._DB_PREFIX_."opensi_order` as osi ON osi.id_order = o.id_order
-												LEFT JOIN `ps_socolissimo_delivery_info` as socolissimo ON socolissimo.id_cart = o.Id_cart
+												LEFT JOIN `"._DB_PREFIX_."socolissimo_delivery_info` as socolissimo ON socolissimo.id_cart = o.Id_cart
 												WHERE o.date_add>\"".pSQL($since)."\" AND o.date_add<=\"".pSQL($to)."\"
 												AND a1.id_address = o.id_address_invoice AND a2.id_address = o.id_address_delivery 
 												AND	co1.id_country = a1.id_country AND	co2.id_country = a2.id_country
@@ -178,7 +178,7 @@ class Dao{
 												LEFT JOIN `"._DB_PREFIX_."message` AS msg ON msg.id_order=o.id_order
 												LEFT JOIN `"._DB_PREFIX_."customer` AS cust ON cust.id_customer=o.id_customer
 												LEFT JOIN `"._DB_PREFIX_."opensi_order` as osi ON osi.id_order = o.id_order
-												LEFT JOIN `ps_socolissimo_delivery_info` as socolissimo ON socolissimo.id_cart = o.Id_cart
+												LEFT JOIN `"._DB_PREFIX_."socolissimo_delivery_info` as socolissimo ON socolissimo.id_cart = o.Id_cart
 												WHERE o.date_add>\"".pSQL($since)."\" AND o.date_add<=\"".pSQL($to)."\"
 												AND a1.id_address = o.id_address_invoice AND a2.id_address = o.id_address_delivery 
 												AND	co1.id_country = a1.id_country AND	co2.id_country = a2.id_country
