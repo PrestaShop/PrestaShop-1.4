@@ -85,7 +85,7 @@ class MRTools
 		if (!preg_match('/[\x80-\xff]/', $string))
 			return $string;
 
-		if (MRTools::mseemsUTF8($string))
+		if (MRTools::seemsUTF8($string))
 		{
 			$chars = array(
 				// Decompositions for Latin-1 Supplement
