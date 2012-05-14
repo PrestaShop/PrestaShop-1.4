@@ -94,6 +94,9 @@ abstract class PaymentModuleCore extends Module
 
 		$cart = new Cart((int)($id_cart));
 		// Does order already exists ?
+		if (!$this->active)
+			die(Tools::displayError());
+
 		if (Validate::isLoadedObject($cart) AND $cart->OrderExists() == false)
 		{
 			if ($secure_key !== false AND $secure_key != $cart->secure_key)
