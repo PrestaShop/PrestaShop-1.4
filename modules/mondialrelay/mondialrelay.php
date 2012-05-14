@@ -357,6 +357,9 @@ class MondialRelay extends Module
 
 	public function hookNewOrder($params)
 	{
+		if (!MondialRelay::isMondialRelayCarrier($params['cart']->id_carrier))
+			return;
+		
 		DB::getInstance()->execute('
 			UPDATE `'._DB_PREFIX_.'mr_selected`
 			SET `id_order` = '.(int)$params['order']->id.'
