@@ -381,12 +381,12 @@ class Socolissimo extends CarrierModule
 
 		if (isset($carrierSo) AND $carrierSo->active)
 		{
-			$signature = $this->make_key(substr($this->lower($params['address']->lastname),0,34),
+			$signature = self::make_key(substr($this->lower($params['address']->lastname),0,34),
 						 (int)(Configuration::Get('SOCOLISSIMO_PREPARATION_TIME')),
 						 number_format((float)(version_compare(_PS_VERSION_, '1.5', '>') ? $params['cart']->getTotalShippingCost() : $params['cart']->getOrderShippingCost($carrierSo->id, true)), 2, ',', ''),
 						 (int)($params['address']->id_customer),(int)($params['address']->id));
 
-			$orderId = $this->formatOrderId((int)($params['address']->id));
+			$orderId = self::formatOrderId((int)($params['address']->id));
 			$inputs = array('PUDOFOID' => Configuration::get('SOCOLISSIMO_ID'),
 							'ORDERID' => $orderId,
 							'CENAME' => substr($this->lower($params['address']->lastname),0, 34),
@@ -563,7 +563,7 @@ class Socolissimo extends CarrierModule
 		}
 	}
 
-	public function make_key($ceName, $dyPraparationTime, $dyForwardingCharges, $trClientNumber, $orderId)
+	public static function make_key($ceName, $dyPraparationTime, $dyForwardingCharges, $trClientNumber, $orderId)
 	{
 		return sha1(Configuration::get('SOCOLISSIMO_ID').$ceName.$dyPraparationTime.$dyForwardingCharges.$trClientNumber.self::formatOrderId($orderId).Configuration::get('SOCOLISSIMO_KEY'));
 	}
@@ -736,13 +736,13 @@ class Socolissimo extends CarrierModule
 		return strtolower(str_replace('-',' ',$strOut));
 	}
 
-	public function formatOrderId($id)
+	public static function formatOrderId($id)
 	{
 		if(strlen($id)<5)
 			while (strLen($id) != 5)
 			{
-            	$id = '0'.$id;
-            }
+				$id = '0'.$id;
+			}
 		return $id;
 	}
 
@@ -793,7 +793,7 @@ class Socolissimo extends CarrierModule
 		if ($carrier->range_behavior)
 		{
 			// Get id zone
-	        if (isset($this->context->cart->id_address_delivery) AND $this->context->cart->id_address_delivery)
+			if (isset($this->context->cart->id_address_delivery) AND $this->context->cart->id_address_delivery)
 				$id_zone = Address::getZoneById((int)($this->context->cart->id_address_delivery));
 			else
 				$id_zone = (int)$this->context->country->id_zone;
