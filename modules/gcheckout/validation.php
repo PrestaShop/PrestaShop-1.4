@@ -37,7 +37,7 @@ require_once(dirname(__FILE__).'/library/googlerequest.php');
 require_once(dirname(__FILE__).'/library/googlecart.php');
 
 if (!$this->active)
-	return;
+	die(Tools::displayError());
 
 $merchant_id = Configuration::get('GCHECKOUT_MERCHANT_ID');
 $merchant_key = Configuration::get('GCHECKOUT_MERCHANT_KEY');
