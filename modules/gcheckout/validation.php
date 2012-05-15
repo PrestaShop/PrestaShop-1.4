@@ -36,7 +36,8 @@ require_once(dirname(__FILE__).'/library/googleresult.php');
 require_once(dirname(__FILE__).'/library/googlerequest.php');
 require_once(dirname(__FILE__).'/library/googlecart.php');
 
-if (!$this->active)
+$gcheckout = new GCheckout();
+if (!$gcheckout->active)
 	die(Tools::displayError());
 
 $merchant_id = Configuration::get('GCHECKOUT_MERCHANT_ID');
@@ -93,7 +94,6 @@ switch ($root)
 			// secure_cart[0] => id_cart
 			// secure_cart[1] => secure_key
 
-			$gcheckout = new GCheckout();
 			$secure_cart = explode('|', $data[$root]['shopping-cart']['merchant-private-data']['VALUE']);
 			$cart = new Cart((int)$secure_cart[0]);
 			$currency = $gcheckout->getCurrency((int)$cart->id_currency);
