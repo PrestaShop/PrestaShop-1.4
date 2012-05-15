@@ -24,6 +24,206 @@ International Registred Trademark & Property of PrestaShop SA
 Release Notes for PrestaShop 1.4
 --------------------------------
 ####################################
+#   v1.4.8.2 - 15288 (2012-05-14)  #
+####################################
+
+	Improved/changed features:
+
+	[*] MO : Tnt carrier, new version of the module
+
+	[*] TR : Added translations english
+	[*] TR : Added translations french and spanish
+
+	Fixed bugs:
+
+	[-] FO : #PSCFI-5383 : Fixed a problem of selector for add_to_cart button which was too strict
+
+	[-] BO : translations errors : fix regex
+
+	[-] Classes : #PSCFI-4973 : Bug fix mail receiver was null
+
+	[-] MO : Fix bug with authorise.net
+	[-] MO : Fixed bug #PNM-118. Dibs payment validation is now correctly handled.
+	[-] MO : Fixed bug #PSCFI-5521. Accented char is now fixed for any charset set.
+	[-] MO : Fixed bug #PSCFI-5633.
+	[-] MO : Mondialrelay, fixed bug #PNM-218. Carrier update works with the new field table 'is_deleted'
+	[-] MO : Mondialrelay, fix order creation when it's not a MR carrier
+	[-] MO : [-] MO : TrustedShops, Fixed bug #PNM-206. Check PS version to get the hook id
+	[-] MO : Paypal, Fixed bug #PNM-129. SSL v3 is now used for cURL and fsockopen.
+	[-] MO : #PNM-110 - Fix bug with So Colissimo without fancybox mod
+	[-] MO : #PNM-82 - SoColissimo do not validates order without javascript
+	[-] MO : #PSCFI-5600 : CloudCache Fix a return by reference issue
+	[-] MO : Socolissimo, fixed bug #PSCFI-5537. Works properly with smarty v2 and made some refacto.
+	[-] MO : USPS module now displays error message returned by USPS web service #PNM-2
+
+	[-] WS : Fix bug when using & in shop name
+
+
+####################################
+#   v1.4.8.1 - 15018 (2012-05-02)  #
+####################################
+
+	Added Features:
+
+	[+] MO : Added 1.5 compatibility for Shipwire module
+
+	Improved/changed features:
+
+	[*] MO : blocklayered module - Unit Price is displayed correctly
+	[*] MO : Check before deleting override files in Avalara module. Also, use PS Tax class if Avalara is not active
+
+	Fixed bugs:
+
+	[-] MO : Avalaratax, Fixed bug #PSCFI-5533. Override file are now deleted after uninstall. Some unused / undeclared variables have been checked properly.
+	[-] MO : Fixed issue with keys on cloudcache
+	[-] MO : Mondialrelay, Fixed bug #PNM-189. Cross-domain ajax call works properly and fix upgrade process for hook
+	[-] MO : Mondialrelay, fixed bug #PNM-196. Following url for other module won't be overrided by this module.
+	[-] MO : Mondialrelay, fix unused condition, carrier propperly disabled, review the installation when keeping data during the uninstall and change upgrade function.
+	[-] MO : Paypal, Fixed bug #PSCFI-5296. Link deleted.
+
+
+####################################
+#   v1.4.8.0 - 14971 (2012-04-27)  #
+####################################
+
+	Added Features:
+
+	[+] BO : Add CloudCache advertisement to the Performance tab
+
+	[+] MO : Added 1.5 compatibility for CloudCache
+	[+] MO : CloudCache 1.0.1
+	[+] MO : ES and FR translation for CloudCache module
+	[+] MO : ES translation for CloudCache module
+	[+] MO : Module AvalaraTax 1.0
+	[+] MO : Module Jirafe 1.2
+	[+] MO : Module Kwixo 4.1
+	[+] MO : Module OpenSI 1.0.9
+	[+] MO : Module Shipwire 1.0
+	[+] MO : Shipwire. Added AffiliateId.
+	[+] MO : Shipwire. Added translations and compatibility for 1.5
+	[+] MO : Shipwire. Added translations in ES and FR.
+	[+] MO : Shipwire. Removed duplicate carrier options.
+
+	Improved/changed features:
+
+	[*] BO : fix #PSFV-433
+
+	[*] MO : autoupgrade 0.3.4 released ( #PNM-51 )
+	[*] MO : Clear description of CloudCache requirements + translation
+
+	[*] LO : SK.xml
+
+	Fixed bugs:
+
+	[-] Project : Bug Fixed #PSCFI-5370 - Order::getTotalProductsWithTaxes() shouldn't apply tax on reduction_amount
+	[-] Project : #PSCFI-519 - Blocklayered installation optimization
+
+	[-] INSTALLER : Active only the selected country by the merchant
+	[-] Installer : Fixed #PSCFI-5182
+	[-] Installer : #PNM-105 : BugFix autoupgrade and module pages not found
+
+	[-] FO : Bug Fixed - Related to #PSCFI-5010 - County taxes not applied
+	[-] FO : fixed bug #PSCFI-5454 - Guest tracking should be SSL encrypted
+	[-] FO : fixed bug #PSCFI-5502 - Incorrect resizing of addresses on the order history page
+	[-] FO : Fix untested variable
+	[-] FO : #PSCFI-5031 : Fixed a problem of translation
+	[-] FO : #PSCFI-5322 - Order::hasBeenDelivered and Order::hasBeenPaid don't work for all order states
+	[-] FO : #PSCFI-5343 : Fixed a problem of E-mail subject encoding
+	[-] FO : #PSCFI-5385 - Fixed JS variable ipa_default
+
+	[-] BO : Fixed AdminCustomers - #PSCFI-5261
+	[-] BO : fixed #PSCFI-5163 - Editing voucher causes inconsitencies in discount table
+	[-] BO : fix #PSCFI-4878
+	[-] BO : fix #PSCFI-4956 - search aliases are now correctly replaced in queries with more than one word
+	[-] BO : fix #PSCFI-5285
+	[-] BO : fix #PSCFI-5311
+	[-] BO : fix #PSCFI-5379
+	[-] BO : fix #PSCFI-5408
+	[-] BO : fix #PSCFI-5421
+	[-] BO : Fix #PSFV-549 : Now two customer with the same mail, isn't possible
+	[-] BO : Norm fix on CloudCache Ad
+	[-] BO : #PNM-31 - Fix bug with jQZoom and position relative
+	[-] BO : #PSCFI-4798 : Allowed to edit guest addresses
+	[-] BO : #PSCFI-4821 : Modified an error message in order to be more clear
+	[-] BO : #PSCFI-4821 : Modified an error message in order to be more clear (added translations)
+	[-] BO : #PSCFI-5323 - Refound proposed whereas the product is shipped
+	[-] BO : #PSCFI-5338 : Modified mail translations in German
+	[-] BO : #PSCFI-5338 : Modified mail translations in German and fixed a problem of variables which were displayed in AdminTranslations
+	[-] BO : #PSCFI-5340 : fix duplicate primary key
+	[-] BO : #PSCFI-5408 : fix bug in getParentsCategories() method
+	[-] BO : #PSCFI-5412 : fix bug style product
+	[-] BO : revert #PSCFI-5113
+	[-] BO : table alignment fixed in the listing of products of a manufacturer when stock management is disabled
+
+	[-] Classes : fixed bug #PSCFI-5354 - Can not Edit or Create Carrier without Error
+	[-] Classes : fixed bug #PSCFI-5435 - Webservice: cannot set negative price to a combination
+	[-] Classes : fixed bug #PSCFI-5436 - Webservice: cannot set negative price to a combination
+	[-] Classes : fixed bug #PSCFI-5488 - typo 'disableMuliviews' in Tools.php
+	[-] Classes : fixed bug #PSCFI-5491 - AdminAddresses unextendable by module
+	[-] Classes : fixed bug #PSCFI-5499 - In OrderDetail.php "product_supplier_reference" is going to 'product_reference'
+
+	[-] MO : Cloudchache module, fixed URL htmlentities
+	[-] MO : Cloudchache module, fixed URL htmlentities
+	[-] MO : Cloudchache module, fixed URL htmlentities
+	[-] MO : Cloudchache module, fixed URL htmlentities
+	[-] MO : Fixed check for Rijndael
+	[-] MO : Fixed CloudCache escaped quotes with strip_tags
+	[-] MO : Fixed HTML entities in Shipwire
+	[-] MO : Fixed Rijndael check in API
+	[-] MO : French translations missing #PSCFI-5503
+	[-] MO : GoogleSiteMap #PSCFI-5331
+	[-] MO : Module Certissim (2.2)
+	[-] MO : Module OpenSI updated (1.1.0)
+	[-] MO : Mondialrelay, Fixed bug #PSCFI-5474. Chars such as (',', ';', ...) are now properly cleaned out of the string
+	[-] MO : Mondialrelay, Fixed bug #PSCFI-5525, phone number properly cleaned and validated with new methods
+	[-] MO : Mondialrelay, fix shop id with last 1.5 update
+	[-] MO : opensi, fix bad include
+	[-] MO : Removing old subscription link (2.8.7)
+	[-] MO : TrustedShop - Fix 1.5
+	[-] MO : TrustedShops, Fix request.
+
+	[-] WS : add readonly attribute for WS
+	[-] WS : Fix bug on manufacturer, stores and suppliers PSCFI-4958
+	[-] WS : Fix multiple bug, posting a product image now return ID, product image legend can now be set via /products entity PSCFI-5221
+
+	[-] PDF : Bug Fixed #PSCFI-5448 - Order::getTaxesAverageUsed() must use historized data (Thx petzo for the patch)
+
+
+####################################
+#   v1.4.7.3 - 14469 (2012-04-05)  #
+####################################
+
+	Improved/changed features:
+
+	[*] project : fix generation of settings file (constant _PS_CREATION_DATE_ was deleted) #PSCFI-4424
+
+	Fixed bugs:
+
+	[-] Installer : Fixed #PSCFI-5089
+
+	[-] FO : BugFix : #PSCFI-4920 : escaping address field in template
+	[-] FO : Fixed #PSCFI-5259 #PSCFI-3869
+	[-] FO : #PSCFI-5027 : Fixed a bug, when a user which didn't have addresses can pay by check his cart
+	[-] FO : #PSCFI-5115 : Fixed a problem of fancybox when cover is not first image
+	[-] FO : #PSCFI-5133 : Fixed a problem linked to ssl. Used Tools::usingSecureMode() for the treatment
+
+	[-] BO : #PI-57 : Fix bug when we import pack of language in emails files
+	[-] BO : #PSCFI-5012 : Fixed a problem of label in "blockcms.php"
+	[-] BO : #PSCFI-5113 : fix bug when we deleting multiple products
+
+	[-] Classes : Fixed #PSCFI-5234 - translations in modules are now correctly handled
+
+	[-] MO : fixed bug #PNM-20, Add locale variable replacing the defaultLang one.
+	[-] MO : Fixed bug #PNM-30. Order-confirmation and others pages could be tracked.
+	[-] MO : Fixed bug #PSCFI-4912. SSL can be used for redirection. (Fix other blocking bug for the module)
+	[-] MO : Fixed bug #PSFV-618. Properly redirect to the order-confirmation page to see properly the validation or error of the payement.
+	[-] MO : #PNM-120 : Bug fix Ogone currency conversion (was applied twice)
+	[-] MO : Refactoring, fix the display of a certificate depending of the selected lang, fix rating widget and verification of the trusted box data.
+
+	[-] LO : Bug Fixed #PSCFI-4275 - SK Unit type
+
+
+####################################
 #   v1.4.7.2 - 14279 (2012-03-26)  #
 ####################################
 
