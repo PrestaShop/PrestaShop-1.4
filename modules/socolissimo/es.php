@@ -8,9 +8,9 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_f8e355b97fa1be7a8d8c206aa66f0077'
 $_MODULE['<{socolissimo}prestashop>socolissimo_690c1c6abf905b88281a7cd324af9942'] = 'Grupo del transportista';
 $_MODULE['<{socolissimo}prestashop>socolissimo_a18ef2e8b3730915798057a50ecbf2cd'] = 'Franja del transportista';
 $_MODULE['<{socolissimo}prestashop>socolissimo_59f26c70c0230e4ec5e4acdfed0e270c'] = 'Precio de franja';
-$_MODULE['<{socolissimo}prestashop>socolissimo_798547c41ec3e64e2322df678e939344'] = '\'Identificante FO\'';
-$_MODULE['<{socolissimo}prestashop>socolissimo_ac08649aa09ff3b879525627bf086dd1'] = '\'Clave de encriptación\'';
-$_MODULE['<{socolissimo}prestashop>socolissimo_a3a53f075adf77334cc34d0f7497ff44'] = '\'URL de la administración de SoColissimo\'';
+$_MODULE['<{socolissimo}prestashop>socolissimo_798547c41ec3e64e2322df678e939344'] = 'Identificante FO\'';
+$_MODULE['<{socolissimo}prestashop>socolissimo_ac08649aa09ff3b879525627bf086dd1'] = 'Clave de encriptación\'';
+$_MODULE['<{socolissimo}prestashop>socolissimo_a3a53f075adf77334cc34d0f7497ff44'] = 'URL de la administración de SoColissimo\'';
 $_MODULE['<{socolissimo}prestashop>socolissimo_4d470fde8487e755a50e9235e3dc13ab'] = 'deben indicarse para funcionar correctamente';
 $_MODULE['<{socolissimo}prestashop>socolissimo_94c614a9df45ea1fcd27b15b7d6f3e67'] = 'Clave no válida';
 $_MODULE['<{socolissimo}prestashop>socolissimo_90a5cb3d07bb39bbd4b76f7f9a0d7947'] = 'Se ha producido un error en la etapa \'transportista\'';

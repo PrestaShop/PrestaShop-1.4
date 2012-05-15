@@ -37,7 +37,7 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_8bf466a25752f2552df8dc8b04fc10b
 $_MODULE['<{blocklayered}prestashop>blocklayered_b5ca9d41e254963a90417fe12bafba5a'] = 'Indexación de URL fallo';
 $_MODULE['<{blocklayered}prestashop>blocklayered_399e951fec4faaeab09333f40bf6d80c'] = 'Indización de atributos fallo';
 $_MODULE['<{blocklayered}prestashop>blocklayered_e2dd8f544131eaf47a4f722ace7f876b'] = 'Indexación de los precios terminado';
-$_MODULE['<{blocklayered}prestashop>blocklayered_7cf7d150dd287df0a8e17eeb4cf2161d'] = '(en progreso,% s productos a indexar)';
+$_MODULE['<{blocklayered}prestashop>blocklayered_7cf7d150dd287df0a8e17eeb4cf2161d'] = '(en progreso,%s productos a indexar)';
 $_MODULE['<{blocklayered}prestashop>blocklayered_ceda32b8540dee4f1222cd482a513db8'] = 'Indexación de los precios fallo';
 $_MODULE['<{blocklayered}prestashop>blocklayered_a2654ab6d514d63a3be2a4d6ea6b39df'] = 'Los actuales plantillas de filtros';
 $_MODULE['<{blocklayered}prestashop>blocklayered_d4041fbb1580b68012b82fee850014a2'] = 'plantillas de filtro están configurados:';
