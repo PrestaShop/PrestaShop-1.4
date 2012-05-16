@@ -411,7 +411,7 @@ class kwixo extends PaymentModule {
     $kwixo_categories = $this->getKwixoCategories();
     $this->_html .= '
 		<fieldset><legend>' . $this->l('Settings "Kwixo"') . '</legend>
-		<p>' . $this->l('The following parameters were provided to you by FIA-NET / KWIXO') . '. ' . $this->l('If you are not yet registered, click ') . ' <a style="color:blue;text-decoration:underline" href="http://recette.kwixo.com/homebo/index.htm">' . $this->l('here') . '</a>
+		<p>' . $this->l('The following parameters were provided to you by FIA-NET / KWIXO') . '. ' . $this->l('If you are not yet registered, click ') . ' <a style="color:blue;text-decoration:underline" href="https://www.kwixo.com/homebo/index.htm" target="_blank">' . $this->l('here') . '</a>
 		<!--<a href="http://recette.kwixo.com/homebo/index.htm"><img src="../modules/kwixo/logoKwixo_Cr_V.png" alt="logo" style="width:100px"/></a>-->
 		<br/><br/></p>
 		<form action="' . Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']) . '" method="post">
