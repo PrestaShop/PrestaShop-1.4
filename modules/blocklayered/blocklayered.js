@@ -170,12 +170,13 @@ function hideFilterValueAction(it)
 	}
 }
 
-function addSlider(type, data, unit)
+function addSlider(type, data, unit, format)
 {
 	sliderList.push({
 		type: type,
 		data: data,
-		unit: unit
+		unit: unit,
+		format: format
 	});
 }
 
@@ -183,8 +184,24 @@ function initSliders()
 {
 	$(sliderList).each(function(i, slider){
 		$('#layered_'+slider['type']+'_slider').slider(slider['data']);
-		$('#layered_'+slider['type']+'_range').html($('#layered_'+slider['type']+'_slider').slider('values', 0)+
-			' - ' + $('#layered_'+slider['type']+'_slider').slider('values', 1 ));
+		
+		var from = '';
+		var to = '';
+		switch (slider['format'])
+		{
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+				from = blocklayeredFormatCurrency($('#layered_'+slider['type']+'_slider').slider('values', 0), slider['format'], slider['unit']);
+				to = blocklayeredFormatCurrency($('#layered_'+slider['type']+'_slider').slider('values', 1), slider['format'], slider['unit']);
+				break;
+			case 5:
+				from =  $('#layered_'+slider['type']+'_slider').slider('values', 0)+slider['unit']
+				to = $('#layered_'+slider['type']+'_slider').slider('values', 1)+slider['unit'];
+				break;
+		}
+		$('#layered_'+slider['type']+'_range').html(from+' - '+to);
 	});
 }
 
@@ -391,12 +408,16 @@ function reloadContent(params_plus)
 			if ($(result.pagination).find('ul.pagination').length)
 			{
 				$('div#pagination').show();
-				$('ul.pagination').replaceWith($(result.pagination).find('ul.pagination'));
+				$('ul.pagination').each(function () {
+					$(this).replaceWith($(result.pagination).find('ul.pagination'));
+				});
 			}
 			else if (!$('ul.pagination').length)
 			{
 				$('div#pagination').show();
-				$('div#pagination').html($(result.pagination));
+				$('div#pagination').each(function () {
+					$(this).html($(result.pagination));
+				});
 			}
 			else
 			{
@@ -412,7 +433,7 @@ function reloadContent(params_plus)
 				val = $('#pagination #nb_item').val();
 				$('#pagination #nb_item').children().each(function(it, option) {
 					if (option.value == val)
-						$(option).attr('selected', 'selected');
+						$(option).attr('selected', true);
 					else
 						$(option).removeAttr('selected');
 				});
@@ -508,6 +529,7 @@ function updateProductUrl()
 		});
 	}
 }
+
 /**
  * Copy of the php function utf8_decode()
  */
@@ -536,4 +558,51 @@ function utf8_decode (utfstr) {
 		}
 	}
 	return res;
+}
+
+
+/**
+ * Return a formatted price
+ * Copy from tools.js
+ */
+function blocklayeredFormatCurrency(price, currencyFormat, currencySign, currencyBlank)
+{
+	// if you modified this function, don't forget to modify the PHP function displayPrice (in the Tools.php class)
+	blank = '';
+	price = parseFloat(price.toFixed(6));
+	price = ps_round(price, priceDisplayPrecision);
+	if (currencyBlank > 0)
+		blank = ' ';
+	if (currencyFormat == 1)
+		return currencySign + blank + blocklayeredFormatNumber(price, priceDisplayPrecision, ',', '.');
+	if (currencyFormat == 2)
+		return (blocklayeredFormatNumber(price, priceDisplayPrecision, ' ', ',') + blank + currencySign);
+	if (currencyFormat == 3)
+		return (currencySign + blank + blocklayeredFormatNumber(price, priceDisplayPrecision, '.', ','));
+	if (currencyFormat == 4)
+		return (blocklayeredFormatNumber(price, priceDisplayPrecision, ',', '.') + blank + currencySign);
+	return price;
+}
+
+
+/**
+ * Return a formatted number
+ * Copy from tools.js
+ */
+function blocklayeredFormatNumber(value, numberOfDecimal, thousenSeparator, virgule)
+{
+	value = value.toFixed(numberOfDecimal);
+	var val_string = value+'';
+	var tmp = val_string.split('.');
+	var abs_val_string = (tmp.length == 2) ? tmp[0] : val_string;
+	var deci_string = ('0.' + (tmp.length == 2 ? tmp[1] : 0)).substr(2);
+	var nb = abs_val_string.length;
+
+	for (var i = 1 ; i < 4; i++)
+		if (value >= Math.pow(10, (3 * i)))
+			abs_val_string = abs_val_string.substring(0, nb - (3 * i)) + thousenSeparator + abs_val_string.substring(nb - (3 * i));
+
+	if (parseInt(numberOfDecimal) == 0)
+		return abs_val_string;
+	return abs_val_string + virgule + (deci_string > 0 ? deci_string : '00');
 }

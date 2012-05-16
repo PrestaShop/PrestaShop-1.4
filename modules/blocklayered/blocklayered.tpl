@@ -51,9 +51,14 @@ param_product_url = '';
 										{if $smarty.foreach.f_values.first}
 											<li>
 												<a href="#" rel="layered_{$filter.type}_slider" title="{l s='Cancel' mod='blocklayered'}">x</a>
-												{$filter.name|escape:html:'UTF-8'} ({$filter.unit|escape:html:'UTF-8'}){l s=':' mod='blocklayered'}
-												{$filter.values[0]|escape:html:'UTF-8'} - 
-												{$filter.values[1]|escape:html:'UTF-8'}
+												{$filter.name|escape:html:'UTF-8'}{l s=':' mod='blocklayered'}
+												{if $filter.format}
+													{displayPrice price=$filter.values[0]} - 
+													{displayPrice price=$filter.values[1]}
+												{else}
+													{$filter.values[0]|escape:html:'UTF-8'}{$filter.unit|escape:html:'UTF-8'} - 
+													{$filter.values[1]|escape:html:'UTF-8'}{$filter.unit|escape:html:'UTF-8'}
+												{/if}
 											</li>
 										{/if}
 									{else}
@@ -80,7 +85,7 @@ param_product_url = '';
 						{else}
 						<div>
 						{/if}
-						<span class="layered_subtitle">{$filter.name|escape:html:'UTF-8'} {if isset($filter.unit)}({$filter.unit|escape:html:'UTF-8'}){/if}</span>
+						<span class="layered_subtitle">{$filter.name|escape:html:'UTF-8'}</span>
 						<span class="layered_close"><a href="#" rel="ul_layered_{$filter.type}_{$filter.id_key}">v</a></span>
 						<div class="clear"></div>
 						<ul id="ul_layered_{$filter.type}_{$filter.id_key}">
@@ -159,12 +164,25 @@ param_product_url = '';
 										values: [ {/literal}{$filter.values[0]}{literal}, {/literal}{$filter.values[1]}{literal}],
 										slide: function( event, ui ) {
 											stopAjaxQuery();
-											$('#layered_{/literal}{$filter.type}{literal}_range').html(ui.values[ 0 ] + ' - ' + ui.values[ 1 ]);
+											{/literal}
+											{if $filter.format < 5}
+											{literal}
+												from = blocklayeredFormatCurrency(ui.values[0], {/literal}{$filter.format}{literal}, '{/literal}{$filter.unit}{literal}');
+												to = blocklayeredFormatCurrency(ui.values[1], {/literal}{$filter.format}{literal}, '{/literal}{$filter.unit}{literal}');
+											{/literal}
+											{else}
+											{literal}
+												from = ui.values[0]+'{/literal}{$filter.unit}{literal}';
+												to = ui.values[1]+'{/literal}{$filter.unit}{literal}';
+											{/literal}
+											{/if}
+											{literal}
+											$('#layered_{/literal}{$filter.type}{literal}_range').html(from+' - '+to);
 										},
 										stop: function () {
 											reloadContent();
 										}
-									}, '{/literal}{$filter.unit}{literal}');
+									}, '{/literal}{$filter.unit}{literal}', {/literal}{$filter.format}{literal});
 								{/literal}
 								</script>
 							{else}
@@ -174,6 +192,7 @@ param_product_url = '';
 									<span class="layered_{$filter.type}_range_unit">{$filter.unit}</span>
 									{l s='to' mod='blocklayered'} <input class="layered_{$filter.type}_range layered_input_range_max layered_input_range" id="layered_{$filter.type}_range_max" type="text" value="{$filter.values[1]}"/>
 									<span class="layered_{$filter.type}_range_unit">{$filter.unit}</span>
+									<span class="layered_{$filter.type}_format">{$filter.format}</span>
 									<script type="text/javascript">
 									{literal}
 										$('#layered_{/literal}{$filter.type}{literal}_range_min').attr('limitValue', {/literal}{$filter.min}{literal});
