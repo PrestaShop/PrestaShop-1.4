@@ -95,7 +95,6 @@ class authorizeAIM extends PaymentModule
 		Configuration::deleteByName('AUTHORIZE_AIM_CARD_MASTERCARD');
 		Configuration::deleteByName('AUTHORIZE_AIM_CARD_DISCOVER');
 		Configuration::deleteByName('AUTHORIZE_AIM_CARD_AX');
-
 		Configuration::deleteByName('AUTHORIZE_AIM_HOLD_REVIEW_OS');
 
 		return parent::uninstall();
@@ -126,7 +125,6 @@ class authorizeAIM extends PaymentModule
 			Configuration::updateValue('AUTHORIZE_AIM_CARD_MASTERCARD', Tools::getvalue('authorizeaim_card_mastercard'));
 			Configuration::updateValue('AUTHORIZE_AIM_CARD_DISCOVER', Tools::getvalue('authorizeaim_card_discover'));
 			Configuration::updateValue('AUTHORIZE_AIM_CARD_AX', Tools::getvalue('authorizeaim_card_ax'));
-
 			Configuration::updateValue('AUTHORIZE_AIM_HOLD_REVIEW_OS', Tools::getvalue('authorizeaim_hold_review_os'));
 
 			$html .= $this->displayConfirmation($this->l('Configuration updated'));
@@ -134,7 +132,6 @@ class authorizeAIM extends PaymentModule
 
 		// For Hold for Review
 		$orderStates = OrderState::getOrderStates((int)$this->context->cookie->id_lang);
-
 
 		$html .= '
 		<h2>'.$this->displayName.'</h2>

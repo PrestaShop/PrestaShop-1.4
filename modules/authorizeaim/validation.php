@@ -26,8 +26,6 @@
 */
 
 include(dirname(__FILE__). '/../../config/config.inc.php');
-
-/* SSL Tricks to bypass the redirect for the FrontController in 1.5 + */
 include(dirname(__FILE__). '/../../init.php');
 
 /* will include backward file */

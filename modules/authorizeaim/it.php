@@ -40,5 +40,3 @@ $_MODULE['<{authorizeaim}prestashop>hookorderconfirmation_30163d8fc3068e8297e7ab
 $_MODULE['<{authorizeaim}prestashop>hookorderconfirmation_0db71da7150c27142eef9d22b843b4a9'] = 'Per eventuali domande o per ulteriori informazioni, contatta la nostra';
 $_MODULE['<{authorizeaim}prestashop>hookorderconfirmation_64430ad2835be8ad60c59e7d44e4b0b1'] = 'assistenza clienti';
 $_MODULE['<{authorizeaim}prestashop>hookorderconfirmation_8de637e24570c1edb0357826a2ad5aea'] = 'Abbiamo notato un problema con il tuo ordine. Se pensi che questo sia un errore, contatta la nostra';
-
-?>
