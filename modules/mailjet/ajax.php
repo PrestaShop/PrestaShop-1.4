@@ -30,7 +30,7 @@
 require('../../config/config.inc.php');
 require('mailjet.php');
 
-if (Tools::getValue('token') == '' || Tools::getValue('token') != Configuration::get('MAILJET_TOKEN'))
+if (Tools::getValue('token') == '' || Tools::getValue('token') != Configuration::get('MAILJET_AJAX_TOKEN'))
 	die('Invalid Token');
 
 $obj_mailjet = new Mailjet();
