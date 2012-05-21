@@ -226,7 +226,7 @@ class authorizeAIM extends PaymentModule
 			else
 				$url = 'https://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/';
 
-			$this->context->smarty->assign('p', $authorizeAIMParams);
+			$this->context->smarty->assign('authorize_params', $authorizeAIMParams);
 			$this->context->smarty->assign('cards', $cards);
 			$this->context->smarty->assign('isFailed', $isFailed);
 			$this->context->smarty->assign('new_base_dir', $url);
