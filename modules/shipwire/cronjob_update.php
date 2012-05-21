@@ -25,7 +25,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-include(dirname(__FILE__).'/../../config/config.inc.php');
+include_once(dirname(__FILE__).'/../../config/config.inc.php');
 
 if (isset($_GET['secure_key']) || isset($_ARGV[1]))
 {
@@ -37,7 +37,7 @@ if (isset($_GET['secure_key']) || isset($_ARGV[1]))
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'shipwire_log` WHERE `date_added` < \''.pSQL($logDeleteDate).'\'');
 
 		if (!class_exists('Shipwire'))
-			require(dirname(__FILE__).'/shipwire.php');
+			require_once(dirname(__FILE__).'/shipwire.php');
 
 		require_once(dirname(__FILE__).'/lib/ShipwireApi.php');
 		require_once(dirname(__FILE__).'/lib/ShipwireTracking.php');

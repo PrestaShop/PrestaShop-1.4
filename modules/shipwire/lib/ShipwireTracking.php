@@ -26,10 +26,10 @@
 */
 
 if (!defined('_PS_VERSION_'))
-	require(dirname(__FILE__).'/../../../config/config.inc.php');
+	require_once(dirname(__FILE__).'/../../../config/config.inc.php');
 
 if (!class_exists('Shipwire'))
-	require(dirname(__FILE__).'/../shipwire.php');
+	require_once(dirname(__FILE__).'/../shipwire.php');
 
 class ShipwireTracking extends ShipwireApi
 {

@@ -30,9 +30,9 @@ if (!defined('_PS_VERSION_'))
 	exit;
 
 if (file_exists(dirname(__FILE__).'/HelperFn.php'))
-	include(dirname(__FILE__).'/HelperFn.php');
+	include_once(dirname(__FILE__).'/HelperFn.php');
 elseif (file_exists(dirname(__FILE__).'/../modules/shipwire/HelperFn.php'))
-	include(dirname(__FILE__).'/../modules/shipwire/HelperFn.php');
+	include_once(dirname(__FILE__).'/../modules/shipwire/HelperFn.php');
 
 $includeFiles = array(
 					'ShipwireApi.php', 
@@ -48,9 +48,9 @@ foreach ($includeFiles as $file)
 		die();
 	
 	if (file_exists(dirname(__FILE__).'/lib/'.$file))
-		require(dirname(__FILE__).'/lib/'.$file);
+		require_once(dirname(__FILE__).'/lib/'.$file);
 	elseif (file_exists(dirname(__FILE__).'/../modules/shipwire/lib/'.$file))
-		require(dirname(__FILE__).'/../modules/shipwire/lib/'.$file);
+		require_once(dirname(__FILE__).'/../modules/shipwire/lib/'.$file);
 }
 
 class Shipwire extends Module
@@ -86,7 +86,7 @@ class Shipwire extends Module
 	{
 		$this->name = 'shipwire';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.1.5';
+		$this->version = '1.1.6';
 		$this->author = 'PrestaShop';
 		
 		$this->_initContext();
@@ -111,7 +111,7 @@ class Shipwire extends Module
 	private function _initContext()
 	{
 		/* Backward compatibility */
-		require(_PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php');
+		require_once(_PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php');
 		$this->context->smarty->assign('base_dir', __PS_BASE_URI__);
 
 		$this->dParams['base_dir'] = __PS_BASE_URI__;
@@ -186,7 +186,7 @@ class Shipwire extends Module
 			return false;
 
 		// Perform the sql install
-		include(dirname(__FILE__).'/sql/sql-install.php');
+		include_once(dirname(__FILE__).'/sql/sql-install.php');
 		foreach ($sql as $s)
 			if (!Db::getInstance()->Execute($s))
 				return false;
@@ -214,7 +214,7 @@ class Shipwire extends Module
 			return false;
 
 		// Uninstall SQL
-		include(dirname(__FILE__).'/sql/sql-uninstall.php');
+		include_once(dirname(__FILE__).'/sql/sql-uninstall.php');
 		foreach ($sql as $s)
 			if (!Db::getInstance()->Execute($s))
 				return false;

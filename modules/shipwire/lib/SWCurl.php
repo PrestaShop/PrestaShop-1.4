@@ -95,7 +95,7 @@ class SWCurl
 		curl_setopt($this->_ch, CURLOPT_URL, $url);
 		
 		if (file_exists(dirname(__FILE__).'/proxy.inc.php'))
-			include(dirname(__FILE__).'/proxy.inc.php');
+			include_once(dirname(__FILE__).'/proxy.inc.php');
 		
 		$this->_lastResponse = curl_exec($this->_ch);
 
