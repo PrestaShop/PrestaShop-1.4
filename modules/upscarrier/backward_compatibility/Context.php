@@ -25,6 +25,32 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
+// Retro 1.3, 'class_exists' cause problem with autoload...
+if (version_compare(_PS_VERSION_, '1.4', '<'))
+{
+	// Not exist for 1.3
+	class Shop extends ObjectModel
+	{
+		public function __construct()
+		{
+
+		}
+
+		public static function getShops()
+		{
+			return array(
+				array('id_shop' => 1, 'name' => 'Default shop')
+			);
+		}
+
+		public static function getCurrentShop()
+		{
+			return 1;
+		}
+	}
+}
+
+// Not exist for 1.3 and 1.4
 class Context
 {
 	/**
@@ -151,6 +177,8 @@ class Context
 class ShopBackwardModule extends Shop
 {
 	const CONTEXT_ALL = 1;
+
+	public $id = 1;
 
 	public function getContextType()
 	{
