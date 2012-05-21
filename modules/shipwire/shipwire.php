@@ -78,6 +78,7 @@ class Shipwire extends Module
 
 	/** @var _shipWireInventoryUpdate Shipwire Api Object */
 	private $_shipWireInventoryUpdate;
+	private $context;
 
 	/******************************************************************/
 	/** Construct Method **********************************************/
@@ -111,7 +112,7 @@ class Shipwire extends Module
 	private function _initContext()
 	{
 		/* Backward compatibility */
-		require_once(_PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php');
+		require(_PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php');
 		$this->context->smarty->assign('base_dir', __PS_BASE_URI__);
 
 		$this->dParams['base_dir'] = __PS_BASE_URI__;
