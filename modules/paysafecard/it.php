@@ -2,6 +2,8 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{paysafecard}prestashop>prepaidservices_3e8e30e75887d2f3b02da669ebd5b380'] = 'Un certificato è stato trovato per questa configurazione';
+$_MODULE['<{paysafecard}prestashop>prepaidservices_515f3d11e66f6fc5f7bb453e6030241a'] = 'Una password è già stato salvato';
 $_MODULE['<{paysafecard}prestashop>disposition-error_393988def796f78c4b673b90548f3afa'] = 'Lo stato di disposizione non è valido';
 $_MODULE['<{paysafecard}prestashop>disposition-error_5db89f2bf67f2c7dbd86cac101c3c1b8'] = '. Non hai i permessi per effettuare il pagamento.';
 $_MODULE['<{paysafecard}prestashop>payment_da9c72b9e543135f3f59e3c8ac68ef35'] = 'Paga con';
@@ -15,8 +17,6 @@ $_MODULE['<{paysafecard}prestashop>paysafecard-confirmation_2c987f462c2ab7fc63e0
 $_MODULE['<{paysafecard}prestashop>paysafecard-confirmation_e6dc7945b557a1cd949bea92dd58963e'] = 'Il tuo ordine verrà inviato al più presto.';
 $_MODULE['<{paysafecard}prestashop>paysafecard-confirmation_0db71da7150c27142eef9d22b843b4a9'] = 'Per eventuali domande o per ulteriori informazioni, contatta la nostra';
 $_MODULE['<{paysafecard}prestashop>paysafecard-confirmation_64430ad2835be8ad60c59e7d44e4b0b1'] = 'assistenza clienti';
-$_MODULE['<{paysafecard}prestashop>prepaidservices_3e8e30e75887d2f3b02da669ebd5b380'] = 'Un certificato è stato trovato per questa configurazione';
-$_MODULE['<{paysafecard}prestashop>prepaidservices_515f3d11e66f6fc5f7bb453e6030241a'] = 'Una password è già stato salvato';
 $_MODULE['<{paysafecard}prestashop>paysafecard_be9240e3ec97017ab6af036384ff7199'] = 'PaysafeCard';
 $_MODULE['<{paysafecard}prestashop>paysafecard_b3e93e632edfb4fa64c3c0949c5eb56d'] = 'Si accettano pagamenti con PaysafeCard';
 $_MODULE['<{paysafecard}prestashop>paysafecard_bed51f5187d4bf98e08f44d93f3098d9'] = 'Disposizione creata. In attesa di addebito.';
@@ -51,5 +51,3 @@ $_MODULE['<{paysafecard}prestashop>paysafecard_315e941f57cf90350aea15d968e190f8'
 $_MODULE['<{paysafecard}prestashop>paysafecard_d59048f21fd887ad520398ce677be586'] = 'Per saperne di più';
 $_MODULE['<{paysafecard}prestashop>paysafecard_ee363d108ef0c9c5a599d3afe04b9e32'] = 'Si è verificato un errore, controlla Messaggi per maggiori informazioni';
 $_MODULE['<{paysafecard}prestashop>paysafecard_a9ced76f2dd6907220fa95b3a136b04a'] = 'Importo non valido';
-
-?>

@@ -28,5 +28,5 @@
 	<br /><br />
 	{l s='You have chosen the' mod='paysafecard'} {$payment_name} {l s='method.' mod='paysafecard'}
 	<br /><br /><span class="bold">{l s='Your order will be sent very soon.' mod='paysafecard'}</span>
-	<br /><br />{l s='For any questions or for further information, please contact our' mod='paysafecard'} <a href="{$base_dir_ssl}contact-form.php">{l s='customer support' mod='paysafecard'}</a>.
+	<br /><br />{l s='For any questions or for further information, please contact our' mod='paysafecard'} <a href="{$link->getPageLink('contact', true)}">{l s='customer support' mod='paysafecard'}</a>.
 </p>
