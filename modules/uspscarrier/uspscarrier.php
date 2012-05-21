@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2011 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2011 PrestaShop SA
 *  @version  Release: $Revision$
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
@@ -53,9 +53,10 @@ class UspsCarrier extends CarrierModule
 	{
 		$this->name = 'uspscarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.2.3';
+		$this->version = '1.2.2';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('us');
+		$this->module_key = '9ac173da9614868dbd15c56cf8ad008a';
 
 		parent::__construct ();
 
@@ -82,8 +83,8 @@ class UspsCarrier extends CarrierModule
 				}
 
 			// Checking Unit
-			$this->_dimensionUnit = $this->_dimensionUnitList[strtoupper(Configuration::get('PS_DIMENSION_UNIT'))];
-			$this->_weightUnit = $this->_weightUnitList[strtoupper(Configuration::get('PS_WEIGHT_UNIT'))];
+			$this->_dimensionUnit = isset($this->_dimensionUnitList[strtoupper(Configuration::get('PS_DIMENSION_UNIT'))]) ? $this->_dimensionUnitList[strtoupper(Configuration::get('PS_DIMENSION_UNIT'))] : false;
+			$this->_weightUnit = isset($this->_weightUnitList[strtoupper(Configuration::get('PS_WEIGHT_UNIT'))]) ? $this->_weightUnitList[strtoupper(Configuration::get('PS_WEIGHT_UNIT'))] : false;
 			if (!$this->_weightUnit || !$this->_weightUnitList[$this->_weightUnit])
 				$warning[] = $this->l('\'Weight Unit (LB or KG).\'').' ';
 			if (!$this->_dimensionUnit || !$this->_dimensionUnitList[$this->_dimensionUnit])
