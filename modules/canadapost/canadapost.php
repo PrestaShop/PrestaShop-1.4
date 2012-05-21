@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2011 PrestaShop 
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2011 PrestaShop SA
 *  @version  Release: $Revision: 7288 $
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
@@ -55,9 +55,10 @@ class CanadaPost extends CarrierModule
 	{
 		$this->name = 'canadapost';
 		$this->tab = 'shipping_logistics';
-		$this->version = '0.8';
+		$this->version = '1.1';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('ca');
+		$this->module_key = 'f597616f5d9731a87086ea7345f830ff';
 
 		parent::__construct ();
 
@@ -73,10 +74,6 @@ class CanadaPost extends CarrierModule
 			$warning = array();
 			$this->loadingVar();
 
-			// Check cURL option availibility
-			if (!is_callable('curl_exec'))
-				$warning[] = "'".$this->l('cURL option')."', ";
-
 			// Check Configuration Values
 			foreach ($this->_fieldsList as $keyConfiguration => $name)
 				if (!Configuration::get($keyConfiguration) && !empty($name))
@@ -87,8 +84,8 @@ class CanadaPost extends CarrierModule
 				Configuration::updateValue('CP_CARRIER_CALCUL_MODE', 'onepackage');
 
 			// Checking Unit
-			$this->_dimensionUnit = $this->_dimensionUnitList[strtoupper(Configuration::get('PS_DIMENSION_UNIT'))];
-			$this->_weightUnit = $this->_weightUnitList[strtoupper(Configuration::get('PS_WEIGHT_UNIT'))];
+			$this->_dimensionUnit = isset($this->_dimensionUnitList[strtoupper(Configuration::get('PS_DIMENSION_UNIT'))]) ? $this->_dimensionUnitList[strtoupper(Configuration::get('PS_DIMENSION_UNIT'))] : false;
+			$this->_weightUnit = isset($this->_weightUnitList[strtoupper(Configuration::get('PS_WEIGHT_UNIT'))]) ? $this->_weightUnitList[strtoupper(Configuration::get('PS_WEIGHT_UNIT'))] : false;
 			if (!$this->_weightUnit || !$this->_weightUnitList[$this->_weightUnit])
 				$warning[] = $this->l('\'Weight Unit (LB or KG).\'').' ';
 			if (!$this->_dimensionUnit || !$this->_dimensionUnitList[$this->_dimensionUnit])
@@ -300,8 +297,6 @@ class CanadaPost extends CarrierModule
 			$alert['deliveryServices'] = 1;
 		if (!$this->_webserviceTestResult)
 			$alert['webserviceTest'] = 1;
-		if (!is_callable('curl_exec'))
-			$alert['curl'] = 1;
 
 
 		if (!count($alert))
@@ -312,7 +307,6 @@ class CanadaPost extends CarrierModule
 			$this->_html .= '<br />'.(isset($alert['generalSettings']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 1) '.$this->l('Fill the "General Settings" form');
 			$this->_html .= '<br />'.(isset($alert['deliveryServices']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 2) '.$this->l('Select your available delivery service');
 			$this->_html .= '<br />'.(isset($alert['webserviceTest']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 3) '.$this->l('Webservice test connection').($this->_webserviceError ? ' : '.$this->_webserviceError : '');
-			$this->_html .= '<br />'.(isset($alert['curl']) ? '<img src="'._PS_IMG_.'admin/warn2.png" />' : '<img src="'._PS_IMG_.'admin/module_install.png" />').' 4) '.$this->l('cURL is enabled');
 		}
 
 
@@ -1574,56 +1568,39 @@ class CanadaPost extends CarrierModule
 		if (isset(self::$request_cache[md5(var_export($wsParams, true))]))
 			return self::$request_cache[md5(var_export($wsParams, true))];
 
-		if (is_callable('curl_exec'))
+		// FsockOpen Request
+		$timeout = 5;
+		$fp = fsockopen("sellonline.canadapost.ca", "30000", $errno, $errstr, $timeout); 
+		if ($fp)
 		{
-			// Curl Request
-			$ch = curl_init("http://sellonline.canadapost.ca");
-			curl_setopt($ch, CURLOPT_HEADER, 1);
-			curl_setopt($ch, CURLOPT_POST, 1);
-			curl_setopt($ch, CURLOPT_TIMEOUT, 60);
-			curl_setopt($ch, CURLOPT_PORT, 30000);
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
-			$result = curl_exec($ch);
+			$request = "POST HTTP/1.1\r\n";
+			$request .= "Host: sellonline.canadapost.ca\r\n";
+			$request .= "Content-type: application/x-www-form-urlencoded\r\n";
+			$request .= "Connection: Close\r\n";
+			$request .= "Content-length: ".strlen($xml)."\r\n\r\n";
+			$request .= $xml."\r\n\r\n";
+			fwrite($fp, $request);
+
+			stream_set_blocking($fp, TRUE);
+			stream_set_timeout($fp,$timeout);
+			$info = stream_get_meta_data($fp);
+
+			$result = '';
+			while ((!feof($fp)) && (!$info['timed_out']))
+			{
+				$result .= fgets($fp, 4096);
+				$info = stream_get_meta_data($fp);
+			}
+			if ($info['timed_out'])
+			{
+				$this->_webserviceError = $this->l('Canada Post Webservice timed out.');
+				return false;
+			}
 		}
 		else
 		{
-			// FsockOpen Request
-			$timeout = 5;
-			$fp = fsockopen("sellonline.canadapost.ca:30000", "80", $errno, $errstr, $timeout); 
-			if ($fp)
-			{
-				$request = "POST HTTP/1.1\r\n";
-				$request .= "Host: sellonline.canadapost.ca\r\n";
-				$request .= "Content-type: application/x-www-form-urlencoded\r\n";
-				$request .= "Connection: Close\r\n";
-				$request .= "Content-length: ".strlen($xml)."\r\n\r\n";
-				$request .= $xml."\r\n\r\n";
-				fwrite($fp, $request);
-
-				stream_set_blocking($fp, TRUE);
-				stream_set_timeout($fp,$timeout);
-				$info = stream_get_meta_data($fp);
-
-				$result = '';
-				while ((!feof($fp)) && (!$info['timed_out']))
-				{
-					$result .= fgets($fp, 4096);
-					$info = stream_get_meta_data($fp);
-				}
-				if ($info['timed_out'])
-				{
-					$this->_webserviceError = $this->l('Canada Post Webservice timed out.');
-					return false;
-				}
-			}
-			else
-			{
-				$this->_webserviceError = $this->l('Could not connect to CanadaPost.com');
-				return false;
-			}
+			$this->_webserviceError = $this->l('Could not connect to CanadaPost.com');
+			return false;
 		}
 
 		// Get xml from HTTP Result
