@@ -27,7 +27,13 @@
 <p class="payment_module" >
 
 	{if $isFailed == 1}
-		<p style="color: red;">{l s='Error, please verify the card information' mod='authorizeaim'}</p>
+		<p style="color: red;">
+			{if !empty($smarty.get.message)}
+				{l s='Error detail from AuthorizeAIM : ' mod='authorizeaim'}{$smarty.get.message|htmlentities}
+			{else}
+				{l s='Error, please verify the card information' mod='authorizeaim'}
+			{/if}
+		</p>
 	{/if}
 
 	<form name="authorizeaim_form" id="authorizeaim_form" action="{$new_base_dir}validation.php" method="post">
@@ -50,7 +56,7 @@
 				<div style="width: 136px; height: 165px; float: left; padding-top:40px; padding-right: 20px; border-right: 1px solid #DDD;">
 					<img src="{$module_dir}logoa.gif" alt="secure payment" />
 				</div>
-				{foreach from=$p key=k item=v}
+				{foreach from=$authorize_params key=k item=v}
 					<input type="hidden" name="{$k}" value="{$v}" />
 				{/foreach}
 
@@ -78,7 +84,6 @@
 				<label style="margin-top: 4px; margin-left: 40px;display: block;width: 90px;float: left;">{l s='CVV' mod='authorizeaim'}</label> <input type="text" name="x_card_code" id="x_card_code" size="4" maxlength="4" /><img src="{$module_dir}secure.png" alt="" style="margin-left: 5px;"/> <img src="{$module_dir}help.png" id="cvv_help" title="{l s='the 3 last digits on the back of your credit card' mod='authorizeaim'}" alt="" /><br /><br />
 			<img src="{$module_dir}cvv.png" id="cvv_help_img" alt=""style="display: none;margin-left: 211px;" />
 				<input type="button" id="asubmit" value="{l s='Validate order' mod='authorizeaim'}" style="margin-left: 129px; padding-left: 25px; padding-right: 25px;" class="button" />
-				<input type="hidden" controller="order-opc" />
 			</div>
 		</span>
 	</form>

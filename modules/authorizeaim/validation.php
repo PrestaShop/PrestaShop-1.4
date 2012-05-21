@@ -25,6 +25,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
+
 include(dirname(__FILE__). '/../../config/config.inc.php');
 include(dirname(__FILE__). '/../../init.php');
 
@@ -32,7 +33,6 @@ include(dirname(__FILE__). '/../../init.php');
 include(dirname(__FILE__). '/authorizeaim.php');
 
 $authorizeaim = new authorizeAIM();
-
 
 /* Transform the POST from the template to a GET for the CURL */
 if (isset($_POST['x_exp_date_m']) && isset($_POST['x_exp_date_y']))
@@ -101,19 +101,20 @@ switch ($response[0]) // Response code
 		break ;
 
 	default:
+		$error_message = (isset($response[3]) && !empty($response[3])) ? urlencode($response[3]) : '';
+
 		$checkout_type = Configuration::get('PS_ORDER_PROCESS_TYPE') ?
 			'order-opc' : 'order';
 		$url = _PS_VERSION_ >= '1.5' ?
 			'index.php?controller='.$checkout_type.'&' : $checkout_type.'.php?';
-		$url .= 'step=3&cgv=1&aimerror=1';
+		$url .= 'step=3&cgv=1&aimerror=1&message='.$error_message;
 
-		if (!isset($_SERVER['HTTP_REFERER']) ||
-			strstr($_SERVER['HTTP_REFERER'], 'order'))
+		if (!isset($_SERVER['HTTP_REFERER']) || strstr($_SERVER['HTTP_REFERER'], 'order'))
 			Tools::redirect($url);
-		elseif (strstr($_SERVER['HTTP_REFERER'], '?'))
-			Tools::redirect($_SERVER['HTTP_REFERER'].'&aimerror=1', '');
+		else if (strstr($_SERVER['HTTP_REFERER'], '?'))
+			Tools::redirect($_SERVER['HTTP_REFERER'].'&aimerror=1&message='.$error_message, '');
 		else
-			Tools::redirect($_SERVER['HTTP_REFERER'].'?aimerror=1', '');
+			Tools::redirect($_SERVER['HTTP_REFERER'].'?aimerror=1&message='.$error_message, '');
 
 		exit;
 
