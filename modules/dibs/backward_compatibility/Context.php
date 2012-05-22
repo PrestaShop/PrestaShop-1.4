@@ -45,7 +45,7 @@ if (version_compare(_PS_VERSION_, '1.4', '<'))
 
 		public static function getCurrentShop()
 		{
-				return 1;
+			return 1;
 		}
 	}
 }
@@ -177,6 +177,8 @@ class Context
 class ShopBackwardModule extends Shop
 {
 	const CONTEXT_ALL = 1;
+
+	public $id = 1;
 
 	public function getContextType()
 	{

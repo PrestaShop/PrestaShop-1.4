@@ -163,6 +163,9 @@ class dibs extends PaymentModule
 			$this->context->smarty->assign(array('status' => 'ok', 'id_order' => $params['objOrder']->id));
 		else
 			$this->context->smarty->assign('status', 'failed');
+			
+		$this->context->smarty->assign('DIBS_page_name', (_PS_VERSION_ < '1.5') ? 'contact-form' : 'contact');
+			
 		return $this->display(__FILE__, 'hookorderconfirmation.tpl');
 	}
 
