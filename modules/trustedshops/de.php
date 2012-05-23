@@ -15,6 +15,10 @@ $_MODULE['<{trustedshops}prestashop>order-confirmation-tsbp-classic_4052048c767f
 $_MODULE['<{trustedshops}prestashop>order-confirmation-tsbp-classic_f975f42362625cf21e592009ff4b3d7b'] = 'Anmeldung zum Trusted Shops Käuferschutz';
 $_MODULE['<{trustedshops}prestashop>seal_of_approval_ee9ae315b086e1b1a0c8fdc6078f9add'] = 'Trusted Shops Gütesiegel - Bitte hier Gültigkeit prüfen!';
 $_MODULE['<{trustedshops}prestashop>seal_of_approval_750bea678eeb1d07f21fe86173288e2e'] = 'Testzertifikat für Shopsystempartner DE trägt das Trusted Shops Zertifikat mit Käuferschutz. Mehr...';
+$_MODULE['<{trustedshops}prestashop>trustedshops_0aa7ce92297d05fc09fb9fdbe5da6be6'] = 'Dieses Modul erfordert die SOAP-PHP-Erweiterung, um ordnungsgemäß zu funktionieren.';
+$_MODULE['<{trustedshops}prestashop>trustedshops_8b61f54775adf535d4da32eb434309ea'] = 'Trusted Shops Vertrauenslösungen';
+$_MODULE['<{trustedshops}prestashop>trustedshops_f3607bb2fb5f04aa4937e7846c560faa'] = 'Stärken Sie das Vertrauen in Ihren Online-Shop mit Trusted Shops Gütesiegel, Käuferschutz und Kundenbewertung.';
+$_MODULE['<{trustedshops}prestashop>trustedshops_968e0f78caa7d3245c8f6f858de993d8'] = 'Sie sind sicher, dass Sie alle Ihre Einstellungen löschen möchten?';
 $_MODULE['<{trustedshops}prestashop>tsbpexception_79fc246c2b70963d27ebb0e9ebaab349'] = 'Kontaktieren Sie Trusted Shops unter service@trustedshops.de';
 $_MODULE['<{trustedshops}prestashop>tsbpexception_3a2a06b3a1f05cde765219211bf2e9bd'] = 'Benutzername oder Passwort ungültig.';
 $_MODULE['<{trustedshops}prestashop>tsbpexception_43048f232a4ebab67835c425a1113b29'] = 'Sie haben Ihr Kreditlimit erreicht';
@@ -63,14 +67,14 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_37554cc43c645833d6713b9cdd
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_9203aec73d2ea1770f66f065c4069816'] = 'Andere Zahlungsmethode';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_743a602a92e214f08c05442217332938'] = 'Trusted Shops Gütesiegel und Käuferschutz';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_f51dabfce0c8ccc01734ed38d8afe27a'] = 'Json Funktionen müssen in Ihrer php Version eingeschaltet sein.';
+$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_eaf4354c3a17f478859421ac2e33a975'] = 'Code #';
+$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_d9fd9cab8b813e70e20c615abf036307'] = 'Mitteilung :';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_b1801eaadecfddd04529313a1e929262'] = 'Das Zertifikat ist gültig';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_ce323cb3453812434f9abc007ba7a952'] = 'Das Zertifikat ist abgelaufen';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_98121ffd0d2a0b4bed569a726632f402'] = 'Das Zertifikat wurde deaktiviert';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_3ec2499357b45a38139485b2b824aa4c'] = 'Der Shop befindet sich gerade im Zertifizierungsprozess';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_a8fcbddffdaccc6daa529aa9c38d82df'] = 'Noch kein Trusted Shops Zertifikat zugewiesen';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_5abbd73fc5189212c57adfb43adac459'] = 'Testzertifikat';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_eaf4354c3a17f478859421ac2e33a975'] = 'Code #';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_d9fd9cab8b813e70e20c615abf036307'] = 'Mitteilung :';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_109715467b74bd66639faa5673f707c1'] = 'Unbekannter Fehler.';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_d4eb1e83b0ea3af3e2b8a6e7b7984d9c'] = 'Das Feld %s ist ungültig, bitte korrekt ausfüllen';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_c230eb5eefd15fa219ff97d42e461a7d'] = 'Einige Parameter für die Methode \"requestForProtectionV2\" fehlen oder sind ungültig.';
@@ -130,13 +134,8 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_12a4fc31ae8a9e4038df56961a
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_f811271eb84f3df1a430c3c78b6e7640'] = 'Rufen Sie die Datei';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_06ec9154ce96a389f7b1d884e021818b'] = 'mit einem Intervall von 10 Minuten auf.';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_f89b7100efcc136900c909690e43f008'] = 'Die Zeile in Ihrer cron Datei könnte so aussehen:';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_b40495f7999e31d4abed3183d2e3cd25'] = 'Der Trusted Shop Käuferschutz erfordert eine Anmeldung. Bitte kontaktieren sie den Shop-Administrator.';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_9d36bad327b052a9bdec7003f95ce4bd'] = 'Problem mit Ihrer Sprache:';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_03e9e3ceaf5769311c57b5903a958e94'] = 'Ein Käufer kann keine mehrere Käuferschutz Produkte kaufen.';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_26a7019f9c88a24e63ebc690e9527f31'] = 'Ihre Garantie-Nr. wird Ihnen von Trusted Shops in einer separaten Mail mitgeteilt.';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_2b83e3a2e08203b9892ad8801d6b2543'] = 'Trusted Shops Kundenbewertung';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_b20a16afda98421bbf7457ccfa50e311'] = 'Dieses Modul erfordert Schreib- und Leserechte auf den Ordner /cache des Moduls.';
-$_MODULE['<{trustedshops}prestashop>trustedshopsrating_0aa7ce92297d05fc09fb9fdbe5da6be6'] = 'Dieses Modul erfordert die SOAP PHP Erweiterung, um korrekt funktionieren zu können.';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_1097e2b0ee70e248749f0d0a9292df56'] = 'ungültige Trusted Shops ID';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_086dbc83aa6b78fa9a234d264ba5808a'] = 'ungültige Verzögerung';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_24bbca53f91f119c930d147557a4e997'] = 'Bitte anmelden';
@@ -171,9 +170,3 @@ $_MODULE['<{trustedshops}prestashop>trustedshopsrating_0fac19c0cc6e205682dd52d61
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_afe906fe9448ed1b480b3eec383461de'] = 'Ihre Kundenbewertungen und Erfahrungsberichte werden mit dem  Twitter und Facebook von Freunde und deren Freunde verbunden. Bewertungen werden automatisch im Google-Index mitübernommen und im Google Shopping angezeigt.';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_2ab78702e34e81e82ca61847300b1618'] = 'Sind Sie zufrieden mit';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_a11109fe93f6dc4637e5b039651a4fdb'] = '? Schreiben Sie uns Ihre Meinung';
-$_MODULE['<{trustedshops}prestashop>trustedshops_0aa7ce92297d05fc09fb9fdbe5da6be6'] = 'Dieses Modul erfordert die SOAP-PHP-Erweiterung, um ordnungsgemäß zu funktionieren.';
-$_MODULE['<{trustedshops}prestashop>trustedshops_8b61f54775adf535d4da32eb434309ea'] = 'Trusted Shops Vertrauenslösungen';
-$_MODULE['<{trustedshops}prestashop>trustedshops_f3607bb2fb5f04aa4937e7846c560faa'] = 'Stärken Sie das Vertrauen in Ihren Online-Shop mit Trusted Shops Gütesiegel, Käuferschutz und Kundenbewertung.';
-$_MODULE['<{trustedshops}prestashop>trustedshops_968e0f78caa7d3245c8f6f858de993d8'] = 'Sie sind sicher, dass Sie alle Ihre Einstellungen löschen möchten?';
-
-?>

@@ -25,5 +25,3 @@ $_MODULE['<{importerosc}prestashop>importerosc_16f35420186575c2a1d9c0b59edf6ad3'
 $_MODULE['<{importerosc}prestashop>importerosc_fced104d747e0855ceff3020653104ab'] = 'Ebene ist berechnet und erstellt worden, Sie können fortfahren.';
 $_MODULE['<{importerosc}prestashop>importerosc_b405d0bebeedbdc1773a44ac36b8ffc4'] = 'Es wird dringend empfohlen eine Sicherung Ihrer Datenbank zu erstellen, bevor Sie fortfahren. Haben Sie eine Sicherung erstellt ?';
 $_MODULE['<{importerosc}prestashop>importerosc_9f95fc55011203d91d50a0ed512f805f'] = 'Table konnte nicht geändert werden.';
-
-?>

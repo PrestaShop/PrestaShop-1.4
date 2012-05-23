@@ -2,9 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{canadapost}prestashop>canadapost_77946efda9f40f6bbcd0e697de948e65'] = 'Kanada Beitrag Träger';
 $_MODULE['<{canadapost}prestashop>canadapost_a5daea18a1d4214028a538c3bf5a41cc'] = 'Bieten Sie Ihren Kunden, abweichende Lieferadresse Methoden mit Kanada Beitrag';
-$_MODULE['<{canadapost}prestashop>canadapost_9d7d8be1feb0bc026fffd29bc536364e'] = 'cURL-Option';
 $_MODULE['<{canadapost}prestashop>canadapost_883fa0069f4b0454e2277dd567ab3991'] = '\"Gewicht Unit (LB oder KG).\"';
 $_MODULE['<{canadapost}prestashop>canadapost_5a3ceec65d417f5d92c26dbf0dccc00d'] = '\"Dimension Unit (cm oder in).\"';
 $_MODULE['<{canadapost}prestashop>canadapost_4d470fde8487e755a50e9235e3dc13ab'] = 'muss so konfiguriert sein, um dieses Modul korrekt verwenden';
@@ -14,12 +12,9 @@ $_MODULE['<{canadapost}prestashop>canadapost_bfc00de34bc04366e7fee516adf7dca5'] 
 $_MODULE['<{canadapost}prestashop>canadapost_386aad80d82f8245e9ef80352a2240e8'] = 'Alle Artikel in einem Paket';
 $_MODULE['<{canadapost}prestashop>canadapost_f35eb2a913a3fd6fd8e661012cf0ebd8'] = 'Split ein Stück pro Paket';
 $_MODULE['<{canadapost}prestashop>canadapost_9c536dc938b99309eab40c9a06fc1c00'] = 'Kanada Beitrag Modulstatus';
-$_MODULE['<{canadapost}prestashop>canadapost_428a446c88625404645d482927d90b31'] = 'Kanada Beitrag Carrier ist konfiguriert und online!';
-$_MODULE['<{canadapost}prestashop>canadapost_c31be897c51c899fe1da81c31403e2a4'] = 'Kanada Beitrag Carrier ist noch nicht konfiguriert, müssen Sie:';
 $_MODULE['<{canadapost}prestashop>canadapost_3e203b9a16f360b88d90bba6eb61ce61'] = 'Füllen Sie die \"Allgemeine Einstellungen\" Form';
 $_MODULE['<{canadapost}prestashop>canadapost_8c0987b9315003df7dae7f130e3cf58e'] = 'Wählen Sie Ihre verfügbare Lieferservice';
 $_MODULE['<{canadapost}prestashop>canadapost_e20f6d6f13fe70e78f6e2ab488493ccf'] = 'Webservice-Test-Verbindung';
-$_MODULE['<{canadapost}prestashop>canadapost_5378f4ad5f6616fda3ef972deba67f8a'] = 'cURL ist aktiviert';
 $_MODULE['<{canadapost}prestashop>canadapost_52f4393e1b52ba63e27310ca92ba098c'] = 'General Settings';
 $_MODULE['<{canadapost}prestashop>canadapost_277d63a9b24a09697e3c64092eaf4353'] = 'Kategorien Einstellungen';
 $_MODULE['<{canadapost}prestashop>canadapost_098eec2cabe2c39c6dec3fc522b6571a'] = 'Produkte Settings';

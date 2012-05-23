@@ -26,7 +26,6 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_417434a4e55adbc67c9c391902cea7f3'
 $_MODULE['<{socolissimo}prestashop>socolissimo_140c34f0b21b932e34d11575509d093b'] = 'Ungültige Transaktions-ID';
 $_MODULE['<{socolissimo}prestashop>socolissimo_28ee1015b475a3a70613ea9c98d712b6'] = 'Format falsch Versandkosten';
 $_MODULE['<{socolissimo}prestashop>socolissimo_afa50e8b2fc14bf578331b2b8e98179d'] = 'Socolissimo Server nicht verfügbar';
-$_MODULE['<{socolissimo}prestashop>socolissimo_27e0a4f1ce5bb4ad9687a021e95367df'] = 'So Collissimo kann nicht mit dem Eine-Seite Bestellabschluss verwendet werden. Damit Sie dieses Modul nutzen können müssen Sie den Standard Bestallabschluss verwenden (Voreinstellungen -> Art des Bestellvorganges)';
 $_MODULE['<{socolissimo}prestashop>socolissimo_b5a7adde1af5c87d7fd797b6245c2a39'] = 'Beschreibung';
 $_MODULE['<{socolissimo}prestashop>socolissimo_d0b34d3e1cb0cc1150ae6bf650e9b569'] = 'SoColissimo ist ein Service von La Poste, der Ihren Käufern 5 Zustellungsarten anbietet';
 $_MODULE['<{socolissimo}prestashop>socolissimo_e5c7c47a2cc967ae4834ad5c076734df'] = 'Nach Hause';

@@ -2,6 +2,8 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{paysafecard}prestashop>prepaidservices_3e8e30e75887d2f3b02da669ebd5b380'] = 'Ein Zertifikat für diese Konfiguration wurde gefunden';
+$_MODULE['<{paysafecard}prestashop>prepaidservices_515f3d11e66f6fc5f7bb453e6030241a'] = 'Ein Kennwort existiert bereits.';
 $_MODULE['<{paysafecard}prestashop>disposition-error_393988def796f78c4b673b90548f3afa'] = 'Der Dispositionsstatus ist ungültig';
 $_MODULE['<{paysafecard}prestashop>disposition-error_5db89f2bf67f2c7dbd86cac101c3c1b8'] = 'Sie sind nicht berechtigt, die Zahlung durchzuführen.';
 $_MODULE['<{paysafecard}prestashop>payment_da9c72b9e543135f3f59e3c8ac68ef35'] = 'Bezahlen Sie mit';
@@ -15,8 +17,6 @@ $_MODULE['<{paysafecard}prestashop>paysafecard-confirmation_2c987f462c2ab7fc63e0
 $_MODULE['<{paysafecard}prestashop>paysafecard-confirmation_e6dc7945b557a1cd949bea92dd58963e'] = 'Ihre Bestellung wird sehr bald geschickt werden.';
 $_MODULE['<{paysafecard}prestashop>paysafecard-confirmation_0db71da7150c27142eef9d22b843b4a9'] = 'Bei Fragen oder für weitere Informationen, kontaktieren Sie bitte unseren';
 $_MODULE['<{paysafecard}prestashop>paysafecard-confirmation_64430ad2835be8ad60c59e7d44e4b0b1'] = 'Kunden-Support';
-$_MODULE['<{paysafecard}prestashop>prepaidservices_3e8e30e75887d2f3b02da669ebd5b380'] = 'Ein Zertifikat für diese Konfiguration wurde gefunden';
-$_MODULE['<{paysafecard}prestashop>prepaidservices_515f3d11e66f6fc5f7bb453e6030241a'] = 'Ein Kennwort existiert bereits.';
 $_MODULE['<{paysafecard}prestashop>paysafecard_be9240e3ec97017ab6af036384ff7199'] = 'PaysafeCard';
 $_MODULE['<{paysafecard}prestashop>paysafecard_b3e93e632edfb4fa64c3c0949c5eb56d'] = 'Zahlungen per Paysafecard akzeptieren';
 $_MODULE['<{paysafecard}prestashop>paysafecard_bed51f5187d4bf98e08f44d93f3098d9'] = 'Disposition erstellt. Warten auf Belastung.';

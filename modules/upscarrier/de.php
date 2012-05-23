@@ -51,7 +51,6 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_3184c79dd129c671b26afaefd7614488'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_40840f8672ee1391fa005409a46475db'] = 'Füllen Sie das Formular \"Allgemeine Einstellungen\" aus und wählen Sie Ihre Bewertungsservice-Gruppe';
 $_MODULE['<{upscarrier}prestashop>upscarrier_e20f6d6f13fe70e78f6e2ab488493ccf'] = 'Webservice Testverbindung';
 $_MODULE['<{upscarrier}prestashop>upscarrier_5bcac5de5a4e77f92b02f00b88cae456'] = 'Wählen Sie Ihren verfügbaren Zustelldienst (Sie müssen Sie Ihre Rate Service Gruppe zuerst bestätigen)';
-$_MODULE['<{upscarrier}prestashop>upscarrier_6a79bb09adada5dc085e16148996425a'] = 'cURL-Erweiterung ist nicht aktiviert, UPV-Modul kann ohne cURL arbeiten, aber es wäre besser, es zu aktivieren.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_52f4393e1b52ba63e27310ca92ba098c'] = 'Allgemeine Einstellungen';
 $_MODULE['<{upscarrier}prestashop>upscarrier_277d63a9b24a09697e3c64092eaf4353'] = 'Kategorieeinstellungen';
 $_MODULE['<{upscarrier}prestashop>upscarrier_098eec2cabe2c39c6dec3fc522b6571a'] = 'Produkteinstellungen';
@@ -148,5 +147,4 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_90dc39cb4d212ee6e6e8c1ea45453019'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_2ce756272bcdd41712b4de841a3bd370'] = 'Dieser Abschnitt ermöglicht Ihnen die Bestimmung einer spezifischen UPS-Konfiguration für jedes Produkt (z. B. Verpackungsart und zusätzliche Kosten).';
 $_MODULE['<{upscarrier}prestashop>upscarrier_902b0d55fddef6f8d651fe1035b7d4bd'] = 'Fehler';
 $_MODULE['<{upscarrier}prestashop>upscarrier_bbb1730944c8f495534aa125411687af'] = 'UPS Webservice scheint heruntergefahren zu sein, warten Sie bitte ein paar Minuten und versuchen Sie es erneut';
-$_MODULE['<{upscarrier}prestashop>upscarrier_da603f01f9ef4785e2aed2b3a2619e99'] = 'UPS Webservice hat die Zeit überschritten.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_755549828deba234f771ea065e24c115'] = 'Konnte keine Verbindung zu UPS.com herstellen';

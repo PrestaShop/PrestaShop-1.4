@@ -21,5 +21,3 @@ $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_410008089d5bb723438
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_397a5e109a5897ee7d699050cbc93347'] = 'Punktuelle Aktionen: kommerzielle Belohnungen (benutzerdefinierte Sonderangebote, geschenkte Produkte oder Dienstleistungen), nicht-kommerzielle Belohnungen (bevorzugte Bearbeitung einer Bestellung oder eines Produkts), geldliche Belohnungen (Gutscheine, Ermäßigungsgutscheine, Payback,...).';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_4bc24eed56e0ba89fc3ab4e094d18d8a'] = 'Dauerhafte Aktionen: Treue- oder Punktekarten, die nicht nur der Kommunikation mit dem Kunden dienen, sondern ihm auch Vorteile bringen (persönliche Angebote, Rabatte).';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_b18d224f0c27b329bc0bd2f7f876228b'] = 'Diese Aktionen fördern den Verkauf, sowie einen regelmäßigen Besuch Ihrer Kunden in Ihrem Onlineshop.';
-
-?>
