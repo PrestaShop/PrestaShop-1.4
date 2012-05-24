@@ -33,10 +33,15 @@ spl_autoload_register('avalaraAutoload');
 
 class AvalaraTax extends Module
 {
-	private $_overrideFilesInModule = array(
+	private $_overrideFilesInModule1_4 = array(
 									'Tax.php' => 'override/classes/Tax.php',
 									'AddressController.php' => 'override/controllers/AddressController.php',
 									'AuthController.php' => 'override/controllers/AuthController.php',
+								);
+	private $_overrideFilesInModule1_5 = array(
+									'Tax.php' => 'override/classes/Tax/Tax.php',
+									'AddressController.php' => 'override/controllers/front/AddressController.php',
+									'AuthController.php' => 'override/controllers/front/AuthController.php',
 								);
 
 	/******************************************************************/
@@ -49,7 +54,7 @@ class AvalaraTax extends Module
 
 		$this->name = 'avalaratax';
 		$this->tab = 'billing_invoicing';
-		$this->version = '1.1';
+		$this->version = '2.0';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('us', 'ca');
 		parent::__construct();
@@ -147,27 +152,8 @@ class AvalaraTax extends Module
 		 )
 			return false;
 		
-		/* Check the files to override */
-		$filesToOverride = array();
-		if (file_exists(dirname(__FILE__).'/../../override/classes/Tax.php'))
-			$filesToOverride[] = '/override/classes/Tax.php';
-		if (file_exists(dirname(__FILE__).'/../../override/controllers/AddressController.php'))
-			$filesToOverride[] = '/override/controllers/AddressController.php';
-		if (file_exists(dirname(__FILE__).'/../../override/controllers/AuthController.php'))
-			$filesToOverride[] = '/override/controllers/AuthController.php';
-		if (count($filesToOverride))
-			die($this->_displayConfirmation($this->l('The module was successfully installed but the following file(s) already exist. Please, merge file(s) manually.').
-			'<br />'.implode('<br />', $filesToOverride), 'warn'));
-		else 
-		{
-			if (!is_dir(dirname(__FILE__).'/../../override/classes/'))
-				mkdir(dirname(__FILE__).'/../../override/classes/', 0777, true);
-			if (!is_dir(dirname(__FILE__).'/../../override/controllers/'))
-				mkdir(dirname(__FILE__).'/../../override/controllers/', 0777, true);
-			
-			foreach ($this->_overrideFilesInModule as $path)
-				copy(dirname(__FILE__).'/'.$path, dirname(__FILE__).'/../../'.$path);
-		}
+		$this->overrideFiles();
+		
 		return true;
 	}
 
@@ -176,10 +162,13 @@ class AvalaraTax extends Module
 		// Before deleting the files, make sure the md5_file matches
 		// We don't want to delete a file that might have other custom modifications that the user
 		// might have done.
-		foreach ($this->_overrideFilesInModule as $path)
-			if (md5_file(dirname(__FILE__).'/'.$path) == md5_file(dirname(__FILE__).'/../../'.$path))
-				@unlink(dirname(__FILE__).'/../../'.$path);
-
+		if (version_compare(_PS_VERSION_, '1.5', '<'))
+		{
+			foreach ($this->_overrideFilesInModule1_4 as $file => $path)
+				if (md5_file(dirname(__FILE__).'/'.$this->_overrideFilesInModule1_5[$file]) == md5_file(dirname(__FILE__).'/../../'.$path))
+					@unlink(dirname(__FILE__).'/../../'.$path);
+		}
+		
 		if (!parent::uninstall() OR
 		!Configuration::deleteByName('AVALARATAX_URL') OR
 		!Configuration::deleteByName('AVALARATAX_ADDRESS_VALIDATION') OR
@@ -209,6 +198,33 @@ class AvalaraTax extends Module
 			return false;
 
 		return true;
+	}
+	
+	public function overrideFiles()
+	{
+		$filesToOverride = array();
+		if (version_compare(_PS_VERSION_, '1.5', '<')) // The regular override for 1.4
+		{
+			if (file_exists(dirname(__FILE__).'/../../override/classes/Tax.php'))
+				$filesToOverride[] = '/override/classes/Tax.php';
+			if (file_exists(dirname(__FILE__).'/../../override/controllers/AddressController.php'))
+				$filesToOverride[] = '/override/controllers/AddressController.php';
+			if (file_exists(dirname(__FILE__).'/../../override/controllers/AuthController.php'))
+				$filesToOverride[] = '/override/controllers/AuthController.php';
+			if (count($filesToOverride))
+				die($this->_displayConfirmation($this->l('The module was successfully installed but the following file(s) already exist. Please, merge file(s) manually.').
+				'<br />'.implode('<br />', $filesToOverride), 'warn'));
+			else
+			{
+				if (!is_dir(dirname(__FILE__).'/../../override/classes/'))
+					mkdir(dirname(__FILE__).'/../../override/classes/', 0777, true);
+				if (!is_dir(dirname(__FILE__).'/../../override/controllers/'))
+					mkdir(dirname(__FILE__).'/../../override/controllers/', 0777, true);
+				
+				foreach ($this->_overrideFilesInModule1_4 as $file => $path)
+					copy(dirname(__FILE__).'/'.$this->_overrideFilesInModule1_5[$file], dirname(__FILE__).'/../../'.$path);
+			}
+		}
 	}
 	
 	/******************************************************************/
@@ -335,13 +351,15 @@ class AvalaraTax extends Module
 		global $cookie, $cart;
 		
 		if (!$cart || !$cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')})
-			$id_address = (int)(Db::getInstance()->getValue('SELECT `id_address` FROM `'._DB_PREFIX_.'address` WHERE `id_customer` = '.(int)($cart->id_customer).' AND `deleted` = 0 ORDER BY `id`'));
+			$id_address = (int)(Db::getInstance()->getValue('SELECT `id_address` FROM `'._DB_PREFIX_.'address` WHERE `id_customer` = '.(int)($cart->id_customer).' AND `deleted` = 0 ORDER BY `id_address`'));
 		else
 			$id_address = $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
 		
 		$buffer = '<script type="text/javascript">
 		$(function(){
 			/* ajax call to cache taxes product taxes that exist in the current cart */
+			$(\'body\').data(\'total_tax\', $(\'#total_tax\').text());
+			$(\'#total_tax\').html(\'<img src="img/loader.gif" alt="" />\');
 			$.ajax(
 			{
 				type : \'POST\',
@@ -354,7 +372,13 @@ class AvalaraTax extends Module
 					\'token\': "'.md5(_COOKIE_KEY_.Configuration::get('PS_SHOP_NAME')).'",
 					
 				},
-				dataType: \'html\'
+				dataType: \'html\',
+				success : function(data){
+					if (data == \'ok_c\')
+						$(\'#total_tax\').html($(\'body\').data(\'total_tax\'));
+					else
+						$(\'#total_tax\').html(\'<a href="'.$this->getCurrentUrl().'">'.$this->l('Display taxes').'</a>\');
+				}
 			});
 		});
 		</script>';
@@ -370,7 +394,7 @@ class AvalaraTax extends Module
 	public function getContent()
 	{
 		global $cookie;
-		
+		$buffer = '';
 		if (Tools::isSubmit('SubmitAvalaraTaxSettings'))
 		{
 			Configuration::updateValue('AVALARATAX_ACCOUNT_NUMBER', Tools::getValue('avalaratax_account_number'));
@@ -378,7 +402,7 @@ class AvalaraTax extends Module
 			Configuration::updateValue('AVALARATAX_URL', Tools::getValue('avalaratax_url'));
 			Configuration::updateValue('AVALARATAX_COMPANY_CODE', Tools::getValue('avalaratax_company_code'));
 			
-			echo $this->_displayConfirmation();
+			$buffer .= $this->_displayConfirmation();
 		}
 		elseif (Tools::isSubmit('SubmitAvalaraTaxOptions'))
 		{
@@ -389,7 +413,7 @@ class AvalaraTax extends Module
 			Configuration::updateValue('AVALARA_CACHE_MAX_LIMIT', Tools::getValue('avalara_cache_max_limit') < 1 ?
 				1 : Tools::getValue('avalara_cache_max_limit') > 23 ? 23 : Tools::getValue('avalara_cache_max_limit'));
 			
-			echo $this->_displayConfirmation();
+			$buffer .= $this->_displayConfirmation();
 		}
 		elseif (Tools::isSubmit('SubmitAvalaraTestConnection'))
 			$connectionTestResult = $this->_testConnection();
@@ -407,7 +431,7 @@ class AvalaraTax extends Module
 			$normalizedAddress = $this->validateAddress($address);
 			if (isset($normalizedAddress['ResultCode']) && $normalizedAddress['ResultCode'] == 'Success')
 			{
-				echo $this->_displayConfirmation($this->l('The address you submitted has been validated.'));
+				$buffer .= $this->_displayConfirmation($this->l('The address you submitted has been validated.'));
 				Configuration::updateValue('AVALARATAX_ADDRESS_LINE1', $normalizedAddress['Normalized']['Line1']);
 				Configuration::updateValue('AVALARATAX_ADDRESS_LINE2', $normalizedAddress['Normalized']['Line2']);
 				Configuration::updateValue('AVALARATAX_CITY', $normalizedAddress['Normalized']['City']);
@@ -417,8 +441,8 @@ class AvalaraTax extends Module
 			}
 			else
 			{
-				echo $this->_displayConfirmation($this->l('The following error was generated while validating your address').
-					':<br /> - '.Tools::safeOutput($normalizedAddress['Messages']['Summary']), 'error');
+				$buffer .= $this->_displayConfirmation($this->l('The following error was generated while validating your address').
+					':<br /> - '.Tools::safeOutput($normalizedAddress['Exception']['FaultString']), 'error');
 				Configuration::updateValue('AVALARATAX_ADDRESS_LINE1', Tools::getValue('avalaratax_address_line1'));
 				Configuration::updateValue('AVALARATAX_ADDRESS_LINE2', Tools::getValue('avalaratax_address_line2'));
 				Configuration::updateValue('AVALARATAX_CITY', Tools::getValue('avalaratax_city'));
@@ -431,7 +455,7 @@ class AvalaraTax extends Module
 			Db::getInstance()->Execute('TRUNCATE TABLE '._DB_PREFIX_.'avalara_product_cache');
 			Db::getInstance()->Execute('TRUNCATE TABLE '._DB_PREFIX_.'avalara_carrier_cache');
 			
-			echo $this->_displayConfirmation('Cache cleared!');
+			$buffer .= $this->_displayConfirmation('Cache cleared!');
 		}
 		
 		$confValues = Configuration::getMultiple(array(
@@ -455,7 +479,7 @@ class AvalaraTax extends Module
 		foreach (Country::getCountries(intval($cookie->id_lang)) as $country)
 			$countryList[] = array('id' => $country['id_country'], 'name' => $country['name'], 'iso_code' => $country['iso_code']);
 		
-		$buffer = '
+		$buffer .= '
 		<style type="text/css">
 			fieldset.avalaratax_fieldset td.avalaratax_column { padding: 0 18px; text-align: right; vertical-align: top;}
 			fieldset.avalaratax_fieldset input[type=text] { width: 250px; }
@@ -1235,8 +1259,13 @@ class AvalaraTax extends Module
 	{
 		return Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'avalara_temp`');
 	}
+	
+	private function getCurrentURL($htmlEntities = false)
+	{
+		$url = Tools::safeOutput($_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'], true);
+		return (!empty($_SERVER['HTTPS']) ? 'https' : 'http').'://'.($htmlEntities ? preg_replace('/&/', '&amp;', $url): $url);
+	}
 }
-
 
 function avalaraAutoload($className)
 {
