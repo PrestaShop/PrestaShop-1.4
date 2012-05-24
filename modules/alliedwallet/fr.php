@@ -1,0 +1,30 @@
+<?php
+
+global $_MODULE;
+$_MODULE = array();
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_ee1e9cbe2a66a3a7ecc434049bd67339'] = 'Allied Wallet';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_f1a61329aca815b8eaad49289759eb47'] = 'Accepter les paiements via Allied Wallet';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_fa214007826415a21a8456e3e09f999d'] = 'Êtes-vous sûr(e) de vouloir supprimer ce module et ces informations ?';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_d2198f8429396f037b796aa94ece06ac'] = 'L\'identifiant Marchand Allied Wallet est requis';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_3eb6a7185343bd77dedac812c14aee03'] = 'L\'identifiant Site Allied Wallet est requis';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_c86005ff4481971ebf5730ccc00cd2c1'] = 'Une URL complète est requise, et doit être correcte.';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Confirmation';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_c888438d14855d7d96a2724ee9c306bd'] = 'Paramètres mis à jour';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_6357d3551190ec7e79371a8570121d3a'] = 'Il y a';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_4ce81305b7edb043d0a7a5c75cab17d0'] = 'Il y a';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_07213a0161f52846ab198be103b5ab43'] = 'erreurs';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_cb5e100e5a9a3e7f6d1fd97512215282'] = 'erreur';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_19b1ea021a1b5402cf797544a64558e1'] = 'Ce module vous permet d\'accepter les paiements via Allied Wallet.';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_4f695f206e2caaeb2022fb4de29303ad'] = 'Afin d\'utiliser ce module, vous devez posséder un compte client Allied Wallet.';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_e50cf4a489c9087ca088334d7636d3de'] = 'Si vous avez déjà un compte, merci de remplir les champs requis avec vos identifiants Allied Wallet.';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_0d24e36c8f62de1699e78f844a0a7f07'] = 'N\'attendez plus et';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_f8b1928c201b0bec9d9e517422711203'] = 'souscrivez dès maintenant';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_fa11cdacfac2ae792b67c03e3280a1d4'] = 'pour obtenir un compte Allied Wallet.';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_f4f70727dc34561dfde1a3c529b6205c'] = 'Paramètres';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_00be0ca8c24aec576142d9a00a5de0db'] = 'Identifiant Marchand';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_30d914c2c970bc8264f4f4108e3a6602'] = 'Identifiant Site';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_3ca7ca93df600ffff03ee0e7eac6950f'] = 'URL de redirection';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_158135b3055bf30a67347a09e85c6bce'] = 'Indiquez ici l\'URL de la page vers laquelle les clients doivent être redirigés après leurs commandes.';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_b17f3f4dcf653a5776792498a9b44d6a'] = 'Mettre à jour les paramètres';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_206f26720312cf5f928632b91d72d9df'] = 'Erreur Allied Wallet';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_24fc650b2c2e8c2f119a577d67efe0c5'] = 'Payer avec Allied Wallet';
