@@ -1,5 +1,5 @@
 /* PHP */
-/* PHP:attribute_group_clean_combinations() */;
+/* PHP:attribute_group_clean_combinations(); */;
 
 /* STRUCTURE */
 SET NAMES 'utf8';
