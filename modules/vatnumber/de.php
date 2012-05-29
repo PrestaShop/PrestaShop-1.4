@@ -2,7 +2,8 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{vatnumber}prestashop>vatnumber_cee549912e318726d2c4989bb507665f'] = 'Europäische Umsatzsteuer-Identifikationsnummer ';
+$_MODULE['<{vatnumber}prestashop>vatnumber_b0b9a606a1c251323825ca45d40964dc'] = 'Kein Standardland festgesetzt.';
+$_MODULE['<{vatnumber}prestashop>vatnumber_cee549912e318726d2c4989bb507665f'] = 'Europäische Umsatzsteuer-Identifikationsnummer';
 $_MODULE['<{vatnumber}prestashop>vatnumber_daa44329eceb03dc085a668376af07f5'] = 'Aktivieren Sie die Umsatzsteuer-Identifikationsnummer bei Erstellung eines Kontos (der Kunde muss seine UST-ID bei Anlage der Adresse angeben)';
 $_MODULE['<{vatnumber}prestashop>vatnumber_162b29cf61678af2aaac37f440265c28'] = 'Ihr Land wurde aktualisiert.';
 $_MODULE['<{vatnumber}prestashop>vatnumber_0ca51bcd22e4d7b56b6f1d8a01cefc1f'] = 'Die Überprüfung der Umsatzsteuer-Identifikationsnummer mit dem WebService ist nun aktiviert.';

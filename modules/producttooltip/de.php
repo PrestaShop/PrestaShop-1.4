@@ -20,5 +20,5 @@ $_MODULE['<{producttooltip}prestashop>producttooltip_f0f5fac9602d88bc27f0edf960d
 $_MODULE['<{producttooltip}prestashop>producttooltip_975f3743bcce9c5a2e30001aab592fb1'] = 'Person sieht gerade';
 $_MODULE['<{producttooltip}prestashop>producttooltip_e1a1dc1574c9f178c14e2952351aa47d'] = 'Menschen sehen gerade';
 $_MODULE['<{producttooltip}prestashop>producttooltip_d296e0c3a7dffc0f4d02574bd502653f'] = 'dieses Produkt';
-$_MODULE['<{producttooltip}prestashop>producttooltip_71736c614b237f4368128077411f1699'] = 'Dieses Produkt wurde zuletzt gekauft ';
+$_MODULE['<{producttooltip}prestashop>producttooltip_71736c614b237f4368128077411f1699'] = 'Dieses Produkt wurde zuletzt gekauft';
 $_MODULE['<{producttooltip}prestashop>producttooltip_4dda321f0231c2d50fcee5c20075dbbd'] = 'Dieses Produkt wurde zuletzt in den Warenkorb hinzugefügt';

@@ -31,7 +31,7 @@ $_MODULE['<{blockwishlist}prestashop>blockwishlist_f2a6c498fb90ee345d997f888fce3
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_4b7d496eedb665d0b5f589f2f874e7cb'] = 'Produkt-Detail';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_09dc02ecbb078868a3a86dded030076d'] = 'Keine Produkte';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist_7ec9cceb94985909c6994e95c31c1aa8'] = 'Meine Wunschlisten';
-$_MODULE['<{blockwishlist}prestashop>managewishlist_0ac1aeb2429db494dd42ad2dc219ca7e'] = 'Produkte verstecken ';
+$_MODULE['<{blockwishlist}prestashop>managewishlist_0ac1aeb2429db494dd42ad2dc219ca7e'] = 'Produkte verstecken';
 $_MODULE['<{blockwishlist}prestashop>managewishlist_0de9d09a36e820f9da7e87ab3678dd12'] = 'Produkte anzeigen';
 $_MODULE['<{blockwishlist}prestashop>managewishlist_0bb3e067c0514f5ff2d5a8e45fc0f4be'] = 'Informationen über gekaufte Produkte verstecken';
 $_MODULE['<{blockwishlist}prestashop>managewishlist_6fe88f5681da397d46fefe19b3020a6a'] = 'Informationen über gekaufte Produkte anzeigen';

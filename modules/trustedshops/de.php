@@ -91,6 +91,7 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_259060bb469ed1256c2e758e32
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_8512ae7d57b1396273f76fe6ed341a23'] = 'Sprache';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_8638c4fb6ff62122acd9927c4edbd22c'] = 'wurde entfernt';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_a599ec4408db04d4bb9e4edd78b849f4'] = 'Anmeldung erfolgreich';
+$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_07186ff4930c511cd3aebb3f43df2e0c'] = 'Certificate Login fehlgeschlagen';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_b18f5630d5ffdfcee5ab0a44ee6e1eb6'] = 'Sei müssen einen Nutzernamen, sowie ein Kennwort erstellen, um fortfahren zu können.';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_068ce643ff39bf2189935d14736fd10b'] = 'Siegel und Käuferschutz';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_e32263743aac776e5e32fc385d8b669a'] = 'Trusted Shops ist das bekannte Internet-Gütesiegel für Online-Shops. Es bieten Ihren Kunden auch einen Käuferschutz. Im Rahmen der Prüfung wird Ihr Online-Shop umfangreichen und gründlichen Tests unterzogen. Diese Prüfung, besteht aus über 100 einzelnen Kriterien, basierend auf nationalen und europäischen Anforderungen für Verbraucherschutz und  Gesetzgebung.';
@@ -136,6 +137,7 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_06ec9154ce96a389f7b1d884e0
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_f89b7100efcc136900c909690e43f008'] = 'Die Zeile in Ihrer cron Datei könnte so aussehen:';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_2b83e3a2e08203b9892ad8801d6b2543'] = 'Trusted Shops Kundenbewertung';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_b20a16afda98421bbf7457ccfa50e311'] = 'Dieses Modul erfordert Schreib- und Leserechte auf den Ordner /cache des Moduls.';
+$_MODULE['<{trustedshops}prestashop>trustedshopsrating_687d745d0dd48ea996cb951d705da4d0'] = 'Dieses Modul erfordert für ein einwandfreies Funktionieren die SOAP PHP Extension';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_1097e2b0ee70e248749f0d0a9292df56'] = 'ungültige Trusted Shops ID';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_086dbc83aa6b78fa9a234d264ba5808a'] = 'ungültige Verzögerung';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_24bbca53f91f119c930d147557a4e997'] = 'Bitte anmelden';
@@ -147,7 +149,7 @@ $_MODULE['<{trustedshops}prestashop>trustedshopsrating_c888438d14855d7d96a2724ee
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_4d3d769b812b6faa6b76e1a8abaece2d'] = 'Aktiv';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_eeb41070f0552af9f1339ed58da237fb'] = 'Inaktiv bis Sie Ihre Trusted Shops ID angegeben haben';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_9eb274fb901206f4fc8345a787443269'] = 'Warnung, alle bestehenden Bewertungsbenachrichtigungen werden gelöscht';
-$_MODULE['<{trustedshops}prestashop>trustedshopsrating_2a94082b582d0620bae922fc14c36444'] = 'Allgemeine Einstellungen ';
+$_MODULE['<{trustedshops}prestashop>trustedshopsrating_2a94082b582d0620bae922fc14c36444'] = 'Allgemeine Einstellungen';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_e66ff458a8281bc8983ef58f991accb0'] = 'Bitte geben Sie Ihre Trusted Shops ID an (je eine andere ID pro Sprache):';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_9dc0b7bdd32d5e30f4d71eb5abb6b8d4'] = 'Einstellungen anzeigen';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_b30cb94d482485bf0bf7015520ffb557'] = 'Widget im Shop anzeigen';

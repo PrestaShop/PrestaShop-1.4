@@ -4,7 +4,7 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{hipay}prestashop>hipay_50089d40ef4536271e8b16dbe5763c01'] = 'Hipay';
 $_MODULE['<{hipay}prestashop>hipay_035ab5edb2d8af86d51f6a92e65b4c0f'] = 'Sichere Zahlung mit Visa, Mastercard und europäischen Zahlungsmethoden';
-$_MODULE['<{hipay}prestashop>hipay_5063b1c7402ff93d09defb875fa0085b'] = '[Hipay] Fehler: kann keine PaymentParams erstellen ';
+$_MODULE['<{hipay}prestashop>hipay_5063b1c7402ff93d09defb875fa0085b'] = '[Hipay] Fehler: kann keine PaymentParams erstellen';
 $_MODULE['<{hipay}prestashop>hipay_a85eba4c6c699122b2bb1387ea4813ad'] = 'Warenkorb';
 $_MODULE['<{hipay}prestashop>hipay_d4126d0b64579211d37151ef9b5af754'] = '[Hipay] Fehler: kann \"Warenkorb\" Produkt nicht erstellen';
 $_MODULE['<{hipay}prestashop>hipay_ac2e397ffc0808f909e9712ca575c121'] = 'Gesamt Bestellung';
@@ -24,7 +24,7 @@ $_MODULE['<{hipay}prestashop>hipay_01ad06b7c5887516f56ff824278feb67'] = 'Hinweis
 $_MODULE['<{hipay}prestashop>hipay_254f642527b45bc260048e30704edb39'] = 'Konfiguration';
 $_MODULE['<{hipay}prestashop>hipay_d86590564b22be4d3b242472722bf969'] = 'Die Konfiguration von Hipay ist einfach und erfolgt in drei Schritten';
 $_MODULE['<{hipay}prestashop>hipay_f21850b58e4866b30f7d3724cc29edb1'] = 'Melden Sie sich bei Ihrem Händler-Konto an';
-$_MODULE['<{hipay}prestashop>hipay_dc32882bf2b1893d53aeaaa862c46d5c'] = 'Erstellen Sie ein hipay-Konto ';
+$_MODULE['<{hipay}prestashop>hipay_dc32882bf2b1893d53aeaaa862c46d5c'] = 'Erstellen Sie ein hipay-Konto';
 $_MODULE['<{hipay}prestashop>hipay_854348e0cffd068204ce979351b2eb10'] = 'Aktivieren Sie Hipay für Ihren Prestashop, es ist kostenlos!';
 $_MODULE['<{hipay}prestashop>hipay_b7ce0a1dce723a074049b88fb22dbb4d'] = 'Erfahren Sie mehr über Sonderkonditionen auf Transaktionen über prestashop, indem Sie';
 $_MODULE['<{hipay}prestashop>hipay_7667c2b31b9980267cb526ed2f0d235d'] = 'unseren Support kontaktieren';

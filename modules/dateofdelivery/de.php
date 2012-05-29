@@ -38,8 +38,8 @@ $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_4dab36ac83853282fc0d7bae20c
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_0008e84621e5c9f21f8a55387a28692f'] = 'Zusätzliche Zeit, wenn ein Produkt nicht vorrätig ist';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_521d02cf307201053a46e0b9c5b5170c'] = 'Zusätzliche Zeit zur Vorbereitung einer Bestellung';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_cec31ec82e3bdee482baaa9f5b11eeed'] = 'Vorbereitungsoption';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_15b4020fafe2bcadf41fbdb2e7fa137a'] = 'Vorbereitung am Samstag ';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_9685cbc6ac9090137fb087d4f48d0561'] = 'Vorbereitung am Sonntag ';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_15b4020fafe2bcadf41fbdb2e7fa137a'] = 'Vorbereitung am Samstag';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_9685cbc6ac9090137fb087d4f48d0561'] = 'Vorbereitung am Sonntag';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_104f1a7d59077b514d4105fcee0e42ff'] = 'Format des Datums';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_f19cb36e3ae263c8c3617a453a0ff521'] = 'Hier sehen Sie alle verfügbaren Paramter:';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_c9cc8cce247e49bae79f15173ce97354'] = 'Speichern';

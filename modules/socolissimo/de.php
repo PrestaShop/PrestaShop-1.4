@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{socolissimo}prestashop>ajax_607e1d854783c8229998ac2b5b6923d3'] = 'Token ungültig';
 $_MODULE['<{socolissimo}prestashop>socolissimo_42ab10dea7d96b9c353e0f5bae43ec20'] = 'So Colissimo';
 $_MODULE['<{socolissimo}prestashop>socolissimo_27d52fec98c204daecd4c4df2b8e11fa'] = 'Bieten Sie Ihren Kunden unterschiedliche Liefermethoden mit LaPoste an.';
 $_MODULE['<{socolissimo}prestashop>socolissimo_f8e355b97fa1be7a8d8c206aa66f0077'] = '\'Versandzone(n)\'';
@@ -13,7 +14,7 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_ac08649aa09ff3b879525627bf086dd1'
 $_MODULE['<{socolissimo}prestashop>socolissimo_a3a53f075adf77334cc34d0f7497ff44'] = '\'URL So\'';
 $_MODULE['<{socolissimo}prestashop>socolissimo_4d470fde8487e755a50e9235e3dc13ab'] = 'muss konfiguriert sein, um dieses Modul richtig zu nutzen';
 $_MODULE['<{socolissimo}prestashop>socolissimo_94c614a9df45ea1fcd27b15b7d6f3e67'] = 'Ungültiger Schlüssel';
-$_MODULE['<{socolissimo}prestashop>socolissimo_90a5cb3d07bb39bbd4b76f7f9a0d7947'] = 'Ein Fehler ist beim Abschnitt Versand aufgetreten ';
+$_MODULE['<{socolissimo}prestashop>socolissimo_90a5cb3d07bb39bbd4b76f7f9a0d7947'] = 'Ein Fehler ist beim Abschnitt Versand aufgetreten';
 $_MODULE['<{socolissimo}prestashop>socolissimo_70b2e65f0f2aabf3e2c58d70cf1e1e9a'] = 'Login FO fehlt';
 $_MODULE['<{socolissimo}prestashop>socolissimo_2b639b851983a24bc12358523861c7ff'] = 'Login FO falsch';
 $_MODULE['<{socolissimo}prestashop>socolissimo_7ca12228b5ad636c637425a086fe0092'] = 'Kunden unberechtigt';
@@ -57,18 +58,18 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_00d23a76e43b46dae9ec7aa9dcbebb32'
 $_MODULE['<{socolissimo}prestashop>socolissimo_b9f5c797ebbf55adccdd8539a65a0241'] = 'Deaktiviert';
 $_MODULE['<{socolissimo}prestashop>socolissimo_09dbe81fba2031934c74555768a0e990'] = 'Wenn Sie diese Option wählen, wird socolissimo in einer fancybox angezeigt.';
 $_MODULE['<{socolissimo}prestashop>socolissimo_85068ddf0b9bcbb6913008356fe328a0'] = 'Kontrolle';
-$_MODULE['<{socolissimo}prestashop>socolissimo_fdd526b84abc0b8fc17060e62d022b84'] = 'Verfügbarkeit von Service SoColissimo erlauben oder nicht erlauben ';
+$_MODULE['<{socolissimo}prestashop>socolissimo_fdd526b84abc0b8fc17060e62d022b84'] = 'Verfügbarkeit von Service SoColissimo erlauben oder nicht erlauben';
 $_MODULE['<{socolissimo}prestashop>socolissimo_32996bdf4214d6cb8bf7fa02273813c8'] = 'URL Kontrolle';
 $_MODULE['<{socolissimo}prestashop>socolissimo_947d84460ad5676c9d79fa05727f1e8a'] = 'Die Überwachung der URL wird für die Verfügbarkeit des socolissimo Service benötigt. Es ist nicht ratsam diese zu deaktivieren.';
 $_MODULE['<{socolissimo}prestashop>socolissimo_c9cc8cce247e49bae79f15173ce97354'] = 'Speichern';
 $_MODULE['<{socolissimo}prestashop>socolissimo_a82be0f551b8708bc08eb33cd9ded0cf'] = 'Information';
-$_MODULE['<{socolissimo}prestashop>socolissimo_3e387f5ebd657c6372f0594c8226863e'] = 'Hier sind zwei Adressen, die Sie in Ihrem Back Office SoColissimo ausfüllen müssen ';
-$_MODULE['<{socolissimo}prestashop>socolissimo_49977cbb6772deeac9ceb89f069e491c'] = 'Bestätigungs-URL ';
+$_MODULE['<{socolissimo}prestashop>socolissimo_3e387f5ebd657c6372f0594c8226863e'] = 'Hier sind zwei Adressen, die Sie in Ihrem Back Office SoColissimo ausfüllen müssen';
+$_MODULE['<{socolissimo}prestashop>socolissimo_49977cbb6772deeac9ceb89f069e491c'] = 'Bestätigungs-URL';
 $_MODULE['<{socolissimo}prestashop>socolissimo_06dc3f24f73027164d2b19556118624e'] = 'Rückgabe-URL';
 $_MODULE['<{socolissimo}prestashop>socolissimo_82c440defe28e2099cba1af1f0761807'] = 'ID SO nicht angegeben';
 $_MODULE['<{socolissimo}prestashop>socolissimo_826361881cfc18b8b75405d398f633b5'] = 'Key SO nicht angegeben';
 $_MODULE['<{socolissimo}prestashop>socolissimo_0bf6a620e5f22d8b46e3903a993f7741'] = 'Vorbereitungszeit nicht angegeben';
-$_MODULE['<{socolissimo}prestashop>socolissimo_228485c5faff886fa4520323dc5b2c76'] = 'Ungültige Vorbereitungszeit ';
+$_MODULE['<{socolissimo}prestashop>socolissimo_228485c5faff886fa4520323dc5b2c76'] = 'Ungültige Vorbereitungszeit';
 $_MODULE['<{socolissimo}prestashop>socolissimo_c3288acdf9ecd0a4fb1e308442b06867'] = 'Mehraufwendungen nicht angegeben';
 $_MODULE['<{socolissimo}prestashop>socolissimo_1a89bc7d83f6e90b2368e3401690a87a'] = 'Ungültige Mehraufwendungen';
 $_MODULE['<{socolissimo}prestashop>socolissimo_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Konfiguration aktualisiert';

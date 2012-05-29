@@ -9,7 +9,7 @@ $_MODULE['<{statsregistrations}prestashop>statsregistrations_4e4f3af3fb18136b8ee
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_a751e9cc4ed4c7585ecc0d97781cb48a'] = 'Kundenkonten insgesamt:';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_998e4c5c80f27dec552e99dfed34889a'] = 'CSV-Export';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_6602bbeb2956c035fb4cb5e844a4861b'] = 'Erklärung';
-$_MODULE['<{statsregistrations}prestashop>statsregistrations_fba0e64541196123bbf8e3737bf9287b'] = 'Anzahl der erstellten Kundenkonten ';
+$_MODULE['<{statsregistrations}prestashop>statsregistrations_fba0e64541196123bbf8e3737bf9287b'] = 'Anzahl der erstellten Kundenkonten';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_a286f4eaef73a0b4f955c42b84472444'] = 'Die Gesamtzahl der erstellten Konten ist an sich keine wichtige Information. Es ist allerdings interessant, die Zahl der Eröffnungen über die Zeit gesehen zu analysieren. Dies sagt aus, ob die Dinge auf dem richtigen Weg sind.';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_57a6f41a27c9baa5b402d30e97d4c1e8'] = 'Die richtige Reaktion auf die Entwicklung der Registrierungen';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_f123e4522d188fba4cbe1dc58034f95c'] = 'Wenn Sie Ihren Shop laufen lassen, ohne etwas zu ändern, sollte die Anzahl der Kunden-Registrierungen stabil bleiben oder leicht rückläufig sein.';

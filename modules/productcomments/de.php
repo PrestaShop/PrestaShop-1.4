@@ -46,14 +46,14 @@ $_MODULE['<{productcomments}prestashop>productcomments_068f80c7519d0528fb08e8213
 $_MODULE['<{productcomments}prestashop>productcomments_af1b98adf7f686b84cd0b443e022b7a0'] = 'Kategorien';
 $_MODULE['<{productcomments}prestashop>productcomments_b718adec73e04ce3ec720dd11a06a308'] = 'ID';
 $_MODULE['<{productcomments}prestashop>productcomments_b9aefa40a54680bb258f9f9569290fae'] = 'Name des Produkts';
-$_MODULE['<{productcomments}prestashop>productcomments_99121ab27aaa7472cfada9071c5ba434'] = 'Name der Kategorie ';
+$_MODULE['<{productcomments}prestashop>productcomments_99121ab27aaa7472cfada9071c5ba434'] = 'Name der Kategorie';
 $_MODULE['<{productcomments}prestashop>productcomments_fd4b5401d4d3c7d32d158bfc1e552f3b'] = 'Bitte tragen Sie Ihren Namen ein';
 $_MODULE['<{productcomments}prestashop>productcomments_7b2f2ea0f690ef3c2fc9bba0e4bfbc4c'] = 'Ungültiger Kommentartext gepostet.';
 $_MODULE['<{productcomments}prestashop>productcomments_f88dc17737f7fdd4464b2eb922a8f133'] = 'Ein Fehler bist eim Speichern Ihres Kommentars aufgetreten.';
 $_MODULE['<{productcomments}prestashop>productcomments_7fa4a3510dafd0eac6435c19861b2bb7'] = 'Kommentar erfolgreich geschrieben.';
 $_MODULE['<{productcomments}prestashop>productcomments_f8694a9aae2eb045920f613cfa7f1235'] = 'Wartet aufBestätigung durch Moderator.';
 $_MODULE['<{productcomments}prestashop>productcomments_6bf852d9850445291f5e9d4740ac7b50'] = 'Kommentartext ist erforderlich.';
-$_MODULE['<{productcomments}prestashop>productcomments_6d28f2900adb9e500868166f6d04da92'] = 'Sie sollten ';
+$_MODULE['<{productcomments}prestashop>productcomments_6d28f2900adb9e500868166f6d04da92'] = 'Sie sollten';
 $_MODULE['<{productcomments}prestashop>productcomments_ba8d7ae5dcadfba739f28a777378f208'] = 'Sekunden warten, bevor Sie einen neuen Kommentar posten';
 $_MODULE['<{productcomments}prestashop>productcomments_7c3b0e9898b88deee7ea75aafd2e37e2'] = 'Durchschnittsgrad';
 $_MODULE['<{productcomments}prestashop>productcomments_b1897515d548a960afe49ecf66a29021'] = 'Durchschnitt';

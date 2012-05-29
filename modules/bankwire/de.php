@@ -12,7 +12,7 @@ $_MODULE['<{bankwire}prestashop>bankwire_ccab155f173ac76f79eb192703f86b18'] = 'K
 $_MODULE['<{bankwire}prestashop>bankwire_444bcb3a3fcf8389296c49467f27e1d6'] = 'ok';
 $_MODULE['<{bankwire}prestashop>bankwire_c888438d14855d7d96a2724ee9c306bd'] = 'Einstellungen aktualisiert';
 $_MODULE['<{bankwire}prestashop>bankwire_fcec4d73cccd149a2d18695fd8785f88'] = 'Dieses Modul ermöglicht Ihnen Zahlungen per Banküberweisung.';
-$_MODULE['<{bankwire}prestashop>bankwire_b6af2d31afe71aedcceca73cc27fec29'] = 'Wenn der Kunde diese Zahlungsmethode wählt, wird der Bestellstatus auf \"Wartet auf Zahlung\" umgestellt. ';
+$_MODULE['<{bankwire}prestashop>bankwire_b6af2d31afe71aedcceca73cc27fec29'] = 'Wenn der Kunde diese Zahlungsmethode wählt, wird der Bestellstatus auf \"Wartet auf Zahlung\" umgestellt.';
 $_MODULE['<{bankwire}prestashop>bankwire_0daeb8f6c1874ec9442e821b524d37c1'] = 'Aus diesem Grund müssen Sie die Bestellung manuell bestätigen, sobald Sie die Überweisung erhalten.';
 $_MODULE['<{bankwire}prestashop>bankwire_5dd532f0a63d89c5af0243b74732f63c'] = 'Kontaktdetails';
 $_MODULE['<{bankwire}prestashop>bankwire_17e6954ea60d238857324fea1f10b8f3'] = 'Bitte spezifizieren Sie die Bankverbindungsdetails für Kunden.';
@@ -45,7 +45,7 @@ $_MODULE['<{bankwire}prestashop>payment_return_a35abd2d31d9e1da82599bc67e166506'
 $_MODULE['<{bankwire}prestashop>payment_return_c51326a2ac458845d579a82a92f111f0'] = 'an den Kontoinhaber von';
 $_MODULE['<{bankwire}prestashop>payment_return_de6d813f05e3916a86b89bd8b1a8a489'] = 'mit dieser Bankverbindung';
 $_MODULE['<{bankwire}prestashop>payment_return_619b26a60df1af3649d2e8920a7949cd'] = 'an diese Bank';
-$_MODULE['<{bankwire}prestashop>payment_return_4fac1f51a5f4b3dd634800fe3d408a45'] = 'Bitte denken Sie daran, Ihre Bestellnummer ';
+$_MODULE['<{bankwire}prestashop>payment_return_4fac1f51a5f4b3dd634800fe3d408a45'] = 'Bitte denken Sie daran, Ihre Bestellnummer';
 $_MODULE['<{bankwire}prestashop>payment_return_4460fcb45ad7a6a61c95293eb611da12'] = 'als Betreff in Ihrer Banküberweisung anzugeben';
 $_MODULE['<{bankwire}prestashop>payment_return_13f4ac6dc75b5829499cb9cf8b733071'] = 'Ihre Angaben wurden soeben per E-Mail bestätigt.';
 $_MODULE['<{bankwire}prestashop>payment_return_c4457a9f2f20e39386008bbb2cd3a78f'] = 'Ihre Bestellung wird abgesandt, sobald Ihre Zahlung vollständig bei uns eingegangen ist.';

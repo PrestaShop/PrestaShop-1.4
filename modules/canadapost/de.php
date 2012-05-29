@@ -3,8 +3,9 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{canadapost}prestashop>canadapost_a5daea18a1d4214028a538c3bf5a41cc'] = 'Bieten Sie Ihren Kunden, abweichende Lieferadresse Methoden mit Kanada Beitrag';
-$_MODULE['<{canadapost}prestashop>canadapost_883fa0069f4b0454e2277dd567ab3991'] = '\"Gewicht Unit (LB oder KG).\"';
-$_MODULE['<{canadapost}prestashop>canadapost_5a3ceec65d417f5d92c26dbf0dccc00d'] = '\"Dimension Unit (cm oder in).\"';
+$_MODULE['<{canadapost}prestashop>canadapost_9d7d8be1feb0bc026fffd29bc536364e'] = 'cURL-Option';
+$_MODULE['<{canadapost}prestashop>canadapost_883fa0069f4b0454e2277dd567ab3991'] = '\\Gewicht Unit (LB oder KG).\"\"';
+$_MODULE['<{canadapost}prestashop>canadapost_5a3ceec65d417f5d92c26dbf0dccc00d'] = '\\Dimension Unit (cm oder in).\"\"';
 $_MODULE['<{canadapost}prestashop>canadapost_4d470fde8487e755a50e9235e3dc13ab'] = 'muss so konfiguriert sein, um dieses Modul korrekt verwenden';
 $_MODULE['<{canadapost}prestashop>canadapost_2056ed4f6b76a94035f12c041350aa2f'] = 'Kanada Postkonto';
 $_MODULE['<{canadapost}prestashop>canadapost_20449d3f0b6c6b9265a5cd2a470a6451'] = 'Gewicht der Verpackung';
@@ -15,6 +16,7 @@ $_MODULE['<{canadapost}prestashop>canadapost_9c536dc938b99309eab40c9a06fc1c00'] 
 $_MODULE['<{canadapost}prestashop>canadapost_3e203b9a16f360b88d90bba6eb61ce61'] = 'Füllen Sie die \"Allgemeine Einstellungen\" Form';
 $_MODULE['<{canadapost}prestashop>canadapost_8c0987b9315003df7dae7f130e3cf58e'] = 'Wählen Sie Ihre verfügbare Lieferservice';
 $_MODULE['<{canadapost}prestashop>canadapost_e20f6d6f13fe70e78f6e2ab488493ccf'] = 'Webservice-Test-Verbindung';
+$_MODULE['<{canadapost}prestashop>canadapost_5378f4ad5f6616fda3ef972deba67f8a'] = 'cURL ist aktiviert';
 $_MODULE['<{canadapost}prestashop>canadapost_52f4393e1b52ba63e27310ca92ba098c'] = 'General Settings';
 $_MODULE['<{canadapost}prestashop>canadapost_277d63a9b24a09697e3c64092eaf4353'] = 'Kategorien Einstellungen';
 $_MODULE['<{canadapost}prestashop>canadapost_098eec2cabe2c39c6dec3fc522b6571a'] = 'Produkte Settings';
@@ -46,6 +48,7 @@ $_MODULE['<{canadapost}prestashop>canadapost_5cdd307ba6e260beb4801c0c10e22a3a'] 
 $_MODULE['<{canadapost}prestashop>canadapost_78945de8de090e90045d299651a68a9b'] = 'Verfügbar';
 $_MODULE['<{canadapost}prestashop>canadapost_2d25c72c1b18e562f6654fff8e11711e'] = 'Nicht verfügbar';
 $_MODULE['<{canadapost}prestashop>canadapost_d63e135774e62574e2a1921267dad142'] = 'Wählen Sie den Lieferservice, die zur Verfügung stehen für die Kunden.';
+$_MODULE['<{canadapost}prestashop>canadapost_cf565402d32b79d33f626252949a6941'] = 'Konfiguration speichern';
 $_MODULE['<{canadapost}prestashop>canadapost_a438cfa1a870740754c9f4b35130cc04'] = 'Ihre kanadische Post-Konto nicht angegeben';
 $_MODULE['<{canadapost}prestashop>canadapost_805353d2862ea0e658c9ddda871540fa'] = 'Ihr Zip / Postal Code ist nicht angegeben';
 $_MODULE['<{canadapost}prestashop>canadapost_ef9bd955e165dfb0207877e9fe180aeb'] = 'Deine Stadt ist nicht angegeben';

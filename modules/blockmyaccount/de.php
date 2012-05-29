@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{blockmyaccount}prestashop>blockmyaccount_ecf3e4f8f34a293099620cc25d5b4d93'] = 'Mein Kontoblock';
-$_MODULE['<{blockmyaccount}prestashop>blockmyaccount_0b9bc7f3bb601ef8959509352aea493b'] = 'Zeigt ein Block mit Links bezüglich des Benutzerkontos an';
+$_MODULE['<{blockmyaccount}prestashop>blockmyaccount_0b9bc7f3bb601ef8959509352aea493b'] = 'Fügt einen Benutzerkontoblock hinzu';
 $_MODULE['<{blockmyaccount}prestashop>blockmyaccount_d95cf4ab2cbf1dfb63f066b50558b07d'] = 'Mein Konto';
 $_MODULE['<{blockmyaccount}prestashop>blockmyaccount_74ecd9234b2a42ca13e775193f391833'] = 'Meine Bestellungen';
 $_MODULE['<{blockmyaccount}prestashop>blockmyaccount_89080f0eedbd5491a93157930f1e45fc'] = 'Meine Warenrücksendungen';
