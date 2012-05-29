@@ -61,5 +61,3 @@ $_MODULE['<{prestafraud}prestashop>prestafraud_a8bbb000124c9697aa5d63e7e758b64d'
 $_MODULE['<{prestafraud}prestashop>prestafraud_08eb31af908e2244867f6e812f82e935'] = 'Punto di ritiro';
 $_MODULE['<{prestafraud}prestashop>prestafraud_880f973e4ddae42c6bebd2c31bb977f8'] = 'Spedizione lenta oltre 3 giorni';
 $_MODULE['<{prestafraud}prestashop>prestafraud_b61de91e556aee84e83c3fde8ef67ddc'] = 'Spedizione express';
-
-?>

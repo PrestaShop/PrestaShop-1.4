@@ -18,7 +18,7 @@ $_MODULE['<{ganalytics}prestashop>ganalytics_b452493b16ead8b4b25ab3fb7174b8f5'] 
 $_MODULE['<{ganalytics}prestashop>ganalytics_95df6d8c97e880d8f6895d824d72c353'] = 'Nella pagina Impostazioni profilo, fai clic su modifica accanto alle informazioni profilo sito web principale';
 $_MODULE['<{ganalytics}prestashop>ganalytics_5189c0be0481408c9301c377818e69dc'] = 'Modifica il tasto radio del sito e-commerce da No a Sì.';
 $_MODULE['<{ganalytics}prestashop>ganalytics_98d12a01ab2aeeb10b7100eecf1974a8'] = 'Per impostare gli obiettivi, inserisci i dati dell\'obiettivo:';
-$_MODULE['<{ganalytics}prestashop>ganalytics_a44698a775d2fec04549ba6a2ac00491'] = 'Ritorna alla pagina principale dell\'account ';
+$_MODULE['<{ganalytics}prestashop>ganalytics_a44698a775d2fec04549ba6a2ac00491'] = 'Ritorna alla pagina principale dell\'account';
 $_MODULE['<{ganalytics}prestashop>ganalytics_dbec126ee3be2cd285a32a8d413fd1fa'] = 'Individua il profilo per il quale desideri creare gli obiettivi, quindi clicca su Modifica';
 $_MODULE['<{ganalytics}prestashop>ganalytics_c4af40d39b97cf98040540639841e27a'] = 'Selezionare uno dei 4 spazi adibiti agli obiettivi disponibili per il profilo, quindi clicca su Modifica';
 $_MODULE['<{ganalytics}prestashop>ganalytics_c3b99aa9b4638183dc1bf55f955ed9ae'] = 'Inserire l\'URL dell\'obiettivo. Il raggiungimento di questa pagina segna una conversione riuscita';
@@ -40,10 +40,10 @@ $_MODULE['<{ganalytics}prestashop>ganalytics_cd4952b65560a1242c68ffc980a6e515'] 
 $_MODULE['<{ganalytics}prestashop>ganalytics_efbf206b1b60cc0400c6147723509bd6'] = 'Dopo aver attivato i rapporti e-commerce e selezionato il profilo inserire \'order-confirmation.php\'  come pagina obiettivo';
 $_MODULE['<{ganalytics}prestashop>ganalytics_68db264effa9364901183d9d12fac500'] = 'Nome di questo obiettivo (per esempio \'elaborazione ordine\')';
 $_MODULE['<{ganalytics}prestashop>ganalytics_9b8bc3519c65da8fac122f91ac5b7673'] = 'Attiva l\'obiettivo';
-$_MODULE['<{ganalytics}prestashop>ganalytics_86a358dd6df1ba0cb3565b88380ba7a6'] = 'Aggiungi \'Product.php\' come prima pagina della tua conversione ';
+$_MODULE['<{ganalytics}prestashop>ganalytics_86a358dd6df1ba0cb3565b88380ba7a6'] = 'Aggiungi \'Product.php\' come prima pagina della tua conversione';
 $_MODULE['<{ganalytics}prestashop>ganalytics_b7f896191caad09b5fc34e79f1cefa76'] = 'Dagli un nome (ad esempio, \'pagina del prodotto\')';
-$_MODULE['<{ganalytics}prestashop>ganalytics_ef7060dd05e779dcfbf82f236df43823'] = 'Non segnare la casella \'richiesta\' perché il cliente potrebbe essere visitato direttamente da un tasto \"aggiungi al carrello\', come nel blocco homefeatured sulla homepage';
+$_MODULE['<{ganalytics}prestashop>ganalytics_ef7060dd05e779dcfbf82f236df43823'] = 'Non segnare la casella \'richiesta\' perché il cliente potrebbe essere visitato direttamente da un tasto \\aggiungi al carrello\', come nel blocco homefeatured sulla homepage\"';
 $_MODULE['<{ganalytics}prestashop>ganalytics_3bab28a0105361c49ca261ca08a19bf7'] = 'Proseguire inserendo i seguenti URL come fasi:';
 $_MODULE['<{ganalytics}prestashop>ganalytics_9bfb6e6af6e6793bfa9387e728187c87'] = '(Obbligatorio)';
-$_MODULE['<{ganalytics}prestashop>ganalytics_6a47891ae07f45802bc948d2618e36f5'] = 'Spuntare l\'opIone \'case sensitive\' ';
+$_MODULE['<{ganalytics}prestashop>ganalytics_6a47891ae07f45802bc948d2618e36f5'] = 'Spuntare l\'opIone \'case sensitive\'';
 $_MODULE['<{ganalytics}prestashop>ganalytics_d2d0c38d112e1d775057388122ae7545'] = 'Salva questo nuovo obiettivo';

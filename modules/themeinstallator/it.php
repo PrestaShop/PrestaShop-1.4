@@ -10,10 +10,10 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_57c1ed81b02e5d3361323c7
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_5fd13c2b89a6eaaa4614bfe258f6c40f'] = 'file Zip sembra essere rotto';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_0dea6caeb83e5c11d3678284e64ebed8'] = 'Errore durante il download di file';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_c186217583219f4cd040d9ee8d388ffb'] = 'Errore durante l\'estrazione zip';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_0210b6456cdccad569cb56026bb0f689'] = 'Cattivo file di configurazione ';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_0210b6456cdccad569cb56026bb0f689'] = 'Cattivo file di configurazione';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_5b6cf869265c13af8566f192b4ab3d2a'] = 'Documentazione';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_6bdbe5a8a9f446d4d758ee4c22648771'] = 'Si consiglia di consultare la documentazione';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_7348fd57bfb5c837fc57e54fcfeeed9e'] = 'Fai clic destro sul nome e scegli \"Salva collegamento come\"';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_7348fd57bfb5c837fc57e54fcfeeed9e'] = 'Fai clic destro sul nome e scegli \\Salva collegamento come\\\"\"';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_b857ef1f431c5f3290dc5b5e644826a6'] = 'I seguenti moduli sono stati installati';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_22c765d777eb4ca6b4292bcbb596872e'] = 'I seguenti moduli sono stati disabilitati';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_e501dc865768ac08d49c129a23c3ae09'] = 'I seguenti moduli sono stati abilitati';
@@ -21,7 +21,7 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_0dfbf4744524c8573235d60
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_dd1f775e443ff3b9a89270713580a51b'] = 'Precedente';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_a20ddccbb6f808ec42cd66323e6c6061'] = 'Fine';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_33167fe8de7517798cf2e95c7680d6a4'] = 'I temi seguenti sono stati importati con successo';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_f4ef3a40f287dd9849004a7f5af73f00'] = 'Attenzione: esiste già un modulo con lo stesso nome ';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_f4ef3a40f287dd9849004a7f5af73f00'] = 'Attenzione: esiste già un modulo con lo stesso nome';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_df8703a4066393da85e8188261660717'] = 'Seleziona i moduli del tema che desideri installare';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_7651cc4a979c5e21ee50de988ce574b0'] = 'Moduli di configurazione originali';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_8ab378b3ad05e14cbe61bff60c50afa6'] = 'configurazione attuale';
@@ -48,7 +48,7 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_7961c4434751797a383d52d
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_bc52857ec49d8de10e55171f5bbc7f2a'] = 'Archivio File';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_24ad8bfdfce09842a83f10d59a8ef01f'] = 'Dove si trova il file zip?';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_dec0faa6eb19bd9120d12c5a876bd1cf'] = 'Importare dal web';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_a33388a338ee2b199d66112369279558'] = 'Archivio URL ';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_a33388a338ee2b199d66112369279558'] = 'Archivio URL';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_cd8d9cc19984ccf9d314eee5eebfc2cc'] = 'Importa da FTP';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_94f2371003860a92b12bf4c66b2851ac'] = 'Seleziona archivio';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_1031371f906a92891140f384d04b3421'] = 'Errore durante la generazione di archivio';
@@ -85,5 +85,3 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_5da618e8e4b89c66fe86e32
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_3271e801d0a5db9dc2963a19ed9695d6'] = 'Scegli un tema';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_ea4788705e6873b424c65e91c2846b19'] = 'Annulla';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_abb381ee4077396e5d5d475b9022ba86'] = 'Genera l\'archivio ora!';
-
-?>

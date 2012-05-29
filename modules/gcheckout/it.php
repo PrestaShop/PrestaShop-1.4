@@ -14,7 +14,7 @@ $_MODULE['<{gcheckout}prestashop>confirm_0881a11f7af33bc1b43e437391129d66'] = 'S
 $_MODULE['<{gcheckout}prestashop>confirm_569fd05bdafa1712c4f6be5b153b8418'] = 'Altri metodi di pagamento';
 $_MODULE['<{gcheckout}prestashop>confirm_46b9e3665f187c739c55983f757ccda0'] = 'Confermo il mio ordine';
 $_MODULE['<{gcheckout}prestashop>gcheckout_6c132b5e262594950586ae13a7d3aa94'] = 'Google Checkout';
-$_MODULE['<{gcheckout}prestashop>gcheckout_3f3c0194c5adbe6953eb571f125af16d'] = 'Attuazione API di Google Checkout ';
+$_MODULE['<{gcheckout}prestashop>gcheckout_3f3c0194c5adbe6953eb571f125af16d'] = 'Attuazione API di Google Checkout';
 $_MODULE['<{gcheckout}prestashop>gcheckout_4402acab1c8f90dcf4a31dc96833bd86'] = 'Nessuna valuta impostata per questo modulo';
 $_MODULE['<{gcheckout}prestashop>gcheckout_82b8bb0d807e6d2e43a068f954c3559f'] = 'ID commerciante sembra essere sbagliato';
 $_MODULE['<{gcheckout}prestashop>gcheckout_9dd37c2106ceacbf0a40778b2109c386'] = 'Chiave commerciante sembra essere sbagliata';
@@ -34,7 +34,7 @@ $_MODULE['<{gcheckout}prestashop>gcheckout_de6fa0b14f259108c4b38e5be0374f46'] = 
 $_MODULE['<{gcheckout}prestashop>gcheckout_74692aae1cff5dc9dfd44f8c4e0540ad'] = 'È possibile registrare la comunicazione server-to-server. I file di registro sono';
 $_MODULE['<{gcheckout}prestashop>gcheckout_be5d5d37542d75f93a87094459f76678'] = 'e';
 $_MODULE['<{gcheckout}prestashop>gcheckout_f2f19b2cbcb395e254ebb1d9bf7cccd4'] = 'Se lo attivi, assicurati di proteggerli mettendo un file. Htaccess nella stessa directory. Se dimentichi di farlo, sarà leggibile da tutti';
-$_MODULE['<{gcheckout}prestashop>gcheckout_b2d37ae1cedf42ff874289b721860af2'] = 'Archivi ';
+$_MODULE['<{gcheckout}prestashop>gcheckout_b2d37ae1cedf42ff874289b721860af2'] = 'Archivi';
 $_MODULE['<{gcheckout}prestashop>gcheckout_38fb7d24e0d60a048f540ecb18e13376'] = 'Salva';
 $_MODULE['<{gcheckout}prestashop>gcheckout_a82be0f551b8708bc08eb33cd9ded0cf'] = 'Informazioni';
 $_MODULE['<{gcheckout}prestashop>gcheckout_968913ba2d4e25f3589d4c612ecbaa8d'] = 'Per poter utilizzare il modulo Google Checkout, è necessario configurare il tuo account Google Checkout (account sandbox così come account live). Accedi a Google Checkout poi vai su Settings > Integration. L\'URL callback API è:';
@@ -42,5 +42,3 @@ $_MODULE['<{gcheckout}prestashop>gcheckout_dba727a9adc372723baef4533a7fc9da'] = 
 $_MODULE['<{gcheckout}prestashop>gcheckout_0d46d15f70a7cfa670545b308c022840'] = 'Gli ordini devono essere posizionati con la stessa valuta del tuo account venditore. Carrelli in altre valute saranno convertiti se il cliente sceglie di pagare con questo modulo.';
 $_MODULE['<{gcheckout}prestashop>gcheckout_8dd85f4218069de952672fe3180dacdb'] = 'Paga con GoogleCheckout';
 $_MODULE['<{gcheckout}prestashop>gcheckout_ba794350deb07c0c96fe73bd12239059'] = 'Confezione';
-
-?>

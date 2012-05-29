@@ -13,7 +13,7 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_ac08649aa09ff3b879525627bf086dd1'
 $_MODULE['<{socolissimo}prestashop>socolissimo_a3a53f075adf77334cc34d0f7497ff44'] = '\'Url So\'';
 $_MODULE['<{socolissimo}prestashop>socolissimo_4d470fde8487e755a50e9235e3dc13ab'] = 'deve essere configurato per utilizzare questo modulo correttamente';
 $_MODULE['<{socolissimo}prestashop>socolissimo_94c614a9df45ea1fcd27b15b7d6f3e67'] = 'Chiave non valida';
-$_MODULE['<{socolissimo}prestashop>socolissimo_90a5cb3d07bb39bbd4b76f7f9a0d7947'] = 'Errore durante la fase di spedizione ';
+$_MODULE['<{socolissimo}prestashop>socolissimo_90a5cb3d07bb39bbd4b76f7f9a0d7947'] = 'Errore durante la fase di spedizione';
 $_MODULE['<{socolissimo}prestashop>socolissimo_70b2e65f0f2aabf3e2c58d70cf1e1e9a'] = 'Manca Login FO';
 $_MODULE['<{socolissimo}prestashop>socolissimo_2b639b851983a24bc12358523861c7ff'] = 'Login FO non valido';
 $_MODULE['<{socolissimo}prestashop>socolissimo_7ca12228b5ad636c637425a086fe0092'] = 'Cliente non autorizzato';
@@ -23,10 +23,9 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_fca3fbced675f75182786525bf4706dc'
 $_MODULE['<{socolissimo}prestashop>socolissimo_d14afc3f67d2457d29f0aa0db98e2c9d'] = 'CAP non valido';
 $_MODULE['<{socolissimo}prestashop>socolissimo_f9733e52e8841f1e45d015d5af5e8655'] = 'Formato url restituzione convalida non corretto';
 $_MODULE['<{socolissimo}prestashop>socolissimo_417434a4e55adbc67c9c391902cea7f3'] = 'Formato url restituzione errore non corretto';
-$_MODULE['<{socolissimo}prestashop>socolissimo_140c34f0b21b932e34d11575509d093b'] = ' ID di transazione non valido';
+$_MODULE['<{socolissimo}prestashop>socolissimo_140c34f0b21b932e34d11575509d093b'] = 'ID di transazione non valido';
 $_MODULE['<{socolissimo}prestashop>socolissimo_28ee1015b475a3a70613ea9c98d712b6'] = 'Formato spese di spedizione formato non corretto';
 $_MODULE['<{socolissimo}prestashop>socolissimo_afa50e8b2fc14bf578331b2b8e98179d'] = 'Socolissimo server non disponibile';
-$_MODULE['<{socolissimo}prestashop>socolissimo_27e0a4f1ce5bb4ad9687a021e95367df'] = 'Così Colissimo non è compatibile con la funzione di Page One Checkout, al fine di utilizzare questo modulo, si prega di attivare il processo standard di ordine (Preferenze> \"tipo di processo Order\")';
 $_MODULE['<{socolissimo}prestashop>socolissimo_b5a7adde1af5c87d7fd797b6245c2a39'] = 'Descrizione';
 $_MODULE['<{socolissimo}prestashop>socolissimo_d0b34d3e1cb0cc1150ae6bf650e9b569'] = 'SoColissimo è un servizio offerto da La Poste, che permette di offrire all\'acquirente 5 modalità di consegna';
 $_MODULE['<{socolissimo}prestashop>socolissimo_e5c7c47a2cc967ae4834ad5c076734df'] = 'A casa';
@@ -38,7 +37,7 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_9fbff0971c06ee404f638e9abcbd9446'
 $_MODULE['<{socolissimo}prestashop>socolissimo_5b6cf869265c13af8566f192b4ab3d2a'] = 'Documentazione';
 $_MODULE['<{socolissimo}prestashop>socolissimo_f4f70727dc34561dfde1a3c529b6205c'] = 'Impostazioni';
 $_MODULE['<{socolissimo}prestashop>socolissimo_0ab984d91ab0a037bdf692bf0e73c349'] = 'Importante';
-$_MODULE['<{socolissimo}prestashop>socolissimo_58f73ae759adc826a9e15e26280cdaa4'] = 'Per aprire il tuo account SoColissimo, si prega di contattare \"La Poste\" a questo numero telefonico: 3634 (numero di telefono francese)';
+$_MODULE['<{socolissimo}prestashop>socolissimo_58f73ae759adc826a9e15e26280cdaa4'] = 'Per aprire il tuo account SoColissimo, si prega di contattare \"La Poste\"  a questo numero telefonico: 3634 (numero di telefono francese)';
 $_MODULE['<{socolissimo}prestashop>socolissimo_9c85d4c2bae6ab548fe23e57bd89ddc4'] = 'ID So';
 $_MODULE['<{socolissimo}prestashop>socolissimo_7b95472e0575adc1e3d90a2d7b51e496'] = 'ID utente per back office SoColissimo.';
 $_MODULE['<{socolissimo}prestashop>socolissimo_897356954c2cd3d41b221e3f24f99bba'] = 'Chiave';
