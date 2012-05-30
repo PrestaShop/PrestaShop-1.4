@@ -325,9 +325,9 @@ if (array_key_exists('ajaxProductsPositions', $_POST))
 			{
 				if ($product = new Product((int)$pos[2]))
 					if (isset($position) && $product->updatePosition($way, $position))
-						echo "ok position $position for product $pos[2]\r\n";
+						echo "ok position ".(int)$position." for product ".(int)$pos[2]."\r\n";
 					else
-						echo '{"hasError" : true, "errors" : "Can not update product '. $id_product . ' to position '.$position.' "}';
+						echo '{"hasError" : true, "errors" : "Can not update product '. $id_product . ' to position '.(int)$position.' "}';
 				else
 					echo '{"hasError" : true, "errors" : "This product ('.$id_product.') can t be loaded"}';
 
