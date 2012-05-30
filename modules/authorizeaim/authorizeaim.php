@@ -83,7 +83,7 @@ class authorizeAIM extends PaymentModule
 			$this->registerHook('payment') &&
 			$this->registerHook('header') &&
 			Configuration::updateValue('AUTHORIZE_AIM_DEMO', 1) &&
-			Configuration::updateValue('AUTHORIZE_AIM_HOLD_REVIEW_OS', _PS_OS_ERROR);
+			Configuration::updateValue('AUTHORIZE_AIM_HOLD_REVIEW_OS', _PS_OS_ERROR_);
 	}
 
 	public function uninstall()
