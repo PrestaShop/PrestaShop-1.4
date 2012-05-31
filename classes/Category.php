@@ -276,13 +276,13 @@ class CategoryCore extends ObjectModel
 			foreach ($discounts as $discount)
 			{
 				$obj = new Discount((int)$discount['id_discount']);
-				
+
 				if ($obj->delete())
 					Db::getInstance()->Execute('
 					DELETE FROM `'._DB_PREFIX_.'discount_category` 
 					WHERE `id_category` IN ('.(int)$discount['id_category'].')');
 			}
-			
+
 		/* Delete category and its child from database */
 		$list = sizeof($toDelete) > 1 ?  implode(',', array_map('intval',$toDelete)) : (int)($this->id);
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category` WHERE `id_category` IN ('.$list.')');
@@ -1109,7 +1109,7 @@ class CategoryCore extends ObjectModel
 		SELECT `id_category` , `id_discount`
 		FROM `'._DB_PREFIX_.'discount_category`
 		WHERE `id_category` = '.(int)$id_category);
-		
+
 		return $results;
 	}
 }
