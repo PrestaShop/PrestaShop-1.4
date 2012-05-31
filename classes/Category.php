@@ -272,6 +272,17 @@ class CategoryCore extends ObjectModel
 		$this->recursiveDelete($toDelete, (int)($this->id));
 		$toDelete = array_unique($toDelete);
 
+		if ($discounts = self::hasDiscountInCategory((int)$this->id))
+			foreach ($discounts as $discount)
+			{
+				$obj = new Discount((int)$discount['id_discount']);
+				
+				if ($obj->delete())
+					Db::getInstance()->Execute('
+					DELETE FROM `'._DB_PREFIX_.'discount_category` 
+					WHERE `id_category` IN ('.(int)$discount['id_category'].')');
+			}
+			
 		/* Delete category and its child from database */
 		$list = sizeof($toDelete) > 1 ?  implode(',', array_map('intval',$toDelete)) : (int)($this->id);
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category` WHERE `id_category` IN ('.$list.')');
@@ -1084,6 +1095,22 @@ class CategoryCore extends ObjectModel
 			$categories[$category['id_category']] = $category;
 
 		return $categories;
+	}
+	
+	/**
+	 * Return ids if categories have discounts
+	 * 
+	 * @param int $ids_category
+	 * @return Array
+	 */
+	public static function hasDiscountInCategory($id_category)
+	{
+		$results = Db::getInstance()->ExecuteS('
+		SELECT `id_category` , `id_discount`
+		FROM `'._DB_PREFIX_.'discount_category`
+		WHERE `id_category` = '.(int)$id_category);
+		
+		return $results;
 	}
 }
 
