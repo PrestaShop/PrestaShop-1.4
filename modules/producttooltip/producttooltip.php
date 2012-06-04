@@ -100,11 +100,11 @@ class ProductToolTip extends Module
 				<input type="text" name="ps_ptooltip_lifetime" style="width: 30px;" value="'.(int)(Configuration::get('PS_PTOOLTIP_LIFETIME')).'" /> '.$this->l('minutes').'<br />
 			</p>
 			<p>
-				'.$this->l('If you activate the option above, you must activate the first option of StatData module').'
+				'.$this->l('If you activate the option above, you must activate the first option from StatData module').'
 			</p>
 			<hr size="1" noshade />			
 			<p>
-				'.$this->l('Display the last time the product has been ordered?').'<br /><br />
+				'.$this->l('Display the last order date?').'<br /><br />
 				<img src="'._PS_ADMIN_IMG_.'enabled.gif" alt="" /><input type="radio" name="ps_ptooltip_date_order" value="1"'.(Configuration::get('PS_PTOOLTIP_DATE_ORDER') ? ' checked="checked"' : '').' style="vertical-align: middle;" /> '.$this->l('Yes').' 
 				&nbsp;<img src="'._PS_ADMIN_IMG_.'disabled.gif" alt="" /><input type="radio" name="ps_ptooltip_date_order" value="0"'.(!Configuration::get('PS_PTOOLTIP_DATE_ORDER') ? ' checked="checked"' : '').' style="vertical-align: middle;" /> '.$this->l('No').'<br /><br />
 			</p>

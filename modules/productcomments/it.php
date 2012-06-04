@@ -39,7 +39,7 @@ $_MODULE['<{productcomments}prestashop>productcomments_21a512e9d635e82fc7c7077fc
 $_MODULE['<{productcomments}prestashop>productcomments_a1fa27779242b4902f7ae3bdd5c6d508'] = 'Tipo';
 $_MODULE['<{productcomments}prestashop>productcomments_ec53a8c4f07baed5d8825072c89799be'] = 'Status';
 $_MODULE['<{productcomments}prestashop>productcomments_7dce122004969d56ae2e0245cb754d35'] = 'Modifica';
-$_MODULE['<{productcomments}prestashop>productcomments_8eb0b6ced310b120b12106e8d4bdbdb8'] = 'Gestire le applicazioni dei criteri';
+$_MODULE['<{productcomments}prestashop>productcomments_d737ea5cce602ab5ff68318f90218436'] = 'Gestire le applicazioni dei criteri';
 $_MODULE['<{productcomments}prestashop>productcomments_6556e73b0255c988d9fe70141f1d4bd9'] = 'Solo i criteri limitati a categorie o prodotti possono essere configurati qui sotto:';
 $_MODULE['<{productcomments}prestashop>productcomments_a942d4abf908e5f708ec4dfaa949065e'] = 'Scegli un criterio';
 $_MODULE['<{productcomments}prestashop>productcomments_068f80c7519d0528fb08e82137a72131'] = 'Prodotti';

@@ -369,7 +369,7 @@ class Secuvad extends Module
 			$this->_setFormConfigure();
 		else
 		{
-			$this->_html .= '<h3>'.$this->l('If you have already an account').'</h3>';
+			$this->_html .= '<h3>'.$this->l('If you already have an account').'</h3>';
 			$this->_setFormConfigure();
 			$this->_setFormRegister($lock);
 		}
@@ -495,7 +495,7 @@ class Secuvad extends Module
 			if (Tools::getValue('capital') != NULL AND !Validate::isGenericName(Tools::getValue('capital')))
 				$errors[] = $this->l('Capital is invalid');
 			if (Tools::getValue('web_site') == NULL OR !Validate::isUrl(Tools::getValue('web_site')))
-				$errors[] = $this->l('WebSite is invalid');
+				$errors[] = $this->l('Website is invalid');
 			if (Tools::getValue('address') != NULL AND !Validate::isAddress(Tools::getValue('address')))
 				$errors[] = $this->l('Address is invalid');
 			if (Tools::getValue('code_postal') != NULL AND !Validate::isPostCode(Tools::getValue('code_postal')))
@@ -1289,7 +1289,7 @@ class Secuvad extends Module
 		if ($is_fraud == 0)
 			return '<img src="../img/admin/blank.gif" alt="'.$this->l('Is not a fraud').'" /> '.$this->l('No');
 		elseif ($is_fraud == 1)
-			return '<img src="../img/admin/disabled.gif" alt="'.$this->l('Is a fraud').'" /> '.$this->l('Yes');
+			return '<img src="../img/admin/disabled.gif" alt="'.$this->l('Is fraud').'" /> '.$this->l('Yes');
 	}
 	
 	public function _getSecuvadStatusHtml($secuvad_status)

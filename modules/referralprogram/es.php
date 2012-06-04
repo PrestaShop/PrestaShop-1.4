@@ -6,8 +6,8 @@ $_MODULE['<{referralprogram}prestashop>authentication_6b31baf25848e7a6563ecc3946
 $_MODULE['<{referralprogram}prestashop>authentication_8fdb2298a0db461ac64e71192a562ca1'] = 'Email de su patrocinador';
 $_MODULE['<{referralprogram}prestashop>my-account_6b31baf25848e7a6563ecc3946626c80'] = 'Programa de patrocinio';
 $_MODULE['<{referralprogram}prestashop>order-confirmation_6a1fc5f99c944639b4005366d393a1ee'] = 'Gracias a su pedido, su patrocinador';
-$_MODULE['<{referralprogram}prestashop>order-confirmation_eb8c6d2e305207c8fbc14a2ebb2e42fc'] = 'ganará un vale por valor de';
-$_MODULE['<{referralprogram}prestashop>order-confirmation_cda09d90a2d64cf06ae6516cc20ae468'] = 'cuando esta compra se confirme.';
+$_MODULE['<{referralprogram}prestashop>order-confirmation_864c28de218ef6242d7adc51af5c68b2'] = 'ganará un vale por valor de';
+$_MODULE['<{referralprogram}prestashop>order-confirmation_c07ebd8a57cb1b1da631b8499a8c1e69'] = 'cuando esta compra se confirme.';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_d3d2e617335f08df83599665eef8a418'] = 'Cerrar';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_7a81aa9275331bb0f5e6adb5e8650a03'] = 'o tecla Esc';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_d95cf4ab2cbf1dfb63f066b50558b07d'] = 'Mi cuenta';
@@ -27,13 +27,13 @@ $_MODULE['<{referralprogram}prestashop>referralprogram-program_46ee2fe8845962d24
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_c56567bc42584de1a7ac430039b3a87e'] = 'En espera de amigos';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_58c7f2542ab2e2c3e4e39e851ea0f225'] = 'Amigos que he patrocinado';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_00c2fab6945aadad3e822d8f38e18ce7'] = 'Consiga un descuento de';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_2dd74a0c7eda49de19eeaed3e1988e8f'] = 'para usted y sus amigos por recomendar este sitio Web.';
+$_MODULE['<{referralprogram}prestashop>referralprogram-program_381b61d47fb88f4c2a7e362cea27cba7'] = 'para usted y sus amigos por recomendar este sitio Web.';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_8d3ae82bfa996855cdf841dd9e15a7e3'] = 'Es rápido y sencillo. Simplemente rellene el nombre, apellidos,  email de su amigo o amigos en los siguientes campos.';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_9cee6c57b3003b3068177fa913f56468'] = 'Cuando uno de ellos haga por lo menos';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_12c500ed0b7879105fb46af0f246be87'] = 'pedidos';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_70a17ffa722a3985b86d30b034ad06d7'] = 'un pedido';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_08b002301ef588d9cb9d7b009df2d1e1'] = 'recibirá un vale de descuanto de ';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_ae01c01c004a8c391d1b9ecd6949f9f8'] = 'y usted también';
+$_MODULE['<{referralprogram}prestashop>referralprogram-program_d05ec51899c256dea704ae4c5e9c6f2a'] = 'y usted también';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_8d3f5eff9c40ee315d452392bed5309b'] = 'Apellidos';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_20db0bfeecd8fe60533206a2b5e9891a'] = 'Nombre ';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_1e884e3078d9978e216a027ecd57fb34'] = 'Email';

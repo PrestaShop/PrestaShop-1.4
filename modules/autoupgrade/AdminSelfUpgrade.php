@@ -416,7 +416,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 		);
 
 		$this->_fieldsAutoUpgrade['PS_AUTOUP_KEEP_DEFAULT_THEME'] = array(
-			'title' => $this->l('Keep theme "prestashop"'), 'cast' => 'intval', 'validation' => 'isBool',
+			'title' => $this->l('Keep "PrestaShop" theme'), 'cast' => 'intval', 'validation' => 'isBool',
 			'type' => 'bool', 'desc'=>$this->l('If you have customized PrestaShop default theme, you can protect it from upgrade (not recommended)'),
 		);
 
@@ -432,7 +432,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 
 		$this->_fieldsAutoUpgrade['PS_AUTOUP_CUSTOM_MOD_DESACT'] = array(
 			'title' => $this->l('Deactivate custom modules'), 'cast' => 'intval', 'validation' => 'isBool',
-			'type' => 'bool', 'desc'=>$this->l('If you don\'t deactivate your modules, you can have some compatibility problems and the Modules page might not load correctly.'),
+			'type' => 'bool', 'desc'=>$this->l('If you don\'t deactivate your modules, you could have some compatibility problems and the Modules page might not load correctly.'),
 		);
 		// allow manual mode only for dev
 		if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_)
@@ -789,7 +789,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 		else
 		{
 			$this->next = 'download';
-			$this->nextDesc = $this->l('Shop deactivated. Now downloading (this can take some time )...');
+			$this->nextDesc = $this->l('Shop deactivated. Downloading in progress (this may take a while)...');
 		}
 	}
 
@@ -1394,7 +1394,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 			}
 		if ($this->next == 'error')
 		{
-			$this->nextDesc = $this->l('An error happen during database upgrade');
+			$this->nextDesc = $this->l('There was an error during database upgrade');
 			return false;
 		}
 
@@ -2228,7 +2228,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 		if (empty($this->backupFilesFilename))
 		{
 			$this->next = 'error';
-			$this->nextDesc = $this->l('error during backupFiles');
+			$this->nextDesc = $this->l('Error during backup Files');
 			$this->nextQuickInfo[] = '[ERROR] backupFiles filename has not been set';
 			return false;
 		}
@@ -2523,7 +2523,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 			$this->nextQuickInfo[] = 'you need allow_url_fopen for automatic download.';
 			// @TODO : ftp mode
 			$this->next = 'error';
-			$this->nextDesc = sprintf($this->l('you need allow_url_fopen for automatic download. You can also manually upload it in %s'),$this->autoupgradePath.$this->destDownloadFilename);
+			$this->nextDesc = sprintf($this->l('you need to allow_url_fopen for automatic download. You can also manually upload it in %s'),$this->autoupgradePath.$this->destDownloadFilename);
 		}
 	}
 	
@@ -2598,17 +2598,17 @@ txtError[4] = "'.$this->l('Impossible to send the email!').'";
 txtError[5] = "'.$this->l('Cannot create settings file, if /config/settings.inc.php exists, please give the public write permissions to this file, else please create a file named settings.inc.php in config directory.').'";
 txtError[6] = "'.$this->l('Cannot write settings file, please create a file named settings.inc.php in config directory.').'";
 txtError[7] = "'.$this->l('Impossible to upload the file!').'";
-txtError[8] = "'.$this->l('Data integrity is not valided. Hack attempt?').'";
+txtError[8] = "'.$this->l('Data integrity is not validated. ').'";
 txtError[9] = "'.$this->l('Impossible to read the content of a MySQL content file.').'";
 txtError[10] = "'.$this->l('Impossible the access the a MySQL content file.').'";
 txtError[11] = "'.$this->l('Error while inserting data in the database:').'";
-txtError[12] = "'.$this->l('The password is incorrect (alphanumeric string at least 8 characters).').'";
-txtError[14] = "'.$this->l('A Prestashop database already exists, please drop it or change the prefix.').'";
+txtError[12] = "'.$this->l('The password is incorrect (alphanumeric string of at least 8 characters required).').'";
+txtError[14] = "'.$this->l('A PrestaShop database with this prefix already exists, please delete it manually or change the prefix.').'";
 txtError[15] = "'.$this->l('This is not a valid file name.').'";
 txtError[16] = "'.$this->l('This is not a valid image file.').'";
 txtError[17] = "'.$this->l('Error while creating the /config/settings.inc.php file.').'";
 txtError[18] = "'.$this->l('Error:').'";
-txtError[19] = "'.$this->l('This PrestaShop database already exists. Please revalidate your authentication informations to the database.').'";
+txtError[19] = "'.$this->l('This PrestaShop database already exists. Please revalidate your authentication information in the database').'";
 txtError[22] = "'.$this->l('An error occurred while resizing the picture.').'";
 txtError[23] = "'.$this->l('Database connection is available!').'";
 txtError[24] = "'.$this->l('Database Server is available but database is not found').'";
@@ -2621,7 +2621,7 @@ txtError[40] = "'.$this->l('The uploaded file was only partially uploaded').'";
 txtError[41] = "'.$this->l('No file was uploaded.').'";
 txtError[42] = "'.$this->l('Missing a temporary folder').'";
 txtError[43] = "'.$this->l('Failed to write file to disk').'";
-txtError[44] = "'.$this->l('File upload stopped by extension').'";
+txtError[44] = "'.$this->l('File upload interrupted by incorrect extension').'";
 txtError[45] = "'.$this->l('Cannot convert your database\'s data to utf-8.').'";
 txtError[46] = "'.$this->l('Invalid shop name').'";
 txtError[47] = "'.$this->l('Your firstname contains some invalid characters').'";
@@ -2726,7 +2726,7 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 		$content = '<fieldset class="width autoupgrade " >';
 		$content .= '<legend><a href="#" id="currentConfigurationToggle">'.$this->l('Your current configuration').'</a></legend>';
 		$content .= '<div id="currentConfiguration">
-		<p>'.$this->l('All the following points must be ok in order to allow the upgrade.').'</p>
+		<p>'.$this->l('All the following points must be valid in order to allow the upgrade.').'</p>
 		<b>'.$this->l('Root directory').' : </b>'.$this->prodRootDir.'<br/><br/>';
 		
 
@@ -2818,7 +2818,7 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 			$configurationDone = '../img/admin/enabled.gif';
 		else
 			$configurationDone = '../img/admin/disabled.gif';
-		$content .= '<b>'.$this->l('Options chosen').' : </b>'
+		$content .= '<b>'.$this->l('Selected options').' : </b>'
 		.'<img src="'.$configurationDone.'" /> 
 		<a class="button" id="scrollToOptions" href="#options">'
 		.($current_config['module_configured']
@@ -2872,7 +2872,7 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 		$content .= '<b>'.$this->l('PrestaShop Original version').' : </b>'.'<span id="checkPrestaShopFilesVersion">
 		<img id="pleaseWait" src="'.__PS_BASE_URI__.'img/loader.gif"/>
 		</span><br/>';
-		$content .= '<b>'.$this->l('Version modifications').' : </b>'.'<span id="checkPrestaShopModifiedFiles">
+		$content .= '<b>'.$this->l('File modifications').' : </b>'.'<span id="checkPrestaShopModifiedFiles">
 		<img id="pleaseWait" src="'.__PS_BASE_URI__.'img/loader.gif"/>
 		</span>';
 		$content .= '<script type="text/javascript">
@@ -2890,7 +2890,7 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 		else
 		{
 			$srcShopStatus = '../img/admin/warning.gif';
-			$label = $this->l('Smarty 2 is deprecated in 1.4 and removed maintained in 1.5. You may need to upgrade your current theme or use a new one.');
+			$label = $this->l('Smarty 2 is depreciated in 1.4 and no longer supported on version 1.5. You may need to upgrade your current theme or use a new one.');
 		}
 		// if current version is 1.4, we propose to edit now the configuration
 		if (version_compare(_PS_VERSION_, '1.4.0.0', '>='))
@@ -3306,7 +3306,7 @@ function doAjaxRequest(action, nextParams){
 			}
 			else
 				if (textStatus == "timeout")
-					updateInfoStep("[Server Error] Timeout:'.$this->l('The request excessed the max_time_limit. Please change your server configuration.').'");
+					updateInfoStep("[Server Error] Timeout:'.$this->l('The request exceeded the max_time_limit. Please change your server configuration.').'");
 			{
 				updateInfoStep("[Server Error] Status message : " + textStatus);
 			}
@@ -3395,7 +3395,7 @@ function handleError(res)
 }';
 	if(!file_exists($this->autoupgradePath.DIRECTORY_SEPARATOR.'ajax-upgradetab.php'))
 		$js .= '$(document).ready(function(){
-			$("#checkPrestaShopFilesVersion").html("<img src=\"../img/admin/warning.gif\" /> [TECHNICAL ERROR] ajax-upgradetab.php '.$this->l('is missing. please reinstall the module').'");
+			$("#checkPrestaShopFilesVersion").html("<img src=\"../img/admin/warning.gif\" /> [TECHNICAL ERROR] ajax-upgradetab.php '.$this->l('is missing. Please reinstall the module').'");
 			})';
 	else
 		$js .= '

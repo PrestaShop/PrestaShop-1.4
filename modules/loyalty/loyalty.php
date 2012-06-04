@@ -174,7 +174,7 @@ class Loyalty extends Module
 			
 			$this->_errors = array();
 			if (!is_array(Tools::getValue('categoryBox')) OR !sizeof(Tools::getValue('categoryBox')))
-				$this->_errors[] = $this->l('You must choose at least one category for voucher\'s action');
+				$this->_errors[] = $this->l('You must choose at least one category in order to generate discount vouchers');
 			if (!sizeof($this->_errors))
 			{
 				Configuration::updateValue('PS_LOYALTY_VOUCHER_CATEGORY', $this->voucherCategories(Tools::getValue('categoryBox')));

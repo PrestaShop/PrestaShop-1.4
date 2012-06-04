@@ -26,7 +26,7 @@
 
 {if $MR_errors_type.error|count}
 <div class="MR_error">
-	{l s='Thanks to kindly correct the following errors on' mod='mondialrelay'}
+	{l s='Please kindly correct the following errors on' mod='mondialrelay'}
 	<a href="index.php?tab=AdminContact&token={$MR_token_admin_contact}" style="color:#f00;">
 		{l s='the contact page:' mod='mondialrelay'}
 	</a>
@@ -49,7 +49,7 @@
 {/if}
 
 <p>
-{l s='All orders which have the state' mod='mondialrelay'} "<b>{$MR_order_state.name}</b>" {l s='will be available for sticker creation' mod='mondialrelay'}
+{l s='All orders which have the state' mod='mondialrelay'} "<b>{$MR_order_state.name}</b>" {l s='will be available for creation of labels' mod='mondialrelay'}
 </p>
 
 <div class="PS_MRErrorList error" id="otherErrors">
@@ -65,9 +65,9 @@
 				<th>{l s='Order ID' mod='mondialrelay'}</th>
 				<th>{l s='Customer' mod='mondialrelay'}</th>
 				<th>{l s='Total price' mod='mondialrelay'}</th>
-				<th>{l s='Total shipping' mod='mondialrelay'}</th>
+				<th>{l s='Total shipping costs' mod='mondialrelay'}</th>
 				<th>{l s='Date' mod='mondialrelay'}</th>
-				<th>{l s='Put a Weight (grams)' mod='mondialrelay'}</th>
+				<th>{l s='Insert weight (grams)' mod='mondialrelay'}</th>
 				<th>{l s='MR Number' mod='mondialrelay'}</th>
 				<th>{l s='MR Country' mod='mondialrelay'}</th>
 				<th>{l s='Exp Number' mod='mondialrelay'}</th>

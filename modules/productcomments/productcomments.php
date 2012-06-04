@@ -436,7 +436,7 @@ class ProductComments extends Module
 		{
 			$this->_html .= '
 			<fieldset class="width2">
-				<legend><img src="'.$this->_path.'img/note_go.png" alt="" title="" />'.$this->l('Manage criterions scope').'</legend>
+				<legend><img src="'.$this->_path.'img/note_go.png" alt="" title="" />'.$this->l('Manage scope of criteria').'</legend>
 				<p style="margin-bottom: 15px;">'.$this->l('Only criterions restricted to categories or products can be configured below:').'</p>
 				<form action="'.$this->_baseUrl.'" method="post" name="product_criterion_form">
 					<label>'.$this->l('Criterion').'</label>

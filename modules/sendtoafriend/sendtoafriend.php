@@ -86,9 +86,9 @@ class sendToAFriend extends Module
 			if (empty($_POST['email']) OR empty($_POST['name']))
 				$error = $this->l('You must fill in all fields.');
 			elseif (empty($_POST['email']) OR !Validate::isEmail($_POST['email']))
-				$error = $this->l('The e-mail given is invalid.');
+				$error = $this->l('Your friend\'s email is invalid.');
 			elseif (!Validate::isName($_POST['name']))
-				$error = $this->l('The name given is invalid.');
+				$error = $this->l('Your friend\'s name is invalid.');
 			elseif (!isset($_GET['id_product']) OR !is_numeric($_GET['id_product']))
 				$error = $this->l('An error occurred during the process.');
 			else

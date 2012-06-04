@@ -124,7 +124,7 @@ class StatsGeoLocation extends Module
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="'.$this->_path.'logo.gif" alt="" title="" /> '.$this->displayName.'</legend>
 			<center>
-				<p><img src="../img/admin/down.gif" />'.$this->l('This module shows the distribution of the countries of your customers by displaying different sized points on the worldmap below. See the fame of your website all around the world and which continent you have yet to conquer.').'</p>
+				<p><img src="../img/admin/down.gif" />'.$this->l('This module shows the distribution of your customers by country by displaying different sized points on the world map  below. See how popular your website is around the world and which continent/s you have yet to conquer.').'</p>
 			</center>
 			<p class="space">
 				<img src="'.$this->_path.'drawer.php" alt="" title="" />
@@ -135,7 +135,7 @@ class StatsGeoLocation extends Module
 		<h2>'.$this->l('Open to the world').'</h2>
 			<p>
 				<ul>
-					<li class="bullet">'.$this->l('Add new languages to your shop if you see that a sufficient part of your customers come from a foreign country.').'</li>
+					<li class="bullet">'.$this->l('Add new languages to your shop if you see that a large number of your customers come from a foreign country.').'</li>
 				<li class="bullet">'.$this->l('Enlarge your shipping area to meet the potential demand.').'</li>
 				</ul>
 			</p>

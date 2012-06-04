@@ -137,10 +137,10 @@ class SEKeywords extends ModuleGraph
 
 		$this->_html .= '</fieldset><br class="clear" />
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
-			<h2>'.$this->l('Identify external search engines\' keywords').'</h2>
-			<p>'.$this->l('One of the most common ways of finding a website through a search engine. Identifying the most popular keywords entered by your new visitors allows you to see which products you should put in front if you want to attract more visitors and potential customers.').'</p><br />
+			<h2>'.$this->l('Identify keywords from external search engines').'</h2>
+			<p>'.$this->l('There are a number of ways of being directed to a Website but one of the most common ones is via a search engine. Identifying the most popular keywords entered by your new visitors allows you to see which products should be featured in order to attract more visitors and potential customers.').'</p><br />
 			<h3>'.$this->l('How does it work?').'</h2>
-			<p>'.$this->l('When a visitor comes to your website, the server notes their previous location. This module parses the URL and finds the keywords in it. Currently, it manages the following search engines:').'<b> Google, AOL, Yandex, Ask, NHL, Yahoo, Baidu, Lycos, Exalead, Live, Voila</b> '.$this->l('and').' <b>Altavista</b>. '.$this->l('Soon it will be possible to dynamically add new search engines and contribute to this module.').'</p><br />
+			<p>'.$this->l('nWhen a visitor is directed to your website, the server picks up their previous location. This module parses the URL and finds the keywords in it. Currently, it manages the following search engines:n').'<b> Google, AOL, Yandex, Ask, NHL, Yahoo, Baidu, Lycos, Exalead, Live, Voila</b> '.$this->l('and').' <b>Altavista</b>. '.$this->l('Soon it will be possible to dynamically add new search engines and contribute to this module.').'</p><br />
 		</fieldset>';
 		return $this->_html;
 	}

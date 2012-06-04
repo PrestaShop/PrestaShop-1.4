@@ -11,7 +11,7 @@ $_MODULE['<{ganalytics}prestashop>ganalytics_d7c9ce3337a28d63ce6626d90fdaedaa'] 
 $_MODULE['<{ganalytics}prestashop>ganalytics_81eeab9506186e2dca8faefa78d54067'] = 'Ejemplo:';
 $_MODULE['<{ganalytics}prestashop>ganalytics_a3e7f361e6fc12caf872119338642143'] = 'Actualizar ID';
 $_MODULE['<{ganalytics}prestashop>ganalytics_6a26f548831e6a8c26bfbbd9f6ec61e0'] = 'Ayuda';
-$_MODULE['<{ganalytics}prestashop>ganalytics_d78b0fcff6b55bafe615f3fc1572c282'] = 'El primer paso para seguir las transacciones de comercio electrónico es activar el informe de su tienda en su perfil.';
+$_MODULE['<{ganalytics}prestashop>ganalytics_38e12e36822cc0988bcac38733f5cae8'] = 'El primer paso para seguir las transacciones de comercio electrónico es activar el informe de su tienda en su perfil.';
 $_MODULE['<{ganalytics}prestashop>ganalytics_d02388589ecfd3b58e0a90e42127ca61'] = 'Para activar el informe de comercio electrónico, por favor revise estos pasos:';
 $_MODULE['<{ganalytics}prestashop>ganalytics_11f4b4ba23dc72ee5e86ff5a90bdde60'] = 'Entrar en su cuenta';
 $_MODULE['<{ganalytics}prestashop>ganalytics_b452493b16ead8b4b25ab3fb7174b8f5'] = 'Haga clic en Editar en el perfil que quiere activar';

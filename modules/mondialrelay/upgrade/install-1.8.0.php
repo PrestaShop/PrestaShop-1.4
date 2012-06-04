@@ -21,7 +21,7 @@ function upgrade_module_1_8_0($object)
 
 	if (!Db::getInstance()->execute($query))
 	{
-		$object->upgrade_detail['1.8.0'][] = $object->l('Can\'t create method shop table');
+		$object->upgrade_detail['1.8.0'][] = $object->l('Can\'t create "shop table" method');
 		return false;
 	}
 
@@ -37,7 +37,7 @@ function upgrade_module_1_8_0($object)
 
 	if (!Db::getInstance()->execute($query))
 	{
-		$object->upgrade_detail['1.8.0'][] = $object->l('Can\'t change name of the method table');
+		$object->upgrade_detail['1.8.0'][] = $object->l('Can\'t change "method table" name');
 		return false;
 	}
 
@@ -45,7 +45,7 @@ function upgrade_module_1_8_0($object)
 
 	if (!Db::getInstance()->execute($query))
 	{
-		$object->upgrade_detail['1.8.0'][] = $object->l('Can\'t rename the history table');
+		$object->upgrade_detail['1.8.0'][] = $object->l('Can\'t rename the "history table"');
 		return false;
 	}
 
@@ -81,7 +81,7 @@ function upgrade_module_1_8_0($object)
 		$query = trim($query, ',');
 		if (!Db::getInstance()->execute($query))
 		{
-			$object->upgrade_detail['1.8.0'][] = $object->l('Can\'t update table mr_method_shop');
+			$object->upgrade_detail['1.8.0'][] = $object->l('Can\'t update "table mr_method_shop"');
 			return false;
 		}
 	}

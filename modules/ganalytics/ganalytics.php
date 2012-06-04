@@ -99,7 +99,7 @@ class GAnalytics extends Module
 		$output .= '
 		<fieldset class="space">
 			<legend><img src="../img/admin/unknown.gif" alt="" class="middle" />'.$this->l('Help').'</legend>
-			 <h3>'.$this->l('The first step of tracking e-commerce transactions is to enable e-commerce reporting for your website\'s profile.').'</h3>
+			 <h3>'.$this->l('The first step for tracking e-commerce transactions is to enable e-commerce reporting for your website\'s profile.').'</h3>
 			 '.$this->l('To enable e-Commerce reporting, please follow these steps:').'
 			 <ol>
 			 	<li>'.$this->l('Log in to your account').'</li>

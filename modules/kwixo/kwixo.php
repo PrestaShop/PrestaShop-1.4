@@ -443,7 +443,7 @@ class kwixo extends PaymentModule {
 			<br/>
 		<fieldset>
 			<legend>' . $this->l('Information on products sold on your shop') . '</legend>
-			<p>' . $this->l('For a better assistance, Kwixo needs to know what are the main product types you sell') . ' :</p><br/>
+			<p>' . $this->l('In order to better assist you, Kwixo needs to know what are the main product types you sell') . ' :</p><br/>
 			<label for="category_id">' . $this->l('Default product type') . '</label>
 			<div class="margin-form">
 				<select name="category_id" id="category_id">
@@ -473,7 +473,7 @@ class kwixo extends PaymentModule {
 			</fieldset>
 			<br class="clear" />
 			<fieldset><legend>' . $this->l('Carrier Configuration') . '</legend>
-			<p>' . $this->l('Please select a carrier type for each carrier use on your shop') . ' :</p><br/>
+			<p>' . $this->l('Please select a carrier type for each carrier used on your shop') . ' :</p><br/>
 				<label>' . $this->l('Carrier Detail') . '</label>
 				<div class="margin-form">
 					<table cellspacing="0" cellpadding="0" class="table">

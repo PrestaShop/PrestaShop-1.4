@@ -38,11 +38,11 @@
 
 	<form name="authorizeaim_form" id="authorizeaim_form" action="{$new_base_dir}validation.php" method="post">
 		<span style="border: 1px solid #595A5E;display: block;padding: 0.6em;text-decoration: none;margin-left: 0.7em;">
-			<a id="click_authorizeaim" href="#" title="{l s='Pay with authorizeaim' mod='authorizeaim'}" style="display: block;text-decoration: none; font-weight: bold;">
-				{if $cards.visa == 1}<img src="{$module_dir}cards/visa.gif" alt="{l s='visa logo' mod='authorizeaim'}" style="vertical-align: middle;" />{/if}
-				{if $cards.mastercard == 1}<img src="{$module_dir}cards/mastercard.gif" alt="{l s='mastercard logo' mod='authorizeaim'}" style="vertical-align: middle;" />{/if}
-				{if $cards.discover == 1}<img src="{$module_dir}cards/discover.gif" alt="{l s='discover logo' mod='authorizeaim'}" style="vertical-align: middle;" />{/if}
-				{if $cards.ax == 1}<img src="{$module_dir}cards/ax.gif" alt="{l s='american express logo' mod='authorizeaim'}" style="vertical-align: middle;" />{/if}
+			<a id="click_authorizeaim" href="#" title="{l s='Pay with AuthorizeAIM' mod='authorizeaim'}" style="display: block;text-decoration: none; font-weight: bold;">
+				{if $cards.visa == 1}<img src="{$module_dir}cards/visa.gif" alt="{l s='Visa Logo' mod='authorizeaim'}" style="vertical-align: middle;" />{/if}
+				{if $cards.mastercard == 1}<img src="{$module_dir}cards/mastercard.gif" alt="{l s='Mastercard Logo' mod='authorizeaim'}" style="vertical-align: middle;" />{/if}
+				{if $cards.discover == 1}<img src="{$module_dir}cards/discover.gif" alt="{l s='Discover Logo' mod='authorizeaim'}" style="vertical-align: middle;" />{/if}
+				{if $cards.ax == 1}<img src="{$module_dir}cards/ax.gif" alt="{l s='American Express Logo' mod='authorizeaim'}" style="vertical-align: middle;" />{/if}
 				&nbsp;&nbsp;{l s='Secured credit card payment with Authorize.net' mod='authorizeaim'}
 			</a>
 

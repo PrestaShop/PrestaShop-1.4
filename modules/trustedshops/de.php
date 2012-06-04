@@ -92,7 +92,7 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_8512ae7d57b1396273f76fe6ed
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_8638c4fb6ff62122acd9927c4edbd22c'] = 'wurde entfernt';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_a599ec4408db04d4bb9e4edd78b849f4'] = 'Anmeldung erfolgreich';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_07186ff4930c511cd3aebb3f43df2e0c'] = 'Certificate Login fehlgeschlagen';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_b18f5630d5ffdfcee5ab0a44ee6e1eb6'] = 'Sei müssen einen Nutzernamen, sowie ein Kennwort erstellen, um fortfahren zu können.';
+$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_859878c85ccbfc7c3c05525f231aeb97'] = 'Sei müssen einen Nutzernamen, sowie ein Kennwort erstellen, um fortfahren zu können.';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_068ce643ff39bf2189935d14736fd10b'] = 'Siegel und Käuferschutz';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_e32263743aac776e5e32fc385d8b669a'] = 'Trusted Shops ist das bekannte Internet-Gütesiegel für Online-Shops. Es bieten Ihren Kunden auch einen Käuferschutz. Im Rahmen der Prüfung wird Ihr Online-Shop umfangreichen und gründlichen Tests unterzogen. Diese Prüfung, besteht aus über 100 einzelnen Kriterien, basierend auf nationalen und europäischen Anforderungen für Verbraucherschutz und  Gesetzgebung.';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_2c786e15a571a442adf85460e6358883'] = 'Mehr Vertrauen führt zu mehr Umsatz !';
@@ -164,8 +164,8 @@ $_MODULE['<{trustedshops}prestashop>trustedshopsrating_c9cc8cce247e49bae79f15173
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_f5395c9793af8a11b406ca7c1ac70da9'] = 'Erfahren Sie mehr';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_9a983837b32d42343dc0c62d35b1f955'] = 'Trusted Shops Kundenmeinungen';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_5b91fe21d207317c7c9fad225a7ce442'] = 'Für Online-Käufer sind positive und überprüfbare Kundenbewertungen ein wichtiger Indiz für einen vertrauenswürdigen Online-Shop. Die erforderliche Software ist bereits in Prestashop enthalten. Sie können diese einfach und mit nur wenigen Klicks aktivieren.';
-$_MODULE['<{trustedshops}prestashop>trustedshopsrating_c81bc534bc261e4107a5c30257fb5ba4'] = 'Orientierungshilfe für Ihre Kunden';
-$_MODULE['<{trustedshops}prestashop>trustedshopsrating_ec1bfc4d5646681a86038f770be8fd0b'] = 'Zufriedene Kunden sind die besten Verkäufer. Lassen Sie Ihre Kunden für Sie Werbung machen.';
+$_MODULE['<{trustedshops}prestashop>trustedshopsrating_1b9370f9382b6734e224e8744ea8a31e'] = 'Orientierungshilfe für Ihre Kunden';
+$_MODULE['<{trustedshops}prestashop>trustedshopsrating_768fb2eb1bc94f8ffc8dee63652e23ad'] = 'Zufriedene Kunden sind die besten Verkäufer. Lassen Sie Ihre Kunden für Sie Werbung machen.';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_866a520be0de10a4fc8958a9e89126c3'] = 'Basis für die Shop-Optimierung';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_9c6dfeed0caab43f7ff0f6bbd19b27dd'] = 'Ihre Kunden helfen Ihnen, Ihren Shop zu optmieren. Desto besser Ihr Online-Shop arbeitet, desto zufriedener werden  Ihre Kunden sein.';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_0fac19c0cc6e205682dd52d61dd5a0a2'] = 'Erreichbarkeit mittels Facebook, Twitter und Google erhöhen';

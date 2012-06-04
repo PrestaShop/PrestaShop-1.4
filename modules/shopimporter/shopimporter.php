@@ -45,7 +45,7 @@ class shopimporter extends ImportModule
 		parent::__construct ();
 
 		$this->displayName = $this->l('Shop Importer');
-		$this->description = $this->l('This module allows you to import your shop from another system into Prestashop.');
+		$this->description = $this->l('This module allows you to import your shop into PrestaShop from another system.');
 		$this->supportedImports = array(
 									'language' => array('methodName' => 'getLangagues',
 														'name' => $this->l('Language'),
@@ -316,7 +316,7 @@ class shopimporter extends ImportModule
 					var importHasErrors = "'.$this->l('Errors occurred during import. For more details click on "Show errors".').'"
 					var importFinish = "'.$this->l('Import is complete.').'"
 					var truncateTable = "'.$this->l('Remove data').'"
-					var oneThing = "'.$this->l('Please choose one thing to import').'"
+					var oneThing = "'.$this->l('Please choose something to import').'"
 				</script>
 				<style>
 					.margin-form{padding: 0px 0px 1em 120px;width:300px;}

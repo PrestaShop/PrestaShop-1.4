@@ -84,13 +84,13 @@
 
 	<div id="idTab1">
 		<p class="bold">
-			{l s='Get a discount of' mod='referralprogram'} {$discount} {l s='for you and your friends by recommending this Website.' mod='referralprogram'}
+			{l s='Get a discount of' mod='referralprogram'} {$discount} {l s='for you and your friends by recommending our shop.' mod='referralprogram'}
 		</p>
 		{if $canSendInvitations}
 			<p>
 				{l s='It\'s quick and it\'s easy. Just fill in the first name, last name, and e-mail address(es) of your friend(s) in the fields below.' mod='referralprogram'}
 				{l s='When one of them makes at least' mod='referralprogram'} {$orderQuantity} {if $orderQuantity > 1}{l s='orders' mod='referralprogram'}{else}{l s='order' mod='referralprogram'}{/if},
-				{l s='he or she will receive a' mod='referralprogram'} {$discount} {l s='voucher and you will receive your own voucher worth' mod='referralprogram'} {$discount}.
+				{l s='he or she will receive a' mod='referralprogram'} {$discount} {l s='discount voucher and you will receive your own voucher worth' mod='referralprogram'} {$discount}.
 			</p>
 			<form method="post" action="{$base_dir_ssl}modules/referralprogram/referralprogram-program.php" class="std">
 				<table class="std">

@@ -109,7 +109,7 @@ class MRManagement extends MondialRelay
 					<div id="PS_MRAskBackupContent">
 						<h2>'.$this->l('Uninstalling Mondial Relay').'</h2>
 						<div>
-							'.$this->l('You\'re attempt to uninstall the module, do you want to remove the database').' ?
+							'.$this->l('You\'re about to uninstall the module, do you want to remove the database').' ?
 							<p id="PS_MRUninstallListSelection">
 									<input type="button" id="PS_MR_BackupAction" href="javascript:void(0)" value="'.$this->l('Keep it and uninstall').'"/>
 									<br />

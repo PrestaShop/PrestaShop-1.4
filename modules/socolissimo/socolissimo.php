@@ -65,7 +65,7 @@ class Socolissimo extends CarrierModule
 
 		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('So Colissimo');
-		$this->description = $this->l('Offer your customers, different delivery methods with LaPoste.');
+		$this->description = $this->l('Offer your customer 5 different delivery methods with LaPoste.');
 		$this->url = Tools::getProtocol().htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__.'modules/'.$this->name.'/validation.php';
 
 		/** Backward compatibility */
@@ -218,11 +218,11 @@ class Socolissimo extends CarrierModule
 		<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('Description').'</legend>'.
 		$this->l('SoColissimo is a service offered by La Poste, which allows you to offer buyers 5 modes of delivery.').' :
 		<br/><br/><ul style ="list-style:disc outside none;margin-left:30px;">
-			<li>'.$this->l('To home').'.</li>
-			<li>'.$this->l('To home (with appointment)').'.</li>
-			<li>'.$this->l('To Cityssimo space').'.</li>
-			<li>'.$this->l('To post office').'.</li>
-			<li>'.$this->l('To merchant').'.</li>
+			<li>'.$this->l('Home delivery').'.</li>
+			<li>'.$this->l('Home delivery (with appointment) between 5pm and 9:30pm ').'.</li>
+			<li>'.$this->l('Delivery in one of 31 Cityssimo locations 24/7').'.</li>
+			<li>'.$this->l('Delivery in one of 10 000 post offices ').'.</li>
+			<li>'.$this->l('Delivery in one of the many pickup points of the La Poste partner network').'.</li>
 		</ul>
 		<p>'.$this->l('This module is free and allows you to activate the offer on your store.').'</p>
 		<p><a href="http://www.prestashop.com/download/partner_modules/docs/Intergation_socolissimo.pdf">
@@ -250,21 +250,21 @@ class Socolissimo extends CarrierModule
 		<label>'.$this->l('Preparation time').' : </label>
 		<div class="margin-form">
 		<input type="text" size="5" name="dypreparationtime" value="'.(int)(Tools::getValue('dypreparationtime',Configuration::get('SOCOLISSIMO_PREPARATION_TIME'))).'" /> '.$this->l('Day(s)').'
-		<p>' . $this->l('Average time of preparation of materials.') . ' <br><span style="color:red">'
-		.$this->l('Average time must be the same in Coliposte back office.').'</span></p>
+		<p>' . $this->l('Average time for preparing your orders.') . ' <br><span style="color:red">'
+		.$this->l('Average time must match that of Coliposte back office.').'</span></p>
 		</div>
 
-		<label>'.$this->l('Overcost').' : </label>
+		<label>'.$this->l('Additional cost').' : </label>
 		<div class="margin-form">
 		<input size="11" type="text" size="5" name="overcost" onkeyup="this.value = this.value.replace(/,/g, \'.\');"
 		value="'.(float)(Tools::getValue('overcost',number_format(Configuration::get('SOCOLISSIMO_OVERCOST'), 2, '.', ''))).'" /> € HT
-		<p>'. $this->l('Additional cost if making appointments.') . ' <br><span style="color:red">'
-		.$this->l('Additional cost must be the same in Coliposte back office.').'</span></p>
+		<p>'. $this->l('Additional cost of delivery with appointment.') . ' <br><span style="color:red">'
+		.$this->l('Additional cost must match that of Coliposte back office.').'</span></p>
 		</div>
 		<div class="margin-form">
 		<p>--------------------------------------------------------------------------------------------------------</p>
 		<span style="color:red">'
-		.$this->l('Be VERY CAREFUL with these settings, change may cause a malfunction of the module.').
+		.$this->l('Be VERY CAREFUL with these settings, any changes may cause the module to malfunction.').
 		'</span>
 		</div>
 		<label>'.$this->l('Url So').' : </label>
@@ -279,7 +279,7 @@ class Socolissimo extends CarrierModule
 			<label class="t" for="fancybox_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
 			<input type="radio" name="SOCOLISSIMO_USE_FANCYBOX" id="fancybox_off" value="0" '.(!Configuration::get('SOCOLISSIMO_USE_FANCYBOX') ? 'checked="checked" ' : '').'/>
 			<label class="t" for="fancybox_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
-			<p>'.$this->l('If you enable this option, the page of socolissimo will displayed in a fancybox').'</p>
+			<p>'.$this->l('If you enable this option, socolissimo page will be displayed in a fancybox').'</p>
 		</div>
 
 		<label>'.$this->l('Supervision').' : </label>
@@ -294,7 +294,7 @@ class Socolissimo extends CarrierModule
 		<label>'.$this->l('Url Supervision').' : </label>
 		<div class="margin-form">
 		<input type="text" size="45" name="url_sup" value="'.htmlentities(Tools::getValue('url_sup',Configuration::get('SOCOLISSIMO_SUP_URL')),ENT_NOQUOTES, 'UTF-8').'" />
-		<p>' . $this->l('The URL of supervision is to ensure the availability of the service socolissimo. It is not advisable to disabled.') . '</p>
+		<p>' . $this->l('The monitor URL is to ensure the availability of the socolissimo service. We strongly recommend that you do not disable it') . '</p>
 		</div>
 
 		<div class="margin-form">
@@ -331,9 +331,9 @@ class Socolissimo extends CarrierModule
 				$this->_postErrors[] = $this->l('Invalid preparation time');
 
 		if (Tools::getValue('overcost') == NULL)
-			$this->_postErrors[] = $this->l('Overcost not specified');
+			$this->_postErrors[] = $this->l('Additional cost not specified');
 		elseif (!Validate::isFloat(Tools::getValue('overcost')))
-				$this->_postErrors[] = $this->l('Invalid overcost');
+				$this->_postErrors[] = $this->l('Invalid additional cost');
 	}
 
 	private function _postProcess()

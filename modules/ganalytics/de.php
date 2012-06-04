@@ -11,7 +11,7 @@ $_MODULE['<{ganalytics}prestashop>ganalytics_d7c9ce3337a28d63ce6626d90fdaedaa'] 
 $_MODULE['<{ganalytics}prestashop>ganalytics_81eeab9506186e2dca8faefa78d54067'] = 'Beispiel:';
 $_MODULE['<{ganalytics}prestashop>ganalytics_a3e7f361e6fc12caf872119338642143'] = 'ID aktualisieren';
 $_MODULE['<{ganalytics}prestashop>ganalytics_6a26f548831e6a8c26bfbbd9f6ec61e0'] = 'Hilfe';
-$_MODULE['<{ganalytics}prestashop>ganalytics_d78b0fcff6b55bafe615f3fc1572c282'] = 'Der erste Schritt zum Erfassen von E-Commerce-Transaktionen ist, E-Commerce-Berichte für das Profil Ihrer Website zu aktivieren.';
+$_MODULE['<{ganalytics}prestashop>ganalytics_38e12e36822cc0988bcac38733f5cae8'] = 'Der erste Schritt zum Erfassen von E-Commerce-Transaktionen ist, E-Commerce-Berichte für das Profil Ihrer Website zu aktivieren.';
 $_MODULE['<{ganalytics}prestashop>ganalytics_d02388589ecfd3b58e0a90e42127ca61'] = 'Bitte folgen Sie diesen Schritten, um die E-Commerce-Bereichte zu aktivieren:';
 $_MODULE['<{ganalytics}prestashop>ganalytics_11f4b4ba23dc72ee5e86ff5a90bdde60'] = 'Melden Sie sich bei Ihrem Konto an';
 $_MODULE['<{ganalytics}prestashop>ganalytics_b452493b16ead8b4b25ab3fb7174b8f5'] = 'Klicken Sie auf Bearbeiten neben dem Profil, das Sie aktivieren möchten';

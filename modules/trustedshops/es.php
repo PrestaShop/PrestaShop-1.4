@@ -92,7 +92,7 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_8512ae7d57b1396273f76fe6ed
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_8638c4fb6ff62122acd9927c4edbd22c'] = 'ha sido suprimido';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_a599ec4408db04d4bb9e4edd78b849f4'] = 'Certificado de inicio de sesión es un éxito';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_07186ff4930c511cd3aebb3f43df2e0c'] = 'Certificado de inicio de sesión fallo';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_b18f5630d5ffdfcee5ab0a44ee6e1eb6'] = 'Tiene que crear un nombre de usuario y una contraseña antes de efectuar cualquier cambio.';
+$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_859878c85ccbfc7c3c05525f231aeb97'] = 'Tiene que crear un nombre de usuario y una contraseña antes de efectuar cualquier cambio.';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_068ce643ff39bf2189935d14736fd10b'] = 'Cuño Trusted Shops y protección comprador';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_e32263743aac776e5e32fc385d8b669a'] = 'Trusted Shops es el sello de calidad europea para sitios de venta en línea con garantía de reembolso para sus clientes. En el momento de la certificación, su tienda está sometida a una auditoría que agrupa más de 1000 criterios diferentes que respetan las exigencias de las asociaciones de protección de los consumidores, así como las legislaciones nacionales y europeas. ';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_2c786e15a571a442adf85460e6358883'] = '¡Más confianza implica más ventas!';
@@ -164,8 +164,8 @@ $_MODULE['<{trustedshops}prestashop>trustedshopsrating_c9cc8cce247e49bae79f15173
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_f5395c9793af8a11b406ca7c1ac70da9'] = 'Más información';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_9a983837b32d42343dc0c62d35b1f955'] = 'Trusted Shops Systema de evaluación cliente';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_5b91fe21d207317c7c9fad225a7ce442'] = 'Para los compradores en línea, las evaluaciones positivas y que los clientes pueden comprobar, son la muestra que un sitio Web es digno de confianza. El software requerido ya existe en PrestaShop, por lo que unos clics son suficientes para ir a buscar las evaluciones de clientes en su sitio Web. ';
-$_MODULE['<{trustedshops}prestashop>trustedshopsrating_c81bc534bc261e4107a5c30257fb5ba4'] = 'Ayuda para orientar a sus clientes';
-$_MODULE['<{trustedshops}prestashop>trustedshopsrating_ec1bfc4d5646681a86038f770be8fd0b'] = 'Los mejores vendedores son los clientes satisfechos. Haga que sus clientes corran la voz de lo buenos que son los productos de su tienda.';
+$_MODULE['<{trustedshops}prestashop>trustedshopsrating_1b9370f9382b6734e224e8744ea8a31e'] = 'Ayuda para orientar a sus clientes';
+$_MODULE['<{trustedshops}prestashop>trustedshopsrating_768fb2eb1bc94f8ffc8dee63652e23ad'] = 'Los mejores vendedores son los clientes satisfechos. Haga que sus clientes corran la voz de lo buenos que son los productos de su tienda.';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_866a520be0de10a4fc8958a9e89126c3'] = 'Base de optimización del sitio';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_9c6dfeed0caab43f7ff0f6bbd19b27dd'] = 'Con sus intervenciones, sus clientes le ayudan a optimizar el proceso de compra en su sitio. Cuanto mejor funcione su tienda, más satisfechos estarán sus clientes.';
 $_MODULE['<{trustedshops}prestashop>trustedshopsrating_0fac19c0cc6e205682dd52d61dd5a0a2'] = 'Difusión en Facebook, Twitter y Google';

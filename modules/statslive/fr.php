@@ -4,7 +4,7 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{statslive}prestashop>statslive_fa55230e9791f2b71322869318a5f00f'] = 'Visiteurs en ligne';
 $_MODULE['<{statslive}prestashop>statslive_b8a5ea9b6e7f2d0b56fbb18e5b6b9246'] = 'Affiche la liste des clients et visiteurs en ligne actuellement';
-$_MODULE['<{statslive}prestashop>statslive_fd42d96861238b1cd5859585c4351eca'] = 'Vous devez activer l\'option \"pages vues pour chaque client\" dans le module \"Récupération des données statistiques\" pour visualiser les pages consultées par vos clients.\"';
+$_MODULE['<{statslive}prestashop>statslive_279a974c9c9a0d109698bb069202ae90'] = 'Vous devez activer l\'option \"pages vues pour chaque client\" dans le module \"Récupération des données statistiques\" pour visualiser les pages consultées par vos clients.\"';
 $_MODULE['<{statslive}prestashop>statslive_5c948349bdf1a7a77ba54497d019e4ca'] = 'Clients en ligne';
 $_MODULE['<{statslive}prestashop>statslive_66c4c5112f455a19afde47829df363fa'] = 'Total :';
 $_MODULE['<{statslive}prestashop>statslive_b718adec73e04ce3ec720dd11a06a308'] = 'ID';

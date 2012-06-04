@@ -923,7 +923,7 @@ class TSBuyerProtection extends AbsTrustedShops
 				$this->errors[] = $this->l('Certificate login failed');
 		}
 		else
-			$this->errors[] = $this->l('You have to set a username and a password before any change.');
+			$this->errors[] = $this->l('You have to set a username and a password before any changes can be made.');
 
 		return true;
 	}

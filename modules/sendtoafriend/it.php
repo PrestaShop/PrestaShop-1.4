@@ -6,8 +6,8 @@ $_MODULE['<{sendtoafriend}prestashop>product_page_2107f6398c37b4b9ee1e1b5afb5d3b
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_2074615eb70699e55b1f9289c6c77c25'] = 'Modulo Invia ad un amico';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_3234e2609dd694d8763c390fe97eba04'] = 'Consente ai clienti di inviare un link prodotto a un amico';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_666f6333e43c215212b916fef3d94af0'] = 'È necessario compilare tutti i campi.';
-$_MODULE['<{sendtoafriend}prestashop>sendtoafriend_ed95f7e7c4691956e0d6f2cd0136d483'] = 'E-mail del tuo amico non valida.';
-$_MODULE['<{sendtoafriend}prestashop>sendtoafriend_0e2a8a9d9c363a1ed93e7822eb3fc0ca'] = 'Nome del tuo amico non valido.';
+$_MODULE['<{sendtoafriend}prestashop>sendtoafriend_47f11ea69ec3161cab7c3434290efc8a'] = 'E-mail del tuo amico non valida.';
+$_MODULE['<{sendtoafriend}prestashop>sendtoafriend_97d4e28297c641ed0dbe3f0172f17fa6'] = 'Nome del tuo amico non valido.';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_98db77c121d8acdba66ec89626ae896c'] = 'Errore durante il processo.';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_22c4733a9ceb239bf825a0cecd1cfaec'] = 'Un amico';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_ffa719e6b8863717a9e86579249c7d9b'] = 'ti ha inviato un link a';

@@ -116,7 +116,7 @@ class CanadaPost extends CarrierModule
 		// Loading calcul mode list
 		$this->_calculModeList = array(
 			'onepackage' => $this->l('All items in one package'),
-			'split' => $this->l('Split one item per package')
+			'split' => $this->l('Only one item per package')
 		);
 	}
 
@@ -505,7 +505,7 @@ class CanadaPost extends CarrierModule
 								foreach($this->_calculModeList as $kcalculmode => $vcalculmode)
 									$html .= '<option value="'.$kcalculmode.'" '.($kcalculmode == (Tools::getValue('cp_carrier_calcul_mode', Configuration::get('CP_CARRIER_CALCUL_MODE'))) ? 'selected="selected"' : '').'>'.$vcalculmode.'</option>';
 					$html .= '</select>
-					<p>' . $this->l('Using the calcul mode "All items in one package" will automatically use default packaging size and delivery services. Specifics configurations for categories or product won\'t be use.') . '</p>
+					<p>' . $this->l('Using calculate mode "All items in one package" will automatically use default packaging size and delivery services. Specific configuration for categories or products won\'t be used.') . '</p>
 					</div>
 					<label>'.$this->l('Delivery Service').' : </label>
 					<div class="margin-form">';
@@ -513,7 +513,7 @@ class CanadaPost extends CarrierModule
 						foreach($rateServiceList as $rateService)
 							$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_cp_rate_service_code'].'" '.(($rateService['active'] == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].' <!--'.($this->webserviceTest($rateService['code']) ? '('.$this->l('Available').')' : '('.$this->l('Not available').')').'--><br />';
 					$html .= '
-					<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
+					<p>' . $this->l('Choose the delivery service available for customers.') . '</p>
 					</div>
 				</fieldset>
 				
@@ -776,7 +776,7 @@ class CanadaPost extends CarrierModule
 									$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_cp_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_cp_rate_service_code']) == 1 || $configServiceSelected > 0) ? 'checked="checked"' : '').' /> '.$rateService['service'].'<br />';
 								}
 						$html .= '
-						<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
+						<p>' . $this->l('Choose the delivery service available for customers.') . '</p>
 						</div>
 						<div class="margin-form"><input class="button" name="submitSave" type="submit" value="'.$this->l('Save configuration').'" /></div>
 					</form>';
@@ -800,7 +800,7 @@ class CanadaPost extends CarrierModule
 								foreach($rateServiceList as $rateService)
 									$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_cp_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_cp_rate_service_code']) == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].'<br />';
 						$html .= '
-						<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
+						<p>' . $this->l('Choose the delivery service available for customers.') . '</p>
 						</div>
 						<div class="margin-form"><input class="button" name="submitSave" type="submit" value="'.$this->l('Save configuration').'" /></div>
 					</form>';
@@ -999,7 +999,7 @@ class CanadaPost extends CarrierModule
 									$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_cp_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_cp_rate_service_code']) == 1 || $configServiceSelected > 0) ? 'checked="checked"' : '').' /> '.$rateService['service'].'<br />';
 								}
 						$html .= '
-						<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
+						<p>' . $this->l('Choose the delivery service available for customers.') . '</p>
 						</div>
 						<div class="margin-form"><input class="button" name="submitSave" type="submit" value="'.$this->l('Save configuration').'" /></div>
 					</form>';
@@ -1030,7 +1030,7 @@ class CanadaPost extends CarrierModule
 								foreach($rateServiceList as $rateService)
 									$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_cp_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_cp_rate_service_code']) == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].'<br />';
 						$html .= '
-						<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
+						<p>' . $this->l('Choose the delivery service available for customers.') . '</p>
 						</div>
 						<div class="margin-form"><input class="button" name="submitSave" type="submit" value="'.$this->l('Save configuration').'" /></div>
 					</form>';

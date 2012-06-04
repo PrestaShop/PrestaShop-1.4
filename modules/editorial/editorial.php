@@ -251,7 +251,7 @@ class Editorial extends Module
 				$this->_html .= $this->displayFlags($languages, $defaultLanguage, $divLangName, 'cpara', true);
 				
 				$this->_html .= '
-					<p class="clear">'.$this->l('Text of your choice; for example, explain your mission, highlight a new product, or describe a recent event.').'</p>
+					<p class="clear">'.$this->l('Introduction text of your choice; for example, explain your mission, highlight a new product, or describe a recent event.').'</p>
 				</div>
 				<label>'.$this->l('Homepage logo').' </label>
 				<div class="margin-form">';

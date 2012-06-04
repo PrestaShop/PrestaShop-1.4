@@ -138,7 +138,7 @@ class authorizeAIM extends PaymentModule
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Help').'</legend>
 			<a href="http://api.prestashop.com/partner/authorize.net/" target="_blank" style="float: right;"><img src="../modules/'.$this->name.'/logo_authorize.png" alt="" /></a>
 			<h3>'.$this->l('In your PrestaShop admin panel').'</h3>
-			- '.$this->l('Fill the Login ID field with the one provided by Authorize.net').'<br />
+			- '.$this->l('Fill the  Login ID  provided by Authorize.net').'<br />
 			- '.$this->l('Fill the key field with the transaction key provided by Authorize.net').'<br />
 			<span style="color: red;" >- '.$this->l('Warning: Your website must possess a SSL certificate to use the Authorize.net AIM payment system. You are responsible for the safety of your customers\' bank information. PrestaShop cannot be blamed for any security issue on your website.').'</span><br />
 			<br />
@@ -169,7 +169,7 @@ class authorizeAIM extends PaymentModule
 						<img src="../modules/'.$this->name.'/cards/ax.gif" alt="visa" />
 				</div>
 
-				<label for="authorizeaim_hold_review_os">'.$this->l('"Hold for Review" order state').'</label>
+				<label for="authorizeaim_hold_review_os">'.$this->l('Order status:  "Hold for Review" ').'</label>
 				<div class="margin-form">
 								<select id="authorizeaim_hold_review_os" name="authorizeaim_hold_review_os">';
 		// Hold for Review order state selection

@@ -511,7 +511,7 @@ class importerosc extends ImportModule
 	{
 		$html = '<div class="warn" id="warn_category_level" style="width:450px;display:none">
 					<img src="../img/admin/warn2.png">
-				'.$this->l('You are trying to import categories and we\'ve detected, that your oscommerce database don\'t have the field "level" in the table categorie. You must have this field to continue the import of categories.');
+				'.$this->l('You are trying to import categories and we\'ve detected, that your oscommerce database doesn\'t have the field "level" in the table category. You must have this field to continue importing categories.');
 		
 		$html .= '<button class="button" onclick="addAndCalculateLevel();" style="padding:10px;font-size:13px;text:align:center">'.$this->l('Click to add and calculate the filed "level" .').'</button> <span id="loading" style="display:none"><img src="../img/loader.gif"></span></div>
 				<div class="conf" id="conf_category_level" style="width:450px;display:none"><img src="../img/admin/ok2.png">'.$this->l('Level field\'s has been created and calculated, You can continue').'</div>';
@@ -588,7 +588,7 @@ class importerosc extends ImportModule
 		if ($this->createLevel())
 			$this->calculateLevel();
 		else
-			die('{"hasError" : true, "error" : "'.$this->l('Can not ALTER TABLE').'"}');
+			die('{"hasError" : true, "error" : "'.$this->l('Cannot ALTER TABLE').'"}');
 	}
 
 	public function createLevel()

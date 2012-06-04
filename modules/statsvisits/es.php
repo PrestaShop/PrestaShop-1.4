@@ -13,8 +13,8 @@ $_MODULE['<{statsvisits}prestashop>statsvisits_6602bbeb2956c035fb4cb5e844a4861b'
 $_MODULE['<{statsvisits}prestashop>statsvisits_ffbee337f031c2282b311bac40bc8bb9'] = 'Determinar el interés de las visitas';
 $_MODULE['<{statsvisits}prestashop>statsvisits_e90d50ca1e68dc66c97bd62929dcbaf1'] = 'El gráfico de evolución visitantes es muy similar al gráfico de las visitas pero da información suplementaria';
 $_MODULE['<{statsvisits}prestashop>statsvisits_cb3ba5c56a0115bd92d888c89e759745'] = 'Si es el caso, enhorabuena, su sitio está bien pensado y resulta agradable.';
-$_MODULE['<{statsvisits}prestashop>statsvisits_0ec292c17c7dded03bee9b3a6528cb9c'] = 'En el caso contrario, la conclusión no es simple. El problema puede ser estético o ergonómico, o quizás la oferta sea insuficiente. También es posible que dichos visitantes hayan llegado a su sitio por error, sin interés particular por su tienda; este fenómeno ocurre con frecuencia con los motores de búsqueda.';
-$_MODULE['<{statsvisits}prestashop>statsvisits_4793db9717cc512af1406b09766a0a1f'] = 'Esta información es sobre todo cualitativa.  Usted deberá determinar el interés de este tipo de visitas.';
+$_MODULE['<{statsvisits}prestashop>statsvisits_e326ed81484bb49c37e9e67fe4daa80d'] = 'En el caso contrario, la conclusión no es simple. El problema puede ser estético o ergonómico, o quizás la oferta sea insuficiente. También es posible que dichos visitantes hayan llegado a su sitio por error, sin interés particular por su tienda; este fenómeno ocurre con frecuencia con los motores de búsqueda.';
+$_MODULE['<{statsvisits}prestashop>statsvisits_2dcee77e35949e4023e290f4b40d53ca'] = 'Esta información es sobre todo cualitativa.  Usted deberá determinar el interés de este tipo de visitas.';
 $_MODULE['<{statsvisits}prestashop>statsvisits_39b960b0a5e2ebaaa638d946f1892050'] = 'Número de visitas y visitantes únicos';
 $_MODULE['<{statsvisits}prestashop>statsvisits_d7e637a6e9ff116de2fa89551240a94d'] = 'Visitas';
 $_MODULE['<{statsvisits}prestashop>statsvisits_ae5d01b6efa819cc7a7c05a8c57fcc2c'] = 'Visitantes';

@@ -13,8 +13,8 @@ $_MODULE['<{statsvisits}prestashop>statsvisits_6602bbeb2956c035fb4cb5e844a4861b'
 $_MODULE['<{statsvisits}prestashop>statsvisits_ffbee337f031c2282b311bac40bc8bb9'] = 'Déterminez l\'intérêt d\'une visite';
 $_MODULE['<{statsvisits}prestashop>statsvisits_e90d50ca1e68dc66c97bd62929dcbaf1'] = 'Le graphique d\'évolution visiteurs ressemble fortement au graphique des visites, mais fournit des informations supplémentaires:';
 $_MODULE['<{statsvisits}prestashop>statsvisits_cb3ba5c56a0115bd92d888c89e759745'] = 'Si c\'est le cas, alors félicitations, votre site est bien conçu et plaît indéniablement.';
-$_MODULE['<{statsvisits}prestashop>statsvisits_0ec292c17c7dded03bee9b3a6528cb9c'] = 'Dans le cas contraire, la conclusion n\'est pas si simple. Le problème peut être esthétique ou ergonomique, ou alors l\'offre insuffisante. Il se peut également que ces visiteurs soient arrivés là par erreur, sans intérêt particulier pour votre boutique ; ce phénomène arrive couramment avec les moteurs de recherche.';
-$_MODULE['<{statsvisits}prestashop>statsvisits_4793db9717cc512af1406b09766a0a1f'] = 'Cette information est surtout qualitative : c\'est à vous de déterminer l\'intérêt d\'une visite sans suite.';
+$_MODULE['<{statsvisits}prestashop>statsvisits_e326ed81484bb49c37e9e67fe4daa80d'] = 'Dans le cas contraire, la conclusion n\'est pas si simple. Le problème peut être esthétique ou ergonomique, ou alors l\'offre insuffisante. Il se peut également que ces visiteurs soient arrivés là par erreur, sans intérêt particulier pour votre boutique ; ce phénomène arrive couramment avec les moteurs de recherche.';
+$_MODULE['<{statsvisits}prestashop>statsvisits_2dcee77e35949e4023e290f4b40d53ca'] = 'Cette information est surtout qualitative : c\'est à vous de déterminer l\'intérêt d\'une visite sans suite.';
 $_MODULE['<{statsvisits}prestashop>statsvisits_39b960b0a5e2ebaaa638d946f1892050'] = 'Nombre de visites et visiteurs uniques';
 $_MODULE['<{statsvisits}prestashop>statsvisits_d7e637a6e9ff116de2fa89551240a94d'] = 'Visites';
 $_MODULE['<{statsvisits}prestashop>statsvisits_ae5d01b6efa819cc7a7c05a8c57fcc2c'] = 'Visiteurs';

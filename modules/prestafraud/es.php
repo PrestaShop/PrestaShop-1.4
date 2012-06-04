@@ -56,7 +56,7 @@ $_MODULE['<{prestafraud}prestashop>prestafraud_950c093b260d7c7709f8ff96e10a6fe0'
 $_MODULE['<{prestafraud}prestashop>prestafraud_d0c6a2fa938df84c0ce628de99c97e16'] = 'Nota:';
 $_MODULE['<{prestafraud}prestashop>prestafraud_88183b946cc5f0e8c96b2e66e1c74a7e'] = 'Desconocido';
 $_MODULE['<{prestafraud}prestashop>prestafraud_240f3031f25601fa128bd4e15f0a37de'] = 'Comentario:';
-$_MODULE['<{prestafraud}prestashop>prestafraud_b88011726eba59d6bf37f0fdec202edc'] = 'Notificar este pedido como un fraude a PrestaShop';
+$_MODULE['<{prestafraud}prestashop>prestafraud_83af58f7375191b5d158a787808555d4'] = 'Notificar este pedido como un fraude a PrestaShop';
 $_MODULE['<{prestafraud}prestashop>prestafraud_a8bbb000124c9697aa5d63e7e758b64d'] = 'Recoger en tienda';
 $_MODULE['<{prestafraud}prestashop>prestafraud_08eb31af908e2244867f6e812f82e935'] = 'Punto de recogida';
 $_MODULE['<{prestafraud}prestashop>prestafraud_880f973e4ddae42c6bebd2c31bb977f8'] = 'Envío lento superior a 3 días';

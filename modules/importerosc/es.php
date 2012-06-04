@@ -20,8 +20,8 @@ $_MODULE['<{importerosc}prestashop>importerosc_14ae0ea02f571a833786d13d9ca6a897'
 $_MODULE['<{importerosc}prestashop>importerosc_e307db07b3975fef922a80d07455ee5e'] = 'Base de datos';
 $_MODULE['<{importerosc}prestashop>importerosc_dac130bdd2c5492a8108a4145bd9f04a'] = 'Prefijo de la base de datos';
 $_MODULE['<{importerosc}prestashop>importerosc_6bdc02625540b5264cffe801c37a82dd'] = '(El prefijo es opcional. Si todas las tablas de la base de datos comienzan con \"pref_\" ese es su prefijo)';
-$_MODULE['<{importerosc}prestashop>importerosc_4685343b5e2e0f0fbee63dddafde693f'] = 'Usted está tratando de importar las categorías y hemos detectado que su base de datos oscommerce no tiene el campo \"nivel\" en la tabla categoria . Usted debe tener este campo para continuar con la importación de las categorías.';
+$_MODULE['<{importerosc}prestashop>importerosc_45c48176271e55a775ec5b2b22fac844'] = 'Usted está tratando de importar las categorías y hemos detectado que su base de datos oscommerce no tiene el campo \"nivel\" en la tabla categoria . Usted debe tener este campo para continuar con la importación de las categorías.';
 $_MODULE['<{importerosc}prestashop>importerosc_16f35420186575c2a1d9c0b59edf6ad3'] = 'Click para añadir y calcular el campo \"nivel\"';
 $_MODULE['<{importerosc}prestashop>importerosc_fced104d747e0855ceff3020653104ab'] = 'El campo NIVEL ha sido creado y calculado, ahora puede continuar';
 $_MODULE['<{importerosc}prestashop>importerosc_b405d0bebeedbdc1773a44ac36b8ffc4'] = 'Es altamente recomendable que haga un backup de su base de datos antes de continuar. Ha hecho un backup?';
-$_MODULE['<{importerosc}prestashop>importerosc_9f95fc55011203d91d50a0ed512f805f'] = 'No se puede ALTERAR LA TABLA';
+$_MODULE['<{importerosc}prestashop>importerosc_bdf50da9fc49e70bb3ef84fb5ed0d8af'] = 'No se puede ALTERAR LA TABLA';

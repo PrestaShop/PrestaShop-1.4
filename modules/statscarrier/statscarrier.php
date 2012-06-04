@@ -76,7 +76,7 @@ class StatsCarrier extends ModuleGraph
 		$this->_html .= '</select>
 				<input type="submit" name="submitState" value="'.$this->l('Filter').'" class="button" />
 			</form>
-			<p><img src="../img/admin/down.gif" />'.$this->l('This graph represents the carrier distribution for your orders. You can also limit it to orders in one state.').'</p>
+			<p><img src="../img/admin/down.gif" />'.$this->l('This graph represents the distribution of carriers for your orders. You can also limit it to orders in one state.').'</p>
 			'.($result['total'] ? ModuleGraph::engine(array('type' => 'pie', 'option' => Tools::getValue('id_order_state'))).'<br /><br />	<a href="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'&export=1&exportType=language"><img src="../img/admin/asterisk.gif" />'.$this->l('CSV Export').'</a>' : $this->l('No valid orders for this period.')).'
 		</fieldset>';
 		return $this->_html;

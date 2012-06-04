@@ -266,10 +266,10 @@ class StatsProduct extends ModuleGraph
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
 		<h2>'.$this->l('Number of purchases compared to number of viewings').'</h2>
 			<p>
-				'.$this->l('After choosing a category and selecting a product, informational graphs will appear. Then, you will be able to analyze them.').'
+				'.$this->l('After choosing a category and selecting a product, informational graphs will appear. You will then be able to analyze them.').'
 				<ul>
-					<li class="bullet">'.$this->l('If you notice that a product is successful and often purchased, but viewed infrequently, you should put it more prominently on your webshop front-office.').'</li>
-					<li class="bullet">'.$this->l('On the other hand, if a product has many viewings but is not often purchased, we advise you to check or modify this product\'s information, description and photography again.').'
+					<li class="bullet">'.$this->l('If you notice that a product is successful, purchased often, but viewed infrequently, you should feature it more prominently on your webshop front-office.').'</li>
+					<li class="bullet">'.$this->l('On the other hand, if a product has many viewings but is not purchased that often, we advise you to check or modify this product\'s information, description and photography again.').'
 					</li>
 				</ul>
 			</p>

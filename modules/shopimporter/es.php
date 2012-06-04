@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{shopimporter}prestashop>shopimporter_d714c742b360a8ecbb124c15e9a391a1'] = 'Import de tienda';
-$_MODULE['<{shopimporter}prestashop>shopimporter_8c0fe18034f47d7d3dd3e58098e3ffdb'] = 'Este módulo le permite importar su tienda a partir de otro sistema.';
+$_MODULE['<{shopimporter}prestashop>shopimporter_eac980737d1ffd0fb480772dbcf57742'] = 'Este módulo le permite importar su tienda a partir de otro sistema.';
 $_MODULE['<{shopimporter}prestashop>shopimporter_4994a8ffeba4ac3140beb89e8d41f174'] = 'Idiomas';
 $_MODULE['<{shopimporter}prestashop>shopimporter_a9db6adcdafc85c5830439401fd866f6'] = 'Import de idiomas';
 $_MODULE['<{shopimporter}prestashop>shopimporter_b8b8ca447e355455b8dc638993c41ae7'] = 'Los nuevos idiomas añadirán automáticamente las traducciones';
@@ -54,7 +54,7 @@ $_MODULE['<{shopimporter}prestashop>shopimporter_bf79359f8edda6f7df97ef57a4ee09b
 $_MODULE['<{shopimporter}prestashop>shopimporter_0b5a6ead644b8ae4edb8a036334c9ed6'] = 'Se han producido errores durante la importación. Para más detalles haga clic en \"Mostrar errores\"';
 $_MODULE['<{shopimporter}prestashop>shopimporter_e905d0eb5204b761d8c0e3eebed4a0e0'] = 'El import ha terminado';
 $_MODULE['<{shopimporter}prestashop>shopimporter_596403b61367ca30d6de75812275f9cd'] = 'Supresión de los datos';
-$_MODULE['<{shopimporter}prestashop>shopimporter_edc186cbc5cc897a79312880ec16c621'] = 'Por favor seleccione algún elemento para importar';
+$_MODULE['<{shopimporter}prestashop>shopimporter_abc68851fb3146446592e68ee7a308bd'] = 'Por favor seleccione algún elemento para importar';
 $_MODULE['<{shopimporter}prestashop>shopimporter_81b33153f65252001fe132d74b658fbe'] = 'Importar a partir de otro sistema';
 $_MODULE['<{shopimporter}prestashop>shopimporter_dd4c0c798ebbf8c6e15dcba8632f558d'] = 'Antes de empezar la importación, por favor haga una copia de seguridad de sus base de datos.';
 $_MODULE['<{shopimporter}prestashop>shopimporter_60474e812295a5adc371de63dc62a164'] = 'Pulsar aquí para guardar';

@@ -493,7 +493,7 @@ class PrestaFraud extends Module
 			$scoring = $this->_getScoring((int)$id_order, $cookie->id_lang);
 			$this->_html .= '<p><b>'.$this->l('Scoring:').'</b> '.($scoring['scoring'] < 0 ? $this->l('Unknown') : (float)$scoring['scoring']).'</p>
 			<p><b>'.$this->l('Comment:').'</b> '.htmlentities($scoring['comment']).'</p>
-			<p><center><a target="_BLANK" href="'.$this->_trustUrl.'fraud_report.php?shop_id='.Configuration::get('PS_TRUST_SHOP_ID').'&shop_key='.Configuration::get('PS_TRUST_SHOP_KEY').'&order_id='.$id_order.'">'.$this->l('Report this order as a fraud to PrestaShop').'</a></center></p>';
+			<p><center><a target="_BLANK" href="'.$this->_trustUrl.'fraud_report.php?shop_id='.Configuration::get('PS_TRUST_SHOP_ID').'&shop_key='.Configuration::get('PS_TRUST_SHOP_KEY').'&order_id='.$id_order.'">'.$this->l('Report this order as fraud towards PrestaShop').'</a></center></p>';
 		}
 		$this->_html .= '</fieldset>';
 		return $this->_html;

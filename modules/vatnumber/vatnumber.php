@@ -45,7 +45,7 @@ class VatNumber extends Module
 			$this->warning = $this->l('No default country set.');
 
 		$this->displayName = $this->l('European VAT number');
-		$this->description = $this->l('Enable entering of the VAT intra-community number when creating the address (You must fill in the company field to allow keyboarding VAT number)');
+		$this->description = $this->l('Enables entering the VAT intra-community number when creating the address (You must fill in the company field to allow keyboarding VAT number)');
 	}
 
 	public function install()
@@ -156,7 +156,7 @@ class VatNumber extends Module
 					echo $this->displayConfirmation($this->l('Your country has been updated.'));
 			$check = (int)Tools::getValue('vatnumber_checking');
 			if (Configuration::get('VATNUMBER_CHECKING') != $check AND Configuration::updateValue('VATNUMBER_CHECKING', $check))
-				echo ($check ? $this->displayConfirmation($this->l('The check of the VAT number with the WebService is now enabled.')) : $this->displayConfirmation($this->l('The check of the VAT number with the WebService is now disabled.')));
+				echo ($check ? $this->displayConfirmation($this->l('VAT number verification with the WebService is now enabled.')) : $this->displayConfirmation($this->l('VAT number verification with the WebService is now disabled.')));
 		}
 		echo '
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
@@ -170,7 +170,7 @@ class VatNumber extends Module
 		echo '		</select>
 				</div>
 				<div class="clear">&nbsp;</div>
-				<label>'.$this->l('Enable checking of the VAT number with the WebService').'</label>
+				<label>'.$this->l('Enable VAT number verification with the WebService').'</label>
 				<div class="margin-form">
 					<input type="checkbox" name="vatnumber_checking" '.(Configuration::get('VATNUMBER_CHECKING') ? 'checked="checked"' : '').' value="1"/>
 					<p>'.$this->l('The verification by the webservice is slow. Enabling this option can slow down your shop.').'</p>

@@ -399,8 +399,8 @@ class TrustedShopsRating extends AbsTrustedShops
 					<h3>'.$this->l('Trusted Shops Customer Rating').'</h3>
 					<p>'.$this->l('For online buyers, positive and verifiable customer ratings are an important indication of an online shop\'s trustworthiness. The required software is already included in Prestashop, so you can start collecting customer ratings in your online shop too. Integration is easy with just a few clicks.').'</p>
 					
-					<h4>'.$this->l('Orientation support for your customers').'</h4>
-					<p>'.$this->l('Satisfied customers are your best sales people. Let your customers speak for themselves as to how	safe and easy it is to buy from your online shop.').'</p>
+					<h4>'.$this->l('Support guide for your customers').'</h4>
+					<p>'.$this->l('Satisfied customers are your best sales people. Let your customers speak for themselves as to how 	safe and easy it is to buy from your online shop.').'</p>
 
 					<h4>'.$this->l('Basis for shop optimisation').'</h4>
 					<p>'.$this->l('Your customers are happy to help you optimise your shop with their feedback. After all, the better your online shop works, the more satisfied your customers will be.').'</p>

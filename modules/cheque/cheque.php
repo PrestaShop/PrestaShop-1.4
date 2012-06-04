@@ -102,7 +102,7 @@ class Cheque extends PaymentModule
 	private function _displayCheque()
 	{
 		$this->_html .= '<img src="../modules/cheque/cheque.jpg" style="float:left; margin-right:15px;"><b>'.$this->l('This module allows you to accept payments by check.').'</b><br /><br />
-		'.$this->l('If the client chooses this payment mode, the order status will change to \'Waiting for payment\'.').'<br />
+		'.$this->l('If the customer chooses this payment mode, the order status will change to \'Waiting for payment\'.').'<br />
 		'.$this->l('Therefore, you will need to manually confirm the order as soon as you receive a check.').'<br /><br /><br />';
 	}
 

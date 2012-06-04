@@ -19,11 +19,11 @@ $_MODULE['<{newsletter}prestashop>newsletter_55caa4828d4e935c2ba9f1558f1c4edd'] 
 $_MODULE['<{newsletter}prestashop>newsletter_48e3d5f66961b621c78f709afcd7d437'] = 'Descargar el fichero';
 $_MODULE['<{newsletter}prestashop>newsletter_faa1115fbab933e7178ee43ce1590977'] = 'ATENCION: Si trata de abrir el fichero .CSV con Excel, no olvide seleccionar el UTF-8 para el encodage, si no aparecerán caracteres incorrectos';
 $_MODULE['<{newsletter}prestashop>newsletter_81573e0ea79138f02fd2cee94786d7e9'] = 'Error: imposible escribir en';
-$_MODULE['<{newsletter}prestashop>newsletter_8d550e9bf69bfc7a09be6eeb1622ae23'] = 'Hay dos tipos de módulos:';
-$_MODULE['<{newsletter}prestashop>newsletter_23e8f8a55548b88bfbdcd1f6ba26a010'] = 'Las personas que hayan suscrito utilizando el bloque newsletter en la página de inicio.';
+$_MODULE['<{newsletter}prestashop>newsletter_9e08d8afdd018f1f04aebe72384e352b'] = 'Hay dos tipos de módulos:';
+$_MODULE['<{newsletter}prestashop>newsletter_0abc3bbea852c63f540590c3f92b07eb'] = 'Las personas que hayan suscrito utilizando el bloque newsletter en la página de inicio.';
 $_MODULE['<{newsletter}prestashop>newsletter_27d1ec406fd2baf49d03f81a4bb41122'] = 'Esta será una lista de direcciones de correo para las personas que visiten su tienda y no se convierta en clientes, pero que desean obtener su newsletter. Use \"Newsletter Suscriptores de exportación\" más abajo para generar una . CSV sobre la base de los usuarios de los datos del bloque Newsletter.';
-$_MODULE['<{newsletter}prestashop>newsletter_74ca54506cdbc82e3aa763ba91b8fa39'] = 'Los clientes que han dicho \"sí\" para recibir la newsletter en su perfil de cliente.';
-$_MODULE['<{newsletter}prestashop>newsletter_1aa14f5a6423dbde1ef2cfe4734980b4'] = 'La sección \"exportación clientes\" debajo de los filtros para clientes a los que quiere enviar la newsletter.';
+$_MODULE['<{newsletter}prestashop>newsletter_e1b67fd4cdf446eec12c8834b83b9a3a'] = 'Los clientes que han dicho \"sí\" para recibir la newsletter en su perfil de cliente.';
+$_MODULE['<{newsletter}prestashop>newsletter_80ca8d4a3fd9e0c3f19bab2a2ce35c6d'] = 'La sección \"exportación clientes\" debajo de los filtros para clientes a los que quiere enviar la newsletter.';
 $_MODULE['<{newsletter}prestashop>newsletter_b192ab83a19105bbf1e2d1fab548249a'] = 'Exportar suscritos a la newsletter';
 $_MODULE['<{newsletter}prestashop>newsletter_a60401e616125189d78605b2ddd7ff45'] = 'Generar un archivo. CSV BlockNewsletter sobre la base de datos de suscriptores.';
 $_MODULE['<{newsletter}prestashop>newsletter_dbb392a2dc9b38722e69f6032faea73e'] = 'Exportar un fichero .CSV';

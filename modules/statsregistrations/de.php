@@ -4,7 +4,7 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_8b15fc6468c919d299f9a601b61b95fc'] = 'Kundenkonten';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_089c9061407fd978366e78b6ad1d0111'] = 'Anzeige des Fortschritts der Kundenregistrierung';
-$_MODULE['<{statsregistrations}prestashop>statsregistrations_75abad0b891bc086fd4837e81a8c488a'] = 'Besucher, die bei der Registrierung aufgehört haben:';
+$_MODULE['<{statsregistrations}prestashop>statsregistrations_d2599cba054b58d8319484590dc24104'] = 'Besucher, die bei der Registrierung aufgehört haben:';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_4e4f3af3fb18136b8eec4b77f25095ce'] = 'Besucher, die direkt nach der Anmeldung eine Bestellung vorgenommen haben:';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_a751e9cc4ed4c7585ecc0d97781cb48a'] = 'Kundenkonten insgesamt:';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_998e4c5c80f27dec552e99dfed34889a'] = 'CSV-Export';

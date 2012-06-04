@@ -53,7 +53,7 @@ $_MODULE['<{mondialrelay}prestashop>mrgettickets_c9b4de92f371ae545ad6f051c07d58c
 $_MODULE['<{mondialrelay}prestashop>mrgettickets_ea5f761be4e4888eabf4e1501d7817d1'] = 'Details:';
 $_MODULE['<{mondialrelay}prestashop>mrgettickets_2653c23b8c0daac59571e4be5e8fa7d0'] = 'Der Webservice von Mondial Relay ist zu r Zeit nicht erreichbar';
 $_MODULE['<{mondialrelay}prestashop>mrmanagement_38b4abe2f5860f034e315f2da648a3d6'] = 'Mondial Relay Uninstall';
-$_MODULE['<{mondialrelay}prestashop>mrmanagement_77bad09c976ec16f38381dc220139367'] = 'Sie versuchen das Modul zu deinstallieren, alle Datenbankeinträge werden ebenso entfernt';
+$_MODULE['<{mondialrelay}prestashop>mrmanagement_a4691c957e81a6f0b6f0ed44f8f2dfe8'] = 'Sie versuchen das Modul zu deinstallieren, alle Datenbankeinträge werden ebenso entfernt';
 $_MODULE['<{mondialrelay}prestashop>mrmanagement_09c081633d484a62a2f6940c12a0de36'] = 'Daten belassen und deinstallieren';
 $_MODULE['<{mondialrelay}prestashop>mrmanagement_0b7f47fce1d82d53244771c64b1535c0'] = 'Deaktivieren (alle Daten löschen) und deinstallieren';
 $_MODULE['<{mondialrelay}prestashop>mrmanagement_ea4788705e6873b424c65e91c2846b19'] = 'stornieren';
@@ -123,13 +123,13 @@ $_MODULE['<{mondialrelay}prestashop>order_detail_81b7b4587a2a3ea7a0d6bb1df3fbba5
 $_MODULE['<{mondialrelay}prestashop>order_detail_c2d05abc7f5ebdc72b6656df35038b43'] = 'Meine Sendung auf der Mondial Relay Webseite verfolgen';
 $_MODULE['<{mondialrelay}prestashop>post_action_466ec9f29b485204ef53818459da48af'] = 'Fehler aufgetreten';
 $_MODULE['<{mondialrelay}prestashop>generate_tickets_de21dc13e1ea638777fbfad49f88b332'] = 'Alle Bestellugen, die den Status haben';
-$_MODULE['<{mondialrelay}prestashop>generate_tickets_a0bf3c9ac2d785f053d883b8746e91ba'] = 'wird für die Erstellung Ihres Aufklebers verfügbar sein';
+$_MODULE['<{mondialrelay}prestashop>generate_tickets_378116486b5a90bb50fd4f1557698d96'] = 'wird für die Erstellung Ihres Aufklebers verfügbar sein';
 $_MODULE['<{mondialrelay}prestashop>generate_tickets_d79cf3f429596f77db95c65074663a54'] = 'Bestellnummer';
 $_MODULE['<{mondialrelay}prestashop>generate_tickets_ce26601dac0dea138b7295f02b7620a7'] = 'Kunde';
 $_MODULE['<{mondialrelay}prestashop>generate_tickets_0eede552438475bdfe820c13f24c9399'] = 'Gesamtpreis';
-$_MODULE['<{mondialrelay}prestashop>generate_tickets_f4e8b53a114e5a17d051ab84d326cae5'] = 'Gesamtbetrag Versandkosten:';
+$_MODULE['<{mondialrelay}prestashop>generate_tickets_c28e0582276cb6747e37d948e1727929'] = 'Gesamtbetrag Versandkosten:';
 $_MODULE['<{mondialrelay}prestashop>generate_tickets_44749712dbec183e983dcd78a7736c41'] = 'Datum';
-$_MODULE['<{mondialrelay}prestashop>generate_tickets_3715c824cbc0f966c61a72254f248a2e'] = 'Gewicht (Gramm)';
+$_MODULE['<{mondialrelay}prestashop>generate_tickets_52150799c57e873360cca13c080a91b4'] = 'Gewicht (Gramm)';
 $_MODULE['<{mondialrelay}prestashop>generate_tickets_6ccc0fdff9995e1a0fce00c99e5b6085'] = 'MR Nummer';
 $_MODULE['<{mondialrelay}prestashop>generate_tickets_f9c50cba4de9032d7a6797a2458f8ed9'] = 'MR Land';
 $_MODULE['<{mondialrelay}prestashop>generate_tickets_428c091372d840900cf8536519fa0056'] = 'Exp Nummer';

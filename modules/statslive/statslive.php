@@ -120,7 +120,7 @@ class StatsLive extends Module
 			$("#calendar").remove();
 		</script>';
 		if (!Configuration::get('PS_STATSDATA_CUSTOMER_PAGESVIEWS'))
-			echo '<div class="warn width3">'.$this->l('You must activate the option "pages views for each customer" in the "Stats datamining" module in order to see the pages currently viewed by your customers.').'</div>';
+			echo '<div class="warn width3">'.$this->l('You must activate the option "page views for each customer" in the "Stats datamining" module in order to see the pages currently viewed by your customers.').'</div>';
 		echo '
 		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Customers online').'</legend>';
 		if ($totalCustomers)

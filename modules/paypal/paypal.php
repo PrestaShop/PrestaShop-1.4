@@ -52,13 +52,13 @@ class PayPal extends PaymentModule
 		$this->_errors = array();
 		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('PayPal');
-		$this->description = $this->l('Accepts payments by credit cards (CB, Visa, MasterCard, Amex, Aurore, Cofinoga, 4 stars) with PayPal.');
+		$this->description = $this->l('Accepts payments by credit cards (Debit Cards, Visa, MasterCard, Amex, Aurore, Cofinoga, 4 stars) with PayPal.');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details?');
 		if (Configuration::get('PAYPAL_BUSINESS') == 'paypal@prestashop.com')
 			$this->warning = $this->l('You are currently using the default PayPal e-mail address, please enter your own e-mail address.');
 		$this->_checkAndUpdateFromOldVersion();
 		if (file_exists(_PS_ROOT_DIR_.'/modules/paypalapi/paypalapi.php') AND $this->active)
-			$this->warning = $this->l('All features of Paypal API module are be include in the new Paypal module. In order to don\'t have any conflict, please don\'t use and remove PayPalAPI module.');
+			$this->warning = $this->l('All features of PayPal API module are to be included in the new PayPal module. In order not to have any conflict, please don\'t use and remove PayPalAPI module.');
 
 		/* For 1.4.3 and less compatibility */
 		$updateConfig = array('PS_OS_CHEQUE' => 1, 'PS_OS_PAYMENT' => 2, 'PS_OS_PREPARATION' => 3, 'PS_OS_SHIPPING' => 4, 'PS_OS_DELIVERED' => 5, 'PS_OS_CANCELED' => 6,
@@ -178,7 +178,7 @@ class PayPal extends PaymentModule
 		$this->_postProcess();
 		$this->_setPayPalSubscription();
 		if (file_exists(_PS_ROOT_DIR_.'/modules/paypalapi/paypalapi.php'))
-			$this->_html .= '<div class="warning warn"><h3>'.$this->l('All features of Paypal API module are be include in this new module. In order to don\'t have any conflict, please don\'t use and remove PayPalAPI module.').'</h3></div>';
+			$this->_html .= '<div class="warning warn"><h3>'.$this->l('All features of PayPal API module are to be included in the new PayPal module. In order not to have any conflict, please don\'t use and remove PayPalAPI module.').'</h3></div>';
 		$this->_setConfigurationForm();
 		
 		return $this->_html;
@@ -304,7 +304,7 @@ class PayPal extends PaymentModule
 			$this->_html .= '<br />
 			<fieldset style="width:400px;">
 				<legend><img src="'._MODULE_DIR_.$this->name.'/logo.gif" alt="" /> '.$this->l('PayPal Validation').'</legend>
-				<p><b>'.$this->l('Information:').'</b> '.(OrderHistory::getLastOrderState((int)($params['id_order']))->id == (int)(Configuration::get('PAYPAL_OS_AUTHORIZATION')) ? $this->l('Pending Capture - No shipping') : $this->l('Pending Payment - No shipping')).'</p>
+				<p><b>'.$this->l('Information:').'</b> '.(OrderHistory::getLastOrderState((int)($params['id_order']))->id == (int)(Configuration::get('PAYPAL_OS_AUTHORIZATION')) ? $this->l('Pending Capture - Do not ship') : $this->l('Pending Payment - Do not ship')).'</p>
 				<form method="post" action="'.htmlentities($_SERVER['REQUEST_URI']).'">
 					<input type="hidden" name="id_order" value="'.(int)$params['id_order'].'" />
 					<p class="center"><input type="submit" class="button" name="submitPayPalValidation" value="'.$this->l('Get payment status').'" /></p>

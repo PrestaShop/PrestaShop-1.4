@@ -100,14 +100,14 @@ class BirthdayPresent extends Module
 			<p>'.$this->l('Offering a present to a client is a means of securing their loyalty.').'</p>
 			<h3>'.$this->l('What should you do?').'</h3>
 			<p>
-				'.$this->l('Keeping a client is more profitable than capturing a new one. Thus, it is necessary to develop their loyalty, in other words to make them want to come back to your webshop.').' <br />
-				'.$this->l('Word of mouth is also a means to get new satisfied clients; a dissatisfied one won\'t attract new clients.').'<br />
-				'.$this->l('In order to achieve this goal you can organize: ').'
+				'.$this->l('Keeping a client is more profitable than acquiring a new one. Thus, it is essential to make them loyal, in other words to make them want to come back to your shop.').' <br />
+				'.$this->l('Word of mouth is also a good way of getting new satisfied customers as an unsatisfied customer won\'t attract new ones.').'<br />
+				'.$this->l('There are many ways to achieve this: ').'
 				<ul>
-					<li>'.$this->l('Punctual operations: commercial rewards (personalized special offers, product or service offered), non commercial rewards (priority handling of an order or a product), pecuniary rewards (bonds, discount coupons, payback...).').'</li>
+					<li>'.$this->l('Occasional operations: commercial rewards (personalized special offers, product or service offered), non commercial rewards (priority handling of an order or a product), pecuniary rewards (bonds, discount coupons, payback...).').'</li>
 					<li>'.$this->l('Sustainable operations: loyalty or points cards, which not only justify communication between merchant and client, but also offer advantages to clients (private offers, discounts).').'</li>
 				</ul>
-				'.$this->l('These operations encourage clients to buy and also to come back to your webshop regularly.').' <br />
+				'.$this->l('These operations encourage customers to buy and also to return to your online shop regularly.').' <br />
 			</p>
 		</fieldset>';
 		return $this->_html;

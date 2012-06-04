@@ -12,7 +12,7 @@ $_MODULE['<{canadapost}prestashop>canadapost_2056ed4f6b76a94035f12c041350aa2f'] 
 $_MODULE['<{canadapost}prestashop>canadapost_20449d3f0b6c6b9265a5cd2a470a6451'] = 'Packaging peso';
 $_MODULE['<{canadapost}prestashop>canadapost_bfc00de34bc04366e7fee516adf7dca5'] = 'La tassa';
 $_MODULE['<{canadapost}prestashop>canadapost_386aad80d82f8245e9ef80352a2240e8'] = 'Tutti gli articoli in un unico pacchetto';
-$_MODULE['<{canadapost}prestashop>canadapost_f35eb2a913a3fd6fd8e661012cf0ebd8'] = 'Dividere un elemento per ogni pacchetto';
+$_MODULE['<{canadapost}prestashop>canadapost_8aaac24ade446a004c434b58e29afe85'] = 'Dividere un elemento per ogni pacchetto';
 $_MODULE['<{canadapost}prestashop>canadapost_9c536dc938b99309eab40c9a06fc1c00'] = 'Canada Post Modulo di stato';
 $_MODULE['<{canadapost}prestashop>canadapost_df432089df8810e4cb9011b96e6ac862'] = 'Il modulo spese postali Canadesi è configurato e online';
 $_MODULE['<{canadapost}prestashop>canadapost_1e098f6c7ac70d1b66f48d1a060076a3'] = 'Il modulo spese postali Canadesi non è ancora configurato tu devi:';
@@ -46,11 +46,11 @@ $_MODULE['<{canadapost}prestashop>canadapost_cf1580798f7aba85d519afadf1ffd886'] 
 $_MODULE['<{canadapost}prestashop>canadapost_02546d525ab356bd43c91e6b07447496'] = 'Non c\'è nessuna configurazione di stato per questo paese';
 $_MODULE['<{canadapost}prestashop>canadapost_0ddc2a5660f7d095fff34d6b93077c80'] = 'Servizio di configurazione';
 $_MODULE['<{canadapost}prestashop>canadapost_8d6bd50f3fe3ee2f4513066c25e5fb4a'] = 'Calcul modalità';
-$_MODULE['<{canadapost}prestashop>canadapost_79a7b64f7e16759d93ef3e74f1916815'] = 'Utilizzando la modalità di calcul \"Tutti gli elementi in un unico pacchetto\"  utilizzerà automaticamente imballaggio dimensioni predefinite e servizi di consegna. Configurazioni specifiche per le categorie o prodotto non sarà utilizzato.';
+$_MODULE['<{canadapost}prestashop>canadapost_96cf4eb97c979b15c96683bbe10fc84c'] = 'Utilizzando la modalità di calcul \"Tutti gli elementi in un unico pacchetto\"  utilizzerà automaticamente imballaggio dimensioni predefinite e servizi di consegna. Configurazioni specifiche per le categorie o prodotto non sarà utilizzato.';
 $_MODULE['<{canadapost}prestashop>canadapost_5cdd307ba6e260beb4801c0c10e22a3a'] = 'Service Delivery';
 $_MODULE['<{canadapost}prestashop>canadapost_78945de8de090e90045d299651a68a9b'] = 'Disponibile';
 $_MODULE['<{canadapost}prestashop>canadapost_2d25c72c1b18e562f6654fff8e11711e'] = 'Non disponibile';
-$_MODULE['<{canadapost}prestashop>canadapost_d63e135774e62574e2a1921267dad142'] = 'Scegliere il servizio di consegna che sarà disponibile per i clienti.';
+$_MODULE['<{canadapost}prestashop>canadapost_80982d4132c137d389a6b827e6bff451'] = 'Scegliere il servizio di consegna che sarà disponibile per i clienti.';
 $_MODULE['<{canadapost}prestashop>canadapost_cf565402d32b79d33f626252949a6941'] = 'Salva la configurazione';
 $_MODULE['<{canadapost}prestashop>canadapost_a438cfa1a870740754c9f4b35130cc04'] = 'Il tuo account Invia il Canada non è specificato';
 $_MODULE['<{canadapost}prestashop>canadapost_805353d2862ea0e658c9ddda871540fa'] = 'Il tuo codice Zip / Postal non è specificato';

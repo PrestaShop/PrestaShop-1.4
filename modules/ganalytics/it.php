@@ -11,7 +11,7 @@ $_MODULE['<{ganalytics}prestashop>ganalytics_d7c9ce3337a28d63ce6626d90fdaedaa'] 
 $_MODULE['<{ganalytics}prestashop>ganalytics_81eeab9506186e2dca8faefa78d54067'] = 'Esempio:';
 $_MODULE['<{ganalytics}prestashop>ganalytics_a3e7f361e6fc12caf872119338642143'] = 'Aggiorna ID';
 $_MODULE['<{ganalytics}prestashop>ganalytics_6a26f548831e6a8c26bfbbd9f6ec61e0'] = 'Aiuto';
-$_MODULE['<{ganalytics}prestashop>ganalytics_d78b0fcff6b55bafe615f3fc1572c282'] = 'La prima fase del monitoraggio delle transazioni e-commerce è quello di attivare i rapporti e-commerce per il profilo del tuo sito web.';
+$_MODULE['<{ganalytics}prestashop>ganalytics_38e12e36822cc0988bcac38733f5cae8'] = 'La prima fase del monitoraggio delle transazioni e-commerce è quello di attivare i rapporti e-commerce per il profilo del tuo sito web.';
 $_MODULE['<{ganalytics}prestashop>ganalytics_d02388589ecfd3b58e0a90e42127ca61'] = 'Per attivare il rapporto dell\'e-commerce, segui queste fasi:';
 $_MODULE['<{ganalytics}prestashop>ganalytics_11f4b4ba23dc72ee5e86ff5a90bdde60'] = 'Accedi al tuo account';
 $_MODULE['<{ganalytics}prestashop>ganalytics_b452493b16ead8b4b25ab3fb7174b8f5'] = 'Clicca su Modifica accanto al profilo che desideri attivare';
