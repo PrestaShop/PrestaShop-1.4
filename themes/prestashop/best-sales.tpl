@@ -34,5 +34,5 @@
 	{include file="$tpl_dir./product-list.tpl" products=$products}
 	{include file="$tpl_dir./pagination.tpl"}
 {else}
-	<p class="warning">{l s='No top sellers.'}</p>
+	<p class="warning">{l s='No top sellers for the moment.'}</p>
 {/if}

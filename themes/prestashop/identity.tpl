@@ -123,7 +123,7 @@
 		</fieldset>
 	</form>
 	<p id="security_informations">
-		{l s='[Insert customer data privacy clause or law here, if applicable]'}
+		{l s='[Insert customer data privacy clause here, if applicable]'}
 	</p>
 {/if}
 

@@ -100,11 +100,11 @@ combinationImages[0] = new Array();
 {/if}
 
 // Translations
-var doesntExist = '{l s='The product does not exist in this model. Please choose another.' js=1}';
+var doesntExist = '{l s='The product does not exist in this model. Please choose another one' js=1}';
 var doesntExistNoMore = '{l s='This product is no longer in stock' js=1}';
 var doesntExistNoMoreBut = '{l s='with those attributes but is available with others' js=1}';
 var uploading_in_progress = '{l s='Uploading in progress, please wait...' js=1}';
-var fieldRequired = '{l s='Please fill in all required fields, then save the customization.' js=1}';
+var fieldRequired = '{l s='Please fill in all required fields, then save your customization.' js=1}';
 
 {if isset($groups)}
 	// Combinations
@@ -181,7 +181,7 @@ var fieldRequired = '{l s='Please fill in all required fields, then save the cus
 			{if $HOOK_EXTRA_LEFT}{$HOOK_EXTRA_LEFT}{/if}
 			<li><a href="javascript:print();">{l s='Print'}</a><br class="clear" /></li>
 			{if $have_image && !$jqZoomEnabled}
-			<li><span id="view_full_size" class="span_link">{l s='View full size'}</span></li>
+			<li><span id="view_full_size" class="span_link">{l s='Maximize'}</span></li>
 			{/if}
 		</ul>
 	</div>
@@ -376,7 +376,7 @@ var fieldRequired = '{l s='Please fill in all required fields, then save the cus
 {if $quantity_discounts}
 <!-- quantity discount -->
 <ul class="idTabs">
-	<li><a style="cursor: pointer" class="selected">{l s='Quantity discount'}</a></li>
+	<li><a style="cursor: pointer" class="selected">{l s='Sliding scale pricing'}</a></li>
 </ul>
 <div id="quantityDiscount">
 	<table class="std">
@@ -501,7 +501,7 @@ var fieldRequired = '{l s='Please fill in all required fields, then save the cus
 									</a>
 								</div>{/if}
 							<div class="customizationUploadBrowse"><input type="file" name="file{$field.id_customization_field}" id="img{$customizationField}" class="customization_block_input {if isset($pictures.$key)}filled{/if}" />{if $field.required}<sup>*</sup>{/if}
-							<div class="customizationUploadBrowseDescription">{if !empty($field.name)}{$field.name}{else}{l s='Please select an image file from your hard drive'}{/if}</div></div>
+							<div class="customizationUploadBrowseDescription">{if !empty($field.name)}{$field.name}{else}{l s='Please select an image file from your computer'}{/if}</div></div>
 						</li>
 						{counter}
 					{/if}

@@ -355,7 +355,7 @@
 		</p>
 	</form>
 {else}
-<p><img src="{$img_dir}icon/infos.gif" alt="" class="icon" />&nbsp;{l s='You cannot make a merchandise return with a guest account'}</p>
+<p><img src="{$img_dir}icon/infos.gif" alt="" class="icon" />&nbsp;{l s='You cannot return merchandise with a guest account'}</p>
 {/if}
 {if !isset($smarty.get.ajax)}
 	</div>

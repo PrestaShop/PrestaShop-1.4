@@ -204,7 +204,7 @@
 			</tr>
 			{/if}
 			<tr class="cart_free_shipping" {if $free_ship <= 0 || $isVirtualCart} style="display: none;" {/if}>
-					<td colspan="6" style="white-space: normal;">{l s='Remaining amount to be added to your cart in order to obtain free shipping:'}</td>
+					<td colspan="6" style="white-space: normal;">{l s='In order to obtain free shipping you must first place an order'}</td>
 					<td id="free_shipping" class="price">{displayPrice price=$free_ship}</td>
 				</tr>
 		</tfoot>

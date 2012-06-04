@@ -51,7 +51,7 @@
 				<div class="opc_float">
 					<h4>{l s='Instant Checkout'}</h4>
 					<p>
-						<input type="button" class="exclusive_large" id="opc_guestCheckout" value="{l s='Checkout as guest'}" />
+						<input type="button" class="exclusive_large" id="opc_guestCheckout" value="{l s='Guest checkout'}" />
 					</p>
 				</div>
 

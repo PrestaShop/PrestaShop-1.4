@@ -31,10 +31,10 @@
 {if isset($errorQuantity) && $errorQuantity}<p class="error">{l s='You do not have enough products to request another merchandise return.'}</p>{/if}
 {if isset($errorMsg) && $errorMsg}<p class="error">{l s='Please provide an explanation for your RMA.'}</p>{/if}
 {if isset($errorDetail1) && $errorDetail1}<p class="error">{l s='Please check at least one product you would like to return.'}</p>{/if}
-{if isset($errorDetail2) && $errorDetail2}<p class="error">{l s='Please provide a quantity for the product you checked.'}</p>{/if}
+{if isset($errorDetail2) && $errorDetail2}<p class="error">{l s='For each product you wish to add please specify desired quantity.'}</p>{/if}
 {if isset($errorNotReturnable) && $errorNotReturnable}<p class="error">{l s='This order cannot be returned.'}</p>{/if}
 
-<p>{l s='Here are the merchandise returns you have made'}.</p>
+<p>{l s='Here is a list of pending merchandise returns'}.</p>
 <div class="block-center" id="block-history">
 	{if $ordersReturn && count($ordersReturn)}
 	<table id="order-list" class="std">
