@@ -86,7 +86,7 @@ class AdminGroups extends AdminTab
 				<label>'.$this->l('Discount:').' </label>
 				<div class="margin-form">
 					<input type="text" size="5" name="reduction" value="'.($reduction ? $reduction : '0').'" /> '.$this->l('%').'
-					<p>'.$this->l('Will automatically apply this value as a discount on ALL shop\'s products for this group\'s members.').'</p>
+					<p>'.$this->l('Will automatically apply this discount on ALL shop\'s products for this group\'s members.').'</p>
 				</div>';
 		if ($obj->id)
 		{
@@ -121,7 +121,7 @@ class AdminGroups extends AdminTab
 						<option value="'.PS_TAX_EXC.'"'.((int)($this->getFieldValue($obj, 'price_display_method')) == PS_TAX_EXC ? ' selected="selected"' : '').'>'.$this->l('Tax excluded').'</option>
 						<option value="'.PS_TAX_INC.'"'.((int)($this->getFieldValue($obj, 'price_display_method')) == PS_TAX_INC ? ' selected="selected"' : '').'>'.$this->l('Tax included').'</option>
 					</select>
-					<p>'.$this->l('How the prices are displayed on order summary for this customer group (tax included or excluded).').'</p>
+					<p>'.$this->l('How to display prices on order summary for this customer group (tax included or excluded).').'</p>
 				</div>
 				<div class="clear">&nbsp;</div>
 				<div class="margin-form">

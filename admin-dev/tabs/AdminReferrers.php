@@ -172,19 +172,19 @@ class AdminReferrers extends AdminTab
 								<label class="t" for="tracking_dt_off"> '.$this->l('No').'</label>
 							</div>
 							<br class="clear" />
-							<p>'.$this->l('Direct traffic can be quite consuming. You should consider enabling it only if you have a strong database server and a strong need for it.').'</p>
+							<p>'.$this->l('Direct traffic can consume a lot of space and performance. You should consider enabling it only if you have a strong database server and a strong need for it.').'</p>
 							<input type="submit" class="button" value="'.$this->l('   Save   ').'" name="submitSettings" />
 						</form>
 						<hr />
 						<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post">
 						<p class="bold">'.$this->l('Indexation').'</p>
-						<p>'.$this->l('There is a huge quantity of data, so each connection corresponding to a referrer is indexed. You can refresh this index by clicking on the button below. Be aware that it may take a long time and it is only needed if you modified or added a referrer and if you want your changes to be retroactive.').'</p>
+						<p>'.$this->l('There is a huge quantity of data, so each connection corresponding to a referrer is indexed. You can refresh this index by clicking on the button below. Be aware that it may take several minutes and it is needed ONLY if you have modified or added a referrer and if you want your changes to be retroactive.').'</p>
 						<input type="submit" class="button" value="'.$this->l('Refresh index').'" name="submitRefreshIndex" />
 						</form>
 						<hr />
 						<form action="'.$currentIndex.'&token='.Tools::getValue('token').'" method="post">
 						<p class="bold">'.$this->l('Cache').'</p>
-						<p>'.$this->l('For you to sort and filter your data, it is cached. You can refresh the cache by clicking on the button below.').'</p>
+						<p>'.$this->l('In order to sort and filter your data, it is cached. You can refresh the cache by clicking on the button below.').'</p>
 						<input type="submit" class="button" value="'.$this->l('Refresh cache').'" name="submitRefreshCache" />
 						</form>
 					</fieldset>
@@ -281,7 +281,7 @@ class AdminReferrers extends AdminTab
 						'.$this->l('The field `request_uri` is the URL from which the customers come to your website.').'<br />
 						'.$this->l('For example, if the visitor accesses a product page, the URL will be').' "'.$uri.'music-ipods/1-ipod-nano.html".<br />
 						'.$this->l('This is interesting because you can add some tags or tokens in the links pointing to your website. For example, you can post a link').' "'.$uri.'index.php?prestashop" '.$this->l('in the forum and get statistics by entering "%prestashop" in the field `request_uri`. You will get all the visitors coming from the forum.').'
-						'.$this->l('This method is more reliable than the `http_referer` one, but there is a danger: if a search engine read a page with your link, then it will be displayed in its results and you will have not only the forum visitors, but also the ones from the search engine.').'
+						'.$this->l('This method is more reliable than the `http_referer`, but there is one disadvantage: if a search engine references a page with your link, then it will be displayed in the search results and you will not only have visitors from the forum visitors, but also those from the search engine.').'
 					</li>
 					<br />
 					<li>
@@ -293,7 +293,7 @@ class AdminReferrers extends AdminTab
 					</li>
 					<br />
 					<li>
-						'.$this->l('When using the simple mode, you can use some generic characters which can replace any characters:').'
+						'.$this->l('When using the simple mode, you can use some generic characters which can replace other characters:').'
 						<ul>
 							<li>'.$this->l('"_" will replace one character. If you want to use the real "_", you should type').' "\\\\_".</li>
 							<li>'.$this->l('"%" will replace any number of characters. If you want to use the real "%", you should type').' "\\\\%".</li>

@@ -47,7 +47,7 @@ class AdminLanguages extends AdminTab
 		'date_format_full' => array('title' => $this->l('Date format (full)')),
 		'active' => array('title' => $this->l('Enabled'), 'align' => 'center', 'active' => 'status', 'type' => 'bool'));
 	
-		$this->optionTitle = $this->l('Languages options');
+		$this->optionTitle = $this->l('Language options');
 		$this->_fieldsOptions = array(
 		'PS_LANG_DEFAULT' => array('title' => $this->l('Default language:'), 'desc' => $this->l('The default language used in shop'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'id_lang', 'list' => Language::getlanguages(false)),
 		);
@@ -380,7 +380,7 @@ class AdminLanguages extends AdminTab
 					<label class="t" for="is_rtl_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Yes').'" /></label>
 					<input type="radio" name="is_rtl" id="active_off" value="0" '.((!$this->getFieldValue($obj, 'is_rtl')) ? 'checked="checked" ' : '').'/>
 					<label class="t" for="is_rtl_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('No').'" /></label>
-					<p>'.$this->l('To active if this language is a right to left language').' '.$this->l('(Experimental: your theme must be compliant with RTL language)').'</p>
+					<p>'.$this->l('Activation necessary if this language is from right to left').' '.$this->l('(Experimental: your theme must be compliant with RTL language)').'</p>
 				</div>
 				<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">
@@ -388,7 +388,7 @@ class AdminLanguages extends AdminTab
 					<label class="t" for="active_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
 					<input type="radio" name="active" id="active_off" value="0" '.((!$this->getFieldValue($obj, 'active') AND $obj->id) ? 'checked="checked" ' : '').'/>
 					<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
-					<p>'.$this->l('Allow or disallow this language to be selected by the customer').'</p>
+					<p>'.$this->l('Activate this language').'</p>
 				</div>
 				<p id="resultCheckLangPack"><img src="'._PS_IMG_.'admin/ajax-loader.gif" alt="" /> '.$this->l('Check if a language pack is available for this ISO code...').'</p>
 				<div class="margin-form">
@@ -403,7 +403,7 @@ class AdminLanguages extends AdminTab
 			echo '
 			<br /><br />
 			<fieldset style="width:572px;"><legend><img src="../img/admin/warning.gif" />'.$this->l('Warning').'</legend>
-					<p>'.$this->l('This language is NOT complete and cannot be used in the Front or Back Office because some files are missing.').'</p>
+					<p>'.$this->l('This language pack is NOT complete and cannot be used in the Front or Back Office because some files are missing.').'</p>
 					<br />
 					<label>'.$this->l('Translations files:').' </label>
 					<div class="margin-form" style="margin-top:4px;">';

@@ -59,7 +59,7 @@ class AdminDiscounts extends AdminTab
 		'date_to' => array('title' => $this->l('To'), 'width' => 60, 'type' => 'date', 'align' => 'right'),
 		'active' => array('title' => $this->l('Status'), 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false));
 	
-		$this->optionTitle = $this->l('Discounts options');
+		$this->optionTitle = $this->l('Discount options');
 		$this->_fieldsOptions = array(
 		'PS_VOUCHERS' => array('title' => $this->l('Enable vouchers:'), 'desc' => $this->l('Allow the use of vouchers in shop'), 'cast' => 'intval', 'type' => 'bool'),
 		);
@@ -253,11 +253,11 @@ class AdminDiscounts extends AdminTab
 						<p class="clear">'.$this->l('Either the monetary amount or the %, depending on Type selected above').'</p>
 					</div>
 				<div id="behavior_not_exhausted" style="display:none;">
-					<label>'.$this->l('Behavior not exhausted:').'</label>
+					<label>'.$this->l('Behavior:').'</label>
 					<div class="margin-form">
 						<select name="behavior_not_exhausted">
-							<option value="1" '.($obj->behavior_not_exhausted === 1 ? 'selected="selected"' : '').'>'.$this->l('Reduce the voucher to the total order amount').'</option>
-							<option value="2" '.($obj->behavior_not_exhausted == 2 ? 'selected="selected"' : '').'>'.$this->l('Create a new voucher with remaining amount').'</option>
+							<option value="1" '.($obj->behavior_not_exhausted === 1 ? 'selected="selected"' : '').'>'.$this->l('Reduces the voucher value to correspond to the order amount').'</option>
+							<option value="2" '.($obj->behavior_not_exhausted == 2 ? 'selected="selected"' : '').'>'.$this->l('Create a new voucher with the remaining amount').'</option>
 							<option value="3" '.($obj->behavior_not_exhausted == 3 ? 'selected="selected"' : '').'>'.$this->l('Create negative invoice').'</option>
 						</select>
 					</div>
@@ -291,7 +291,7 @@ class AdminDiscounts extends AdminTab
 		$this->recurseCategoryForInclude((int)(Tools::getValue($this->identifier)), $index, $categories, $categories[0][1], 1, $obj->id);
 		echo '
 							</table>
-							<p style="padding:0px; margin:0px 0px 10px 0px;">'.$this->l('Mark all checkbox(es) of categories to which the discount is to be applied').'<sup> *</sup></p>
+							<p style="padding:0px; margin:0px 0px 10px 0px;">'.$this->l('Check all box(es) of categories to which the discount is to be applied').'<sup> *</sup></p>
 						</div>
 				<div class="clear" / >
 				<label>'.$this->l('Total quantity:').' </label>
@@ -304,7 +304,7 @@ class AdminDiscounts extends AdminTab
 					<input type="text" size="15" name="quantity_per_user" value="'.(int)($this->getFieldValue($obj, 'quantity_per_user')).'" /> <sup>*</sup>
 					<p class="clear">'.$this->l('Number of times a single customer can use this voucher').'</p>
 				</div>
-				<label>'.$this->l('Minimum amount').'</label>
+				<label>'.$this->l('Minimum purchase').'</label>
 				<div class="margin-form">
 					<input type="text" size="15" name="minimal" value="'.($this->getFieldValue($obj, 'minimal') ? (float)($this->getFieldValue($obj, 'minimal')) : '0').'" onkeyup="javascript:this.value = this.value.replace(/,/g, \'.\'); " /> <sup>*</sup>&nbsp;
 					<select name="include_tax" id="include_tax" style="vertical-align: middle;">
@@ -421,7 +421,7 @@ class AdminDiscounts extends AdminTab
 				<label>'.$this->l('From:').' </label>
 				<div class="margin-form">
 					<input type="text" size="20" id="date_from" name="date_from" value="'.($this->getFieldValue($obj, 'date_from') ? htmlentities($this->getFieldValue($obj, 'date_from'), ENT_COMPAT, 'UTF-8') : date('Y-m-d H:i:s')).'" /> <sup>*</sup>
-					<p class="clear">'.$this->l('Start date/time from which voucher can be used').'<br />'.$this->l('Format: YYYY-MM-DD HH:MM:SS').'</p>
+					<p class="clear">'.$this->l('Date /time from which voucher is valid').'<br />'.$this->l('Format: YYYY-MM-DD HH:MM:SS').'</p>
 				</div>
 				<label>'.$this->l('To:').' </label>
 				<div class="margin-form">

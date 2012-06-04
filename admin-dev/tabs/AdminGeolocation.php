@@ -32,7 +32,7 @@ class AdminGeolocation extends AdminTab
 		global $currentIndex, $cookie;
 		
 		echo '
-		<h2>'.$this->l('Geolocation').'</h2>
+		<h2>'.$this->l('Geolocation preferences').'</h2>
 		';
 		
 		if (!$this->_isGeoLiteCityAvailable())
@@ -122,7 +122,7 @@ class AdminGeolocation extends AdminTab
 				<legend><img src="../img/admin/world.gif" alt="" />'.$this->l('Whitelist of IP addresses').'</legend>
 				
 				<div class="hint" style="display:block;margin-bottom:20px;">
-					'.$this->l('You can add many IP addresses, these addresses will always be allowed to access your shop (e.g. Google bots IP).').'
+					'.$this->l('You can add many IP addresses; these addresses will always be able to access your shop (e.g. Google bots IP).').'
 				</div>
 				
 				<label for="PS_GEOLOCATION_WHITELIST">'.$this->l('Allowed IP addresses:').'</label>

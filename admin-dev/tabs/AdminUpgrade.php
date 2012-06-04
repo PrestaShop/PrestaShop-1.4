@@ -113,7 +113,7 @@ class AdminUpgrade extends AdminPreferences
 
 		$this->_fieldsAutoUpgrade['PS_AUTOUP_KEEP_TRAD'] = array(
 			'title' => $this->l('Keep translations'), 'cast' => 'intval', 'validation' => 'isBool',
-			'type' => 'bool', 'desc'=>$this->l('If set too yes, you will keep all your translations'),
+			'type' => 'bool', 'desc'=>$this->l('If set to "yes", you will keep all your translations'),
 		);
 		// allow manual mode only for dev
 		if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_)
@@ -271,7 +271,7 @@ class AdminUpgrade extends AdminPreferences
 
 	public function ajaxProcessUpgradeComplete()
 	{
-		$this->nextDesc = $this->l('Upgrade process done. Congratulations ! You can now reactive your shop.');
+		$this->nextDesc = $this->l('Upgrade process complete. Congratulations! You can now reactivate your shop.');
 		$this->next = '';
 	}
 
@@ -433,7 +433,7 @@ class AdminUpgrade extends AdminPreferences
 		else
 		{
 			$this->next = 'download';
-			$this->nextDesc = $this->l('Shop deactivated. Now downloading (this can takes some times )...');
+			$this->nextDesc = $this->l('Shop deactivated. Downloading in progress (this may take a while)...');
 		}
 	}
 
@@ -676,7 +676,7 @@ class AdminUpgrade extends AdminPreferences
 				// all theses cases are handled by the method ajaxRequestRollback()
 				$this->next = ''; // next is empty : nothing next :)
 				$this->status = 'ok';
-				$this->nextDesc = $this->l('All your site is restored... ');
+				$this->nextDesc = $this->l('Your site is now restored... ');
 			}
 		}
 	}
@@ -708,7 +708,7 @@ class AdminUpgrade extends AdminPreferences
 					Configuration::updateValue('UPGRADER_BACKUPFILES_FILENAME', '');
 					if (!empty($this->backupDbFilename))
 					{
-						$this->nextDesc = $this->l('Files restored. No database backup found. Restoration done.');
+						$this->nextDesc = $this->l('Files restored. No database backup found. Restoration complete.');
 						$this->next = '';
 					}
 					else
@@ -816,7 +816,7 @@ class AdminUpgrade extends AdminPreferences
 			Configuration::updateValue('UPGRADER_BACKUPDB_FILENAME', $backup->id);
 
 			$this->next = 'upgradeFiles';
-			$this->nextDesc = sprintf($this->l('Database backup done in %s. Now updating files'),$backup->id);
+			$this->nextDesc = sprintf($this->l('Database backup saved in %s. Now updating files'), $backup->id);
 		}
 		// if an error occur, we assume the file is not saved
 	}
@@ -1057,7 +1057,10 @@ class AdminUpgrade extends AdminPreferences
 		{
 			// @TODO : ftp mode
 			$this->next = 'error';
-			$this->nextDesc = sprintf($this->l('you need allow_url_fopen for automatic download. You can also manually upload it in %s'),$this->autoupgradePath.$this->destDownloadFilename);
+			$this->nextDesc = sprintf(
+				$this->l('you need to allow_url_fopen for automatic download. You can also manually upload it in %s'),
+				$this->autoupgradePath.$this->destDownloadFilename
+			);
 		}
 	}
 
@@ -1152,17 +1155,17 @@ txtError[4] = "'.$this->l('Impossible to send the email!').'";
 txtError[5] = "'.$this->l('Can\'t create settings file, if /config/settings.inc.php exists, please give the public write permissions to this file, else please create a file named settings.inc.php in config directory.').'";
 txtError[6] = "'.$this->l('Can\'t write settings file, please create a file named settings.inc.php in config directory.').'";
 txtError[7] = "'.$this->l('Impossible to upload the file!').'";
-txtError[8] = "'.$this->l('Data integrity is not valided. Hack attempt?').'";
-txtError[9] = "'.$this->l('Impossible to read the content of a MySQL content file.').'";
-txtError[10] = "'.$this->l('Impossible the access the a MySQL content file.').'";
+txtError[8] = "'.$this->l('Integrity of data is not validated').'";
+txtError[9] = "'.$this->l('Impossible to read the content of one of the MySQL content files.').'";
+txtError[10] = "'.$this->l('Impossible to access one of the MySQL content files.').'";
 txtError[11] = "'.$this->l('Error while inserting data in the database:').'";
-txtError[12] = "'.$this->l('The password is incorrect (alphanumeric string at least 8 characters).').'";
-txtError[14] = "'.$this->l('A Prestashop database already exists, please drop it or change the prefix.').'";
+txtError[12] = "'.$this->l('The password is incorrect (alphanumeric string of at least 8 characters).').'";
+txtError[14] = "'.$this->l('A PrestaShop database with this prefix already exists, please delete it manually or change the prefix.').'";
 txtError[15] = "'.$this->l('This is not a valid file name.').'";
 txtError[16] = "'.$this->l('This is not a valid image file.').'";
 txtError[17] = "'.$this->l('Error while creating the /config/settings.inc.php file.').'";
 txtError[18] = "'.$this->l('Error:').'";
-txtError[19] = "'.$this->l('This PrestaShop database already exists. Please revalidate your authentication informations to the database.').'";
+txtError[19] = "'.$this->l('This PrestaShop database already exists. Please revalidate your authentication information in the database.').'";
 txtError[22] = "'.$this->l('An error occurred while resizing the picture.').'";
 txtError[23] = "'.$this->l('Database connection is available!').'";
 txtError[24] = "'.$this->l('Database Server is available but database is not found').'";
@@ -1175,7 +1178,7 @@ txtError[40] = "'.$this->l('The uploaded file was only partially uploaded').'";
 txtError[41] = "'.$this->l('No file was uploaded.').'";
 txtError[42] = "'.$this->l('Missing a temporary folder').'";
 txtError[43] = "'.$this->l('Failed to write file to disk').'";
-txtError[44] = "'.$this->l('File upload stopped by extension').'";
+txtError[44] = "'.$this->l('File upload interrupted due to incorrect extension').'";
 txtError[45] = "'.$this->l('Cannot convert your database\'s data to utf-8.').'";
 txtError[46] = "'.$this->l('Invalid shop name').'";
 txtError[47] = "'.$this->l('Your firstname contains some invalid characters').'";
@@ -1369,7 +1372,7 @@ echo '</script>';
 		// update['num'] = only the version
 		// update['link'] = download link
 		echo '<fieldset class="error"><legend><img src="'.__PS_BASE_URI__.'modules/autoupgrade/logo.gif" />'.$this->l('New upgrade module').'</legend>';
-		echo '<p>'.$this->l('The tab AdminUpgrade present in 1.4.4.0 and 1.4.4.1 version has been removed and that functions is now available as module.').'</p>';
+		echo '<p>'.$this->l('The AdminUpgrade tab present in the 1.4.4.0 and 1.4.4.1 versions has been removed. It is now available as a module.').'</p>';
 		$tokenModule = Tools::getAdminToken('AdminModules'.(int)(Tab::getIdFromClassName('AdminModules')).(int)$cookie->id_employee);
 		$tokenAdminTabs =  Tools::getAdminToken('AdminTabs'.(int)(Tab::getIdFromClassName('AdminTabs')).(int)$cookie->id_employee);
 		$tokenAdminTools =  Tools::getAdminToken('AdminTools'.(int)(Tab::getIdFromClassName('AdminTools')).(int)$cookie->id_employee);
@@ -1411,14 +1414,14 @@ echo '</script>';
 				
 		</script>
 	</fieldset>';
-		$this->displayWarning($this->l('This function is experimental. It\'s highly recommended to make a backup of your files and database before starting the upgrade process.'));
+		$this->displayWarning($this->l('This function is experimental. It\'s highly recommended to backup your files and database before starting the upgrade process.'));
 		echo '</fieldset>';
 
 		if ($this->isUpgradeAllowed())
 		{
 			if ($this->useSvn)
 				echo '<div class="error"><h1>'.$this->l('Unstable upgrade').'</h1>
-				<p class="warning">'.$this->l('Your current configuration indicate you want to upgrade your system from the unstable development branch, with no version number. If you upgrade, you will not be able to follow the official release process anymore').'.</p>
+				<p class="warning">'.$this->l('Your current configuration indicates you want to upgrade your system from the unstable development branch, with no version number. If you upgrade, you will not be able to follow the official release process anymore').'.</p>
 				</div>';
 			$this->_displayUpgraderForm();
 		

@@ -89,20 +89,28 @@ class AdminPreferences extends AdminTab
 			'PS_ORDER_PROCESS_TYPE' => array('title' => $this->l('Order process type'), 'desc' => $this->l('You can choose the order process type as either standard (5 steps) or One Page Checkout'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'select', 'list' => $order_process_type, 'identifier' => 'value'),
 			'PS_GUEST_CHECKOUT_ENABLED' => array('title' => $this->l('Enable guest checkout'), 'desc' => $this->l('Your guest can make an order without registering'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_CONDITIONS' => array('title' => $this->l('Terms of service'), 'desc' => $this->l('Require customers to accept or decline terms of service before processing the order'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool', 'js' => array('on' => 'onchange="changeCMSActivationAuthorization()"', 'off' => 'onchange="changeCMSActivationAuthorization()"')),
-			'PS_CONDITIONS_CMS_ID' => array('title' => $this->l('Conditions of use CMS page'), 'desc' => $this->l('Choose the Conditions of use CMS page'), 'validation' => 'isInt', 'type' => 'select', 'list' => $cms_tab, 'identifier' => 'id', 'cast' => 'intval'),
+			'PS_CONDITIONS_CMS_ID' => array('title' => $this->l('Conditions of use of CMS page'), 'desc' => $this->l('Choose the Conditions of use of CMS page'), 'validation' => 'isInt', 'type' => 'select', 'list' => $cms_tab, 'identifier' => 'id', 'cast' => 'intval'),
 			'PS_GIFT_WRAPPING' => array('title' => $this->l('Offer gift-wrapping'), 'desc' => $this->l('Suggest gift-wrapping to customer and possibility of leaving a message'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
-			'PS_GIFT_WRAPPING_PRICE' => array('title' => $this->l('Gift-wrapping price'), 'desc' => $this->l('Set a price for gift-wrapping'), 'validation' => 'isPrice', 'cast' => 'floatval', 'type' => 'price'),
+			'PS_GIFT_WRAPPING_PRICE' => array('title' => $this->l('Gift-wrap pricing'), 'desc' => $this->l('Set a price for gift-wrapping'), 'validation' => 'isPrice', 'cast' => 'floatval', 'type' => 'price'),
 			'PS_GIFT_WRAPPING_TAX' => array('title' => $this->l('Gift-wrapping tax'), 'desc' => $this->l('Set a tax for gift-wrapping'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'select', 'list' => $taxes, 'identifier' => 'id'),
-			'PS_ATTACHMENT_MAXIMUM_SIZE' => array('title' => $this->l('Attachment maximum size'), 'desc' => $this->l('Set the maximum size of attachment files (in MegaBytes).').' '.$this->l('Maximum:').' '.((int)str_replace('M', '', ini_get('post_max_size')) > (int)str_replace('M', '', ini_get('upload_max_filesize')) ? ini_get('upload_max_filesize') : ini_get('post_max_size')), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'text', 'default' => '2'),
+			'PS_ATTACHMENT_MAXIMUM_SIZE' => array('title' => $this->l('Maximum attachment size'), 'desc' => $this->l('Set the maximum size of attached files (in Megabytes ).').' '.$this->l('Maximum:').' '.((int)str_replace('M', '', ini_get('post_max_size')) > (int)str_replace('M', '', ini_get('upload_max_filesize')) ? ini_get('upload_max_filesize') : ini_get('post_max_size')), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'text', 'default' => '2'),
 			'PS_RECYCLABLE_PACK' => array('title' => $this->l('Offer recycled packaging'), 'desc' => $this->l('Suggest recycled packaging to customer'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
-			'PS_CART_FOLLOWING' => array('title' => $this->l('Cart re-display at login'), 'desc' => $this->l('After customer logs in, recall and display contents of his/her last shopping cart'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
+			'PS_CART_FOLLOWING' => array('title' => $this->l('Cart re-display following login'), 'desc' => $this->l('Recall and display contents of shopping cart following customer login'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_PRICE_ROUND_MODE' => array('title' => $this->l('Round mode'), 'desc' => $this->l('You can choose how to round prices: always round superior; always round inferior, or classic rounding'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'select', 'list' => $round_mode, 'identifier' => 'value'),
 			'PRESTASTORE_LIVE' => array('title' => $this->l('Automatically check for module updates'), 'desc' => $this->l('New modules and updates are displayed on the modules page'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_HIDE_OPTIMIZATION_TIPS' => array('title' => $this->l('Hide optimization tips'), 'desc' => $this->l('Hide optimization tips on the back office homepage'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_DISPLAY_SUPPLIERS' => array('title' => $this->l('Display suppliers and manufacturers'), 'desc' => $this->l('Display manufacturers and suppliers list even if corresponding blocks are disabled'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 			'PS_FORCE_SMARTY_2' => array('title' => $this->l('Use Smarty 2 instead of 3'), 'desc' => $this->l('Enable if your theme is incompatible with Smarty 3 (you should update your theme, since Smarty 2 will be unsupported from PrestaShop v1.5)'), 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
-			'PS_LIMIT_UPLOAD_FILE_VALUE' => array('title' => $this->l('Limit upload file value'), 'desc' => $this->l('Define the limit upload for a downloadable product, this value have to be inferior or equal to your server\'s maximum upload file ').sprintf('(%s MB).',$upload_mb), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'limit', 'default' => '1'),
-			'PS_LIMIT_UPLOAD_IMAGE_VALUE' => array('title' => $this->l('Limit upload image value'), 'desc' => $this->l('Define the limit upload for an image, this value have to be inferior or equal to your server\'s maximum upload file ').sprintf('(%s MB).',$upload_mb), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'limit', 'default' => '1'),
+			'PS_LIMIT_UPLOAD_FILE_VALUE' => array(
+				'title' => $this->l('Limit upload file value'),
+				'desc' => $this->l('Define the limit upload for a downloadable product, this value has to be inferior or equal to your server\'s maximum upload file ').sprintf('(%s MB).', $upload_mb),
+				'validation' => 'isInt', 'cast' => 'intval', 'type' => 'limit', 'default' => '1'
+			),
+			'PS_LIMIT_UPLOAD_IMAGE_VALUE' => array(
+				'title' => $this->l('Limit upload image value'),
+				'desc' => $this->l('Define the limit upload for an image, this value has to be inferior or equal to your server\'s maximum upload file ').sprintf('(%s MB).', $upload_mb),
+				'validation' => 'isInt', 'cast' => 'intval', 'type' => 'limit', 'default' => '1'
+			),
 		);
 			if (function_exists('date_default_timezone_set'))
 				$this->_fieldsGeneral['PS_TIMEZONE'] = array('title' => $this->l('Time Zone:'), 'validation' => 'isAnything', 'type' => 'select', 'list' => $timezones, 'identifier' => 'name');
@@ -143,7 +151,7 @@ class AdminPreferences extends AdminTab
 
 			if (Tools::getValue('PS_LIMIT_UPLOAD_FILE_VALUE') > $maxSize or Tools::getValue('PS_LIMIT_UPLOAD_IMAGE_VALUE') > $maxSize)
 			{
-				$this->_errors[] = Tools::displayError($this->l('The limit choosen is superior to the server\'s maximum upload file You need to improve the limit of your server.'));
+				$this->_errors[] = Tools::displayError($this->l('The chosen limit is superior to the server\'s maximum upload capacity. You need to increase your server limit.'));
 				return;
 			}
 			else if (!Tools::getValue('PS_LIMIT_UPLOAD_FILE_VALUE'))
@@ -463,7 +471,7 @@ class AdminPreferences extends AdminTab
 							<b>'.$this->l('In order to use a new theme, please follow these steps:', get_class()).'</b>
 							<ul>
 								<li>'.$this->l('Import your theme using this module:', get_class()).' <a href="index.php?tab=AdminModules&token='.Tools::getAdminTokenLite('AdminModules').'&filtername=themeinstallator" style="text-decoration: underline;">'.$this->l('Theme installer', get_class()).'</a></li>
-								<li>'.$this->l('When your theme is imported, please select the theme in this page', get_class()).'</li>
+								<li>'.$this->l('When your theme is imported, please select the theme on this page', get_class()).'</li>
 							</ul>
 						</td>
 						</tr>

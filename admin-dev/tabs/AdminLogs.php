@@ -52,7 +52,7 @@ class AdminLogs extends AdminTab
 		$this->_fieldsOptions = array(
 			'PS_LOGS_BY_EMAIL' => array(
 				'title' => $this->l('Minimum severity level:'), 
-				'desc' => $this->l('Put "5" if you don\'t want to receive any emails.').'<br />'.$this->l('Emails will be sent to the shop owner.'), 
+				'desc' => $this->l('Choose "5" if you don\'t want to receive any emails.').'<br />'.$this->l('Emails will be sent to the shop owner.'), 
 				'cast' => 'intval', 
 				'type' => 'text', 
 				'size' => 5

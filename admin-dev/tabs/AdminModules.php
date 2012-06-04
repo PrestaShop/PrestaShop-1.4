@@ -57,7 +57,7 @@ class AdminModules extends AdminTab
 		$this->listTabModules['content_management'] = $this->l('Content Management');
 		$this->listTabModules['export'] = $this->l('Export');
 		$this->listTabModules['front_office_features'] = $this->l('Front Office Features');
-		$this->listTabModules['i18n_localization'] = $this->l('I18n & Localization');
+		$this->listTabModules['i18n_localization'] = $this->l('International & Localization');
 		$this->listTabModules['merchandizing'] = $this->l('Merchandizing');
 		$this->listTabModules['migration_tools'] = $this->l('Migration Tools');
 		$this->listTabModules['mobile'] = $this->l('Mobile');
@@ -646,7 +646,7 @@ class AdminModules extends AdminTab
 		<div id="module_install" style="width:900px; '.((Tools::isSubmit('submitDownload') OR Tools::isSubmit('submitDownload2')) ? '' : 'display: none;').'">
 			<fieldset>
 				<legend><img src="../img/admin/add.gif" alt="'.$this->l('Add a new module').'" class="middle" /> '.$this->l('Add a new module').'</legend>
-				<p>'.$this->l('The module must be either a zip file or a tarball.').'</p>
+				<p>'.$this->l('The module must either be a zip file or a tarball.').'</p>
 				<hr />
 				<div style="float:right;margin-right:50px;border-left:solid 1px #DFD5C3">
 					<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
@@ -717,10 +717,10 @@ class AdminModules extends AdminTab
 						<select name="module_type">
 							<option value="allModules" '.($showTypeModules == 'allModules' ? 'selected="selected"' : '').'>'.$this->l('All Modules').'</option>
 							<option value="nativeModules" '.($showTypeModules == 'nativeModules' ? 'selected="selected"' : '').'>'.$this->l('Native Modules').'</option>
-							<option value="partnerModules" '.($showTypeModules == 'partnerModules' ? 'selected="selected"' : '').'>'.$this->l('Partners Modules').'</option>'
+							<option value="partnerModules" '.($showTypeModules == 'partnerModules' ? 'selected="selected"' : '').'>'.$this->l('Partner Modules').'</option>'
 .$this->_buildModuleAuthorsOptGroup($modulesAuthors, 'authorModules')
 .'
-							<option value="otherModules" '.($showTypeModules == 'otherModules' ? 'selected="selected"' : '').'>'.$this->l('Others Modules').'</option>
+							<option value="otherModules" '.($showTypeModules == 'otherModules' ? 'selected="selected"' : '').'>'.$this->l('Other Modules').'</option>
 						</select>
 						&nbsp;
 						<select name="module_install">
@@ -963,8 +963,8 @@ class AdminModules extends AdminTab
 		$showCountryModules = Configuration::get('PS_SHOW_COUNTRY_MODULES_'.(int)($cookie->id_employee));
 		$selected_filter .= ($showTypeModules == 'allModules' ? $this->l('All Modules').' - ' : '').
 							($showTypeModules == 'nativeModules' ? $this->l('Native Modules').' - ' : '').
-							($showTypeModules == 'partnerModules' ? $this->l('Partners Modules').' - ' : '').
-							($showTypeModules == 'otherModules' ? $this->l('Others Modules').' - ' : '').
+							($showTypeModules == 'partnerModules' ? $this->l('Partner Modules').' - ' : '').
+							($showTypeModules == 'otherModules' ? $this->l('Other Modules').' - ' : '').
 							($showInstalledModules == 'installedUninstalled' ? $this->l('Installed & Uninstalled').' - ' : '').
 							($showInstalledModules == 'installed' ? $this->l('Installed Modules').' - ' : '').
 							($showInstalledModules == 'unistalled' ? $this->l('Uninstalled Modules').' - ' : '').

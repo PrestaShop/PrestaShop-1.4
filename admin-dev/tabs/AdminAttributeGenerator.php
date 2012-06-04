@@ -206,8 +206,8 @@ class AdminAttributeGenerator extends AdminTab
 					<thead>
 						<tr>
 							<th id="tab_h1" style="width: 150px">'.htmlspecialchars(stripslashes($attributeGroup['name'])).'</th>
-							<th id="tab_h2" style="width: 350px" colspan="2">'.$this->l('Price impact').' ('.$currency->sign.')'.'</th>
-							<th style="width: 150px">'.$this->l('Weight impact').' ('.Configuration::get('PS_WEIGHT_UNIT').')'.'</th>
+							<th id="tab_h2" style="width: 350px" colspan="2">'.$this->l('Impact on Price').' ('.$currency->sign.')'.'</th>
+							<th style="width: 150px">'.$this->l('Impact on Weight').' ('.Configuration::get('PS_WEIGHT_UNIT').')'.'</th>
 						</tr>
 					</thead>
 					<tbody id="table_'.$idGroup.'" name="result_table">

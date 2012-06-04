@@ -57,7 +57,7 @@ class AdminProducts extends AdminTab
 			'price_final' => array('title' => $this->l('Final price'), 'width' => 70, 'price' => true, 'align' => 'right', 'havingFilter' => true, 'orderby' => false),
 			'quantity' => array('title' => $this->l('Quantity'), 'width' => 30, 'align' => 'right', 'filter_key' => 'a!quantity', 'type' => 'decimal'),
 			'position' => array('title' => $this->l('Position'), 'width' => 40,'filter_key' => 'cp!position', 'align' => 'center', 'position' => 'position'),
-			'a!active' => array('title' => $this->l('Displayed'), 'active' => 'status', 'filter_key' => 'a!active', 'align' => 'center', 'type' => 'bool', 'orderby' => false));
+			'a!active' => array('title' => $this->l('Status'), 'active' => 'status', 'filter_key' => 'a!active', 'align' => 'center', 'type' => 'bool', 'orderby' => false));
 
 		/* Join categories table */
 		$this->_category = AdminCatalog::getCurrentCategory();
@@ -1677,7 +1677,7 @@ class AdminProducts extends AdminTab
 			$this->_displaySpecificPriceModificationForm($defaultCurrency, $shops, $currencies, $countries, $groups);
 		}
 		else
-			echo '<b>'.$this->l('You must save this product before adding specific prices').'.</b>';
+			echo '<b>'.$this->l('You must save this product before adding specific pricing').'.</b>';
 	}
 
 	private function _getFinalPrice($specificPrice, $productPrice, $taxRate)
@@ -1721,7 +1721,7 @@ class AdminProducts extends AdminTab
 		$groups = $tmp;
 
 		echo '
-		<h4>'.$this->l('Current specific prices').'</h4>
+		<h4>'.$this->l('Current specific pricing').'</h4>
 
 		<table style="text-align: center;width:100%" class="table" cellpadding="0" cellspacing="0">
 			<thead>
@@ -2454,7 +2454,7 @@ class AdminProducts extends AdminTab
 	<tr>
 		<td colspan="2">
 			<p><input type="checkbox" id="is_virtual_good" name="is_virtual_good" value="true" onclick="toggleVirtualProduct(this);" <?php if (($productDownload->id OR Tools::getValue('is_virtual_good')=='true') AND $productDownload->active) echo 'checked="checked"' ?> />
-			<label for="is_virtual_good" class="t bold" style="color: black;"><?php echo $this->l('Is this a downloadable product?') ?></label></p>
+			<label for="is_virtual_good" class="t bold" style="color: black;"><?php echo $this->l('Downloadable product') ?></label></p>
 			<div id="virtual_good" <?php if (!$productDownload->id OR !$productDownload->active) echo 'style="display:none;"' ?> >
 	<?php if (!ProductDownload::checkWritableDir()): ?>
 		<p class="alert">
@@ -2517,7 +2517,7 @@ class AdminProducts extends AdminTab
 				<p class="block">
 					<label for="virtual_product_nb_days" class="t"><?php echo $this->l('Number of days') ?></label>
 					<input type="text" id="virtual_product_nb_days" name="virtual_product_nb_days" value="<?php echo $productDownload->id > 0 ? $productDownload->nb_days_accessible : htmlentities(Tools::getValue('virtual_product_nb_days'), ENT_COMPAT, 'UTF-8') ?>" class="" size="4" /><sup> *</sup>
-					<span class="hint" name="help_box" style="display:none"><?php echo $this->l('How many days this file can be accessed by customers') ?> - <em>(<?php echo $this->l('set to zero for unlimited access'); ?>)</em></span>
+					<span class="hint" name="help_box" style="display:none"><?php echo $this->l('Number of days this file can be accessed by customers') ?> - <em>(<?php echo $this->l('set to zero for unlimited access'); ?>)</em></span>
 				</p>
 				</div>
 	<?php endif; // check if download directory is writable ?>
@@ -3385,7 +3385,7 @@ class AdminProducts extends AdminTab
 			<tr>
 			  <td style="width:150px">'.$this->l('Default:').'<br /><br /></td>
 			  <td style="padding-bottom:5px;">
-				<input type="checkbox" name="attribute_default" id="attribute_default" value="1" />&nbsp;'.$this->l('Make this the default combination for this product').'<br /><br />
+				<input type="checkbox" name="attribute_default" id="attribute_default" value="1" />&nbsp;'.$this->l('Make this combination the default combination for this product').'<br /><br />
 			  </td>
 		  </tr>
 		  <tr>
@@ -3754,12 +3754,12 @@ class AdminProducts extends AdminTab
 			{
 				if ($(\'#curPackItemId\').val() == \'\' || $(\'#curPackItemName\').val() == \'\')
 				{
-					alert(\''.$this->l('Thanks to select at least one product.').'\');
+					alert(\''.$this->l('Please select at least one product.').'\');
 					return false;
 				}
 				else if ($(\'#curPackItemId\').val() == \'\' || $(\'#curPackItemQty\').val() == \'\')
 				{
-					alert(\''.$this->l('Thanks to set a quantity to add a product.').'\');
+					alert(\''.$this->l('Please set a quantity to add a product.').'\');
 					return false;
 				}
 

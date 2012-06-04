@@ -147,7 +147,7 @@ class AdminInformation extends AdminTab
 		<h2>'.$this->l('Information').'</h2>
 		<fieldset>
 			<legend><img src="../img/t/AdminInformation.gif" alt="" /> '.$this->l('Help').'</legend>
-			<p>'.$this->l('This information must be indicated when you report a bug on our bug tracker or if you report a problem on our forum.').'</p>
+			<p>'.$this->l('This information is important when reporting bugs on our bug tracker or when reporting problems on our forum.').'</p>
 		</fieldset>
 		<br />
 		<fieldset>

@@ -39,7 +39,7 @@ class AdminDb extends AdminPreferences
 		'db_name' => array('title' => $this->l('Database:'), 'desc' => $this->l('Database name (e.g., \'prestashop\')'), 'size' => 30, 'type' => 'text', 'required' => true),
 		'db_prefix' => array('title' => $this->l('Prefix:'), 'size' => 30, 'type' => 'text'),
 		'db_user' => array('title' => $this->l('User:'), 'size' => 30, 'type' => 'text', 'required' => true),
-		'db_passwd' => array('title' => $this->l('Password:'), 'size' => 30, 'type' => 'password', 'desc' => $this->l('Leave blank if no change')));
+		'db_passwd' => array('title' => $this->l('Password:'), 'size' => 30, 'type' => 'password', 'desc' => $this->l('Leave blank if there is no change')));
 		parent::__construct();
 	}
 	
@@ -103,9 +103,9 @@ class AdminDb extends AdminPreferences
 						$this->_errors[] = $table.' '.$this->l('is already in').' '.$engineType;
 					else
 						if (!Db::getInstance()->Execute('ALTER TABLE `'.bqSQL($table).'` ENGINE=`'.bqSQL($engineType).'`'))
-							$this->_errors[] = $this->l('Cannot change engine for').' '.$table;
+							$this->_errors[] = $this->l('Cannot change search engine for').' '.$table;
 						else
-							echo '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Engine change of').' '.$table.' '.$this->l('to').' '.$engineType.'</div>';
+							echo '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Change search engine for').' '.$table.' '.$this->l('to').' '.$engineType.'</div>';
 				}
 			}
 		}

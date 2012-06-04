@@ -91,7 +91,7 @@ class AdminAttachments extends AdminTab
 					$this->_errors[] = $this->l('the File').' <b>'.$_FILES['file']['name'].'</b> '.$this->l('exceeds the size allowed by the server. This limit is set to').' <b>'.$upload_mb.$this->l('Mb').'</b>';
 				}
 				elseif (!empty($_FILES['file']['tmp_name']))
-					$this->_errors[] = $this->l('No file or your file isn\'t uploadable, check your server configuration about the upload maximum size.');
+					$this->_errors[] = $this->l('The file does not exist or cannot be downloaded;check your server configuration regarding the maximum upload size.');
 			}
 			$this->validateRules();
 		}

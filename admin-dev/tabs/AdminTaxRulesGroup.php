@@ -50,7 +50,7 @@ class AdminTaxRulesGroup extends AdminTab
 		echo '<div class="hint clear" style="display:block;">
 					'.$this->l('The tax rules allow you to define a product or a carrier with different taxes depending on their location (country, state, etc.).').'
 
-					<b>'.$this->l('In the majority of cases, the rules created by default by PrestaShop should be enough.').'</b> '.
+					<b>'.$this->l('In the majority of cases, the default rules by PrestaShop should be enough.').'</b> '.
 					$this->l('If, however, you need to change them, here is an example that will help you understand how it works:').
 					'<br /><br />'
 					.$this->l('You want to apply a tax of 19.6% to a product in France and Europe, but not apply this tax to other countries. Follow these steps:').'

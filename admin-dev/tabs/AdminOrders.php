@@ -812,7 +812,7 @@ class AdminOrders extends AdminTab
 						}
 					echo '
 					</table>
-					<div style="float:left; width:280px; margin-top:15px;"><sup>*</sup> '.$this->l('According to the group of this customer, prices are printed:').' '.($order->getTaxCalculationMethod() == PS_TAX_EXC ? $this->l('tax excluded.') : $this->l('tax included.')).(!Configuration::get('PS_ORDER_RETURN') ? '<br /><br />'.$this->l('Merchandise returns are disabled') : '').'</div>';
+					<div style="float:left; width:280px; margin-top:15px;"><sup>*</sup> '.$this->l('According to this customer\'s group, prices are displayed:').' '.($order->getTaxCalculationMethod() == PS_TAX_EXC ? $this->l('tax excluded.') : $this->l('tax included.')).(!Configuration::get('PS_ORDER_RETURN') ? '<br /><br />'.$this->l('Merchandise returns are disabled') : '').'</div>';
 					if (sizeof($discounts))
 					{
 						echo '

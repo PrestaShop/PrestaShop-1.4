@@ -45,11 +45,11 @@ class AdminContacts extends AdminTab
 	
 		$this->optionTitle = $this->l('Contact options');
 		$this->_fieldsOptions = array(
-			'PS_CUSTOMER_SERVICE_FILE_UPLOAD' => array('title' => $this->l('Allow file upload'), 'desc' => $this->l('Allow customers to upload file using contact page'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'value', 'list' => array(
+			'PS_CUSTOMER_SERVICE_FILE_UPLOAD' => array('title' => $this->l('Allow file upload'), 'desc' => $this->l('Allow customers to upload a file via the contact page'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'value', 'list' => array(
 				'0' => array('value' => 0, 'name' => $this->l('No')), 
 				'1' => array('value' => 1, 'name' => $this->l('Yes')) 
 			)),
-			'PS_CUSTOMER_SERVICE_SIGNATURE' => array('title' => $this->l('Pre-defined message'), 'desc' => $this->l('Please fill the message that appears by default when you answer a thread on the customer service page'), 'cast' => 'pSQL', 'type' => 'textareaLang', 'identifier' => 'value',
+			'PS_CUSTOMER_SERVICE_SIGNATURE' => array('title' => $this->l('Pre-defined message'), 'desc' => $this->l('Please fill the message that appears by default when you reply to a thread on the customer service page'), 'cast' => 'pSQL', 'type' => 'textareaLang', 'identifier' => 'value',
 			'cols' => 40, 'rows' => 8
 		));
 		
@@ -83,7 +83,7 @@ class AdminContacts extends AdminTab
 					<input type="text" size="33" name="email" value="'.htmlentities($this->getFieldValue($obj, 'email'), ENT_COMPAT, 'UTF-8').'" />
 					<p style="clear: both">'.$this->l('E-mails will be sent to this address').'</p>
 				</div>
-				<label>'.$this->l('Save in Customer Service?').'</label>
+				<label>'.$this->l('Connect to Customer Service section').'</label>
 				<div class="margin-form">
 					<input type="radio" name="customer_service" id="customer_service_on" value="1" '.($this->getFieldValue($obj, 'customer_service') ? 'checked="checked" ' : '').'/>
 					<label class="t" for="customer_service_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
@@ -100,7 +100,7 @@ class AdminContacts extends AdminTab
 					</div>';
 				$this->displayFlags($this->_languages, $this->_defaultFormLanguage, 'name¤description', 'description');
 				echo '
-					<p style="clear: both">'.$this->l('Additional information about this contact').'</p>
+					<p style="clear: both">'.$this->l('Further information regarding this contact').'</p>
 				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />

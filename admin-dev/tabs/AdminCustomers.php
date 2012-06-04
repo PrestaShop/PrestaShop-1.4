@@ -61,7 +61,7 @@ class AdminCustomers extends AdminTab
 
 		$this->optionTitle = $this->l('Customers options');
 		$this->_fieldsOptions = array(
-			'PS_PASSWD_TIME_FRONT' => array('title' => $this->l('Regenerate password:'), 'desc' => $this->l('Security minimum time to wait to regenerate the password'),'validation' => 'isUnsignedInt', 'cast' => 'intval', 'size' => 5, 'type' => 'text', 'suffix' => ' '.$this->l('minutes'))
+			'PS_PASSWD_TIME_FRONT' => array('title' => $this->l('Regenerate password:'), 'desc' => $this->l('Minimum time before requesting a new password'),'validation' => 'isUnsignedInt', 'cast' => 'intval', 'size' => 5, 'type' => 'text', 'suffix' => ' '.$this->l('minutes'))
 		);
 
 		parent::__construct();
@@ -75,11 +75,11 @@ class AdminCustomers extends AdminTab
 		{
 			$deleteForm = '
 			<form action="'.htmlentities($_SERVER['REQUEST_URI']).'" method="post">
-				<fieldset><legend>'.$this->l('How do you want to delete your customer(s)?').'</legend>
-					'.$this->l('You have two ways to delete a customer, please choose what you want to do.').'
+				<fieldset><legend>'.$this->l('How do you want to delete these customer(s)?').'</legend>
+					'.$this->l('There are 2 ways of deleting a customer, please choose which you prefer.').'
 					<p>
 						<input type="radio" name="deleteMode" value="real" id="deleteMode_real" />
-						<label for="deleteMode_real" style="float:none">'.$this->l('I want to delete my customer(s) for real, all data will be removed from the database. A customer with the same e-mail address will be able to register again.').'</label>
+						<label for="deleteMode_real" style="float:none">'.$this->l('I want to delete my customer(s) completely; all data will be removed from the database. A customer with the same email address will be able to register again.').'</label>
 					</p>
 					<p>
 						<input type="radio" name="deleteMode" value="deleted" id="deleteMode_deleted" />
@@ -707,7 +707,7 @@ class AdminCustomers extends AdminTab
 					echo '<label>'.$this->l('Password:').' </label>
 					<div class="margin-form">
 						<input type="password" size="33" name="passwd" value="" /> '.(!$obj->id ? '<sup>*</sup>' : '').'
-						<p>'.($obj->id ? $this->l('Leave blank if no change') : $this->l('5 characters min., only letters, numbers, or').' -_').'</p>
+						<p>'.($obj->id ? $this->l('Leave blank if there is no change') : $this->l('min 5 characters, only letters and numbers').' -_').'</p>
 					</div>';
 				}
 				echo '
@@ -760,7 +760,7 @@ class AdminCustomers extends AdminTab
 					<label class="t" for="active_on"><img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
 					<input type="radio" name="active" id="active_off" value="0" '.(!$this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
 					<label class="t" for="active_off"><img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
-					<p>'.$this->l('Allow or disallow this customer to log in').'</p>
+					<p>'.$this->l('Enable or disable customer login').'</p>
 				</div>
 				<label>'.$this->l('Newsletter:').' </label>
 				<div class="margin-form">
@@ -810,7 +810,7 @@ class AdminCustomers extends AdminTab
 						}
 						echo '
 					</table>
-					<p style="padding:0px; margin:10px 0px 10px 0px;">'.$this->l('Check all the box(es) of groups of which the customer is to be a member').'<sup> *</sup></p>
+					<p style="padding:0px; margin:10px 0px 10px 0px;">'.$this->l('Check all the box(es) of groups to which the customer is member').'<sup> *</sup></p>
 					';
 					} else
 						echo '<p>'.$this->l('No group created').'</p>';

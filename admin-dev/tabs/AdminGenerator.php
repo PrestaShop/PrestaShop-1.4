@@ -51,8 +51,8 @@ class AdminGenerator extends AdminTab
 		echo '
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post" enctype="multipart/form-data">
 		<fieldset><legend><img src="../img/admin/htaccess.gif" alt="" />'.$this->l('Htaccess file generation').'</legend>
-		<p><b>'.$this->l('Warning:').'</b> '.$this->l('this tool can ONLY be used if you are hosted by an Apache web server. Please ask your webhost.').'</p>
-		<p>'.$this->l('This tool will automatically generate a ".htaccess" file that will give you the ability to do URL rewriting and to catch 404 errors.').'</p>';
+		<p><b>'.$this->l('Warning:').'</b> '.$this->l('this tool can ONLY be used if you are hosted by an Apache web server. Please ask your web hosting provider').'</p>
+		<p>'.$this->l('This tool will automatically generate an ".htaccess" file that will give you the ability to rewrite URL and to catch 404 errors.').'</p>';
 
 		if ($this->_checkConfiguration($this->_htFile))
 			echo '
@@ -60,7 +60,7 @@ class AdminGenerator extends AdminTab
 			<label for="imageCacheControl">'.$this->l('Optimization').'</label>
 			<div class="margin-form">
 				<input type="checkbox" name="PS_HTACCESS_CACHE_CONTROL" id="PS_HTACCESS_CACHE_CONTROL" value="1" '.(Configuration::get('PS_HTACCESS_CACHE_CONTROL') == 1 ? 'checked="checked"' : '').' />
-				<p>'.$this->l('This will add directives to your .htaccess file which should improve caching and compression.').'</p>
+				<p>'.$this->l('By checking this box it will add directives to your .htaccess file which should improve caching and compression.').'</p>
 			</div>
 			<div class="clear">&nbsp;</div>
 			<label for="imageCacheControl">'.$this->l('Friendly URL').'</label>
@@ -72,22 +72,22 @@ class AdminGenerator extends AdminTab
 			<label for="imageCacheControl">'.$this->l('Disable apache multiviews').'</label>
 			<div class="margin-form">
 				<input type="checkbox" name="PS_HTACCESS_DISABLE_MULTIVIEWS" id="PS_HTACCESS_CACHE_CONTROL" value="1" '.(Configuration::get('PS_HTACCESS_DISABLE_MULTIVIEWS') == 1 ? 'checked="checked"' : '').' />
-				<p>'.$this->l('Enable this option only if you have problems with some pages URL rewriting.').'</p>
+				<p>'.$this->l('Enable this option only if you encounter problems with the redirection of certain URL pages.').'</p>
 			</div>
 			<div class="clear">&nbsp;</div>
 			<label for="specific_configuration">'.$this->l('Specific configuration').'</label>
 			<div class="margin-form">
 				<textarea rows="10" class="width3" id="specific_configuration" name="ps_htaccess_specific">'.Configuration::get('PS_HTACCESS_SPECIFIC').'</textarea>
-				<p>'.$this->l('Add here the specific directives of your host (SetEnv PHP_VER 5, AddType x-mapp-php5 .php...).').'</p>
+				<p>'.$this->l('Add here the specific directives of your hosting provider (SetEnv PHP_VER 5, AddType x-mapp-php5 .php...).').'</p>
 			</div>
 			<p class="clear" style="font-weight:bold;">'.$this->l('Generate your ".htaccess" file by clicking on the following button:').' 
 			<input type="submit" value="'.$this->l('Generate .htaccess file').'" name="submitHtaccess" class="button" /></p>
-			<p>'.$this->l('This will erase your').'<b> '.$this->l('old').'</b> '.$this->l('.htaccess file!').'</p>';
+			<p>'.$this->l('This will delete your').'<b> '.$this->l('old').'</b> '.$this->l('.htaccess file!').'</p>';
 		else
 			echo '
-			<p style="color:red; font-weight:bold;">'.$this->l('Before being able to use this tool, you need to:').'</p>
+			<p style="color:red; font-weight:bold;">'.$this->l('Before using this tool, you need to:').'</p>
 			<p>'.$this->l('- create a').' <b>'. $this->l('.htaccess').'</b> '.$this->l('blank file in directory').' <b>'.__PS_BASE_URI__.'</b>
-			<br />'.$this->l('- give it write permissions (CHMOD 666 on Unix system)').'</p>';
+			<br />'.$this->l('give write permissions (CHMOD 666 on Unix system)').'</p>';
 		echo '</p></fieldset></form>';
 
 		// Robots
@@ -101,12 +101,12 @@ class AdminGenerator extends AdminTab
 			echo '
 			<p style="font-weight:bold;">'.$this->l('Generate your "robots.txt" file by clicking on the following button:').' 
 			<input type="submit" value="'.$this->l('Generate robots.txt file').'" name="submitRobots" class="button" /></p>
-			<p>'.$this->l('This will erase your').'<b> '.$this->l('old').'</b> '.$this->l('robots.txt file!').'</p>';
+			<p>'.$this->l('This will delete your').'<b> '.$this->l('old').'</b> '.$this->l('robots.txt file!').'</p>';
 		else
 			echo '
-			<p style="color:red; font-weight:bold;">'.$this->l('Before being able to use this tool, you need to:').'</p>
+			<p style="color:red; font-weight:bold;">'.$this->l('Before using this tool, you need to:').'</p>
 			<p>'.$this->l('- create a').' <b>'. $this->l('robots.txt').'</b> '.$this->l('blank file in dir:').' <b>'.__PS_BASE_URI__.'</b>
-			<br />'.$this->l('- give it write permissions (CHMOD 666 on Unix system)').'</p>';
+			<br />'.$this->l('give write permissions (CHMOD 666 on Unix system)').'</p>';
 		echo '</p></fieldset></form>
 		<br />';
 	}
@@ -140,7 +140,7 @@ class AdminGenerator extends AdminTab
 				Configuration::updateValue('PS_HTACCESS_SPECIFIC',  Tools::getValue('ps_htaccess_specific'), true);
 				if (Tools::generateHtaccess($this->_htFile, Configuration::get('PS_REWRITING_SETTINGS'), Configuration::get('PS_HTACCESS_CACHE_CONTROL'), Tools::getValue('ps_htaccess_specific'), Tools::getValue('PS_HTACCESS_DISABLE_MULTIVIEWS')))
 					Tools::redirectAdmin($currentIndex.'&conf=4&token='.$this->token);
-				$this->_errors[] = $this->l('Cannot write into file:').' <b>'.$this->_htFile.'</b><br />'.$this->l('Please check write permissions.');
+				$this->_errors[] = $this->l('Cannot write to file:').' <b>'.$this->_htFile.'</b><br />'.$this->l('Please check write permissions.');
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
@@ -151,7 +151,7 @@ class AdminGenerator extends AdminTab
 			if ($this->tabAccess['edit'] === '1')
 			{
 				if (!$writeFd = @fopen($this->_rbFile, 'w'))
-					die ($this->l('Cannot write into file:').' <b>'.$this->_rbFile.'</b><br />'.$this->l('Please check write permissions.'));
+					die ($this->l('Cannot write to file:').' <b>'.$this->_rbFile.'</b><br />'.$this->l('Please check write permissions.'));
 				else
 				{
 					// PS Comments

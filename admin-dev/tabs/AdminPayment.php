@@ -122,11 +122,11 @@ class AdminPayment extends AdminTab
 			$textCurrencies = $this->l('Please mark the checkbox(es) for the currency or currencies for which you want the payment module(s) to be available.');
 			$textCountries = $this->l('Please mark the checkbox(es) for the country or countries for which you want the payment module(s) to be available.');
 			$textGroups = $this->l('Please mark the checkbox(es) for the groups for which you want the payment module(s) available.');
-			$this->displayModuleRestrictions($currencies, $this->l('Currencies restrictions'), 'currency', $textCurrencies, 'dollar');
+			$this->displayModuleRestrictions($currencies, $this->l('Currency restrictions'), 'currency', $textCurrencies, 'dollar');
 			echo '<br />';
-			$this->displayModuleRestrictions($groups, $this->l('Groups restrictions'), 'group', $textGroups, 'group');
+			$this->displayModuleRestrictions($groups, $this->l('Group restrictions'), 'group', $textGroups, 'group');
 			echo '<br />';
-			$this->displayModuleRestrictions($countries, $this->l('Countries restrictions'), 'country', $textCountries, 'world');
+			$this->displayModuleRestrictions($countries, $this->l('Country restrictions'), 'country', $textCountries, 'world');
 		}
 		else
 		{

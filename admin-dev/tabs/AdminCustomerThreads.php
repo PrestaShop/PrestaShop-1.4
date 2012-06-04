@@ -475,12 +475,12 @@ class AdminCustomerThreads extends AdminTab
 		if ($nextThread)
 			echo $this->displayButton('
 			<a href="'.$currentIndex.'&id_customer_thread='.(int)$nextThread.'&viewcustomer_thread&token='.$this->token.'">
-				<img src="../img/admin/next-msg.png" title="'.$this->l('Go to the oldest next unanswered message').'" style="margin-bottom: 10px;" />
-				<br />'.$this->l('Answer to the next unanswered message in this category').' &gt;
+				<img src="../img/admin/next-msg.png" title="'.$this->l('Go to the next oldest unanswered message').'" style="margin-bottom: 10px;" />
+				<br />'.$this->l('Reply to the next unanswered message in this category').' &gt;
 			</a>');
 		else
 			echo $this->displayButton('
-			<img src="../img/admin/msg-ok.png" title="'.$this->l('Go to the oldest next unanswered message').'" style="margin-bottom: 10px;" />
+			<img src="../img/admin/msg-ok.png" title="'.$this->l('Go to the next oldest unanswered message').'" style="margin-bottom: 10px;" />
 			<br />'.$this->l('The other messages in this category have been answered'));
 
 		if ($thread->status != "closed")

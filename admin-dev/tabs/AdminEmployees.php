@@ -164,7 +164,7 @@ class AdminEmployees extends AdminTab
 					<label class="t" for="active_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
 					<input type="radio" name="bo_show_screencast" id="bo_show_screencast_off" value="0" '.(!$this->getFieldValue($obj, 'bo_show_screencast') ? 'checked="checked" ' : '').'/>
 					<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
-					<p>'.$this->l('Show the welcome video on the dashbord of the back office').'</p>
+					<p>'.$this->l('Show the welcome video via the back office dashboard').'</p>
 				</div>
 				<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">
@@ -172,7 +172,7 @@ class AdminEmployees extends AdminTab
 					<label class="t" for="active_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
 					<input type="radio" name="active" id="active_off" value="0" '.(!$this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
 					<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
-					<p>'.$this->l('Allow or disallow this employee to log into this Back Office').'</p>
+					<p>'.$this->l('Enable or disable this employee to log into the Back Office').'</p>
 				</div>
 				<label>'.$this->l('Profile:').' </label>
 				<div class="margin-form">

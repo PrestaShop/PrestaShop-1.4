@@ -227,7 +227,7 @@ class AdminHome extends AdminTab
 				</li>
 				<li id="fourth_block">
 					<h4><a href="index.php?tab=AdminEmployees&addemployee&token='.Tools::getAdminTokenLite('AdminEmployees').'">'.$this->l('New employee').'</a></h4>
-					<p>'.$this->l('Add a new employee account and discharge a part of your duties of shop owner.').'</p>
+					<p>'.$this->l('Add a new employee account and delegate part of your duties as shop owner.').'</p>
 				</li>
 			</ul>
 			';

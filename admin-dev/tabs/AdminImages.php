@@ -174,7 +174,7 @@ class AdminImages extends AdminTab
 					<label class="t" for="scenes_on"><img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" /></label>
 					<input type="radio" name="scenes" id="scenes_off" value="0" '.(!$this->getFieldValue($obj, 'scenes') ? 'checked="checked" ' : '').'/>
 					<label class="t" for="scenes_off"><img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" /></label>
-					<p>'.$this->l('This type will be applied to scenes images').'</p>
+					<p>'.$this->l('This type will be applied to scene images').'</p>
 				</div>
 				<label>'.$this->l('Stores:').' </label>
 				<div class="margin-form">
@@ -182,7 +182,7 @@ class AdminImages extends AdminTab
 					<label class="t" for="stores_on"><img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" /></label>
 					<input type="radio" name="stores" id="stores_off" value="0" '.(!$this->getFieldValue($obj, 'stores') ? 'checked="checked" ' : '').'/>
 					<label class="t" for="stores_off"><img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" /></label>
-					<p>'.$this->l('This type will be applied to stores images').'</p>
+					<p>'.$this->l('This type will be applied to store images').'</p>
 				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
@@ -212,7 +212,7 @@ class AdminImages extends AdminTab
 		echo '
 		<h2 class="space">'.$this->l('Regenerate thumbnails').'</h2>
 		'.$this->l('Regenerates thumbnails for all existing product images').'.<br /><br /><div  class="width4">';
-		$this->displayWarning($this->l('Please be patient, as this can take several minutes').'<br />'.$this->l('Be careful! Manually generated thumbnails will be erased by automatically generated thumbnails.'));
+		$this->displayWarning($this->l('Please be patient, as this process can take from several minutes to more than an hour').'<br />'.$this->l('Be careful! Manually generated thumbnails will be erased by automatically generated thumbnails.'));
 		echo '
 		</div>
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
@@ -251,7 +251,7 @@ class AdminImages extends AdminTab
 				<label>'.$this->l('Erase previous images').'</label>
 				<div class="margin-form">
 					<input name="erase" type="checkbox" value="1" checked="checked" />
-					<p>'.$this->l('Uncheck this checkbox only if your server timed out and you need to resume the regeneration.').'</p>
+					<p>'.$this->l('Uncheck this box only if your server has timed out and you need to resume the regeneration.').'</p>
 				</div>
 				<div class="clear"></div>
 				<center><input type="Submit" name="submitRegenerate'.$this->table.'" value="'.$this->l('Regenerate thumbnails').'" class="button space" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');" /></center>

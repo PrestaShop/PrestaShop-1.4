@@ -791,7 +791,7 @@ class AdminTranslations extends AdminTab
 					<img src="../img/admin/import.gif" />'.$this->l('Add / Update a language').'
 				</legend>
 				<div id="submitAddLangContent" style="float:left;"><p>'.$this->l('You can add or update a language directly from prestashop.com here').'</p>';
-			$this->displayWarning($this->l('If you choose to update an existing language pack, all your previous customization in the theme named prestashop will be lost. This includes front office expressions and default e-mail templates.'));
+			$this->displayWarning($this->l('If you choose to update an existing language pack, all your previous customization in the "PrestaShop" theme will be lost. This includes front office translations and default email templates.'));
 			echo '<div style="font-weight:bold; float:left;">'.$this->l('Language you want to add or update:').' ';
 			
 			if ($lang_packs = Tools::file_get_contents($this->link_lang_pack .'?version='._PS_VERSION_, false, @stream_context_create(array('http' => array('method' => 'GET', 'timeout' => 5)))))
@@ -898,7 +898,7 @@ class AdminTranslations extends AdminTab
 					<div style="float:left;">
 						<input type="submit" value="'.$this->l('   Copy   ').'" name="submitCopyLang" class="button" style="margin:25px 0px 0px 25px;" />
 					</div>
-					<p style="clear: left; padding: 16px 0px 0px 0px;"><span style="font-style: bold; color: red;">*</span> '.$this->l('Language files (as indicated at Tools >> Languages >> Edition) must be complete to allow copying of translations').'</p>
+					<p style="clear: left; padding: 16px 0px 0px 0px;"><span style="font-style: bold; color: red;">*</span> '.$this->l('Language files (Tools >> Languages >> Edition) must be complete to allow translation copies').'</p>
 				</fieldset>
 			</form>';
 		}
@@ -965,7 +965,7 @@ class AdminTranslations extends AdminTab
 				.(!empty($php_max_input)?'<b>'.$php_max_input.'</b> '
 					.sprintf($this->l('for %s'), 'max_input_vars').'<br/>'
 				:'')
-			.$this->l('Please ask your hosting provider to increase the suhosin post and request limit to')
+			.$this->l('Please ask your hosting provider to increase the post and request limit to')
 			.' <u><b>'.((int)$count + 100).'</b></u> '.$this->l('at least.').' '.$this->l('or edit the translation file manually.').'</div>'; 
 		}
 		return $str_output;
@@ -1615,7 +1615,7 @@ class AdminTranslations extends AdminTab
 		$str_output .= $this->l('Core e-mails:');
 		$str_output .= $this->displayMailContent($core_mails, $subject_mail, $obj_lang, 'core', $this->l('Core e-mails'));
 		// module mails
-		$str_output .= $this->l('Modules e-mails:');
+		$str_output .= $this->l('Module emails:');
 		foreach ($module_mails as $module_name => $mails)
 		{
 			$str_output .= $this->displayMailContent($mails, $subject_mail, $obj_lang, Tools::strtolower($module_name), sprintf($this->l('E-mails for %s module'), '<em>'.$module_name.'</em>'), $module_name);
@@ -1623,7 +1623,7 @@ class AdminTranslations extends AdminTab
 		// mail theme and module theme
 		if (!empty($theme_mails))
 		{
-			$str_output .= $this->l('Themes e-mails:');
+			$str_output .= $this->l('Theme emails:');
 			$bool_title = false;
 			foreach ($theme_mails as $theme_or_module_name => $mails)
 			{

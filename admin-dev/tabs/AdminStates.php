@@ -140,7 +140,7 @@ class AdminStates extends AdminTab
 
 		echo '
 					</select>
-					<p>'.$this->l('Geographical zone where this state is located').'<br />'.$this->l('Used for shipping').'</p>
+					<p>'.$this->l('Geographical region where this state is located').'<br />'.$this->l('Used for shipping').'</p>
 				</div>
 				<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">

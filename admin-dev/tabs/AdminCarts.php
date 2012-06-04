@@ -247,7 +247,7 @@ class AdminCarts extends AdminTab
 			</table>';
 			}
 				echo '<div style="float:left; margin-top:15px;">'.
-				$this->l('According to the group of this customer, prices are printed:').' <b>'.($order->getTaxCalculationMethod() == PS_TAX_EXC ? $this->l('tax excluded.') : $this->l('tax included.')).'</b>
+				$this->l('According to this customer\'s group prices are displayed in:').' <b>'.($order->getTaxCalculationMethod() == PS_TAX_EXC ? $this->l('tax excluded.') : $this->l('tax included.')).'</b>
 				</div></div>';
 
 				// Cancel product

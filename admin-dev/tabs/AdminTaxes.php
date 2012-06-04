@@ -50,7 +50,7 @@ class AdminTaxes extends AdminTab
 		$this->_fieldsOptions = array(
 		'PS_TAX' => array('title' => $this->l('Enable tax:'), 'desc' => $this->l('Select whether or not to include tax on purchases'), 'cast' => 'intval', 'type' => 'bool'),
 		'PS_TAX_DISPLAY' => array('title' => $this->l('Display tax in cart:'), 'desc' => $this->l('Select whether or not to display tax on a distinct line in the cart'), 'cast' => 'intval', 'type' => 'bool'),
-		'PS_TAX_ADDRESS_TYPE' => array('title' => $this->l('Base on:'), 'cast' => 'pSQL', 'type' => 'select', 'list' => array(array('name' => $this->l('Invoice Address'), 'id' => 'id_address_invoice'), array('name' => $this->l('Delivery Address'), 'id' => 'id_address_delivery')), 'identifier' => 'id'),
+		'PS_TAX_ADDRESS_TYPE' => array('title' => $this->l('Based on:'), 'cast' => 'pSQL', 'type' => 'select', 'list' => array(array('name' => $this->l('Invoice Address'), 'id' => 'id_address_invoice'), array('name' => $this->l('Delivery Address'), 'id' => 'id_address_delivery')), 'identifier' => 'id'),
 		'PS_USE_ECOTAX' => array('title' => $this->l('Use ecotax'), 'desc' => $ecotax_desc, 'validation' => 'isBool', 'cast' => 'intval', 'type' => 'bool'),
 		);
 
@@ -174,7 +174,7 @@ class AdminTaxes extends AdminTab
 
    		$_cacheLang['DeleteItem'] = $this->l('Delete item #', __CLASS__, TRUE, FALSE).$id.' ?)';
         if (TaxRule::isTaxInUse($id))
-            $_cacheLang['DeleteItem'] = $this->l('This tax is currently in use in a tax rule. Are you sure?');
+            $_cacheLang['DeleteItem'] = $this->l('This tax is currently in use in a tax rule. Are you sure you want to continue?');
 
 		echo '
 			<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&delete'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'" onclick="return confirm(\''.$_cacheLang['DeleteItem'].'\');">
@@ -185,7 +185,7 @@ class AdminTaxes extends AdminTab
 	{
 	    global $currentIndex;
 
-        $confirm = ($value AND TaxRule::isTaxInUse($id)) ? 'onclick="return confirm(\''. $this->l('This tax is currently in use in a tax rule. If you continue this tax will be removed from the tax rule, are you sure?').'\')"' : '';
+        $confirm = ($value && TaxRule::isTaxInUse($id)) ? 'onclick="return confirm(\''.$this->l('This tax is currently in use in a tax rule. If you continue this tax will be removed from the tax rule, are you sure you want to continue?').'\')"' : '';
 
 	    echo '<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&'.$active.
 	        ((int)$id_category && (int)$id_product ? '&id_category='.(int)$id_category : '').'&token='.($token != null ? $token : $this->token).'" '.$confirm.'>

@@ -153,7 +153,7 @@ class AdminStockMvt extends AdminTab
 				echo '
 				<fieldset>
 					<form method="post" action="'.$currentIndex.'&token='.$this->token.'&rebuildMvt=1">
-						<label for="stock_rebuild">'.$this->l('Calculate the movement of inventory missing').'</label>
+						<label for="stock_rebuild">'.$this->l('Calculate the movement of missing inventory').'</label>
 						<div class="margin-form">
 							<input class="button" type="submit" name="rebuildStock" value="'.$this->l('Submit').'" />
 						</div>
@@ -182,7 +182,7 @@ class AdminStockMvt extends AdminTab
 												'name' => array('title' => $this->l('Name'), 'width' => 500));
 		
 		$reasons = StockMvtReason::getStockMvtReasons((int)$cookie->id_lang);
-		$this->_fieldsOptions = array('PS_STOCK_MVT_REASON_DEFAULT' => array('title' => $this->l('Default Stock Movement reason:'), 
+		$this->_fieldsOptions = array('PS_STOCK_MVT_REASON_DEFAULT' => array('title' => $this->l('Default reason for stock movement :'), 
 												'cast' => 'intval', 
 												'type' => 'select', 
 												'list' => $reasons, 
@@ -190,7 +190,7 @@ class AdminStockMvt extends AdminTab
 		
 		unset($this->_select, $this->_join, $this->_group, $this->_filterHaving, $this->_filter);
 		
-		echo '<h2>'.$this->l('Stock movement reason').'</h2>';
+		echo '<h2>'.$this->l('Reason for stock movement ').'</h2>';
 		$this->postProcess();
 		return parent::display();
 	}

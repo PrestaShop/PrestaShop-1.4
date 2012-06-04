@@ -159,7 +159,7 @@ class AdminOrdersStates extends AdminTab
 				<div class="margin-form">
 					<p>
 						<input type="checkbox" style="vertical-align: text-bottom;" name="hidden"'.(($this->getFieldValue($obj, 'hidden') == 1) ? ' checked="checked"' : '').' id="hidden_on" value="1" />
-						<label class="t" for="hidden_on"> '.$this->l('Hide this state in order for customer').'</label>
+						<label class="t" for="hidden_on"> '.$this->l('Hide this status in customer\'s order').'</label>
 					</p>
 				</div>
 				<div class="margin-form">

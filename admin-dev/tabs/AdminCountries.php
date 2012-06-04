@@ -267,16 +267,16 @@ class AdminCountries extends AdminTab
 			$address_layout = $value;
 			
 		echo '		</select>
-					<p>'.$this->l('Geographical zone where country is located').'</p>
+					<p>'.$this->l('Geographical region').'</p>
 				</div>
-				<label>'.$this->l('Need zip code:').' </label>
+				<label>'.$this->l('Need zip/postal code').' </label>
 				<div class="margin-form">
 					<input type="radio" name="need_zip_code" id="need_zip_code_on" value="1" onchange="disableZipFormat();" '.((!$obj->id OR $this->getFieldValue($obj, 'need_zip_code')) ? 'checked="checked" ' : '').'/>
 					<label class="t" for="need_zip_code_on"> <img src="../img/admin/enabled.gif" alt="" title="'.$this->l('Yes').'" /></label>
 					<input type="radio" name="need_zip_code" id="need_zip_code_off" value="0" onchange="disableZipFormat();" '.((!$this->getFieldValue($obj, 'need_zip_code') AND $obj->id) ? 'checked="checked" ' : '').'/>
 					<label class="t" for="need_zip_code_off"> <img src="../img/admin/disabled.gif" alt="" title="'.$this->l('No').'" /></label>
 				</div>
-				<label class="zip_code_format">'.$this->l('Zip code format:').' </label>
+				<label class="zip_code_format">'.$this->l('Zip/post code format').' </label>
 				<div class="margin-form zip_code_format">
 					<input type="text" name="zip_code_format" id="zip_code_format" value="'.$this->getFieldValue($obj, 'zip_code_format').'" onkeyup="$(\'#zip_code_format\').val($(\'#zip_code_format\').val().toUpperCase());" /> <sup>*</sup>
 					<p>'.$this->l('National zip code (L for a letter, N for a number and C for the Iso code), e.g., NNNNN for France. No verification if undefined').'.</p>
@@ -287,7 +287,7 @@ class AdminCountries extends AdminTab
 						<textarea id="ordered_fields" name="address_layout" style="width: 300px;height: 140px;">'.$address_layout.'</textarea>
 					</div>
 					<div style="float:left; margin-left:20px; width:340px;">
-						'.$this->l('Liable fields for the address information (click to have more details)').': '.$this->_displayValidFields().'
+						'.$this->l('Available fields for address (click to have more details)').': '.$this->_displayValidFields().'
 					</div>
 					<div class="clear"></div>
 					<div style="margin:10px 0 10px 0;">
@@ -296,9 +296,9 @@ class AdminCountries extends AdminTab
 						<a id="useDefaultLayoutSystem" style="margin-left:5px;" href="javascript:void(0)" onClick="resetLayout(\''.urlencode($defaultLayout).'\', \'defaultSystem\');" class="button">'.
 							$this->l('Use a default layout').'</a>
 						<a id="useCurrentLastModifiedLayout" style="margin-left:5px;" href="javascript:void(0)" onClick="resetLayout(lastLayoutModified, \'currentModified\')" class="button">'.
-							$this->l('Use my current modified layout').'</a>
+							$this->l('Use my last modified layout').'</a>
 						<a id="eraseCurrentLayout" style="margin-left:5px;" href="javascript:void(0)" onClick="resetLayout(\'\', \'erase\');" class="button">'.
-							$this->l('Clean layout').'</a>
+							$this->l('Empty all').'</a>
 						<div style="margin-top:10px; padding-top:5px; height:10px;" id="explanationText"></div>
 					</div>
 				</div>
@@ -310,7 +310,7 @@ class AdminCountries extends AdminTab
 					<label class="t" for="active_off"> <img src="../img/admin/disabled.gif" alt="" title="'.$this->l('Disabled').'" /></label>
 					<p>'.$this->l('Enabled or disabled').'</p>
 				</div>
-				<label>'.$this->l('Contains states:').' </label>
+				<label>'.$this->l('Contains following states:').' </label>
 				<div class="margin-form">
 					<input type="radio" name="contains_states" id="contains_states_on" value="1" '.((!$obj->id OR $this->getFieldValue($obj, 'contains_states')) ? 'checked="checked" ' : '').'/>
 					<label class="t" for="contains_states_on"> <img src="../img/admin/enabled.gif" alt="" title="" />'.$this->l('Yes').'</label>

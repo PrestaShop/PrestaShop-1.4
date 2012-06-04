@@ -46,7 +46,7 @@ class AdminCurrencies extends AdminTab
 		'conversion_rate' => array('title' => $this->l('Conversion rate'), 'float' => true, 'align' => 'center', 'width' => 50, 'search' => false),
 		'active' => array('title' => $this->l('Enabled'), 'width' => 25, 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false));
 
-		$this->optionTitle = $this->l('Currencies options');
+		$this->optionTitle = $this->l('Currency options');
 		$this->_fieldsOptions = array(
 			'PS_CURRENCY_DEFAULT' => array(
 				'title' => $this->l('Default currency:'),
@@ -139,7 +139,7 @@ class AdminCurrencies extends AdminTab
 			<legend><img src="../img/admin/exchangesrate.gif" />'.$this->l('Currency rates').'</legend>
 			<label>'.$this->l('Update currency rates').'</label>
 				<div class="margin-form">
-					<p>'.$this->l('Update your currencies exchanges rates with a real-time tool').'</p>
+					<p>'.$this->l('Update your currency exchange rates in real-time').'</p>
 				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('Update currency rates').'" name="submitExchangesRates" class="button" />
@@ -194,7 +194,7 @@ class AdminCurrencies extends AdminTab
 					<input type="text" size="3" maxlength="11" name="conversion_rate" value="'.htmlentities($this->getFieldValue($obj, 'conversion_rate')).'" /> <sup>*</sup>
 					<p class="clear">'.$this->l('Conversion rate from one unit of your shop\'s default currency (for example, 1€) to this currency. For example, if the default currency is euros and this currency is dollars, type \'1.20\'').' 1&euro; = $1.20</p>
 				</div>
-				<label>'.$this->l('Formatting:').' </label>
+				<label>'.$this->l('Conversion rate from one unit of your shop\'s default currency (for example, 1 Euro) to this currency. For example, if the default currency is Euros and this currency is Dollars, type \'1.20\'').' </label>
 				<div class="margin-form">
 					<select name="format">';
 				$currency_formats = array(

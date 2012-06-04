@@ -1236,7 +1236,7 @@ class AdminImport extends AdminTab
 			echo '<div class="module_confirmation conf confirm"><img src="../img/admin/ok.gif" alt="" title="" style="margin-right:5px; float:left;" />'.$this->l('The .CSV file has been imported into your shop.').'</div>';
 
 		if (!is_writable(PS_ADMIN_DIR.'/import/'))
-			$this->displayWarning($this->l('directory import on admin directory must be writable (CHMOD 755 / 777)'));
+			$this->displayWarning($this->l('Directory import on admin directory must be writable (CHMOD 755 / 777)'));
 
 		if (isset($this->_warnings) AND sizeof($this->_warnings))
 		{
@@ -1275,13 +1275,13 @@ class AdminImport extends AdminTab
 			<form action="'.$currentIndex.'&token='.$this->token.'" method="POST" enctype="multipart/form-data">
 				<label class="clear">'.$this->l('Select a file').' </label>
 				<div class="margin-form">
-					<input name="file" type="file" /><br />'.$this->l('You can also upload your file by FTP and put it in').' '.realpath(dirname(__FILE__).'/../import/').'.
+					<input name="file" type="file" /><br />'.$this->l('You can also upload your file by FTP and insert it in the folder').' '.realpath(dirname(__FILE__).'/../import/').'.
 				</div>
 				<div class="margin-form">
 					<input type="submit" name="submitFileUpload" value="'.$this->l('Upload').'" class="button" />
 				</div>
 				<div class="margin-form">
-					'.$this->l('Allowed files are only UTF-8 and iso-8859-1 encoded ones').'
+					'.$this->l('Only UTF-8 and iso-8859-1 files are allowed').'
 				</div>
 			</form>
 		</fieldset>';
@@ -1360,15 +1360,15 @@ class AdminImport extends AdminTab
 				else
 					echo '
 					<div class="warn">
-						'.$this->l('No CSV file is available, please upload one file above.').'<br /><br />
-						'.$this->l('You can get many informations about CSV import at:').' <a href="http://www.prestashop.com/wiki/Troubleshooting_6/" target="_blank">http://www.prestashop.com/wiki/Troubleshooting_6/</a><br /><br />
-						'.$this->l('More about CSV format at: ').' <a href="http://en.wikipedia.org/wiki/Comma-separated_values" target="_blank">http://en.wikipedia.org/wiki/Comma-separated_values</a>
+						'.$this->l('No CSV file is available, please upload one above.').'<br /><br />
+						'.$this->l('You can get a great deal of information about CSV import at:').' <a href="http://www.prestashop.com/wiki/Troubleshooting_6/" target="_blank">http://www.prestashop.com/wiki/Troubleshooting_6/</a><br /><br />
+						'.$this->l('For more information about the CSV format please go to: ').' <a href="http://en.wikipedia.org/wiki/Comma-separated_values" target="_blank">http://en.wikipedia.org/wiki/Comma-separated_values</a>
 					</div>';
 					echo '
 					</fieldset>
 				</form>
 				<fieldset style="display: inline; float: right; margin-left: 20px;">
-				<legend><img src="../img/admin/import.gif" />'.$this->l('Fields available').'</legend>
+				<legend><img src="../img/admin/import.gif" />'.$this->l('Available fields').'</legend>
 				<div id="availableFields" style="min-height: 218px; width: 300px;">'.$this->getAvailableFields().'</div>
 				</fieldset>
 				<div class="clear" style="float:right; padding-right: 120px;">
@@ -1507,7 +1507,7 @@ class AdminImport extends AdminTab
 		</script>
 		<h2>'.$this->l('Your data').'</h2>'.'
 		<div style="float:right">
-		<b>'.$this->l('Save and load your matching configuration').' : </b><br><br>
+		<b>'.$this->l('Save and load your configuration for importing files').' : </b><br><br>
 		<input type="text" name="newImportMatchs" id="newImportMatchs"><a id="saveImportMatchs" class="button" href="#">'.$this->l('Save').'</a><br><br>
 		<div id="selectDivImportMatchs" '.(!$importMatchs ? 'style="display:none"' : '' ).'>';
 			echo '<select id="valueImportMatchs">';
