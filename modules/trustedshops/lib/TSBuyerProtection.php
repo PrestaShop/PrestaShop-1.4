@@ -36,7 +36,7 @@ include(_PS_MODULE_DIR_.'trustedshops/lib/TSBPException.php');
 class TSBuyerProtection extends AbsTrustedShops
 {
 	const PREFIX_TABLE = 'TS_TAB1_';
-	const ENV_MOD = 'test';// Or 'production'
+	const ENV_MOD = 'production';// 'test' or 'production'
 	const DB_ITEMS = 'ts_buyerprotection_items';
 	const DB_APPLI = 'ts_application_id';
 	const WEBSERVICE_BO = 'administration';
