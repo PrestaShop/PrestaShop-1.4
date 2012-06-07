@@ -26,7 +26,7 @@
 */
 
 /*
- * File called by ajax. It's like a controler, you have to send the
+ * File called by ajax. It's like a controller, you have to send the
  * method name of the webservice and implement it.
  * Each Name method allow to instanciate an object containing
  * methods to manage correctly the data and name fields

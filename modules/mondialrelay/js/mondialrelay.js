@@ -44,36 +44,36 @@ function toggleHistoryListSelection()
 function getTickets(detailedExpeditionList)
 {
 	$.ajax(
-	{
-		type : 'POST',
-		url : _PS_MR_MODULE_DIR_ + 'ajax.php',
-		data :	{'detailedExpeditionList':detailedExpeditionList, 'method':'MRGetTickets', 'mrtoken':mrtoken},
-		dataType: 'json',
-		success: function(json) 
 		{
-			if (json && json.success)
+			type : 'POST',
+			url : _PS_MR_MODULE_DIR_ + 'ajax.php',
+			data :	{'detailedExpeditionList':detailedExpeditionList, 'method':'MRGetTickets', 'mrtoken':mrtoken},
+			dataType: 'json',
+			success: function(json)
 			{
-				$('#MR_error_histories').remove();
-				for (id_order in json.success)
-					if (json.success[id_order])
-					{
-						$('#URLA4_' + id_order).html('<a href="' + json.success[id_order].URLPDF_A4 + '">\
+				if (json && json.success)
+				{
+					$('#MR_error_histories').remove();
+					for (id_order in json.success)
+						if (json.success[id_order])
+						{
+							$('#URLA4_' + id_order).html('<a href="' + json.success[id_order].URLPDF_A4 + '">\
 								<img width="20" src="' + _PS_MR_MODULE_DIR_ + 'images/pdf_icon.jpg" alt="download pdf"" /></a>');
-						$('#URLA5_' + id_order).html('<a href="' + json.success[id_order].URLPDF_A5 + '">\
+							$('#URLA5_' + id_order).html('<a href="' + json.success[id_order].URLPDF_A5 + '">\
 								<img width="20" src="' + _PS_MR_MODULE_DIR_ + 'images/pdf_icon.jpg" alt="download pdf"" /></a>');
-						$('#expeditionNumber_' + id_order).html(json.success[id_order].expeditionNumber);
-						$('#detailHistory_' + id_order).children('td').children('input').attr('value', json.success[id_order].id_mr_history);
-						$('#detailHistory_' + id_order).children('td').children('input').attr('id', 'PS_MRHistoryId_' + json.success[id_order].id_mr_history);
-					}
+							$('#expeditionNumber_' + id_order).html(json.success[id_order].expeditionNumber);
+							$('#detailHistory_' + id_order).children('td').children('input').attr('value', json.success[id_order].id_mr_history);
+							$('#detailHistory_' + id_order).children('td').children('input').attr('id', 'PS_MRHistoryId_' + json.success[id_order].id_mr_history);
+						}
+				}
+				displayBackGenerateSubmitButton();
+				displayBackHistoriesSubmitButton();
+			},
+			error: function(xhr, ajaxOptions, thrownError)
+			{
+				displayBackGenerateSubmitButton();
 			}
-			displayBackGenerateSubmitButton();
-			displayBackHistoriesSubmitButton();
-		},
-		error: function(xhr, ajaxOptions, thrownError)
-		{
-			displayBackGenerateSubmitButton();
-		}
-	});
+		});
 }
 
 /**

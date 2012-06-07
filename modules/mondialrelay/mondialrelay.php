@@ -71,25 +71,23 @@ class MondialRelay extends Module
 	{
 		$this->name		= 'mondialrelay';
 		$this->tab		= 'shipping_logistics';
-		$this->version	= '1.8.3';
+		$this->version	= '1.8.4';
 		$this->installed_version = '';
 		$this->module_key = '366584e511d311cfaa899fc2d9ec1bd0';
 		$this->author = 'PrestaShop';
+		$this->displayName = $this->l('Mondial Relay');
+		$this->description = $this->l('Deliver in Relay points');
 
 		parent::__construct();
 
-		$this->displayName = $this->l('Mondial Relay');
-		$this->description = $this->l('Deliver in Relay points');
+		/** Backward compatibility */
+		require(_PS_MODULE_DIR_.'/mondialrelay/backward_compatibility/backward.php');
 
 		self::initModuleAccess();
 
 		// Call everytime to prevent the change of the module by a recent one
 		$this->_updateProcess();
-
 		$this->initAccount();
-
-		/** Backward compatibility */
-		require(_PS_MODULE_DIR_.'/mondialrelay/backward_compatibility/backward.php');
 	}
 
 	public function install()
@@ -266,7 +264,7 @@ class MondialRelay extends Module
 	public function runUpgrade()
 	{
 		// List of upgraded version existing
-		$files_version = array('1.8', '1.8.3');
+		$files_version = array('1.8.0', '1.8.3');
 
 		$upgrade_path = dirname(__FILE__).'/upgrade/';
 		if (_PS_VERSION_ < '1.5')

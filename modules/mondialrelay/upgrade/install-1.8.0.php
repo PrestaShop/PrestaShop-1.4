@@ -8,7 +8,9 @@ if (!defined('_PS_VERSION_'))
 // object module ($this) available
 function upgrade_module_1_8_0($object)
 {
-	$object->upgrade_detail['1.8.0'] = array();
+	$upgrade_version = '1.8.0';
+
+	$object->upgrade_detail[$upgrade_version] = array();
 
 	// Add new table to handle multi-shop for a carrier
 	$query = '
@@ -20,10 +22,7 @@ function upgrade_module_1_8_0($object)
 		) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
 
 	if (!Db::getInstance()->execute($query))
-	{
-		$object->upgrade_detail['1.8.0'][] = $object->l('Can\'t create "shop table" method');
-		return false;
-	}
+		$object->upgrade_detail[$upgrade_version][] = $object->l('Can\'t create method shop table');
 
 	// Refacto name
 	$query = '
@@ -36,18 +35,12 @@ function upgrade_module_1_8_0($object)
 		CHANGE  `id_carrier`  `id_carrier` INT( 10 ) NOT NULL';
 
 	if (!Db::getInstance()->execute($query))
-	{
-		$object->upgrade_detail['1.8.0'][] = $object->l('Can\'t change "method table" name');
-		return false;
-	}
+		$object->upgrade_detail[$upgrade_version][] = $object->l('Can\'t change name of the method table');
 
 	$query = 'RENAME TABLE  `'._DB_PREFIX_.'mr_historique` TO  `'._DB_PREFIX_.'mr_history`';
 
 	if (!Db::getInstance()->execute($query))
-	{
-		$object->upgrade_detail['1.8.0'][] = $object->l('Can\'t rename the "history table"');
-		return false;
-	}
+		$object->upgrade_detail[$upgrade_version][] = $object->l('Can\'t rename the history table');
 
 	$object->account_shop['MR_ENSEIGNE_WEBSERVICE'] = Configuration::get('MR_ENSEIGNE_WEBSERVICE');
 	$object->account_shop['MR_CODE_MARQUE'] = Configuration::get('MR_CODE_MARQUE');
@@ -67,7 +60,7 @@ function upgrade_module_1_8_0($object)
 	Configuration::deleteByName('MONDIAL_RELAY_1_4');
 	Configuration::deleteByName('MONDIAL_RELAY_INSTALL_UPDATE_1');
 
-	Configuration::updateValue('MONDIAL_RELAY', $object->version);
+	Configuration::updateValue('MONDIAL_RELAY', $upgrade_version);
 
 	$methods = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'mr_method`');
 	if (count($methods))
@@ -80,10 +73,8 @@ function upgrade_module_1_8_0($object)
 			$query .= '('.(int)$method['id_mr_method'].', '.(int)$object->account_shop['id_shop'].'),';
 		$query = trim($query, ',');
 		if (!Db::getInstance()->execute($query))
-		{
-			$object->upgrade_detail['1.8.0'][] = $object->l('Can\'t update "table mr_method_shop"');
-			return false;
-		}
+			$object->upgrade_detail[$upgrade_version][] = $object->l('Can\'t update table mr_method_shop');
+
 	}
 
 	if (!empty($object->installed_version))
@@ -110,5 +101,5 @@ function upgrade_module_1_8_0($object)
 	if (!$object->isRegisteredInHook('header'))
 		$object->registerHook('header');
 
-	return true;
+	return (bool)count($object->upgrade_detail[$upgrade_version]);
 }
