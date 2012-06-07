@@ -430,7 +430,7 @@ class TrustedShopsRating extends AbsTrustedShops
 		global $cookie;
 		$buyer_email = '';
 
-		if ($cookie->isLogged())
+		if (Context::getContext()->customer->isLogged())
 		{
 			if (empty($id_order) && !empty($cookie->id_customer))
 				$id_order = (int)$this->_getLastOrderId((int)$cookie->id_customer);

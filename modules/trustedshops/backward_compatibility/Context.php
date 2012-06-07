@@ -134,7 +134,7 @@ class Context
 		$this->language = new Language((int)$cookie->id_lang);
 		$this->country = new Country((int)$cookie->id_country);
 		$this->shop = new ShopBackwardModule();
-		$this->customer = new Customer((int)$cookie->id_customer);
+		$this->customer = new CustomerBackwardModule((int)$cookie->id_customer);
 		$this->employee = new Employee((int)$cookie->id_employee);
 	}
 
@@ -209,5 +209,30 @@ class ControllerBackwardModule
 	public function addCSS($css_uri, $css_media_type = 'all')
 	{
 		Tools::addCSS($css_uri, $css_media_type);
+	}
+}
+
+/**
+ * Class Customer for a Backward compatibility
+ * Allow to use method declaed in 1.5
+ */
+class CustomerBackwardModule extends Customer
+{
+	/**
+	 * Check customer informations and return customer validity
+	 *
+	 * @since 1.5.0
+	 * @param boolean $with_guest
+	 * @return boolean customer validity
+	 */
+	public function isLogged($with_guest = false)
+	{
+		if (!$with_guest && $this->is_guest == 1)
+			return false;
+
+		/* Customer is valid only if it can be load and if object password is the same as database one */
+		if ($this->logged == 1 && $this->id && Validate::isUnsignedId($this->id) && Customer::checkPassword($this->id, $this->passwd))
+			return true;
+		return false;
 	}
 }
