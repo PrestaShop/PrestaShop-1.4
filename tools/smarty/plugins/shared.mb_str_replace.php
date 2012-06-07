@@ -30,7 +30,7 @@ if(!function_exists('smarty_mb_str_replace')) {
         if (function_exists('mb_split')) {
           $parts = mb_split(preg_quote($search), $subject);
         } else {
-          $parts = split(preg_quote($search), $subject);
+          $parts = @split(preg_quote($search), $subject);
         }
           $count = count($parts)-1; 
           $subject = implode($replace, $parts); 
