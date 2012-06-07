@@ -27,7 +27,7 @@
 
 {if $item_exist}
 	<script type="text/javascript">
-		$().ready(function()
+		$(document).ready(function()
 		{
 			var items_length = $('#ts-list-items').find('input').length;
 			//$('#ts-list-items').css('line-height', ((70/items_length) > 12 ? Math.round(70/items_length) : 12 )+'px');
@@ -48,23 +48,27 @@
 				success: function(jsonData)
 				{
 					ajaxCart.updateCart(jsonData);
-					$('span.price').not('#cart_block_shipping_cost').not('.products .price').not('.carrier_price > .price').html(jsonData.total);
+					$('#total_price, #cart_block_total').html(jsonData.total);
 				}
 			});
 		}
 
+		// TODO : REWRITE this part because it's completely not a good way (Control  + R, add Product dynamically)
 		return {
+			handle_product: function(block)
+			{
+				var id_number = block.attr('id').split('-')[2];
+
+				if (block.attr('checked'))
+					updateTsProduct(id_number, 'add');
+				else
+					updateTsProduct(id_number, 'delete');
+			},
 			init: function ()
 			{
 				$('#ts-list-items input[type=checkbox]').click(function(e)
 				{
-					var $t = $(this);
-					var id_number = $t.attr('id').split('-')[2];
-
-					if ($t.attr('checked'))
-						updateTsProduct(id_number, 'add');
-					else
-						updateTsProduct(id_number, 'delete');
+					TS.handle_product($(this));
 				});
 			}
 		}

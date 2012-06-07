@@ -1409,6 +1409,7 @@ class TSBuyerProtection extends AbsTrustedShops
 		foreach ($product as $item)
 			$product_protection[] = $item['id_product'];
 
+		// TODO : REWRITE this part because it's completely not a good way (Control  + R, add Product dynamically)
 		foreach ($params['cart']->getProducts() as $item)
 			if (in_array($item['id_product'], $product_protection))
 				$params['cart']->deleteProduct($item['id_product']);
