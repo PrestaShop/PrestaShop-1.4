@@ -57,7 +57,7 @@ class CloudCache extends Module
 	{
 		$this->name = 'cloudcache';
 		$this->tab = 'administration';
-		$this->version = '1.2';
+		$this->version = '1.4.3';
 		$this->author = 'PrestaShop';
 
 		parent::__construct();
@@ -106,35 +106,33 @@ class CloudCache extends Module
 
 	private function _installOverride()
 	{
-		// Hash of the empty file in 1.5 => file name
-		$files = array('810f3fa83a88b5019be31d7b80db460d' => 'classes/Tools.php');
 		if (_PS_VERSION_ > '1.5')
-			$files['5b917f57038acb75714cf144c9043bb4'] = 'classes/controller/FrontController.php';
+			return true;
 
+		$errors = array();
 		// Make sure the environment is OK
 		if (!is_dir(dirname(__FILE__).'/../../override/classes/'))
 			mkdir(dirname(__FILE__).'/../../override/classes/', 0777, true);
-		if (_PS_VERSION_ > '1.5' && !is_dir(dirname(__FILE__).'/../../override/classes/controller/'))
-			mkdir(dirname(__FILE__).'/../../override/classes/controller/', 0777);
 
-		$errors = array();
-		foreach ($files as $hash => $path)
+		if (file_exists(dirname(__FILE__).'/../../override/classes/Tools.php'))
 		{
-			if (file_exists(dirname(__FILE__).'/../../override/'.$path))
-			{
-				if (md5_file(dirname(__FILE__).'/../../override/'.$path) == $hash)
-					rename(dirname(__FILE__).'/../../override/'.$path, dirname(__FILE__).'/../../override/'.$path.'.origin.php');
-				elseif (md5_file(dirname(__FILE__).'/../../override/'.$path) == md5_file(dirname(__FILE__).'/override/'.$path))
-					continue ;
-				else
-				{
-					$errors[] = '/override/'.$path;
-					continue ;
-				}
-			}
-			if (!copy(dirname(__FILE__).'/override/'.$path, dirname(__FILE__).'/../../override/'.$path))
-				$errors[] = '/override/'.$path;
+			if (md5_file(dirname(__FILE__).'/../../override/classes/Tools.php') == '810f3fa83a88b5019be31d7b80db460d')
+					rename(dirname(__FILE__).'/../../override/classes/Tools.php', dirname(__FILE__).'/../../override/classes/Tools.origin.php');
+			elseif (!md5_file(dirname(__FILE__).'/../../override/classes/Tools.php') == md5_file(dirname(__FILE__).'/override/classes/Tools.php'))
+				$errors[] = '/override/classes/Tools.php';
 		}
+		if (!copy(dirname(__FILE__).'/override/classes/Tools.php', dirname(__FILE__).'/../../override/classes/Tools.php'))
+			$errors[] = '/override/classes/Tools.php';
+
+		if (file_exists(dirname(__FILE__).'/../../override/classes/FrontController.php'))
+		{
+			if (md5_file(dirname(__FILE__).'/../../override/classes/FrontController.php') == '5b917f57038acb75714cf144c9043bb4')
+					rename(dirname(__FILE__).'/../../override/classes/FrontController.php', dirname(__FILE__).'/../../override/classes/FrontController.origin.php');
+			elseif (!md5_file(dirname(__FILE__).'/../../override/classes/FrontController.php') == md5_file(dirname(__FILE__).'/override_14/classes/FrontController.php'))
+				$errors[] = '/override/classes/FrontController.php';
+		}
+		if (!copy(dirname(__FILE__).'/override_14/classes/FrontController.php', dirname(__FILE__).'/../../override/classes/FrontController.php'))
+			$errors[] = '/override/classes/FrontController.php';
 
 		if (count($errors))
 			die('<div class="conf warn">
@@ -478,8 +476,8 @@ class CloudCache extends Module
 	 */
 	private function _testConnection()
 	{
-		set_time_limit(300);
-		
+		@set_time_limit(300);
+
 		if (count($this->_compatibilityCheck()))
 			return array('<img src="../img/admin/forbbiden.gif" alt="" /><b style="color: #CC0000;">'.
 				$this->l('You have compatibility issues, please fix them before using the module.').'</b>',
@@ -687,7 +685,7 @@ class CloudCache extends Module
 						'file_type' => pSQL($exists ? $row['file_type'] : 'none'),
 						'zone_type' => pSQL($namespace),
 						'id_shop' => (int)$this->context->shop->id,
-						'id_group_shop' => (int)$this->context->shop->id_group_shop,
+						'id_shop_group' => (int)$this->context->shop->id_shop_group,
 					);
 				}
 			}
@@ -784,11 +782,6 @@ class CloudCache extends Module
 		if ($this->_api->getLastFaultCode())
 			return $this->_api->getLastFaultString();
 
-		/* // Insert the new zone in database */
-		/* if ($this->_updateZoneSql($r, 'CRE)) */
-		/* 	return $this->context->smarty->assign('confirmMessage', */
-		/* 		$this->_displayConfirmation($this->l('Unknown internal error.'), 'error')); */
-
 		// Sync
 		$this->_syncZonesWithServer($type);
 
@@ -825,7 +818,7 @@ class CloudCache extends Module
 
 		// Check if the transaction went well
 		if ($this->_api->getLastFaultCode())
-			return ; //die('KO '.pSQL($this->_api->getLastFaultString())); // pSQL for XSS
+			return ;
 
 		return $r;
 	}

@@ -39,9 +39,9 @@ $(document).ready(function()
 <br/>
 <br/>
 {if isset($confirmMessage)}
-<div style="clear:both" class="conf {$confirmMessage['class']}">
-  <img src="../img/admin/{$confirmMessage['img']}" alt="" title="" />
-  {$confirmMessage['text']}
+<div style="clear:both" class="conf {$confirmMessage.class}">
+  <img src="../img/admin/{$confirmMessage.img}" alt="" title="" />
+  {$confirmMessage.text}
 </div>
 {/if}
 {if isset($compatibilityIssues)}
@@ -114,8 +114,8 @@ $(document).ready(function()
 	{$connectionTestResult[0]}<br />
 	{if $connectionTestResult[1] == '#FFD8D8'}
 	<b style="color: red">{l s='An error occured while testing the connection.' mod='cloudcache'}</b>
-	{elseif isset($connectionTestResult['newZone'])}
-	<b style="color: green;">{l s='Success! That is all you have to do!' mod='cloudcache'} {$connectionTestResult['newZone']|escape} {l s='is now accelerated by cloudcache.com' mod='cloudcache'}</b>
+	{elseif isset($connectionTestResult.newZone)}
+	<b style="color: green;">{l s='Success! That is all you have to do!' mod='cloudcache'} {$connectionTestResult.newZone|escape} {l s='is now accelerated by cloudcache.com' mod='cloudcache'}</b>
 	{else}
 	<b style="color: green;">{l s='Success! The connection have been established!' mod='cloudcache'}</b>
 	{/if}<br />
@@ -126,7 +126,7 @@ $(document).ready(function()
 	{if !empty($companyId)}
 	<fieldset>
 	  <legend>CloudCache</legend>
-	  <a href="http://login.cloudcache.com">
+	  <a target="_blank" href="http://login.cloudcache.com">
 	    {l s='Click Here to access your CloudCache account' mod='cloudcache'}
 	  </a>
 	</fieldset>
@@ -186,15 +186,15 @@ $(document).ready(function()
 	  </tr>
 	  {foreach from=$zones key=id_zone item=zone}
 	  <tr align="left" valign="top">
-	    <td>{$zone['name']|escape}</td>
-	    <td>{if $zone['file_type'] eq null or $zone['file_type'] eq 'none' or $zone['file_type'] eq '0'}{l s='N/A' mod='cloudcache'}{else}{$zone['file_type']|upper|escape}{/if}</td>
-	    <td><div class="jexcerpt-short">{$zone['origin']|substr:0:10|escape}{if $zone['origin']|strlen > 10}...{/if}</div>{if $zone['origin']|strlen > 10}<div class="jexcerpt-long">{$zone['origin']}</div>{/if}</td>
-	    <td><span class="jexcerpt-short">{$zone['cdn_url']|substr:0:10|escape}{if $zone['cdn_url']|strlen > 10}...{/if}</span>{if $zone['cdn_url']|strlen > 10}<span class="jexcerpt-long">{$zone['cdn_url']|escape}</span>{/if}</td>
-	    {*	    <td>{if isset($zone.label)}{$zone['label']|escape}{/if}</td> *}
-	    <td>{if isset($zone['compress']) && $zone['compress'] == 1}{l s='YES' mod='cloudcache'}{else}{l s='NO' mod='cloudcache'}{/if}</td>
-    <td>{if $zone.bw_last_month != -1}{$zone['bw_last_month']|escape}{else}{l s='N/A' mod='cloudcache'}{/if}</td>
-	    <td>{if $zone.bw_last_week != -1}{$zone['bw_last_week']|escape}{else}{l s='N/A' mod='cloudcache'}{/if}</td>
-	    <td>{if $zone.bw_yesterday != -1}{$zone['bw_yesterday']|escape}{else}{l s='N/A' mod='cloudcache'}{/if}</td>
+	    <td>{$zone.name|escape}</td>
+	    <td>{if $zone.file_type eq null or $zone.file_type eq 'none' or $zone.file_type eq '0'}{l s='N/A' mod='cloudcache'}{else}{$zone.file_type|upper|escape}{/if}</td>
+	    <td><div class="jexcerpt-short">{$zone.origin|substr:0:10|escape}{if $zone.origin|strlen > 10}...{/if}</div>{if $zone.origin|strlen > 10}<div class="jexcerpt-long">{$zone.origin}</div>{/if}</td>
+	    <td><span class="jexcerpt-short">{$zone.cdn_url|substr:0:10|escape}{if $zone.cdn_url|strlen > 10}...{/if}</span>{if $zone.cdn_url|strlen > 10}<span class="jexcerpt-long">{$zone.cdn_url|escape}</span>{/if}</td>
+	    {*	    <td>{if isset($zone.label)}{$zone.label|escape}{/if}</td> *}
+	    <td>{if isset($zone.compress) && $zone.compress == 1}{l s='YES' mod='cloudcache'}{else}{l s='NO' mod='cloudcache'}{/if}</td>
+    <td>{if $zone.bw_last_month != -1}{$zone.bw_last_month|escape}{else}{l s='N/A' mod='cloudcache'}{/if}</td>
+	    <td>{if $zone.bw_last_week != -1}{$zone.bw_last_week|escape}{else}{l s='N/A' mod='cloudcache'}{/if}</td>
+	    <td>{if $zone.bw_yesterday != -1}{$zone.bw_yesterday|escape}{else}{l s='N/A' mod='cloudcache'}{/if}</td>
 
 	    <td>
 	      <form method="post" action="{$serverRequestUri|strip_tags}&id_tab=4">
@@ -223,44 +223,44 @@ $(document).ready(function()
     {if isset($edit_zone_info)}
     <div id="cloudcache_edit_zone_form" class="cloudcache-dialogbox">
       <form method="post" action="{$serverRequestUri|strip_tags}&id_tab=4">
-	<input type="hidden" name="id_zone" id="id_zone" value="{$edit_zone_info['id_zone']|escape}"/>
+	<input type="hidden" name="id_zone" id="id_zone" value="{$edit_zone_info.id_zone|escape}"/>
 	<table border="0" cellspacing="5" class="bold-td">
 	  <tr>
 	    <td>{l s='ID Zone' mod='cloudcache'}</td>
-	    <td>{$edit_zone_info['id_zone']|escape}</td>
+	    <td>{$edit_zone_info.id_zone|escape}</td>
 	  </tr>
 	  <tr>
 	    <td>{l s='Pull Zone Name' mod='cloudcache'}</td>
-	    <td><input type="hidden" name="name" id="name" size="20" maxlength="30" value="{$edit_zone_info['name']|escape}"/>{$edit_zone_info['name']|escape}</td>
+	    <td><input type="hidden" name="name" id="name" size="20" maxlength="30" value="{$edit_zone_info.name|escape}"/>{$edit_zone_info.name|escape}</td>
 	  </tr>
 	  <tr>
 	    <td>{l s='Origin Server Url' mod='cloudcache'}</td>
-	    <td><input type="hidden" name="origin" id="origin" size="20" maxlength="30" value="{$edit_zone_info['origin']|escape}"/>{$edit_zone_info['origin']|escape}</td>
+	    <td><input type="hidden" name="origin" id="origin" size="20" maxlength="30" value="{$edit_zone_info.origin|escape}"/>{$edit_zone_info.origin|escape}</td>
 	  </tr>
 	  <tr>
 	    <td>{l s='Custom CDN Domain' mod='cloudcache'}</td>
-	    <td><input type="text" name="vanity_domain" id="vanity_domain" size="20" maxlength="30" value="{$edit_zone_info['cdn_url']|escape}"/></td>
+	    <td><input type="text" name="vanity_domain" id="vanity_domain" size="20" value="{$edit_zone_info.cdn_url|escape}"/></td>
 	  </tr>
 	  <tr>
 	    <td>{l s='Label' mod='cloudcache'}</td>
-	    <td><input type="text" name="label" id="label" size="20" maxlength="30" value="{$edit_zone_info['label']|escape}"/></td>
+	    <td><input type="text" name="label" id="label" size="20" maxlength="30" value="{$edit_zone_info.label|escape}"/></td>
 	  </tr>
 	  <tr>
 	    <td>{l s='Compression' mod='cloudcache'}</td>
 	    <td>
-	      <input type="checkbox" name="compress" id="compress" size="20" maxlength="30" {if $edit_zone_info['compress'] == 1}checked="checked"{/if}/>
+	      <input type="checkbox" name="compress" id="compress" size="20" maxlength="30" {if $edit_zone_info.compress == 1}checked="checked"{/if}/>
 	    </td>
 	  </tr>
 	  <tr>
 	    <td>{l s='File Type' mod='cloudcache'}</td>
 	    <td>
 	      <select name="file_type" id="file_type">
-		<option value="all" {if $edit_zone_info['file_type'] == 'all'}selected="selected"{/if}>{l s='All' mod='cloudcache'}</option>
-		<option value="0" {if !$edit_zone_info['file_type']}selected="selected"{/if}>--not assigned--</option>
-		<option value="css" {if $edit_zone_info['file_type'] == 'css'}selected="selected"{/if}>CSS</option>
-		<option value="js" {if $edit_zone_info['file_type'] == 'js'}selected="selected"{/if}>JS</option>
-		<option value="img" {if $edit_zone_info['file_type'] == 'img'}selected="selected"{/if}>Images</option>
-		<option value="other" {if $edit_zone_info['file_type'] == 'other'}selected="selected"{/if}>Others</option>
+		<option value="all" {if $edit_zone_info.file_type == 'all'}selected="selected"{/if}>{l s='All' mod='cloudcache'}</option>
+		<option value="0" {if !$edit_zone_info.file_type}selected="selected"{/if}>--not assigned--</option>
+		<option value="css" {if $edit_zone_info.file_type == 'css'}selected="selected"{/if}>CSS</option>
+		<option value="js" {if $edit_zone_info.file_type == 'js'}selected="selected"{/if}>JS</option>
+		<option value="img" {if $edit_zone_info.file_type == 'img'}selected="selected"{/if}>Images</option>
+		<option value="other" {if $edit_zone_info.file_type == 'other'}selected="selected"{/if}>Others</option>
 	      </select>
 	      <input type="hidden" style="display: none;" name="type" value="pullzone" />
 	    </td>
@@ -269,7 +269,7 @@ $(document).ready(function()
 	    <td>{l s='Zone Type' mod='cloudcache'}</td>
 	    <td><select name="type" id="type">
 		{foreach from=$allAvailableZones key=type item=name}
-		<option value="{$type|escape}" {if $edit_zone_info['type'] == $type}selected="selected"{/if}>{$name|escape}</option>
+		<option value="{$type|escape}" {if $edit_zone_info.type == $type}selected="selected"{/if}>{$name|escape}</option>
 		{/foreach}
 	      </select>
 	    </td>

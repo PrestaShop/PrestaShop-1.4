@@ -14,7 +14,7 @@ if (version_compare(_PS_VERSION_, '1.4', '<'))
 	class Shop extends ObjectModel
 	{
 		public $id = 1;
-		public $id_group_shop = 1;
+		public $id_shop_group = 1;
 		
 		public function __construct()
 		{
@@ -179,7 +179,7 @@ class ShopBackwardModule extends Shop
 {
 	const CONTEXT_ALL = 1;
 	public $id = 1;
-	public $id_group_shop = 1;
+	public $id_shop_group = 1;
 	
 	
 	public function getContextType()

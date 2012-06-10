@@ -5,7 +5,7 @@ $sql = array();
 $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'cloudcache_zone` (
 		`id_zone` int(10) unsigned NOT NULL,
 		`id_shop` int(10) unsigned NOT NULL,
-		`id_group_shop` int(10) unsigned NOT NULL,
+		`id_shop_group` int(10) unsigned NOT NULL,
 		`name` varchar(255) NOT NULL,
 		`origin` varchar(255) NULL,
 		`compress` tinyint NULL,

@@ -25,9 +25,6 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-if (!class_exists('CloudCache') && file_exists(dirname(__FILE__).'/../../modules/cloudcache/cloudcache.php'))
-	require(dirname(__FILE__).'/../../modules/cloudcache/cloudcache.php');
-
 class Tools extends ToolsCore
 {
 	/** @var _totalServerCount Total count of all servers */
@@ -41,8 +38,20 @@ class Tools extends ToolsCore
 	/** @var _activatedModule Flag weither or not the module is active */
 	private static $_activatedModule = false;
 
-	public static $id_group_shop = 1;
+	public static $id_shop_group = 1;
 	public static $id_shop = 1;
+
+	/** @var _isActive Flag to know if the module is active or note */
+	public static $_isActive = -1;
+
+	private static function _selectProtocol(&$url)
+	{
+		$useSSL = (Configuration::get('PS_SSL_ENABLED') && Tools::usingSecureMode());
+
+		if (preg_match('#(.*)\.'.Configuration::get('CLOUDCACHE_API_COMPANY_ID').'\.netdna-cdn.com$#', $url, $matches) && $useSSL)
+			$url = $matches[1].'-'.Configuration::get('CLOUDCACHE_API_COMPANY_ID').'.netdna-ssl.com';
+		return $useSSL ? 'https://' : 'http://';
+	}
 
 	/**
 	 * @brief Init the statics needed by getMediaServer
@@ -53,7 +62,7 @@ class Tools extends ToolsCore
 
 		$context = Context::getContext();
 		self::$id_shop = $context->shop->id;
-		self::$id_group_shop = $context->shop->id_group_shop;
+		self::$id_shop_group = $context->shop->id_shop_group;
 
 		// Init the statics
 		self::$_servers = array();
@@ -79,7 +88,8 @@ class Tools extends ToolsCore
 		foreach ($d as $line)
 			if ($line['file_type'] == CLOUDCACHE_FILE_TYPE_ALL)
 			{
-				self::$_servers[CLOUDCACHE_FILE_TYPE_ALL][] = pSQL($line['cdn_url']);
+				$protocol = self::_selectProtocol($line['cdn_url']); // Must be there because _SelectProtocol updates the url
+				self::$_servers[CLOUDCACHE_FILE_TYPE_ALL][] = array('url' => $line['cdn_url'], 'protocol' => $protocol);
 				self::$_serversCount[CLOUDCACHE_FILE_TYPE_ALL]++;
 				self::$_totalServerCount++;
 				$allOnly = true;
@@ -88,35 +98,87 @@ class Tools extends ToolsCore
 		foreach ($d as $line)
 			if ($line['file_type'] && !$allOnly)
 			{
-				self::$_servers[$line['file_type']][] = $line['cdn_url'];
+				$protocol = self::_selectProtocol($line['cdn_url']); // Must be there because _SelectProtocol updates the url
+				self::$_servers[$line['file_type']][] = array('url' => $line['cdn_url'], 'protocol' => $protocol);
 				self::$_serversCount[$line['file_type']]++;
 				self::$_totalServerCount++;
 			}
 	}
 
+	/**
+	 * @brief Temper with JS files
+	 *
+	 * @param js_uri URI of the JS
+	 *
+	 * @note 1.4 only
+	 */
 	public static function addJS($js_uri)
 	{
 		parent::addJS($js_uri);
+
+		if (!self::_isActive())
+			return ;
+
 		global $js_files;
 
 		foreach ($js_files as &$file)
 			if (!preg_match('/^http(s?):\/\//i', $file))
-				$file = 'http://'.self::getMediaServer($file).$file;
+			{
+				$proto = 'http://';
+				$file = self::getMediaServer($file, $proto).$file;
+				$file = $proto.$file;
+			}
 	}
 
+	/**
+	 * @brief Temper with CSS files
+	 *
+	 * @param css_uri URI of the CSS
+	 * @param css_media_type Type of the css
+	 *
+	 * @note 1.4 only
+	 */
 	public static function addCSS($css_uri, $css_media_type = 'all')
 	{
 		parent::addCSS($css_uri, $css_media_type);
+
+		if (!self::_isActive())
+			return ;
+
 		global $css_files;
 
 		$new = array();
 		foreach ($css_files as $key => $file)
 		{
 			if (!preg_match('/^http(s?):\/\//i', $key))
-				$key = 'http://'.self::getMediaServer($key).$key;
+			{
+				$proto = 'http://';
+				$key = self::getMediaServer($key, $proto).$key; // Pass as reference, do not move $proto
+				$key = $proto.$key;
+			}
 			$new[$key] = $file;
 		}
 		$css_files = $new;
+	}
+
+	public static function getProtocol($use_ssl = null)
+	{
+		if (self::_isActive())
+			return (Configuration::get('PS_SSL_ENABLED') && self::usingSecureMode()) ? 'https://' : 'http://';
+		return parent::getProtocol($use_ssl);
+	}
+
+	private static function _isActive()
+	{
+		if (self::$_isActive == -1)
+		{
+			// This override is part of the cloudcache module, so the cloudcache.php file exists
+			require_once(dirname(__FILE__).'/../../modules/cloudcache/cloudcache.php');
+			$module = new CloudCache();
+			self::$_isActive = $module->active;
+		}
+
+		return self::$_isActive;
 	}
 
 	/**
@@ -128,15 +190,9 @@ class Tools extends ToolsCore
 	 *
 	 * @return URL of the server to use.
 	 */
-	public static function getMediaServer($filename)
+	public static function getMediaServer($filename, &$protocol = NULL)
 	{
-		// Override default behavior only if module is active
-		if (!class_exists('CloudCache'))
-			include(dirname(__FILE__).'/../../modules/cloudcache/cloudcache.php');
-
-		$module = new CloudCache();
-
-		if (!$module->active)
+		if (!self::_isActive())
 			return parent::getMediaServer($filename);
 
 		// Init the server list if needed
@@ -146,11 +202,16 @@ class Tools extends ToolsCore
 		if (!self::$_activatedModule)
 			return parent::getMediaServer($filename);
 
+
 		// If there is a least one ALL server, then use one of them
 		if (self::$_serversCount[CLOUDCACHE_FILE_TYPE_ALL])
-					// Return one of those server
-					return (self::$_servers[CLOUDCACHE_FILE_TYPE_ALL][(abs(crc32($filename)) %
-								self::$_serversCount[CLOUDCACHE_FILE_TYPE_ALL])]);
+		{
+			$server = self::$_servers[CLOUDCACHE_FILE_TYPE_ALL][(abs(crc32($filename)) %
+					self::$_serversCount[CLOUDCACHE_FILE_TYPE_ALL])];
+			if ($protocol)
+				$protocol = $server['protocol'];
+			return $server['url'];
+		}
 
 
 		// If there is servers, then use them
@@ -162,16 +223,24 @@ class Tools extends ToolsCore
 				if (strstr($filename, $type) && self::$_serversCount[$type])
 				{
 					// Return one of those server
-					return (self::$_servers[$type][(abs(crc32($filename)) %
+					$server = (self::$_servers[$type][(abs(crc32($filename)) %
 								self::$_serversCount[$type])]);
+					if ($protocol)
+						$protocol = $server['protocol'];
+					return $server['url'];
 				}
 
 			// If no file type found, then it is 'other'
 			// If there is server setted for the 'other' type, use it
 			if (self::$_serversCount[CLOUDCACHE_FILE_TYPE_OTHER])
+			{
 				// Return one of the server setted up
-				return (self::$_servers[$type][(abs(crc32($filename)) %
-							self::$_serversCount[$type])]);
+				$server = (self::$_servers[$type][(abs(crc32($filename)) %
+											self::$_serversCount[$type])]);
+				if ($protocol)
+					$protocol = $server['protocol'];
+				return $server['url'];
+			}
 		}
 
 		// If there is no server setted up, then use the parent method
