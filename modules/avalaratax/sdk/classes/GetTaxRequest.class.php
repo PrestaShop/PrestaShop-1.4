@@ -108,8 +108,8 @@ class GetTaxRequest
 	public function postFetch()
 	{
 		$addresses = $this->getAddresses();
-		$this->OriginAddress = $addresses[$this->OriginCode];
-		$this->DestinationAddress = $addresses[$this->DestinationCode];
+		$this->OriginAddress = (isset($addresses[$this->OriginCode]) ? $addresses[$this->OriginCode] : null);
+		$this->DestinationAddress = (isset($addresses[$this->DestinationCode]) ? $addresses[$this->DestinationCode] : null);
 		
 		//@author: Swetal
 		//Commenting following foreach loop
@@ -437,7 +437,12 @@ class GetTaxRequest
 		
 		//@swetal
 		//Changed from $this->Addresses to $this->Addresses->BaseAddress
-		return is_array($this->Addresses) ? $this->Addresses : EnsureIsArray($this->Addresses->BaseAddress);
+
+		if (is_array($this->Addresses))
+			return $this->Addresses;
+		else if (is_object($this->Addresses) && isset($this->Addresses->BaseAddress))
+			return EnsureIsArray($this->Addresses->BaseAddress);
+		return null;
 		
 		
 		

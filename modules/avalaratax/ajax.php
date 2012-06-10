@@ -110,21 +110,23 @@ if ($avalaraModule->active)
 					'quantity' => 1, // This is a per product, so qty is 1
 					'total' => $product['price'],
 					'tax_code' => $avalaraModule->getProductTaxCode($product['id_product']));
-
 		// Call Avalara
-		$getTaxResult = $avalaraModule->getTax($avalaraProducts, array('type' => 'SalesOrder', 'DocCode' => 1));
-
+		$getTaxResult = $avalaraModule->getTax($avalaraProducts, array('type' => 'SalesOrder', 'DocCode' => 1), $id_address);
 		// Store the taxrate in cache
 		// If taxrate exists (but it's outdated), then update, else insert (REPLACE INTO)
 		if (isset($getTaxResult['TotalTax'])
-		&& $getTaxResult['TotalTax']
+			&& (float) $getTaxResult['TotalTax'] >= 0
 		&& isset($getTaxResult['TotalAmount'])
 		&& $getTaxResult['TotalAmount'])
+		{
 			Db::getInstance()->Execute('REPLACE INTO '._DB_PREFIX_.'avalara_product_cache (`id_product`, `tax_rate`, `region`, `update_date`)
 									VALUES ('.(int)$product['id_product'].'
 									,'.(float)($getTaxResult['TotalTax'] * 100 / $getTaxResult['TotalAmount']).'
 									,\''.pSQL($region).'\'
 									,"'.date('Y-m-d H:i:s').'")');
+			echo 'ok_d';
+			return;
+		}
 	}
 }
 echo 'ok';

@@ -54,7 +54,7 @@ class AvalaraTax extends Module
 
 		$this->name = 'avalaratax';
 		$this->tab = 'billing_invoicing';
-		$this->version = '2.0';
+		$this->version = '2.1';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('us', 'ca');
 		parent::__construct();
@@ -374,10 +374,10 @@ class AvalaraTax extends Module
 				},
 				dataType: \'html\',
 				success : function(data){
-					if (data == \'ok_c\')
-						$(\'#total_tax\').html($(\'body\').data(\'total_tax\'));
-					else
+					if (data == \'ok_d\')
 						$(\'#total_tax\').html(\'<a href="'.$this->getCurrentUrl().'">'.$this->l('Display taxes').'</a>\');
+          else
+            $(\'#total_tax\').html($(\'body\').data(\'total_tax\'));
 				}
 			});
 		});
@@ -822,7 +822,7 @@ class AvalaraTax extends Module
 	** 		cart : (required for SalesOrder and SalesInvoice) Cart object
 	** 		DocCode : (required in ReturnInvoice, and when 'cart' is not set) Specify the Document Code
 	*/
-	public function getTax($products = array(), $params = array())
+	public function getTax($products = array(), $params = array(), $id_address = null)
 	{
 		global $cookie;
 		$addressDest = array();
@@ -839,11 +839,16 @@ class AvalaraTax extends Module
 		// Get the address from customer profile
 		if (isset($cookie) && isset($cookie->id_customer) && $cookie->id_customer)
 		{
-			$addressId = Db::getInstance()->ExecuteS('SELECT `id_address` 
+			if ($id_address == null)
+			{
+				$addressId = Db::getInstance()->ExecuteS('SELECT `id_address` 
 													FROM '._DB_PREFIX_.'address
-													WHERE id_customer = '.(int)$cookie->id_customer);
+													WHERE id_customer = '.(int)$cookie->id_customer.' AND active = "1" AND deleted = "0"');
 			
-			$address = new Address((int)$addressId[0]['id_address']);
+				$address = new Address((int)$addressId[0]['id_address']);
+			}
+			else
+				$address = new Address((int)$id_address);
 			if (!empty($address->id_state))
 				$state = new State((int)$address->id_state);
 			$addressDest['Line1'] = $address->address1;
@@ -987,7 +992,7 @@ class AvalaraTax extends Module
 				{
 					$buffer['TaxLines'][$ctl->getNo()]['GetTax'] = Tools::safeOutput($ctl->getTax());
 					$buffer['TaxLines'][$ctl->getNo()]['TaxCode'] = Tools::safeOutput($ctl->getTaxCode());
-					
+
 					foreach($ctl->getTaxDetails() as $ctd)
 					{
 						$buffer['TaxLines'][$ctl->getNo()]['TaxDetails']['JurisType'] = Tools::safeOutput($ctd->getJurisType());
