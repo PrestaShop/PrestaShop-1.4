@@ -35,8 +35,8 @@ elseif (file_exists(dirname(__FILE__).'/../modules/shipwire/HelperFn.php'))
 	include_once(dirname(__FILE__).'/../modules/shipwire/HelperFn.php');
 
 $includeFiles = array(
-					'ShipwireApi.php', 
-					'ShipwireInventoryUpdate.php', 
+					'ShipwireApi.php',
+					'ShipwireInventoryUpdate.php',
 					'ShipwireOrder.php',
 					'ShipwireTracking.php',
 					'SWCurl.php',
@@ -46,7 +46,7 @@ foreach ($includeFiles as $file)
 {
 	if (!HelperFn::safeFileName($file))
 		die();
-	
+
 	if (file_exists(dirname(__FILE__).'/lib/'.$file))
 		require_once(dirname(__FILE__).'/lib/'.$file);
 	elseif (file_exists(dirname(__FILE__).'/../modules/shipwire/lib/'.$file))
@@ -78,7 +78,7 @@ class Shipwire extends Module
 
 	/** @var _shipWireInventoryUpdate Shipwire Api Object */
 	private $_shipWireInventoryUpdate;
-	private $context;
+	public $context;
 
 	/******************************************************************/
 	/** Construct Method **********************************************/
@@ -87,9 +87,9 @@ class Shipwire extends Module
 	{
 		$this->name = 'shipwire';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.1.6';
+		$this->version = '1.1.7';
 		$this->author = 'PrestaShop';
-		
+
 		$this->_initContext();
 
 		parent::__construct();
@@ -260,7 +260,7 @@ class Shipwire extends Module
 						if (help_class_name == "adminorders")
 							$(\'.container-command div:eq(0)\').append(html);
 						';
-				
+
 				$buffer .= '
 				$(\'.link-submit-form\').click(function(){
 					$(this).parent(\'form\').submit();
@@ -292,7 +292,7 @@ class Shipwire extends Module
 				});
 			});
 		</script>';
-		
+
 		echo $buffer;
 	}
 
@@ -386,12 +386,12 @@ class Shipwire extends Module
 			{
 				if ($o['@attributes']['number'] != $order->id)
 					$this->_displayConfirmation($this->l('An unkown error occured with order Id.'), 'error');
-				//$val = Db::getInstance()->getValue('SELECT `transaction_ref` FROM `'._DB_PREFIX_.'shipwire_order` 
+				//$val = Db::getInstance()->getValue('SELECT `transaction_ref` FROM `'._DB_PREFIX_.'shipwire_order`
 				//										WHERE `id_order` = '.(int)$order->id);
 
-				$orderExists = Db::getInstance()->ExecuteS('SELECT `id_order` FROM `'._DB_PREFIX_.'shipwire_order` 
+				$orderExists = Db::getInstance()->ExecuteS('SELECT `id_order` FROM `'._DB_PREFIX_.'shipwire_order`
 															WHERE `id_order` = '.(int)$order->id.' LIMIT 1');
-															
+
 				if (isset($orderExists[0]['id_order']) && $orderExists[0]['id_order'])
 				{
 					Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'shipwire_order`
@@ -424,10 +424,10 @@ class Shipwire extends Module
 	 * @return Rendered form
 	 */
 	public function getContent()
-	{	
+	{
 		$idShop = isset($this->context->shop->id) ? $this->context->shop->id : 1;
 		$idGroupShop = isset($this->context->shop->id_group_shop) ? $this->context->shop->id_group_shop : 1;
-		
+
 		if (Tools::isSubmit('SubmitShipwireSettings'))
 		{
 			if (Validate::isEmail(Tools::getValue('shipwire_api_user')))
@@ -440,12 +440,12 @@ class Shipwire extends Module
 
 				$this->dParams['confirmMessage'] = $this->_displayConfirmation();
 				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'shipwire_order` '.
-					(isset($this->context->shop->id) && isset($this->context->shop->id_group_shop) ? 
-						'WHERE `id_shop` = '.(int)$this->context->shop->id.' 
+					(isset($this->context->shop->id) && isset($this->context->shop->id_group_shop) ?
+						'WHERE `id_shop` = '.(int)$this->context->shop->id.'
 						AND `id_group_shop` = '.(int)$this->context->shop->id_group_shop : ''));
 				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'shipwire_stock` '.
-					(isset($this->context->shop->id) && isset($this->context->shop->id_group_shop) ? 
-						'WHERE `id_shop` = '.(int)$this->context->shop->id.' 
+					(isset($this->context->shop->id) && isset($this->context->shop->id_group_shop) ?
+						'WHERE `id_shop` = '.(int)$this->context->shop->id.'
 						AND `id_group_shop` = '.(int)$this->context->shop->id_group_shop : ''));
 			}
 			else
@@ -516,7 +516,7 @@ class Shipwire extends Module
 		}
 		elseif (Tools::isSubmit('SubmitUpdateTracking'))
 		{
-			
+
 			if (ShipwireTracking::updateTracking(true, $idShop, $idGroupShop))
 				$this->dParams['confirmMessage'] = $this->_displayConfirmation($this->l('Transactions updated.'));
 			else
