@@ -579,7 +579,7 @@ class MondialRelay extends Module
 			$carrier = new Carrier((int)$id_carrier);
 
 		$this->context->smarty->assign(array(
-			'MR_Data'=> Tools::jsonEncode(array(
+			'MR_Data'=> MRTools::jsonEncode(array(
 				'carrier_list' => $carriersList,
 				'carrier' => $carrier,
 				'dlv_mode' => $id_carrier ? $carrier['dlv_mode']: '',
