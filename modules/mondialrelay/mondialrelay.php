@@ -71,7 +71,7 @@ class MondialRelay extends Module
 	{
 		$this->name		= 'mondialrelay';
 		$this->tab		= 'shipping_logistics';
-		$this->version	= '1.8.4';
+		$this->version	= '1.8.5';
 		$this->installed_version = '';
 		$this->module_key = '366584e511d311cfaa899fc2d9ec1bd0';
 		$this->author = 'PrestaShop';
@@ -579,11 +579,13 @@ class MondialRelay extends Module
 			$carrier = new Carrier((int)$id_carrier);
 
 		$this->context->smarty->assign(array(
-			'carriersextra' => $carriersList,
-			'preSelectedRelay' => isset($preSelectedRelay['MR_selected_num']) ? $preSelectedRelay['MR_selected_num'] : '',
-			'MR_carrier' => $carrier,
-			'MR_PS_VERSION' => _PS_VERSION_,
-			'MR_dlv_mode' => $id_carrier ? $carrier['dlv_mode']: ''
+			'MR_Data'=> Tools::jsonEncode(array(
+				'carrier_list' => $carriersList,
+				'carrier' => $carrier,
+				'dlv_mode' => $id_carrier ? $carrier['dlv_mode']: '',
+				'PS_VERSION' => _PS_VERSION_,
+				'pre_selected_relay' => isset($preSelectedRelay['MR_selected_num']) ? $preSelectedRelay['MR_selected_num'] : '',
+			))
 		));
 
 		return $this->fetchTemplate('/tpl/', 'checkout_process');
