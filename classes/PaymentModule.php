@@ -180,7 +180,7 @@ abstract class PaymentModuleCore extends Module
 				Product::addCustomizationPrice($products, $customizedDatas);
 				$outOfStock = false;
 
-				$storeAllTaxes = array();
+				$store_all_taxes = array();
 
 				foreach ($products AS $key => $product)
 				{
@@ -224,18 +224,18 @@ abstract class PaymentModuleCore extends Module
 
 						foreach ($allTaxes as $res)
 						{
-							if (!isset($storeAllTaxes[$res->id]))
+							if (!isset($store_all_taxes[$res->id]))
 							{
-								$storeAllTaxes[$res->id] = array();
-								$storeAllTaxes[$res->id]['amount'] = 0;
+								$store_all_taxes[$res->id] = array();
+								$store_all_taxes[$res->id]['amount'] = 0;
 							}
-	
-							$storeAllTaxes[$res->id]['name'] = $res->name[(int)$order->id_lang];
-							$storeAllTaxes[$res->id]['rate'] = $res->rate;
-	
+
+							$store_all_taxes[$res->id]['name'] = $res->name[(int)$order->id_lang];
+							$store_all_taxes[$res->id]['rate'] = $res->rate;
+							
 							$unit_tax_amount = $tmp_price * ($res->rate * 0.01);
 							$tmp_price = $tmp_price + $unit_tax_amount;
-							$storeAllTaxes[$res->id]['amount'] += $unit_tax_amount * $product['cart_quantity'];
+							$store_all_taxes[$res->id]['amount'] += $unit_tax_amount * $product['cart_quantity'];
 						}
 					}
 					/* End */
@@ -348,24 +348,24 @@ abstract class PaymentModuleCore extends Module
 					if (!isset($res->id))
 						continue;
 
-					if (!isset($storeAllTaxes[$res->id]))
-						$storeAllTaxes[$res->id] = array();
-					if (!isset($storeAllTaxes[$res->id]['amount']))
-						$storeAllTaxes[$res->id]['amount'] = 0;
-					$storeAllTaxes[$res->id]['name'] = $res->name[(int)$order->id_lang];
-					$storeAllTaxes[$res->id]['rate'] = $res->rate;
+					if (!isset($store_all_taxes[$res->id]))
+						$store_all_taxes[$res->id] = array();
+					if (!isset($store_all_taxes[$res->id]['amount']))
+						$store_all_taxes[$res->id]['amount'] = 0;
+					$store_all_taxes[$res->id]['name'] = $res->name[(int)$order->id_lang];
+					$store_all_taxes[$res->id]['rate'] = $res->rate;
 
 					if (!$nTax++)
-						$storeAllTaxes[$res->id]['amount'] += ($shippingCostTaxExcl * (1 + ($res->rate * 0.01))) - $shippingCostTaxExcl;
+						$store_all_taxes[$res->id]['amount'] += ($shippingCostTaxExcl * (1 + ($res->rate * 0.01))) - $shippingCostTaxExcl;
 					else
 					{
 						$priceTmp = $order->total_shipping / (1 + ($res->rate * 0.01));
-						$storeAllTaxes[$res->id]['amount'] += $order->total_shipping - $priceTmp;
+						$store_all_taxes[$res->id]['amount'] += $order->total_shipping - $priceTmp;
 					}
 				}
 
 				/* Store taxes */
-				foreach ($storeAllTaxes AS $t)
+				foreach ($store_all_taxes as $t)
 					Db::getInstance()->Execute('
 					INSERT INTO '._DB_PREFIX_.'order_tax (id_order, tax_name, tax_rate, amount)
 					VALUES ('.(int)$order->id.', \''.pSQL($t['name']).'\', '.(float)($t['rate']).', '.(float)$t['amount'].')');
