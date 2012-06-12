@@ -39,7 +39,7 @@ class BlockLayered extends Module
 	{
 		$this->name = 'blocklayered';
 		$this->tab = 'front_office_features';
-		$this->version = '1.8.4';
+		$this->version = '1.8.5';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
@@ -139,7 +139,8 @@ class BlockLayered extends Module
 			`price_max` INT NOT NULL,
 		PRIMARY KEY (`id_product`, `id_currency`, `id_shop`),
 		INDEX `id_currency` (`id_currency`),
-		INDEX `price_min` (`price_min`), INDEX `price_max` (`price_max`)) ENGINE = '._MYSQL_ENGINE_);
+		INDEX `price_min` (`price_min`), INDEX `price_max` (`price_max`)
+		)  ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;');
 	}
 	
 	private function installFriendlyUrlTable()
@@ -152,7 +153,8 @@ class BlockLayered extends Module
 		`data` varchar(200) NOT NULL,
 		`id_lang` INT NOT NULL,
 		PRIMARY KEY (`id_layered_friendly_url`),
-		INDEX `id_lang` (`id_lang`)) ENGINE = '._MYSQL_ENGINE_);
+		INDEX `id_lang` (`id_lang`)
+		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;');
 
 		Db::getInstance()->execute('CREATE INDEX `url_key` ON `'._DB_PREFIX_.'layered_friendly_url`(url_key(5))');
 	}
@@ -165,7 +167,8 @@ class BlockLayered extends Module
 		CREATE TABLE `'._DB_PREFIX_.'layered_indexable_attribute_group` (
 		`id_attribute_group` INT NOT NULL,
 		`indexable` BOOL NOT NULL DEFAULT 0,
-		PRIMARY KEY (`id_attribute_group`)) ENGINE = '._MYSQL_ENGINE_);
+		PRIMARY KEY (`id_attribute_group`)
+		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;');
 		Db::getInstance()->execute('
 		INSERT INTO `'._DB_PREFIX_.'layered_indexable_attribute_group`
 		SELECT id_attribute_group, 1 FROM `'._DB_PREFIX_.'attribute_group`');
@@ -177,7 +180,8 @@ class BlockLayered extends Module
 		`id_lang` INT NOT NULL,
 		`url_name` VARCHAR(20),
 		`meta_title` VARCHAR(20),
-		PRIMARY KEY (`id_attribute_group`, `id_lang`)) ENGINE = '._MYSQL_ENGINE_);
+		PRIMARY KEY (`id_attribute_group`, `id_lang`)
+		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;');
 		
 		// Attributes
 		Db::getInstance()->execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'layered_indexable_attribute_lang_value`');
@@ -187,7 +191,8 @@ class BlockLayered extends Module
 		`id_lang` INT NOT NULL,
 		`url_name` VARCHAR(20),
 		`meta_title` VARCHAR(20),
-		PRIMARY KEY (`id_attribute`, `id_lang`)) ENGINE = '._MYSQL_ENGINE_);
+		PRIMARY KEY (`id_attribute`, `id_lang`)
+		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;');
 		
 		
 		// Features
@@ -196,7 +201,8 @@ class BlockLayered extends Module
 		CREATE TABLE `'._DB_PREFIX_.'layered_indexable_feature` (
 		`id_feature` INT NOT NULL,
 		`indexable` BOOL NOT NULL DEFAULT 0,
-		PRIMARY KEY (`id_feature`)) ENGINE = '._MYSQL_ENGINE_);
+		PRIMARY KEY (`id_feature`)
+		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;');
 		
 		Db::getInstance()->execute('
 		INSERT INTO `'._DB_PREFIX_.'layered_indexable_feature`
@@ -209,7 +215,8 @@ class BlockLayered extends Module
 		`id_lang` INT NOT NULL,
 		`url_name` VARCHAR(20) NOT NULL,
 		`meta_title` VARCHAR(20),
-		PRIMARY KEY (`id_feature`, `id_lang`)) ENGINE = '._MYSQL_ENGINE_);
+		PRIMARY KEY (`id_feature`, `id_lang`)
+		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;');
 		
 		// Features values
 		Db::getInstance()->execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'layered_indexable_feature_value_lang_value`');
@@ -219,7 +226,8 @@ class BlockLayered extends Module
 		`id_lang` INT NOT NULL,
 		`url_name` VARCHAR(20),
 		`meta_title` VARCHAR(20),
-		PRIMARY KEY (`id_feature_value`, `id_lang`)) ENGINE = '._MYSQL_ENGINE_);
+		PRIMARY KEY (`id_feature_value`, `id_lang`)
+		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;');
 	}
 	
 	/**
@@ -236,7 +244,7 @@ class BlockLayered extends Module
 		`id_attribute_group` int(10) unsigned NOT NULL DEFAULT "0",
 		`id_shop` int(10) unsigned NOT NULL DEFAULT "1",
 		KEY `id_attribute` (`id_attribute`)
-		) ENGINE= '._MYSQL_ENGINE_);
+		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;');
 	}
 	
 	/**
@@ -1362,7 +1370,7 @@ class BlockLayered extends Module
 		$layered_filter_list = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT * FROM '._DB_PREFIX_.'layered_filter');
 		foreach ($layered_filter_list as $layered_filter)
 		{
-			$data = unserialize($layered_filter_list['filters']);
+			$data = self::unSerialize($layered_filter_list['filters']);
 			if (in_array((int)$params['category']->id, $data['categories']))
 			{
 				unset($data['categories'][array_search((int)$params['category']->id, $data['categories'])]);
@@ -2224,7 +2232,7 @@ class BlockLayered extends Module
 						{
 							$data = Db::getInstance()->getValue('SELECT data FROM `'._DB_PREFIX_.'layered_friendly_url` WHERE `url_key` = \''.md5('/'.$attribute_name.'-'.$url_parameter).'\'');
 							if ($data)
-								foreach (unserialize($data) as $key_params => $params)
+								foreach (self::unSerialize($data) as $key_params => $params)
 								{
 									if (!isset($selected_filters[$key_params]))
 										$selected_filters[$key_params] = array();
@@ -3457,7 +3465,7 @@ class BlockLayered extends Module
 		{
 			$layered_filter = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT * FROM '._DB_PREFIX_.'layered_filter WHERE id_layered_filter = '.(int)$id_layered_filter);
 			if ($layered_filter && isset($layered_filter['filters']) && !empty($layered_filter['filters']))
-				$layered_values = unserialize($layered_filter['filters']);
+				$layered_values = self::unSerialize($layered_filter['filters']);
 			if (isset($layered_values['categories']) && count($layered_values['categories']))
 				foreach ($layered_values['categories'] as $id_category)
 					$category_box[] = (int)$id_category;
@@ -3922,14 +3930,16 @@ class BlockLayered extends Module
 		`name` VARCHAR(64) NOT NULL,
 		`filters` TEXT NULL,
 		`n_categories` INT(10) UNSIGNED NOT NULL,
-		`date_add` DATETIME NOT NULL)');
+		`date_add` DATETIME NOT NULL
+		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;');
 		
 		Db::getInstance()->execute('
 		CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'layered_filter_shop` (
 		`id_layered_filter` INT(10) UNSIGNED NOT NULL,
 		`id_shop` INT(11) UNSIGNED NOT NULL,
 		PRIMARY KEY (`id_layered_filter`, `id_shop`),
-		KEY `id_shop` (`id_shop`))');
+		KEY `id_shop` (`id_shop`)
+		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;');
 	}
 	
 	public function rebuildLayeredCache($products_ids = array(), $categories_ids = array())
@@ -4122,7 +4132,7 @@ class BlockLayered extends Module
 		$values = false;
 		foreach ($res as $filter_template)
 		{
-			$data = unserialize($filter_template['filters']);
+			$data = self::unSerialize($filter_template['filters']);
 			foreach ($data['categories'] as  $id_category)
 			{
 				$n = 0;
@@ -4164,5 +4174,19 @@ class BlockLayered extends Module
 		}
 		if ($values)
 			Db::getInstance()->execute(rtrim($sql_to_insert, ','));
+	}
+	
+	/**
+	 * Define our own Tools::unSerialize() (since 1.5), to be available in PrestaShop 1.4
+	 */
+	protected static function unSerialize($serialized)
+	{
+		if (method_exists('Tools', 'unserialize'))
+			return Tools::unSerialize($serialized);
+		
+		if (is_string($serialized) && (strpos($serialized, 'O:') === false || !preg_match('/(^|;|{|})O:[0-9]+:"/', $serialized)))
+			return @unserialize($serialized);
+
+		return false;
 	}
 }
