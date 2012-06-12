@@ -26,7 +26,10 @@
 */
 
 /* Class FreeOrder to use PaymentModule (abstract class, cannot be instancied) */
-class FreeOrder extends PaymentModule {}
+class FreeOrder extends PaymentModule
+{
+	public $active = 1;
+}
 
 class ParentOrderControllerCore extends FrontController
 {
