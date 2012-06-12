@@ -213,27 +213,31 @@ abstract class PaymentModuleCore extends Module
 					}
 					$allTaxes = TaxRulesGroup::getTaxes((int)Product::getIdTaxRulesGroupByIdProduct((int)$product['id_product']), $id_country, $id_state, $id_county);
 
-					// remove order discount quotepart on product price in order to obtain the real tax
-					$ratio = $price / $order->total_products;
-					$order_reduction_amount = ((float)abs($cart->getOrderTotal(false, Cart::ONLY_DISCOUNTS))) * $ratio;
-					$tmp_price = $price - $order_reduction_amount;
-
-					foreach ($allTaxes AS $res)
+					// If its a freeOrder, there will be no calculation
+					if ($order->total_products > 0)
 					{
-						if (!isset($storeAllTaxes[$res->id]))
+						// remove order discount quotepart on product price in order to obtain the real tax
+						$ratio = $price / $order->total_products;
+						$order_reduction_amount = ((float)abs($cart->getOrderTotal(false, Cart::ONLY_DISCOUNTS))) * $ratio;
+						$tmp_price = $price - $order_reduction_amount;
+					
+
+						foreach ($allTaxes as $res)
 						{
-							$storeAllTaxes[$res->id] = array();
-							$storeAllTaxes[$res->id]['amount'] = 0;
+							if (!isset($storeAllTaxes[$res->id]))
+							{
+								$storeAllTaxes[$res->id] = array();
+								$storeAllTaxes[$res->id]['amount'] = 0;
+							}
+	
+							$storeAllTaxes[$res->id]['name'] = $res->name[(int)$order->id_lang];
+							$storeAllTaxes[$res->id]['rate'] = $res->rate;
+	
+							$unit_tax_amount = $tmp_price * ($res->rate * 0.01);
+							$tmp_price = $tmp_price + $unit_tax_amount;
+							$storeAllTaxes[$res->id]['amount'] += $unit_tax_amount * $product['cart_quantity'];
 						}
-
-						$storeAllTaxes[$res->id]['name'] = $res->name[(int)$order->id_lang];
-						$storeAllTaxes[$res->id]['rate'] = $res->rate;
-
-						$unit_tax_amount = $tmp_price * ($res->rate * 0.01);
-						$tmp_price = $tmp_price + $unit_tax_amount;
-						$storeAllTaxes[$res->id]['amount'] += $unit_tax_amount * $product['cart_quantity'];
 					}
-
 					/* End */
 
 					// Add some informations for virtual products
@@ -334,7 +338,6 @@ abstract class PaymentModuleCore extends Module
 				} // end foreach ($products)
 				$query = rtrim($query, ',');
 				$result = $db->Execute($query);
-
 				/* Add carrier tax */
 				$shippingCostTaxExcl = $cart->getOrderShippingCost((int)$order->id_carrier, false);
 				$allTaxes = TaxRulesGroup::getTaxes((int)Carrier::getIdTaxRulesGroupByIdCarrier((int)$order->id_carrier), $id_country, $id_state, $id_county);
