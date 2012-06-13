@@ -26,7 +26,10 @@
 <br/>
 <fieldset style="width:400px">
 			<legend><img src="../img/admin/delivery.gif" />{l s='Shipping information'}</legend>
-			<!--{$var.error}--><br/>
+			{if $var.errorMessage}
+			{$var.error}
+			{/if}
+			<br/>
 			<form action="{$var.currentIndex}&view{$var.table}&token={$var.token}" method="post" style="margin-top:10px;">
 			{if $var.weight}
 			{l s='The package weight must be between 0.1 and ' mod='tntcarrier'} {$weight} {l s='kg or call your TNT commercial' mod='tntcarrier'}<br/><br/>

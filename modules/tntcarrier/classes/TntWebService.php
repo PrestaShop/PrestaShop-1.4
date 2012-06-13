@@ -124,13 +124,13 @@ class TntWebService
 		$sender = array(
 			'type' => "ENTERPRISE",//(Configuration::get('TNT_CARRIER_SHIPPING_COLLECT') ? "ENTERPRISE" : "DEPOT"), //ENTREPRISE OR DEPOT
 			'typeId' => "",//(Configuration::get('TNT_CARRIER_SHIPPING_COLLECT') ? "" : Configuration::get('TNT_CARRIER_SHIPPING_PEX')) , // code PEX if DEPOT is ON
-			'name' => Configuration::get('TNT_CARRIER_SHIPPING_COMPANY'), // raison social
-			'address1' => Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS1'),
-			'address2' => Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS2'),
+			'name' => (strlen(Configuration::get('TNT_CARRIER_SHIPPING_COMPANY')) > 32 ? substr(Configuration::get('TNT_CARRIER_SHIPPING_COMPANY'), 0, 32)  : Configuration::get('TNT_CARRIER_SHIPPING_COMPANY')), // raison social
+			'address1' => (strlen(Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS1')) > 32 ? substr(Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS1'), 0, 32) : Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS1')),
+			'address2' => (strlen(Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS2')) > 32 ? substr(Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS2'), 0, 32) : Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS2')),
 			'zipCode' => Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE'),
 			'city' => $tntcarrier->putCityInNormeTnt(Configuration::get('TNT_CARRIER_SHIPPING_CITY')),
-			'contactLastName' => Configuration::get('TNT_CARRIER_SHIPPING_LASTNAME'),
-			'contactFirstName' => Configuration::get('TNT_CARRIER_SHIPPING_FIRSTNAME'),
+			'contactLastName' => (strlen(Configuration::get('TNT_CARRIER_SHIPPING_LASTNAME')) > 19 ? substr(Configuration::get('TNT_CARRIER_SHIPPING_LASTNAME'), 0, 19) : Configuration::get('TNT_CARRIER_SHIPPING_LASTNAME')),
+			'contactFirstName' => (strlen(Configuration::get('TNT_CARRIER_SHIPPING_FIRSTNAME')) > 12 ? substr(Configuration::get('TNT_CARRIER_SHIPPING_FIRSTNAME'), 0, 12) : Configuration::get('TNT_CARRIER_SHIPPING_FIRSTNAME')),
 			'emailAddress' => Configuration::get('TNT_CARRIER_SHIPPING_EMAIL'),
 			'phoneNumber' => Configuration::get('TNT_CARRIER_SHIPPING_PHONE'),
 			'faxNumber' => '' //may be later
@@ -146,8 +146,8 @@ class TntWebService
 				'zipCode' => $info[0]['postcode'],
 				'city' => $tntcarrier->putCityInNormeTnt((strlen($info[0]['city']) > 27 ? substr($info[0]['city'], 0, 27) : $info[0]['city'])),
 				'instructions' => '',
-				'contactLastName' => (strlen($info[0]['lastname']) > 32 ? substr($info[0]['lastname'], 0, 32) : $info[0]['lastname']),
-				'contactFirstName' => (strlen($info[0]['firstname']) > 32 ? substr($info[0]['firstname'], 0, 32) : $info[0]['firstname']),
+				'contactLastName' => (strlen($info[0]['lastname']) > 19 ? substr($info[0]['lastname'], 0, 19) : $info[0]['lastname']),
+				'contactFirstName' => (strlen($info[0]['firstname']) > 12 ? substr($info[0]['firstname'], 0, 12) : $info[0]['firstname']),
 				'emailAddress' => $info[0]['email'],
 				'phoneNumber' => (isset($info[0]['phone_mobile']) && $info[0]['phone_mobile'] != '' ? $info[0]['phone_mobile'] : $info[0]['phone']),
 				'accessCode' => '',
@@ -165,8 +165,8 @@ class TntWebService
 				'zipCode' => $info[4]['zipcode'],
 				'city' => $tntcarrier->putCityInNormeTnt((strlen($info[4]['city']) > 27 ? substr($info[4]['city'], 0, 27) : $info[4]['city'])),
 				'instructions' => '',
-				'contactLastName' => (strlen($info[0]['lastname']) > 32 ? substr($info[0]['lastname'], 0, 32) : $info[0]['lastname']),
-				'contactFirstName' => (strlen($info[0]['firstname']) > 32 ? substr($info[0]['firstname'], 0, 32) : $info[0]['firstname']),
+				'contactLastName' => (strlen($info[0]['lastname']) > 19 ? substr($info[0]['lastname'], 0, 19) : $info[0]['lastname']),
+				'contactFirstName' => (strlen($info[0]['firstname']) > 12 ? substr($info[0]['firstname'], 0, 12) : $info[0]['firstname']),
 				'emailAddress' => $info[0]['email'],
 				'phoneNumber' => (isset($info[0]['phone_mobile']) && $info[0]['phone_mobile'] != '' ? $info[0]['phone_mobile'] : $info[0]['phone']),
 				'accessCode' => '',
