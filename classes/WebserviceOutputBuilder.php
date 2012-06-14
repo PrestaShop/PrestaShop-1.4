@@ -684,7 +684,7 @@ class WebserviceOutputBuilderCore
 				
 				if (!is_null($this->schemaToDisplay))
 					$field['synopsis_details'] = $this->getSynopsisDetails($field);
-				
+				$field['is_association'] = true;
 				$output .= $this->setIndent($depth-1).$this->objectRender->renderField($field);
 			}
 		}
