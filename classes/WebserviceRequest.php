@@ -400,6 +400,11 @@ class WebserviceRequestCore
 			$this->method = $method;
 			$this->urlSegment = explode('/', $url);
 			$this->urlFragments = $params;
+			$xml = file_get_contents('php://input');
+			if (strncmp($xml, 'xml=', 4) == 0)
+				$xml = substr($xml, 4);
+			if (get_magic_quotes_gpc() == '1')
+				$inputXml = stripslashes($inputXml);
 			$this->_inputXml = $inputXml;
 			$this->depth = isset($this->urlFragments['depth']) ? (int)$this->urlFragments['depth'] : $this->depth;
 			
@@ -1197,9 +1202,17 @@ class WebserviceRequestCore
 	 */
 	protected function executeEntityPost()
 	{
-		return $this->saveEntityFromXml(201);
+		if ($this->outputFormat == 'JSON')
+			return $this->saveEntityFromJSON(201);
+		else
+			return $this->saveEntityFromXml(201);
 	}
 	
+	public function saveEntityFromJSON($code)
+	{
+		// not implemented yet
+	}
+
 	/**
 	 * Execute PUT method on a PrestaShop entity
 	 * 
