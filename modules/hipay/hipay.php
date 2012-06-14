@@ -37,7 +37,8 @@ class Hipay extends PaymentModule
 	{
 		$this->name = 'hipay';
 		$this->tab = 'payments_gateways';
-		$this->version = 1.3;
+		$this->version = '1.3.1';
+		$this->module_key = 'e25bc8f4f9296ef084abf448bca4808a';
 
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
@@ -72,8 +73,6 @@ class Hipay extends PaymentModule
 	public function install()
 	{
 		Configuration::updateValue('HIPAY_SALT', uniqid());
-		// Force using Prod mod	
-		Configuration::updateValue('HIPAY_PROD', 1);
 
 		if (!Configuration::get('HIPAY_UNIQID'))
 			Configuration::updateValue('HIPAY_UNIQID', uniqid());
@@ -162,7 +161,7 @@ class Hipay extends PaymentModule
 		$languageCodeArray = preg_split('/-|_/', $language_code);
 		if (!isset($languageCodeArray[1]))
 			$languageCodeArray[1] = $languageCodeArray[0];
-		return strtoupper($languageCodeArray[0]).'_'.strtolower($languageCodeArray[1]);
+		return strtolower($languageCodeArray[0]).'_'.strtoupper($languageCodeArray[1]);
 	}
 
 	public function payment()
@@ -235,12 +234,12 @@ class Hipay extends PaymentModule
 		$order->setOrderCategory($hipaycategory);
 
 		if (!$order->check())
-		    return $this->l('[Hipay] Error: cannot create Order');
+			return $this->l('[Hipay] Error: cannot create Order');
 
 		try {
 			$commande = new HIPAY_MAPI_SimplePayment($paymentParams, $order, $items);
 		} catch (Exception $e) {
-		  	return $this->l('[Hipay] Error:').' '.$e->getMessage();
+			return $this->l('[Hipay] Error:').' '.$e->getMessage();
 		}
 
 		$xmlTx = $commande->getXML();
@@ -276,7 +275,7 @@ class Hipay extends PaymentModule
 
 		if (HIPAY_MAPI_COMM_XML::analyzeNotificationXML($_POST['xml'], $operation, $status, $date, $time, $transid, $amount, $currency, $id_cart, $data) === false)
 		{
-			file_put_contents('logs'.Configuration::get('HIPAY_UNIQID').'.txt', '['.date('Y-m-d H:i:s').'] Analysis error: '.$_POST['xml']."\n", FILE_APPEND);
+			file_put_contents('logs'.Configuration::get('HIPAY_UNIQID').'.txt', '['.date('Y-m-d H:i:s').'] Analysis error: '.htmlentities($_POST['xml'])."\n", FILE_APPEND);
 			return false;
 		}
 		
@@ -285,7 +284,7 @@ class Hipay extends PaymentModule
 		
 		$cart = new Cart((int)$id_cart);
 		if (Tools::encrypt($cart->id.$cart->secure_key.Configuration::get('HIPAY_SALT')) != Tools::getValue('token'))
-			file_put_contents('logs'.Configuration::get('HIPAY_UNIQID').'.txt', '['.date('Y-m-d H:i:s').'] Token error: '.$_POST['xml']."\n", FILE_APPEND);
+			file_put_contents('logs'.Configuration::get('HIPAY_UNIQID').'.txt', '['.date('Y-m-d H:i:s').'] Token error: '.htmlentities($_POST['xml'])."\n", FILE_APPEND);
 		else
 		{
 			if (trim($operation) == 'capture' AND trim(strtolower($status)) == 'ok')
@@ -368,13 +367,11 @@ class Hipay extends PaymentModule
 			$results = Db::getInstance()->ExecuteS($request.$this->getRequestZones('id_zone'));
 
 			foreach ($results as $rowValues)
-				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'module_country VALUE('.(int)$this->id.', '.(_PS_VERSION_ >= 1.5 ?  Context::getContext()->shop->getID().',' : '').' '.(int)$rowValues['id_country'].')');
+				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'module_country VALUE('.(int)$this->id.', '.(_PS_VERSION_ >= 1.5 ?  Context::getContext()->shop->id.',' : '').' '.(int)$rowValues['id_country'].')');
 			
 		}
 		elseif (Tools::isSubmit('submitHipay'))
 		{
-			
-			Configuration::updateValue('HIPAY_PROD', $this->prod);
 			
 			$accounts = array();
 			foreach ($currencies as $currency)
@@ -412,10 +409,10 @@ class Hipay extends PaymentModule
 		
 		foreach ($currencies as $currency)
 		{
-			if (($hipaySiteId = Configuration::get('HIPAY_SITEID_'.$currency['iso_code']) AND $hipayAccountId = Configuration::get('HIPAY_ACCOUNT_'.$currency['iso_code']) AND !count($this->getHipayCategories($hipaySiteId, $hipayAccountId))))
+			if (($hipaySiteId = Configuration::get('HIPAY_SITEID_'.$currency['iso_code']) && ($hipayAccountId = Configuration::get('HIPAY_ACCOUNT_'.$currency['iso_code'])) && !count($this->getHipayCategories($hipaySiteId, $hipayAccountId))))
 				$categoryRetrieval = false;
 
-			if ((Configuration::get('HIPAY_SITEID_'.$currency['iso_code']) AND !Configuration::get('HIPAY_CATEGORY_'.$currency['iso_code'])))
+			if ((Configuration::get('HIPAY_SITEID_'.$currency['iso_code']) && !Configuration::get('HIPAY_CATEGORY_'.$currency['iso_code'])))
 				$categories = false;
 		}
 		
@@ -449,8 +446,8 @@ class Hipay extends PaymentModule
 			#hipay_steps_infos td.hipay_block {border-bottom:none}
 
 		</style>
-    <fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Hipay').'</legend>
-    '.$this->l('Hipay is a secure electronic wallet which has the European Bank approval. Hipay offer you many opportunities without need to negotiate with a bank. Easy and free to use, Hipay\'s solution of the implementation is a real asset for an e-commerce website that wants to expand in Europe: secure payment by international card, local payment solutions, bank transfers...').'
+	<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Hipay').'</legend>
+	'.$this->l('Hipay is a secure electronic wallet which has the European Bank approval. Hipay offer you many opportunities without need to negotiate with a bank. Easy and free to use, Hipay\'s solution of the implementation is a real asset for an e-commerce website that wants to expand in Europe: secure payment by international card, local payment solutions, bank transfers...').'
 			<br />
 			<!-- <br />'.$this->l('Notice: if you want to refund a payment, please log in to your Hipay account then go to Merchant Management > Sales management.').'-->
 		</fieldset>
@@ -496,7 +493,7 @@ class Hipay extends PaymentModule
 							<label class="hipay_label" for="HIPAY_SITEID_'.$currency['iso_code'].'">'.$this->l('Site ID').' <a href="../modules/'.$this->name.'/screenshots/siteid.png" target="_blank"><img src="../modules/'.$this->name.'/help.png" class="hipay_help" /></a></label><br />
 							<input type="text" id="HIPAY_SITEID_'.$currency['iso_code'].'" name="HIPAY_SITEID_'.$currency['iso_code'].'" value="'.Tools::safeOutput(Tools::getValue('HIPAY_SITEID_'.$currency['iso_code'], Configuration::get('HIPAY_SITEID_'.$currency['iso_code']))).'" /><br />';
 
-			if ($ping AND $hipaySiteId = (int)Configuration::get('HIPAY_SITEID_'.$currency['iso_code']) AND $hipayAccountId = (int)Configuration::get('HIPAY_ACCOUNT_'.$currency['iso_code']))
+			if ($ping && ($hipaySiteId = (int)Configuration::get('HIPAY_SITEID_'.$currency['iso_code'])) && ($hipayAccountId = (int)Configuration::get('HIPAY_ACCOUNT_'.$currency['iso_code'])))
 			{
 				$form .= '	<label for="HIPAY_CATEGORY_'.$currency['iso_code'].'" class="hipay_label">'.$this->l('Category').'</label><br />
 							<select id="HIPAY_CATEGORY_'.$currency['iso_code'].'" name="HIPAY_CATEGORY_'.$currency['iso_code'].'">';
@@ -525,7 +522,7 @@ class Hipay extends PaymentModule
 				<hr class="clear" />
 				<p>'.$this->l('Notice: please verify that the currency mode you have chosen in the payment tab is compatible with your Hipay account(s).').'</p>
 				<input type="submit" name="submitHipay" value="'.$this->l('Update configuration').'" class="button" />
-        	</form>
+			</form>
 		</fieldset>
 		<br />
 		';
