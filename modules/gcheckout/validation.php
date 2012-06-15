@@ -45,7 +45,7 @@ $merchant_key = Configuration::get('GCHECKOUT_MERCHANT_KEY');
 $server_type = Configuration::get('GCHECKOUT_MODE');
 
 if (!$merchant_id || !$merchant_key)
-	die(Tools::displayError())
+	die(Tools::displayError());
 
 $Gresponse = new GoogleResponse($merchant_id, $merchant_key);
 
