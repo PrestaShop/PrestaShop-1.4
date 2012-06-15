@@ -1,5 +1,8 @@
+<link rel="stylesheet" href="./modules/tntcarrier/css/ui.tabs.css" type="text/css" />
+<link rel="stylesheet" href="./modules/tntcarrier/css/ui.dialog.css" type="text/css" />
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 <script type="text/javascript" src="./modules/tntcarrier/js/relais.js"></script>
+<script type="text/javascript" src="./js/jquery/jquery-ui-1.8.10.custom.min.js"></script>
 <script type="text/javascript">
 var id_carrier = new Array();
 var option_carrier = new Array();
@@ -171,7 +174,7 @@ $().ready(function()
 	}
 {/literal}
 </script>
-<div id="tntHelpCarrier" style="display:none;position:absolute;width:100%;top:0px;left:0px;background:url('./img/macFFBgHack.png')">
+<div id="tntHelpCarrier" style="display:none;position:absolute;width:100%;top:0px;left:0px;background:url('./img/macFFBgHack.png');z-index:10000">
 	<div id="helpCarrierBlock" style="text-align:center;position:relative">
 		<div style="width:720px;margin:auto;background-color:white">
 		<span style="cursor:pointer;color:blue;text-decoration:underline;" onclick="hideHelpCarrier()">{l s='Close' mod='tntcarrier'}</span><br/>

@@ -400,7 +400,7 @@ function setInfoMarker(codeRelais, nomRelais, adresse, codePostal, commune, mess
 	var htmlInfo = [
 		"<div>",
 			"<div class='rc'>",
-				"<b>RELAIS COLIS N° ", codeRelais, "</b><br/>",
+				"<b>RELAIS COLIS N\260 ", codeRelais, "</b><br/>",
 				"<b>", nomRelais, "</b><br/>", 
 				adresse, "<br/>", 
 				codePostal, " ", commune,
@@ -443,7 +443,7 @@ function setInfoMarker(codeRelais, nomRelais, adresse, codePostal, commune, mess
 
 	google.maps.event.addListener(infowindow, "domready", function() {  
 		$("#point_choisi").attr("value", adresse_pointclic);
-		//$("#tabs").tabs();
+		$("#tabs").tabs();
 		$("#tabs").parent().removeAttr("style");
 	});
 
