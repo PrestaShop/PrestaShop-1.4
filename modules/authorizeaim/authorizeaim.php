@@ -34,9 +34,8 @@ class authorizeAIM extends PaymentModule
 	{
 		$this->name = 'authorizeaim';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.3.2';
+		$this->version = '1.4.1';
 		$this->author = 'PrestaShop';
-		//$this->limited_countries = array('us');
 		$this->need_instance = 0;
 
 		parent::__construct();
@@ -193,26 +192,6 @@ class authorizeAIM extends PaymentModule
 	{
 		if (Configuration::get('PS_SSL_ENABLED') || (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off'))
 		{
-			$invoiceAddress = new Address((int)$params['cart']->id_address_invoice);
-
-			$authorizeAIMParams = array();
-			$authorizeAIMParams['x_solution_ID'] = 'A1000006';
-			$authorizeAIMParams['x_login'] = Configuration::get('AUTHORIZE_AIM_LOGIN_ID');
-			$authorizeAIMParams['x_tran_key'] = Configuration::get('AUTHORIZE_AIM_KEY');
-			$authorizeAIMParams['x_version'] = '3.1';
-			$authorizeAIMParams['x_delim_data'] = 'TRUE';
-			$authorizeAIMParams['x_delim_char'] = '|';
-			$authorizeAIMParams['x_relay_response'] = 'FALSE';
-			$authorizeAIMParams['x_type'] = 'AUTH_CAPTURE';
-			$authorizeAIMParams['x_method'] = 'CC';
-			$authorizeAIMParams['x_test_request'] = Configuration::get('AUTHORIZE_AIM_DEMO');
-			$authorizeAIMParams['x_invoice_num'] = (int)$params['cart']->id;
-			$authorizeAIMParams['x_amount'] = number_format($params['cart']->getOrderTotal(true, 3), 2, '.', '');
-			$authorizeAIMParams['x_address'] = $invoiceAddress->address1.' '.$invoiceAddress->address2;
-			$authorizeAIMParams['x_zip'] = $invoiceAddress->postcode;
-			$authorizeAIMParams['x_first_name'] = $this->context->customer->firstname;
-			$authorizeAIMParams['x_last_name'] = $this->context->customer->lastname;
-
 			$isFailed = Tools::getValue('aimerror');
 
 			$cards = array();
@@ -226,7 +205,7 @@ class authorizeAIM extends PaymentModule
 			else
 				$url = 'https://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/';
 
-			$this->context->smarty->assign('authorize_params', $authorizeAIMParams);
+			$this->context->smarty->assign('x_invoice_num', (int)$params['cart']->id);
 			$this->context->smarty->assign('cards', $cards);
 			$this->context->smarty->assign('isFailed', $isFailed);
 			$this->context->smarty->assign('new_base_dir', $url);

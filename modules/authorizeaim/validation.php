@@ -33,17 +33,61 @@ include(dirname(__FILE__). '/authorizeaim.php');
 
 $authorizeaim = new authorizeAIM();
 
-/* Transform the POST from the template to a GET for the CURL */
-if (isset($_POST['x_exp_date_m']) && isset($_POST['x_exp_date_y']))
-{
-	$_POST['x_exp_date'] = $_POST['x_exp_date_m'].$_POST['x_exp_date_y'];
-	unset($_POST['x_exp_date_m']);
-	unset($_POST['x_exp_date_y']);
-}
-$postString = '';
-foreach ($_POST as $key => $value)
-	$postString .= $key.'='.urlencode($value).'&';
+/* Does the cart exist and is valid? */
+$cart = Context::getContext()->cart;
 
+if (!isset($_POST['x_invoice_num']))
+{
+	Logger::addLog('Missing x_invoice_num', 4);
+	die('An unrecoverable error occured: Missing parameter');
+}
+
+if (!Validate::isLoadedObject($cart))
+{
+	Logger::addLog('Cart loading failed for cart '.(int)$_POST['x_invoice_num'], 4);
+	die('An unrecoverable error occured with the cart '.(int)$_POST['x_invoice_num']);
+}
+
+if ($cart->id != $_POST['x_invoice_num'])
+{
+	Logger::addLog('Conflit between cart id order and customer cart id');
+	die('An unrecoverable conflict error occured with the cart '.(int)$_POST['x_invoice_num']);
+}
+
+$customer = new Customer((int)$cart->id_customer);
+$invoiceAddress = new Address((int)$cart->id_address_invoice);
+
+if (!Validate::isLoadedObject($customer) || !Validate::isLoadedObject($invoiceAddress))
+{
+	Logger::addLog('Issue loading customer and/or address data');
+	die('An unrecoverable error occured while retrieving you data');
+}
+
+$params = array(
+	'x_test_request' => (bool)Configuration::get('AUTHORIZE_AIM_DEMO'),
+	'x_invoice_num' => (int)$_POST['x_invoice_num'],
+	'x_amount' => number_format((float)$cart->getOrderTotal(true, 3), 2, '.', ''),
+	'x_exp_date' => Tools::safeOutput($_POST['x_exp_date_m'].$_POST['x_exp_date_y']),
+	'x_address' => Tools::safeOutput($invoiceAddress->address1.' '.$invoiceAddress->address2),
+	'x_zip' => Tools::safeOutput($invoiceAddress->postcode),
+	'x_first_name' => Tools::safeOutput($customer->firstname),
+	'x_last_name' => Tools::safeOutput($customer->lastname),
+	'x_version' => '3.1',
+	'x_delim_data' => true,
+	'x_delim_char' => '|',
+	'x_relay_response' => false,
+	'x_type' => 'AUTH_CAPTURE',
+	'x_method' => 'CC',
+	'x_solution_id' => 'A1000006',
+	'x_login' => Tools::safeOutput(Configuration::get('AUTHORIZE_AIM_LOGIN_ID')),
+	'x_tran_key' => Tools::safeOutput(Configuration::get('AUTHORIZE_AIM_KEY')),
+	'x_card_num' => Tools::safeOutput($_POST['x_card_num']),
+	'x_card_code' => Tools::safeOutput($_POST['x_card_code']),
+);
+
+$postString = '';
+foreach ($params as $key => $value)
+	$postString .= $key.'='.urlencode($value).'&';
 $postString = trim($postString, '&');
 
 $url = 'https://secure.authorize.net/gateway/transact.dll';
@@ -72,15 +116,6 @@ if (!isset($response[7]) || !isset($response[3]) || !isset($response[9]))
 	die('Authorize.net returned a malformed response, aborted.');
 }
 
-/* Does the cart exist and is valid? */
-$cart = Context::getContext()->cart;
-
-if (!Validate::isLoadedObject($cart))
-{
-	Logger::addLog('Cart loading failed for cart '.(int)$response[7], 4);
-	die('An unrecoverable error occured with the cart '.(int)$repsonse[7]);
-}
-$customer = new Customer((int)$cart->id_customer);
 $message = $response[3];
 $payment_method = 'Authorize.net AIM';
 
@@ -96,11 +131,11 @@ switch ($response[0]) // Response code
 	case 4: // Hold for review
 		$authorizeaim->validateOrder((int)$cart->id,
 			Configuration::get('AUTHORIZE_AIM_HOLD_REVIEW_OS'), (float)$response[9],
-			$authorizeaim->displayName, $response[3]);
+			$authorizeaim->displayName, $response[3], NULL, NULL, false, $customer->secure_key);
 		break ;
 
 	default:
-		$error_message = (isset($response[3]) && !empty($response[3])) ? urlencode($response[3]) : '';
+		$error_message = (isset($response[3]) && !empty($response[3])) ? urlencode(Tools::safeOutput($response[3])) : '';
 
 		$checkout_type = Configuration::get('PS_ORDER_PROCESS_TYPE') ?
 			'order-opc' : 'order';
@@ -116,12 +151,6 @@ switch ($response[0]) // Response code
 			Tools::redirect($_SERVER['HTTP_REFERER'].'?aimerror=1&message='.$error_message, '');
 
 		exit;
-
-		/// @todo check the reason code and determine weither we should retry are
-		///				mark the order as failed.
-		$authorizeaim->validateOrder((int)$cart->id,
-			Configuration::get('PS_OS_ERROR'), (float)$response[9],
-			$payment_method, $message, NULL, NULL, false, $customer->secure_key);
 }
 
 $url = 'index.php?controller=order-confirmation&';
