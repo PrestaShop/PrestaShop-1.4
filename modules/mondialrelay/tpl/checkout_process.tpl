@@ -27,6 +27,10 @@
 <script type="text/javascript">
 	// Global JS Value
 	var PS_MRData = {$MR_Data};
+	
+	$(document).ready(function() {
+		PS_MRObject.initFront();
+	});
 </script>
 
 {if $MR_Data.PS_VERSION >= '1.5' && !$MR_Data.carrier}

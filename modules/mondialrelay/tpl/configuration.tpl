@@ -141,7 +141,7 @@
 				</li>
 				<li>
 					<label for="MR_language" class="mrLabel">
-					{l s="Etiquette's Language:" mod='mondiarelay'}
+					{l s='Etiquette\'s Language:' mod='mondialrelay'}
 					</label>
 					<select id="MR_language" name="MR_language">
 					{foreach from=$MR_available_languages key=num_language item=language}

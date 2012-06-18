@@ -69,16 +69,18 @@ class MondialRelay extends Module
 
 	public function __construct()
 	{
+	
 		$this->name		= 'mondialrelay';
 		$this->tab		= 'shipping_logistics';
 		$this->version	= '1.8.5';
 		$this->installed_version = '';
 		$this->module_key = '366584e511d311cfaa899fc2d9ec1bd0';
 		$this->author = 'PrestaShop';
+		
+		parent::__construct();
+
 		$this->displayName = $this->l('Mondial Relay');
 		$this->description = $this->l('Deliver in Relay points');
-
-		parent::__construct();
 
 		/** Backward compatibility */
 		require(_PS_MODULE_DIR_.'/mondialrelay/backward_compatibility/backward.php');
@@ -114,34 +116,16 @@ class MondialRelay extends Module
 			WHERE class_name="AdminMondialRelay"');
 
 		if (!$result)
-		{
-			// AdminOrders id_tab
-			$id_parent = _PS_VERSION_ < '1.5' ? 3 : 9;
-
-			/*tab install */
-			$result = Db::getInstance()->getRow('
-				SELECT position
-				FROM `' . _DB_PREFIX_ . 'tab`
-				WHERE `id_parent` = '.(int)$id_parent.'
-				ORDER BY `'. _DB_PREFIX_ .'tab`.`position` DESC');
-
-			$pos = (isset($result['position'])) ? $result['position'] + 1 : 0;
-
-			Db::getInstance()->execute('
-				INSERT INTO ' . _DB_PREFIX_ . 'tab
-				(id_parent, class_name, position, module)
-				VALUES('.(int)$id_parent.', "AdminMondialRelay",  "'.(int)($pos).'", "mondialrelay")');
-
-			$id_tab = Db::getInstance()->Insert_ID();
-
+		{	
+			$tab = new Tab();
 			$languages = Language::getLanguages(false);
 			foreach ($languages as $language)
-				Db::getInstance()->execute('
-				INSERT INTO ' . _DB_PREFIX_ . 'tab_lang
-				(id_lang, id_tab, name)
-				VALUES("'.(int)($language['id_lang']).'", "'.(int)($id_tab).'", "Mondial Relay")');
+				$tab->name[$language['id_lang']] = 'Mondialrelay';
+      $tab->class_name = 'AdminMondialRelay';
+      $tab->module = 'mondialrelay';
+      $tab->id_parent = Tab::getIdFromClassName('AdminOrders');
 
-			if (!Tab::initAccess($id_tab))
+			if (!$tab->add() || !Tab::initAccess($tab->id))
 				return false;
 
 			if (is_dir(_PS_MODULE_DIR_.'mondialrelay/'))
@@ -298,7 +282,7 @@ class MondialRelay extends Module
 	private function askForBackup($href)
 	{
 		return 'targetButton = \''.$href.'\';
-			PS_MRGetUninstallDetail();';
+			PS_MRObject.uninstall()';
 	}
 
 	/*
@@ -536,14 +520,13 @@ class MondialRelay extends Module
 
 	public function hookExtraCarrier($params)
 	{
+		// TODO : Makes it work with multi-shipping
 		if (!MondialRelay::isAccountSet())
 			return '';
 
-		$carrier = false;
 		$id_carrier = false;
-		$preSelectedRelay = $this->getRelayPointSelected($params['cart']->id);
+		$preSelectedRelay = $this->getRelayPointSelected($this->context->cart->id);
 		$carriersList = MondialRelay::_getCarriers();
-
 		$address = new Address($this->context->cart->id_address_delivery);
 		$id_zone = Address::getZoneById((int)($address->id));
 
@@ -551,8 +534,8 @@ class MondialRelay extends Module
 		foreach ($carriersList as $k => $row)
 		{
 			// For now works only with single shipping (>= 1.5 compatibility)
-			if (method_exists($params['cart'], 'carrierIsSelected'))
-				if ($params['cart']->carrierIsSelected($row['id_carrier'], $params['address']->id))
+			if (method_exists($this->context->cart, 'carrierIsSelected'))
+				if ($this->context->cart->carrierIsSelected($row['id_carrier'], $params['address']->id))
 					$id_carrier = $row['id_carrier'];
 
 			// Temporary carrier for some test
@@ -575,16 +558,21 @@ class MondialRelay extends Module
 			}
 		}
 
-		if ($id_carrier && MondialRelay::getMethodByIdCarrier($id_carrier))
+		$carrier = NULL;
+		if ($id_carrier && ($method = MondialRelay::getMethodByIdCarrier($id_carrier)))
+		{
 			$carrier = new Carrier((int)$id_carrier);
+			// Add dynamically a new field
+			$carrier->id_mr_method = $method['id_mr_method'];
+			$carrier->mr_dlv_mode = $method['dlv_mode'];
+		}
 
 		$this->context->smarty->assign(array(
 			'MR_Data'=> MRTools::jsonEncode(array(
 				'carrier_list' => $carriersList,
 				'carrier' => $carrier,
-				'dlv_mode' => $id_carrier ? $carrier['dlv_mode']: '',
 				'PS_VERSION' => _PS_VERSION_,
-				'pre_selected_relay' => isset($preSelectedRelay['MR_selected_num']) ? $preSelectedRelay['MR_selected_num'] : '',
+				'pre_selected_relay' => isset($preSelectedRelay['MR_selected_num']) ? $preSelectedRelay['MR_selected_num'] : 0,
 			))
 		));
 
@@ -791,13 +779,16 @@ class MondialRelay extends Module
 
 		if (($carrier = new Carrier()))
 		{
-			$carrier->name = $name;
+			$delay_lang = array();
+			foreach (Language::getLanguages(false) as $lang)
+				$delay_lang[$lang['id_lang']] = $delay;
+ 			$carrier->name = $name;
 			$carrier->active = 1;
 			$carrier->range_behavior = 1;
 			$carrier->need_range = 1;
 			$carrier->external_module_name = 'mondialrelay';
 			$carrier->shipping_method = 1;
-			$carrier->delay = array($this->context->language->id => $delay);
+			$carrier->delay = $delay_lang;
 			$carrier->is_module = (_PS_VERSION_ < '1.4') ? 0 : 1;
 
 			$ret = $carrier->add();
@@ -1125,5 +1116,15 @@ class MondialRelay extends Module
 		if ($this->isMondialRelayCarrier($params['cart']->id_carrier) &&
 			!$this->getRelayPointSelected($params['cart']->id))
 			$params['cart']->id_carrier = 0;
+	}
+	
+	public function getMethodValueByIdCarier($id_carrier, $key)
+	{
+		$content = Db::getInstance()->executeS(
+			'SELECT *
+			FROM `'._DB_PREFIX_.'mr_method` m
+			WHERE `id_carrier` = '.(int)$id_carrier);
+
+		return isset($content[$key]) ? $content[$key] : '';
 	}
 }

@@ -19,7 +19,7 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_5eeb9ca7eee4be7192dd10d917f79a1
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_8b446ac2013dc7085802de71cc342ead'] = 'Vous devez choisir au moins un pays de livraison';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_979c6094728c14aac1b66d544dc5cebd'] = 'Etat de commande invalide';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_e82faee1422140edd04b2f94c5051500'] = 'Action réussie';
-$_MODULE['<{mondialrelay}prestashop>mondialrelay_672facd73d4aee44c116cfd95298db87'] = 'Les informations du compte viennent d\'être mise à jour';
+$_MODULE['<{mondialrelay}prestashop>mondialrelay_672facd73d4aee44c116cfd95298db87'] = 'Les informations du compte viennent d\'être mises à jour';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_b4ac3d3f15bc0984d0906aff1202e701'] = 'Impossibilité de mettre à jour les infos du compte pour cette boutique';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_ea50be3d60be594e10e9e3560cb9159f'] = 'Nouvelle méthode de transport ajoutée';
 $_MODULE['<{mondialrelay}prestashop>mondialrelay_d0cfdfcfb71029b561f5ebdc176d87ca'] = 'Le statu de la commande à été mise à jour';
@@ -92,7 +92,7 @@ $_MODULE['<{mondialrelay}prestashop>mrrelaydetail_8b7051187b9191cdcdae6ed5a10e5a
 $_MODULE['<{mondialrelay}prestashop>mrrelaydetail_9d1a0949c39e66a0cd65240bc0ac9177'] = 'Dimanche';
 $_MODULE['<{mondialrelay}prestashop>mrrelaydetail_2653c23b8c0daac59571e4be5e8fa7d0'] = 'Le webservice Mondial Relay est actuellement innaccessible.';
 $_MODULE['<{mondialrelay}prestashop>checkout_process_836f6c949a2f2d61489bf410def82111'] = 'Mondialrelay ne peut récupérer les points relais du à une erreur de Prestashop';
-$_MODULE['<{mondialrelay}prestashop>configuration_0f27e5e9020f28e3f31b78376e11d4c7'] = 'Configuration de Mondial relay';
+$_MODULE['<{mondialrelay}prestashop>configuration_0f27e5e9020f28e3f31b78376e11d4c7'] = 'Configuration de Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>configuration_8bc212f48680748479bbd322d4d73d3f'] = 'Détails du compte';
 $_MODULE['<{mondialrelay}prestashop>configuration_ea9cf7e47ff33b2be14e6dd07cbcefc6'] = 'Transporteur';
 $_MODULE['<{mondialrelay}prestashop>configuration_fe4c6a5e7bd6793b37370e4e46daf998'] = 'Paramètres avancés';
@@ -102,17 +102,18 @@ $_MODULE['<{mondialrelay}prestashop>configuration_5a2355a42ba3ab265701183c914467
 $_MODULE['<{mondialrelay}prestashop>configuration_3de769f9a81eed916583d5b35c58dbdd'] = 'si vous rencontrez le moindre problème après une mise à jour du module';
 $_MODULE['<{mondialrelay}prestashop>configuration_8f8b21bd013b38d1e3059557c22a57e7'] = 'Consulter le manuel pour vous guider dans la configuration de Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>configuration_d21a9f93917604d5490ad529a7cf1ff9'] = 'Pour créer un transporteur Mondial Relay';
-$_MODULE['<{mondialrelay}prestashop>configuration_c6a2e6af5fff47adb3afd780b97d9b4b'] = 'Remplissez et sauvegarder vos paramètres Mondial Relay';
+$_MODULE['<{mondialrelay}prestashop>configuration_c6a2e6af5fff47adb3afd780b97d9b4b'] = 'Remplissez et sauvegardez vos paramètres Mondial Relay';
 $_MODULE['<{mondialrelay}prestashop>configuration_b29c4694f835ad29b9893cd3fed36fbc'] = 'Créez un transporteur en utilisant le bouton \'Transporteur\'';
 $_MODULE['<{mondialrelay}prestashop>configuration_b962d8fb95f5a439f50502152f3bad71'] = 'Définissez un prix pour votre transporteur sur';
 $_MODULE['<{mondialrelay}prestashop>configuration_faf1247ae6846a9955a466d4f301bbe4'] = 'La page Transporteurs';
 $_MODULE['<{mondialrelay}prestashop>configuration_10d78806b84b97ebc774e9f6277af6ac'] = 'Pour générer vos étiquettes, vous devez avoir enregistré une adresse valide de votre boutique sur votre';
 $_MODULE['<{mondialrelay}prestashop>configuration_af5efea250326c1c34d69aa9364b482c'] = 'page contact';
 $_MODULE['<{mondialrelay}prestashop>configuration_1ba3935c9858ffb8e19a35ca640b8505'] = 'Détails du compte Mondial Relay';
-$_MODULE['<{mondialrelay}prestashop>configuration_a125105400f6e4ee4574da3793af5ef2'] = 'Ces paramètres vous sont données par Mondial Relay une fois inscris à leurs services';
+$_MODULE['<{mondialrelay}prestashop>configuration_a125105400f6e4ee4574da3793af5ef2'] = 'Ces paramètres vous sont donnés par Mondial Relay une fois inscrit à leurs services';
 $_MODULE['<{mondialrelay}prestashop>configuration_12a3fbd35c1cab4b1101b91d708efd15'] = 'Enseigne Webservice :';
-$_MODULE['<{mondialrelay}prestashop>configuration_6f0434b67007b555dfd1201f4e0d5254'] = 'Code marque :';
+$_MODULE['<{mondialrelay}prestashop>configuration_6f0434b67007b555dfd1201f4e0d5254'] = 'Code Marque :';
 $_MODULE['<{mondialrelay}prestashop>configuration_08f785193c96b2a78dec8d76a46648d6'] = 'Clé Webservice :';
+$_MODULE['<{mondialrelay}prestashop>configuration_0dae2d7c71f2daaedb00191af25dc28d'] = 'Langue des étiquettes';
 $_MODULE['<{mondialrelay}prestashop>configuration_a26329cba9723551cb8654deba32872b'] = 'Coefficient de Poids :';
 $_MODULE['<{mondialrelay}prestashop>configuration_99244b234ec089eca40ff9e8ec343e87'] = 'grammes = 1';
 $_MODULE['<{mondialrelay}prestashop>configuration_61cbc2d26b4157292673c772ddd6c0f7'] = 'Mettre à jour le compte';
@@ -122,7 +123,7 @@ $_MODULE['<{mondialrelay}prestashop>configuration_fcf5b2122da1d5a5f5c7253b96a3f9
 $_MODULE['<{mondialrelay}prestashop>configuration_66661dacf33146201b60dc16520ddd68'] = 'Ajouter une méthode de transport';
 $_MODULE['<{mondialrelay}prestashop>configuration_531e144cc23ef08408b81cb4d9c641dc'] = 'Nom du transporteur';
 $_MODULE['<{mondialrelay}prestashop>configuration_8f497c1a3d15af9e0c215019f26b887d'] = 'Délais ';
-$_MODULE['<{mondialrelay}prestashop>configuration_201bdb87f8e278b943d07ae924d5de6e'] = 'Mode de livraion';
+$_MODULE['<{mondialrelay}prestashop>configuration_201bdb87f8e278b943d07ae924d5de6e'] = 'Mode de livraison';
 $_MODULE['<{mondialrelay}prestashop>configuration_142ef02888af88b8b772335277d1c0c8'] = 'Livraison dans un point relais';
 $_MODULE['<{mondialrelay}prestashop>configuration_eeab8b7cf3c7a558a0e8a4050fa994ca'] = 'Livraison Colis Drive';
 $_MODULE['<{mondialrelay}prestashop>configuration_8f7794b107749728c3333ef38d2687e8'] = 'Livraison à domicile RDC (1 personne)';
@@ -181,8 +182,3 @@ $_MODULE['<{mondialrelay}prestashop>settings_0a4ee7474864081af12dba847fafdaa6'] 
 $_MODULE['<{mondialrelay}prestashop>settings_ca57625685f058f54d82c6e05876a131'] = 'Choississez le statut pour la génération d\'étiquette.';
 $_MODULE['<{mondialrelay}prestashop>settings_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{mondialrelay}prestashop>settings_f4f70727dc34561dfde1a3c529b6205c'] = 'Paramètres';
-$_MODULE['<{mondialrelay}prestashop>install-1.8.0_212446275f2cee81b55a18a3106c6d59'] = 'Impossible de créer la méthode \"shop table\"';
-$_MODULE['<{mondialrelay}prestashop>install-1.8.0_c3f1bb9f4e93ec07fc892f1781ddb66b'] = 'Impossible de changer le nom de la table de méthodes';
-$_MODULE['<{mondialrelay}prestashop>install-1.8.0_e2aa3260446c53906857d068b0b940b5'] = 'Impossible de renommer la table d\'historique';
-$_MODULE['<{mondialrelay}prestashop>install-1.8.0_3ac9c6d6990ac32120d0c767a02ff961'] = 'Impossible de mettre à jour la table \"mr_method_shop\"';
-$_MODULE['<{mondialrelay}prestashop>install-1.8.3_59b7c6d35d8f9547e5d72b93b843645f'] = 'Impossible d\'ajouter un nouveau champ dans la table de méthodes';

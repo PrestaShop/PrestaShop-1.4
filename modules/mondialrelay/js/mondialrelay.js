@@ -1,4 +1,4 @@
-(function($, undifened) {
+var PS_MRObject = (function($, undifened) {
 
 	var toggle_status_order_list = false;
 	var toggle_history_order_list = false;
@@ -19,6 +19,8 @@
 
 // List the marker liable to the relay pint
 	var markerList = new Object();
+	
+	var selected = false;
 
 	/**
 	 * Toggle selected orders
@@ -417,6 +419,7 @@
 	function PS_MRAddSelectedRelayPointInDB(relayPointNumber, id_carrier)
 	{
 		PS_MRSelectedRelayPoint['relayPointNum'] = relayPointNumber;
+		console.log(PS_MRCarrierMethodList);
 
 		// Ajax call to add the selection in the database (compatibility for 1.3)
 		// But keep this way to add a selection better that the hook
@@ -430,7 +433,7 @@
 				'mrtoken' : mrtoken},
 			success: function(json)
 			{
-				if (PS_MROPC)
+				if (PS_MROPC && PS_MRData.PS_VERSION < '1.5')
 					updateCarrierSelectionAndGift();
 			},
 			error: function(xhr, ajaxOptions, thrownError)
@@ -480,9 +483,6 @@
 		{
 			// Seek Relay point if it doesn't a home delivery mode
 			PS_MRGetRelayPoint(carrierSelected);
-
-			// Will have relay points
-			PS_MRSelectedRelayPoint['relayPointNum'] = 0;
 		}
 		else
 		{
@@ -581,10 +581,10 @@
 					if (!$('#' + contentBlockid).size())
 					{
 						// Set translation if a preselection exist
-						var BtTranslation = (PS_MRData.pre_selected_relay == json.success[relayPoint].Num) ?
+						var BtTranslation = (PS_MRSelectedRelayPoint['relayPointNum'] == json.success[relayPoint].Num) ?
 							PS_MRTranslationList['Selected'] : PS_MRTranslationList['Select'];
 
-						var classSelection = (PS_MRData.pre_selected_relay == json.success[relayPoint].Num) ?
+						var classSelection = (PS_MRSelectedRelayPoint['relayPointNum'] == json.success[relayPoint].Num) ?
 							'PS_MRFloatRelayPointSelected' : 'PS_MRFloatRelayPointSelecteIt';
 
 						$('<div class="PS_MRRelayPointInfo clearfix" id="' + contentBlockid + '">'
@@ -720,9 +720,9 @@
 	 */
 	function PS_MRCreateGmap(id_carrier)
 	{
-		// This has been write this way because it needed to have a known block
+		// This has been written this way because it needed to have a known block
 		// present everytime in the page. Body is the only one sure.
-		// It's an hidden block it's replaced in the good block when user select his
+		// It's an hidden block which will be put in the right block when user select his
 		// own carrier
 		$('body').prepend('\
 		<tr id="PS_MRGmapDefaultPosition_' + id_carrier + '" class="PS_MRGmapDefaultPosition">\
@@ -736,7 +736,7 @@
 				{
 					GmapList[id_carrier] = $(this);
 					// Can't set the display to none by default (bug due to
-					// navigator that tell to google that content size = 0
+					// navigator that tell to google that the content size = 0
 					//$(this).toggle('fast');
 				}
 			}
@@ -999,6 +999,51 @@
 		if ($('#' + block_form_id).length == 0)
 			$('#MR_error_account').fadeIn('fast');
 	}
+	
+	function checkToDisplayRelayList()
+	{
+		if (typeof PS_MRData != 'undefined')
+		{
+			PS_MRSelectedRelayPoint['relayPointNum'] = PS_MRData.pre_selected_relay;
+			// PS_VERSION < '1.5'
+			if (PS_MRData.PS_VERSION < '1.5')
+			{
+				// Bind id_carrierX to an ajax call
+				$.each(PS_MRData.carrier_list, function(i, carrier) {
+					$('#id_carrier' + carrier.id_carrier).click(function(){
+						PS_MRCarrierSelectedProcess($(this), carrier.id_carrier, carrier.dlv_mode);
+					});
+					PS_MRCarrierMethodList[carrier.id_carrier] = carrier.id_mr_method;
+					if ($('#id_carrier' + carrier.id_carrier).attr('checked')){
+						PS_MRCarrierSelectedProcess($('#id_carrier' + carrier.id_carrier), carrier.id_carrier, carrier.dlv_mode);
+					}	
+				});
+			}
+			else if (PS_MRData.PS_VERSION >= '1.5' && PS_MRData.carrier)
+			{ // 1.5 way
+				var carrier_block = $('input[class=delivery_option_radio]:checked').parent('div.delivery_option');
+				
+				PS_MRCarrierMethodList[PS_MRData.carrier.id] = PS_MRData.carrier.id_mr_method;	
+				PS_MRSelectedRelayPoint['carrier_id'] = PS_MRData.carrier.id;
+				// Simulate 1.4 table to store the relay point fetched
+				$(carrier_block).append(
+					'<div><table width="' + $(carrier_block).width() + '"><tr>'
+						+	  '<td><input type="hidden" id="id_carrier' + PS_MRData.carrier.id + '" value="'+PS_MRData.carrier.id+'" /></td>'
+						+ '</tr></table></div>');
+	
+				PS_MRCarrierMethodList[PS_MRData.carrier.id_carrier] = PS_MRData.carrier.id_mr_method;
+				PS_MRCarrierSelectedProcess($('#id_carrier' + PS_MRData.carrier.id), PS_MRData.carrier.id, PS_MRData.carrier.mr_dlv_mode);
+			}
+			
+			// Handle input click of the other input to hide the previous relay point list displayed
+			$('input[name=id_carrier], .delivery_option_radio').click(function(){
+				// Hide MR input if one of them is not selected
+				if (PS_MRCarrierMethodList[$(this).val()] == undefined){
+					PS_MRHideLastRelayPointList();
+				}
+			});
+		}
+	}
 
 	$(document).ready(function()
 	{
@@ -1034,6 +1079,17 @@
 				PS_MRDisplayConfigurationForm($(this).attr('id'));
 			});
 		})
+		
+		// 1.5 OPC Validation - Warn user to select a relay point
+		$('.payment_module a').live('click', function() {
+			if (PS_MRData.PS_VERSION >= '1.5' && PS_MRData.carrier)
+			{
+				var _return = !(!PS_MRSelectedRelayPoint['carrier_id'] || !PS_MRSelectedRelayPoint['relayPointNum']);
+				if (!_return)
+					alert(PS_MRTranslationList['errorSelection']);
+				return _return;
+			}
+		});
 
 		if (typeof(PS_MR_SELECTED_TAB ) != 'undefined')
 			$('#MR_' + PS_MR_SELECTED_TAB + '_block').fadeIn('fast');
@@ -1059,46 +1115,14 @@
 		}
 	});
 
-	$(function(){
-		if (typeof PS_MRData != 'undefined')
+	// To have public method access for this closure
+	return {
+		initFront : function() {
+			checkToDisplayRelayList();
+		},
+		uninstall : function()
 		{
-			// PS_VERSION < '1.5'
-			if (PS_MRData.PS_VERSION < '1.5')
-			{
-				// Bind id_carrierX to an ajax call
-				$.each(PS_MRData.carrier_list, function(i, carrier) {
-					console.log(carrier);
-					$('#id_carrier' + carrier.id_carrier).click(function(){
-						PS_MRCarrierSelectedProcess($(this), carrier.id_carrier, carrier.dlv_mode);
-					});
-					PS_MRCarrierMethodList[carrier.id_carrier] = carrier.id_mr_method;
-					if ($('#id_carrier' + carrier.id_carrier).attr('checked')){
-						PS_MRCarrierSelectedProcess($('#id_carrier' + carrier.id_carrier), carrier.id_carrier, carrier.dlv_mode);
-					}
-	
-					// Handle input click of the other input to hide the previous relay point list displayed
-					$('input[name=id_carrier]').click(function(){
-						// Hide MR input if one of them is not selected
-						if (PS_MRCarrierMethodList[$(this).val()] == undefined){
-							PS_MRHideLastRelayPointList();
-						}
-					})
-				});
-			}
-			else if (PS_MRData.PS_VERSION >= '1.5' && PS_MRData.carrier)
-			{ // 1.5 way
-				var carrier_block = $('input[class=delivery_option_radio]:checked').parent('div.delivery_option');
-	
-				// Simulate 1.4 table to store the relay point fetched
-				$(carrier_block).append(
-					'<div><table width="' + $(carrier_block).width() + '"><tr>'
-						+	  '<td><input type="hidden" id="id_carrier' + PS_MRData.carrier.id_carrier + '" value="'+PS_MRData.carrier.id_carrier+'" /></td>'
-						+ '</tr></table></div>');
-	
-				PS_MRCarrierMethodList[PS_MRData.carrier.id_carrier] = PS_MRData.carrier.id_mr_method;
-				PS_MRCarrierSelectedProcess($('#id_carrier' + PS_MRData.carrier.id_carrier), PS_MRData.carrier.id_carrier, PS_MRData.dlv_mode);
-			}
+			PS_MRGetUninstallDetail();
 		}
-	});
-
+	};
 })(jQuery);
