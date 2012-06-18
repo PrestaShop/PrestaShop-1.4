@@ -65,8 +65,21 @@ if ($id_address)
 									FROM '._DB_PREFIX_.'address a
 									LEFT JOIN '._DB_PREFIX_.'state s ON (s.`id_state` = a.`id_state`)
 									WHERE a.`id_address` = '.(int)$id_address);
+
 if (empty($region))
-	$region = Configuration::get('AVALARATAX_STATE');
+{
+	//$region = Configuration::get('AVALARATAX_STATE');
+	echo 'ok';
+	exit;
+}
+
+//check if it is outside the state and if we are in united state and if conf AVALARATAX_TAX_OUTSIDE IS ENABLE
+if ($region != Configuration::get('AVALARATAX_STATE') && !Configuration::get('AVALARATAX_TAX_OUTSIDE'))
+{
+	echo "ok";
+	exit;
+}
+
 $result = Db::getInstance()->ExecuteS('SELECT ac.`tax_rate`, ac.`update_date` FROM '._DB_PREFIX_.'avalara_product_cache ac
 									WHERE ac.`id_product` IN ('.pSQL($ids_product).')
 									AND ac.`region` = \''.pSQL($region).'\'');
@@ -79,13 +92,12 @@ if (count($result) && count($result) == count($cart->getProducts()) && (float)$r
 	$date1 = new DateTime($result['update_date']);
 	$date2 = new DateTime(date('Y-m-d H:i:s'));
 	$dateTimeComparison = $date1->diff($date2);
-
 	// Check if the cached tax is not expired
 	if ($dateTimeComparison->y == 0 
 	&& $dateTimeComparison->m == 0 
 	&& $dateTimeComparison->d == 0 
 	&& (int)$dateTimeComparison->h == 0 
-	&& (int)$dateTimeComparison->i < (int)Configuration::get('AVALARA_CACHE_MAX_LIMIT') 
+		//&& (int)$dateTimeComparison->i < (int)Configuration::get('AVALARA_CACHE_MAX_LIMIT') 
 	&& (float)$result['tax_rate'] > 0)
 	{
 		echo 'ok_c'; //$result['tax_rate'];
@@ -124,9 +136,9 @@ if ($avalaraModule->active)
 									,'.(float)($getTaxResult['TotalTax'] * 100 / $getTaxResult['TotalAmount']).'
 									,\''.pSQL($region).'\'
 									,"'.date('Y-m-d H:i:s').'")');
-			echo 'ok_d';
-			return;
 		}
 	}
+	echo 'ok_d';
+	return;
 }
 echo 'ok';

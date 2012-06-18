@@ -39,7 +39,7 @@ class AvalaraTax extends Module
 									'AuthController.php' => 'override/controllers/AuthController.php',
 								);
 	private $_overrideFilesInModule1_5 = array(
-									'Tax.php' => 'override/classes/Tax/Tax.php',
+									'Tax.php' => 'override/classes/tax/Tax.php',
 									'AddressController.php' => 'override/controllers/front/AddressController.php',
 									'AuthController.php' => 'override/controllers/front/AuthController.php',
 								);
@@ -54,7 +54,7 @@ class AvalaraTax extends Module
 
 		$this->name = 'avalaratax';
 		$this->tab = 'billing_invoicing';
-		$this->version = '2.1';
+		$this->version = '2.2';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('us', 'ca');
 		parent::__construct();
@@ -206,7 +206,7 @@ class AvalaraTax extends Module
 		if (version_compare(_PS_VERSION_, '1.5', '<')) // The regular override for 1.4
 		{
 			if (file_exists(dirname(__FILE__).'/../../override/classes/Tax.php'))
-				$filesToOverride[] = '/override/classes/Tax.php';
+				$filesToOverride[] = '/override/classes/tax/Tax.php';
 			if (file_exists(dirname(__FILE__).'/../../override/controllers/AddressController.php'))
 				$filesToOverride[] = '/override/controllers/AddressController.php';
 			if (file_exists(dirname(__FILE__).'/../../override/controllers/AuthController.php'))
@@ -354,7 +354,6 @@ class AvalaraTax extends Module
 			$id_address = (int)(Db::getInstance()->getValue('SELECT `id_address` FROM `'._DB_PREFIX_.'address` WHERE `id_customer` = '.(int)($cart->id_customer).' AND `deleted` = 0 ORDER BY `id_address`'));
 		else
 			$id_address = $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
-		
 		$buffer = '<script type="text/javascript">
 		$(function(){
 			/* ajax call to cache taxes product taxes that exist in the current cart */
@@ -410,6 +409,7 @@ class AvalaraTax extends Module
 			Configuration::updateValue('AVALARATAX_TAX_CALCULATION', Tools::getValue('avalaratax_tax_calculation'));
 			Configuration::updateValue('AVALARATAX_TIMEOUT', (int)Tools::getValue('avalaratax_timeout'));
 			Configuration::updateValue('AVALARATAX_ADDRESS_NORMALIZATION', Tools::getValue('avalaratax_address_normalization'));
+			Configuration::updateValue('AVALARATAX_TAX_OUTSIDE', Tools::getValue('avalaratax_tax_outside'));
 			Configuration::updateValue('AVALARA_CACHE_MAX_LIMIT', Tools::getValue('avalara_cache_max_limit') < 1 ?
 				1 : Tools::getValue('avalara_cache_max_limit') > 23 ? 23 : Tools::getValue('avalara_cache_max_limit'));
 			
@@ -463,7 +463,7 @@ class AvalaraTax extends Module
 		'AVALARATAX_ACCOUNT_NUMBER', 'AVALARATAX_LICENSE_KEY', 'AVALARATAX_URL', 'AVALARATAX_COMPANY_CODE',
 		// Options
 		'AVALARATAX_ADDRESS_VALIDATION', 'AVALARATAX_TAX_CALCULATION', 'AVALARATAX_TIMEOUT', 
-		'AVALARATAX_ADDRESS_NORMALIZATION', 'AVALARATAX_COMMIT_ID', 'AVALARATAX_CANCEL_ID', 
+		'AVALARATAX_ADDRESS_NORMALIZATION', 'AVALARATAX_TAX_OUTSIDE', 'AVALARATAX_COMMIT_ID', 'AVALARATAX_CANCEL_ID', 
 		'AVALARATAX_REFUND_ID', 'AVALARATAX_POST_ID', 'AVALARA_CACHE_MAX_LIMIT',
 		// Default Address
 		'AVALARATAX_ADDRESS_LINE1', 'AVALARATAX_ADDRESS_LINE2', 'AVALARATAX_CITY', 'AVALARATAX_STATE', 
@@ -570,6 +570,10 @@ class AvalaraTax extends Module
 						<td class="avalaratax_column">'.$this->l('Enable address normalization in uppercase').'</td>
 						<td><input type="checkbox" name="avalaratax_address_normalization" value="1" '.(isset($confValues['AVALARATAX_ADDRESS_NORMALIZATION']) && $confValues['AVALARATAX_ADDRESS_NORMALIZATION'] ? ' checked="checked"' : '').' /></td>
 					</tr>
+<tr>
+						<td class="avalaratax_column">'.$this->l('Enable tax calculation outside of your state').'</td>
+						<td><input type="checkbox" name="avalaratax_tax_outside" value="1" '.(isset($confValues['AVALARATAX_TAX_OUTSIDE']) && $confValues['AVALARATAX_TAX_OUTSIDE'] ? ' checked="checked"' : '').' /></td>
+</tr>
 					<tr>
 						<td class="avalaratax_column">'.$this->l('Request timeout').'</td>
 						<td><input type="text" name="avalaratax_timeout" value="'.(isset($confValues['AVALARATAX_TIMEOUT']) ? Tools::safeOutput($confValues['AVALARATAX_TIMEOUT']) : '').'" style="width: 50px;" /> <span style="font-size: 11px;">'.$this->l('seconds').'</span></td>
@@ -947,6 +951,7 @@ class AvalaraTax extends Module
 		{
 			// Retrieve the tax_code for the current product if not defined
 			$taxCode = !isset($product['tax_code']) ? $this->getProductTaxCode((int)$product['id_product']) : $product['tax_code'];
+
 			if (isset($product['id_product']))
 			{
 				$line = new Line();

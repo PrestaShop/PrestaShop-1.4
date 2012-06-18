@@ -16,11 +16,18 @@ class Tax extends TaxCore
 		$moduleActive = Db::getInstance()->getValue('SELECT `active` 
 													FROM '._DB_PREFIX_.'module 
 													WHERE `name` = \'avalaratax\'');
-		if (!$moduleActive)
+
+		if ($id_address)
+			$region = Db::getInstance()->getValue('SELECT s.`iso_code`
+									FROM '._DB_PREFIX_.'address a
+									LEFT JOIN '._DB_PREFIX_.'state s ON (s.`id_state` = a.`id_state`)
+									WHERE a.`id_address` = '.(int)$id_address);
+
+		if (!$moduleActive || (isset($region) && $region != Configuration::get('AVALARATAX_STATE') && !Configuration::get('AVALARATAX_TAX_OUTSIDE')))
 			return parent::getProductTaxRate($id_product, $id_address, $getCarrierRate);
 		
 		global $cart;
-		
+
 		// Check cache first
 		if ($id_address)
 			$region = Db::getInstance()->getValue('SELECT s.`iso_code`
