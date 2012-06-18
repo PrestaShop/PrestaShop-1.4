@@ -398,7 +398,7 @@ function reloadContent(params_plus)
 		cache: false, // @todo see a way to use cache and to add a timestamps parameter to refresh cache each 10 minutes for example
 		success: function(result)
 		{
-			$('#layered_block_left').replaceWith(result.filtersBlock);
+			$('#layered_block_left').replaceWith(utf8_decode(result.filtersBlock));
 			
 			$('.category-product-count').html(result.categoryCount);
 			
@@ -542,6 +542,7 @@ function updateProductUrl()
 		});
 	}
 }
+
 
 /**
  * Copy of the php function utf8_decode()
