@@ -419,7 +419,6 @@ var PS_MRObject = (function($, undifened) {
 	function PS_MRAddSelectedRelayPointInDB(relayPointNumber, id_carrier)
 	{
 		PS_MRSelectedRelayPoint['relayPointNum'] = relayPointNumber;
-		console.log(PS_MRCarrierMethodList);
 
 		// Ajax call to add the selection in the database (compatibility for 1.3)
 		// But keep this way to add a selection better that the hook
@@ -1042,6 +1041,17 @@ var PS_MRObject = (function($, undifened) {
 					PS_MRHideLastRelayPointList();
 				}
 			});
+			
+			// 1.5 OPC Validation - Warn user to select a relay point
+			$('.payment_module a').live('click', function() {
+				if (PS_MRData.PS_VERSION >= '1.5' && PS_MRData.carrier)
+				{
+					var _return = !(!PS_MRSelectedRelayPoint['carrier_id'] || !PS_MRSelectedRelayPoint['relayPointNum']);
+					if (!_return)
+						alert(PS_MRTranslationList['errorSelection']);
+					return _return;
+				}
+			});
 		}
 	}
 
@@ -1079,17 +1089,6 @@ var PS_MRObject = (function($, undifened) {
 				PS_MRDisplayConfigurationForm($(this).attr('id'));
 			});
 		})
-		
-		// 1.5 OPC Validation - Warn user to select a relay point
-		$('.payment_module a').live('click', function() {
-			if (PS_MRData.PS_VERSION >= '1.5' && PS_MRData.carrier)
-			{
-				var _return = !(!PS_MRSelectedRelayPoint['carrier_id'] || !PS_MRSelectedRelayPoint['relayPointNum']);
-				if (!_return)
-					alert(PS_MRTranslationList['errorSelection']);
-				return _return;
-			}
-		});
 
 		if (typeof(PS_MR_SELECTED_TAB ) != 'undefined')
 			$('#MR_' + PS_MR_SELECTED_TAB + '_block').fadeIn('fast');

@@ -25,12 +25,15 @@
 *}
 
 <script type="text/javascript">
+
 	// Global JS Value
 	var PS_MRData = {$MR_Data};
 	
-	$(document).ready(function() {
+	// literal for smarty v2 compatibility
+	$(document).ready(function() {literal}{{/literal}
 		PS_MRObject.initFront();
-	});
+	{literal}}{/literal});
+
 </script>
 
 {if $MR_Data.PS_VERSION >= '1.5' && !$MR_Data.carrier}

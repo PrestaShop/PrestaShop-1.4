@@ -125,7 +125,7 @@ class MondialRelay extends Module
       $tab->module = 'mondialrelay';
       $tab->id_parent = Tab::getIdFromClassName('AdminOrders');
 
-			if (!$tab->add() || !Tab::initAccess($tab->id))
+			if (!$tab->add())
 				return false;
 
 			if (is_dir(_PS_MODULE_DIR_.'mondialrelay/'))
@@ -185,20 +185,10 @@ class MondialRelay extends Module
 	public function uninstallCommonData()
 	{
 		// Tab uninstall
-		$result = Db::getInstance()->getRow('
-			SELECT id_tab
-			FROM `' . _DB_PREFIX_ . 'tab`
-			WHERE class_name="AdminMondialRelay"');
-
-		if ($result)
+		if (($id_tab = Tab::getIdFromClassName('AdminMondialRelay')))
 		{
-			$id_tab = $result['id_tab'];
-			if (isset($id_tab) && !empty($id_tab))
-			{
-				Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'tab WHERE id_tab = '.(int)($id_tab));
-				Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'tab_lang WHERE id_tab = '.(int)($id_tab));
-				Db::getInstance()->execute('DELETE FROM ' . _DB_PREFIX_ . 'access WHERE id_tab = '.(int)($id_tab));
-			}
+			$tab = new Tab($id_tab);
+			$tab->delete();
 		}
 
 		if (!Db::getInstance()->execute('
