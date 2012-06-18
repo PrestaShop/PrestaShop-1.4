@@ -35,9 +35,17 @@ $ch = curl_init('https://sale.alliedwallet.com/ip_list.txt');
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $content = curl_exec($ch);
 curl_close($ch);
+
 if (!in_array($_SERVER['REMOTE_ADDR'], explode('|', $content)))
 {
 	Logger::AddLog('[AlliedWallet] Hack attempt: Someone tried to validate a payment - '.Tools::safeOutput($_SERVER['REMOTE_ADDR']), 2);
+	die($allied->l('Forbidden Action.'));
+}
+
+$siteId = Tools::getValue('SiteID');
+if ($siteId != Configuration::get('ALLIEDWALLET_SITE_ID'))
+{
+	Logger::AddLog('[AlliedWallet] Hack attempt: Someone tried to validate a payment with a different site ID - '.Tools::safeOutput($siteId), 2);
 	die($allied->l('Forbidden Action.'));
 }
 
