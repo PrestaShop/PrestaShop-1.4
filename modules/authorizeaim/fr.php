@@ -2,7 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{authorizeaim}prestashop>authorizeaim_cb313e911b15b21b57f4fc7b53058e4f'] = 'Recevoir des paiments avec Authorize.net';
+$_MODULE['<{authorizeaim}prestashop>authorizeaim_cb313e911b15b21b57f4fc7b53058e4f'] = 'Recevoir des paiements avec Authorize.net';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_9d5b40ff49295ac0b4a5a13a88ccd285'] = 'L\'extension cURL doit être activée sur votre serveur pour utiliser ce module.';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Configuration mise à jour';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_6a26f548831e6a8c26bfbbd9f6ec61e0'] = 'Aide';
