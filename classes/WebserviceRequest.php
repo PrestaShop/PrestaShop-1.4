@@ -1395,8 +1395,9 @@ class WebserviceRequestCore
 				if (isset($fieldProperties['i18n']) && $fieldProperties['i18n'])
 				{
 					$i18n = true;
-					foreach ($attributes->$fieldName->language as $lang)
-						$object->{$fieldName}[(int)$lang->attributes()->id] = (string)$lang;
+					if (isset($attributes->$fieldName, $attributes->$fieldName->language))
+						foreach ($attributes->$fieldName->language as $lang)
+							$object->{$fieldName}[(int)$lang->attributes()->id] = (string)$lang;
 				}
 			}
 					
