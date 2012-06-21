@@ -84,7 +84,6 @@ function clearLocations(n)
 	}
 	locationSelect.appendChild(option);
 	$('#stores-table tr.node').remove();
-	initMarkers();
 }
 
 function searchLocationsNear(center)
