@@ -549,7 +549,7 @@ class TwengaException extends Exception
 	{
 		if ($code !== 0)
 		{
-			$error_label = self::$translation_object->l('This call to Twenga Web Services failed and returned an HTTP status of %d. This means:', basename(__FILE__, '.php'))."\n";
+			$error_label = self::$translation_object->l('This call to Twenga Web Services failed and returned an HTTP status of %d. That means:', basename(__FILE__, '.php'))."\n";
 			$error_label = sprintf($error_label, $code);
 			if ($message === '' || empty($message) || $message === NULL)
 			{
