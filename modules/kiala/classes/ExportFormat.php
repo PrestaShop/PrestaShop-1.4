@@ -120,13 +120,16 @@ class ExportFormat
 	{
 		$this->openExportFile();
 		$success = true;
+		
+		// DEACTIVATED BY REQUEST FROM KIALA
 		// If pickup country and delivery country are different, we need to write 2 lines with different DSPID
-		if ($kiala_order->id_country_pickup != $kiala_order->id_country_delivery)
+		/*if ($kiala_order->id_country_pickup != $kiala_order->id_country_delivery)
 		{
 			$kiala_country_pickup = KialaCountry::getByIdCountry($kiala_order->id_country_pickup);
 			$fields = $this->initRecordData($kiala_order, $kiala_country_pickup->dspid);
 			$success = $this->writeRecord($fields);
-		}
+		}*/
+		
 		$kiala_country = KialaCountry::getByIdCountry($kiala_order->id_country_delivery);
 		$fields = $this->initRecordData($kiala_order, $kiala_country->dspid);
 		if($success &= $this->writeRecord($fields))
@@ -282,14 +285,15 @@ class ExportFormat
 		$success = true;
 		foreach ($kiala_orders as $kiala_order)
 		{
+			// DEACTIVATED BY REQUEST FROM KIALA
 			// If pickup country and delivery country are different, we need to write 2 lines with different DSPID
-			if ($kiala_order->id_country_pickup != $kiala_order->id_country_delivery)
+			/*if ($kiala_order->id_country_pickup != $kiala_order->id_country_delivery)
 			{
 				$kiala_country_pickup = KialaCountry::getByIdCountry($kiala_order->id_country_pickup);
 				$fields = $this->initRecordData($kiala_order, $kiala_country_pickup->dspid);
 				if (!$success = $this->writeRecord($fields))
 					break;
-			}
+			}*/
 			$kiala_country = KialaCountry::getByIdCountry($kiala_order->id_country_delivery);
 			$fields = $this->initRecordData($kiala_order, $kiala_country->dspid);
 			if (!$success = $this->writeRecord($fields))
