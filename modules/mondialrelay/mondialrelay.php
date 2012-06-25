@@ -759,6 +759,7 @@ class MondialRelay extends Module
 				'MR_local_path' => MondialRelay::$modulePath,
 				'MR_upgrade_detail' => $this->upgrade_detail,
 				'MR_unit_weight_used' => Configuration::get('PS_WEIGHT_UNIT'),
+				'MR_account_set' => MondialRelay::isAccountSet(),
 				'MR_base_dir' => MondialRelay::$moduleURL)
 		);
 		return $this->fetchTemplate('/tpl/', 'configuration');
