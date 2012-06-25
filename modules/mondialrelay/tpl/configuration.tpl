@@ -107,7 +107,7 @@
 		- {l s='Define a price for your carrier on' mod='mondialrelay'}
 		<a href="index.php?tab=AdminCarriers&token={$MR_token_admin_carriers}" class="green">{l s='The Carrier page' mod='mondialrelay'}</a> <br />
 		- {l s='To generate labels, you must have a valid and registered address of your store on your' mod='mondialrelay'}
-		<a href="index.php?tab=AdminContact&token={$MR_token_admin_contact}" class="green">{l s='contact page' mod='mondialrelay'}</a> <br />
+		<a href="index.php?tab={$MR_token_admin_contact.controller_name}&token={$MR_token_admin_contact.token}" class="green">{l s='contact page' mod='mondialrelay'}</a> <br />
 	</fieldset>
 </div>
 

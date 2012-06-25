@@ -733,10 +733,15 @@ class MondialRelay extends Module
 			ON ms.`id_mr_method` = m.`id_mr_method`
 			WHERE c.`deleted` = 0 AND ms.`id_shop` = '.(int)$this->account_shop['id_shop']);
 
+		$controller = (_PS_VERSION_ < '1.5') ? 'AdminContact' : 'AdminStores';
+
+		// TODO : Fill an array with admi controller name
 		$this->context->smarty->assign(array(
 				'MR_token_admin_performance' => Tools::getAdminToken('AdminPerformance'.(int)(Tab::getIdFromClassName('AdminPerformance')).(int)($this->context->cookie->id_employee)),
 				'MR_token_admin_carriers' => Tools::getAdminToken('AdminCarriers'.(int)(Tab::getIdFromClassName('AdminCarriers')).(int)$this->context->employee->id),
-				'MR_token_admin_contact' => Tools::getAdminToken('AdminContact'.(int)(Tab::getIdFromClassName('AdminContact')).(int)$this->context->employee->id),
+				'MR_token_admin_contact' => array(
+					'controller_name' => $controller, 
+					'token' => Tools::getAdminToken($controller.(int)(Tab::getIdFromClassName($controller)).(int)$this->context->employee->id)),
 				'MR_token_admin_mondialrelay' => Tools::getAdminToken('AdminMondialRelay'.(int)(Tab::getIdFromClassName('AdminMondialRelay')).(int)$this->context->employee->id),
 				'MR_token_admin_module' => Tools::getAdminToken('AdminModules'.(int)(Tab::getIdFromClassName('AdminModules')).(int)$this->context->employee->id),
 				'MR_enseigne_webservice' => Tools::getValue('MR_enseigne_webservice') ? Tools::getValue('MR_enseigne_webservice') : $this->account_shop['MR_ENSEIGNE_WEBSERVICE'],

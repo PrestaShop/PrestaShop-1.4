@@ -27,7 +27,7 @@
 {if $MR_errors_type.error|count}
 <div class="MR_error">
 	{l s='Please kindly correct the following errors on' mod='mondialrelay'}
-	<a href="index.php?tab=AdminContact&token={$MR_token_admin_contact}" style="color:#f00;">
+	<a href="index.php?tab={$MR_token_admin_contact.controller_name}&token={$MR_token_admin_contact.token}" style="color:#f00;">
 		{l s='the contact page:' mod='mondialrelay'}
 	</a>
 	<ul>

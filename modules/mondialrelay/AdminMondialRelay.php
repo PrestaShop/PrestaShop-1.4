@@ -65,10 +65,14 @@ class AdminMondialRelay extends AdminTab
 			$order['display_date'] = Tools::displayDate($order['date'], $order['id_lang']);
 			$order['weight'] = (!empty($order['mr_weight']) && $order['mr_weight'] > 0) ? $order['mr_weight'] : $order['order_weight'];
 		}
+		
+		$controller = (_PS_VERSION_ < '1.5') ? 'AdminContact' : 'AdminStores';
 
 		$this->context->smarty->assign(array(
 				'MR_token_admin_module' => Tools::getAdminToken('AdminModules'.(int)(Tab::getIdFromClassName('AdminModules')).(int)$this->context->employee->id),
-				'MR_token_admin_contact' => Tools::getAdminToken('AdminContact'.(int)Tab::getIdFromClassName('AdminContact').(int)$this->context->employee->id),
+				'MR_token_admin_contact' => array(
+					'controller_name' => $controller, 
+					'token' => Tools::getAdminToken($controller.(int)(Tab::getIdFromClassName($controller)).(int)$this->context->employee->id)),
 				'MR_token_admin_orders' => Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)$this->context->employee->id),
 				'MR_order_state_name' => $order_state->name,
 				'MR_orders' => $orders,
