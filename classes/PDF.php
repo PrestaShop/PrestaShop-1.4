@@ -637,18 +637,85 @@ class PDFCore extends PDF_PageGroupCore
 		$pdf->Ln(15);
 		$pdf->ProdTab((self::$delivery ? true : ''));
 
-
+		if (!self::$delivery)
+		{
+			$priceBreakDown = array();
+			$pdf->priceBreakDownCalculation($priceBreakDown);
+		}
 
 		/* Canada */
 		$taxable_address = new Address((int)self::$order->{Configuration::get('PS_TAX_ADDRESS_TYPE')});
 		if (!self::$delivery && strtoupper(Country::getIsoById((int)$taxable_address->id_country)) == 'CA')
 		{
 			$pdf->Ln(15);
-			$taxToDisplay = Db::getInstance()->ExecuteS('SELECT * FROM '._DB_PREFIX_.'order_tax WHERE id_order = '.(int)self::$order->id);
-			foreach ($taxToDisplay AS $t)
+
+			if (self::$orderSlip)
 			{
-				$pdf->Cell(0, 6, utf8_decode($t['tax_name']).' ('.number_format($t['tax_rate'], 2, '.', '').'%)      '.self::convertSign(Tools::displayPrice($t['amount'], self::$currency, true)), 0, 0, 'R');
-				$pdf->Ln(5);
+				$id_country = (int)$taxable_address->id_country;
+				$id_state = (int)$taxable_address->id_state;
+				$id_county = 0;
+
+				// fetch taxes for product
+				$products = self::$orderSlip->getOrdersSlipProducts(self::$orderSlip->id, self::$order);
+				foreach ($products as $product)
+				{
+					$tmp_price = $product['product_price'];
+
+					$allTaxes = TaxRulesGroup::getTaxes((int)Product::getIdTaxRulesGroupByIdProduct((int)$product['product_id']), $id_country, $id_state, $id_county);
+					foreach ($allTaxes as $res)
+					{
+						if (!isset($store_all_taxes[$res->id]))
+						{
+							$store_all_taxes[$res->id] = array();
+							$store_all_taxes[$res->id]['amount'] = 0;
+						}
+
+						$store_all_taxes[$res->id]['name'] = $res->name[(int)self::$order->id_lang];
+						$store_all_taxes[$res->id]['rate'] = $res->rate;
+
+						$unit_tax_amount = $tmp_price * ($res->rate * 0.01);
+						$tmp_price = $tmp_price + $unit_tax_amount;
+						$store_all_taxes[$res->id]['amount'] += $unit_tax_amount * $product['product_quantity'];
+					}
+				}
+
+				// fetch taxes for carrier
+				$allTaxes = TaxRulesGroup::getTaxes((int)Carrier::getIdTaxRulesGroupByIdCarrier((int)self::$order->id_carrier), $id_country, $id_state, $id_county);
+				$nTax = 0;
+
+				foreach ($allTaxes as $res)
+				{
+					if (!isset($res->id))
+						continue;
+
+					if (!isset($store_all_taxes[$res->id]))
+						$store_all_taxes[$res->id] = array();
+					if (!isset($store_all_taxes[$res->id]['amount']))
+						$store_all_taxes[$res->id]['amount'] = 0;
+					$store_all_taxes[$res->id]['name'] = $res->name[(int)self::$order->id_lang];
+					$store_all_taxes[$res->id]['rate'] = $res->rate;
+
+					if (!$nTax++)
+						$store_all_taxes[$res->id]['amount'] += ($priceBreakDown['shippingCostWithoutTax'] * (1 + ($res->rate * 0.01))) - $priceBreakDown['shippingCostWithoutTax'];
+					else
+					{
+						$priceTmp = self::$order->total_shipping / (1 + ($res->rate * 0.01));
+						$store_all_taxes[$res->id]['amount'] += self::$order->total_shipping - $priceTmp;
+					}
+				}
+
+				foreach ($store_all_taxes as $t)
+				{
+					$pdf->Cell(0, 6, utf8_decode($t['name']).' ('.number_format($t['rate'], 2, '.', '').'%)      '.self::convertSign(Tools::displayPrice($t['amount'], self::$currency, true)), 0, 0, 'R');
+					$pdf->Ln(5);
+				}
+			} else {
+				$taxToDisplay = Db::getInstance()->ExecuteS('SELECT * FROM '._DB_PREFIX_.'order_tax WHERE id_order = '.(int)self::$order->id);
+				foreach ($taxToDisplay as $t)
+				{
+					$pdf->Cell(0, 6, utf8_decode($t['tax_name']).' ('.number_format($t['tax_rate'], 2, '.', '').'%)      '.self::convertSign(Tools::displayPrice($t['amount'], self::$currency, true)), 0, 0, 'R');
+					$pdf->Ln(5);
+				}
 			}
 		}
 		/* End */
@@ -658,8 +725,6 @@ class PDFCore extends PDF_PageGroupCore
 		{
 			if (!self::$orderSlip)
 				$pdf->DiscTab();
-			$priceBreakDown = array();
-			$pdf->priceBreakDownCalculation($priceBreakDown);
 
 			if (!self::$orderSlip OR (self::$orderSlip AND self::$orderSlip->shipping_cost))
 			{
@@ -975,10 +1040,17 @@ class PDFCore extends PDF_PageGroupCore
 			return ;
 
 		// Setting products tax
-		if (isset(self::$order->products) AND sizeof(self::$order->products))
-			$products = self::$order->products;
+		if (!self::$orderSlip)
+		{
+			if (isset(self::$order->products) && count(self::$order->products))
+				$products = self::$order->products;
+			else
+				$products = self::$order->getProducts();
+		}
 		else
-			$products = self::$order->getProducts();
+		{
+			$products = self::$orderSlip->getOrdersSlipProducts(self::$orderSlip->id, self::$order);
+		}
 		$amountWithoutTax = 0;
 		$taxes = array();
 		/* Firstly calculate all prices */
