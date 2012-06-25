@@ -34,7 +34,6 @@ class AdminMondialRelay extends AdminTab
 
 	public $post_errors = array();
 
-
 	public function __construct()
 	{
 		$this->mondialrelay = new MondialRelay();
@@ -54,7 +53,9 @@ class AdminMondialRelay extends AdminTab
 		$MRCreateTicket = new MRCreateTickets(array(
 			'orderIdList' => NULL,
 			'totalOrder' => NULL,
-			'weightList' => NULL)
+			'weightList' => NULL
+			),
+			$this->mondialrelay
 		);
 
 		foreach($orders as &$order)

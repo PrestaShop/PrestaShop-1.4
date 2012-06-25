@@ -32,47 +32,43 @@
  * methods to manage correctly the data and name fields
  */
 
-$back_office_method =  array(
-	'MRGetTickets',
-	'MRCreateTickets',
-	'MRDeleteHistory',
-	'uninstallDetail',
-	'DeleteHistory'
-);
+// Clean displayed content for Admin ajax query 
+ob_clean();
 
-$front_office_method = array(
-	'MRGetRelayPoint',
-	'addSelectedCarrierToDB'
-);
+// Front Ajax query, need the front cookie and MR class
+// When it's back query, the PS core made the work
+if (!defined('_PS_ADMIN_DIR_'))
+{
+	require_once(realpath(dirname(__FILE__).'/../../config/config.inc.php'));
+	require_once(realpath(dirname(__FILE__).'/../../init.php'));
+	require_once(dirname(__FILE__).'/mondialrelay.php');
+}
+
+$mondialrelay = isset($this) ? $this : new Mondialrelay();
+
+require_once(dirname(__FILE__).'/classes/MRCreateTickets.php');
+require_once(dirname(__FILE__).'/classes/MRGetTickets.php');
+require_once(dirname(__FILE__).'/classes/MRGetRelayPoint.php');
+require_once(dirname(__FILE__).'/classes/MRRelayDetail.php');
+require_once(dirname(__FILE__).'/classes/MRManagement.php');
 
 // Can't use Tools at this time... Need to know if _PS_ADMIN_DIR_ has to be defined
-$method = isset($_POST['method']) ? $_POST['method'] : '';
-$token = isset($_POST['mrtoken']) ? $_POST['mrtoken'] : '';
-
-if (in_array($method, $back_office_method))
-	define('_PS_ADMIN_DIR_', true);
-
-require_once(realpath(dirname(__FILE__).'/../../config/config.inc.php'));
-
-if (_PS_VERSION_ < '1.5' || !defined('_PS_ADMIN_DIR_'))
-	require_once(realpath(dirname(__FILE__).'/../../init.php'));
-
-/** Backward compatibility */
-require(dirname(__FILE__).'/backward_compatibility/backward.php');
-
-require(dirname(__FILE__).'/mondialrelay.php');
-require(dirname(__FILE__).'/classes/MRCreateTickets.php');
-require(dirname(__FILE__).'/classes/MRGetTickets.php');
-require(dirname(__FILE__).'/classes/MRGetRelayPoint.php');
-require(dirname(__FILE__).'/classes/MRRelayDetail.php');
-require(dirname(__FILE__).'/classes/MRManagement.php');
-
-MondialRelay::initModuleAccess();
+$method = Tools::getValue('method');
+$token = Tools::getValue('mrtoken');
 
 // Access page List liable to the generated token
 $accessPageList = array(
-	MondialRelay::getToken('front') => $front_office_method,
-	MondialRelay::getToken('back') => $back_office_method
+	MondialRelay::getToken('front') => array(
+		'MRGetRelayPoint',
+		'addSelectedCarrierToDB'
+	),
+	MondialRelay::getToken('back') => array(
+		'MRGetTickets',
+		'MRCreateTickets',
+		'MRDeleteHistory',
+		'uninstallDetail',
+		'DeleteHistory'
+	)
 );
 
 $params = array();
@@ -121,7 +117,8 @@ try
 {
 	if (class_exists($method, false))
 	{
-		$obj = new $method($params);
+		// $this is the current mondialrelay object loaded when use in BO. Use for perf
+		$obj = new $method($params, $mondialrelay);
 
 		// Verify that the class implement correctly the interface
 		// Else use a Management class to do some ajax stuff
@@ -147,4 +144,3 @@ catch(Exception $e)
 }
 echo MRTools::jsonEncode($result);
 exit(0);
-?>

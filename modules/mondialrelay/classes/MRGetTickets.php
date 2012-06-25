@@ -64,9 +64,9 @@ class MRGetTickets implements IMondialRelayWSMethod
 	
 	private $_webserviceURL = 'http://www.mondialrelay.fr/webservice/Web_Services.asmx?WSDL';
 	
-	public function __construct($params)	
+	public function __construct($params, $object)	
 	{
-		$this->_mondialrelay = new MondialRelay();
+		$this->_mondialrelay = $object;
 		$this->_detailedExpeditionList = $params['detailedExpeditionList'];
 		$this->_webServiceKey = $this->_mondialrelay->account_shop['MR_KEY_WEBSERVICE'];
 	}

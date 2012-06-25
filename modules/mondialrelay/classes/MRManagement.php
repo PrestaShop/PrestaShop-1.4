@@ -168,4 +168,3 @@ class MRManagement extends MondialRelay
 		return $this->_resultList;
 	}
 }
-?>

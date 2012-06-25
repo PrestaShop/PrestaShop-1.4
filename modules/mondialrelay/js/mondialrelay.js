@@ -50,7 +50,7 @@ var PS_MRObject = (function($, undifened) {
 		$.ajax(
 			{
 				type : 'POST',
-				url : _PS_MR_MODULE_DIR_ + 'ajax.php',
+				url : window.location.href,
 				data :	{'detailedExpeditionList':detailedExpeditionList, 'method':'MRGetTickets', 'mrtoken':mrtoken},
 				dataType: 'json',
 				success: function(json)
@@ -207,7 +207,7 @@ var PS_MRObject = (function($, undifened) {
 		$.ajax(
 			{
 				type : 'POST',
-				url : _PS_MR_MODULE_DIR_ + 'ajax.php',
+				url : window.location.href,
 				data :	{'order_id_list' : order_id_list,
 					'numSelected' : numSelected,
 					'weight_list' : weight_list,
@@ -295,7 +295,7 @@ var PS_MRObject = (function($, undifened) {
 		$.ajax(
 			{
 				type : 'POST',
-				url : _PS_MR_MODULE_DIR_ + 'ajax.php',
+				url : window.location.href,
 				data :	{'history_id_list' : history_id_list,
 					'numSelected' : numSelected,
 					'method' : 'DeleteHistory',
@@ -323,7 +323,7 @@ var PS_MRObject = (function($, undifened) {
 		$.ajax(
 			{
 				type: 'POST',
-				url: _PS_MR_MODULE_DIR_ + 'ajax.php',
+				url: window.location.href,
 				data: {'method' : 'uninstallDetail',
 					'action' : 'showFancy',
 					'href' : targetButton,
@@ -392,7 +392,7 @@ var PS_MRObject = (function($, undifened) {
 		$.ajax(
 			{
 				type: 'POST',
-				url: _PS_MR_MODULE_DIR_ + 'ajax.php',
+				url: window.location.href,
 				data: {'method' : 'uninstallDetail',
 					'action' : 'backupAndUninstall',
 					'mrtoken' : mrtoken},
@@ -660,10 +660,13 @@ var PS_MRObject = (function($, undifened) {
 				url: _PS_MR_MODULE_DIR_ + 'ajax.php',
 				data: {'method' : 'MRGetRelayPoint',
 					'id_carrier' : carrier_id,
+					'ajax' : true,
+					'step' : 2,
 					'mrtoken' : mrtoken},
 				dataType: 'json',
 				success: function(json)
 				{
+					console.log(json);
 					if (json && json.error && json.error.length)
 						PS_MRDisplayErrorRelayPoint(json.error, $('#PS_MRSelectedCarrier_' + carrier_id));
 					else if (json && json.success)

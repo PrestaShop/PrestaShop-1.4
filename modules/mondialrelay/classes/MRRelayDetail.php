@@ -66,9 +66,9 @@ class MRRelayDetail implements IMondialRelayWSMethod
 	
 	private $_webserviceURL = 'http://www.mondialrelay.fr/webservice/Web_Services.asmx?WSDL';
 	
-	public function __construct($params)	
+	public function __construct($params, $object)	
 	{
-		$this->_mondialrelay = new MondialRelay();
+		$this->_mondialrelay = $object;
 
 		$this->_relayPointNumList = $params['relayPointNumList'];
 		$this->_id_address_delivery = (int)($params['id_address_delivery']);

@@ -27,7 +27,7 @@
 
 if (!defined('_PS_VERSION_'))
 	exit;
-
+	
 require_once(_PS_MODULE_DIR_.'mondialrelay/classes/MRTools.php');
 
 class MondialRelay extends Module
@@ -69,14 +69,13 @@ class MondialRelay extends Module
 
 	public function __construct()
 	{
-	
 		$this->name		= 'mondialrelay';
 		$this->tab		= 'shipping_logistics';
 		$this->version	= '1.8.5';
 		$this->installed_version = '';
 		$this->module_key = '366584e511d311cfaa899fc2d9ec1bd0';
 		$this->author = 'PrestaShop';
-		
+
 		parent::__construct();
 
 		$this->displayName = $this->l('Mondial Relay');
@@ -90,6 +89,9 @@ class MondialRelay extends Module
 		// Call everytime to prevent the change of the module by a recent one
 		$this->_updateProcess();
 		$this->initAccount();
+
+		// Check if it's a mondialrelay ajax query
+		$this->checkAJAX();
 	}
 
 	public function install()
@@ -120,7 +122,7 @@ class MondialRelay extends Module
 			$tab = new Tab();
 			$languages = Language::getLanguages(false);
 			foreach ($languages as $language)
-				$tab->name[$language['id_lang']] = 'Mondialrelay';
+				$tab->name[$language['id_lang']] = 'Mondial Relay';
       $tab->class_name = 'AdminMondialRelay';
       $tab->module = 'mondialrelay';
       $tab->id_parent = Tab::getIdFromClassName('AdminOrders');
@@ -303,8 +305,15 @@ class MondialRelay extends Module
 	 */
 	public function initAccount()
 	{
-		if (($account_shop_stored = unserialize(Configuration::get('MR_ACCOUNT_DETAIL'))))
+		// Get default value
+		$id_order_state = $this->account_shop['MR_ORDER_STATE'];
+		
+		if (($account_shop_stored = MondialRelay::getAccountDetail()))
 			$this->account_shop = $account_shop_stored;
+			
+		// Normally, this can't happen... 
+		if (empty($this->account_shop['MR_ORDER_STATE']))
+			$this->account_shop['MR_ORDER_STATE'] = $id_order_state;
 	}
 
 	/*
@@ -588,7 +597,7 @@ class MondialRelay extends Module
 	 */
 	public static function isAccountSet()
 	{
-		$details = unserialize(Configuration::get('MR_ACCOUNT_DETAIL'));
+		$details = MondialRelay::getAccountDetail();
 
 		if (!$details || !count($details))
 			return false;
@@ -747,7 +756,6 @@ class MondialRelay extends Module
 				'MR_PS_ADMIN_IMG_' => _PS_ADMIN_IMG_,
 				'MR_tab_selected' => Tools::getValue('MR_tab_name') ? Tools::getValue('MR_tab_name') : (MondialRelay::isAccountSet() ? 'account_form' : 'info_form'),
 				'MR_delay' => Tools::getValue('MR_delay') ? Tools::getValue('MR_delay') : '',
-				'MR_account_set' => MondialRelay::isAccountSet(),
 				'MR_local_path' => MondialRelay::$modulePath,
 				'MR_upgrade_detail' => $this->upgrade_detail,
 				'MR_unit_weight_used' => Configuration::get('PS_WEIGHT_UNIT'),
@@ -1116,5 +1124,20 @@ class MondialRelay extends Module
 			WHERE `id_carrier` = '.(int)$id_carrier);
 
 		return isset($content[$key]) ? $content[$key] : '';
+	}
+
+	public function checkAJAX()
+	{
+		// Avoid loop inclusion
+		static $is_included = false;
+
+		// TODO : Find a way to use it on front
+		if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
+			if (Tools::getValue('mrtoken') && !$is_included)
+			{
+				$is_included = true;
+				include(dirname(__FILE__).'/ajax.php');
+				exit(0);
+			}
 	}
 }

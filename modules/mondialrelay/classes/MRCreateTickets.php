@@ -35,6 +35,8 @@ require_once(dirname(__FILE__).'/IMondialRelayWSMethod.php');
  */
 class MRCreateTickets implements IMondialRelayWSMethod
 {
+	public $class_name = __CLASS__;
+
 	private $_fields	= array(
 		'id_mr_selected' => 0,
 		'list' => array(
@@ -243,15 +245,16 @@ class MRCreateTickets implements IMondialRelayWSMethod
 
 	private $_webserviceURL = 'http://www.mondialrelay.fr/webservice/Web_Services.asmx?WSDL';
 
-	public function __construct($params)
+	public function __construct($params, $object)
 	{
 		$this->_orderListId = $params['orderIdList'];
 		$this->_totalOrder = $params['totalOrder'];
 		$this->_weightList = $params['weightList'];
 
-		$this->_mondialrelay = new MondialRelay();
+		$this->_mondialrelay = $object;
 		$this->_webServiceKey = $this->_mondialrelay->account_shop['MR_KEY_WEBSERVICE'];
 		$this->_markCode = $this->_mondialrelay->account_shop['MR_CODE_MARQUE'];
+		$this->class_name = strtolower($this->class_name);
 	}
 
 	public function __destruct()
@@ -302,7 +305,7 @@ class MRCreateTickets implements IMondialRelayWSMethod
 	public function init()
 	{
 		if ($this->_totalOrder == 0)
-			throw new Exception($this->_mondialrelay->l('Please select at least one order'));
+			throw new Exception($this->_mondialrelay->l('Please select at least one order', $this->class_name));
 
 		$this->_setRequestDefaultValue();
 		if (count($orderListDetails = $this->_mondialrelay->getOrders($this->_orderListId)))
@@ -396,9 +399,9 @@ class MRCreateTickets implements IMondialRelayWSMethod
 					else if ((!strlen($valueDetailed['value']) && $valueDetailed['required']) || strlen($valueDetailed['value']))
 					{
 						if (empty($valueDetailed['value']))
-							$error = $this->_mondialrelay->l('This key').' ['.$paramName.'] '.$this->_mondialrelay->l('is empty and need to be filled');
+							$error = $this->_mondialrelay->l('This key', $this->class_name).' ['.$paramName.'] '.$this->_mondialrelay->l('is empty and need to be filled', $this->class_name);
 						else
-							$error = 'This key ['.$paramName.'] hasn\'t a valid value format : '.$valueDetailed['value'];
+							$error = 'This key ['.$paramName.'] hasn not a valid value format : '.$valueDetailed['value'];
 						$this->_resultList['error'][$rootCase['list']['NDossier']['value']][] = $error;
 					}
 				}
@@ -452,14 +455,14 @@ class MRCreateTickets implements IMondialRelayWSMethod
 		$success = &$this->_resultList['success'][$params['NDossier']];
 
 		if ($client->fault)
-			$errors[] = $this->_mondialrelay->l('It seems the request isn\'t valid:').
+			$errors[] = $this->_mondialrelay->l('It seems the request is not valid:', $this->class_name).
 				$result;
 
 		$result = $result['WSI2_CreationEtiquetteResult'];
 		if (($errorNumber = $result['STAT']) != 0)
 		{
-			$errors[] = $this->_mondialrelay->l('There is an error number : ').$errorNumber;
-			$errors[] = $this->_mondialrelay->l('Details : ').
+			$errors[] = $this->_mondialrelay->l('There is an error number : ', $this->class_name).$errorNumber;
+			$errors[] = $this->_mondialrelay->l('Details : ', $this->class_name).
 				$this->_mondialrelay->getErrorCodeDetail($errorNumber);
 		}
 		else
@@ -473,9 +476,9 @@ class MRCreateTickets implements IMondialRelayWSMethod
 				'lg_fr/espaces/url/popup_exp_details.aspx?cmrq='.$params['Enseigne'].
 				$this->_markCode.'&nexp='.$expedition.'&crc='.$securityKey;
 
-			$success['displayExpedition'] = $this->_mondialrelay->l('Expedition Number : ') . $expedition;
-			$success['displayTicketURL'] = $this->_mondialrelay->l('Ticket URL : ') . $ticketURL;
-			$success['displayTrackingURL'] = $this->_mondialrelay->l('Tracking URL: ') . $trackingURL;
+			$success['displayExpedition'] = $this->_mondialrelay->l('Expedition Number : ', $this->class_name) . $expedition;
+			$success['displayTicketURL'] = $this->_mondialrelay->l('Ticket URL : ', $this->class_name) . $ticketURL;
+			$success['displayTrackingURL'] = $this->_mondialrelay->l('Tracking URL: ', $this->class_name) . $trackingURL;
 			$success['expeditionNumber'] = $expedition;
 
 			$this->_updateTable($params, $expedition, $ticketURL, $trackingURL, $id_mr_selected);
@@ -506,7 +509,7 @@ class MRCreateTickets implements IMondialRelayWSMethod
 			unset($client);
 		}
 		else
-			throw new Exception($this->_mondialrelay->l('The Mondial Relay webservice isn\'t currently reliable'));
+			throw new Exception($this->_mondialrelay->l('The Mondial Relay webservice is not currently reliable', $this->class_name));
 	}
 
 	/*
@@ -519,31 +522,30 @@ class MRCreateTickets implements IMondialRelayWSMethod
 		$list = array(
 			'Expe_Langage' => array(
 				'value' => $this->_mondialrelay->account_shop['MR_LANGUAGE'],
-				'error' => $this->_mondialrelay->l('Please check your language configuration')),
+				'error' => $this->_mondialrelay->l('Please check your language configuration', $this->class_name)),
 			'Expe_Ad1' => array(
 				'value' => Configuration::get('PS_SHOP_NAME'),
-				'error' => $this->_mondialrelay->l('Please check your shop name configuration')),
+				'error' => $this->_mondialrelay->l('Please check your shop name configuration', $this->class_name)),
 			'Expe_Ad3' => array(
 				'value' => Configuration::get('PS_SHOP_ADDR1'),
-				'error' => $this->_mondialrelay->l('Please check your address 1 configuration')),
+				'error' => $this->_mondialrelay->l('Please check your address 1 configuration', $this->class_name)),
 			'Expe_Ville' =>	array(
 				'value' => Configuration::get('PS_SHOP_CITY'),
-				'error' => $this->_mondialrelay->l('Please check your city configuration')),
+				'error' => $this->_mondialrelay->l('Please check your city configuration', $this->class_name)),
 			'Expe_CP' => array(
 				'value' => Configuration::get('PS_SHOP_CODE'),
-				'error' => $this->_mondialrelay->l('Please check your zipcode configuration'),
-				'warn' => $this->_mondialrelay->l('It seems the layout of your zipcode country is not configured or you didn\'t set a right zipcode')),
+				'error' => $this->_mondialrelay->l('Please check your zipcode configuration', $this->class_name)),
 			'Expe_Pays' => array(
 				'value' => ((_PS_VERSION_ >= '1.4') ?
 					Country::getIsoById(Configuration::get('PS_SHOP_COUNTRY_ID')) :
 					substr(Configuration::get('PS_SHOP_COUNTRY'), 0, 2)),
-				'error' => $this->_mondialrelay->l('Please check your country configuration')),
+				'error' => $this->_mondialrelay->l('Please check your country configuration', $this->class_name)),
 			'Expe_Tel1' => array(
 				'value' => MRTools::getFormatedPhone(Configuration::get('PS_SHOP_PHONE')),
-				'error' => $this->_mondialrelay->l('Please check your Phone configuration')),
+				'error' => $this->_mondialrelay->l('Please check your Phone configuration', $this->class_name)),
 			'Expe_Mail' => array(
 				'value' => Configuration::get('PS_SHOP_EMAIL'),
-				'error' => $this->_mondialrelay->l('Please check your mail configuration')));
+				'error' => $this->_mondialrelay->l('Please check your mail configuration', $this->class_name)));
 
 		foreach($list as $name => $tab)
 		{
@@ -559,11 +561,9 @@ class MRCreateTickets implements IMondialRelayWSMethod
 					if (!($zipcodeError = MRTools::checkZipcodeByCountry($tab['value'], array(
 						'id_country' => Configuration::get('PS_COUNTRY_DEFAULT')))))
 						$errorList['error'][$name] = $tab['error'];
-					else if ($zipcodeError < 0)
-						$errorList['warn'][$name] = $tab['warn'];
 				}
 				else
-					$errorList['warn'][$name] = $this->_mondialrelay->l('Post code cannot be validated with PrestaShop versions older than 1.4');
+					$errorList['warn'][$name] = $this->_mondialrelay->l('Post code cannot be validated with PrestaShop versions older than 1.4', $this->class_name);
 			}
 			else if (isset($this->_fields['list'][$name]['regexValidation']) &&
 				(!preg_match($this->_fields['list'][$name]['regexValidation'], $tab['value'], $matches)))

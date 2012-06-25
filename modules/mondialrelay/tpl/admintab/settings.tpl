@@ -33,7 +33,7 @@
 	<form action="{$smarty.server.REQUEST_URI}" method="post" class="form">
 		<fieldset>
 			<legend><img src="../modules/mondialrelay/images/logo.gif" />{l s='Admin Tab Settings' mod='mondialrelay'}</legend>
-			<label for="id_order_state">{l s='Order state' mod="mondialrelay"}</label>
+			<label for="id_order_state">{l s='Order state' mod='mondialrelay'}</label>
 			<div class="margin-form">
 				<select id="id_order_state" name="id_order_state" style="width:250px">
 				{foreach from=$MR_orders_states_list key=num_state item=order_state}
