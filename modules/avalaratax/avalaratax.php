@@ -31,6 +31,8 @@ if (!defined('_PS_VERSION_'))
 
 spl_autoload_register('avalaraAutoload');
 
+
+
 class AvalaraTax extends Module
 {
 	private $_overrideFilesInModule1_4 = array(
@@ -54,7 +56,7 @@ class AvalaraTax extends Module
 
 		$this->name = 'avalaratax';
 		$this->tab = 'billing_invoicing';
-		$this->version = '2.2';
+		$this->version = '2.3';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('us', 'ca');
 		parent::__construct();
@@ -301,6 +303,13 @@ class AvalaraTax extends Module
 
 	public function hookUpdateOrderStatus($params)
 	{
+		$order = new Order((int)$params['id_order']);
+		$address_delivery = new Address((int)$order->id_address_delivery);
+		$state = new State((int)$address_delivery->id_state);
+
+		if ($state->iso_code != Configuration::get('AVALARATAX_STATE') && !Configuration::get('AVALARATAX_TAX_OUTSIDE'))
+			return false;
+
 		if ($params['newOrderStatus']->id == (int)Configuration::get('AVALARATAX_COMMIT_ID'))
 			return $this->commitToAvalara($params);
 		elseif ($params['newOrderStatus']->id == (int)Configuration::get('AVALARATAX_CANCEL_ID'))
