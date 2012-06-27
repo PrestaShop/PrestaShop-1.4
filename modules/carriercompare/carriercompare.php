@@ -32,7 +32,10 @@ class CarrierCompare extends Module
 {
 	public $template_directory = '';
 	public $smarty;
-	
+
+	const VIRTUAL_CUSTOMER = 'SE_VIRTUAL_ID_CUSTOMER';
+	const VIRTUAL_ADDRESS = 'SE_VIRTUAL_ID_ADDRESS';
+
 	public function __construct()
 	{
 		$this->name = 'carriercompare';
@@ -48,15 +51,15 @@ class CarrierCompare extends Module
 		$this->template_directory = dirname(__FILE__).'/template/';
 		$this->initRetroCompatibilityVar();
 	}
-	
+
 	// Retro-compatibiliy 1.4/1.5
 	private function initRetroCompatibilityVar()
-	{			
+	{
 		if (class_exists('Context'))
 			$smarty = Context::getContext()->smarty;
 		else
 			global $smarty;
-		
+
 		$this->smarty = $smarty;
 	}
 
@@ -64,28 +67,83 @@ class CarrierCompare extends Module
 	{
 		if (!parent::install() OR !$this->registerHook('shoppingCart') OR !$this->registerHook('header'))
 			return false;
+
+		if (!$this->createCustomer())
+			return false;
+
 		return true;
 	}
-	
+
+	/**
+	 * Create virtual customer to associate address for country selection
+	 *
+	 * @return bool
+	 */
+	private function createCustomer()
+	{
+		$customer = new Customer();
+		$customer->email = 'shipping_estimation@prestashop_virtual.com';
+		$customer->lastname = 'Shipping';
+		$customer->firstname = 'Estimation';
+		$customer->deleted = 1; // Keep it Hidden
+		$customer->passwd = Tools::encrypt(Tools::passwdGen());
+
+		if ($customer->add())
+		{
+			Configuration::updateValue(CarrierCompare::VIRTUAL_CUSTOMER, $customer->id);
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Create virtual address to associate id_zone for a country selection
+	 *
+	 * @param $id_country
+	 * @param $zipcode
+	 * @return bool
+	 */
+	private function addAddress($id_country, $zipcode)
+	{
+		$customer = new Customer((int)Configuration::get(CarrierCompare::VIRTUAL_CUSTOMER));
+
+		$address = new Address();
+		$address->id_country = $id_country;
+		$address->alias = 'Shipping Estimation';
+		$address->lastname = $customer->lastname;
+		$address->firstname = $customer->firstname;
+		$address->address1 = 'test';
+		$address->city = 'test';
+		$address->postcode = $zipcode;
+		$address->id_customer = $customer->id;
+
+		if ($address->add())
+		{
+			Configuration::updateValue(CarrierCompare::VIRTUAL_ADDRESS, $address->id);
+			return true;
+		}
+		return false;
+	}
+
 	public function getContent()
 	{
 		if (!empty($_POST))
 			$this->postProcess();
-		
+
 		$this->smarty->assign('refresh_method', Configuration::get('SE_RERESH_METHOD'));
 		return $this->smarty->fetch($this->template_directory .'configuration.tpl');
 	}
-	
+
 	public function postProcess()
 	{
 		$errors = array();
-		
+
 		if (Tools::isSubmit('setGlobalConfiguration'))
 		{
 			$method = (int)Tools::getValue('refresh_method');
 			Configuration::updateValue('SE_RERESH_METHOD', $method);
 		}
-		
+
 		$this->smarty->assign(array(
 			'display_error' => count($errors) ? $errors : false));
 	}
@@ -93,7 +151,7 @@ class CarrierCompare extends Module
 	public function hookHeader($params)
 	{
 		if (!$this->isModuleAvailable())
-			return;
+			return '';
 		Tools::addCSS(($this->_path).'style.css', 'all');
 		Tools::addJS(($this->_path).'carriercompare.js');
 	}
@@ -106,20 +164,20 @@ class CarrierCompare extends Module
 		global $cookie, $smarty, $currency;
 
 		if (!$this->isModuleAvailable())
-			return;
-		
-		$protocol = (Configuration::get('PS_SSL_ENABLED') || (!empty($_SERVER['HTTPS']) 
+			return '';
+
+		$protocol = (Configuration::get('PS_SSL_ENABLED') || (!empty($_SERVER['HTTPS'])
 			&& strtolower($_SERVER['HTTPS']) != 'off')) ? 'https://' : 'http://';
-		
+
 		$endURL = __PS_BASE_URI__.'modules/carriercompare/';
-	
+
 		if (method_exists('Tools', 'getShopDomainSsl'))
 			$moduleURL = $protocol.Tools::getShopDomainSsl().$endURL;
 		else
-			$moduleURL = $protocol.$_SERVER['HTTP_HOST'].$endURL;		
-		
+			$moduleURL = $protocol.$_SERVER['HTTP_HOST'].$endURL;
+
 		$refresh_method = Configuration::get('SE_RERESH_METHOD');
-		
+
 		$this->smarty->assign(array(
 			'countries' => Country::getCountries((int)$cookie->id_lang),
 			'id_carrier' => ($params['cart']->id_carrier ? $params['cart']->id_carrier : Configuration::get('PS_CARRIER_DEFAULT')),
@@ -167,14 +225,31 @@ class CarrierCompare extends Module
 			$id_zone = State::getIdZone($id_state);
 		if (!$id_zone)
 			$id_zone = Country::getIdZone($id_country);
-		
+
 		// Need to set the infos for carrier module !
 		$cookie->id_country = $id_country;
 		$cookie->id_state = $id_state;
 		$cookie->postcode = $zipcode;
 
-		$carriers = Carrier::getCarriersForOrder((int)$id_zone);
-		
+		$carriers = array();
+		if ($this->addAddress($id_country, $zipcode))
+		{
+			// Back up the current id_address_delivery
+			$current_id_address_delivery = $cart->id_address_delivery;
+
+			// Get the new one created
+			$cart->id_address_delivery = Configuration::get(CarrierCompare::VIRTUAL_ADDRESS);
+			$cart->id_customer = Configuration::get(CarrierCompare::VIRTUAL_CUSTOMER);
+
+			// Get carriers with good id_zone
+			$carriers = Carrier::getCarriersForOrder((int)$id_zone);
+
+			// Delete Address and restore id_address_delivery
+			$address = new Address((int)Configuration::get(CarrierCompare::VIRTUAL_ADDRESS));
+			$address->delete();
+			$cart->id_address_delivery = $current_id_address_delivery;
+		}
+
 		return (sizeof($carriers) ? $carriers : array());
 	}
 
@@ -230,12 +305,12 @@ class CarrierCompare extends Module
 			return false;
 
 		$regxMask = str_replace(
-				array('N', 'C', 'L'),
-				array(
-					'[0-9]',
-					Country::getIsoById((int)$id_country),
-					'[a-zA-Z]'),
-				$zipcodeFormat);
+			array('N', 'C', 'L'),
+			array(
+				'[0-9]',
+				Country::getIsoById((int)$id_country),
+				'[a-zA-Z]'),
+			$zipcodeFormat);
 		if (preg_match('/'.$regxMask.'/', $zipcode))
 			return true;
 		return false;
@@ -248,7 +323,7 @@ class CarrierCompare extends Module
 	private function isModuleAvailable()
 	{
 		global $cookie;
-		
+
 		$fileName = basename($_SERVER['SCRIPT_FILENAME']);
 		/**
 		 * This module is only available on standard order process because

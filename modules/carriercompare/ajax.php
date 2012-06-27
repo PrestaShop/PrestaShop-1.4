@@ -45,7 +45,5 @@ switch (Tools::getValue('method'))
 		$errors = $carrierCompare->saveSelection((int)Tools::getValue('id_country'), (int)Tools::getValue('id_state', 0), Tools::getValue('zipcode', 0), (int)Tools::getValue('id_carrier', 0));
 		die(Tools::jsonEncode($errors));
 		break;
-	default:
-		exit;
 }
-exit;
+exit(0);
