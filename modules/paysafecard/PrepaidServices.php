@@ -37,11 +37,13 @@ abstract class PSCPrepaidServices extends PaymentModule
 
 	protected $prefix = '';
 
-	protected $environments = array('P' => 'Production',
-								 'T' => 'Test');
+	protected $environments = array(
+		'P' => 'Production',
+		'T' => 'Test');
 
-	protected $business_types = array('I' => 'Intangible',
-									'T' => 'Tangible');
+	protected $business_types = array(
+		'I' => 'Intangible',
+		'T' => 'Tangible');
 
 	// abstract
 	protected $supported_languages;
@@ -77,13 +79,21 @@ abstract class PSCPrepaidServices extends PaymentModule
 	private function _createOrderState()
 	{
 
-		if (Configuration::get($this->prefix.'ORDER_STATE_ID') && Configuration::get($this->prefix.'ORDER_STATE_PART_ID')) return true;
+		if (Configuration::get($this->prefix.'ORDER_STATE_ID') && Configuration::get($this->prefix.'ORDER_STATE_PART_ID'))
+			return true;
 
 		// Awaiting payment
 		$os = new OrderState();
-		$os->name = array('1' => 'Awaiting '.$this->displayName.' payment',
-						  '2' => 'En attente du paiement par '.$this->displayName,
-						  '3' => 'En espera de pago por '.$this->displayName);
+		$os->name = array(
+			'1' => 'Awaiting '.$this->displayName.' payment',
+			'2' => 'En attente du paiement par '.$this->displayName,
+			'3' => 'En espera de pago por '.$this->displayName);
+
+		// Set for other language the default translate (en)
+		$languages = Language::getLanguages(false);
+		foreach ($languages as $language)
+			if (!isset($os->name[$language['id_lang']]))
+				$os->name[$language['id_lang']] = $os->name[1];
 
 		$os->invoice = false;
 		$os->color = 'lightblue';

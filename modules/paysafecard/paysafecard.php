@@ -122,8 +122,9 @@ class PaysafeCard extends PSCPrepaidServices
 
 	protected function _getErrorMsgFromErrorCode($error_code)
 	{
-		$error_msg = array(1 => $this->l('An error has occurred, check Messages for more info'),
-						   2 => $this->l('Invalid amount'));
+		$error_msg = array(
+			1 => $this->l('An error has occurred, check Messages for more info'),
+			2 => $this->l('Invalid amount'));
 
 		return $error_msg[$error_code];
 	}
