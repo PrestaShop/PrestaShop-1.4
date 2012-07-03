@@ -140,7 +140,7 @@ class AdminProducts extends AdminTab
 				Attribute::updateQtyProduct($this->_list[$i]);
 			/* update product final price */
 			for ($i = 0; $i < $nb; $i++)
-				$this->_list[$i]['price_tmp'] = Product::getPriceStatic($this->_list[$i]['id_product'], true, NULL, 6, NULL, false, true, 1, true);
+				$this->_list[$i]['price_tmp'] = Product::getPriceStatic($this->_list[$i]['id_product'], true, null, 2, null, false, true, 1, true);
 		}
 
 		if ($orderByPriceFinal == 'price_final')
@@ -1685,7 +1685,7 @@ class AdminProducts extends AdminTab
 		$price = Tools::ps_round((float)($specificPrice['price']) ? $specificPrice['price'] : $productPrice, 2);
 		if (!(float)($specificPrice['reduction']))
 			return (float)($specificPrice['price']);
-		return ($specificPrice['reduction_type'] == 'amount') ? ($price - $specificPrice['reduction'] / (1 + $taxRate / 100)) : ($price - $price * $specificPrice['reduction']);
+		return ($specificPrice['reduction_type'] == 'amount') ? ($price - $specificPrice['reduction'] / (1 + $taxRate / 100)) : ($price - Tools::ps_round($price * $specificPrice['reduction'], 2));
 	}
 
 	protected function _displaySpecificPriceModificationForm($defaultCurrency, $shops, $currencies, $countries, $groups)
