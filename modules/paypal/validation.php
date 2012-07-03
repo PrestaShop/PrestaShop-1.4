@@ -51,7 +51,11 @@ if (function_exists('curl_exec'))
 		$ch = curl_init('https://' . $paypalServer . '/cgi-bin/webscr/');
 	
 	if (!$ch)
-		$errors .= $paypal->getL('connect').' '.$paypal->getL('curlmethodfailed');
+	{
+		$errors .= $this->l('Problem connecting to the PayPal server.');
+		$errors .= ' ';
+		$errors .= $this->l('Connection using cURL failed');
+	}
 	else
 	{
 		curl_setopt($ch, CURLOPT_POST, true);
@@ -64,7 +68,7 @@ if (function_exists('curl_exec'))
 		$result = curl_exec($ch);
 
 		if (strtoupper($result) != 'VERIFIED')
-			$errors .= $paypal->getL('curlmethod').$result.' cURL error:'.curl_error($ch);
+			$errors .= $this->l('Verification failure (using cURL). Returned: ').$result.' cURL error:'.curl_error($ch);
 		curl_close($ch);
 	}
 }
@@ -90,11 +94,14 @@ elseif (($fp = @fsockopen('ssl://' . $paypalServer, 443, $errno, $errstr, 30)) |
 		}
  	}
 	if (strtoupper($result) != 'VERIFIED')
-		$errors .= $paypal->getL('socketmethod').$result;
+		$errors .= $this->l('Verification failure (using fsockopen). Returned: ').$result;
 	fclose($fp);
 }
 else
-	$errors = $paypal->getL('connect').$paypal->getL('nomethod');
+{
+	$errors = $this->l('Problem connecting to the PayPal server.');
+	$errors .= $this->l('No communications transport available.');
+}
 
 $cart_secure = (isset($_POST['custom']) ? explode('_', $_POST['custom']) : array());
 // If there isn't any cart ID, set it to "0"
@@ -109,38 +116,38 @@ if (strtoupper($result) == 'VERIFIED')
 {
 	if (!isset($_POST['mc_gross']))
 	{
-		$errors .= $paypal->getL('mc_gross').'<br />';
+		$errors .= $this->l('PayPpal key \'mc_gross\' not specified, cannot control amount paid.').'<br />';
 		$_POST['mc_gross'] = 0;
 	}
 	if (!isset($_POST['payment_status']))
 	{
-		$errors .= $paypal->getL('payment_status').'<br />';
+		$errors .= $this->l('PayPal key \'payment_status\' not specified, cannot control payment validity').'<br />';
 		$_POST['payment_status'] = 'ko';
 	}
 	elseif (strtoupper($_POST['payment_status']) != 'COMPLETED')
-		$errors .= $paypal->getL('payment').$_POST['payment_status'].'<br />';
+		$errors .= $this->l('Payment: ').$_POST['payment_status'].'<br />';
 	if (!isset($_POST['custom']))
-		$errors .= $paypal->getL('custom').'<br />';
+		$errors .= $this->l('PayPal key \'custom\' not specified, cannot relay to cart').'<br />';
 	if (!isset($_POST['txn_id']))
 	{
-		$errors .= $paypal->getL('txn_id').'<br />';
+		$errors .= $this->l('PayPal key \'txn_id\' not specified, transaction unknown').'<br />';
 		$_POST['txn_id'] = 0;
 	}
 	if (!isset($_POST['mc_currency']))
-		$errors .= $paypal->getL('mc_currency').'<br />';
+		$errors .= $this->l('PayPal key \'mc_currency\' not specified, currency unknown').'<br />';
 	if (empty($errors))
 	{
 		$cart = new Cart((int)$cart_secure[0]);
 		if (!$cart->id)
-			$errors = $paypal->getL('cart').'<br />';
+			$errors = $this->l('Cart not found').'<br />';
 		elseif (Order::getOrderByCartId((int)($cart_secure[0])))
-			$errors = $paypal->getL('order').'<br />';
+			$errors = $this->l('Order has already been placed').'<br />';
 		else
-			$paypal->validateOrder((int)$cart_secure[0], Configuration::get('PS_OS_PAYMENT'), (float)($_POST['mc_gross']), $paypal->displayName, $paypal->getL('transaction').$_POST['txn_id'], array('transaction_id' => $_POST['txn_id'], 'payment_status' => $_POST['payment_status']), NULL, false, $cart_secure[1]);
+			$paypal->validateOrder((int)$cart_secure[0], Configuration::get('PS_OS_PAYMENT'), (float)($_POST['mc_gross']), $paypal->displayName, $this->l('Paypal Transaction ID: ').$_POST['txn_id'], array('transaction_id' => $_POST['txn_id'], 'payment_status' => $_POST['payment_status']), NULL, false, $cart_secure[1]);
 	}
 }
 else
-	$errors .= $paypal->getL('verified');
+	$errors .= $this->l('The PayPal transaction could not be VERIFIED.');
 
 // Set transaction details if pcc is defiend in PaymentModule class
 if (isset($paypal->pcc))
@@ -150,8 +157,10 @@ if (isset($paypal->pcc))
 
 if (!empty($errors) AND isset($_POST['custom']))
 {
+	d('test');
 	if (strtoupper($_POST['payment_status']) == 'PENDING')
-		$paypal->validateOrder((int)$cart_secure[0], Configuration::get('PS_OS_PAYPAL'), (float)$_POST['mc_gross'], $paypal->displayName, $paypal->getL('transaction').$_POST['txn_id'].'<br />'.$errors, array('transaction_id' => $_POST['txn_id'], 'payment_status' => $_POST['payment_status']), NULL, false, $cart_secure[1]);
+		$paypal->validateOrder((int)$cart_secure[0], Configuration::get('PS_OS_PAYPAL'), (float)$_POST['mc_gross'], $paypal->displayName, $this->l('Paypal Transaction ID: ').$_POST['txn_id'].'<br />'.$errors, array('transaction_id' => $_POST['txn_id'], 'payment_status' => $_POST['payment_status']), NULL, false, $cart_secure[1]);
 	else
 		$paypal->validateOrder((int)$cart_secure[0], Configuration::get('PS_OS_ERROR'), 0, $paypal->displayName, $errors.'<br />', array(), NULL, false, $cart_secure[1]);
+
 }

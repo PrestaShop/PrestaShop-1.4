@@ -28,10 +28,12 @@
 require_once(dirname(__FILE__).'/../../config/config.inc.php');
 require_once(dirname(__FILE__).'/../../init.php');
 
-include(dirname(__FILE__).'/../../header.php');
+include_once(dirname(__FILE__).'/paypal.php');
 
-$smarty->assign('iso_code', Tools::strtolower(Language::getIsoById($cookie->id_lang ? (int)$cookie->id_lang : Configuration::get('PS_LANG_DEFAULT'))));
+new PayPal();
+$iso_code = Language::getIsoById((int)($cookie->id_lang ? $cookie->id_lang : Configuration::get('PS_LANG_DEFAULT')));
+Context::getContext()->smarty->assign('iso_code', Tools::strtolower($iso_code));
 
-echo Module::display(dirname(__FILE__).'/paypal', 'about.tpl'); 
-
-include(dirname(__FILE__).'/../../footer.php');
+$display = new BWDisplay();
+$display->setTemplate(_PS_MODULE_DIR_.'paypal/views/templates/front/about.tpl');
+$display->run();
