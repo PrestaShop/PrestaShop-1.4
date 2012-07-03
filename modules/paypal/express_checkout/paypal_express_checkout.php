@@ -242,9 +242,9 @@ class PaypalExpressCheckout extends Paypal
 			$fields['L_PAYMENTREQUEST_0_NAME'.$num] = $product['name'];
 			$fields['L_PAYMENTREQUEST_0_NUMBER'.$num] = $product['id_product'];
 			$fields['L_PAYMENTREQUEST_0_DESC'.$num] = substr(strip_tags($product['description_short']), 0, 120).'...';
-			$fields['L_PAYMENTREQUEST_0_AMT'.$num] = Tools::ps_round($product['total_wt'], $decimals);
+			$fields['L_PAYMENTREQUEST_0_AMT'.$num] = Tools::ps_round($product['price_wt'], $decimals);
 			$fields['L_PAYMENTREQUEST_0_QTY'.$num] = Tools::ps_round($product['quantity'], $decimals);
-			$total = bcadd($total, Tools::ps_round($product['total_wt'], $decimals), 2);
+			$total = bcadd($total, $fields['L_PAYMENTREQUEST_0_AMT'.$num] * $fields['L_PAYMENTREQUEST_0_QTY'.$num], 2);
 			++$num;
 		}
 
