@@ -103,7 +103,6 @@ else if ($id_cart = Tools::getValue('id_cart'))
 		$controller = new FrontController();
 		$controller->init();
 		Tools::redirect(Context::getContext()->link->getModuleLink('paypal', 'submit', $values));
-		//Tools::redirect('index.php?'.$query);
 	}
 }
 else

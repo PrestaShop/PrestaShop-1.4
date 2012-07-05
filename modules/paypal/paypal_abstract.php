@@ -436,7 +436,13 @@ abstract class PayPalAbstract extends PaymentModule
 				$shipping = $this->context->cart->getTotalShippingCost();
 			}
 
+			if (((int)Configuration::get('PAYPAL_SANDBOX')) == 1)
+				$action_url = "https://securepayments.sandbox.paypal.com/acquiringweb";
+			else
+				$action_url = "https://securepayments.paypal.com/acquiringweb";
+
 			$this->context->smarty->assign(array(
+				'action_url'		=> $action_url,
 				'cart'              => $this->context->cart,
 				'cart_details'      => $cart_details,
 				'currency'          => new Currency($this->context->cart->id_currency),
