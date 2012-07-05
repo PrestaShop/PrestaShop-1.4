@@ -23,11 +23,10 @@ $(document).ready( function() {
 
 	function getOrdersCount() {
 		$.get(
-			fullPath + '/confirm.php', // URL on which query will be applied
-			{ id_cart: '{$id_cart}' }, // GET parameters
-
-			function(data) {
-				if (data && (data > 0)) { // Redirect if payment is done
+			fullPath + '/confirm.php',
+			{ id_cart: '{$id_cart}' },
+			function (data) {
+				if (data && (data > 0)) {
 					clearInterval(confirmTimer);
 					window.location.replace(fullPath + '/submit.php?id_cart={$id_cart}');
 					$('p.payment_module, p.cart_navigation').hide();
