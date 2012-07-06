@@ -32,11 +32,10 @@ include_once(dirname(__FILE__).'/twenga.php');
 if ((sha1(Configuration::get('TWENGA_TOKEN')._COOKIE_KEY_)) != Tools::getValue('twenga_token'))
 	die('FATAL ERROR : INVALID TOKEN');
 
+@ini_set('memory_limit', '300M');
 if (!ini_get('safe_mode'))
 	@set_time_limit(300);
 
+header("Content-type: text/xml; charset=utf-8");
 $export = new Twenga();
-$output = $export->buildXML();
-if (empty($export->_errors))
-	header("Content-type: text/xml; charset=utf-8");
-echo $output;
+$export->buildXML();

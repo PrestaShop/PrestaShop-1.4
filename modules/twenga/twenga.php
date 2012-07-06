@@ -122,7 +122,7 @@ class Twenga extends PaymentModule
 		$this->token = Tools::getValue('token');
 	 	$this->name = 'twenga';
 	 	$this->tab = 'smart_shopping';
-	 	$this->version = '1.8.1';
+	 	$this->version = '1.8.2';
 		$this->author = 'PrestaShop';
 		
 	 	parent::__construct();
@@ -927,8 +927,7 @@ class Twenga extends PaymentModule
 		}
 		
 		// Now method build the XML
-		$xmlstr = '<?xml version="1.0" encoding="utf-8"?><catalog></catalog>';
-		$xml = new SimpleXMLElement($xmlstr);
+		echo '<?xml version="1.0" encoding="utf-8"?><catalog>';
 		
 		$parameters = Configuration::getMultiple(array('PS_REWRITING_SETTINGS', 'PS_LANG_DEFAULT', 'PS_SHIPPING_FREE_PRICE', 'PS_SHIPPING_HANDLING', 'PS_SHIPPING_METHOD', 'PS_SHIPPING_FREE_WEIGHT', 'PS_COUNTRY_DEFAULT'));
 		$lang = (int)$parameters['PS_LANG_DEFAULT'];
@@ -959,36 +958,39 @@ class Twenga extends PaymentModule
 					// prepared values before insert it in node structure.
 					// In this way we can structure code with checking method and displaying method for more lisibility.
 					$product_values = $this->preparedValues($product, $combination, $lang, $link, $carrier);
+					foreach ($product_values as $k => $v)
+						$product_values[$k] = str_replace(array('&lt;![CDATA[', ']]&gt;', '&#13;'), array('<![CDATA[', ']]>', ''), $v);
 					
 					// create the product node for each products and declinations
-					$product_node = $xml->addChild('product', '');
+					echo '<product>';
 					
 					// required Fields
-					$product_node->addChild('product_url', $product_values['product_url']);
-					$product_node->addChild('designation', '<![CDATA['.$product_values['designation'].']]>');
-					$product_node->addChild('price', $product_values['price']);
-					$product_node->addChild('category', '<![CDATA['.$product_values['category'].']]>');
-					$product_node->addChild('image_url', $product_values['image_url']);
-					$product_node->addChild('description', '<![CDATA['.$product_values['description'].']]>');
-					$product_node->addChild('brand', $product_values['brand']);
-					
+					echo '<product_url>'.$product_values['product_url'].'</product_url>';
+					echo '<designation>'.'<![CDATA['.$product_values['designation'].']]>'.'</designation>';
+					echo '<price>'.$product_values['price'].'</price>';
+					echo '<category>'.'<![CDATA['.$product_values['category'].']]>'.'</category>';
+					echo '<image_url>'.$product_values['image_url'].'</image_url>';
+					echo '<description>'.'<![CDATA['.$product_values['description'].']]>'.'</description>';
+					echo '<brand>'.$product_values['brand'].'</brand>';
+
 					// optionnals fields
-					$product_node->addChild('merchant_id', $product_values['merchant_id']);
-					$product_node->addChild('manufacturer_id', $product_values['manufacturer_id']);
-					$product_node->addChild('shipping_cost', $product_values['shipping_cost']);
-					$product_node->addChild('in_stock', $product_values['in_stock']);
-					$product_node->addChild('stock_detail', $product_values['stock_detail']);
-					$product_node->addChild('condition', $product_values['condition']);
-					$product_node->addChild('upc_ean', $product_values['upc_ean']);
-					$product_node->addChild('product_type', $product_values['product_type']);
-					$product_node->addChild('isbn', $product_values['isbn']);
-					$product_node->addChild('eco_tax', $product_values['eco_tax']);
+					echo '<merchant_id>'.$product_values['merchant_id'].'</merchant_id>';
+					echo '<manufacturer_id>'.$product_values['manufacturer_id'].'</manufacturer_id>';
+					echo '<shipping_cost>'.$product_values['shipping_cost'].'</shipping_cost>';
+					echo '<in_stock>'.$product_values['in_stock'].'</in_stock>';
+					echo '<stock_detail>'.$product_values['stock_detail'].'</stock_detail>';
+					echo '<condition>'.$product_values['condition'].'</condition>';
+					echo '<upc_ean>'.$product_values['upc_ean'].'</upc_ean>';
+					echo '<product_type>'.$product_values['product_type'].'</product_type>';
+					echo '<isbn>'.$product_values['isbn'].'</isbn>';
+					echo '<eco_tax>'.$product_values['eco_tax'].'</eco_tax>';
+
+					echo '</product>';
 				}
 			}
 		}
-		$str_xml = $xml->asXML();
-		$str_xml = str_replace(array('&lt;![CDATA[', ']]&gt;', '&#13;'), array('<![CDATA[', ']]>', ''), $str_xml);
-		return $str_xml;
+		echo '</catalog>';
+		return true;
 	}
 	/**
 	 * @param Product $product to get the product properties
