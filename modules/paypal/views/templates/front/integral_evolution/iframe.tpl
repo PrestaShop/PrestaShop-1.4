@@ -44,6 +44,7 @@
 	<input type="hidden" name="buyer_email" value="{$customer->email}" />
 	<input type="hidden" name="address1" value="{$delivery_address->address1}" />
 	<input type="hidden" name="address2" value="{$delivery_address->address2}" />
+	<input type="hidden" name="address_override" value="true" />
 	<input type="hidden" name="city" value="{$delivery_address->city}" />
 	<input type="hidden" name="zip" value="{$delivery_address->postcode}" />
 	<input type="hidden" name="country" value="{$delivery_address->country->iso_code}" />
