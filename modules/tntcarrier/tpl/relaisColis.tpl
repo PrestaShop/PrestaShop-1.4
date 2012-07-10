@@ -4,6 +4,7 @@
 <script type="text/javascript" src="./modules/tntcarrier/js/relais.js"></script>
 <script type="text/javascript" src="./js/jquery/jquery-ui-1.8.10.custom.min.js"></script>
 <script type="text/javascript">
+//date_carrier[$(this).val()]
 var id_carrier = new Array();
 var option_carrier = new Array();
 var date_carrier = new Array();
@@ -27,15 +28,15 @@ $().ready(function()
 				if(option_carrier[indexTab].length > 1)
 				{
 					if (option_carrier[indexTab].charAt(1) == 'Z')
-						$("#id_carrier"+$(this).val()).parent().parent().children(".carrier_infos").append("<br/>"+date_carrier[$(this).val()]+" <span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_domicile.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
+						$("#id_carrier"+$(this).val()).parent().parent().children(".carrier_infos").append("<br/><span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_domicile.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
 					else if (option_carrier[indexTab].charAt(1) == 'D')
-						$("#id_carrier"+$(this).val()).parent().parent().children(".carrier_infos").append("<br/>"+date_carrier[$(this).val()]+" <span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_relais-colis.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
+						$("#id_carrier"+$(this).val()).parent().parent().children(".carrier_infos").append("<br/><span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_relais-colis.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
 
 					else
-						$("#id_carrier"+$(this).val()).parent().parent().children(".carrier_infos").append("<br/>"+date_carrier[$(this).val()]+" <span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_popup.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
+						$("#id_carrier"+$(this).val()).parent().parent().children(".carrier_infos").append("<br/><span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_popup.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
 				}
 				else
-					$("#id_carrier"+$(this).val()).parent().parent().children(".carrier_infos").append("<br/>"+date_carrier[$(this).val()]+" <span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_popup.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
+					$("#id_carrier"+$(this).val()).parent().parent().children(".carrier_infos").append("<br/><span onclick=\'displayHelpCarrier(\"http://www.tnt.fr/BtoC/page_popup.html\")\' style=\'font-style:italic;cursor:pointer;color:blue;text-decoration:underline\'>+ d\'infos</span>");
 			}
 		});
 });

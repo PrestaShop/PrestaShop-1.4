@@ -27,7 +27,7 @@ class TntCarrier extends CarrierModule
 	{
 		$this->name = 'tntcarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.7.1';
+		$this->version = '1.7.2';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 		$this->module_key = 'd4dcfde9937b67002235598ac35cbdf8';
@@ -850,7 +850,7 @@ class TntCarrier extends CarrierModule
 			else if ($postal == '69000')
 			{
 				for ($i = 1; $i < 10; $i++)
-					$cities[] = "LYON ".$nb;
+					$cities[] = "LYON ".$i;
 			}
 			else if ($postal == '13000')
 			{
@@ -892,6 +892,8 @@ class TntCarrier extends CarrierModule
 			$link = new Link();
 			$redirect = $link->getPageLink('order.php?step=2');
 			$smarty->assign('redirect' , $redirect);
+			if (!sizeof($cities))
+				$cities[] = 'Aucune ville disponible';
 			$smarty->assign('cities', $cities);
 		}
 		$services = Db::getInstance()->ExecuteS('SELECT `id_carrier`, `option` FROM `'._DB_PREFIX_.'tnt_carrier_option`');
@@ -966,7 +968,7 @@ class TntCarrier extends CarrierModule
 			{
 				//var_dump($e);
 				//var_dump($info);
-				$errorMessage = false;
+				$errorMessage = true;//false;
 				if (strrpos($e->faultstring, "weight"))
 					$weightError = 1;
 				if (strrpos($e->faultstring, "shippingDate"))
@@ -1072,6 +1074,7 @@ class TntCarrier extends CarrierModule
 			$weight += (float)($v['weight'] * (int)$v['cart_quantity']);
 		$serviceCache = new serviceCache($params->id, $info['postcode'], $info['city'], $info['company'], Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE'), Configuration::get('TNT_CARRIER_SHIPPING_CITY'));
 		$serviceCache->clean();
+
 		if (!$serviceCache->getFaisabilityAtThisTime())
 		{
 			$serviceCache->deletePreviousServices();
@@ -1083,7 +1086,6 @@ class TntCarrier extends CarrierModule
 				$typeDestinataire[] = 'ENTERPRISE';
 
 			$faisability = $tntWebService->getFaisability($typeDestinataire, $info['postcode'], $this->putCityInNormeTnt($info['city']), date("Y-m-d", strtotime("now")));//"2012-05-02");
-
 			if (!is_array($faisability) && strrpos($faisability, "(zip code / city)") === 0)
 				$serviceCache->errorCodePostal();
 			else if (is_array($faisability))
@@ -1096,8 +1098,13 @@ class TntCarrier extends CarrierModule
 			foreach ($service as $v)
 			{
 				if (Configuration::get('TNT_CARRIER_'.pSQL($v['code']).'_ID'))
+				{
 					if (Configuration::get('TNT_CARRIER_'.pSQL($v['code']).'_ID') == $this->id_carrier)
 						$priceCarrier = Configuration::get('TNT_CARRIER_'.pSQL($v['code']).'_OVERCOST');
+				}
+				else if (Configuration::get('TNT_CARRIER_'.substr(pSQL($v['code']), 0, 2).'_ID'))
+					if (Configuration::get('TNT_CARRIER_'.substr(pSQL($v['code']), 0, 2).'_ID') == $this->id_carrier)
+						$priceCarrier = Configuration::get('TNT_CARRIER_'.substr(pSQL($v['code']), 0, 2).'_OVERCOST');
 			}
 		$zero = 0;
 		$weightLimit = Db::getInstance()->getRow('SELECT additionnal_charges FROM `'._DB_PREFIX_.'tnt_carrier_weight` WHERE `weight_min` < "'.(float)($weight).'" AND (`weight_max` > "'.(float)($weight).'" OR `weight_max` = "'.(float)$zero.'")');

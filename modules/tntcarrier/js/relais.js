@@ -306,7 +306,7 @@ function listeCommunes(tabCommunes)
 }
 
 function erreurListeCommunes() {
-	$("#relaisColisResponse").html("Erreur");
+	$("#relaisColisResponse").html("Erreur sur le code postal");
 }
 
 function erreurListeRelais() {
