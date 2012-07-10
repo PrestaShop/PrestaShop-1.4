@@ -318,7 +318,7 @@ var PS_MRObject = (function($, undifened) {
 	 * Display a fancy box displaying details about the
 	 * backup of the database
 	 */
-	function PS_MRGetUninstallDetail()
+	function PS_MRGetUninstallDetail(url)
 	{
 		$.ajax(
 			{
@@ -326,7 +326,7 @@ var PS_MRObject = (function($, undifened) {
 				url: window.location.href,
 				data: {'method' : 'uninstallDetail',
 					'action' : 'showFancy',
-					'href' : targetButton,
+					'href' : url,
 					'mrtoken' : mrtoken},
 				dataType: 'json',
 				success: function(json)
@@ -341,7 +341,7 @@ var PS_MRObject = (function($, undifened) {
 								'transitionOut'		: 'none',
 								'onComplete'			: function()
 								{
-									PS_MRHandleUninstallButton();
+									PS_MRHandleUninstallButton(url);
 
 									// Rewrite some css properties of Fancybox
 									$('#fancybox-wrap').css('width', '');
@@ -362,17 +362,17 @@ var PS_MRObject = (function($, undifened) {
 	/**
 	 * Handle the button when a user clicked on the uninstall button
 	 */
-	function PS_MRHandleUninstallButton()
+	function PS_MRHandleUninstallButton(url)
 	{
 		$('#PS_MR_BackupAction').click(function()
 		{
 			$.fancybox.close();
-			PS_MRBackupDatabase();
+			PS_MRBackupDatabase(url);
 		});
 
 		$('#PS_MR_UninstallAction').click(function()
 		{
-			window.location.href = targetButton;
+			window.location.href = url;
 			$.fancybox.close();
 			return true;
 		});
@@ -387,7 +387,7 @@ var PS_MRObject = (function($, undifened) {
 	/**
 	 * Ajax call to keep the database of the module safe
 	 */
-	function PS_MRBackupDatabase()
+	function PS_MRBackupDatabase(url)
 	{
 		$.ajax(
 			{
@@ -399,8 +399,8 @@ var PS_MRObject = (function($, undifened) {
 				dataType: 'json',
 				success: function(json)
 				{
-					targetButton += '&keepDatabase=true';
-					window.location.href = targetButton;
+					url += '&keepDatabase=true';
+					window.location.href = url;
 				},
 				error: function(xhr, ajaxOptions, thrownError)
 				{
@@ -666,7 +666,6 @@ var PS_MRObject = (function($, undifened) {
 				dataType: 'json',
 				success: function(json)
 				{
-					console.log(json);
 					if (json && json.error && json.error.length)
 						PS_MRDisplayErrorRelayPoint(json.error, $('#PS_MRSelectedCarrier_' + carrier_id));
 					else if (json && json.success)
@@ -1122,9 +1121,9 @@ var PS_MRObject = (function($, undifened) {
 		initFront : function() {
 			checkToDisplayRelayList();
 		},
-		uninstall : function()
+		uninstall : function(url)
 		{
-			PS_MRGetUninstallDetail();
+			PS_MRGetUninstallDetail(url);
 		}
 	};
 })(jQuery);

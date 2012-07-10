@@ -929,7 +929,7 @@ class MondialRelay extends Module
 
 		unset($fields['submit_add_shipping'], $fields['MR_tab_name'], $fields['tab'], $fields['MR_delay']);
 
-		// Force col mod to CCC
+		// Force col mode to CCC
 		$fields['col_mode'] = 'CCC';
 		$fields['id_carrier'] = $id_carrier;
 
