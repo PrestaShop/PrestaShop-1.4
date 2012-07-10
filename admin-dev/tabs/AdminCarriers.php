@@ -267,14 +267,23 @@ class AdminCarriers extends AdminTab
 	{
 		if ($delete)
 			Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'carrier_group WHERE id_carrier = '.(int)$id_carrier);
-		$groups = Db::getInstance()->ExecuteS('SELECT id_group FROM `'._DB_PREFIX_.'group`');
-		if (Tools::isSubmit('groupBox') && Tools::getValue('groupBox'))
-			foreach ($groups as $group)
-				if (in_array($group['id_group'], Tools::getValue('groupBox')))
-					Db::getInstance()->Execute('
-						INSERT INTO '._DB_PREFIX_.'carrier_group (id_group, id_carrier)
-						VALUES('.(int)$group['id_group'].','.(int)$id_carrier.')
-					');
+		
+		if (isset($_POST['groupBox']) && is_array($_POST['groupBox']) && count($_POST['groupBox']))
+		{
+			$all_groups = explode(',', Db::getInstance()->getValue('SELECT GROUP_CONCAT(id_group) FROM `'._DB_PREFIX_.'group`'));
+			if ($all_groups)
+			{
+				$list = '';
+				$groups_to_link = Tools::getValue('groupBox');
+				foreach ($groups_to_link as $group)
+					if (in_array($group, $all_groups))
+						$list .= '('.(int)$group.','.(int)$id_carrier.'),';
+				$list = rtrim($list, ',');
+
+				if ($list != '')
+					Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'carrier_group (id_group, id_carrier) VALUES '.pSQL($list));
+			}
+		}
 	}
 
 	public function postProcess()
@@ -285,7 +294,7 @@ class AdminCarriers extends AdminTab
 		{
 		 	/* Checking fields validity */
 			$this->validateRules();
-			if (!sizeof($this->_errors))
+			if (!count($this->_errors))
 			{
 				$id = (int)(Tools::getValue('id_'.$this->table));
 
