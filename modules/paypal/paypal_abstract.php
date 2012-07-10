@@ -46,7 +46,7 @@ abstract class PayPalAbstract extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'payments_gateways';
-		$this->version = '3.0.2';
+		$this->version = '3.0.3';
 
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
@@ -159,7 +159,7 @@ abstract class PayPalAbstract extends PaymentModule
 			$orderState = new OrderState();
 			$orderState->name = array();
 
-			foreach (Language::getLanguages() AS $language)
+			foreach (Language::getLanguages() as $language)
 			{
 				if (strtolower($language['iso_code']) == 'fr')
 				{
@@ -298,7 +298,11 @@ abstract class PayPalAbstract extends PaymentModule
 	public function getContent()
 	{
 		$this->_postProcess();
-		$english_language_id = (int)Language::getIdByIso('EN');
+
+		if (($id_lang = Language::getIdByIso('EN')) == 0)
+			$english_language_id = (int)$this->context->employee->id_lang;
+		else
+			$english_language_id = (int)$id_lang;
 
 		$values = array(
 			'Countries' => Country::getCountries($english_language_id),
@@ -340,9 +344,14 @@ abstract class PayPalAbstract extends PaymentModule
 			)
 		);
 
-		$this->context->controller->addCSS(_MODULE_DIR_ . $this->name . '/css/paypal.css');
+		// Backward compatibility
+		if (_PS_VERSION_ < '1.5')
+			Tools::addCSS(_MODULE_DIR_ . $this->name . '/css/paypal.css');
+		else
+			$this->context->controller->addCSS(_MODULE_DIR_ . $this->name . '/css/paypal.css');
 
 		$output = $this->fetchTemplate('/js/', 'front_office', 'js');
+			
 		return '<script type="text/javascript">' . $output . '</script>';
 	}
 
@@ -679,20 +688,23 @@ abstract class PayPalAbstract extends PaymentModule
 
 		$response = $this->_makeRefund($id_transaction, $order->id, (float)($amt));
 		$message = $this->l('Cancel products result:') . '<br>';
-		foreach ($response AS $k => $value)
+		foreach ($response as $key => $value)
 		{
-			$message .= $k . ': ' . $value . '<br>';
+			$message .= $key . ': ' . $value . '<br>';
 		}
 		$this->_addNewPrivateMessage((int)$order->id, $message);
 	}
 
 	public function hookBackOfficeHeader()
 	{
-		if (strcmp(Tools::getValue('module_name'), $this->name) != 0)
-		{
-            return '';
-        }
-        else
+		if (_PS_VERSION_ < '1.5')
+			$getName = (int)strcmp(Tools::getValue('configure'), $this->name);
+		else
+			$getName = (int)strcmp(Tools::getValue('module_name'), $this->name);
+
+		if ($getName != 0)
+			return '';
+		else
         {
             $this->getContext()->smarty->assign(
                 array(

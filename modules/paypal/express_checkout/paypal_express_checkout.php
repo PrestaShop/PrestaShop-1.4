@@ -122,7 +122,7 @@ class PaypalExpressCheckout extends Paypal
 					'price_wt' => $product->getPrice(true, $this->id_p_attr, 2),
 				);
 				$this->product_list[0]['total_wt'] = $this->product_list[0]['price_wt'] * (int)($this->quantity);
-				$this->product_list[0]['total'] = bcmul(Tools::ps_round($this->product_list[0]['price'], 2), (int)$this->quantity, 2);
+				$this->product_list[0]['total'] = Tools::ps_round($this->product_list[0]['price'] * (int)$this->quantity, 2);
 				break;
 
 			case ('cart' || 'payment_cart') :
@@ -244,7 +244,7 @@ class PaypalExpressCheckout extends Paypal
 			$fields['L_PAYMENTREQUEST_0_DESC'.$num] = substr(strip_tags($product['description_short']), 0, 120).'...';
 			$fields['L_PAYMENTREQUEST_0_AMT'.$num] = Tools::ps_round($product['price_wt'], $decimals);
 			$fields['L_PAYMENTREQUEST_0_QTY'.$num] = Tools::ps_round($product['quantity'], $decimals);
-			$total = bcadd($total, $fields['L_PAYMENTREQUEST_0_AMT'.$num] * $fields['L_PAYMENTREQUEST_0_QTY'.$num], 2);
+			$total = Tools::ps_round($total + ($fields['L_PAYMENTREQUEST_0_AMT'.$num] * $fields['L_PAYMENTREQUEST_0_QTY'.$num]), $decimals);
 			++$num;
 		}
 
@@ -254,7 +254,7 @@ class PaypalExpressCheckout extends Paypal
 			$fields['L_PAYMENTREQUEST_0_NAME'.$num] = $this->l('Gift wrapping');
 			$fields['L_PAYMENTREQUEST_0_AMT'.$num] = Tools::ps_round($gift_wrapping_price, $decimals);
 			$fields['L_PAYMENTREQUEST_0_QTY'.$num] = 1;
-			$total = bcadd($total, Tools::ps_round($gift_wrapping_price, $decimals), 2);
+			$total = Tools::ps_round($total + $gift_wrapping_price, $decimals);
 		}
 
 		// Payement

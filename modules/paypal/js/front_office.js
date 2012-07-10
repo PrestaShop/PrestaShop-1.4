@@ -1,19 +1,19 @@
-$(document).ready( function() {
+{literal}
+jQuery(document).ready( function() {
 
-	// Submit the paypal expresss form
-	$('#payment_paypal_express_checkout').click(function() {
-		var nb = $('#quantity_wanted').val();
-		var id = $('#idCombination').val();
+	jQuery('#payment_paypal_express_checkout').click(function() {
+		var nb = jQuery('#quantity_wanted').val();
+		var id = jQuery('#idCombination').val();
 
-		$('#paypal_express_checkout_form input[name=quantity]').val(nb)
-		$('#paypal_express_checkout_form input[name=id_p_attr]').val(id);
-		$('#paypal_express_checkout_form').submit();
+		jQuery('#paypal_express_checkout_form input[name=quantity]').val(nb);
+		jQuery('#paypal_express_checkout_form input[name=id_p_attr]').val(id);
+		jQuery('#paypal_express_checkout_form').submit();
 	});
 
-	if ($('form[target="hss_iframe"]').length == 0) {
+	if (jQuery('form[target="hss_iframe"]').length == 0) {
 		return false;
 	} else {
-		var hostname = 'http://' + window.location.hostname + '{$base_uri}';
+		var hostname = 'http://' + window.location.hostname + '{/literal}{$base_uri}{literal}';
 		var modulePath = 'modules/paypal';
 		var subFolder = '/integral_evolution';
 		var fullPath = hostname + modulePath + subFolder;
@@ -22,17 +22,17 @@ $(document).ready( function() {
 	}
 
 	function getOrdersCount() {
-		$.get(
+		jQuery.get(
 			fullPath + '/confirm.php',
-			{ id_cart: '{$id_cart}' },
+			{ id_cart: '{/literal}{$id_cart}{literal}' },
 			function (data) {
 				if (data && (data > 0)) {
 					clearInterval(confirmTimer);
-					window.location.replace(fullPath + '/submit.php?id_cart={$id_cart}');
-					$('p.payment_module, p.cart_navigation').hide();
+					window.location.replace(fullPath + '/submit.php?id_cart={/literal}{$id_cart}{literal}');
+					jQuery('p.payment_module, p.cart_navigation').hide();
 				}
 			}
 		);
 	}
-
 });
+{/literal}
