@@ -319,15 +319,15 @@ class WebserviceRequestCore
 			$decimals = (isset($value['decimals']) ? $value['decimals'] : Configuration::get('PS_PRICE_ROUND_MODE'));
 			$id_product_attribute = (isset($value['product_attribute']) ? $value['product_attribute'] : null);
 			$id_county = (isset($value['county']) ? $value['county'] : null);
-			
 			$only_reduc = (isset($value['only_reduction']) ? $value['only_reduction'] : false);
 			$use_reduc = (isset($value['use_reduction']) ? $value['use_reduction'] : true);
 			$use_ecotax = (isset($value['use_ecotax']) ? $value['use_ecotax'] : Configuration::get('PS_USE_ECOTAX'));
 			$specific_price_output = null;
 			$id_county = (isset($value['county']) ? $value['county'] : 0);
-			$return_value = Product::priceCalculation(null, $value['object_id'], $id_product_attribute, $id_country, $id_state, $id_county, $id_currency, $id_group, $quantity, 
-									$use_tax, $decimals, $only_reduc, $use_reduc, $use_ecotax, $specific_price_output, null);
-			$arr_return[$name] = array('sqlId'=>strtolower($name), 'value'=>$return_value);
+			$return_value = Product::priceCalculation(null, $value['object_id'], $id_product_attribute, $id_country, $id_state, 
+			$id_county, $id_currency, $id_group, $quantity, $use_tax, $decimals, $only_reduc, $use_reduc, $use_ecotax, 
+			$specific_price_output, null);
+			$arr_return[$name] = array('sqlId' => strtolower($name), 'value' => sprintf('%f', $return_value));
 		}
 		return $arr_return;
 	}
