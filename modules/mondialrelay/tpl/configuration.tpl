@@ -115,7 +115,7 @@
 ** Account settings form
 *}
 <div id="MR_account_form_block" class="PS_MRFormType">
-	<form action="{$smarty.server.REQUEST_URI}" method="post" >
+	<form action="{$smarty.server.REQUEST_URI|escape:'htmlall'}" method="post" >
 		<fieldset>
 			<legend><img src="../modules/mondialrelay/images/logo.gif" />{l s='Mondial Relay Account Settings' mod='mondialrelay'}</legend>
 			<div>
@@ -190,7 +190,7 @@
  ** Add new shipping form
  *}
 <div id="MR_supplier_form_block" class="PS_MRFormType">
-	<form action="{$smarty.server.REQUEST_URI}" method="post" >
+	<form action="{$smarty.server.REQUEST_URI|escape:'htmlall'}" method="post" >
 		<fieldset>
 			<legend><img src="../modules/mondialrelay/images/logo.gif" alt="" />{l s='Add a Shipping Method' mod='mondialrelay'}</legend>
 			<ul>
@@ -267,7 +267,7 @@
 					{else}
 					{foreach from=$MR_carriers_list key=num_carrier item=carrier}
 						<li>
-							<form action="{$smarty.server.REQUEST_URI}&MR_tab_name=supplier_form" method="post">
+							<form action="{$smarty.server.REQUEST_URI|escape:'htmlall'}&MR_tab_name=supplier_form" method="post">
 								<input type="hidden" name="delete_mr" value="{$carrier.id_mr_method}" >
 								<a class="send_disable_carrier_form" href="javascript:void(0)">
 									<img src="../img/admin/disabled.gif" alt="Delete" title="Delete" />
