@@ -915,7 +915,8 @@ class TntCarrier extends CarrierModule
 		$token = Tools::safeOutput(Tools::getValue('token'));
 		$errorShipping = 0;
 		if ($currentIndex == '')
-			$currentIndex = 'index.php?controller='.Tools::safeOutput(Tools::getValue('controller'))."&id_order=".(int)($params['id_order']);
+			$currentIndex = 'index.php?controller='.Tools::safeOutput(Tools::getValue('controller'));
+		$currentIndex .= "&id_order=".(int)($params['id_order']);
 		$carrierName = Db::getInstance()->getRow('SELECT c.external_module_name FROM `'._DB_PREFIX_.'carrier` as c, `'._DB_PREFIX_.'orders` as o WHERE c.id_carrier = o.id_carrier AND o.id_order = "'.(int)($params['id_order']).'"');
 		if ($carrierName!= null && $carrierName['external_module_name'] != $this->_moduleName)
 			return false;
@@ -939,7 +940,28 @@ class TntCarrier extends CarrierModule
 			$smarty->assign('var', $var);
 			return $this->display( __FILE__, 'tpl/shippingNumber.tpl' );
 		}
+		$order = new Order($params['id_order']);
+		$products = $order->getProducts();
+		$productWeight = array();
 
+		foreach ($products as $product)
+		{
+			$p = new Product($product['product_id']);
+			if ((float)$p->weight == 0 && (!isset($_POST['product_weight_'.$product['product_id']]) || (float)$_POST['product_weight_'.$product['product_id']] <= 0))
+				$productWeight[] = array('id' => $product['product_id'], 'name' => $product['product_name']);
+			else if (isset($_POST['product_weight_'.$product['product_id']]) && (float)$_POST['product_weight_'.$product['product_id']] > 0)
+			{
+				$p->weight = (float)$_POST['product_weight_'.$product['product_id']];
+				$p->update();
+			}
+		}
+		if (count($productWeight) > 0)
+		{
+			$var = array('currentIndex' => $currentIndex, 'table' => $table, 'token' => $token);
+			$smarty->assign('var', $var);
+			$smarty->assign('productWeight', $productWeight);
+			return $this->display( __FILE__, 'tpl/weightForm.tpl' );
+		}
 		$orderInfoTnt = new OrderInfoTnt((int)($params['id_order']));
 		$info = $orderInfoTnt->getInfo();
 		if (isset($info[3]) && (strlen($info[3]['option']) == 1 || substr($info[3]['option'], 1, 1) == 'S'))
@@ -953,9 +975,7 @@ class TntCarrier extends CarrierModule
 			$smarty->assign('var', $var);
 			return $this->display( __FILE__, 'tpl/formerror.tpl' );
 		}
-		$dataWeight = (float)(Tools::getValue('weightErrorOrder'));
-		if ($dataWeight != 0)
-			$info[1]['weight'][0] = $dataWeight;
+
 		$pack = new PackageTnt((int)($params['id_order']));
 		if ($info[0]['shipping_number'] == '' && $pack->getOrder()->hasBeenShipped())
 		{
@@ -966,24 +986,24 @@ class TntCarrier extends CarrierModule
 			}
 			catch(SoapFault $e)
 			{
-				//var_dump($e);
-				//var_dump($info);
-				$errorMessage = true;//false;
-				if (strrpos($e->faultstring, "weight"))
-					$weightError = 1;
+				$errorFriendly = '';
 				if (strrpos($e->faultstring, "shippingDate"))
 					$dateError = date("Y-m-d");
-				if (strrpos($e->faultstring, "phoneNumber"))
-					$errorMessage = true;
+				if (strrpos($e->faultstring, "receiver"))
+				{
+					$receiverError = 1;
+					$errorFriendly = $this->l('Can you please modify the field').' '.substr($e->faultstring, strpos($e->faultstring, "receiver") + 9, strpos($e->faultstring, "'", strpos($e->faultstring, "receiver" ) - strpos($e->faultstring, "receiver")) + 1).' '.$this->l('in the box "shipping address" below.');
+				}
+				if (strrpos($e->faultstring, "sender"))
+				{
+					$senderError = 1;
+					$errorFriendly = $this->l('Can you please modify the field').' '.substr($e->faultstring, strpos($e->faultstring, "sender") + 7, strpos($e->faultstring, "'", strpos($e->faultstring, "sender" ) - strpos($e->faultstring, "sender")) + 1).' '.$this->l('in you tnt module configuration.');
+				}
+
 				$error = $this->l("Problem : ") . $e->faultstring;
-				$var = array("error" => $error, "weight" => (isset($weightError) ? $weightError : ''), "weightHidden" => (!isset($weightError) ? $info[1]['weight'] : ''),
-							 "date" => (isset($dateError) ? $dateError : ''), "dateHidden" => (!isset($dateError) ? $info[2]['delivery_date'] : ''),
-							 'currentIndex' => $currentIndex, 'table' => $table, 'token' => $token, 'errorMessage' => $errorMessage);
+				$var = array("error" => $error, "errorFriendly" => $errorFriendly, "date" => (isset($dateError) ? $dateError : ''), 'currentIndex' => $currentIndex, 'table' => $table, 'token' => $token);
 				$smarty->assign('var', $var);
 				return $this->display( __FILE__, 'tpl/formerror.tpl' );
-			}
-			catch(Exception $e) {
-				$error = $this->l("Problem : failed");
 			}
 			if (isset($package->Expedition->parcelResponses->parcelNumber))
 				$pack->setShippingNumber($package->Expedition->parcelResponses->parcelNumber);
@@ -994,13 +1014,11 @@ class TntCarrier extends CarrierModule
 		}
 		if ($pack->getShippingNumber() != '')
 		{
-			//var_dump($info);
 			$var = array(
 				'error' => '',
 				'shipping_numbers' => $pack->getShippingNumber(),
 				'sticker' => "../modules/".$this->_moduleName.'/pdf/'.$pack->getOrder()->shipping_number.'.pdf',
 				'date' => $info[2]['delivery_date'],
-				//'customer' => $info[0]['address1'].' '.$info[0]['address2'].'<br/>'.$info[0]['postcode'].' '.$info[0]['city'],
 				'relay' => (isset($info[4]) ? $info[4]['name'].'<br/>'.$info[4]['address'].'<br/>'.$info[4]['zipcode'].' '.$info[4]['city']: ''),
 				'place' => Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS1')." ".Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS2')."<br/>".Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE')." ".$this->putCityInNormeTnt(Configuration::get('TNT_CARRIER_SHIPPING_CITY')));
 			$smarty->assign('var', $var);
