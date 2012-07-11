@@ -106,7 +106,7 @@ class AdminTaxRulesGroup extends AdminTab
 
 		echo '<br />';
 
-		echo '<div class="tab-panet-tax" id="tab-pane-1">
+		echo '<div class="tab-pane-tax" id="tab-pane-1">
 			<script type="text/javascript">
 			var pos_select = '.(($tab = Tools::getValue('tabs')) ? $tab : '0').';
 			function loadTab(id)

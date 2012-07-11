@@ -267,7 +267,7 @@ class AdminCarriers extends AdminTab
 	{
 		if ($delete)
 			Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'carrier_group WHERE id_carrier = '.(int)$id_carrier);
-		
+
 		if (isset($_POST['groupBox']) && is_array($_POST['groupBox']) && count($_POST['groupBox']))
 		{
 			$all_groups = explode(',', Db::getInstance()->getValue('SELECT GROUP_CONCAT(id_group) FROM `'._DB_PREFIX_.'group`'));

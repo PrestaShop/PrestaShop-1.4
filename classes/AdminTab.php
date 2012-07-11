@@ -187,7 +187,10 @@ abstract class AdminTabCore
 		21 => $this->l('Module reset successfully'), 22 => $this->l('Module deleted successfully'),
 		23 => $this->l('Localization pack imported successfully'), 24 => $this->l('Refund Successful'),
 		25 => $this->l('Images successfully moved'));
-		if (!$this->identifier) $this->identifier = 'id_'.$this->table;
+	
+		if (!$this->identifier)
+			$this->identifier = 'id_'.(is_array($this->table) ? $this->table[0] : $this->table);
+		
 		if (!$this->_defaultOrderBy) $this->_defaultOrderBy = $this->identifier;
 		$className = get_class($this);
 		if ($className == 'AdminCategories' OR $className == 'AdminProducts')
