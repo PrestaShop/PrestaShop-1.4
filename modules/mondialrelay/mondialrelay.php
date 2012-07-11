@@ -273,8 +273,7 @@ class MondialRelay extends Module
 	*/
 	private function askForBackup($href)
 	{
-		return 'targetButton = \''.$href.'\';
-			PS_MRObject.uninstall()';
+		return 'return PS_MRObject.uninstall(\''.$href.'\');';
 	}
 
 	/*
@@ -929,7 +928,7 @@ class MondialRelay extends Module
 
 		unset($fields['submit_add_shipping'], $fields['MR_tab_name'], $fields['tab'], $fields['MR_delay']);
 
-		// Force col mode to CCC
+		// Force col mod to CCC
 		$fields['col_mode'] = 'CCC';
 		$fields['id_carrier'] = $id_carrier;
 

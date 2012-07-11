@@ -350,7 +350,7 @@ var PS_MRObject = (function($, undifened) {
 								}
 							})
 						: '');
-				},
+				,
 				error: function(xhr, ajaxOptions, thrownError)
 				{
 					// Put debug to see error detail
@@ -1123,7 +1123,7 @@ var PS_MRObject = (function($, undifened) {
 		},
 		uninstall : function(url)
 		{
-			PS_MRGetUninstallDetail(url);
+			return PS_MRGetUninstallDetail(url);
 		}
 	};
 })(jQuery);
