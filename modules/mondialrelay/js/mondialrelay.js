@@ -350,7 +350,7 @@ var PS_MRObject = (function($, undifened) {
 								}
 							})
 						: '');
-				,
+				},
 				error: function(xhr, ajaxOptions, thrownError)
 				{
 					// Put debug to see error detail
