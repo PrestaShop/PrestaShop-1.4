@@ -282,7 +282,7 @@ class WebserviceRequestCore
 	{
 		if (is_int($entity_object->id))
 		{
-			$arr_return = $this->specificPriceForProduct($entity_object, array('default_price'=>''));
+			$arr_return = $this->specificPriceForProduct($entity_object, array('default_price' => ''));
 			$field['value'] = $arr_return['default_price']['value'];
 		}
 		return $field;
@@ -1112,9 +1112,7 @@ class WebserviceRequestCore
 				return false;
 			}
 			else
-			{
 				$sql_limit .= ' LIMIT '.(int)($limitArgs[0]).(isset($limitArgs[1]) ? ', '.(int)($limitArgs[1]) : '')."\n";// LIMIT X|X, Y
-			}
 		}
 		$filters['sql_join'] = $sql_join;
 		$filters['sql_filter'] = $sql_filter;
@@ -1124,26 +1122,26 @@ class WebserviceRequestCore
 		return $filters;
 	}
 	
-	
-	
 	public function getFilteredObjectList()
 	{
 		$objects = array();
 		$filters = $this->manageFilters();
+		
+		/* If we only need to display the synopsis, analyzing the first row is sufficient */
+		if ($this->urlFragments['schema'] == 'synopsis')
+			$filters = array('sql_join' => '', 'sql_filter' => '', 'sql_sort' => '', 'sql_limit' => ' LIMIT 1');
+		
 		$this->resourceConfiguration['retrieveData']['params'][] = $filters['sql_join'];
 		$this->resourceConfiguration['retrieveData']['params'][] = $filters['sql_filter'];
 		$this->resourceConfiguration['retrieveData']['params'][] = $filters['sql_sort'];
 		$this->resourceConfiguration['retrieveData']['params'][] = $filters['sql_limit'];
-		//list entities
 		
 		$tmp = new $this->resourceConfiguration['retrieveData']['className']();
 		$sqlObjects = call_user_func_array(array($tmp, $this->resourceConfiguration['retrieveData']['retrieveMethod']), $this->resourceConfiguration['retrieveData']['params']);
 		if ($sqlObjects)
 		{
 			foreach ($sqlObjects as $sqlObject)
-			{
 				$objects[] = new $this->resourceConfiguration['retrieveData']['className']($sqlObject[$this->resourceConfiguration['fields']['id']['sqlId']]);
-			}
 			return $objects;
 		}
 	}
@@ -1223,9 +1221,6 @@ class WebserviceRequestCore
 		return $this->saveEntityFromXml(200);
 
 	}
-	
-	
-
 	
 	/**
 	 * Execute DELETE method on a PrestaShop entity

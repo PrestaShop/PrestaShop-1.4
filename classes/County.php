@@ -164,10 +164,7 @@ class CountyCore extends ObjectModel
 			self::$_cache_county_zipcode[$id_state.'-'.$zip_code] = Db::getInstance()->getValue('
 			SELECT DISTINCT c.`id_county` FROM `'._DB_PREFIX_.'county` c
 			LEFT JOIN `'._DB_PREFIX_.'county_zip_code` cz ON (c.`id_county` = cz.`id_county`)
-			WHERE `id_state` = '.(int)$id_state.'
-			AND cz.`from_zip_code` <= '.(int)$zip_code.'
-			AND cz.`to_zip_code` >= '.(int)$zip_code
-			);
+			WHERE `id_state` = '.(int)$id_state.' AND cz.`from_zip_code` >= '.(int)$zip_code.' AND cz.`to_zip_code` <= '.(int)$zip_code);
 		}
 
 		return self::$_cache_county_zipcode[$id_state.'-'.$zip_code];

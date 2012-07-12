@@ -161,16 +161,22 @@ class MailCore
 			if ($moduleName !== false && (file_exists(_PS_THEME_DIR_.'modules/'.$moduleName.'/mails/'.$template.'.txt') ||
 				file_exists(_PS_THEME_DIR_.'modules/'.$moduleName.'/mails/'.$template.'.html')))
 				$templatePath = _PS_THEME_DIR_.'modules/'.$moduleName.'/mails/';
-			else if (file_exists(_PS_THEME_DIR_.'mails/'.$template.'.txt') || file_exists(_PS_THEME_DIR_.'mails/'.$template.'.html'))
+			elseif (file_exists(_PS_THEME_DIR_.'mails/'.$template.'.txt') || file_exists(_PS_THEME_DIR_.'mails/'.$template.'.html'))
 			{
 				$templatePath = _PS_THEME_DIR_.'mails/';
 				$overrideMail  = true;
 			}
-			else if (!file_exists($templatePath.$template.'.txt') || !file_exists($templatePath.$template.'.html'))
+			elseif (!file_exists($templatePath.$template.'.html'))
+			{
+				Tools::dieOrLog(Tools::displayError('Error - The following email template is missing:').' '.$templatePath.$template.'.html', $die);
+				return false;
+			}
+			elseif (!file_exists($templatePath.$template.'.txt'))
 			{
 				Tools::dieOrLog(Tools::displayError('Error - The following email template is missing:').' '.$templatePath.$template.'.txt', $die);
 				return false;
 			}
+			
 			$templateHtml = file_get_contents($templatePath.$template.'.html');
 			$templateTxt = strip_tags(html_entity_decode(file_get_contents($templatePath.$template.'.txt'), null, 'utf-8'));
 

@@ -51,6 +51,7 @@ class AdminDeliverySlip extends AdminTab
 		<h2>'.$this->l('Print PDF delivery slips').'</h2>
 		<fieldset>
 			<form action="'.$currentIndex.'&submitPrint=1&token='.$this->token.'" method="post">
+				<p>'.$this->l('Please select a date range, this one applies to the order\'s last modification date:').'<br /><br /></p>
 				<label>'.$this->l('From:').' </label>
 				<div class="margin-form">
 					<input type="text" size="4" maxlength="10" name="date_from" value="'.(date('Y-m-d')).'" style="width: 120px;" /> <sup>*</sup>

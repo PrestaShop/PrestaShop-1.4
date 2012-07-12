@@ -234,7 +234,7 @@ CREATE TABLE `PREFIX_category_product` (
   `id_category` int(10) unsigned NOT NULL,
   `id_product` int(10) unsigned NOT NULL,
   `position` int(10) unsigned NOT NULL default '0',
-  UNIQUE KEY `category_product_index` (`id_category`,`id_product`),
+  PRIMARY KEY (`id_category`,`id_product`),
   INDEX (`id_product`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
@@ -278,7 +278,7 @@ CREATE TABLE `PREFIX_cms_category_lang` (
   `meta_title` varchar(128) DEFAULT NULL,
   `meta_keywords` varchar(255) DEFAULT NULL,
   `meta_description` varchar(255) DEFAULT NULL,
-  UNIQUE KEY `category_lang_index` (`id_cms_category`,`id_lang`),
+  PRIMARY KEY (`id_cms_category`, `id_lang`),
   KEY `category_name` (`name`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
@@ -942,10 +942,12 @@ CREATE TABLE `PREFIX_order_detail` (
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_order_tax` (
+  `id_order_tax` int(10) unsigned NOT NULL auto_increment,
   `id_order` int(11) NOT NULL,
   `tax_name` varchar(40) NOT NULL,
   `tax_rate` decimal(6,3) NOT NULL,
-  `amount` decimal(20,6) NOT NULL
+  `amount` decimal(20,6) NOT NULL,
+  PRIMARY KEY (`id_order_tax`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_order_discount` (

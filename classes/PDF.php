@@ -552,6 +552,9 @@ class PDFCore extends PDF_PageGroupCore
 		self::$orderSlip = $slip;
 		self::$delivery = $delivery;
 		self::$_iso = strtoupper(Language::getIsoById((int)(self::$order->id_lang)));
+		if (!isset(self::$_pdfparams[self::$_iso]))
+			self::$_iso = strtoupper(Language::getIsoById((int)Configuration::get('PS_LANG_DEFAULT')));
+		
 		if ((self::$_priceDisplayMethod = $order->getTaxCalculationMethod()) === false)
 			die(self::l('No price display method defined for the customer group'));
 

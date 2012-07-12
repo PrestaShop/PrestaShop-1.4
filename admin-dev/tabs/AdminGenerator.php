@@ -60,7 +60,8 @@ class AdminGenerator extends AdminTab
 			<label for="imageCacheControl">'.$this->l('Optimization').'</label>
 			<div class="margin-form">
 				<input type="checkbox" name="PS_HTACCESS_CACHE_CONTROL" id="PS_HTACCESS_CACHE_CONTROL" value="1" '.(Configuration::get('PS_HTACCESS_CACHE_CONTROL') == 1 ? 'checked="checked"' : '').' />
-				<p>'.$this->l('By checking this box it will add directives to your .htaccess file which should improve caching and compression.').'</p>
+				<p>'.$this->l('Checking this box will enable Gzip compression, tune ETags and add cache directives on CSS, JS and images.').'<br />
+				<b>'.$this->l('Warning: You must enable mod_expires, mod_deflate and mod_filter in Apache before checking this box.').'</b></p>
 			</div>
 			<div class="clear">&nbsp;</div>
 			<label for="imageCacheControl">'.$this->l('Friendly URL').'</label>

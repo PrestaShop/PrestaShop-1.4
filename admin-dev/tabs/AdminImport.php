@@ -341,31 +341,19 @@ class AdminImport extends AdminTab
 	}
 
 	/*
-	* Return fields to be display AS piece of advise
+	* Return fields necessary to import an entity
 	*
 	* @param $inArray boolean
 	* @return string or return array
 	*/
 	public function getAvailableFields($inArray = false)
 	{
-		$i = 0;
 		$fields = array();
-		foreach ($this->available_fields AS $k => $field)
-		{
-			if ($k === 'no')
-				continue;
-			if ($k === 'price_tin')
-			{
-				$fields[$i-1]['label'] = $fields[$i-1]['label'].' '.$this->l('or').' '.$field['label'];
-			}
-			else
-				$fields[] = '<div>'.(isset($field['help']) ? '<a href="#" class="info" title="'.$this->l('Info').'|'.$field['help'].'"><img src="'._PS_ADMIN_IMG_.'information.png"></a>' : '<span style="margin-left:16px"></span>').$field['label'].'</div>';
-			++$i;
-		}
-		if ($inArray)
-			return $fields;
-		else
-			return implode("\n\r", $fields);
+		foreach ($this->available_fields as $k => $field)
+			if ($k != 'no')
+				$fields[] = '<div>'.(isset($field['help']) ? '<a href="#" class="info" title="'.$this->l('Info').'|'.$field['help'].'"><img src="'._PS_ADMIN_IMG_.'information.png" alt=""></a>' : '<span style="margin-left:16px"></span>').$field['label'].'</div>';
+
+		return $inArray ? $fields : implode("\n\r", $fields);
 	}
 
 	private function receiveTab()
@@ -826,11 +814,9 @@ class AdminImport extends AdminTab
 						}
 					}
 				}
-				//delete existing images if "delete_existing_images" is set to 1
-				if (isset($product->delete_existing_images))
-					if ((bool)$product->delete_existing_images)
-						$product->deleteImages();
-				elseif (isset($product->image) AND is_array($product->image) AND sizeof($product->image))
+				
+				/* Delete existing images if "delete_existing_images" is set to 1 */
+				if ((isset($product->delete_existing_images) && (bool)$product->delete_existing_images) || (isset($product->image) && is_array($product->image) && count($product->image)))
 					$product->deleteImages();
 
 				if (isset($product->image) AND is_array($product->image) and sizeof($product->image))

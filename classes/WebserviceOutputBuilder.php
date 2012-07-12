@@ -383,9 +383,7 @@ class WebserviceOutputBuilderCore
 			}
 		}
 		else
-		{
 			$output .= $this->renderSchema($objects['empty'], $ws_params);
-		}
 		
 		// If a list is asked, need to wrap with a plural node
 		if ($type_of_view === self::VIEW_LIST)
@@ -423,15 +421,15 @@ class WebserviceOutputBuilderCore
 	{
 		$output = $this->objectRender->renderNodeHeader($ws_params['objectNodeName'], $ws_params);
 		foreach ($ws_params['fields'] as $field_name => $field)
-		{
 			$output .= $this->renderField($object, $ws_params, $field_name, $field, 0);
-		}
+
 		if (isset($ws_params['associations']) && count($ws_params['associations']) > 0)
 		{
 			$this->fieldsToDisplay = 'full';
 			$output .= $this->renderAssociations($object, 0, $ws_params['associations'], $ws_params);
 		}
 		$output .= $this->objectRender->renderNodeFooter($ws_params['objectNodeName'], $ws_params);
+
 		return $output;
 	}
 
