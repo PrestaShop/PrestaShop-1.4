@@ -46,8 +46,7 @@ abstract class PayPalAbstract extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'payments_gateways';
-		$this->version = '3.0.4';
-
+		$this->version = '3.0.5';
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
 

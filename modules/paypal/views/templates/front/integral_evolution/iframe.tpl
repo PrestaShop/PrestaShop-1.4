@@ -26,7 +26,7 @@
 
 <iframe name="hss_iframe" width="556px" height="540px" style="overflow: hidden; border: none" class="payment_module"></iframe>
 
-<form style="display: none" target="hss_iframe" name="form_iframe" method="post" action="https://securepayments.sandbox.paypal.com/acquiringweb">
+<form style="display: none" target="hss_iframe" name="form_iframe" method="post" action="{$action_url}">
 	<input type="hidden" name="cmd" value="_hosted-payment" />
 
 	<input type="hidden" name="billing_first_name" value="{$billing_address->firstname}" />
@@ -44,6 +44,7 @@
 	<input type="hidden" name="buyer_email" value="{$customer->email}" />
 	<input type="hidden" name="address1" value="{$delivery_address->address1}" />
 	<input type="hidden" name="address2" value="{$delivery_address->address2}" />
+	<input type="hidden" name="address_override" value="true" />
 	<input type="hidden" name="city" value="{$delivery_address->city}" />
 	<input type="hidden" name="zip" value="{$delivery_address->postcode}" />
 	<input type="hidden" name="country" value="{$delivery_address->country->iso_code}" />

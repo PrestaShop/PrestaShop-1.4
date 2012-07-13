@@ -248,6 +248,21 @@ class PaypalExpressCheckout extends Paypal
 			++$num;
 		}
 
+		$discounts = $this->context->cart->getDiscounts();
+		if (sizeof($discounts) > 0)
+		{
+			foreach ($discounts as $product)
+			{
+				$fields['L_PAYMENTREQUEST_0_NAME'.$num] = $product['name'];
+				$fields['L_PAYMENTREQUEST_0_NUMBER'.$num] = $product['id_discount'];
+				$fields['L_PAYMENTREQUEST_0_DESC'.$num] = substr(strip_tags($product['description']), 0, 120).'...';
+				$fields['L_PAYMENTREQUEST_0_AMT'.$num] = - Tools::ps_round($product['value_real'], $decimals);
+				$fields['L_PAYMENTREQUEST_0_QTY'.$num] = 1;
+				$total = Tools::ps_round($total + $fields['L_PAYMENTREQUEST_0_AMT'.$num], $decimals);
+				++$num;
+			}
+		}
+
 		if ($this->context->cart->gift == 1)
 		{
 			$gift_wrapping_price = (float)Configuration::get('PS_GIFT_WRAPPING_PRICE');
