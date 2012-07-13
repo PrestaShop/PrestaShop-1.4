@@ -45,7 +45,7 @@ class Alliedwallet extends PaymentModule
 
 		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('Allied Wallet');
-		$this->description = $this->l('Accept payments with Allied Wallet');
+		$this->description = $this->l('Accept credit and debit cards online with Allied Wallet. You\'ll be able to accept 164 different currencies around the globe with safety and security.');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details?');
 
 		/** Backward compatibility 1.4 and 1.5 */
@@ -76,11 +76,7 @@ class Alliedwallet extends PaymentModule
 		$this->_html = '<h2>'.$this->displayName.'</h2>
 		<p><img src="../modules/alliedwallet/alliedwallet.gif" alt="alliedwallet"/></p>
 		<fieldset style="margin-bottom:10px">
-			'.$this->l('This module allows you to accept payments by Allied Wallet.').'<br/><br/>
-			'.$this->l('In order to use this module, you have to create an account with Allied Wallet').'<br/>
-			'.$this->l('If you already have an account, please fill in the required fileds with the Merchant ID and Site ID provided to you by Allied Wallet.').'<br/><br/>
-			'.$this->l('Don\'t wait and').' <a target="_BLANK" style="color:blue;text-decoration:underline" href="https://www.alliedwallet.com/sign-up">'.$this->l('sign-up today').'</a> '.$this->l('to get your Allied Wallet account.').'
-		</fieldset>';
+<b>'.$this->l('Accept payments with Allied Wallet now.').'</b><br/><br/>'.$this->l('Are you ready to begin accepting 164 different currencies in nearly every card brand, direct debit, and ACH?').'<br/>'.$this->l('Are you ready to protect your business with state-of-the-art security?').'<br/>'.$this->l('Are you ready to see more ease in your business with our tracking and reporting?').'<br/><br/>'.$this->l('Pair your PrestaShop store with the most innovative and fully-featured payment solution available. See your profit today and use the module below.').'<br/><br/>'.$this->l('If you don\'t have an Allied Wallet account yet,').' <a target="_BLANK" style="color:blue;text-decoration:underline" href="https://www.alliedwallet.com/sign-up"><b>'.$this->l('sign up today').'</b></a> '.$this->l('and begin processing in as little as 24 hours at a rate starting as low as 1.95%.').'</fieldset>';
 
 		if (isset($_POST['submitAlliedwallet']))
 		{
