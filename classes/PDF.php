@@ -294,7 +294,7 @@ class PDFCore extends PDF_PageGroupCore
 		// 8 point = 2.8mm and the cell height = 4mm
 		$this->SetY(-(21.0 + (4 * $totalLineDetailFooter)) - ($y_delta * 7.0));
 		$this->SetFont(self::fontname(), '', 7);
-		$this->Cell(190, 5, ' '."\n".Tools::iconv('utf-8', self::encoding(), 'P. ').$this->GroupPageNo().' / '.$this->PageGroupAlias(), 'T', 1, 'R');
+		$this->Cell(190, 5, Tools::iconv('utf-8', self::encoding(), self::l('P. ')).$this->GroupPageNo().' / '.$this->PageGroupAlias(), 'T', 1, 'R');
 
 		global $cookie;
 		if (Configuration::get('PS_INVOICE_FREE_TEXT', $cookie->id_lang))

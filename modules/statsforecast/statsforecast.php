@@ -111,18 +111,13 @@ class StatsForecast extends Module
 			: 'IFNULL(MAKEDATE(YEAR(invoice_date),DAYOFYEAR(invoice_date)-WEEKDAY(invoice_date)), CONCAT(YEAR(invoice_date),"-01-01*"))');
 		
 		$result = $db->ExecuteS('
-		SELECT
-			'.$dateFromGInvoice.' as fix_date,
-			COUNT(DISTINCT o.id_order) as countOrders,
-			SUM(od.product_quantity) as countProducts,
-			SUM(od.product_price * od.product_quantity / o.conversion_rate) as totalProducts
+		SELECT '.$dateFromGInvoice.' fix_date, COUNT(DISTINCT o.id_order) countOrders,
+		SUM(od.product_quantity) countProducts, SUM(od.product_price * od.product_quantity / o.conversion_rate) totalProducts
 		FROM '._DB_PREFIX_.'orders o
 		LEFT JOIN '._DB_PREFIX_.'order_detail od ON o.id_order = od.id_order
 		LEFT JOIN '._DB_PREFIX_.'product p ON od.product_id = p.id_product
-		WHERE o.valid = 1
-		AND o.invoice_date BETWEEN '.ModuleGraph::getDateBetween().'
-		GROUP BY '.$dateFromGInvoice.'
-		ORDER BY fix_date', false);
+		WHERE o.valid = 1 AND o.invoice_date BETWEEN '.ModuleGraph::getDateBetween().'
+		GROUP BY '.$dateFromGInvoice, false);
 
 		while ($row = $db->nextRow($result))
 			$dataTable[$row['fix_date']] = $row;
@@ -162,14 +157,16 @@ class StatsForecast extends Module
 		$discounts = Db::getInstance()->ExecuteS('
 		SELECT '.$dateFromGInvoice.' as fix_date, SUM(od.value) as total
 		FROM '._DB_PREFIX_.'orders o
-		LEFT JOIN '._DB_PREFIX_.'order_discount od ON o.id_order = od.id_order
-		WHERE o.valid = 1
-		AND o.total_paid_real > 0
-		AND o.invoice_date BETWEEN '.ModuleGraph::getDateBetween().'
+		LEFT JOIN '._DB_PREFIX_.'order_discount od ON (o.id_order = od.id_order)
+		WHERE o.valid = 1 AND o.total_paid_real > 0 AND o.invoice_date BETWEEN '.ModuleGraph::getDateBetween().'
 		GROUP BY '.$dateFromGInvoice, false);
 		while ($row = $db->nextRow($discounts))
 			$discountArray[$row['fix_date']] = $row['total'];
 		$today = date('Y-m-d');
+		
+		/* Order results by date ASC */
+		ksort($dataTable);
+
 		foreach ($dataTable as $row)
 		{
 			$discountToday = (isset($discountArray[$row['fix_date']]) ? $discountArray[$row['fix_date']] : 0);

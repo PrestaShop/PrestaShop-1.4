@@ -222,7 +222,7 @@ class AdminCMS extends AdminTab
 			{
 				$admin_dir = dirname($_SERVER['PHP_SELF']);
 				$admin_dir = substr($admin_dir, strrpos($admin_dir,'/') + 1);
-				$redir .= '?adtoken='.Tools::encrypt('PreviewCMS'.$cms->id).'&ad='.$admin_dir;
+				$redir .= '&adtoken='.Tools::encrypt('PreviewCMS'.$cms->id).'&ad='.$admin_dir;
 			}
 			Tools::redirectAdmin($redir);
 		}
@@ -269,49 +269,30 @@ class AdminCMS extends AdminTab
 
 			if (!sizeof($this->_errors))
 			{
-				if (!$id_cms = (int)(Tools::getValue('id_cms')))
+				$cms = new CMS();
+				$this->copyFromPost($cms, 'cms');
+				$cms->id = (int)Tools::getValue('id_cms');
+
+				if (!$cms->id && !$cms->add())
+					$this->_errors[] = Tools::displayError('An error occurred while creating object.').' <b>'.$this->table.' ('.mysql_error().')</b>';
+				elseif (!$cms->update())
+					$this->_errors[] = Tools::displayError('An error occurred while updating object.').' <b>'.$this->table.' ('.mysql_error().')</b>';
+				
+				if (!count($this->_errors))
 				{
-					$cms = new CMS();
-					$this->copyFromPost($cms, 'cms');
-					if (!$cms->add())
-						$this->_errors[] = Tools::displayError('An error occurred while creating object.').' <b>'.$this->table.' ('.mysql_error().')</b>';
-					elseif (Tools::isSubmit('submitAddcmsAndPreview'))
+					if (Tools::isSubmit('submitAddcmsAndPreview'))
 					{
-						$preview_url = $link->getCMSLink($cms, $this->getFieldValue($object, 'link_rewrite', $this->_defaultFormLanguage), (int)($cookie->id_lang));
+						$preview_url = $link->getCMSLink($cms, $this->getFieldValue($cms, 'link_rewrite', $this->_defaultFormLanguage), (int)($cookie->id_lang));
 						if (!$cms->active)
 						{
 							$admin_dir = dirname($_SERVER['PHP_SELF']);
 							$admin_dir = substr($admin_dir, strrpos($admin_dir,'/') + 1);
-							$token = Tools::encrypt('PreviewCMS'.$cms->id);
-	
-							$preview_url .= $object->active ? '' : '&adtoken='.$token.'&ad='.$admin_dir;
+							$preview_url .= '&adtoken='.Tools::encrypt('PreviewCMS'.(int)$cms->id).'&ad='.$admin_dir;
 						}
 						Tools::redirectAdmin($preview_url);
 					}
 					else
-						Tools::redirectAdmin($currentIndex.'&id_cms_category='.$cms->id_cms_category.'&conf=3&token='.Tools::getAdminTokenLite('AdminCMSContent'));
-				}
-				else
-				{
-					$cms = new CMS($id_cms);
-					$this->copyFromPost($cms, 'cms');
-					if (!$cms->update())
-						$this->_errors[] = Tools::displayError('An error occurred while updating object.').' <b>'.$this->table.' ('.mysql_error().')</b>';
-					elseif (Tools::isSubmit('submitAddcmsAndPreview'))
-					{
-						$preview_url = $link->getCMSLink($cms, $this->getFieldValue($object, 'link_rewrite', $this->_defaultFormLanguage), (int)($cookie->id_lang));
-						if (!$cms->active)
-						{
-							$admin_dir = dirname($_SERVER['PHP_SELF']);
-							$admin_dir = substr($admin_dir, strrpos($admin_dir,'/') + 1);
-							$token = Tools::encrypt('PreviewCMS'.$cms->id);
-	
-							$preview_url .= $object->active ? '' : '&adtoken='.$token.'&ad='.$admin_dir;
-						}
-						Tools::redirectAdmin($preview_url);
-					}
-					else
-						Tools::redirectAdmin($currentIndex.'&id_cms_category='.$cms->id_cms_category.'&conf=4&token='.Tools::getAdminTokenLite('AdminCMSContent'));
+						Tools::redirectAdmin($currentIndex.'&id_cms_category='.(int)$cms->id_cms_category.'&conf='.(int)($cms->id ? 3 : 4).'&token='.Tools::getAdminTokenLite('AdminCMSContent'));
 				}
 			}
 		}
