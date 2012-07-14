@@ -112,7 +112,7 @@ class StatsForecast extends Module
 		
 		$result = $db->ExecuteS('
 		SELECT '.$dateFromGInvoice.' fix_date, COUNT(DISTINCT o.id_order) countOrders,
-		SUM(od.product_quantity) countProducts, SUM(od.product_price * od.product_quantity / o.conversion_rate) totalProducts
+		SUM(od.product_quantity) countProducts, SUM(o.total_products / o.conversion_rate) totalProducts
 		FROM '._DB_PREFIX_.'orders o
 		LEFT JOIN '._DB_PREFIX_.'order_detail od ON o.id_order = od.id_order
 		LEFT JOIN '._DB_PREFIX_.'product p ON od.product_id = p.id_product
@@ -176,7 +176,6 @@ class StatsForecast extends Module
 				? 'LIKE \''.$row['fix_date'].'%\''
 				: 'BETWEEN \''.substr($row['fix_date'], 0, 10).' 00:00:00\' AND DATE_ADD(\''.substr($row['fix_date'], 0, 8).substr($row['fix_date'], 8, 2).' 23:59:59\', INTERVAL 7 DAY)');
 			$row['registrations'] = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer WHERE date_add BETWEEN '.ModuleGraph::getDateBetween().' AND date_add '.$dateFromGReg);
-			$totalHT = $row['totalProducts'] - $discountToday;
 
 			$this->_html .= '
 			<tr>
@@ -188,7 +187,7 @@ class StatsForecast extends Module
 				<td align="center">'.($visitsToday ? round(100 * (int)($row['registrations']) / $visitsToday, 2).' %' : '-').'</td>
 				<td align="center">'.($visitsToday ? round(100 * (int)($row['countOrders']) / $visitsToday, 2).' %' : '-').'</td>
 				<td align="right">'.Tools::displayPrice($discountToday, $currency).'</td>
-				<td align="right" >'.Tools::displayPrice($totalHT, $currency).'</td>
+				<td align="right" >'.Tools::displayPrice($row['totalProducts'], $currency).'</td>
 			</tr>';
 			
 			$this->t1 += $visitsToday;
@@ -196,7 +195,7 @@ class StatsForecast extends Module
 			$this->t3 += (int)($row['countOrders']);
 			$this->t4 += (int)($row['countProducts']);
 			$this->t7 += $discountToday;
-			$this->t8 += $totalHT;
+			$this->t8 += $row['totalProducts'];
 		}
 
 		$this->_html .= '

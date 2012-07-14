@@ -449,11 +449,11 @@ $_ERRORS['36f9983aadfde9d77db0d357abe6e85e'] = 'Cette règle de taxe ne peut êt
 $_ERRORS['7df7cede74e46f3db6b15097bc0def56'] = 'ce bon peut être utilisé uniquement dans cette devise:';
 $_ERRORS['f31c6bd22c7b96ca912b03f72ba9da24'] = 'ce bon de réduction a déjà été utilisé ou est désactivé';
 $_ERRORS['be0caf91a9818eb72c4b365ac169fba8'] = 'ce bon de réduction a expiré (limite d\'usage atteinte)';
-$_ERRORS['e9d528fd77aaf898ebb763f124a1fd1d'] = 'ce bon de réduction a expiré';
+$_ERRORS['e9d528fd77aaf898ebb763f124a1fd1d'] = 'ce bon de réduction n\'est plus valide (expiré)';
 $_ERRORS['d0f1560c5d1b13b1e64fa87a301dd83b'] = 'ce bon de réduction se trouve déjà dans votre panier';
 $_ERRORS['5f42bae6298b1656297e184ecd359f22'] = 'ce bon de réduction n\'est pas cumulable avec des produits en promotion ou soldés';
 $_ERRORS['bc9679730b07cd7d0e813dab08efd415'] = 'ce bon de réduction n\'est pas cumulable avec d\'autre réductions';
-$_ERRORS['596c0b7077b7a2619c64c8c3c40142b9'] = 'ce bon de réduction n\'est plus valide';
+$_ERRORS['596c0b7077b7a2619c64c8c3c40142b9'] = 'ce bon de réduction n\'est pas encore valide';
 $_ERRORS['546212fa1d2694600b976add6bf722f7'] = 'vers les catégories';
 $_ERRORS['3d064d5efb6cf2ed52cf72bfef7c7db2'] = 'Pour utiliser CacheFS, le dossier';
 $_ERRORS['32a2e7694628335252aceb0552a6f6ba'] = 'Pour utiliser Memcached, Vous devez installer l\'extension Memcache PECL sur votre serveur :';
@@ -559,3 +559,5 @@ $_ERRORS['a9b036d3e91d53892d6a67c31327e456'] = 'doit avoir les droits d\'écritu
 $_ERRORS['412e78628d9b033b54bb0e387e6e40f3'] = 'le nom pour la caractéristique';
 $_ERRORS['5e5fe82e71c8495982731e4c43e7ecef'] = 'ni une table ni un identifiant : ';
 $_ERRORS['db5bf82f326c6332a2c3dc1b0dd4598e'] = 'a été re-écrit comme';
+
+?>

@@ -101,7 +101,7 @@
 		
 		<p class="SE_SubmitRefreshCard">
 			<input class="exclusive_large" id="carriercompare_submit" type="submit" name="carriercompare_submit" value="{l s='Update Cart' mod='carriercompare'}"/>
-			<input id="update_carriers_list" type="button" class="exclusive_large" value="{l s='Update carrier list'}" />
+			<input id="update_carriers_list" type="button" class="exclusive_large" value="{l s='Update carrier list' mod='carriercompare'}" />
 		</p>
 	</fieldset>
 </form>

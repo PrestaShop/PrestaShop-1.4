@@ -70,8 +70,7 @@ class AdminImport extends AdminTab
 		'available_now' => array('AdminImport', 'createMultiLangField'),
 		'available_later' => array('AdminImport', 'createMultiLangField'),
 		'category' => array('AdminImport', 'split'),
-		'online_only' => array('AdminImport', 'getBoolean')
-		);
+		'online_only' => array('AdminImport', 'getBoolean'));
 
 	public function __construct()
 	{
@@ -176,12 +175,13 @@ class AdminImport extends AdminTab
 				'date_add' => array('label' => $this->l('Date add product')),
 				'show_price' => array('label' => $this->l('Show price')),
 				'image' => array('label' => $this->l('Image URLs (x,y,z...)')),
+				'online_only' => array('label' => $this->l('Only available online')),
 				'delete_existing_images' => array(
 											'label' => $this->l('Delete existing images (0 = no, 1 = yes)'),
 											'help' => $this->l('If you do not specify this column and you specify the column images, all images of the product will be replaced by those specified in the import file')),
-				'feature' => array('label' => $this->l('Feature')),
-				'online_only' => array('label' => $this->l('Only available online')),
-				'condition' => array('label' => $this->l('Condition')));
+				
+				'condition' => array('label' => $this->l('Condition')),
+				'feature' => array('label' => $this->l('Feature')));
 
 				self::$default_values = array(
 				'id_category' => array(1),
@@ -332,7 +332,7 @@ class AdminImport extends AdminTab
 			$options .= '<option value="'.$k.'"';
 			if ($k === 'price_tin')
 				++$nb_c;
-			if ($i === ($nb_c + 1) AND (!in_array($k, $noPreSelect)))
+			if ($i === ($nb_c + 1) && (!in_array($k, $noPreSelect)))
 				$options .= ' selected="selected"';
 			$options .= '>'.$field['label'].'</option>';
 			++$i;
@@ -429,7 +429,7 @@ class AdminImport extends AdminTab
 		$tmpfile = tempnam(_PS_TMP_IMG_DIR_, 'ps_import');
 		$watermark_types = explode(',', Configuration::get('WATERMARK_TYPES'));
 
-		switch($entity)
+		switch ($entity)
 		{
 			default:
 			case 'products':
@@ -467,14 +467,22 @@ class AdminImport extends AdminTab
 		$handle = $this->openCsvFile();
 		$defaultLanguageId = (int)Configuration::get('PS_LANG_DEFAULT');
 		self::setLocale();
-		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
+		for ($current_line = 0, $lines_ok = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
 				$line = $this->utf8_encode_array($line);
 			$info = self::getMaskedRow($line);
 
-			if (!isset($info['id']) || (int)$info['id'] < 2)
+			if (isset($info['id']) && !empty($info['id']) && (int)$info['id'] < 2)
+			{
+				$this->_warnings[] = Tools::displayError('Line').' '.(int)($current_line + 1).' '.Tools::displayError('was ignored due to a wrong ID value - Category name:').' '.Tools::safeOutput($info['name']);
 				continue;
+			}
+			elseif (empty($info['id']))
+				unset($info['id']);
+
+			if (!isset($info['parent']) || $info['parent'] < 1)
+				$info['parent'] = 1;
 
 			self::setDefaultValues($info);
 			$category = new Category();
@@ -502,7 +510,7 @@ class AdminImport extends AdminTab
 					else
 					{
 						$this->_errors[] = $categoryToCreate->name[$defaultLanguageId].(isset($categoryToCreate->id) ? ' ('.$categoryToCreate->id.')' : '').' '.Tools::displayError('Cannot be saved');
-						$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
+						$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').Db::getInstance()->getMsgError();
 					}
 				}
 			}
@@ -557,23 +565,28 @@ class AdminImport extends AdminTab
 			if (!$res)
 			{
 				$this->_errors[] = $info['name'].(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('Cannot be saved');
-				$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
+				$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').Db::getInstance()->getMsgError();
 			}
+			else
+				$lines_ok++;
 		}
 		/* Import has finished, we can regenerate the categories nested tree */
 		Category::regenerateEntireNtree();
 
 		$this->closeCsvFile($handle);
+		
+		return (int)$lines_ok;
 	}
 
 	public function productImport()
 	{
 		global $cookie;
+
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
 		$defaultLanguageId = (int)(Configuration::get('PS_LANG_DEFAULT'));
 		self::setLocale();
-		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
+		for ($current_line = 0, $lines_ok = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
 				$line = $this->utf8_encode_array($line);
@@ -612,7 +625,7 @@ class AdminImport extends AdminTab
 					else
 					{
 						$this->_errors[] = $manufacturer->name.(isset($manufacturer->id) ? ' ('.$manufacturer->id.')' : '').' '.Tools::displayError('Cannot be saved');
-						$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
+						$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').Db::getInstance()->getMsgError();
 					}
 				}
 			}
@@ -632,7 +645,7 @@ class AdminImport extends AdminTab
 					else
 					{
 						$this->_errors[] = $supplier->name.(isset($supplier->id) ? ' ('.$supplier->id.')' : '').' '.Tools::displayError('Cannot be saved');
-						$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
+						$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').Db::getInstance()->getMsgError();
 					}
 				}
 			}
@@ -671,7 +684,7 @@ class AdminImport extends AdminTab
 							else
 							{
 								$this->_errors[] = $categoryToCreate->name[$defaultLanguageId].(isset($categoryToCreate->id) ? ' ('.$categoryToCreate->id.')' : '').' '.Tools::displayError('Cannot be saved');
-								$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
+								$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').Db::getInstance()->getMsgError();
 							}
 						}
 					}
@@ -693,7 +706,7 @@ class AdminImport extends AdminTab
 							else
 							{
 								$this->_errors[] = $categoryToCreate->name[$defaultLanguageId].(isset($categoryToCreate->id) ? ' ('.$categoryToCreate->id.')' : '').' '.Tools::displayError('Cannot be saved');
-								$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
+								$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').Db::getInstance()->getMsgError();
 							}
 						}
 					}
@@ -752,11 +765,12 @@ class AdminImport extends AdminTab
 			if (!$res)
 			{
 				$this->_errors[] = $info['name'].(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('Cannot be saved');
-				$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
-
+				$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').Db::getInstance()->getMsgError();
 			}
 			else
 			{
+				$lines_ok++;
+				
 				// SpecificPrice (only the basic reduction feature is supported by the import)
 				if ((isset($info['reduction_price']) AND $info['reduction_price'] > 0) OR (isset($info['reduction_percent']) AND $info['reduction_percent'] > 0))
 				{
@@ -838,7 +852,7 @@ class AdminImport extends AdminTab
 							else
 							{
 								$this->_warnings[] = $image->legend[$defaultLanguageId].(isset($image->id_product) ? ' ('.$image->id_product.')' : '').' '.Tools::displayError('Cannot be saved');
-								$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
+								$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').Db::getInstance()->getMsgError();
 							}
 						}
 				}
@@ -857,6 +871,8 @@ class AdminImport extends AdminTab
 			}
 		}
 		$this->closeCsvFile($handle);
+		
+		return (int)$lines_ok;
 	}
 
 	public function attributeImport()
@@ -874,7 +890,7 @@ class AdminImport extends AdminTab
 		$handle = $this->openCsvFile();
 		$fsep = ((is_null(Tools::getValue('multiple_value_separator')) OR trim(Tools::getValue('multiple_value_separator')) == '' ) ? ',' : Tools::getValue('multiple_value_separator'));
 		self::setLocale();
-		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
+		for ($current_line = 0, $lines_ok = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
 				$line = $this->utf8_encode_array($line);
@@ -906,9 +922,10 @@ class AdminImport extends AdminTab
 				else
 				{
 					$this->_warnings[] = $image->legend[$defaultLanguageId].(isset($image->id_product) ? ' ('.$image->id_product.')' : '').' '.Tools::displayError('Cannot be saved');
-					$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
+					$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').Db::getInstance()->getMsgError();
 				}
-			} elseif (isset($info['image_position']) && $info['image_position'])
+			}
+			elseif (isset($info['image_position']) && $info['image_position'])
 			{
 				$images = $product->getImages($defaultLanguage);
 
@@ -923,7 +940,11 @@ class AdminImport extends AdminTab
 					$this->_warnings[] = sprintf(Tools::displayError('No image found for combination with id_product = %s and image position = %s.'), $product->id, (int)$info['image_position']);
 			}
 
-			$id_product_attribute = $product->addProductAttribute((float)($info['price']), (float)($info['weight']), 0, (float)($info['ecotax']), (int)($info['quantity']), $id_image, strval($info['reference']), strval($info['supplier_reference']), strval($info['ean13']), (int)($info['default_on']), null, strval($info['upc']));
+			$id_product_attribute = $product->addCombinationEntity((float)$info['wholesale_price'], (float)$info['price'], (float)$info['weight'], 0, (float)$info['ecotax'], (int)$info['quantity'],
+			$id_image, strval($info['reference']), 0, strval($info['ean13']), (int)$info['default_on'], 0, strval($info['upc']), (int)$info['minimal_quantity']);
+			if ($id_product_attribute)
+				$lines_ok++;
+			
 			foreach (explode($fsep, $info['options']) as $option)
 			{
 				list($group, $attribute) = array_map('trim', explode(':', $option));
@@ -954,10 +975,12 @@ class AdminImport extends AdminTab
 					else
 						$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '');
 				}
-				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'product_attribute_combination (id_attribute, id_product_attribute) VALUES ('.(int)($attributes[$group.'_'.$attribute]).','.(int)($id_product_attribute).')');
+				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'product_attribute_combination (id_attribute, id_product_attribute) VALUES ('.(int)$attributes[$group.'_'.$attribute].','.(int)$id_product_attribute.')');
 			}
 		}
 		$this->closeCsvFile($handle);
+
+		return (int)$lines_ok;
 	}
 
 	public function customerImport()
@@ -965,7 +988,7 @@ class AdminImport extends AdminTab
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
 		self::setLocale();
-		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
+		for ($current_line = 0, $lines_ok = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
 				$line = $this->utf8_encode_array($line);
@@ -986,15 +1009,20 @@ class AdminImport extends AdminTab
 				if (!$res)
 					$res = $customer->add();
 				if ($res)
+				{
 					$customer->addGroups(array(1));
+					$lines_ok++;
+				}
 			}
 			if (!$res)
 			{
 				$this->_errors[] = $info['email'].(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('Cannot be saved');
-				$this->_errors[] = ($fieldError !== true ? $fieldError : ($langFieldError !== true ? $langFieldError : '')).mysql_error();
+				$this->_errors[] = ($fieldError !== true ? $fieldError : ($langFieldError !== true ? $langFieldError : '')).Db::getInstance()->getMsgError();
 			}
 		}
 		$this->closeCsvFile($handle);
+		
+		return (int)$lines_ok;
 	}
 
 	public function addressImport()
@@ -1003,7 +1031,7 @@ class AdminImport extends AdminTab
 		$defaultLanguageId = (int)Configuration::get('PS_LANG_DEFAULT');
 		$handle = $this->openCsvFile();
 		self::setLocale();
-		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
+		for ($current_line = 0, $lines_ok = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
 				$line = $this->utf8_encode_array($line);
@@ -1036,7 +1064,7 @@ class AdminImport extends AdminTab
 					else
 					{
 						$this->_errors[] = $country->name[$defaultLanguageId].' '.Tools::displayError('Cannot be saved');
-						$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
+						$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').Db::getInstance()->getMsgError();
 					}
 				}
 			}
@@ -1064,20 +1092,20 @@ class AdminImport extends AdminTab
 					else
 					{
 						$this->_errors[] = $state->name.' '.Tools::displayError('Cannot be saved');
-						$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
+						$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').Db::getInstance()->getMsgError();
 					}
 				}
 			}
 
 			if (isset($address->customer_email) and !empty($address->customer_email))
 			{
-				if ( Validate::isEmail($address->customer_email))
+				if (Validate::isEmail($address->customer_email))
 				{
 					$customer = Customer::customerExists($address->customer_email, true);
 					if ($customer)
 						$address->id_customer = (int)($customer);
 					else
-						$this->_errors[] = mysql_error().' '.$address->customer_email.' '.Tools::displayError('does not exist in database').' '.(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('Cannot be saved');
+						$this->_errors[] = Db::getInstance()->getMsgError().' '.$address->customer_email.' '.Tools::displayError('does not exist in database').' '.(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('Cannot be saved');
 				}
 				else
 					$this->_errors[] = '"'.$address->customer_email.'" :' .Tools::displayError('Is not a valid Email');
@@ -1093,8 +1121,8 @@ class AdminImport extends AdminTab
 					$address->id_manufacturer = (int)($manufacturer->id);
 				else
 				{
-					$this->_errors[] = mysql_error().' '.$manufacturer->name.(isset($manufacturer->id) ? ' ('.$manufacturer->id.')' : '').' '.Tools::displayError('Cannot be saved');
-					$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
+					$this->_errors[] = Db::getInstance()->getMsgError().' '.$manufacturer->name.(isset($manufacturer->id) ? ' ('.$manufacturer->id.')' : '').' '.Tools::displayError('Cannot be saved');
+					$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').Db::getInstance()->getMsgError();
 				}
 			}
 
@@ -1108,8 +1136,8 @@ class AdminImport extends AdminTab
 					$address->id_supplier = (int)($supplier->id);
 				else
 				{
-					$this->_errors[] = mysql_error().' '.$supplier->name.(isset($supplier->id) ? ' ('.$supplier->id.')' : '').' '.Tools::displayError('Cannot be saved');
-					$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
+					$this->_errors[] = Db::getInstance()->getMsgError().' '.$supplier->name.(isset($supplier->id) ? ' ('.$supplier->id.')' : '').' '.Tools::displayError('Cannot be saved');
+					$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').Db::getInstance()->getMsgError();
 				}
 			}
 
@@ -1124,10 +1152,14 @@ class AdminImport extends AdminTab
 			if (!$res)
 			{
 				$this->_errors[] = $info['alias'].(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('Cannot be saved');
-				$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').mysql_error();
+				$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '').Db::getInstance()->getMsgError();
 			}
+			else
+				$lines_ok++;
 		}
 		$this->closeCsvFile($handle);
+		
+		return (int)$lines_ok;
 	}
 
 	public function manufacturerImport()
@@ -1135,7 +1167,7 @@ class AdminImport extends AdminTab
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
 		self::setLocale();
-		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
+		for ($current_line = 0, $lines_ok = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
 				$line = $this->utf8_encode_array($line);
@@ -1162,11 +1194,15 @@ class AdminImport extends AdminTab
 
 			if (!$res)
 			{
-				$this->_errors[] = mysql_error().' '.$info['name'].(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('Cannot be saved');
-				$this->_errors[] = ($field_error !== true ? $field_error : '').($lang_field_error !== true ? $lang_field_error : '').mysql_error();
+				$this->_errors[] = Db::getInstance()->getMsgError().' '.$info['name'].(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('Cannot be saved');
+				$this->_errors[] = ($field_error !== true ? $field_error : '').($lang_field_error !== true ? $lang_field_error : '').Db::getInstance()->getMsgError();
 			}
+			else
+				$lines_ok++;
 		}
 		$this->closeCsvFile($handle);
+		
+		return (int)$lines_ok;
 	}
 
 	public function supplierImport()
@@ -1174,7 +1210,7 @@ class AdminImport extends AdminTab
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
 		self::setLocale();
-		for ($current_line = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
+		for ($current_line = 0, $lines_ok = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
 			if (Tools::getValue('convert'))
 				$line = $this->utf8_encode_array($line);
@@ -1196,7 +1232,9 @@ class AdminImport extends AdminTab
 				if (!$res)
 					$res = $supplier->add();
 				if (!$res)
-					$this->_errors[] = mysql_error().' '.$info['name'].(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('Cannot be saved');
+					$this->_errors[] = $info['name'].(isset($info['id']) ? ' (ID '.$info['id'].')' : '').' '.Tools::displayError('Cannot be saved');
+				else
+					$lines_ok++;
 			}
 			else
 			{
@@ -1205,6 +1243,8 @@ class AdminImport extends AdminTab
 			}
 		}
 		$this->closeCsvFile($handle);
+		
+		return (int)$lines_ok;
 	}
 
 	public function display()
@@ -1217,9 +1257,6 @@ class AdminImport extends AdminTab
 	{
 		global $currentIndex, $cookie;
 		parent::displayForm();
-
-		if ((Tools::getValue('import')) AND (isset($this->_warnings) AND !sizeof($this->_warnings)))
-			echo '<div class="module_confirmation conf confirm"><img src="../img/admin/ok.gif" alt="" title="" style="margin-right:5px; float:left;" />'.$this->l('The .CSV file has been imported into your shop.').'</div>';
 
 		if (!is_writable(PS_ADMIN_DIR.'/import/'))
 			$this->displayWarning($this->l('Directory import on admin directory must be writable (CHMOD 755 / 777)'));
@@ -1580,62 +1617,67 @@ class AdminImport extends AdminTab
 
 	private function truncateTables($case)
 	{
-		switch ((int)($case))
+		switch ((int)$case)
 		{
 			case $this->entities[$this->l('Categories')]:
-				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category` WHERE id_category != 1');
-				Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_lang` WHERE id_category != 1');
-				Db::getInstance()->Execute('ALTER TABLE `'._DB_PREFIX_.'category` AUTO_INCREMENT = 2');
-				foreach (scandir(_PS_CAT_IMG_DIR_) AS $d)
-					if (preg_match('/^[0-9]+(\-(.*))?\.jpg$/', $d))
-						unlink(_PS_CAT_IMG_DIR_.$d);
+				$categories = Db::getInstance()->ExecuteS('SELECT `id_category` FROM `'._DB_PREFIX_.'category` WHERE id_category != 1');
+				foreach ($categories as $category)
+				{
+					$c = new Category((int)$category['id_category']);
+					$c->delete();
+				}
 				break;
 			case $this->entities[$this->l('Products')]:
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product');
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'feature_product');
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product_lang');
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'category_product');
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product_tag');
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'image');
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'image_lang');
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'specific_price');
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'specific_price_priority');
-				Image::deleteAllImages(_PS_PROD_IMG_DIR_);
-				if (!file_exists(_PS_PROD_IMG_DIR_))
-					mkdir(_PS_PROD_IMG_DIR_);
+				$products = Db::getInstance()->ExecuteS('SELECT `id_product` FROM `'._DB_PREFIX_.'product`');
+				foreach ($products as $product)
+				{
+					$p = new Product((int)$product['id_product']);
+					$p->delete();
+				}
 				break;
 			case $this->entities[$this->l('Customers')]:
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'customer');
+				$customers = Db::getInstance()->ExecuteS('SELECT `id_customer` FROM `'._DB_PREFIX_.'customer`');
+				foreach ($customers as $customer)
+				{
+					$c = new Customer((int)$product['id_customer']);
+					$c->delete();
+				}
 				break;
 			case $this->entities[$this->l('Addresses')]:
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'address');
+				$addresses = Db::getInstance()->ExecuteS('SELECT `id_address` FROM `'._DB_PREFIX_.'address`');
+				foreach ($addresses as $address)
+				{
+					$a = new Address((int)$address['id_address']);
+					$a->delete();
+				}
 				break;
 			case $this->entities[$this->l('Combinations')]:
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'attribute_impact');
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product_attribute`');
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product_attribute_combination`');
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'product_attribute_image`');
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'attribute_group`');
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'attribute_group_lang`');
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'attribute`');
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'attribute_lang`');
+				$combinations = Db::getInstance()->ExecuteS('SELECT `id_product_attribute` FROM `'._DB_PREFIX_.'product_attribute`');
+				foreach ($combinations as $combination)
+				{
+					$c = new ProductAttribute((int)$combination['id_product_attribute']);
+					$c->delete();
+				}
 				break;
 			case $this->entities[$this->l('Manufacturers')]:
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'manufacturer');
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'manufacturer_lang');
-				foreach (scandir(_PS_MANU_IMG_DIR_) AS $d)
-					if (preg_match('/^[0-9]+(\-(.*))?\.jpg$/', $d))
-						unlink(_PS_MANU_IMG_DIR_.$d);
+				$manufacturers = Db::getInstance()->ExecuteS('SELECT `id_manufacturer` FROM `'._DB_PREFIX_.'manufacturer`');
+				foreach ($manufacturers as $manufacturer)
+				{
+					$m = new Manufacturer((int)$manufacturer['id_manufacturer']);
+					$m->delete();
+				}
 				break;
 			case $this->entities[$this->l('Suppliers')]:
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'supplier');
-				Db::getInstance()->Execute('TRUNCATE TABLE `'._DB_PREFIX_.'supplier_lang');
-				foreach (scandir(_PS_SUPP_IMG_DIR_) AS $d)
-					if (preg_match('/^[0-9]+(\-(.*))?\.jpg$/', $d))
-						unlink(_PS_SUPP_IMG_DIR_.$d);
+				$suppliers = Db::getInstance()->ExecuteS('SELECT `id_supplier` FROM `'._DB_PREFIX_.'supplier`');
+				foreach ($suppliers as $supplier)
+				{
+					$m = new Supplier((int)$supplier['id_supplier']);
+					$m->delete();
+				}
 				break;
 		}
 		Image::clearTmpDir();
+
 		return true;
 	}
 
@@ -1692,35 +1734,46 @@ class AdminImport extends AdminTab
 			if (Tools::getValue('truncate'))
 				$this->truncateTables((int)(Tools::getValue('entity')));
 
-			switch ((int)(Tools::getValue('entity')))
+			$start_time = microtime(true);
+			switch ((int)Tools::getValue('entity'))
 			{
 				case $this->entities[$this->l('Categories')]:
-					$this->categoryImport();
+					$lines_imported = $this->categoryImport();
 				break;
 				case $this->entities[$this->l('Products')]:
-					$this->productImport();
+					$lines_imported = $this->productImport();
+					if ($lines_imported)
+						Search::indexation();
 				break;
 				case $this->entities[$this->l('Customers')]:
-					$this->customerImport();
+					$lines_imported = $this->customerImport();
 				break;
 				case $this->entities[$this->l('Addresses')]:
-					$this->addressImport();
+					$lines_imported = $this->addressImport();
 				break;
 				case $this->entities[$this->l('Combinations')]:
-					$this->attributeImport();
+					$lines_imported = $this->attributeImport();
 				break;
 				case $this->entities[$this->l('Manufacturers')]:
-					$this->manufacturerImport();
+					$lines_imported = $this->manufacturerImport();
 				break;
 				case $this->entities[$this->l('Suppliers')]:
-					$this->supplierImport();
+					$lines_imported = $this->supplierImport();
 				break;
 				default:
 					$this->_errors[] = $this->l('no entity selected');
 			}
+			$end_time = microtime(true);
 		}
 
 		parent::postProcess();
+		
+		if (Tools::getValue('import') && !count($this->_errors))
+			echo '
+			<div class="conf confirm">
+				<img src="../img/admin/ok.gif" alt="" /> 
+				'.$this->l('Import successfully performed in').' '.sprintf('%.02f', $end_time - $start_time).' '.$this->l('seconds').' - '.(int)$lines_imported.' '.$this->l('line(s) imported').'
+			</div>';
 	}
 
 	public static function setLocale()

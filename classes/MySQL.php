@@ -238,7 +238,7 @@ class MySQLCore extends Db
 	 * @acces public
 	 * @return string error
 	 */
-	public function getMsgError($query = false)
+	public function getMsgError()
 	{
 		return mysql_error($this->_link);
 	}

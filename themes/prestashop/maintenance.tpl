@@ -41,9 +41,9 @@
 	</head>
 	<body>
 		<div id="maintenance">
-			 <p><img src="{$content_dir}img/logo.jpg" alt="logo" /><br /><br /></p>
+			 <p><img src="{$img_ps_dir}logo.jpg" alt="logo" /><br /><br /></p>
 			 <p id="message">
-				<img src="{$content_dir}img/admin/tab-tools.gif" style="margin-right:10px; float:left;" alt="" />{l s='In order to perform site maintenance, our online shop has shut down temporarily. We apologize for the inconvenience and ask that you please try again later.'}
+				<img src="{$img_ps_dir}admin/tab-tools.gif" style="margin-right:10px; float:left;" alt="" />{l s='In order to perform site maintenance, our online shop has shut down temporarily. We apologize for the inconvenience and ask that you please try again later.'}
 			 </p>
 			 <span style="clear:both;">&nbsp;</span>
 		</div>

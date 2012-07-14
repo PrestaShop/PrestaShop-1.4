@@ -128,6 +128,8 @@ class CountryCore extends ObjectModel
 		$states = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT s.*
 		FROM `'._DB_PREFIX_.'state` s
+		WHERE 1
+		'.($active ? 'AND s.active = 1' : '').'
 		ORDER BY s.`name` ASC');
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('

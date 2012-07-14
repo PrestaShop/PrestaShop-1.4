@@ -279,8 +279,8 @@ class AdminSearch extends AdminTab
 				<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
 					<td>'.$customer['id_customer'].'</td>
 					<td class="center">'.$imgGender.'</td>
-					<td>'.stripslashes($customer['lastname']).' '.stripslashes($customer['firstname']).'</td>
-					<td>'.stripslashes($customer['email']).'<a href="mailto:'.stripslashes($customer['email']).'"> <img src="../img/admin/email_edit.gif" alt="'.$this->l('Write to this customer').'" /></a></td>
+					<td>'.Tools::safeOutput($customer['lastname']).' '.Tools::safeOutput($customer['firstname']).'</td>
+					<td>'.Tools::safeOutput($customer['email']).'<a href="mailto:'.Tools::safeOutput($customer['email']).'"> <img src="../img/admin/email_edit.gif" alt="'.$this->l('Write to this customer').'" /></a></td>
 					<td>'.Tools::displayDate($customer['birthday'], (int)($cookie->id_lang)).'</td>
 					<td>'.Tools::displayDate($customer['date_add'], (int)($cookie->id_lang)).'</td>
 					<td>'.Order::getCustomerNbOrders($customer['id_customer']).'</td>

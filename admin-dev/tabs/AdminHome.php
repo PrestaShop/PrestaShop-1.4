@@ -369,7 +369,7 @@ class AdminHome extends AdminTab
 		{
 			$currency = Currency::getCurrency((int)$order['id_currency']);
 			echo '
-					<tr'.($i % 2 ? ' id="order_line1"' : '').'>
+					<tr'.($i % 2 ? ' class="order_line1"' : '').'>
 						<td class="order_td_first order_id">'.(int)$order['id_order'].'</td>
 						<td class="order_customer">'.Tools::htmlentitiesUTF8($order['firstname']).' '.Tools::htmlentitiesUTF8($order['lastname']).'</td>
 						<td class="order_status">'.Tools::htmlentitiesUTF8($order['state_name']).'</td>

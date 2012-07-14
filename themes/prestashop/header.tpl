@@ -60,7 +60,7 @@
 		{$HOOK_HEADER}
 	</head>
 	
-	<body {if $page_name}id="{$page_name|escape:'htmlall':'UTF-8'}"{/if}>
+	<body {if $page_name}id="{if $page_name == '404'}p{/if}{$page_name|escape:'htmlall':'UTF-8'}"{/if}>
 	{if !$content_only}
 		{if isset($restricted_country_mode) && $restricted_country_mode}
 		<div id="restricted-country">

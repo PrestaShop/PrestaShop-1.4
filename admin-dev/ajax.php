@@ -154,12 +154,12 @@ if (isset($_GET['ajaxDiscountCustomers']))
 
 	$json = '{"customers" : ';
 	foreach ($customers AS $customer)
-		$jsonArray[] = '{"value":"0_'.(int)($customer['id_customer']).'", "text":"'.addslashes($customer['name']).' ('.addslashes($customer['email']).')"}';
+		$jsonArray[] = '{"value":"0_'.(int)($customer['id_customer']).'", "text":"'.addcslashes($customer['name'], '"\\/').' ('.addcslashes($customer['email'], '"\\/').')"}';
 	$json .= '['.implode(',', $jsonArray).'],
 		"groups" : ';
 	$jsonArray = array();
 	foreach ($groups AS $group)
-		$jsonArray[] = '{"value":"1_'.(int)($group['id_group']).'", "text":"'.addslashes($group['name']).'"}';
+		$jsonArray[] = '{"value":"1_'.(int)($group['id_group']).'", "text":"'.addcslashes($group['name'], '"\\/').'"}';
 	$json .= '['.implode(',', $jsonArray).']}';
 	die($json);
 }

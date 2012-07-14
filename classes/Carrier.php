@@ -404,14 +404,16 @@ class CarrierCore extends ObjectModel
 		return $carriers;
 	}
 
-	public static function getDeliveredCountries($id_lang, $activeCountries = false, $activeCarriers = false, $containStates = null)
+	public static function getDeliveredCountries($id_lang, $activeCountries = false, $activeCarriers = false, $containStates = null, $activeStates = false)
 	{
-		if (!Validate::isBool($activeCountries) || !Validate::isBool($activeCarriers))
+		if (!Validate::isBool($activeCountries) || !Validate::isBool($activeCarriers) || !Validate::isBool($activeStates))
 	 		die(Tools::displayError());
 	 		
 		$states = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT s.*
 		FROM `'._DB_PREFIX_.'state` s
+		WHERE 1
+		'.($activeStates ? 'AND s.active = 1 ' : '').'
 		ORDER BY s.`name` ASC');
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('

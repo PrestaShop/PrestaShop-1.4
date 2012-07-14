@@ -910,6 +910,7 @@ class ProductCore extends ObjectModel
 	*
 	* @param float $price Additional price
 	* @param float $weight Additional weight
+	* @param float $unit_impact Additional price per unit
 	* @param float $ecotax Additional ecotax
 	* @param integer $quantity Quantity available
 	* @param integer $id_images Image ids
@@ -1027,6 +1028,7 @@ class ProductCore extends ObjectModel
 	* Update a product attribute
 	*
 	* @param integer $id_product_attribute Product attribute id
+	* @param float $wholesale_price Additional wholesale price
 	* @param float $price Additional price
 	* @param float $weight Additional weight
 	* @param float $ecotax Additional ecotax
