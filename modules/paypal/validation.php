@@ -157,6 +157,7 @@ if (isset($paypal->pcc))
 
 if (!empty($errors) AND isset($_POST['custom']))
 {
+	d('test');
 	if (strtoupper($_POST['payment_status']) == 'PENDING')
 		$paypal->validateOrder((int)$cart_secure[0], Configuration::get('PS_OS_PAYPAL'), (float)$_POST['mc_gross'], $paypal->displayName, $paypal->l('Paypal Transaction ID: ').$_POST['txn_id'].'<br />'.$errors, array('transaction_id' => $_POST['txn_id'], 'payment_status' => $_POST['payment_status']), NULL, false, $cart_secure[1]);
 	else
