@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<currencies>
+	<source iso_code='EUR' />
+	<list>
+		<currency iso_code='USD' rate='1.2185' />
+		<currency iso_code='JPY' rate='96.6' />
+		<currency iso_code='BGN' rate='1.9558' />
+		<currency iso_code='CZK' rate='25.395' />
+		<currency iso_code='DKK' rate='7.4385' />
+		<currency iso_code='GBP' rate='0.7875' />
+		<currency iso_code='HUF' rate='288.95' />
+		<currency iso_code='LTL' rate='3.4528' />
+		<currency iso_code='LVL' rate='0.6961' />
+		<currency iso_code='PLN' rate='4.2113' />
+		<currency iso_code='RON' rate='4.5615' />
+		<currency iso_code='SEK' rate='8.5746' />
+		<currency iso_code='CHF' rate='1.2009' />
+		<currency iso_code='NOK' rate='7.441' />
+		<currency iso_code='HRK' rate='7.486' />
+		<currency iso_code='RUB' rate='39.9148' />
+		<currency iso_code='TRY' rate='2.2165' />
+		<currency iso_code='AUD' rate='1.1984' />
+		<currency iso_code='BRL' rate='2.48' />
+		<currency iso_code='CAD' rate='1.2391' />
+		<currency iso_code='CNY' rate='7.7849' />
+		<currency iso_code='HKD' rate='9.4523' />
+		<currency iso_code='IDR' rate='11547.93' />
+		<currency iso_code='ILS' rate='4.834' />
+		<currency iso_code='INR' rate='67.194' />
+		<currency iso_code='KRW' rate='1402.4' />
+		<currency iso_code='MXN' rate='16.3659' />
+		<currency iso_code='MYR' rate='3.8815' />
+		<currency iso_code='NZD' rate='1.5403' />
+		<currency iso_code='PHP' rate='51.11' />
+		<currency iso_code='SGD' rate='1.5459' />
+		<currency iso_code='THB' rate='38.56' />
+		<currency iso_code='ZAR' rate='10.156' />
+	</list>
+</currencies>

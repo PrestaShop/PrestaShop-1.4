@@ -198,13 +198,12 @@ if (isFormValid())
 		$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = "'.pSQL($_GET['infosTimezone']).'" WHERE name = \'PS_TIMEZONE\'';
 		$sql_isocode = Db::getInstance()->getValue('SELECT `iso_code` FROM `'._DB_PREFIX_.'country` WHERE `id_country` = '.(int)($_GET['infosCountry']));
 		$sqlParams[] = 'UPDATE '._DB_PREFIX_.'configuration SET value = \''.pSQL($sql_isocode).'\' WHERE name = \'PS_LOCALE_COUNTRY\'';
-
 	}
+
 	Language::loadLanguages();
 	Configuration::loadConfiguration();
 	require_once(dirname(__FILE__).'/../../config/defines.inc.php');
 	require_once(dirname(__FILE__).'/../../classes/LocalizationPack.php');
-
 
 	$stream_context = @stream_context_create(array('http' => array('timeout' => 5)));
 	$localization_file = @Tools::file_get_contents('http://www.prestashop.com/download/localization_pack.php?country='.$_GET['countryName'], false, $stream_context);
