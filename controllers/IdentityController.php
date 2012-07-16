@@ -31,11 +31,11 @@ class IdentityControllerCore extends FrontController
 	public $php_self = 'identity.php';
 	public $authRedirection = 'identity.php';
 	public $ssl = true;
-	
+
 	public function preProcess()
 	{
 		parent::preProcess();
-		
+
 		$customer = new Customer((int)(self::$cookie->id_customer));
 
 		if (isset($_POST['years']) AND isset($_POST['months']) AND isset($_POST['days']))
@@ -43,6 +43,14 @@ class IdentityControllerCore extends FrontController
 
 		if (Tools::isSubmit('submitIdentity'))
 		{
+			if (Module::getInstanceByName('blocknewsletter')->active)
+			{
+				if (!isset($_POST['optin']))
+					$customer->optin = 0;
+				if (!isset($_POST['newsletter']))
+					$customer->newsletter = 0;
+			}
+
 			if (!@checkdate(Tools::getValue('months'), Tools::getValue('days'), Tools::getValue('years')) AND
 			!(Tools::getValue('months') == '' AND Tools::getValue('days') == '' AND Tools::getValue('years') == ''))
 				$this->errors[] = Tools::displayError('Invalid date of birth');
@@ -98,21 +106,19 @@ class IdentityControllerCore extends FrontController
 			'sl_day' => $birthday[2],
 			'errors' => $this->errors
 		));
-		
+
 		self::$smarty->assign('newsletter', (int)Module::getInstanceByName('blocknewsletter')->active);
 	}
-	
+
 	public function setMedia()
 	{
 		parent::setMedia();
 		Tools::addCSS(_THEME_CSS_DIR_.'identity.css');
 	}
-	
+
 	public function displayContent()
 	{
 		parent::displayContent();
 		self::$smarty->display(_PS_THEME_DIR_.'identity.tpl');
 	}
 }
-
-
