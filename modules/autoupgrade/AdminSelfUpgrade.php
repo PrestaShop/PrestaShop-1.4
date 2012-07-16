@@ -1490,7 +1490,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 			array('_MEDIA_SERVER_3_', defined('_MEDIA_SERVER_3_') ? _MEDIA_SERVER_3_ : ''),
 			array('_COOKIE_KEY_', _COOKIE_KEY_),
 			array('_COOKIE_IV_', _COOKIE_IV_),
-			array('_PS_CREATION_DATE_', defined("_PS_CREATION_DATE_") ? _PS_CREATION_DATE_ : date('Y-m-d')),
+			array('_PS_CREATION_DATE_', defined('_PS_CREATION_DATE_') ? _PS_CREATION_DATE_ : date('Y-m-d')),
 			array('_PS_VERSION_', INSTALL_VERSION)
 		);
 		if (defined('_RIJNDAEL_KEY_'))

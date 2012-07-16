@@ -82,7 +82,8 @@ class StatsForecast extends Module
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 		$employee = new Employee((int)($cookie->id_employee));
 		
-		$from = max(strtotime(_PS_CREATION_DATE_.' 00:00:00'), strtotime($employee->stats_date_from.' 00:00:00'));
+		/* Date range */
+		$from = strtotime($employee->stats_date_from.' 00:00:00');		
 		$to = strtotime($employee->stats_date_to.' 23:59:59');
 		$to2 = min(time(), $to);
 		$interval = ($to - $from) / 60 / 60 / 24;
@@ -97,11 +98,11 @@ class StatsForecast extends Module
 			$intervalAvg = $interval2;
 		if ($cookie->stats_granularity == 42)
 			$intervalAvg = $interval2 / 7;
-
+		
 		$dataTable = array();
 		if ($cookie->stats_granularity == 10)
 			for ($i = $from; $i <= $to2; $i = strtotime('+1 day', $i))
-				$dataTable[date('Y-m-d', $i)] = array('fix_date' => date('Y-m-d', $i), 'countOrders' => 0, 'countProducts' => 0, 'totalProducts' => 0);
+				$dataTable[date('Y-m-d', $i)] = array('fix_date' => date('Y-m-d', $i), 'countOrders' => 0, 'countProducts' => 0, 'totalProducts' => 0, 'totalShipping' => 0);
 
 		$dateFromGAdd = ($cookie->stats_granularity != 42
 			? 'LEFT(date_add, '.(int)$cookie->stats_granularity.')'
@@ -111,11 +112,10 @@ class StatsForecast extends Module
 			: 'IFNULL(MAKEDATE(YEAR(invoice_date),DAYOFYEAR(invoice_date)-WEEKDAY(invoice_date)), CONCAT(YEAR(invoice_date),"-01-01*"))');
 		
 		$result = $db->ExecuteS('
-		SELECT '.$dateFromGInvoice.' fix_date, COUNT(DISTINCT o.id_order) countOrders,
-		SUM(od.product_quantity) countProducts, SUM(o.total_products / o.conversion_rate) totalProducts
+		SELECT '.$dateFromGInvoice.' fix_date, COUNT(DISTINCT o.id_order) countOrders, 
+		(SELECT SUM(od.product_quantity) FROM '._DB_PREFIX_.'order_detail od WHERE od.id_order = o.id_order) countProducts,
+		SUM(o.total_products / o.conversion_rate) totalProducts, SUM(o.total_shipping / (1 + carrier_tax_rate * 0.01)) totalShipping
 		FROM '._DB_PREFIX_.'orders o
-		LEFT JOIN '._DB_PREFIX_.'order_detail od ON o.id_order = od.id_order
-		LEFT JOIN '._DB_PREFIX_.'product p ON od.product_id = p.id_product
 		WHERE o.valid = 1 AND o.invoice_date BETWEEN '.ModuleGraph::getDateBetween().'
 		GROUP BY '.$dateFromGInvoice, false);
 
@@ -124,7 +124,7 @@ class StatsForecast extends Module
 
 		$this->_html .= '<div style="float:left;width:660px">
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
-			<p style="float:left">'.$this->l('All amounts are without taxes.').'</p>
+			<p style="float:left">'.$this->l('All amounts are without taxes. Dates are referring to the invoices dates.').'</p>
 			<form id="granularity" action="'.$ru.'#granularity" method="post" style="float:right">
 				<input type="hidden" name="submitGranularity" value="1" />
 				'.$this->l('Mode:').' <select name="stats_granularity" onchange="this.form.submit();" style="width:100px">
@@ -146,12 +146,13 @@ class StatsForecast extends Module
 					<th style="text-align:center">'.$this->l('% Orders').'</th>
 					<th style="width:80px;text-align:center">'.$this->l('Coupons').'</th>
 					<th style="width:100px;text-align:center">'.$this->l('Products Sales').'</th>
+					<th style="width:100px;text-align:center">'.$this->l('Shipping').'</th>
 				</tr>';
 		
 		$visitArray = array();
 		$visits = Db::getInstance()->ExecuteS('SELECT '.$dateFromGAdd.' as fix_date, COUNT(*) as visits FROM '._DB_PREFIX_.'connections c WHERE c.date_add BETWEEN '.ModuleGraph::getDateBetween().' GROUP BY '.$dateFromGAdd, false);
 		while ($row = $db->nextRow($visits))
-			$visitArray[$row['fix_date']] = $row['visits'];
+			$visitArray[$row['fix_date']] = (int)$row['visits'];
 			
 		$discountArray = array();
 		$discounts = Db::getInstance()->ExecuteS('
@@ -162,7 +163,6 @@ class StatsForecast extends Module
 		GROUP BY '.$dateFromGInvoice, false);
 		while ($row = $db->nextRow($discounts))
 			$discountArray[$row['fix_date']] = $row['total'];
-		$today = date('Y-m-d');
 		
 		/* Order results by date ASC */
 		ksort($dataTable);
@@ -188,6 +188,7 @@ class StatsForecast extends Module
 				<td align="center">'.($visitsToday ? round(100 * (int)($row['countOrders']) / $visitsToday, 2).' %' : '-').'</td>
 				<td align="right">'.Tools::displayPrice($discountToday, $currency).'</td>
 				<td align="right" >'.Tools::displayPrice($row['totalProducts'], $currency).'</td>
+				<td align="right" >'.Tools::displayPrice($row['totalShipping'], $currency).'</td>
 			</tr>';
 			
 			$this->t1 += $visitsToday;
@@ -196,6 +197,7 @@ class StatsForecast extends Module
 			$this->t4 += (int)($row['countProducts']);
 			$this->t7 += $discountToday;
 			$this->t8 += $row['totalProducts'];
+			$this->t9 += $row['totalShipping'];
 		}
 
 		$this->_html .= '
@@ -209,6 +211,7 @@ class StatsForecast extends Module
 					<th style="text-align:center">'.$this->l('% Orders').'</th>
 					<th style="width:80px;text-align:center">'.$this->l('Coupons').'</th>
 					<th style="width:100px;text-align:center">'.$this->l('Products Sales').'</th>
+					<th style="width:100px;text-align:center">'.$this->l('Shipping').'</th>
 				</tr>
 				<tr>
 					<th>'.$this->l('Total').'</th>
@@ -220,6 +223,7 @@ class StatsForecast extends Module
 					<td style="font-weight: 700" align="center">--</td>
 					<td style="font-weight: 700" align="right">'.Tools::displayPrice($this->t7, $currency).'</td>
 					<td style="font-weight: 700" align="right">'.Tools::displayPrice($this->t8, $currency).'</td>
+					<td style="font-weight: 700" align="right">'.Tools::displayPrice($this->t9, $currency).'</td>
 				</tr>
 				<tr>
 					<th>'.$this->l('Average').'</th>
@@ -231,6 +235,7 @@ class StatsForecast extends Module
 					<td style="font-weight: 700" align="center">'.($this->t1 ? round(100 * $this->t3 / $this->t1, 2) .' %' : '-').'</td>
 					<td style="font-weight: 700" align="right">'.Tools::displayPrice($this->t7 / $intervalAvg, $currency).'</td>
 					<td style="font-weight: 700" align="right">'.Tools::displayPrice($this->t8 / $intervalAvg, $currency).'</td>
+					<td style="font-weight: 700" align="right">'.Tools::displayPrice($this->t9 / $intervalAvg, $currency).'</td>
 				</tr>
 				<tr>
 					<th>'.$this->l('Forecast').'</th>
@@ -242,6 +247,7 @@ class StatsForecast extends Module
 					<td style="font-weight: 700" align="center">--</td>
 					<td style="font-weight: 700" align="right">'.Tools::displayPrice($this->t7 * $prop30, $currency).'</td>
 					<td style="font-weight: 700" align="right">'.Tools::displayPrice($this->t8 * $prop30, $currency).'</td>
+					<td style="font-weight: 700" align="right">'.Tools::displayPrice($this->t9 * $prop30, $currency).'</td>
 				</tr>
 			</table>
 		</fieldset>';

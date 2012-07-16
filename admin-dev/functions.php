@@ -92,7 +92,7 @@ function rewriteSettingsFile($baseUrls = NULL, $theme = NULL, $arrayDB = NULL)
 	$defines['_DB_TYPE_'] = (($arrayDB AND isset($arrayDB['_DB_TYPE_'])) ? $arrayDB['_DB_TYPE_'] : _DB_TYPE_);
 	$defines['_COOKIE_KEY_'] = addslashes(_COOKIE_KEY_);
 	$defines['_COOKIE_IV_'] = addslashes(_COOKIE_IV_);
-	$defines['_PS_CREATION_DATE_'] = defined(_PS_CREATION_DATE_) ? _PS_CREATION_DATE_ : date('Y-m-d');
+	$defines['_PS_CREATION_DATE_'] = defined('_PS_CREATION_DATE_') ? _PS_CREATION_DATE_ : date('Y-m-d');
 	if (defined('_RIJNDAEL_KEY_'))
 		$defines['_RIJNDAEL_KEY_'] = addslashes(_RIJNDAEL_KEY_);
 	if (defined('_RIJNDAEL_IV_'))

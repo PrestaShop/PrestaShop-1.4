@@ -94,12 +94,12 @@ class ProductCore extends ObjectModel
 	public 		$online_only = false;
 
 	/** @var string unity */
-	public		$unity = NULL;
+	public $unity = null;
 
-    	/** @var float price for product's unity */
+    /** @var float price for product's unity */
 	public		$unit_price;
 
-    	/** @var float price for product's unity ratio */
+    /** @var float price for product's unity ratio */
 	public		$unit_price_ratio = 0;
 
 	/** @var float Ecotax */
@@ -311,10 +311,12 @@ class ProductCore extends ObjectModel
 				$this->tax_rate = Tax::getProductTaxRate($this->id, NULL);
 			$this->new = $this->isNew();
 			$this->price = Product::getPriceStatic((int)($this->id), false, NULL, 6, NULL, false, true, 1, false, NULL, NULL, NULL, $this->specificPrice);
-			$this->unit_price = ($this->unit_price_ratio != 0  ? $this->price / $this->unit_price_ratio : 0);
 			if ($this->id)
 				$this->tags = Tag::getProductTags((int)$this->id);
 		}
+		
+		/* Must be out of the $full if statement, to keep $this->unit_price_ratio consistent while saving the product */
+		$this->unit_price = ($this->unit_price_ratio != 0  ? $this->price / $this->unit_price_ratio : 0);
 
 		if ($this->id_category_default)
 			$this->category = Category::getLinkRewrite((int)$this->id_category_default, (int)$id_lang);
@@ -1727,6 +1729,7 @@ class ProductCore extends ObjectModel
 
 		if (!Validate::isBool($usetax) OR !Validate::isUnsignedId($id_product))
 			die(Tools::displayError());
+
 		// Initializations
 		if (!$id_customer)
 			$id_customer = ((Validate::isCookie($cookie) AND isset($cookie->id_customer) AND $cookie->id_customer) ? (int)($cookie->id_customer) : NULL);
