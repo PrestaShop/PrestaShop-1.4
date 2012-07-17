@@ -32,24 +32,24 @@ class BlockWishList extends Module
 {
 	const INSTALL_SQL_FILE = 'install.sql';
 
-    private $_html = '';
-    private $_postErrors = array();
+	private $_html = '';
+	private $_postErrors = array();
 
 	public function __construct()
 	{
 		$this->name = 'blockwishlist';
 		$this->tab = 'front_office_features';
-		$this->version = 0.2;
+		$this->version = 0.3;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
-		
+
 		parent::__construct();
-		
+
 		$this->displayName = $this->l('Wishlist block');
 		$this->description = $this->l('Adds a block containing the customer\'s wishlists.');
 		$this->default_wishlist_name = $this->l('My wishlist');
 	}
-	
+
 	public function install()
 	{
 		if (!file_exists(dirname(__FILE__).'/'.self::INSTALL_SQL_FILE))
@@ -62,27 +62,26 @@ class BlockWishList extends Module
 			if ($query)
 				if (!Db::getInstance()->Execute(trim($query)))
 					return false;
-		if (!parent::install() OR
-						!$this->registerHook('rightColumn') OR
-						!$this->registerHook('productActions') OR
-						!$this->registerHook('cart') OR
-						!$this->registerHook('customerAccount') OR
-						!$this->registerHook('header') OR
-						!$this->registerHook('adminCustomers')
-					)
+		if (!parent::install() ||
+			!$this->registerHook('rightColumn') ||
+			!$this->registerHook('productActions') ||
+			!$this->registerHook('cart') ||
+			!$this->registerHook('customerAccount') ||
+			!$this->registerHook('header') ||
+			!$this->registerHook('adminCustomers') ||
+			!$this->registerHook('authentication'))
 			return false;
 		/* This hook is optional */
 		$this->registerHook('myAccountBlock');
 		return true;
 	}
-	
+
 	public function uninstall()
 	{
-		return (
-			Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'wishlist') AND
-			Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'wishlist_email') AND
-			Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'wishlist_product') AND
-			Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'wishlist_product_cart') AND 
+		return (Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'wishlist') &&
+			Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'wishlist_email') &&
+			Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'wishlist_product') &&
+			Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'wishlist_product_cart') &&
 			parent::uninstall()
 		);
 	}
@@ -105,7 +104,7 @@ class BlockWishList extends Module
 	{
 		$this->_displayFormView();
 	}
-	
+
 	private function _displayFormView()
 	{
 		global $cookie;
@@ -168,7 +167,18 @@ class BlockWishList extends Module
 		$this->_html .= 	'</fieldset>
 		</form>';
 	}
-	
+
+	public function hookAuthentication()
+	{
+		global $cookie;
+
+		if (isset($cookie->id_wishlist))
+		{
+			unset($cookie->id_wishlist);
+			$cookie->write();
+		}
+	}
+
 	public function hookHeader($params)
 	{
 		Tools::addCSS(($this->_path).'blockwishlist.css', 'all');
@@ -216,27 +226,27 @@ class BlockWishList extends Module
 	public function hookProductActions($params)
 	{
 		global $smarty;
-		
+
 		$smarty->assign('id_product', (int)(Tools::getValue('id_product')));
 		return ($this->display(__FILE__, 'blockwishlist-extra.tpl'));
 	}
-	
+
 	public function hookCustomerAccount($params)
 	{
 		global $smarty;
 		return $this->display(__FILE__, 'my-account.tpl');
 	}
-	
+
 	public function hookMyAccountBlock($params)
 	{
 		return $this->hookCustomerAccount($params);
 	}
-	
+
 	private function _displayProducts($id_wishlist)
 	{
 		global $cookie, $link;
 		include_once(dirname(__FILE__).'/WishList.php');
-		
+
 		$wishlist = new WishList((int)($id_wishlist));
 		$products = WishList::getProductByIdCustomer((int)($id_wishlist), (int)($wishlist->id_customer), (int)($cookie->id_lang));
 		for ($i = 0; $i < sizeof($products); ++$i)
@@ -287,28 +297,28 @@ class BlockWishList extends Module
 			}
 		$this->_html .= '</tbody></table>';
 	}
-	
+
 	public function hookAdminCustomers($params)
 	{
 		require_once(dirname(__FILE__).'/WishList.php');
-		
+
 		$customer = new Customer((int)($params['id_customer']));
 		if (!Validate::isLoadedObject($customer))
 			die (Tools::displayError());
 
 		$this->_html = '<h2>'.$this->l('Wishlists').'</h2>';
-		
+
 		$wishlists = WishList::getByIdCustomer((int)($customer->id));
 		if (!sizeof($wishlists))
 			$this->_html .= $customer->lastname.' '.$customer->firstname.' '.$this->l('No wishlist.');
 		else
 		{
 			$this->_html .= '<form action="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'" method="post" id="listing">';
-	
+
 			$id_wishlist = (int)(Tools::getValue('id_wishlist'));
 			if (!$id_wishlist)
 					$id_wishlist = $wishlists[0]['id_wishlist'];
-			
+
 			$this->_html .= '<span>'.$this->l('Wishlist').': </span> <select name="id_wishlist" onchange="$(\'#listing\').submit();">';
 			foreach ($wishlists as $wishlist)
 			{
@@ -319,13 +329,13 @@ class BlockWishList extends Module
 					$counter = $wishlist['counter'];
 				}
 				$this->_html .= '>'.htmlentities($wishlist['name'], ENT_COMPAT, 'UTF-8').'</option>';
-			}		
+			}
 			$this->_html .= '</select>';
-			
+
 			$this->_displayProducts((int)($id_wishlist));
-						
+
 			$this->_html .= '</form><br />';
-			
+
 			return $this->_html;
 		}
 	}

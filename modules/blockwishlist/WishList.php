@@ -27,33 +27,33 @@
 
 if (!defined('_PS_VERSION_'))
 	exit;
-	
-class		WishList extends ObjectModel
+
+class WishList extends ObjectModel
 {
 	/** @var integer Wishlist ID */
-	public		$id;
+	public $id;
 
 	/** @var integer Customer ID */
-	public 		$id_customer;
+	public $id_customer;
 
 	/** @var integer Token */
-	public 		$token;
+	public $token;
 
 	/** @var integer Name */
-	public 		$name;
+	public $name;
 
 	/** @var string Object creation date */
-	public 		$date_add;
+	public $date_add;
 
 	/** @var string Object last modification date */
-	public 		$date_upd;
+	public $date_upd;
 
 	protected	$fieldsSize = array('name' => 64, 'token' => 64);
 	protected	$fieldsRequired = array('id_customer', 'name', 'token');
 	protected	$fieldsValidate = array('id_customer' => 'isUnsignedId', 'name' => 'isMessage',
 		'token' => 'isMessage');
-	protected 	$table = 'wishlist';
-	protected 	$identifier = 'id_wishlist';
+	protected $table = 'wishlist';
+	protected $identifier = 'id_wishlist';
 
 	public function getFields()
 	{
@@ -69,12 +69,12 @@ class		WishList extends ObjectModel
 	public function delete()
 	{
 		global $cookie;
-		
+
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'wishlist_email` WHERE `id_wishlist` = '.(int)($this->id));
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'wishlist_product` WHERE `id_wishlist` = '.(int)($this->id));
 		if (isset($cookie->id_wishlist))
 			unset($cookie->id_wishlist);
-		
+
 		return (parent::delete());
 	}
 
@@ -99,19 +99,19 @@ class		WishList extends ObjectModel
 		WHERE `id_wishlist` = '.(int)($id_wishlist)));
 	}
 
-	
+
 	public static function isExistsByNameForUser($name)
 	{
 		global $cookie;
-	
+
 		return Db::getInstance()->getValue('
 		SELECT COUNT(*) AS total
-		FROM `'._DB_PREFIX_.'wishlist` 
+		FROM `'._DB_PREFIX_.'wishlist`
 		WHERE `name` = \''.pSQL($name).'\'
 		AND `id_customer` = '.(int)($cookie->id_customer)
 		);
 	}
-	
+
 	/**
 	 * Return true if wishlist exists else false
 	 *

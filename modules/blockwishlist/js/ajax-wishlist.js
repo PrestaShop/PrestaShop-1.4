@@ -48,14 +48,14 @@ function WishlistCart(id, action, id_product, id_product_attribute, quantity)
 				var pictureOffsetOriginal = $element.offset();
 				$picture.css({'position': 'absolute', 'top': pictureOffsetOriginal.top, 'left': pictureOffsetOriginal.left});
 				var pictureOffset = $picture.offset();
-				var wishlistBlockOffset = $('#wishlist_block').offset();
+				var wishlistBlockOffset = $('#wishlist_button').offset();
 
 				$picture.appendTo('body');
 				$picture.css({ 'position': 'absolute', 'top': $picture.css('top'), 'left': $picture.css('left') })
 				.animate({ 'width': $element.attr('width')*0.66, 'height': $element.attr('height')*0.66, 'opacity': 0.2, 'top': wishlistBlockOffset.top + 30, 'left': wishlistBlockOffset.left + 15 }, 1000)
 				.fadeOut(800);
 			}
-			
+
 			if($('#' + id).length != 0)
 			{
 				$('#' + id).slideUp('normal');
@@ -118,7 +118,7 @@ function WishlistAddProductCart(token, id_product, id_product_attribute, id_quan
 		url: baseDir + 'modules/blockwishlist/buywishlistproduct.php',
 		data: 'token=' + token + '&static_token=' + static_token + '&id_product=' + id_product  + '&id_product_attribute=' + id_product_attribute,
 		async: true,
-		cache: false, 
+		cache: false,
 		success: function(data)
 		{
 			if (data)
