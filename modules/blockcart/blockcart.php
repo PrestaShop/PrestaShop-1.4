@@ -34,7 +34,7 @@ class BlockCart extends Module
 	{
 		$this->name = 'blockcart';
 		$this->tab = 'front_office_features';
-		$this->version = '1.2';
+		$this->version = '1.3';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
@@ -64,7 +64,7 @@ class BlockCart extends Module
 		else
 			$taxCalculationMethod = Group::getDefaultPriceDisplayMethod();
 
-		$useTax = !($taxCalculationMethod == PS_TAX_EXC);
+		$useTax = $taxCalculationMethod != PS_TAX_EXC;
 
 		$products = $params['cart']->getProducts(true);
 		$nbTotalProducts = 0;
@@ -72,13 +72,15 @@ class BlockCart extends Module
 			$nbTotalProducts += (int)$product['cart_quantity'];
 
 		$wrappingCost = (float)($params['cart']->getOrderTotal($useTax, Cart::ONLY_WRAPPING));
-		$totalToPay = $params['cart']->getOrderTotal($useTax);
 
-		if ($useTax AND Configuration::get('PS_TAX_DISPLAY') == 1)
+		if (Configuration::get('PS_TAX_DISPLAY') == 1 && ($useTax || Configuration::get('PS_TAX_DISPLAY_ALL')))
 		{
+			$totalToPay = $params['cart']->getOrderTotal(true);
 			$totalToPayWithoutTaxes = $params['cart']->getOrderTotal(false);
 			$smarty->assign('tax_cost', Tools::displayPrice($totalToPay - $totalToPayWithoutTaxes, $currency));
 		}
+		else
+			$totalToPay = $params['cart']->getOrderTotal($useTax);
 
 		$smarty->assign(array(
 			'products' => $products,
@@ -89,7 +91,7 @@ class BlockCart extends Module
 			'nb_total_products' => (int)($nbTotalProducts),
 			'shipping_cost' => Tools::displayPrice($params['cart']->getOrderTotal($useTax, Cart::ONLY_SHIPPING), $currency),
 			'show_wrapping' => $wrappingCost > 0 ? true : false,
-			'show_tax' => (int)(Configuration::get('PS_TAX_DISPLAY') == 1 && (int)Configuration::get('PS_TAX')),
+			'show_tax' => (int)((int)Configuration::get('PS_TAX_DISPLAY') && (int)Configuration::get('PS_TAX')),
 			'wrapping_cost' => Tools::displayPrice($wrappingCost, $currency),
 			'product_total' => Tools::displayPrice($params['cart']->getOrderTotal($useTax, Cart::BOTH_WITHOUT_SHIPPING), $currency),
 			'total' => Tools::displayPrice($totalToPay, $currency),
@@ -108,13 +110,24 @@ class BlockCart extends Module
 		$output = '<h2>'.$this->displayName.'</h2>';
 		if (Tools::isSubmit('submitBlockCart'))
 		{
-			$ajax = Tools::getValue('ajax');
-			if ($ajax != 0 AND $ajax != 1)
-				$output .= '<div class="alert error">'.$this->l('Ajax : Invalid choice.').'</div>';
+			if (Tools::getValue('ps_display_tax') == 2)
+			{
+				Configuration::updateValue('PS_TAX_DISPLAY', 1);
+				Configuration::updateValue('PS_TAX_DISPLAY_ALL', 1);
+			}
+			elseif (Tools::getValue('ps_display_tax') == 1)
+			{
+				Configuration::updateValue('PS_TAX_DISPLAY', 1);
+				Configuration::updateValue('PS_TAX_DISPLAY_ALL', 0);
+			}
 			else
 			{
-				Configuration::updateValue('PS_BLOCK_CART_AJAX', (int)($ajax));
+				Configuration::updateValue('PS_TAX_DISPLAY', 0);
+				Configuration::updateValue('PS_TAX_DISPLAY_ALL', 0);
 			}
+
+			Configuration::updateValue('PS_BLOCK_CART_AJAX', (int)Tools::getValue('ajax'));
+
 			$output .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Settings updated').'</div>';
 		}
 		return $output.$this->displayForm();
@@ -124,21 +137,30 @@ class BlockCart extends Module
 	{
 		return '
 		<form action="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'" method="post">
-			<fieldset>
+			<fieldset class="width3">
 				<legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Settings').'</legend>
 
-				<label>'.$this->l('Ajax cart').'</label>
+				<label>'.$this->l('Enable Ajax cart').'</label>
 				<div class="margin-form">
-					<input type="radio" name="ajax" id="ajax_on" value="1" '.(Tools::getValue('ajax', Configuration::get('PS_BLOCK_CART_AJAX')) ? 'checked="checked" ' : '').'/>
-					<label class="t" for="ajax_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
-					<input type="radio" name="ajax" id="ajax_off" value="0" '.(!Tools::getValue('ajax', Configuration::get('PS_BLOCK_CART_AJAX')) ? 'checked="checked" ' : '').'/>
-					<label class="t" for="ajax_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
-					<p class="clear">'.$this->l('Activate AJAX mode for cart (compatible with the default theme)').'</p>
+					<input type="radio" name="ajax" id="ajax_on" value="1" '.(Configuration::get('PS_BLOCK_CART_AJAX') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="ajax_on"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Yes').'" title="'.$this->l('Yes').'" />'.$this->l('Yes').'&nbsp;</label>
+					<input type="radio" name="ajax" id="ajax_off" value="0" '.(!Configuration::get('PS_BLOCK_CART_AJAX') ? 'checked="checked" ' : '').'/>
+					<label class="t" for="ajax_off"> <img src="../img/admin/disabled.gif" alt="'.$this->l('No').'" title="'.$this->l('No').'" />'.$this->l('No').'</label>
+					<p class="clear">'.$this->l('Enable AJAX mode for cart (Your theme has to be compliant)').'</p>
 				</div>
-
-				<center><input type="submit" name="submitBlockCart" value="'.$this->l('Save').'" class="button" /></center>
+				<label>'.$this->l('Display taxes').'</label>
+				<div class="margin-form">
+					<select name="ps_display_tax" style="width: 380px;">
+						<option value="2"'.((Configuration::get('PS_TAX_DISPLAY') && Configuration::get('PS_TAX_DISPLAY_ALL')) ? ' selected="selected"' : '').'>'.$this->l('Yes, for all customers').'</option>
+						<option value="1"'.((Configuration::get('PS_TAX_DISPLAY') && !Configuration::get('PS_TAX_DISPLAY_ALL')) ? ' selected="selected"' : '').'>'.$this->l('Yes, but only if the customer\'s group has taxes enabled').'</option>
+						<option value="0"'.((!Configuration::get('PS_TAX_DISPLAY') && !Configuration::get('PS_TAX_DISPLAY_ALL')) ? ' selected="selected"' : '').'>'.$this->l('No').'</option>
+					</select>
+				</div>
+				<br />
+				<center><input type="submit" name="submitBlockCart" value="'.$this->l('   Save   ').'" class="button" /></center>
 			</fieldset>
-		</form>';
+		</form>
+		<br />';
 	}
 
 	public function install()

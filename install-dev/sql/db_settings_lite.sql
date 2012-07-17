@@ -225,7 +225,8 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (135, 'PS_RESTRICT_DELIVERED_COUNTRIES', '0', NOW(), NOW()),
 (136, 'PS_LIMIT_UPLOAD_IMAGE_VALUE', '2', NOW(), NOW()),
 (137, 'PS_LIMIT_UPLOAD_FILE_VALUE', '2', NOW(), NOW()),
-(138, 'PS_CART_FOLLOWING', 1, NOW(), NOW());
+(138, 'PS_CART_FOLLOWING', 1, NOW(), NOW()),
+(139, 'PS_TAX_DISPLAY_ALL', 0, NOW(), NOW());
 
 INSERT INTO `PREFIX_configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES
 (36, 1, 'IN', NOW()),(36, 2, 'FA', NOW()),(36, 3, 'CU', NOW()),(36, 4, 'FA', NOW()),(36, 5, 'FA', NOW()),

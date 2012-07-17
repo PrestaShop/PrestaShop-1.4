@@ -281,6 +281,7 @@
 	</modules>
 	<configurations>
 		<configuration name="PS_TAX_DISPLAY" value="1" />
+		<configuration name="PS_TAX_DISPLAY_ALL" value="1" />
 	</configurations>
 	<group_default price_display_method="1" />
 </localizationPack>

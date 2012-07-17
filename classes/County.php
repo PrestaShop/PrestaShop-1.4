@@ -76,8 +76,7 @@ class CountyCore extends ObjectModel
 		{
 			self::$_cache_get_counties[$id_state] = Db::getInstance()->ExecuteS('
 			SELECT * FROM `'._DB_PREFIX_.'county`
-			WHERE `id_state` = '.(int)$id_state
-			);
+			WHERE `id_state` = '.(int)$id_state);
 		}
 
 		return self::$_cache_get_counties[$id_state];
@@ -89,8 +88,7 @@ class CountyCore extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT * FROM `'._DB_PREFIX_.'county_zip_code`
 		WHERE `id_county` = '.(int)$this->id.'
-		ORDER BY `from_zip_code` ASC'
-		);
+		ORDER BY `from_zip_code` ASC');
 	}
 
 	public function addZipCodes($zip_codes)
@@ -102,8 +100,7 @@ class CountyCore extends ObjectModel
 
 		return Db::getInstance()->Execute(
 		'INSERT INTO `'._DB_PREFIX_.'county_zip_code` (`id_county`, `from_zip_code`, `to_zip_code`)
-		VALUES ('.(int)$this->id.','.(int)$from.','.(int)$to.')'
-		);
+		VALUES ('.(int)$this->id.','.(int)$from.','.(int)$to.')');
 	}
 
 
@@ -117,9 +114,7 @@ class CountyCore extends ObjectModel
 		return Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'county_zip_code`
 		WHERE `id_county` = '.(int)$this->id.'
-		AND `from_zip_code` = '.(int)$from.'
-		AND `to_zip_code` = '.(int)$to
-		);
+		AND `from_zip_code` = '.(int)$from.' AND `to_zip_code` = '.(int)$to);
 	}
 
 
@@ -139,16 +134,16 @@ class CountyCore extends ObjectModel
 			elseif ($zip_codes[0] == $zip_codes[1])
 			{
 				$from = $zip_codes[0];
-				$to   = 0;
+				$to = $from;
 			}
 		}
 		elseif (sizeof($zip_codes) == 1)
 		{
 			$from = $zip_codes[0];
-			$to = 0;
+			$to = $from;
 		}
 
-		if (!Validate::isInt($from) OR !Validate::isInt($to))
+		if (!Validate::isInt($from) || !Validate::isInt($to))
 		{
 			$from = 0;
 			$to = 0;
@@ -162,9 +157,10 @@ class CountyCore extends ObjectModel
 		if (!isset(self::$_cache_county_zipcode[$id_state.'-'.$zip_code]))
 		{
 			self::$_cache_county_zipcode[$id_state.'-'.$zip_code] = Db::getInstance()->getValue('
-			SELECT DISTINCT c.`id_county` FROM `'._DB_PREFIX_.'county` c
+			SELECT DISTINCT c.`id_county`
+			FROM `'._DB_PREFIX_.'county` c
 			LEFT JOIN `'._DB_PREFIX_.'county_zip_code` cz ON (c.`id_county` = cz.`id_county`)
-			WHERE `id_state` = '.(int)$id_state.' AND cz.`from_zip_code` >= '.(int)$zip_code.' AND cz.`to_zip_code` <= '.(int)$zip_code);
+			WHERE c.`id_state` = '.(int)$id_state.' AND cz.`from_zip_code` >= '.(int)$zip_code.' AND cz.`to_zip_code` <= '.(int)$zip_code);
 		}
 
 		return self::$_cache_county_zipcode[$id_state.'-'.$zip_code];
@@ -184,14 +180,12 @@ class CountyCore extends ObjectModel
 			SELECT COUNT(*) FROM `'._DB_PREFIX_.'county_zip_code` cz
 			LEFT JOIN `'._DB_PREFIX_.'county` c ON (c.`id_county` = cz.`id_county`)
 			LEFT JOIN `'._DB_PREFIX_.'state` s ON (s.`id_state` = c.`id_state`)
-			WHERE `from_zip_code` >= '.(int)$from.'
-			AND `to_zip_code` <= '.(int)$to.'
-			AND s.`id_country` = (SELECT `id_country`
-										 FROM `'._DB_PREFIX_.'state` s
-										 LEFT JOIN `'._DB_PREFIX_.'county` c ON (c.`id_state` = s.`id_state`)
-										 WHERE `id_county` = '.(int)$this->id.'
-										)'
-			);
+			WHERE `from_zip_code` >= '.(int)$from.' AND `to_zip_code` <= '.(int)$to.'
+			AND s.`id_country` = (
+				SELECT `id_country`
+				FROM `'._DB_PREFIX_.'state` s
+				LEFT JOIN `'._DB_PREFIX_.'county` c ON (c.`id_state` = s.`id_state`)
+				WHERE `id_county` = '.(int)$this->id.')');
 		}
 
 		return ($res OR County::isZipCodePresent($from) OR County::isZipCodePresent($to));
@@ -199,7 +193,6 @@ class CountyCore extends ObjectModel
 
 	public function isZipCodePresent($zip_code)
 	{
-
 		if ($zip_code == 0)
 			return false;
 
@@ -207,34 +200,27 @@ class CountyCore extends ObjectModel
 		SELECT COUNT(*) FROM `'._DB_PREFIX_.'county_zip_code` cz
 		LEFT JOIN `'._DB_PREFIX_.'county` c ON (c.`id_county` = cz.`id_county`)
 		LEFT JOIN `'._DB_PREFIX_.'state` s ON (s.`id_state` = c.`id_state`)
-		WHERE
-		(`from_zip_code` <= '.(int)$zip_code.' AND `to_zip_code` >= '.(int)$zip_code.')
-		OR
-		(`from_zip_code` = '.(int)$zip_code.')
-		AND s.`id_country` = (SELECT `id_country`
-									 FROM `'._DB_PREFIX_.'state` s
-									 LEFT JOIN `'._DB_PREFIX_.'county` c ON (c.`id_state` = s.`id_state`)
-									 WHERE `id_county` = '.(int)$this->id.'
-									)'
-		);
+		WHERE (`from_zip_code` <= '.(int)$zip_code.' AND `to_zip_code` >= '.(int)$zip_code.')
+		OR (`from_zip_code` = '.(int)$zip_code.')
+		AND s.`id_country` = (
+			SELECT `id_country`
+			FROM `'._DB_PREFIX_.'state` s
+			LEFT JOIN `'._DB_PREFIX_.'county` c ON (c.`id_state` = s.`id_state`)
+			WHERE `id_county` = '.(int)$this->id.')');
 	}
 
 	public static function deleteZipCodeByIdCounty($id_county)
 	{
-		return Db::getInstance()->Execute(
-		'DELETE FROM `'._DB_PREFIX_.'county_zip_code`
-		WHERE `id_county` = '.(int)$id_county
-		);
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'county_zip_code` WHERE `id_county` = '.(int)$id_county);
 	}
 
 
 	public static function getIdCountyByNameAndIdState($name, $id_state)
 	{
 		return Db::getInstance()->getValue('
-		SELECT `id_county` FROM `'._DB_PREFIX_.'county`
-		WHERE `name` = \''.pSQL($name).'\'
-		AND `id_state` = '.(int)$id_state
-		);
+		SELECT `id_county`
+		FROM `'._DB_PREFIX_.'county`
+		WHERE `name` = \''.pSQL($name).'\' AND `id_state` = '.(int)$id_state);
 	}
 
 }

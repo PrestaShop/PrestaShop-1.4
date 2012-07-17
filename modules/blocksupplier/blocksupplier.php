@@ -46,16 +46,9 @@ class BlockSupplier extends Module
 
 	function install()
 	{
-		if (!parent::install())
-			return false;
-		if (!$this->registerHook('leftColumn'))
-			return false;
-		if (!$this->registerHook('header'))
-			return false;
-		Configuration::updateValue('SUPPLIER_DISPLAY_TEXT', true);
-		Configuration::updateValue('SUPPLIER_DISPLAY_TEXT_NB', 5);
-		Configuration::updateValue('SUPPLIER_DISPLAY_FORM', true);
-		return true;
+		return (parent::install() && $this->registerHook('leftColumn') && $this->registerHook('header') && 
+		Configuration::updateValue('SUPPLIER_DISPLAY_TEXT', true) && Configuration::updateValue('SUPPLIER_DISPLAY_TEXT_NB', 5) &&
+		Configuration::updateValue('SUPPLIER_DISPLAY_FORM', true));
 	}
 
 	function hookLeftColumn($params)
@@ -136,5 +129,3 @@ class BlockSupplier extends Module
 		Tools::addCSS(($this->_path).'blocksupplier.css', 'all');
 	}
 }
-
-

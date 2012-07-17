@@ -314,7 +314,7 @@ class ProductCore extends ObjectModel
 			if ($this->id)
 				$this->tags = Tag::getProductTags((int)$this->id);
 		}
-		
+
 		/* Must be out of the $full if statement, to keep $this->unit_price_ratio consistent while saving the product */
 		$this->unit_price = ($this->unit_price_ratio != 0  ? $this->price / $this->unit_price_ratio : 0);
 

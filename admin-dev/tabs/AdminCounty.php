@@ -129,13 +129,13 @@ class AdminCounty extends AdminTab
 		echo $this->renderJS().
 		'<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" id="id_county" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
-			<fieldset><legend><img src="../img/admin/world.gif" />'.$this->l('Counties').'</legend>';
+			<fieldset><legend><img src="../img/admin/world.gif" alt="" />'.$this->l('Counties').'</legend>';
 
 				if (!isset($obj->id))
 					echo '<div class="hint clear" style="display:block;">&nbsp;'.$this->l('Save this county then you will be able to associate zipcodes').'</div><br />';
 
 		$countries = Country::getCountries($cookie->id_lang, true, true);
-		echo '<label>'.$this->l('Country:').' </label>
+		echo '<label>'.$this->l('Country:').'</label> 
 				<div class="margin-form"><select id="id_country" onchange="populateStates($(this).val(), '.(int)($this->getFieldValue($obj, 'id_state')).');">';
 
 		foreach ($countries AS $country)
@@ -144,7 +144,7 @@ class AdminCounty extends AdminTab
 		echo '</select></div>';
 
 
-		echo '<label>'.$this->l('State:').' </label>
+		echo '<label>'.$this->l('State:').'</label> 
 				<div class="margin-form">
 				<select name="id_state" id="id_state">
 				</select>
@@ -155,7 +155,7 @@ class AdminCounty extends AdminTab
 				</script>';
 
 		echo
-			'<label>'.$this->l('Name:').' </label>
+			'<label>'.$this->l('Name:').'</label> 
 				<div class="margin-form">
 					<input type="text" size="30" maxlength="64" name="name" value="'.htmlentities($this->getFieldValue($obj, 'name'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 				</div>
@@ -194,9 +194,11 @@ class AdminCounty extends AdminTab
 	{
 		return '
 		<div>
-		Add Zip Codes:<br /> <input type="text" id="zipcodes" name="zipcodes" />
-		<a href="#" class="button" onclick="addZipCode()">Add</a>
-		<div id="error-msg" style="color: #FF0000"></div>
+			'.$this->l('Add Zip Codes:').'<br />
+			<input type="text" id="zipcodes" name="zipcodes" />
+			<a href="#" class="button" onclick="addZipCode()">'.$this->l('Add').'</a>
+			<p>'.$this->l('You can add a zip code range using a dash sign (example: 10001-14975)').'</p>
+			<div id="error-msg" style="color: #FF0000"></div>
 		</div>';
 	}
 
@@ -207,7 +209,7 @@ class AdminCounty extends AdminTab
 		foreach ($zip_codes AS $zip_code)
 		{
 			$full_zip_code = $zip_code['from_zip_code'];
-			if ($zip_code['to_zip_code'] != 0)
+			if ($zip_code['to_zip_code'] != 0 && $zip_code['from_zip_code'] != $zip_code['to_zip_code'])
 				$full_zip_code .= '-'.$zip_code['to_zip_code'];
 
 			$html .= '<div>'.Tools::htmlentitiesUTF8($full_zip_code).' <a href="#" onclick="removeZipCodes(\''.Tools::htmlentitiesUTF8($full_zip_code).'\')"><img src="../img/admin/delete.gif" alt="" /></a></div>';

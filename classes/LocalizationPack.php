@@ -157,6 +157,9 @@ class LocalizationPackCore
 							$zipcodes = $zipcode_attributes['from'];
 							if (isset($zipcode_attributes['to']))
 								$zipcodes .= '-'.$zipcode_attributes['to'];
+							/* By default, if the user did not add a range, the "to" zip code needs to be equal to the "from" */
+							else
+								$zipcodes .= '-'.$zipcode_attributes['from'];
 
 							if ($county->isZipCodeRangePresent($zipcodes))
 								continue;

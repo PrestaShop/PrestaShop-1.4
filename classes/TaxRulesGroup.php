@@ -33,12 +33,12 @@ class TaxRulesGroupCore extends ObjectModel
     /** @var bool active state */
     public 		$active;
 
- 	protected 	$fieldsRequired = array('name');
- 	protected 	$fieldsSize = array('name' => 64);
- 	protected 	$fieldsValidate = array('name' => 'isGenericName');
+ 	protected $fieldsRequired = array('name');
+ 	protected $fieldsSize = array('name' => 64);
+ 	protected $fieldsValidate = array('name' => 'isGenericName');
 
-	protected 	$table = 'tax_rules_group';
-	protected 	$identifier = 'id_tax_rules_group';
+	protected $table = 'tax_rules_group';
+	protected $identifier = 'id_tax_rules_group';
 
     protected static $_taxes = array();
 
@@ -131,8 +131,9 @@ class TaxRulesGroupCore extends ObjectModel
 	            $taxes[] = new Tax((int)$row['id_tax']);
 	    }
 
-	    self::$_taxes[$id_tax_rules_group.'-'.$id_country.'-'.$id_state.'-'.$id_county] = $taxes;
-       return $taxes;
+		self::$_taxes[$id_tax_rules_group.'-'.$id_country.'-'.$id_state.'-'.$id_county] = $taxes;
+		
+		return $taxes;
 	}
 
 	public static function getAssociatedTaxRatesByIdCountry($id_country)
@@ -142,10 +143,7 @@ class TaxRulesGroupCore extends ObjectModel
 	    FROM `'._DB_PREFIX_.'tax_rules_group` rg
    	    LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (tr.`id_tax_rules_group` = rg.`id_tax_rules_group`)
 	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
-	    WHERE tr.`id_country` = '.(int)$id_country.'
-	    AND tr.`id_state` = 0
-	    AND tr.`id_county` = 0'
-	    );
+	    WHERE tr.`id_country` = '.(int)$id_country.' AND tr.`id_state` = 0 AND tr.`id_county` = 0');
 
 	    $res = array();
 	    foreach ($rows AS $row)
@@ -158,6 +156,7 @@ class TaxRulesGroupCore extends ObjectModel
 	{
 		$state = new State((int)$id_state);
 
+		/* Case 1: We need to multiply the taxes (example: Canadian law) */
 		if (Country::getIsoById((int)$id_country) == self::$canada_iso && in_array($state->iso_code, self::$canada_states_iso))
 		{
 			 $rate = 1;
@@ -167,11 +166,13 @@ class TaxRulesGroupCore extends ObjectModel
 			$rate *= 100;
 			$rate -= 100;
 		}
+		
+		/* Case 2: We need to add the taxes (example: US Law) */
 		else
 		{
 		    $rate = 0;
 		    foreach (TaxRulesGroup::getTaxes($id_tax_rules_group, $id_country, $id_state, $id_county) AS $tax)
-	       	$rate += (float)$tax->rate;
+				$rate += (float)$tax->rate;
 		}
 
 	   return $rate;
@@ -182,8 +183,7 @@ class TaxRulesGroupCore extends ObjectModel
 	    return Db::getInstance()->getValue(
 	    'SELECT `id_tax_rules_group`
 	    FROM `'._DB_PREFIX_.'tax_rules_group` rg
-	    WHERE `name` = \''.pSQL($name).'\''
-	    );
+	    WHERE `name` = \''.pSQL($name).'\'');
 	}
 }
 

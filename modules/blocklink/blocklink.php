@@ -107,7 +107,7 @@ class BlockLink extends Module
 	{
 		$result = array();
 		/* Get id and url */
-		if (!$links = Db::getInstance()->ExecuteS('SELECT `id_blocklink`, `url`, `new_window` FROM '._DB_PREFIX_.'blocklink'.((int)(Configuration::get('PS_BLOCKLINK_ORDERWAY')) == 1 ? ' ORDER BY `id_blocklink` DESC' : '')))
+		if (!$links = Db::getInstance()->ExecuteS('SELECT `id_blocklink`, `url`, `new_window` FROM '._DB_PREFIX_.'blocklink'.((int)Configuration::get('PS_BLOCKLINK_ORDERWAY') == 1 ? ' ORDER BY `id_blocklink` DESC' : '')))
 			return false;
 		$i = 0;
 		foreach ($links AS $link)
@@ -116,7 +116,7 @@ class BlockLink extends Module
 			$result[$i]['url'] = $link['url'];
 			$result[$i]['newWindow'] = $link['new_window'];
 			/* Get multilingual text */
-			if (!$texts = Db::getInstance()->ExecuteS('SELECT `id_lang`, `text` FROM '._DB_PREFIX_.'blocklink_lang WHERE `id_blocklink`='.(int)($link['id_blocklink'])))
+			if (!$texts = Db::getInstance()->ExecuteS('SELECT `id_lang`, `text` FROM '._DB_PREFIX_.'blocklink_lang WHERE `id_blocklink` = '.(int)($link['id_blocklink'])))
 				return false;
 			foreach ($texts AS $text)
 				$result[$i]['text_'.$text['id_lang']] = $text['text'];

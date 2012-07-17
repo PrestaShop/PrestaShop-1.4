@@ -39,19 +39,20 @@ class StatsForecast extends Module
 	private $t6 = 0;
 	private $t7 = 0;
 	private $t8 = 0;
+	private $t9 = 0;
 
 	public function __construct()
 	{
 		$this->name = 'statsforecast';
-        	$this->tab = 'analytics_stats';
-        	$this->version = 1.0;
+		$this->tab = 'analytics_stats';
+		$this->version = 1.1;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
-	        parent::__construct();
+		parent::__construct();
 
-	        $this->displayName = $this->l('Stats Dashboard');
-	        $this->description = '';
+		$this->displayName = $this->l('Stats Dashboard');
+		$this->description = '';
 	}
 
 	public function install()
@@ -173,7 +174,7 @@ class StatsForecast extends Module
 			$visitsToday = (int)(isset($visitArray[$row['fix_date']]) ? $visitArray[$row['fix_date']] : 0);
 			
 			$dateFromGReg = ($cookie->stats_granularity != 42
-				? 'LIKE \''.$row['fix_date'].'%\''
+				? 'LIKE \''.pSQL($row['fix_date']).'%\''
 				: 'BETWEEN \''.substr($row['fix_date'], 0, 10).' 00:00:00\' AND DATE_ADD(\''.substr($row['fix_date'], 0, 8).substr($row['fix_date'], 8, 2).' 23:59:59\', INTERVAL 7 DAY)');
 			$row['registrations'] = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer WHERE date_add BETWEEN '.ModuleGraph::getDateBetween().' AND date_add '.$dateFromGReg);
 
@@ -184,8 +185,8 @@ class StatsForecast extends Module
 				<td align="center">'.(int)($row['registrations']).'</td>
 				<td align="center">'.(int)($row['countOrders']).'</td>
 				<td align="center">'.(int)($row['countProducts']).'</td>
-				<td align="center">'.($visitsToday ? round(100 * (int)($row['registrations']) / $visitsToday, 2).' %' : '-').'</td>
-				<td align="center">'.($visitsToday ? round(100 * (int)($row['countOrders']) / $visitsToday, 2).' %' : '-').'</td>
+				<td align="center">'.($visitsToday ? min(100, round(100 * (int)($row['registrations']) / $visitsToday, 2)).'%' : '-').'</td>
+				<td align="center">'.($visitsToday ? min(100, round(100 * (int)($row['countOrders']) / $visitsToday, 2)).'%' : '-').'</td>
 				<td align="right">'.Tools::displayPrice($discountToday, $currency).'</td>
 				<td align="right" >'.Tools::displayPrice($row['totalProducts'], $currency).'</td>
 				<td align="right" >'.Tools::displayPrice($row['totalShipping'], $currency).'</td>
@@ -231,8 +232,8 @@ class StatsForecast extends Module
 					<td style="font-weight: 700" align="center">'.(int)($this->t2 / $intervalAvg).'</td>
 					<td style="font-weight: 700" align="center">'.(int)($this->t3 / $intervalAvg).'</td>
 					<td style="font-weight: 700" align="center">'.(int)($this->t4 / $intervalAvg).'</td>
-					<td style="font-weight: 700" align="center">'.($this->t1 ? round(100 * $this->t2 / $this->t1, 2) .' %' : '-').'</td>
-					<td style="font-weight: 700" align="center">'.($this->t1 ? round(100 * $this->t3 / $this->t1, 2) .' %' : '-').'</td>
+					<td style="font-weight: 700" align="center">'.($this->t1 ? min(100, round(100 * $this->t2 / $this->t1, 2)).'%' : '-').'</td>
+					<td style="font-weight: 700" align="center">'.($this->t1 ? min(100, round(100 * $this->t3 / $this->t1, 2)) .'%' : '-').'</td>
 					<td style="font-weight: 700" align="right">'.Tools::displayPrice($this->t7 / $intervalAvg, $currency).'</td>
 					<td style="font-weight: 700" align="right">'.Tools::displayPrice($this->t8 / $intervalAvg, $currency).'</td>
 					<td style="font-weight: 700" align="right">'.Tools::displayPrice($this->t9 / $intervalAvg, $currency).'</td>
@@ -264,30 +265,30 @@ class StatsForecast extends Module
 		<fieldset><legend><img src="../modules/'.$this->name.'/funnel.png" /> '.$this->l('Conversion').'</legend>
 			<span style="float:left;text-align:center;margin-right:10px;padding-top:15px">'.$this->l('Visitors').'<br />'.$visitors.'</span>
 			<span style="float:left;text-align:center;margin-right:10px">
-				<img src="../modules/'.$this->name.'/next.png"><br />'.round(100 * $customers / max(1, $visitors)).' %<br />
-				<img src="../modules/'.$this->name.'/next.png"><br />'.round(100 * $carts / max(1, $visitors)).' %
+				<img src="../modules/'.$this->name.'/next.png"><br />'.min(100, round(100 * $customers / max(1, $visitors))).'%<br />
+				<img src="../modules/'.$this->name.'/next.png"><br />'.min(100, round(100 * $carts / max(1, $visitors))).'%
 			</span>
 			<span style="float:left;text-align:center;margin-right:10px">
 				'.$this->l('Accounts').'<br />'.$customers.'<br />
 				'.$this->l('Carts').'<br />'.$carts.'
 			</span>
 			<span style="float:left;text-align:center;margin-right:10px">
-				<img src="../modules/'.$this->name.'/next.png"><br />'.round(100 * $fullcarts / max(1, $customers)).' %<br />
-				<img src="../modules/'.$this->name.'/next.png"><br />'.round(100 * $fullcarts / max(1, $carts)).' %<br />
+				<img src="../modules/'.$this->name.'/next.png"><br />'.min(100, round(100 * $fullcarts / max(1, $customers))).'%<br />
+				<img src="../modules/'.$this->name.'/next.png"><br />'.min(100, round(100 * $fullcarts / max(1, $carts))).'%<br />
 			</span>
 			<span style="float:left;text-align:center;margin-right:10px;padding-top:15px">'.$this->l('Full carts').'<br />'.$fullcarts.'</span>
-			<span style="float:left;text-align:center;margin-right:10px;padding-top:15px"><img src="../modules/'.$this->name.'/next.png"><br />'.round(100 * $orders / max(1, $fullcarts)).' %</span>
+			<span style="float:left;text-align:center;margin-right:10px;padding-top:15px"><img src="../modules/'.$this->name.'/next.png"><br />'.min(100, round(100 * $orders / max(1, $fullcarts))).'%</span>
 			<span style="float:left;text-align:center;margin-right:10px;padding-top:15px">'.$this->l('Orders').'<br />'.$orders.'</span>
 			<br class="clear" /><br class="clear" />
 			<span style="float:left;text-align:center;margin-right:10px">'.$this->l('Registered visitors').'</span>
 			<span style="float:left;text-align:center;margin-right:10px">
-				<img src="../modules/'.$this->name.'/next.png"> '.round(100 * $orders / max(1, $customers), 2).' % <img src="../modules/'.$this->name.'/next.png">
+				<img src="../modules/'.$this->name.'/next.png"> '.min(100, round(100 * $orders / max(1, $customers), 2)).'% <img src="../modules/'.$this->name.'/next.png">
 			</span>
 			<span style="float:left;text-align:center;margin-right:10px">'.$this->l('Orders').'</span>
 			<br class="clear" />
 			<span style="float:left;text-align:center;margin-right:10px">'.$this->l('Visitors').'</span>
 			<span style="float:left;text-align:center;margin-right:10px">
-				<img src="../modules/'.$this->name.'/next.png"> <b>'.round(100 * $orders / max(1, $visitors), 2).' %</b> <img src="../modules/'.$this->name.'/next.png">
+				<img src="../modules/'.$this->name.'/next.png"> <b>'.min(100, round(100 * $orders / max(1, $visitors), 2)).'%</b> <img src="../modules/'.$this->name.'/next.png">
 			</span>
 			<span style="float:left;text-align:center;margin-right:10px">'.$this->l('Orders').'</span>
 			<div class="clear">&nbsp;</div>
@@ -317,8 +318,8 @@ class StatsForecast extends Module
 				$this->_html .= '
 					<tr>
 						<td>'.$payment['module'].'</td>
-						<td style="text-align:center;padding:4px">'.(int)$payment['nb'].'<br />'.($ca['ventil']['nb'] ? number_format((100 * $payment['nb'] / $ca['ventil']['nb']), 1, '.', ' ') : '0').' %</td>
-						<td style="text-align:center;padding:4px">'.Tools::displayPrice($payment['total'], $currency).'<br />'.((double)$ca['ventil']['total'] > 0 ? number_format((100 * $payment['total'] / $ca['ventil']['total']), 1, '.', ' ') : '0').' %</td>
+						<td style="text-align:center;padding:4px">'.(int)$payment['nb'].'<br />'.($ca['ventil']['nb'] ? number_format((100 * $payment['nb'] / $ca['ventil']['nb']), 1, '.', ' ') : '0').'%</td>
+						<td style="text-align:center;padding:4px">'.Tools::displayPrice($payment['total'], $currency).'<br />'.((double)$ca['ventil']['total'] > 0 ? number_format((100 * $payment['total'] / $ca['ventil']['total']), 1, '.', ' ') : '0').'%</td>
 						<td style="text-align:center;padding:4px">'.Tools::displayPrice($payment['cart'], $currency).'</td>
 					</tr>';
 			$this->_html .= '

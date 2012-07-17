@@ -35,11 +35,12 @@ class TaxRuleCore extends ObjectModel
     public $state_behavior;
     public $county_behavior;
 
- 	protected 	$fieldsRequired = array('id_tax_rules_group', 'id_country', 'id_tax');
- 	protected 	$fieldsValidate = array('id_tax_rules_group' => 'isUnsignedId', 'id_country' => 'isUnsignedId', 'id_state' => 'isUnsignedId', 'id_county' => 'isUnsignedId', 'id_tax' => 'isUnsignedId', 'state_behavior' => 'isUnsignedInt', 'county_behavior' => 'isUnsignedInt');
+ 	protected $fieldsRequired = array('id_tax_rules_group', 'id_country', 'id_tax');
+ 	protected $fieldsValidate = array('id_tax_rules_group' => 'isUnsignedId', 'id_country' => 'isUnsignedId', 'id_state' => 'isUnsignedId',
+	'id_county' => 'isUnsignedId', 'id_tax' => 'isUnsignedId', 'state_behavior' => 'isUnsignedInt', 'county_behavior' => 'isUnsignedInt');
 
-	protected 	$table = 'tax_rule';
-	protected 	$identifier = 'id_tax_rule';
+	protected $table = 'tax_rule';
+	protected $identifier = 'id_tax_rule';
 
 	public function getFields()
 	{
@@ -62,8 +63,7 @@ class TaxRuleCore extends ObjectModel
 
         return Db::getInstance()->Execute('
         DELETE FROM `'._DB_PREFIX_.'tax_rule`
-        WHERE `id_tax_rules_group` = '.(int)$id_group
-        );
+        WHERE `id_tax_rules_group` = '.(int)$id_group);
     }
 
     public static function getTaxRulesByGroupId($id_group)
@@ -74,8 +74,7 @@ class TaxRuleCore extends ObjectModel
         $results = Db::getInstance()->ExecuteS('
         SELECT *
         FROM `'._DB_PREFIX_.'tax_rule`
-        WHERE `id_tax_rules_group` = '.(int)$id_group
-        );
+        WHERE `id_tax_rules_group` = '.(int)$id_group);
 
         $res = array();
         foreach ($results AS $row)
@@ -88,8 +87,8 @@ class TaxRuleCore extends ObjectModel
     {
         return Db::getInstance()->Execute('
         DELETE FROM `'._DB_PREFIX_.'tax_rule`
-        WHERE `id_tax` = '.(int)$id_tax
-        );
+        WHERE `id_tax` = '.(int)$id_tax.'
+		LIMIT 1');
     }
 
 
@@ -97,15 +96,16 @@ class TaxRuleCore extends ObjectModel
 	{
 		return Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'tax_rule`
-		WHERE `id_county` = '.(int)$id_county
-		);
+		WHERE `id_county` = '.(int)$id_county.'
+		LIMIT 1');
 	}
 
     public static function isTaxInUse($id_tax)
     {
         return Db::getInstance()->getValue('
-        SELECT COUNT(*) FROM `'._DB_PREFIX_.'tax_rule` WHERE `id_tax` = '.(int)$id_tax
-        );
+        SELECT COUNT(*)
+		FROM `'._DB_PREFIX_.'tax_rule`
+		WHERE `id_tax` = '.(int)$id_tax);
     }
 }
 
