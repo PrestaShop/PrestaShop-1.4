@@ -84,7 +84,7 @@ class OrderCore extends ObjectModel
 	/** @var float Products total */
 	public 		$total_products;
 
-	/** @var float Products total tax excluded */
+	/** @var float Products total tax included */
 	public 		$total_products_wt;
 
 	/** @var float Shipping total */
