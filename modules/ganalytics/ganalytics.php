@@ -29,7 +29,7 @@ if (!defined('_PS_VERSION_'))
 	exit;
 
 class GAnalytics extends Module
-{	
+{
 	function __construct()
 	{
 	 	$this->name = 'ganalytics';
@@ -38,9 +38,9 @@ class GAnalytics extends Module
 		$this->author = 'PrestaShop';
 		$this->displayName = 'Google Analytics';
 		$this->module_key = 'fd2aaefea84ac1bb512e6f1878d990b8';
-		
+
 	 	parent::__construct();
-		
+
 		if ($this->id AND !Configuration::get('GANALYTICS_ID'))
 			$this->warning = $this->l('You have not yet set your Google Analytics ID');
 		$this->description = $this->l('Integrate Google Analytics script into your shop');
@@ -58,14 +58,14 @@ class GAnalytics extends Module
 			return false;
 		return true;
 	}
-	
+
 	function uninstall()
 	{
 		if (!Configuration::deleteByName('GANALYTICS_ID') || !parent::uninstall())
 			return false;
 		return true;
 	}
-	
+
 	public function getContent()
 	{
 		$output = '<h2>Google Analytics</h2>';
@@ -95,7 +95,7 @@ class GAnalytics extends Module
 				<center><input type="submit" name="submitGAnalytics" value="'.$this->l('Update ID').'" class="button" /></center>
 			</fieldset>
 		</form>';
-		
+
 		$output .= '
 		<fieldset class="space">
 			<legend><img src="../img/admin/unknown.gif" alt="" class="middle" />'.$this->l('Help').'</legend>
@@ -151,35 +151,31 @@ class GAnalytics extends Module
 				<li>'.$this->l('Save this new goal').'</li>
 			</ol>
 		</fieldset>';
-		
+
 		return $output;
 	}
-	
+
 	function hookHeader($params)
 	{
 		// Better way to check which file / controller name is loaded
 		if (!($file = basename(Tools::getValue('controller'))))
 			$file = str_replace(array('.php', '-'), '', basename($_SERVER['SCRIPT_NAME']));
 
-		//#PNM-30 - Order confirmation wasn't tracked
-			// If other controller / file name need to be done, add it to the array
-			// if (in_array(v, array('orderconfirmation')))
-				// return '';
-		
 		// Otherwise, create Google Analytics stats
 		$ganalytics_id = Configuration::get('GANALYTICS_ID');
 		$multilang = method_exists('Language', 'isMultiLanguageActivated') ? Language::isMultiLanguageActivated() : (Language::countActiveLanguages() > 1);
 		$defaultMetaOrder = Meta::getMetaByPage('order',$this->context->language->id);
 		$order = ($multilang?((string)Tools::getValue('isolang').'/'):'').$defaultMetaOrder['url_rewrite'];
-		$pageTrack = ((strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.'order.php') === 0 ||
-			strpos($_SERVER['REQUEST_URI'], __PS_BASE_URI__.($multilang ? ((string)Tools::getValue('isolang').'/') : '').$defaultMetaOrder['url_rewrite']) === 0) ?
-			'/order/step'.(int)(Tools::getValue('step')).'.html' : $file);
+
+		$pageTrack = preg_match('#(^'.__PS_BASE_URI__.'order.php)|(^'.__PS_BASE_URI__.($multilang ? ((string)Tools::getValue('isolang').'/') : '').$defaultMetaOrder['url_rewrite'].'[^-])#', $_SERVER['REQUEST_URI']) ?
+			'/order/step'.(int)Tools::getValue('step').'.html' : $file;
+
 		$this->context->smarty->assign('ganalytics_id', $ganalytics_id);
 		$this->context->smarty->assign('pageTrack', $pageTrack);
 		$this->context->smarty->assign('isOrder', false);
 		return $this->display(__FILE__, 'header.tpl');
 	}
-	
+
 	function hookFooter($params)
 	{
 		// for retrocompatibility
@@ -192,7 +188,7 @@ class GAnalytics extends Module
 	{
 		// Setting parameters
 		$parameters = Configuration::getMultiple(array('PS_LANG_DEFAULT'));
-		
+
 		$order = $params['objOrder'];
 		if (Validate::isLoadedObject($order))
 		{
@@ -222,10 +218,10 @@ class GAnalytics extends Module
 			foreach ($products AS $product)
 			{
 				$category = Db::getInstance()->getRow('
-								SELECT name FROM `'._DB_PREFIX_.'category_lang` , '._DB_PREFIX_.'product 
-								WHERE `id_product` = '.intval($product['product_id']).' AND `id_category_default` = `id_category` 
+								SELECT name FROM `'._DB_PREFIX_.'category_lang` , '._DB_PREFIX_.'product
+								WHERE `id_product` = '.intval($product['product_id']).' AND `id_category_default` = `id_category`
 								AND `id_lang` = '.intval($parameters['PS_LANG_DEFAULT']));
-				
+
 				$items[] = array(
 					'OrderId' => intval($order->id),								// order ID - required
 								'SKU' => addslashes($product['product_id']),		// SKU/code - required
