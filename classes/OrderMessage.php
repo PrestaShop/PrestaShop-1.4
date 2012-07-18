@@ -27,10 +27,10 @@
 
 class OrderMessageCore extends ObjectModel
 {
-	/** @var string name name */
+	/** @var mixed name name */
 	public 		$name;
 
-	/** @var string message content */
+	/** @var mixed message content */
 	public 		$message;
 
 	/** @var string Object creation date */
@@ -53,7 +53,6 @@ class OrderMessageCore extends ObjectModel
 		)
 	);
 
-
 	public function getFields()
 	{
 		parent::validateFields();
@@ -72,7 +71,7 @@ class OrderMessageCore extends ObjectModel
 		SELECT om.id_order_message, oml.name, oml.message
 		FROM '._DB_PREFIX_.'order_message om
 		LEFT JOIN '._DB_PREFIX_.'order_message_lang oml ON (oml.id_order_message = om.id_order_message)
-		WHERE oml.id_lang = '.(int)($id_lang).'
+		WHERE oml.id_lang = '.(int)$id_lang.'
 		ORDER BY name ASC');
 	}
 }

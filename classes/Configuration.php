@@ -32,7 +32,7 @@ class ConfigurationCore extends ObjectModel
 	/** @var string Key */
 	public 		$name;
 
-	/** @var string Value */
+	/** @var mixed Value */
 	public 		$value;
 
 	/** @var string Object creation date */

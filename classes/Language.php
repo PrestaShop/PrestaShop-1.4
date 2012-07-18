@@ -511,7 +511,7 @@ class LanguageCore extends ObjectModel
 		$languages = array();
 		foreach (self::$_LANGUAGES AS $language)
 		{
-			if ($active AND !$language['active'])
+			if ($active && !$language['active'])
 				continue;
 			$languages[] = $language;
 		}
@@ -520,9 +520,13 @@ class LanguageCore extends ObjectModel
 
 	public static function getLanguage($id_lang)
 	{
-		if (!array_key_exists((int)($id_lang), self::$_LANGUAGES))
+		/* We need to double-check that the language list has been loaded first */
+		if (!self::$_LANGUAGES)
+			self::loadLanguages();
+			
+		if (isset(self::$_LANGUAGES[(int)$id_lang]))
 			return false;
-		return self::$_LANGUAGES[(int)($id_lang)];
+		return self::$_LANGUAGES[(int)$id_lang];
 	}
 
 	/**
@@ -533,6 +537,10 @@ class LanguageCore extends ObjectModel
 	  */
 	public static function getIsoById($id_lang)
 	{
+		/* We need to double-check that the language list has been loaded first */
+		if (!self::$_LANGUAGES)
+			self::loadLanguages();
+
 		if (isset(self::$_LANGUAGES[(int)$id_lang]['iso_code']))
 			return self::$_LANGUAGES[(int)$id_lang]['iso_code'];
 		return false;
@@ -609,8 +617,6 @@ class LanguageCore extends ObjectModel
 
 	public function update($nullValues = false)
 	{
-
-		
 		if (!parent::update($nullValues))
 			return false;
 
@@ -709,4 +715,3 @@ class LanguageCore extends ObjectModel
 		return self::$countActiveLanguages;
 	}
 }
-

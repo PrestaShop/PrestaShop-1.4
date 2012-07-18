@@ -57,7 +57,7 @@ class ProductCore extends ObjectModel
 	/** @var string Supplier name */
 	public		$supplier_name;
 
-	/** @var string Name */
+	/** @var mixed Name */
 	public 		$name;
 
 	/** @var string Long description */
@@ -72,10 +72,10 @@ class ProductCore extends ObjectModel
 	/** @var integer Minimal quantity for add to cart */
 	public	$minimal_quantity = 1;
 
-	/** @var string available_now */
+	/** @var mixed available_now */
 	public 		$available_now;
 
-	/** @var string available_later */
+	/** @var mixed available_later */
 	public 		$available_later;
 
 	/** @var float Price in euros */
@@ -132,16 +132,16 @@ class ProductCore extends ObjectModel
 	/** @var string Upc barcode */
 	public 		$upc;
 
-	/** @var string Friendly URL */
+	/** @var mixed Friendly URL */
 	public 		$link_rewrite;
 
-	/** @var string Meta tag description */
+	/** @var mixed Meta tag description */
 	public 		$meta_description;
 
-	/** @var string Meta tag keywords */
+	/** @var mixed Meta tag keywords */
 	public 		$meta_keywords;
 
-	/** @var string Meta tag title */
+	/** @var mixed Meta tag title */
 	public 		$meta_title;
 
 	/** @var integer Out of stock behavior */

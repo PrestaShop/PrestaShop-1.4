@@ -27,7 +27,7 @@
 
 class SceneCore extends ObjectModel
 {
- 	/** @var string Name */
+ 	/** @var mixed Name */
 	public 		$name;
 	
 	/** @var boolean Active Scene */

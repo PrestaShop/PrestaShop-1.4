@@ -87,7 +87,7 @@ class GroupCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT g.`id_group`, g.`reduction`, g.`price_display_method`, gl.`name`
 		FROM `'._DB_PREFIX_.'group` g
-		LEFT JOIN `'._DB_PREFIX_.'group_lang` AS gl ON (g.`id_group` = gl.`id_group` AND gl.`id_lang` = '.(int)($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'group_lang` gl ON (g.`id_group` = gl.`id_group` AND gl.`id_lang` = '.(int)$id_lang.')
 		ORDER BY g.`id_group` ASC');
 	}
 	
@@ -158,10 +158,10 @@ class GroupCore extends ObjectModel
 			return false;
 		if (parent::delete())
 		{
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customer_group` WHERE `id_group` = '.(int)($this->id));
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_group` WHERE `id_group` = '.(int)($this->id));
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'group_reduction` WHERE `id_group` = '.(int)($this->id));
-			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_group_reduction_cache` WHERE `id_group` = '.(int)($this->id));
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customer_group` WHERE `id_group` = '.(int)$this->id);
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_group` WHERE `id_group` = '.(int)$this->id);
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'group_reduction` WHERE `id_group` = '.(int)$this->id);
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_group_reduction_cache` WHERE `id_group` = '.(int)$this->id);
 			
 			// Add default group (id 1) to customers without groups
 			Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'customer_group` (
@@ -178,13 +178,11 @@ class GroupCore extends ObjectModel
 						SELECT min(id_group) FROM `'._DB_PREFIX_.'customer_group`
 						WHERE id_customer = cg.id_customer),
 						1)
-				WHERE `id_default_group` = '.(int)($this->id));
+				WHERE `id_default_group` = '.(int)$this->id);
 			
-			Discount::deleteByIdGroup((int)($this->id));
+			Discount::deleteByIdGroup((int)$this->id);
 			return true;
 		}
 		return false;
 	}
 }
-
-

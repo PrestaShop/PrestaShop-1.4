@@ -35,10 +35,10 @@ class ManufacturerCore extends ObjectModel
 	/** @var string Name */
 	public 		$name;
 
-	/** @var string A description */
+	/** @var mixed A description */
 	public 		$description;
 
-	/** @var string A short description */
+	/** @var mixed A short description */
 	public 		$short_description;
 
 	/** @var int Address */
@@ -53,13 +53,13 @@ class ManufacturerCore extends ObjectModel
 	/** @var string Friendly URL */
 	public 		$link_rewrite;
 
-	/** @var string Meta title */
+	/** @var mixed Meta title */
 	public 		$meta_title;
 
-	/** @var string Meta keywords */
+	/** @var mixed Meta keywords */
 	public 		$meta_keywords;
 
-	/** @var string Meta description */
+	/** @var mixed Meta description */
 	public 		$meta_description;
 
 	/** @var boolean active */

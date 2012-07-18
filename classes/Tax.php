@@ -27,7 +27,7 @@
 
 class TaxCore extends ObjectModel
 {
- 	/** @var string Name */
+ 	/** @var mixed Name */
 	public 		$name;
 
 	/** @var float Rate (%) */

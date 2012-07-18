@@ -29,13 +29,13 @@ class ContactCore extends ObjectModel
 {
 	public 		$id;
 	
-	/** @var string Name */
+	/** @var mixed Name */
 	public 		$name;
 	
 	/** @var string e-mail */
 	public 		$email;
 
-	/** @var string Detailed description */
+	/** @var mixed Detailed description */
 	public 		$description;
 	
 	public 		$customer_service;

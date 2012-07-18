@@ -44,7 +44,7 @@ class DiscountCore extends ObjectModel
 	/** @var string Name (the one which must be entered) */
 	public 		$name;
 
-	/** @var string A short description for the discount */
+	/** @var mixed A short description for the discount */
 	public 		$description;
 
 	/** @var string Value in percent as well as in euros */
@@ -101,7 +101,6 @@ class DiscountCore extends ObjectModel
 	protected 	$table = 'discount';
 	protected 	$identifier = 'id_discount';
 
-
 	protected	$webserviceParameters = array(
 			'fields' => array(
 			'id_discount_type' => array('sqlId' => 'id_discount_type', 'xlink_resource' => 'discount_types'),
@@ -125,8 +124,6 @@ class DiscountCore extends ObjectModel
 			'date_upd' => array('sqlId' => 'date_upd')
 		)
 	);
-
-
 
 	public function getFields()
 	{

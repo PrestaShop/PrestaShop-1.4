@@ -106,15 +106,16 @@ abstract class ObjectModelCore
 	 * @param integer $id Existing object id in order to load object (optional)
 	 * @param integer $id_lang Required if object is multilingual (optional)
 	 */
-	public function __construct($id = NULL, $id_lang = NULL)
+	public function __construct($id = null, $id_lang = null)
 	{
-		if ($id_lang != NULL && Validate::isLoadedObject(new Language($id_lang)))
-			$this->id_lang = $id_lang;
-		elseif ($id_lang != NULL)
-			$this->id_lang = Configuration::get('PS_LANG_DEFAULT');
+		if ($id_lang != null)
+		{
+			$this->id_lang = Language::getLanguage((int)$id_lang) ? (int)$id_lang : (int)Configuration::get('PS_LANG_DEFAULT');
+			$id_lang = $this->id_lang;
+		}
 			
 	 	/* Connect to database and check SQL table/identifier */
-	 	if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
+	 	if (!Validate::isTableOrIdentifier($this->identifier) || !Validate::isTableOrIdentifier($this->table))
 			die(Tools::displayError());
 		$this->identifier = pSQL($this->identifier);
 
@@ -131,8 +132,8 @@ abstract class ObjectModelCore
 			$result = self::$_cache[$this->table][(int)($id)][(int)($id_lang)];
 			if ($result)
 			{
-				$this->id = (int)($id);
-				foreach ($result AS $key => $value)
+				$this->id = (int)$id;
+				foreach ($result as $key => $value)
 					if (key_exists($key, $this))
 						$this->{$key} = $value;
 	
@@ -144,9 +145,9 @@ abstract class ObjectModelCore
 					FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` 
 					WHERE `'.$this->identifier.'` = '.(int)$id);
 					if ($result)
-						foreach ($result AS $row)
-							foreach ($row AS $key => $value)
-								if (key_exists($key, $this) AND $key != $this->identifier)
+						foreach ($result as $row)
+							foreach ($row as $key => $value)
+								if (key_exists($key, $this) && $key != $this->identifier)
 								{
 									if (!is_array($this->{$key}))
 										$this->{$key} = array();

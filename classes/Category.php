@@ -32,7 +32,7 @@ class CategoryCore extends ObjectModel
 	/** @var integer category ID */
 	public 		$id_category;
 
-	/** @var string Name */
+	/** @var mixed Name */
 	public 		$name;
 
 	/** @var boolean Status for display */
@@ -41,7 +41,7 @@ class CategoryCore extends ObjectModel
 	/** @var  integer category position */
 	public 		$position;
 
-	/** @var string Description */
+	/** @var mixed Description */
 	public 		$description;
 
 	/** @var integer Parent category ID */
@@ -56,16 +56,16 @@ class CategoryCore extends ObjectModel
 	/** @var integer Nested tree model "right" value */
 	public 		$nright;
 
-	/** @var string string used in rewrited URL */
+	/** @var mixed string used in rewrited URL */
 	public 		$link_rewrite;
 
-	/** @var string Meta title */
+	/** @var mixed Meta title */
 	public 		$meta_title;
 
-	/** @var string Meta keywords */
+	/** @var mixed Meta keywords */
 	public 		$meta_keywords;
 
-	/** @var string Meta description */
+	/** @var mixed Meta description */
 	public 		$meta_description;
 
 	/** @var string Object creation date */
@@ -746,11 +746,7 @@ class CategoryCore extends ObjectModel
 		if (!$id_lang)
 		{
 			global $cookie;
-
-			if (isset($this->name[$cookie->id_lang]))
-				$id_lang = $cookie->id_lang;
-			else
-				$id_lang = (int)(Configuration::get('PS_LANG_DEFAULT'));
+			$id_lang = isset($this->name[$cookie->id_lang]) ? (int)$cookie->id_lang : (int)Configuration::get('PS_LANG_DEFAULT');
 		}
 		return isset($this->name[$id_lang]) ? $this->name[$id_lang] : '';
 	}
@@ -775,7 +771,7 @@ class CategoryCore extends ObjectModel
 			return Db::getInstance()->ExecuteS('
 			SELECT c.*, cl.*
 			FROM `'._DB_PREFIX_.'category` c
-			LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.(int)($id_lang).')
+			LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.(int)$id_lang.')
 			WHERE `name` LIKE \'%'.pSQL($query).'%\' AND c.`id_category` != 1');
 	}
 

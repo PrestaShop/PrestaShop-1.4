@@ -27,7 +27,7 @@
 
 class TabCore extends ObjectModel
 {
-	/** @var string Displayed name*/
+	/** @var mixed Displayed name*/
 	public		$name;
 
 	/** @var string Class and file name*/

@@ -30,19 +30,19 @@ class		EditorialClass extends ObjectModel
 	/** @var integer editorial id*/
 	public		$id = 1;
 	
-	/** @var string body_title*/
+	/** @var string Logo link */
 	public		$body_home_logo_link;
 
-	/** @var string body_title*/
+	/** @var mixed Body Title */
 	public		$body_title;
 
-	/** @var string body_title*/
+	/** @var mixed Body Sub-heading */
 	public		$body_subheading;
 
-	/** @var string body_title*/
+	/** @var mixed Body Paragraph */
 	public		$body_paragraph;
 
-	/** @var string body_title*/
+	/** @var mixed Logo Sub-heading */
 	public		$body_logo_subheading;
 	
 	protected 	$table = 'editorial';

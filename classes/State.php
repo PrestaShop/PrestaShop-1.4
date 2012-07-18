@@ -136,13 +136,13 @@ class StateCore extends ObjectModel
 		if (!$this->isUsed())
 		{
 			/* Database deletion */
-			$result = Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'` WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
+			$result = Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'` WHERE `'.pSQL($this->identifier).'` = '.(int)$this->id);
 			if (!$result)
 				return false;
 
 			/* Database deletion for multilingual fields related to the object */
 			if (method_exists($this, 'getTranslationsFieldsChild'))
-				Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
+				Db::getInstance()->Execute('DELETE FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE `'.pSQL($this->identifier).'` = '.(int)$this->id);
 			return $result;
 		}
 		else

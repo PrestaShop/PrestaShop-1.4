@@ -27,7 +27,7 @@
 
 class QuickAccessCore extends ObjectModel
 {
- 	/** @var string Name */
+ 	/** @var mixed Name */
 	public 		$name;
 	
 	/** @var string Link */

@@ -27,23 +27,25 @@
 
 class AttributeGroupCore extends ObjectModel
 {
- 	/** @var string Name */
-	public 		$name;
-	public		$is_color_group;
+ 	/** @var mixed Name */
+	public $name;
+
+	/** @var mixed Public Name */
+	public $public_name;
 	
-	/** @var string Public Name */
-	public 		$public_name;	
+	/** @var boolean Only for attribute groups using the color picker */
+	public $is_color_group;
 	
-	protected	$fieldsRequired = array();
-	protected	$fieldsValidate = array('is_color_group' => 'isBool');
- 	protected 	$fieldsRequiredLang = array('name', 'public_name');
- 	protected 	$fieldsSizeLang = array('name' => 64, 'public_name' => 64);
- 	protected 	$fieldsValidateLang = array('name' => 'isGenericName', 'public_name' => 'isGenericName');
+	protected $fieldsRequired = array();
+	protected $fieldsValidate = array('is_color_group' => 'isBool');
+ 	protected $fieldsRequiredLang = array('name', 'public_name');
+ 	protected $fieldsSizeLang = array('name' => 64, 'public_name' => 64);
+ 	protected $fieldsValidateLang = array('name' => 'isGenericName', 'public_name' => 'isGenericName');
 		
-	protected 	$table = 'attribute_group';
-	protected 	$identifier = 'id_attribute_group';
+	protected $table = 'attribute_group';
+	protected $identifier = 'id_attribute_group';
 	
-	protected	$webserviceParameters = array(
+	protected $webserviceParameters = array(
 		'objectsNodeName' => 'product_options',
 		'objectNodeName' => 'product_option',
 		'fields' => array(),

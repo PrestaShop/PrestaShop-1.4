@@ -35,7 +35,7 @@ class ImageCore extends ObjectModel
 	/** @var integer Product ID */
 	public		$id_product;
 	
-	/** @var string HTML title and alt attributes */
+	/** @var mixed HTML title and alt attributes */
 	public		$legend;
 	
 	/** @var integer Position used to order images of the same product */

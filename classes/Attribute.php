@@ -30,7 +30,7 @@ class AttributeCore extends ObjectModel
 	/** @var integer Group id which attribute belongs */
 	public		$id_attribute_group;
 	
-	/** @var string Name */
+	/** @var mixed Name */
 	public 		$name;
 	public		$color;
 	
