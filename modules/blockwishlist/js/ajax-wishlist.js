@@ -48,7 +48,7 @@ function WishlistCart(id, action, id_product, id_product_attribute, quantity)
 				var pictureOffsetOriginal = $element.offset();
 				$picture.css({'position': 'absolute', 'top': pictureOffsetOriginal.top, 'left': pictureOffsetOriginal.left});
 				var pictureOffset = $picture.offset();
-				var wishlistBlockOffset = $('#wishlist_button').offset();
+				var wishlistBlockOffset = $('#wishlist_block').offset();
 
 				$picture.appendTo('body');
 				$picture.css({ 'position': 'absolute', 'top': $picture.css('top'), 'left': $picture.css('left') })
