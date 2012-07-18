@@ -573,7 +573,7 @@ class AdminOrders extends AdminTab
 			{
 				echo '
 				'.$this->l('This order has been placed by a').' <b>'.$this->l('guest').'</b>';
-				if (!Customer::customerExists($customer->email))
+				if (!Customer::customerExists($customer->email, false, true))
 				{
 					echo '<form method="POST" action="index.php?tab=AdminCustomers&id_customer='.(int)$customer->id.'&token='.Tools::getAdminTokenLite('AdminCustomers').'">
 						<input type="hidden" name="id_lang" value="'.(int)$order->id_lang.'" />

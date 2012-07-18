@@ -2579,9 +2579,10 @@ class ProductCore extends ObjectModel
 					$result3 = Db::getInstance()->getRow('
 					SELECT *
 					FROM `'._DB_PREFIX_.'feature_value_lang`
-					WHERE `id_feature_value` = '.(int)($old_id_feature_value).'
+					WHERE `id_feature_value` = '.(int)$old_id_feature_value.'
 					AND `id_lang` = '.(int)($language['id_lang']));
 					$result3['id_feature_value'] = $new_id_feature_value;
+					$result3['value'] = pSQL($result3['value']);
 					$return &= Db::getInstance()->AutoExecute(_DB_PREFIX_.'feature_value_lang', $result3, 'INSERT');
 				}
 				$row['id_feature_value'] = $new_id_feature_value;

@@ -1097,11 +1097,11 @@ class AdminImport extends AdminTab
 				}
 			}
 
-			if (isset($address->customer_email) and !empty($address->customer_email))
+			if (isset($address->customer_email) && !empty($address->customer_email))
 			{
 				if (Validate::isEmail($address->customer_email))
 				{
-					$customer = Customer::customerExists($address->customer_email, true);
+					$customer = Customer::customerExists($address->customer_email, true, false);
 					if ($customer)
 						$address->id_customer = (int)($customer);
 					else

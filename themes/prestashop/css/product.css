@@ -1,10 +1,7 @@
-
 /* product.tpl */
 #primary_block #pb-right-column {
 	float: left;
-	width: 10em;
-	margin-left: 0.8em;
-	margin-top:0;
+	width: 11em;
 }
 
 #primary_block #image-block {

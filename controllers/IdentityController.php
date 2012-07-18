@@ -50,6 +50,8 @@ class IdentityControllerCore extends FrontController
 				if (!isset($_POST['newsletter']))
 					$customer->newsletter = 0;
 			}
+			if (!isset($_POST['id_gender']))
+				$_POST['id_gender'] = 9;
 
 			if (!@checkdate(Tools::getValue('months'), Tools::getValue('days'), Tools::getValue('years')) AND
 			!(Tools::getValue('months') == '' AND Tools::getValue('days') == '' AND Tools::getValue('years') == ''))
@@ -58,7 +60,7 @@ class IdentityControllerCore extends FrontController
 			{
 				$customer->birthday = (empty($_POST['years']) ? '' : (int)($_POST['years']).'-'.(int)($_POST['months']).'-'.(int)($_POST['days']));
 
-				if (Customer::customerExists(Tools::getValue('email'), true))
+				if (Customer::customerExists(Tools::getValue('email'), false, false))
 					$this->errors[] = Tools::displayError('An account is already registered with this e-mail.');
 
 				$_POST['old_passwd'] = trim($_POST['old_passwd']);
@@ -69,9 +71,9 @@ class IdentityControllerCore extends FrontController
 				else
 				{
 					$prev_id_default_group = $customer->id_default_group;
-					$this->errors = $customer->validateControler(true, true);
+					$this->errors = array_unique(array_merge($this->errors, $customer->validateController(true, true)));
 				}
-				if (!sizeof($this->errors))
+				if (!count($this->errors))
 				{
 					$customer->id_default_group = (int)($prev_id_default_group);
 					$customer->firstname = Tools::ucfirst(Tools::strtolower($customer->firstname));

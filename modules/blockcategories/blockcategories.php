@@ -241,7 +241,6 @@ class BlockCategories extends Module
 		if (!$this->isCached('blockcategories_footer.tpl', $smartyCacheId))
 		{
 			$maxdepth = Configuration::get('BLOCK_CATEG_MAX_DEPTH');
-
 			if (!$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 				SELECT c.id_parent, c.id_category, cl.name, cl.description, cl.link_rewrite
 				FROM `'._DB_PREFIX_.'category` c
@@ -250,6 +249,7 @@ class BlockCategories extends Module
 				WHERE (c.`active` = 1 OR c.`id_category` = 1)
 				'.((int)($maxdepth) != 0 ? ' AND `level_depth` <= '.(int)($maxdepth) : '').'
 				AND cg.`id_group` IN ('.pSQL($groups).')
+				GROUP BY id_category
 				ORDER BY `level_depth` ASC, '.(Configuration::get('BLOCK_CATEG_SORT') ? 'cl.`name`' : 'c.`position`').' '.(Configuration::get('BLOCK_CATEG_SORT_WAY') ? 'DESC' : 'ASC'))
 			)
 				return;

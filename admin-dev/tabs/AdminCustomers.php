@@ -222,7 +222,7 @@ class AdminCustomers extends AdminTab
 				$customer = new Customer((int)Tools::getValue('id_customer'));
 				if (!Validate::isLoadedObject($customer))
 					$this->_errors[] = Tools::displayError('This customer does not exist.');
-				if (Customer::customerExists($customer->email))
+				if (Customer::customerExists($customer->email, false, true))
 					$this->_errors[] = Tools::displayError('This customer already exist as non-guest.');
 				elseif ($customer->transformToCustomer(Tools::getValue('id_lang', Configuration::get('PS_LANG_DEFAULT'))))
 					Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$customer->id.'&conf=3&token='.$this->token);
@@ -231,7 +231,8 @@ class AdminCustomers extends AdminTab
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
-		}elseif (Tools::isSubmit('changeNewsletterVal') AND Tools::getValue('id_customer'))
+		}
+		elseif (Tools::isSubmit('changeNewsletterVal') && Tools::getValue('id_customer'))
 		{
 			$id_customer = (int)Tools::getValue('id_customer');
 			$customer = new Customer($id_customer);
@@ -308,7 +309,7 @@ class AdminCustomers extends AdminTab
 			echo '
 			<div>
 			'.$this->l('This customer is registered as').' <b>'.$this->l('guest').'</b>';
-				if (!Customer::customerExists($customer->email))
+				if (!Customer::customerExists($customer->email, false, true))
 				{
 					echo '
 					<form method="POST" action="index.php?tab=AdminCustomers&id_customer='.(int)$customer->id.'&token='.Tools::getAdminTokenLite('AdminCustomers').'">

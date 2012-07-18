@@ -150,9 +150,9 @@ else
 				}
 				$customer = $ppec->getContext()->customer;
 			}
-			else if (($id_customer = Customer::customerExists($ppec->result['EMAIL'], true)))
+			else if (($id_customer = Customer::customerExists($ppec->result['EMAIL'], true, true)))
 			{
-				$customer = new Customer($id_customer);
+				$customer = new Customer((int)$id_customer);
 			}
 			else
 			{

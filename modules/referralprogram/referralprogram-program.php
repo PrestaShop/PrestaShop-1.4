@@ -75,15 +75,12 @@ if (Tools::isSubmit('submitSponsorFriends') AND Tools::getValue('friendsEmail') 
 
 			if (empty($friendEmail) AND empty($friendLastName) AND empty($friendFirstName))
 				continue;
-			elseif (empty($friendEmail) OR !Validate::isEmail($friendEmail))
+			elseif (empty($friendEmail) || !Validate::isEmail($friendEmail))
 				$error = 'email invalid';
-			elseif (empty($friendFirstName) OR empty($friendLastName) OR !Validate::isName($friendLastName) OR !Validate::isName($friendFirstName))
+			elseif (empty($friendFirstName) || empty($friendLastName) || !Validate::isName($friendLastName) || !Validate::isName($friendFirstName))
 				$error = 'name invalid';
-			elseif (ReferralProgramModule::isEmailExists($friendEmail) OR Customer::customerExists($friendEmail))
-			{
+			elseif (ReferralProgramModule::isEmailExists($friendEmail) || Customer::customerExists($friendEmail, false, false))
 				$mails_exists[] = $friendEmail;
-
-			}
 			else
 			{
 				$referralprogram = new ReferralProgramModule();

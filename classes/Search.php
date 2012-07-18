@@ -181,6 +181,8 @@ class SearchCore
 			{
 				$word = str_replace('%', '\\%', $word);
 				$word = str_replace('_', '\\_', $word);
+				$word = Tools::replaceAccentedChars($word);
+
 				$intersectArray[] = 'SELECT id_product
 					FROM '._DB_PREFIX_.'search_word sw
 					LEFT JOIN '._DB_PREFIX_.'search_index si ON sw.id_word = si.id_word

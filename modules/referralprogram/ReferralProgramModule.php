@@ -172,7 +172,7 @@ class ReferralProgramModule extends ObjectModel
 		$result = Db::getInstance()->getRow('
 		SELECT s.`id_referralprogram`
 		FROM `'._DB_PREFIX_.'referralprogram` s
-		WHERE s.`id_sponsor` = '.(int)($id_sponsor).' AND s.`id_referralprogram` = '.(int)($id_friend));
+		WHERE s.`id_sponsor` = '.(int)$id_sponsor.' AND s.`id_referralprogram` = '.(int)$id_friend);
 
 		return isset($result['id_referralprogram']);
 	}
@@ -184,16 +184,16 @@ class ReferralProgramModule extends ObjectModel
 	  */
 	public static function isEmailExists($email, $getId = false, $checkCustomer = true)
 	{
-		if (empty($email) OR !Validate::isEmail($email))
-			die (Tools::displayError('Email invalid.'));
-		if ($checkCustomer === true AND Customer::customerExists($email))
+		if (empty($email) || !Validate::isEmail($email))
+			die(Tools::displayError('Email invalid.'));
+		if ($checkCustomer && Customer::customerExists($email, false, true))
 			return false;
+
 		$result = Db::getInstance()->getRow('
 		SELECT s.`id_referralprogram`
 		FROM `'._DB_PREFIX_.'referralprogram` s
 		WHERE s.`email` = \''.pSQL($email).'\'');
-		if ($getId)
-			return (int)$result['id_referralprogram'];
-		return isset($result['id_referralprogram']);
+
+		return $getId ? (int)$result['id_referralprogram'] : isset($result['id_referralprogram']);
 	}
 }

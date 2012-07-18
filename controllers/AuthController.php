@@ -47,7 +47,7 @@ class AuthControllerCore extends FrontController
 		{
 			if (!Validate::isEmail($email = Tools::getValue('email_create')) OR empty($email))
 				$this->errors[] = Tools::displayError('Invalid e-mail address');
-			elseif (Customer::customerExists($email))
+			elseif (Customer::customerExists($email, false, false))
 			{
 				$this->errors[] = Tools::displayError('An account is already registered with this e-mail, please fill in the password or request a new one.');
 				$_POST['email'] = $_POST['email_create'];
@@ -131,7 +131,7 @@ class AuthControllerCore extends FrontController
 
 			if (!sizeof($this->errors))
 			{
-				if (Customer::customerExists(Tools::getValue('email')))
+				if (Customer::customerExists(Tools::getValue('email'), false, (Configuration::get('PS_GUEST_CHECKOUT_ENABLED') && Tools::getValue('is_new_customer') == 0)))
 					$this->errors[] = Tools::displayError('An account is already registered with this e-mail, please fill in the password or request a new one.');
 				if (Tools::isSubmit('newsletter'))
 				{
