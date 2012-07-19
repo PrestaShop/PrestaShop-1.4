@@ -510,15 +510,15 @@ class AdminOrders extends AdminTab
 		<div style="float:left" style="width:440px">';
 		echo '<h2>
 				'.$prevOrder.'
-				'.(Validate::isLoadedObject($customer) ? $customer->firstname.' '.$customer->lastname.' - ' : '').$this->l('Order #').sprintf('%06d', $order->id).'
+				'.(Validate::isLoadedObject($customer) ? Tools::safeOutput($customer->firstname.' '.$customer->lastname).' - ' : '').$this->l('Order #').sprintf('%06d', (int)$order->id).'
 				'.$nextOrder.'
 			</h2>
 			<div style="width:429px">
-				'.((($currentState->invoice OR $order->invoice_number) AND count($products))
+				'.((($currentState->invoice || $order->invoice_number) && count($products))
 					? '<a href="pdf.php?id_order='.$order->id.'&pdf"><img src="../img/admin/charged_ok.gif" alt="'.$this->l('View invoice').'" /> '.$this->l('View invoice').'</a>'
 					: '<img src="../img/admin/charged_ko.gif" alt="'.$this->l('No invoice').'" /> '.$this->l('No invoice')).' -
-				'.(($currentState->delivery OR $order->delivery_number)
-					? '<a href="pdf.php?id_delivery='.$order->delivery_number.'"><img src="../img/admin/delivery.gif" alt="'.$this->l('View delivery slip').'" /> '.$this->l('View delivery slip').'</a>'
+				'.(($currentState->delivery || $order->delivery_number)
+					? '<a href="pdf.php?id_delivery='.(int)$order->delivery_number.'"><img src="../img/admin/delivery.gif" alt="'.$this->l('View delivery slip').'" /> '.$this->l('View delivery slip').'</a>'
 					: '<img src="../img/admin/delivery_ko.gif" alt="'.$this->l('No delivery slip').'" /> '.$this->l('No delivery slip')).' -
 				<a href="javascript:window.print()"><img src="../img/admin/printer.gif" alt="'.$this->l('Print order').'" title="'.$this->l('Print order').'" /> '.$this->l('Print page').'</a>
 			</div>
@@ -529,9 +529,9 @@ class AdminOrders extends AdminTab
 			<table cellspacing="0" cellpadding="0" class="table" style="width: 429px">
 				<tr>
 					<th>'.Tools::displayDate($row['date_add'], (int)($cookie->id_lang), true).'</th>
-					<th><img src="../img/os/'.$row['id_order_state'].'.gif" /></th>
-					<th>'.stripslashes($row['ostate_name']).'</th>
-					<th>'.((!empty($row['employee_lastname'])) ? '('.stripslashes(Tools::substr($row['employee_firstname'], 0, 1)).'. '.stripslashes($row['employee_lastname']).')' : '').'</th>
+					<th><img src="../img/os/'.(int)$row['id_order_state'].'.gif" /></th>
+					<th>'.Tools::safeOutput(stripslashes($row['ostate_name'])).'</th>
+					<th>'.((!empty($row['employee_lastname'])) ? '('.Tools::safeOutput(stripslashes(Tools::substr($row['employee_firstname'], 0, 1)).'. '.stripslashes($row['employee_lastname'])).')' : '').'</th>
 				</tr>';
 			/* Display previous status */
 			foreach ($history AS $row)
@@ -539,9 +539,9 @@ class AdminOrders extends AdminTab
 				echo '
 				<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
 					<td>'.Tools::displayDate($row['date_add'], (int)($cookie->id_lang), true).'</td>
-					<td><img src="../img/os/'.$row['id_order_state'].'.gif" /></td>
-					<td>'.stripslashes($row['ostate_name']).'</td>
-					<td>'.((!empty($row['employee_lastname'])) ? '('.stripslashes(Tools::substr($row['employee_firstname'], 0, 1)).'. '.stripslashes($row['employee_lastname']).')' : '').'</td>
+					<td><img src="../img/os/'.(int)$row['id_order_state'].'.gif" /></td>
+					<td>'.Tools::safeOutput(stripslashes($row['ostate_name'])).'</td>
+					<td>'.((!empty($row['employee_lastname'])) ? '('.Tools::safeOutput(stripslashes(Tools::substr($row['employee_firstname'], 0, 1)).'. '.stripslashes($row['employee_lastname'])).')' : '').'</td>
 				</tr>';
 			}
 		echo '
@@ -587,8 +587,8 @@ class AdminOrders extends AdminTab
 			else
 			{
 				echo $this->l('Account registered:').' '.Tools::displayDate($customer->date_add, (int)($cookie->id_lang), true).'<br />
-				'.$this->l('Valid orders placed:').' <b>'.$customerStats['nb_orders'].'</b><br />
-				'.$this->l('Total paid since registration:').' <b>'.Tools::displayPrice(Tools::ps_round(Tools::convertPrice($customerStats['total_orders'], $currency), 2), $currency, false).'</b><br />';
+				'.$this->l('Valid orders placed:').' <b>'.(int)$customerStats['nb_orders'].'</b><br />
+				'.$this->l('Total paid since registration:').' <b>'.Tools::displayPrice(Tools::ps_round($customerStats['total_orders'], 2), $currency, false).'</b><br />';
 			}
 			echo '</fieldset>';
 		}

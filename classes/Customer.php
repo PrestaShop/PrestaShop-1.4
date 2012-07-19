@@ -76,7 +76,7 @@ class CustomerCore extends ObjectModel
 
 	/** @var boolean Status */
 	public 		$is_guest = 0;
-	
+
 	/** @var boolean True if carrier has been deleted (staying in database as deleted) */
 	public 		$deleted = 0;
 
@@ -309,7 +309,7 @@ class CustomerCore extends ObjectModel
 		}
 		return self::$_customerHasAddress[$id_customer];
 	}
-	
+
 	public static function resetAddressCache($id_customer)
 	{
 		if (array_key_exists($id_customer, self::$_customerHasAddress))
@@ -438,31 +438,32 @@ class CustomerCore extends ObjectModel
 	}
 
 	/**
-	  * Return several useful statistics about customer
-	  *
-	  * @return array Stats
-	  */
+	 * Return several useful statistics about customer
+	 *
+	 * @return array Stats
+	 */
 	public function getStats()
-	{			
+	{
+		// Get Row because we want $result to be an array
 		$result = Db::getInstance()->getRow('
 		SELECT COUNT(`id_order`) AS nb_orders, SUM(`total_paid` / o.`conversion_rate`) AS total_orders
 		FROM `'._DB_PREFIX_.'orders` o
-		WHERE o.`id_customer` = '.(int)($this->id).'
+		WHERE o.`id_customer` = '.(int)$this->id.'
 		AND o.valid = 1');
 
-		$result2 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+		$result['last_visit'] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT MAX(c.`date_add`) AS last_visit
 		FROM `'._DB_PREFIX_.'guest` g
 		LEFT JOIN `'._DB_PREFIX_.'connections` c ON c.id_guest = g.id_guest
-		WHERE g.`id_customer` = '.(int)($this->id));
+		WHERE g.`id_customer` = '.(int)$this->id);
 
-		$result3 = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+		$age = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT (YEAR(CURRENT_DATE)-YEAR(c.`birthday`)) - (RIGHT(CURRENT_DATE, 5)<RIGHT(c.`birthday`, 5)) AS age
 		FROM `'._DB_PREFIX_.'customer` c
-		WHERE c.`id_customer` = '.(int)($this->id));
+		WHERE c.`id_customer` = '.(int)$this->id);
 
-		$result['last_visit'] = $result2['last_visit'];
-		$result['age'] = ($result3['age'] != date('Y') ? $result3['age'] : '--');
+		$result['age'] = $age != date('Y') ? $age : '--';
+
 		return $result;
 	}
 
@@ -586,7 +587,7 @@ class CustomerCore extends ObjectModel
 	public function getNeedDNI()
 	{
 		Tools::displayAsDeprecated();
-		
+
 		return false;
 	}
 
@@ -608,7 +609,7 @@ class CustomerCore extends ObjectModel
 		$ids = Address::getCountryAndState($id_address);
 		return (int)($ids['id_country'] ? $ids['id_country'] : Configuration::get('PS_COUNTRY_DEFAULT'));
 	}
-	
+
 	public function toggleStatus()
 	{
 		parent::toggleStatus();
@@ -625,7 +626,7 @@ class CustomerCore extends ObjectModel
 	{
 		return (bool)$this->is_guest;
 	}
-	
+
 	public function transformToCustomer($id_lang, $password = NULL)
 	{
 		if (!$this->isGuest())
@@ -634,7 +635,7 @@ class CustomerCore extends ObjectModel
 			$password = Tools::passwdGen();
 		if (!Validate::isPasswd($password))
 			return false;
-		
+
 		$this->is_guest = 0;
 		$this->passwd = Tools::encrypt($password);
 		if ($this->update())
@@ -645,13 +646,13 @@ class CustomerCore extends ObjectModel
 			    '{email}' => $this->email,
 			    '{passwd}' => $password
 			);
-			
+
 			Mail::Send((int)$id_lang, 'guest_to_customer', Mail::l('Your guest account has been transformed to customer account', (int)$id_lang), $vars, $this->email, $this->firstname.' '.$this->lastname);
 			return true;
 		}
 		return false;
 	}
-	
+
 	public static function printNewsIcon($id_customer, $tr)
 	{
 		$customer = new Customer($tr['id_customer']);
@@ -661,7 +662,7 @@ class CustomerCore extends ObjectModel
 				($customer->newsletter ? '<img src="../img/admin/enabled.gif" />' : '<img src="../img/admin/disabled.gif" />').
 			'</a>';
 	}
-	
+
 	public static function printOptinIcon($id_customer, $tr)
 	{
 		$customer = new Customer($tr['id_customer']);
@@ -671,7 +672,7 @@ class CustomerCore extends ObjectModel
 				($customer->optin ? '<img src="../img/admin/enabled.gif" />' : '<img src="../img/admin/disabled.gif" />').
 			'</a>';
 	}
-	
+
 	public function setWsPasswd($passwd)
 	{
 		if ($this->id != 0)
