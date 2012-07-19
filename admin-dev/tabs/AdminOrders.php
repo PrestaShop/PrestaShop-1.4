@@ -588,7 +588,7 @@ class AdminOrders extends AdminTab
 			{
 				echo $this->l('Account registered:').' '.Tools::displayDate($customer->date_add, (int)($cookie->id_lang), true).'<br />
 				'.$this->l('Valid orders placed:').' <b>'.(int)$customerStats['nb_orders'].'</b><br />
-				'.$this->l('Total paid since registration:').' <b>'.Tools::displayPrice(Tools::ps_round($customerStats['total_orders'], 2), $currency, false).'</b><br />';
+				'.$this->l('Total paid since registration:').' <b>'.Tools::displayPrice(Tools::ps_round(Tools::convertPrice($customerStats['total_orders'], $currency), 2), $currency, false).'</b><br />';
 			}
 			echo '</fieldset>';
 		}
