@@ -523,10 +523,8 @@ class LanguageCore extends ObjectModel
 		/* We need to double-check that the language list has been loaded first */
 		if (!self::$_LANGUAGES)
 			self::loadLanguages();
-			
-		if (isset(self::$_LANGUAGES[(int)$id_lang]))
-			return false;
-		return self::$_LANGUAGES[(int)$id_lang];
+
+		return isset(self::$_LANGUAGES[(int)$id_lang]) ? self::$_LANGUAGES[(int)$id_lang] : false;
 	}
 
 	/**

@@ -622,7 +622,6 @@ if ($lm->getIncludeTradFilename())
 						<span class="contentinput">
 							<select id="infosActivity">
 								<option value="0"><?php echo lang('-- Please choose your main activity --'); ?></option>
-								<option value="1"><?php echo lang('Adult'); ?></option>
 								<option value="2"><?php echo lang('Animals and Pets'); ?></option>
 								<option value="3"><?php echo lang('Art and Culture'); ?></option>
 								<option value="4"><?php echo lang('Babies'); ?></option>
@@ -642,6 +641,7 @@ if ($lm->getIncludeTradFilename())
 								<option value="18"><?php echo lang('Shoes and accessories'); ?></option>
 								<option value="19"><?php echo lang('Sports and Entertainment'); ?></option>
 								<option value="20"><?php echo lang('Travel'); ?></option>
+								<option value="1"><?php echo lang('Adult'); ?></option>
 								<option value="0"><?php echo lang('Other activity...'); ?></option>
 							</select>
 						</span>

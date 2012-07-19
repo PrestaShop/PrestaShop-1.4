@@ -237,11 +237,14 @@ var fieldRequired = '{l s='Please fill in all required fields, then save your cu
 			<!-- prices -->
 			{if $product->show_price AND !isset($restricted_country_mode) AND !$PS_CATALOG_MODE}
 				<p class="price">
+					{if !isset($priceDisplayPrecision)}
+						{assign var='priceDisplayPrecision' value=2}
+					{/if}
 					{if !$priceDisplay || $priceDisplay == 2}
-						{assign var='productPrice' value=$product->getPrice(true, $smarty.const.NULL, 2)}
+						{assign var='productPrice' value=$product->getPrice(true, $smarty.const.NULL, $priceDisplayPrecision)}
 						{assign var='productPriceWithoutRedution' value=$product->getPriceWithoutReduct(false, $smarty.const.NULL)}
 					{elseif $priceDisplay == 1}
-						{assign var='productPrice' value=$product->getPrice(false, $smarty.const.NULL, 2)}
+						{assign var='productPrice' value=$product->getPrice(false, $smarty.const.NULL, $priceDisplayPrecision)}
 						{assign var='productPriceWithoutRedution' value=$product->getPriceWithoutReduct(true, $smarty.const.NULL)}
 					{/if}
 					{if $product->on_sale}
