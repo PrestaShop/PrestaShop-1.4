@@ -61,17 +61,18 @@ class PayPalExpressCheckoutSubmit extends OrderConfirmationControllerCore
 	{
 		$id_order = (int)Tools::getValue('id_order');
 		$order = new Order($id_order);
+		$ecs_order = $this->getECSOrder($id_order);
 
 		$this->context->smarty->assign(
 			array(
 				'order' => $order,
 				'id_order' => $id_order,
 				'currency' => $this->context->currency,
-				'ecs_order' => $this->getECSOrder($id_order)
+				'id_transaction' => $ecs_order['id_transaction']
 			)
 		);
 
-		echo $this->paypal->fetchTemplate('/views/templates/front/express_checkout/', 'order-confirmation');
+		echo $this->paypal->fetchTemplate('/views/templates/front/', 'order-confirmation');
 	}
 }
 
@@ -150,9 +151,9 @@ else
 				}
 				$customer = $ppec->getContext()->customer;
 			}
-			else if (($id_customer = Customer::customerExists($ppec->result['EMAIL'], true, true)))
+			else if (($id_customer = Customer::customerExists($ppec->result['EMAIL'], true)))
 			{
-				$customer = new Customer((int)$id_customer);
+				$customer = new Customer($id_customer);
 			}
 			else
 			{
@@ -168,7 +169,7 @@ else
 
 			if (!$customer->id)
 			{
-				$ppec->logs[] = $ppec->l('Can\'t create customer');
+				$ppec->logs[] = $ppec->l('Cannot create customer');
 			}
 
 			foreach ($customer->getAddresses($ppec->getContext()->language->id) as $addr)
@@ -260,8 +261,7 @@ else
 				else
 				{
 					$order = new Order($ppec->currentOrder);
-					//$order->total_shipping = Configuration::get('PAYPAL_SHIPPING_COST');
-					$order->total_paid = $order->total_paid_real = $ppec->getTotalPaid();
+					$order->total_paid = $ppec->getTotalPaid();
 				}
 			}
 			else
@@ -278,11 +278,10 @@ else
 				}
 
 				$order = new Order($ppec->currentOrder);
-				//$order->total_shipping = Configuration::get('PAYPAL_SHIPPING_COST');
 				$order->total_paid = $ppec->getTotalPaid();
-				$order->total_paid_real = $ppec->result['PAYMENTINFO_0_AMT'];
 			}
 			unset(Context::getContext()->cookie->{PaypalExpressCheckout::$COOKIE_NAME});
+
 			// Update for the Paypal shipping cost
 			if ($order)
 			{
@@ -304,7 +303,6 @@ else
 					$controller = new FrontController();
 					$controller->init();
 					Tools::redirect(Context::getContext()->link->getModuleLink('paypal', 'submit', $values));
-					//Tools::redirect('index.php?'.$query);
 				}
 			}
 		}

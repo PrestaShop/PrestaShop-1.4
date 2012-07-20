@@ -39,7 +39,7 @@ class PaypalExpressCheckout extends Paypal
 	/** @var result Contains the last request result **/
 	public $result;
 
-	/** @var result Contains the last token result **/
+	/** @var token Contains the last token **/
 	public $token;
 
 	// Depending of the type set, id_cart or id_product will be set
@@ -296,8 +296,10 @@ class PaypalExpressCheckout extends Paypal
 
 		// float problem with php, have to use the string cast.
 		if ((isset($this->result['AMT']) && ((string)$this->result['AMT'] != (string)$total)) ||
-				(isset($this->result['PAYMENTINFO_0_AMT']) && ((string)$this->result['PAYMENTINFO_0_AMT'] != (string)$total)))
-			return false;
+			(isset($this->result['PAYMENTINFO_0_AMT']) && ((string)$this->result['PAYMENTINFO_0_AMT'] != (string)$total)))
+		{
+			return false;	
+		}
 		return true;
 	}
 
@@ -306,9 +308,36 @@ class PaypalExpressCheckout extends Paypal
 	 */
 	public function getTotalPaid()
 	{
-		$total = 0.0;
+		$currency = new Currency((int)$this->context->cart->id_currency);
+		if (!Validate::isLoadedObject($currency))
+		{
+			$this->_errors[] = $this->l('Not a valid currency');
+		}
+		if (sizeof($this->_errors))
+		{
+			return false;
+		}
+
+		$currency_decimals = is_array($currency) ? (int)$currency['decimals'] : (int)$currency->decimals;
+		$decimals = $currency_decimals * _PS_PRICE_DISPLAY_PRECISION_;
+		$total = 0.00;
+
 		foreach ($this->product_list as $product)
-			$total += $product['total_wt'];
+		{
+			$price = Tools::ps_round($product['price_wt'], $decimals);
+			$quantity = Tools::ps_round($product['quantity'], $decimals);
+			$total = Tools::ps_round($total + ($price * $quantity), $decimals);
+		}
+		
+		$discounts = $this->context->cart->getDiscounts();
+		if (sizeof($discounts) > 0)
+		{
+			foreach ($discounts as $product)
+			{
+				$price = - Tools::ps_round($product['value_real'], $decimals);
+				$total = Tools::ps_round($total + $price, $decimals);
+			}
+		}
 
 		if ($this->context->cart->gift == 1)
 			$total += Configuration::get('PS_GIFT_WRAPPING_PRICE');

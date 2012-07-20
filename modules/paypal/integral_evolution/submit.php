@@ -57,15 +57,19 @@ class PayPalIntegralEvolutionSubmit extends OrderConfirmationControllerCore
 	public function displayContent()
 	{
 		$id_order = (int)Tools::getValue('id_order');
+		$order = new Order($id_order);
+		$paypal_order = $this->getPayPalOrder($id_order);
 
 		$this->context->smarty->assign(
 			array(
-				'currency' => $this->context->currency,
-				'order' => $this->getPayPalOrder($id_order)
+				'currency'			=> $this->context->currency,
+				'order'				=> $order,
+				'id_order'			=> $id_order,
+				'id_transaction'	=> $paypal_order['id_transaction']
 			)
 		);
 
-		echo $this->paypal->fetchTemplate('/views/templates/front/integral_evolution/', 'order-confirmation');
+		echo $this->paypal->fetchTemplate('/views/templates/front/', 'order-confirmation');
 	}
 
 }

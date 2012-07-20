@@ -45,11 +45,11 @@ class PayPal extends PayPalAbstract
 			// Set transaction details if pcc is defined in PaymentModule class_exists
 			if (isset($this->pcc))
 			{
-				$this->pcc->transaction_id = (isset($extraVars['transaction_id']) ? $extraVars['transaction_id'] : '');
+				$this->pcc->transaction_id = (isset($transaction['transaction_id']) ? $transaction['transaction_id'] : '');
 			}
-			parent::validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod, $message, $extraVars, $currency_special, $dont_touch_amount, $secure_key, $shop);
+			parent::validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod, $message, $transaction, $currency_special, $dont_touch_amount, $secure_key, $shop);
 
-			$id_order = (int)Order::getOrderByCartId((int)$this->context->cart->id);
+			$id_order = (int)$this->currentOrder;
 			if (count($transaction) > 0)
 			{
 				$this->_saveTransaction($id_order, $transaction);

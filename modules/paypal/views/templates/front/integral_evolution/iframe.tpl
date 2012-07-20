@@ -44,7 +44,6 @@
 	<input type="hidden" name="buyer_email" value="{$customer->email}" />
 	<input type="hidden" name="address1" value="{$delivery_address->address1}" />
 	<input type="hidden" name="address2" value="{$delivery_address->address2}" />
-	<input type="hidden" name="address_override" value="true" />
 	<input type="hidden" name="city" value="{$delivery_address->city}" />
 	<input type="hidden" name="zip" value="{$delivery_address->postcode}" />
 	<input type="hidden" name="country" value="{$delivery_address->country->iso_code}" />
@@ -56,13 +55,13 @@
 	<input type="hidden" name="showShippingAddress" value="true" />
 
 	<input type="hidden" name="currency_code" value="{$currency->iso_code}" />
-	<input type="hidden" name="invoice" value="{$customer->id}_{time()}" />
+	<input type="hidden" name="invoice" value="{$customer->id}_{$time}" />
 	<input type="hidden" name="shipping" value="{$shipping}" />
-	<input type="hidden" name="tax" value="{$cart_details['total_tax']}" />
+	<input type="hidden" name="tax" value="{$cart_details.total_tax}" />
 	{if ($cart->gift == 1)}
 		<input type="hidden" name="handling" value="{$gift_price}" />
 	{/if}
-	<input type="hidden" name="subtotal" value="{$cart_details['total_price_without_tax'] - $shipping}" />
+	<input type="hidden" name="subtotal" value="{$cart_details.total_price_without_tax - $shipping}" />
 
 	<input type="hidden" name="custom" value="{$custom|escape:'htmlall'}" />
 	<input type="hidden" name="notify_url" value="{$notify_url}" />

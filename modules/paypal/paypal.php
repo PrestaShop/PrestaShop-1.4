@@ -28,13 +28,13 @@
 if (!defined('_PS_VERSION_'))
 	exit;
 
-include(dirname(__FILE__).'/paypal_abstract.php');
-include(dirname(__FILE__).'/paypal_logos.php');
+include(_PS_MODULE_DIR_.'/paypal/paypal_abstract.php');
+include(_PS_MODULE_DIR_.'/paypal/paypal_logos.php');
 
 if (_PS_VERSION_ < '1.5')
-	include(dirname(__FILE__) . '/paypal_1.4.php');
+	include(_PS_MODULE_DIR_.'/paypal/paypal_1.4.php');
 else
-	include(dirname(__FILE__) . '/paypal_1.5.php');
+	include(_PS_MODULE_DIR_.'/paypal/paypal_1.5.php');
 
 define('WPS', 1);
 define('HSS', 2);

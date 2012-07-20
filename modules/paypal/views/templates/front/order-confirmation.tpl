@@ -39,9 +39,9 @@
 
 <br />
 
-<p>{l s='Total of the transaction (taxes incl.) :'} <span class="bold">{$order->total_paid}{$currency->sign}</span></p>
-<p>{l s='Your order ID is :'} <span class="bold">{$paypal_order.id_order}</span></p>
-<p>{l s='Your PayPal transaction ID is :'} <span class="bold">{$paypal_order.id_transaction}</span></p>
+<p>{l s='Total of the transaction (taxes incl.) :'} <span class="bold">{$order->total_paid_real}{$currency->sign}</span></p>
+<p>{l s='Your order ID is :'} <span class="bold">{$id_order}</span></p>
+<p>{l s='Your PayPal transaction ID is :'} <span class="bold">{$id_transaction}</span></p>
 
 <br />
 

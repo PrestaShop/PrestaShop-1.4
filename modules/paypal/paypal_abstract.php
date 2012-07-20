@@ -33,7 +33,8 @@ if (!defined('_PS_VERSION_'))
 abstract class PayPalAbstract extends PaymentModule
 {
 	protected $_html = '';
-	protected $_errors = array();
+
+	public $_errors = array();
 
 	public $default_country;
 	public $iso_code;
@@ -46,7 +47,7 @@ abstract class PayPalAbstract extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'payments_gateways';
-		$this->version = '3.0.5';
+		$this->version = '3.0.6';
 
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
@@ -464,6 +465,7 @@ abstract class PayPalAbstract extends PaymentModule
 				'billing_address'   => $billing_address,
 				'delivery_address'  => $delivery_address,
 				'shipping'          => $shipping,
+				'time'				=> time(),
 				'cancel_return'     => $shop_url . '/order.php',
 				'notify_url'        => $shop_url . _MODULE_DIR_ . $this->name . '/integral_evolution/notifier.php',
 				'return_url'        => $shop_url . _MODULE_DIR_ . $this->name . '/integral_evolution/submit.php?id_cart=' . $this->context->cart->id,
@@ -1079,7 +1081,10 @@ abstract class PayPalAbstract extends PaymentModule
 
 		if (!$amt)
 		{
-			$request = array('TRANSACTIONID' => $id_transaction, 'REFUNDTYPE'    => 'Full');
+			$request = array(
+				'TRANSACTIONID' => $id_transaction,
+				'REFUNDTYPE'    => 'Full'
+			);
 		}
 		else
 		{
@@ -1090,7 +1095,12 @@ abstract class PayPalAbstract extends PaymentModule
 
 			$isoCurrency = Db::getInstance()->getValue($sql);
 
-			$request = array('TRANSACTIONID' => $id_transaction, 'REFUNDTYPE' => 'Partial', 'AMT' => (float)$amt, 'CURRENCYCODE' => Tools::strtoupper($isoCurrency));
+			$request = array(
+				'TRANSACTIONID'	=> $id_transaction,
+				'REFUNDTYPE'	=> 'Partial',
+				'AMT'			=> (float)$amt,
+				'CURRENCYCODE'	=> Tools::strtoupper($isoCurrency)
+			);
 		}
 
 		$paypal_lib = new PaypalLib();
@@ -1105,12 +1115,14 @@ abstract class PayPalAbstract extends PaymentModule
 		{
 			return false;
 		}
+
 		$msg = new Message();
 		$message = strip_tags($message, '<br>');
 		if (!Validate::isCleanHtml($message))
 		{
 			$message = $this->l('Payment message is not valid, please check your module.');
 		}
+
 		$msg->message = $message;
 		$msg->id_order = (int)$id_order;
 		$msg->private = 1;
@@ -1217,7 +1229,11 @@ abstract class PayPalAbstract extends PaymentModule
 
 		$order = new Order((int)$id_order);
 		$currency = new Currency((int)$order->id_currency);
-		$request = array('AUTHORIZATIONID' => $id_transaction, 'AMT'             => (float)$order->total_paid, 'CURRENCYCODE'    => $currency->iso_code, 'COMPLETETYPE'    => 'Complete');
+		$request = array(
+			'AMT'             => (float)$order->total_paid,
+			'AUTHORIZATIONID' => $id_transaction,
+			'CURRENCYCODE'    => $currency->iso_code,
+			'COMPLETETYPE'    => 'Complete');
 		$request = '&' . http_build_query($request, '', '&');
 
 		$paypalLib = new PaypalLib();
@@ -1411,7 +1427,7 @@ abstract class PayPalAbstract extends PaymentModule
 
     private function warningsCheck()
     {
-        if (Configuration::get('PAYPAL_BUSINESS_ACCOUNT') == 'paypal@prestashop.com')
+        if ((Configuration::get('PAYPAL_PAYMENT_METHOD') == HSS) && (Configuration::get('PAYPAL_BUSINESS_ACCOUNT') == 'paypal@prestashop.com'))
         {
             $this->warning = $this->l('You are currently using the default PayPal e-mail address, please enter your own e-mail address.');
         }
