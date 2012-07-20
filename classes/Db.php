@@ -117,7 +117,8 @@ abstract class DbCore
 	 * @param string $values Data to insert/update
 	 * @param string $type INSERT or UPDATE
 	 * @param string $where WHERE clause, only for UPDATE (optional)
-	 * @param string $limit LIMIT clause (optional)
+	 * @param boolean $limit LIMIT clause (optional)
+	 * @param boolean $use_cache (optional)
 	 * @return mixed|boolean SQL query result
 	 */
 	public function	autoExecute($table, $values, $type, $where = false, $limit = false, $use_cache = 1)
@@ -135,7 +136,7 @@ abstract class DbCore
 				$query .= '\''.(is_bool($value) ? (int)$value : $value).'\',';
 			$query = rtrim($query, ',').')';
 			if ($limit)
-				$query .= ' LIMIT '.(int)($limit);
+				$query .= ' LIMIT '.(int)$limit;
 			return $this->q($query, $use_cache);
 		}
 		elseif (strtoupper($type) == 'UPDATE')
@@ -147,13 +148,12 @@ abstract class DbCore
 			if ($where)
 				$query .= ' WHERE '.$where;
 			if ($limit)
-				$query .= ' LIMIT '.(int)($limit);
+				$query .= ' LIMIT '.(int)$limit;
 			return $this->q($query, $use_cache);
 		}
 		
 		return false;
 	}
-
 
 	/**
 	 * Filter SQL query within a blacklist
@@ -162,7 +162,7 @@ abstract class DbCore
 	 * @param string $values Data to insert/update
 	 * @param string $type INSERT or UPDATE
 	 * @param string $where WHERE clause, only for UPDATE (optional)
-	 * @param string $limit LIMIT clause (optional)
+	 * @param boolean $limit LIMIT clause (optional)
 	 * @return mixed|boolean SQL query result
 	 */
 	public function	autoExecuteWithNullValues($table, $values, $type, $where = false, $limit = false)

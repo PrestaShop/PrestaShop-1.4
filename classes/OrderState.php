@@ -112,7 +112,7 @@ class OrderStateCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'order_state` os
-		LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.(int)($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.(int)$id_lang.')
 		WHERE os.`deleted` = 0
 		ORDER BY `name` ASC');
 	}
@@ -137,4 +137,3 @@ class OrderStateCore extends ObjectModel
 	 	return !($this->unremovable);
 	}
 }
-

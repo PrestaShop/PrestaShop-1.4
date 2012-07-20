@@ -531,10 +531,9 @@ class SearchCore
 	 	global $cookie;
 
 		// Only use cookie if id_customer is not present
-		if ($useCookie)
-			$id_customer = (int)$cookie->id_customer;
-		else
-			$id_customer = 0;
+		$id_customer = $useCookie ? (int)$cookie->id_customer : 0;
+			
+		$customerGroups = FrontController::getCurrentCustomerGroups();
 
 		if (!is_numeric($pageNumber) OR !is_numeric($pageSize) OR !Validate::isBool($count) OR !Validate::isValidSearch($tag)
 		OR $orderBy AND !$orderWay OR ($orderBy AND !Validate::isOrderBy($orderBy))	OR ($orderWay AND !Validate::isOrderBy($orderWay)))
@@ -552,10 +551,13 @@ class SearchCore
 			LEFT JOIN `'._DB_PREFIX_.'tag` t ON (pt.`id_tag` = t.`id_tag` AND t.`id_lang` = '.(int)$id_lang.')
 			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)
 			LEFT JOIN `'._DB_PREFIX_.'category_group` cg ON (cg.`id_category` = cp.`id_category`)
-			WHERE p.`active` = 1
-			AND cg.`id_group` '.(!$id_customer ?  '= 1' : 'IN (
-				SELECT id_group FROM '._DB_PREFIX_.'customer_group
-				WHERE id_customer = '.(int)$id_customer.')').'
+			WHERE p.`active` = 1 AND p.`id_product` IN (
+				SELECT cp.`id_product`
+				FROM `'._DB_PREFIX_.'category_group` cg
+				LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
+				LEFT JOIN `'._DB_PREFIX_.'category` c ON (c.`id_category` = cp.`id_category`)
+				WHERE c.`active` = 1 AND cg.`id_group` '.(count($customerGroups) ? 'IN ('.implode(',', $customerGroups).')' : '= 1').'
+			)			
 			AND t.`name` LIKE \'%'.pSQL($tag).'%\'');
 			return isset($result['nb']) ? $result['nb'] : 0;
 		}
@@ -576,10 +578,13 @@ class SearchCore
 		LEFT JOIN `'._DB_PREFIX_.'tag` t ON (pt.`id_tag` = t.`id_tag` AND t.`id_lang` = '.(int)$id_lang.')
 		LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_product` = p.`id_product`)
 		LEFT JOIN `'._DB_PREFIX_.'category_group` cg ON (cg.`id_category` = cp.`id_category`)
-		WHERE p.`active` = 1
-		AND cg.`id_group` '.(!$id_customer ?  '= 1' : 'IN (
-			SELECT id_group FROM '._DB_PREFIX_.'customer_group
-			WHERE id_customer = '.(int)$id_customer.')').'
+		WHERE p.`active` = 1 AND p.`id_product` IN (
+			SELECT cp.`id_product`
+			FROM `'._DB_PREFIX_.'category_group` cg
+			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
+			LEFT JOIN `'._DB_PREFIX_.'category` c ON (c.`id_category` = cp.`id_category`)
+			WHERE c.`active` = 1 AND cg.`id_group` '.(count($customerGroups) ? 'IN ('.implode(',', $customerGroups).')' : '= 1').'
+		)		
 		AND t.`name` LIKE \'%'.pSQL($tag).'%\'
 		ORDER BY position DESC'.($orderBy ? ', '.$orderBy : '').($orderWay ? ' '.$orderWay : '').'
 		LIMIT '.(int)(($pageNumber - 1) * $pageSize).','.(int)$pageSize);

@@ -52,15 +52,15 @@ class ConfigurationCore extends ObjectModel
 	protected static $_CONF;
 	/** @var array Configuration multilang cache */
 	protected static $_CONF_LANG;
+	/** @var array Configuration IDs cache */
+	protected static $_CONF_IDS;
 
 	protected $webserviceParameters = array(
 		'fields' => array(
 			'value' => array(),
 		)
 	);
-	
-	
-	
+
 	public function getFields()
 	{
 		parent::validateFields();
@@ -94,14 +94,28 @@ class ConfigurationCore extends ObjectModel
 	{
 	 	if (!Validate::isConfigName($key))
 			return false;
-
-		if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'configuration_lang` WHERE `id_configuration` = (SELECT `id_configuration` FROM `'._DB_PREFIX_.'configuration` WHERE `name` = \''.pSQL($key).'\')')
-		AND Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'configuration` WHERE `name` = \''.pSQL($key).'\''))
-		{
+		
+		/* Delete the key from the main configuration table */
+		if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'configuration` WHERE `id_configuration` = '.(int)self::$_CONF_IDS[$key].' LIMIT 1'))
 			unset(self::$_CONF[$key]);
-			return true;
-		}
-		return false;
+		else
+			return false;
+			
+		/* Determine if the key is present in the multi-lingual table */
+		$is_multilingual = false;
+		foreach (self::$_CONF_LANG as $id_lang => $values)
+			if (isset(self::$_CONF_LANG[(int)$id_lang][$key]))
+			{
+				unset(self::$_CONF_LANG[(int)$id_lang][$key]);
+				$is_multilingual |= true;
+			}
+			
+		if ($is_multilingual && !Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'configuration_lang` WHERE `id_configuration` = '.(int)self::$_CONF_IDS[$key]))
+			return false;
+	
+		unset(self::$_CONF_IDS[$key]);
+		
+		return true;
 	}
 
 	/**
@@ -113,9 +127,9 @@ class ConfigurationCore extends ObjectModel
 	  */
 	public static function get($key, $id_lang = NULL)
 	{
-		if ($id_lang AND isset(self::$_CONF_LANG[(int)$id_lang][$key]))
+		if ($id_lang && isset(self::$_CONF_LANG[(int)$id_lang][$key]))
 			return self::$_CONF_LANG[(int)$id_lang][$key];
-		elseif (is_array(self::$_CONF) AND key_exists($key, self::$_CONF))
+		elseif (isset(self::$_CONF[$key]))
 			return self::$_CONF[$key];
 		return false;
 	}
@@ -211,7 +225,7 @@ class ConfigurationCore extends ObjectModel
 		$newConfig->name = $key;
 		if (!is_null($value))
 			$newConfig->value = $value;
-		return $newConfig->add();
+		return $newConfig->add() ? (int)$newConfig->id : false;
 	}
 
 	/**
@@ -224,69 +238,92 @@ class ConfigurationCore extends ObjectModel
 	  */
 	public static function updateValue($key, $values, $html = false)
 	{
-		if ($key == NULL) return;
+		if ($key == null) return;
 		if (!Validate::isConfigName($key))
 	 		die(Tools::displayError());
 		$db = Db::getInstance();
+		
+		$current_value = Configuration::get($key);
+		
 		/* Update classic values */
 		if (!is_array($values))
 		{
-		 	if (Configuration::get($key) !== false)
+		 	if ($current_value !== false)
 		 	{
 		 		$values = pSQL($values, $html);
-				$result = $db->AutoExecute(
-					_DB_PREFIX_.'configuration',
-					array('value' => $values, 'date_upd' => date('Y-m-d H:i:s')),
-					'UPDATE', '`name` = \''.pSQL($key).'\'', true, true);
-				self::$_CONF[$key] = stripslashes($values);
+				
+				/* Do not update the database if the current value is the same one than the new one */
+				if ($values == $current_value)
+					$result = true;
+				else
+				{
+					$result = $db->AutoExecute(_DB_PREFIX_.'configuration', array('value' => $values, 'date_upd' => date('Y-m-d H:i:s')),
+					'UPDATE', '`id_configuration` = \''.(int)self::$_CONF_IDS[$key].'\'', true, true);
+					if ($result)
+						self::$_CONF[$key] = stripslashes($values);
+				}
 			}
 			else
 			{
 				$result = self::_addConfiguration($key, $values);
 				if ($result)
 					self::$_CONF[$key] = stripslashes($values);
-				return $result;
 			}
 		}
 
 		/* Update multilingual values */
 		else
 		{
-			$result = 1;
+			$result = true;
+			
 			/* Add the key in the configuration table if it does not already exist... */
-			$conf = $db->getRow('SELECT `id_configuration` FROM `'._DB_PREFIX_.'configuration` WHERE `name` = \''.pSQL($key).'\'');
-			if (!is_array($conf) OR !array_key_exists('id_configuration', $conf))
-			{
-				self::_addConfiguration($key);
-				$conf = $db->getRow('SELECT `id_configuration` FROM `'._DB_PREFIX_.'configuration` WHERE `name` = \''.pSQL($key).'\'');
-			}
-			/* ... then add multilingual values into configuration_lang table */
-			if (!array_key_exists('id_configuration', $conf) OR !(int)($conf['id_configuration']))
-				return false;
+			$id_configuration = ($current_value === false) ? self::_addConfiguration($key) : (int)self::$_CONF_IDS[$key];
+
+			$to_insert = '';
+			$current_date = date('Y-m-d H:i:s');
+			$update_main_key = false;
 			foreach ($values as $id_lang => $value)
 			{
 				$value = pSQL($value, $html);
-				$result &= $db->Execute('INSERT INTO `'._DB_PREFIX_.'configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`)
-										VALUES ('.$conf['id_configuration'].', '.(int)($id_lang).', \''.$value.'\', NOW())
-										ON DUPLICATE KEY UPDATE `value` = \''.$value.'\', `date_upd` = NOW()');
-				self::$_CONF_LANG[(int)($id_lang)][$key] = stripslashes($value);
+				if (!isset(self::$_CONF_LANG[(int)$id_lang][$key]))
+					$to_insert .= '('.(int)$id_configuration.', '.(int)$id_lang.', \''.$value.'\', NOW()),';
+				elseif ((isset(self::$_CONF_LANG[(int)$id_lang][$key]) && self::$_CONF_LANG[(int)$id_lang][$key] != $value))
+				{
+					$update_main_key |= true;
+					$result &= $db->AutoExecute(_DB_PREFIX_.'configuration_lang', array('value' => $value, 'date_upd' => $current_date),
+					'UPDATE', 'id_configuration = '.(int)$id_configuration.' AND id_lang = '.(int)$id_lang, true, true);
+				}
+				self::$_CONF_LANG[(int)$id_lang][$key] = stripslashes($value);
 			}
+			if ($to_insert != '')
+			{
+				$result &= $db->Execute('INSERT INTO `'._DB_PREFIX_.'configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES '.rtrim($to_insert, ','));
+				$update_main_key |= true;
+			}
+			
+			/* Update the date_upd in the main configuration table too */
+			if ($result && $update_main_key)
+				$result &= $db->AutoExecute(_DB_PREFIX_.'configuration', array('date_upd' => $current_date), 'UPDATE', 'id_configuration = '.(int)$id_configuration, true, true);
 		}
-		return $result;
+		return (bool)$result;
 	}
 
 	public static function loadConfiguration()
 	{
 		self::$_CONF = array();
 		self::$_CONF_LANG = array();
-		$result = Db::getInstance()->ExecuteS('
-		SELECT c.`name`, cl.`id_lang`, cl.`value` as cl_value, c.`value` as c_value
+		self::$_CONF_IDS = array();
+
+		$db = Db::getInstance();
+		$result = $db->ExecuteS('
+		SELECT c.`id_configuration`, c.`name`, cl.`id_lang`, cl.`value` cl_value, c.`value` c_value
 		FROM `'._DB_PREFIX_.'configuration` c
-		LEFT JOIN `'._DB_PREFIX_.'configuration_lang` cl ON (c.id_configuration = cl.id_configuration)');
+		LEFT JOIN `'._DB_PREFIX_.'configuration_lang` cl ON (c.id_configuration = cl.id_configuration)', false);
 		
-		if (is_array($result))
-			foreach ($result AS $row)
+		if ($result)
+			while ($row = $db->nextRow($result))
 			{
+				self::$_CONF_IDS[$row['name']] = (int)$row['id_configuration'];
 				self::$_CONF[$row['name']] = $row['c_value'];
 				if ($row['id_lang'])
 					self::$_CONF_LANG[(int)$row['id_lang']][$row['name']] = $row['cl_value'];

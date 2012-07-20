@@ -71,6 +71,7 @@ class SupplierCore extends ObjectModel
 
 	protected	$webserviceParameters = array(
 		'fields' => array(
+			'active' => array(),
 			'link_rewrite' => array('sqlId' => 'link_rewrite'),
 		),
 	);

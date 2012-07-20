@@ -225,7 +225,7 @@ class MySQLCore extends Db
 			$result =  mysql_query($query, $this->_link);
 			if ($webservice_call)
 				$this->displayMySQLError($query);
-			if ($use_cache AND _PS_CACHE_ENABLED_)
+			if ($use_cache && _PS_CACHE_ENABLED_)
 				Cache::getInstance()->deleteQuery($query);
 			return $result;
 		}

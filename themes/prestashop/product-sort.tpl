@@ -52,7 +52,7 @@ $(document).ready(function()
 {/literal}
 </script>
 
-<form id="productsSortForm" action="{$request|escape:'htmlall':'UTF-8'}">
+<form class="productsSortForm" action="{$request|escape:'htmlall':'UTF-8'}">
 	<p class="select">
 		<select id="selectPrductSort">
 			<option value="{$orderbydefault|escape:'htmlall':'UTF-8'}:{$orderwaydefault|escape:'htmlall':'UTF-8'}" {if $orderby eq $orderbydefault}selected="selected"{/if}>{l s='--'}</option>

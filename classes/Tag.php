@@ -126,25 +126,24 @@ class TagCore extends ObjectModel
 	
 	public static function getMainTags($id_lang, $nb = 10)
 	{
-		$groups = FrontController::getCurrentCustomerGroups();
-		$sqlGroups = (count($groups) ? 'IN ('.implode(',', $groups).')' : '= 1');
+		$customerGroups = FrontController::getCurrentCustomerGroups();
 
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT t.name, COUNT(pt.id_tag) AS times
+		SELECT t.`name`, COUNT(pt.`id_tag`) times
 		FROM `'._DB_PREFIX_.'product_tag` pt
-		LEFT JOIN `'._DB_PREFIX_.'tag` t ON (t.id_tag = pt.id_tag)
-		LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.id_product = pt.id_product)
-		WHERE t.`id_lang` = '.(int)($id_lang).'
-		AND p.`active` = 1
+		LEFT JOIN `'._DB_PREFIX_.'tag` t ON (t.`id_tag` = pt.`id_tag`)
+		LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.`id_product` = pt.`id_product`)
+		WHERE t.`id_lang` = '.(int)$id_lang.' AND p.`active` = 1
 		AND p.`id_product` IN (
 			SELECT cp.`id_product`
 			FROM `'._DB_PREFIX_.'category_group` cg
 			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-			WHERE cg.`id_group` '.$sqlGroups.'
+			LEFT JOIN `'._DB_PREFIX_.'category` c ON (c.`id_category` = cp.`id_category`)
+			WHERE c.`active` = 1 AND cg.`id_group` '.(count($customerGroups) ? 'IN ('.implode(',', $customerGroups).')' : '= 1').'
 		)
-		GROUP BY t.id_tag
+		GROUP BY t.`id_tag`
 		ORDER BY times DESC
-		LIMIT 0, '.(int)($nb));
+		LIMIT 0, '.(int)$nb);
 	}
 	
 	public static function getProductTags($id_product)
@@ -153,7 +152,7 @@ class TagCore extends ObjectModel
 		SELECT t.`id_lang`, t.`name` 
 		FROM '._DB_PREFIX_.'tag t 
 		LEFT JOIN '._DB_PREFIX_.'product_tag pt ON (pt.id_tag = t.id_tag) 
-		WHERE pt.`id_product`='.(int)($id_product)))
+		WHERE pt.`id_product`='.(int)$id_product))
 	 		return false;
 	 	$result = array();
 	 	foreach ($tmp AS $tag)
@@ -173,9 +172,9 @@ class TagCore extends ObjectModel
 		SELECT pl.name, pl.id_product
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON p.id_product = pl.id_product
-		WHERE pl.id_lang = '.(int)($id_lang).'
+		WHERE pl.id_lang = '.(int)$id_lang.'
 		AND p.active = 1
-		'.($this->id ? ('AND p.id_product '.($associated ? 'IN' : 'NOT IN').' (SELECT pt.id_product FROM `'._DB_PREFIX_.'product_tag` pt WHERE pt.id_tag = '.(int)($this->id).')') : '').'
+		'.($this->id ? ('AND p.id_product '.($associated ? 'IN' : 'NOT IN').' (SELECT pt.id_product FROM `'._DB_PREFIX_.'product_tag` pt WHERE pt.id_tag = '.(int)$this->id.')') : '').'
 		ORDER BY pl.name');
 	}
 	

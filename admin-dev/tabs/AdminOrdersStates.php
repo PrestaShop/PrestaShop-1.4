@@ -44,8 +44,9 @@ class AdminOrdersStates extends AdminTab
 		'id_order_state' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 		'name' => array('title' => $this->l('Name'), 'width' => 130),
 		'logo' => array('title' => $this->l('Icon'), 'align' => 'center', 'image' => 'os', 'orderby' => false, 'search' => false),
-		'send_email' => array('title' => $this->l('Send e-mail to customer'), 'align' => 'center', 'icon' => array('1' => 'enabled.gif', '0' => 'disabled.gif'), 'type' => 'bool', 'orderby' => false),
+		'send_email' => array('title' => $this->l('Send e-mail'), 'align' => 'center', 'icon' => array('1' => 'enabled.gif', '0' => 'disabled.gif'), 'type' => 'bool', 'orderby' => false),
 		'invoice' => array('title' => $this->l('Invoice'), 'align' => 'center', 'icon' => array('1' => 'enabled.gif', '0' => 'disabled.gif'), 'type' => 'bool', 'orderby' => false),
+		'delivery' => array('title' => $this->l('Delivery'), 'align' => 'center', 'icon' => array('1' => 'enabled.gif', '0' => 'disabled.gif'), 'type' => 'bool', 'orderby' => false),
 		'template' => array('title' => $this->l('E-mail template'), 'width' => 100));
 		
 		parent::__construct();
@@ -57,16 +58,17 @@ class AdminOrdersStates extends AdminTab
 		
 		if (Tools::isSubmit('submitAdd'.$this->table))
 		{
-			$this->deleted = false; // Don't want to historise on saving
-			$_POST['invoice'] = Tools::getValue('invoice');
-			$_POST['logable'] = Tools::getValue('logable');
-			$_POST['send_email'] = Tools::getValue('send_email');
-			$_POST['hidden'] = Tools::getValue('hidden');
+			$this->deleted = false;
+			$_POST['invoice'] = Tools::getValue('invoice', 0);
+			$_POST['delivery'] = Tools::getValue('delivery', 0);
+			$_POST['logable'] = Tools::getValue('logable', 0);
+			$_POST['send_email'] = Tools::getValue('send_email', 0);
+			$_POST['hidden'] = Tools::getValue('hidden', 0);
 			if (!$_POST['send_email'])
 			{
 				$languages = Language::getLanguages(false);
-				foreach ($languages AS $language)
-					$_POST['template_'.$language['id_lang']] = '';
+				foreach ($languages as $language)
+					$_POST['template_'.(int)$language['id_lang']] = '';
 			}
 			parent::postProcess();
 		}
@@ -154,6 +156,12 @@ class AdminOrdersStates extends AdminTab
 					<p>
 						<input type="checkbox" style="vertical-align: text-bottom;" name="invoice"'.(($this->getFieldValue($obj, 'invoice') == 1) ? ' checked="checked"' : '').' id="invoice_on" value="1" />
 						<label class="t" for="invoice_on"> '.$this->l('Allow customer to download and view PDF version of invoice').'</label>
+					</p>
+				</div>
+				<div class="margin-form">
+					<p>
+						<input type="checkbox" style="vertical-align: text-bottom;" name="delivery"'.(($this->getFieldValue($obj, 'delivery') == 1) ? ' checked="checked"' : '').' id="delivery_on" value="1" />
+						<label class="t" for="delivery_on"> '.$this->l('Update delivery date and create a delivery slip (if it has not been created already)').'</label>
 					</p>
 				</div>
 				<div class="margin-form">

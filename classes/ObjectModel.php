@@ -189,9 +189,9 @@ abstract class ObjectModelCore
 			die(Tools::displayError('not table or identifier : ').$this->table);
 
 		/* Automatically fill dates */
-		if ($autodate AND key_exists('date_add', $this))
+		if ($autodate && (isset($this->date_add) || property_exists($this, 'date_add')))
 			$this->date_add = date('Y-m-d H:i:s');
-		if ($autodate AND key_exists('date_upd', $this))
+		if ($autodate && (isset($this->date_upd) || property_exists($this, 'date_upd')))
 			$this->date_upd = date('Y-m-d H:i:s');
 
 		/* Database insertion */

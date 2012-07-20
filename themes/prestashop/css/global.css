@@ -736,12 +736,12 @@ ul.step li#step_end.step_current { background: transparent url('../img/step_end_
 ul#order_step { background-color: white }
 
 /* product-sort.tpl */
-#productsSortForm p {
+.productsSortForm p {
 	height: 1em;
 	margin: 0.5em 0 0 0
 }
-#productsSortForm label, #productsSortForm select { float: right }
-#productsSortForm select { font-size: 1em }
+.productsSortForm label, .productsSortForm select { float: right }
+.productsSortForm select { font-size: 1em }
 
 /* Header */
 #header_right ul { list-style: none }

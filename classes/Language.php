@@ -509,7 +509,7 @@ class LanguageCore extends ObjectModel
 			self::loadLanguages();
 
 		$languages = array();
-		foreach (self::$_LANGUAGES AS $language)
+		foreach (self::$_LANGUAGES as $language)
 		{
 			if ($active && !$language['active'])
 				continue;
@@ -608,8 +608,9 @@ class LanguageCore extends ObjectModel
 	public static function loadLanguages()
 	{
 		self::$_LANGUAGES = array();
-		$result = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'lang`');
-		foreach ($result AS $row)
+		$db = Db::getInstance();
+		$result = $db->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'lang`', false);
+		while ($row = $db->nextRow($result))
 			self::$_LANGUAGES[(int)$row['id_lang']] = $row;
 	}
 
