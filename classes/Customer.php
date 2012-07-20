@@ -259,7 +259,7 @@ class CustomerCore extends ObjectModel
 	public static function customerExists($email, $return_id = false, $ignoreGuest = false)
 	{
 	 	if (!Validate::isEmail($email))
-	 		die(Tools::displayError());
+			return false;
 
 		$result = Db::getInstance()->getRow('
 		SELECT `id_customer`
