@@ -509,7 +509,7 @@ class ProductComments extends Module
 		require_once(dirname(__FILE__).'/ProductComment.php');
 		require_once(dirname(__FILE__).'/ProductCommentCriterion.php');
 
-		if (!empty($cookie->id_customer) && !isset($cookie->id_guest))
+		if (empty($cookie->id_customer) && !isset($cookie->id_guest))
 			Guest::setNewGuest($cookie);
 
 		$allow_guests = (int)Configuration::get('PRODUCT_COMMENTS_ALLOW_GUESTS');
