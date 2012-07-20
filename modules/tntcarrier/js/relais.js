@@ -332,7 +332,7 @@ var contentTo = [
                      '<input type="text" id="saisie" name="saisie" value="" maxlength="500" size="30">',
                      '<input type="hidden" id="mode" name="mode" value="toPoint">',
                      '<input type="hidden" id="point_choisi" name="point_choisi" value="">',
-                     '<input type="submit" onclick="popup_roadmap();" value="Ok">',
+                     '<input type="submit" onclick="return popup_roadmap();" value="Ok">',
                      '<br/>Ex: 58 avenue Leclerc 69007 Lyon',
                  '</div>'].join('');
      
@@ -343,7 +343,7 @@ var contentFrom = [
                       '<input type="text" id="saisie" name="saisie" value="" maxlength="500" size="30">',
                       '<input type="hidden" id="mode" name="mode" value="fromPoint">',
                       '<input type="hidden" id="point_choisi" name="point_choisi" value="">',
-                      '<input type="button" onclick="popup_roadmap();" value="Ok">',
+                      '<input type="button" onclick="return popup_roadmap();" value="Ok">',
                       '<br/>Ex: 58 avenue Leclerc 69007 Lyon',
                   '</div>'].join('');
 
@@ -585,8 +585,9 @@ function switchFromTo(htmlContent) {
 }
 
 function popup_roadmap() {
-	if($("#saisie").val() == "") return;
-	window.open("http://" + tntDomain + "/public/geolocalisation/print_roadmap.do?mode="+ $("#mode").val() +"&point_choisi="+ $("#point_choisi").val() +"&saisie="+ $("#saisie").val());
+	if($("#saisie").val() == "") return false;
+	window.open("http://www.tnt.fr/public/geolocalisation/print_roadmap.do?mode="+ $("#mode").val() +"&point_choisi="+ $("#point_choisi").val() +"&saisie="+ $("#saisie").val());
+    return false;
 }
 
 /*$().ready(tntRCInitMap);*/
