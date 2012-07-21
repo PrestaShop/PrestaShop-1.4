@@ -27,28 +27,29 @@
 
 class ContactCore extends ObjectModel
 {
-	public 		$id;
+	public $id;
 	
-	/** @var mixed Name */
-	public 		$name;
-	
-	/** @var string e-mail */
-	public 		$email;
+	/** @var mixed Contact Name */
+	public $name;
+
+	/** @var string E-mail Address */
+	public $email;
 
 	/** @var mixed Detailed description */
-	public 		$description;
-	
-	public 		$customer_service;
-	
- 	protected 	$fieldsRequired = array();
- 	protected 	$fieldsSize = array('email' => 128);
- 	protected 	$fieldsValidate = array('email' => 'isEmail', 'customer_service' => 'isBool');
- 	protected 	$fieldsRequiredLang = array('name');
- 	protected 	$fieldsSizeLang = array('name' => 32);
- 	protected 	$fieldsValidateLang = array('name' => 'isGenericName', 'description' => 'isCleanHtml');
-	
-	protected 	$table = 'contact';
-	protected 	$identifier = 'id_contact';
+	public $description;
+
+	/** @var boolean True if the employee's message are linked to the customer service */
+	public $customer_service;
+
+ 	protected $fieldsRequired = array('email');
+ 	protected $fieldsSize = array('email' => 128);
+ 	protected $fieldsValidate = array('email' => 'isEmail', 'customer_service' => 'isBool');
+ 	protected $fieldsRequiredLang = array('name');
+ 	protected $fieldsSizeLang = array('name' => 32);
+ 	protected $fieldsValidateLang = array('name' => 'isGenericName', 'description' => 'isCleanHtml');
+
+	protected $table = 'contact';
+	protected $identifier = 'id_contact';
 
 	public function getFields()
 	{
@@ -57,7 +58,7 @@ class ContactCore extends ObjectModel
 		$fields['customer_service'] = (int)($this->customer_service);
 		return $fields;
 	}
-	
+
 	/**
 	  * Check then return multilingual fields for database interaction
 	  *

@@ -1439,7 +1439,7 @@ class AdminProducts extends AdminTab
 		$this->l('in category').' "'.stripslashes($this->_category->getName()).'"</h3>';
 		if ($this->tabAccess['add'] === '1')
 			echo '<a href="'.$currentIndex.'&id_category='.$id_category.'&add'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'"><img src="../img/admin/add.gif" border="0" /> '.$this->l('Add a new product').'</a>';
-		echo '<div style="margin:10px;">';
+		echo '<div style="margin: 3px 0;">';
 		$this->displayList($token);
 		echo '</div>';
 	}
@@ -2871,7 +2871,7 @@ class AdminProducts extends AdminTab
 			echo '					<div class="lang_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $this->_defaultFormLanguage ? 'block' : 'none').'; float: left;">
 											<input size="55" type="text" id="link_rewrite_'.$language['id_lang'].'" name="link_rewrite_'.$language['id_lang'].'"
 											value="'.htmlentities($this->getFieldValue($obj, 'link_rewrite', $language['id_lang']), ENT_COMPAT, 'UTF-8').'" onkeyup="if (isArrowKey(event)) return ;updateFriendlyURL();" onchange="updateFriendlyURL();" /><sup> *</sup>
-											<span class="hint" name="help_box">'.$this->l('Only letters and the "less" character are allowed').'<span class="hint-pointer">&nbsp;</span></span>
+											<span class="hint" name="help_box">'.$this->l('Only letters and the "-" character are allowed').'<span class="hint-pointer">&nbsp;</span></span>
 										</div>';
 		}
 		echo '						<p class="clear" style="padding:10px 0 0 0">'.'<a style="cursor:pointer" class="button" onmousedown="updateFriendlyURLByName();">'.$this->l('Generate').'</a>&nbsp;'.$this->l('Friendly-url from product\'s name.').'<br /><br />';

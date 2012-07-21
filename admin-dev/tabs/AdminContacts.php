@@ -67,7 +67,8 @@ class AdminContacts extends AdminTab
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
-			<fieldset><legend><img src="../img/admin/contact.gif" />'.$this->l('Contacts').'</legend>
+			<fieldset class="width3">
+				<legend><img src="../img/admin/contact.gif" alt="" />'.$this->l('Contacts').'</legend>
 				<label>'.$this->l('Title:').' </label>
 				<div class="margin-form">';
 				foreach ($this->_languages as $language)
@@ -80,7 +81,7 @@ class AdminContacts extends AdminTab
 				</div>
 				<label>'.$this->l('E-mail address').'</label>
 				<div class="margin-form">
-					<input type="text" size="33" name="email" value="'.htmlentities($this->getFieldValue($obj, 'email'), ENT_COMPAT, 'UTF-8').'" />
+					<input type="text" size="33" name="email" value="'.htmlentities($this->getFieldValue($obj, 'email'), ENT_COMPAT, 'UTF-8').'" /><sup> *</sup>
 					<p style="clear: both">'.$this->l('E-mails will be sent to this address').'</p>
 				</div>
 				<label>'.$this->l('Connect to Customer Service section').'</label>

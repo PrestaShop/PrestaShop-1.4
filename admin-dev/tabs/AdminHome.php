@@ -170,14 +170,15 @@ class AdminHome extends AdminTab
 		{
 			$upgrade = new Upgrader();
 			if($update = $upgrade->checkPSVersion())
-				echo '<div class="warning warn" style="margin-bottom:30px;"><h3>'.$this->l('New PrestaShop version available').' : <a style="text-decoration: underline;" href="'.$update['link'].'" target="_blank">'.$this->l('Download').'&nbsp;'.$update['name'].'</a> !</h3></div>';
+				echo '<div class="warning warn" style="margin-bottom: 30px;"><h3>'.$this->l('New PrestaShop version available').' : <a style="text-decoration: underline;" href="'.$update['link'].'" target="_blank">'.$this->l('Download').'&nbsp;'.$update['name'].'</a> !</h3></div>';
 		}
 		else
 		{
-			echo '<p>'.$this->l('Update notification unavailable').'</p>';
-			echo '<p>&nbsp;</p>';
-			echo '<p>'.$this->l('To receive PrestaShop update warnings, you need to activate the <b>allow_url_fopen</b> command in your <b>php.ini</b> config file.').' [<a href="http://www.php.net/manual/'.$isoUser.'/ref.filesystem.php">'.$this->l('more info').'</a>]</p>';
-			echo '<p>'.$this->l('If you don\'t know how to do that, please contact your host administrator !').'</p><br>';
+			echo '
+			<div class="warning warn" style="margin-bottom: 20px; width: 600px;">
+			'.$this->l('Warning: Update notifications are not available').'<br />
+			'.$this->l('Please turn on the "allow_url_fopen" option in your php.ini config file.').' [<a href="http://www.php.net/manual/'.$isoUser.'/ref.filesystem.php">'.$this->l('more info').'</a>]<br />
+			</div>';
 		}
 	  echo '</div>';
 

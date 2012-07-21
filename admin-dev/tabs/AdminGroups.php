@@ -106,7 +106,7 @@ class AdminGroups extends AdminTab
 						<tr>
 							<td>'.Tools::htmlentitiesUTF8($groupReduction['category_name']).'</td>
 							<td><input type="hidden" name="gr_id_group_reduction[]" value="'.(int)($groupReduction['id_group_reduction']).'" /><input type="text" name="gr_reduction[]" value="'.($groupReduction['reduction'] * 100).'" /></td>
-							<td><a href="'.$currentIndex.'&deleteGroupReduction&id_group_reduction='.(int)($groupReduction['id_group_reduction']).'&id_group='.(int)($obj->id).'&token='.$this->token.'"><img src="" alt="'.$this->l('Delete').'" /></a></td>
+							<td><a href="'.$currentIndex.'&deleteGroupReduction&id_group_reduction='.(int)($groupReduction['id_group_reduction']).'&id_group='.(int)($obj->id).'&token='.$this->token.'"><img src="../img/admin/disabled.gif" alt="'.$this->l('Delete').'" /></a></td>
 						</tr>';
 				echo '</table>';
 			}

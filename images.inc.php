@@ -55,10 +55,10 @@ function cacheImage($image, $cacheImage, $size, $imageType = 'jpg', $disableCach
 
 			$x = $infos[0];
 			$y = $infos[1];
-			$max_x = ((int)$size)*3;
+			$max_x = (int)($size * 2);
 
 			/* Size is already ok */
-			if ($y < $size && $x <= $max_x )
+			if ($y < $size && $x <= $max_x)
 				copy($image, _PS_TMP_IMG_DIR_.$cacheImage);
 
 			/* We need to resize */

@@ -38,107 +38,107 @@ if (empty($tab) and !sizeof($_POST))
 	$_POST['token'] = Tools::getAdminTokenLite($tab);
 }
 
-	if ($id_tab = checkingTab($tab))
+if ($id_tab = checkingTab($tab))
+{
+	$isoUser = Language::getIsoById(intval($cookie->id_lang));
+	$tabs = array();
+	recursiveTab($id_tab);
+	$tabs = array_reverse($tabs);
+	$bread = '';
+
+	foreach ($tabs AS $key => $item)
+		$bread .= ' <img src="../img/admin/separator_breadcrum.png" style="margin-right:5px" alt="&gt;" />
+		'.((sizeof($tabs) - 1 > $key)
+			? '<a href="?tab='.$item['class_name'].'&token='.Tools::getAdminToken($item['class_name'].intval($item['id_tab']).intval($cookie->id_employee)).'">'
+			: '').'
+		'.$item['name'].((sizeof($tabs) - 1 > $key) ? '</a>' : '');
+	// @TODO : a way to desactivate this feature
+	echo'<script type="text/javascript">
+
+	$(document).ready(function(){
+		$.ajax({
+			type : "POST",
+			url: "ajax.php",
+			data:{
+				"helpAccess":"1",
+				"item":"'.$item['class_name'].'",
+				"isoUser":"'.$isoUser.'",
+				"country":"'.Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')).'",
+				"version":"'._PS_VERSION_.'"
+			},
+			async : true,
+			success: function(msg) {
+				$("#help-button").html(msg);
+				$("#help-button").fadeIn("slow");
+			}
+		});
+	});</script>';
+
+	echo '<div class="path_bar">
+	<div id="help-button" class="floatr" style="display: none; font-family: Verdana; font-size: 10px; margin-right: 4px; margin-top: 4px;">
+	</div>
+		<a href="?token='.Tools::getAdminToken($tab.intval(Tab::getIdFromClassName($tab)).intval($cookie->id_employee)).'">'.translate('Back Office').'</a>
+		'.$bread.'
+	</div>';
+
+	if (Validate::isLoadedObject($adminObj))
 	{
-		$isoUser = Language::getIsoById(intval($cookie->id_lang));
-		$tabs = array();
-		recursiveTab($id_tab);
-		$tabs = array_reverse($tabs);
-		$bread = '';
-
-		foreach ($tabs AS $key => $item)
-			$bread .= ' <img src="../img/admin/separator_breadcrum.png" style="margin-right:5px" alt="&gt;" />
-			'.((sizeof($tabs) - 1 > $key)
-				? '<a href="?tab='.$item['class_name'].'&token='.Tools::getAdminToken($item['class_name'].intval($item['id_tab']).intval($cookie->id_employee)).'">'
-				: '').'
-			'.$item['name'].((sizeof($tabs) - 1 > $key) ? '</a>' : '');
-		// @TODO : a way to desactivate this feature
-		echo'<script type="text/javascript">
-
-		$(document).ready(function(){
-			$.ajax({
-				type : "POST",
-				url: "ajax.php",
-				data:{
-					"helpAccess":"1",
-					"item":"'.$item['class_name'].'",
-					"isoUser":"'.$isoUser.'",
-					"country":"'.Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')).'",
-					"version":"'._PS_VERSION_.'"
-				},
-				async : true,
-				success: function(msg) {
-					$("#help-button").html(msg);
-					$("#help-button").fadeIn("slow");
-				}
-			});
-		});</script>';
-
-		echo '<div class="path_bar">
-		<div id="help-button" class="floatr" style="display: none; font-family: Verdana; font-size: 10px; margin-right: 4px; margin-top: 4px;">
-		</div>
-			<a href="?token='.Tools::getAdminToken($tab.intval(Tab::getIdFromClassName($tab)).intval($cookie->id_employee)).'">'.translate('Back Office').'</a>
-			'.$bread.'
-		</div>';
-
-		if (Validate::isLoadedObject($adminObj))
+		if ($adminObj->checkToken())
 		{
-			if ($adminObj->checkToken())
-			{
-				/* Filter memorization */
-				if (isset($_POST) AND !empty($_POST) AND isset($adminObj->table))
-					foreach ($_POST AS $key => $value)
-						if (is_array($adminObj->table))
-						{
-							foreach ($adminObj->table AS $table)
-								if (strncmp($key, $table.'Filter_', 7) === 0 OR strncmp($key, 'submitFilter', 12) === 0)
-									$cookie->$key = !is_array($value) ? $value : serialize($value);
-						}
-						elseif (strncmp($key, $adminObj->table.'Filter_', 7) === 0 OR strncmp($key, 'submitFilter', 12) === 0)
-							$cookie->$key = !is_array($value) ? $value : serialize($value);
+			/* Filter memorization */
+			if (isset($_POST) AND !empty($_POST) AND isset($adminObj->table))
+				foreach ($_POST AS $key => $value)
+					if (is_array($adminObj->table))
+					{
+						foreach ($adminObj->table AS $table)
+							if (strncmp($key, $table.'Filter_', 7) === 0 OR strncmp($key, 'submitFilter', 12) === 0)
+								$cookie->$key = !is_array($value) ? $value : serialize($value);
+					}
+					elseif (strncmp($key, $adminObj->table.'Filter_', 7) === 0 OR strncmp($key, 'submitFilter', 12) === 0)
+						$cookie->$key = !is_array($value) ? $value : serialize($value);
 
-				if (isset($_GET) AND !empty($_GET) AND isset($adminObj->table))
-					foreach ($_GET AS $key => $value)
-						if (is_array($adminObj->table))
-						{
-							foreach ($adminObj->table AS $table)
-								if (strncmp($key, $table.'OrderBy', 7) === 0 OR strncmp($key, $table.'Orderway', 8) === 0)
-									$cookie->$key = $value;
-						}
-						elseif (strncmp($key, $adminObj->table.'OrderBy', 7) === 0 OR strncmp($key, $adminObj->table.'Orderway', 12) === 0)
-							$cookie->$key = $value;
+			if (isset($_GET) AND !empty($_GET) AND isset($adminObj->table))
+				foreach ($_GET AS $key => $value)
+					if (is_array($adminObj->table))
+					{
+						foreach ($adminObj->table AS $table)
+							if (strncmp($key, $table.'OrderBy', 7) === 0 OR strncmp($key, $table.'Orderway', 8) === 0)
+								$cookie->$key = $value;
+					}
+					elseif (strncmp($key, $adminObj->table.'OrderBy', 7) === 0 OR strncmp($key, $adminObj->table.'Orderway', 12) === 0)
+						$cookie->$key = $value;
 
-				$adminObj->displayConf();
-				$adminObj->postProcess();
-				$adminObj->displayErrors();
-				$adminObj->display();
-			}
-			else
-			{
-				// If this is an XSS attempt, then we should only display a simple, secure page
-				ob_clean();
+			$adminObj->displayConf();
+			$adminObj->postProcess();
+			$adminObj->displayErrors();
+			$adminObj->display();
+		}
+		else
+		{
+			// If this is an XSS attempt, then we should only display a simple, secure page
+			ob_clean();
 
-				// ${1} in the replacement string of the regexp is required, because the token may begin with a number and mix up with it (e.g. $17)
-				$url = preg_replace('/([&?]token=)[^&]*(&.*)?$/', '${1}'.$adminObj->token.'$2', $_SERVER['REQUEST_URI']);
-				if (false === strpos($url, '?token=') AND false === strpos($url, '&token='))
-					$url .= '&token='.$adminObj->token;
+			// ${1} in the replacement string of the regexp is required, because the token may begin with a number and mix up with it (e.g. $17)
+			$url = preg_replace('/([&?]token=)[^&]*(&.*)?$/', '${1}'.$adminObj->token.'$2', $_SERVER['REQUEST_URI']);
+			if (false === strpos($url, '?token=') AND false === strpos($url, '&token='))
+				$url .= '&token='.$adminObj->token;
 
-				$message = translate('Invalid security token');
-				echo '<html><head><title>'.$message.'</title></head><body style="font-family:Arial,Verdana,Helvetica,sans-serif;background-color:#EC8686">
-					<div style="background-color:#FAE2E3;border:1px solid #000000;color:#383838;font-weight:700;line-height:20px;margin:0 0 10px;padding:10px 15px;width:500px">
-						<img src="../img/admin/error2.png" style="margin:-4px 5px 0 0;vertical-align:middle">
-						'.$message.'
-					</div>';
-				echo '<a href="'.htmlentities($url).'" method="get" style="float:left;background: #E3E3E3;border-color: #CCCCCC #BBBBBB #A0A0A0;border-left: 1px solid #BBBBBB;border-radius: 3px 3px 3px 3px;border-right: 1px solid #BBBBBB;border-style: solid;border-width: 1px;color: #000000;margin: 20px 10px;padding:10px;text-align:center;vertical-align:middle;">
-						'.Tools::htmlentitiesUTF8(translate('I understand the risks and I really want to display this page')).'
-					</a>
-					<a href="index.php" method="get" style="float:left;background: #E3E3E3;border-color: #CCCCCC #BBBBBB #A0A0A0;border-left: 1px solid #BBBBBB;border-radius: 3px 3px 3px 3px;border-right: 1px solid #BBBBBB;border-style: solid;border-width: 1px;color: #000000;margin: 20px 10px;padding:10px;text-align:center;vertical-align:middle;">
-						'.Tools::htmlentitiesUTF8(translate('Take me out of here!')).'
-					</a>
-				</body></html>';
-				die;
-			}
+			$message = translate('Invalid security token');
+			echo '<html><head><title>'.$message.'</title></head><body style="font-family:Arial,Verdana,Helvetica,sans-serif;background-color:#EC8686">
+				<div style="background-color:#FAE2E3;border:1px solid #000000;color:#383838;font-weight:700;line-height:20px;margin:0 0 10px;padding:10px 15px;width:500px">
+					<img src="../img/admin/error2.png" style="margin:-4px 5px 0 0;vertical-align:middle">
+					'.$message.'
+				</div>';
+			echo '<a href="'.htmlentities($url).'" method="get" style="float:left;background: #E3E3E3;border-color: #CCCCCC #BBBBBB #A0A0A0;border-left: 1px solid #BBBBBB;border-radius: 3px 3px 3px 3px;border-right: 1px solid #BBBBBB;border-style: solid;border-width: 1px;color: #000000;margin: 20px 10px;padding:10px;text-align:center;vertical-align:middle;">
+					'.Tools::htmlentitiesUTF8(translate('I understand the risks and I really want to display this page')).'
+				</a>
+				<a href="index.php" method="get" style="float:left;background: #E3E3E3;border-color: #CCCCCC #BBBBBB #A0A0A0;border-left: 1px solid #BBBBBB;border-radius: 3px 3px 3px 3px;border-right: 1px solid #BBBBBB;border-style: solid;border-width: 1px;color: #000000;margin: 20px 10px;padding:10px;text-align:center;vertical-align:middle;">
+					'.Tools::htmlentitiesUTF8(translate('Take me out of here!')).'
+				</a>
+			</body></html>';
+			die;
 		}
 	}
+}
 
 include(PS_ADMIN_DIR.'/footer.inc.php');

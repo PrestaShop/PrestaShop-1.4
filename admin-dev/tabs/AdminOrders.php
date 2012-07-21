@@ -498,21 +498,13 @@ class AdminOrders extends AdminTab
 
 		// display bar code if module enabled
 		$hook = Module::hookExec('invoice', array('id_order' => $order->id));
-		if ($hook !== false)
-		{
-			echo '<div style="float: right; margin: -40px 40px 10px 0;">';
-			echo $hook;
-			echo '</div><br class="clear" />';
-		}
+		if (!empty($hook))
+			echo '<div style="float: right; margin: -40px 40px 10px 0;">'.$hook.'</div><br class="clear" />';
 
 		// display order header
 		echo '
-		<div style="float:left" style="width:440px">';
-		echo '<h2>
-				'.$prevOrder.'
-				'.(Validate::isLoadedObject($customer) ? Tools::safeOutput($customer->firstname.' '.$customer->lastname).' - ' : '').$this->l('Order #').sprintf('%06d', (int)$order->id).'
-				'.$nextOrder.'
-			</h2>
+		<h2>'.$prevOrder.' '.(Validate::isLoadedObject($customer) ? Tools::safeOutput($customer->firstname.' '.$customer->lastname).' - ' : '').$this->l('Order #').sprintf('%06d', (int)$order->id).' '.$nextOrder.'</h2>
+		<div style="float:left" style="width:440px">
 			<div style="width:429px">
 				'.((($currentState->invoice || $order->invoice_number) && count($products))
 					? '<a href="pdf.php?id_order='.$order->id.'&pdf"><img src="../img/admin/charged_ok.gif" alt="'.$this->l('View invoice').'" /> '.$this->l('View invoice').'</a>'

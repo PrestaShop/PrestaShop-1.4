@@ -157,15 +157,12 @@ class SearchCore
 	public static function find($id_lang, $expr, $pageNumber = 1, $pageSize = 1, $orderBy = 'position', $orderWay = 'desc', $ajax = false, $useCookie = true)
 	{
 		global $cookie;
+
 		$db = Db::getInstance(_PS_USE_SQL_SLAVE_);
 
 		// Only use cookie if id_customer is not present
-		if ($useCookie)
-			$id_customer = (int)$cookie->id_customer;
-		else
-			$id_customer = 0;
+		$id_customer = $useCookie ? (int)$cookie->id_customer : 0;
 
-		// TODO : smart page management
 		if ($pageNumber < 1) $pageNumber = 1;
 		if ($pageSize < 1) $pageSize = 1;
 
@@ -251,8 +248,7 @@ class SearchCore
 		if ($ajax)
 		{
 			return $db->ExecuteS('
-			SELECT DISTINCT p.id_product, pl.name pname, cl.name cname,
-				cl.link_rewrite crewrite, pl.link_rewrite prewrite '.$score.'
+			SELECT DISTINCT p.id_product, pl.name pname, cl.name cname, cl.link_rewrite crewrite, pl.link_rewrite prewrite '.$score.'
 			FROM '._DB_PREFIX_.'product p
 			INNER JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)$id_lang.')
 			INNER JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.(int)$id_lang.')

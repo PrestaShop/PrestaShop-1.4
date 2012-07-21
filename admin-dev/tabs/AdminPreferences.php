@@ -140,7 +140,7 @@ class AdminPreferences extends AdminTab
 			$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
 			return;
 		}
-		/* PrestaShop demo mode*/
+
 		if (Tools::getValue('PS_ATTACHMENT_MAXIMUM_SIZE') OR Tools::getValue('PS_LIMIT_UPLOAD_FILE_VALUE') OR Tools::getValue('PS_LIMIT_UPLOAD_IMAGE_VALUE'))
 		{
 			$uploadMaxSize = (int)str_replace('M', '',ini_get('upload_max_filesize'));

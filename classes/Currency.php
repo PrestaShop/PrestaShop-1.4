@@ -41,7 +41,7 @@ class CurrencyCore extends ObjectModel
 	/** @var string Symbol for short display */
 	public 		$sign;
 
-	/** @var int bool used for displaying blank between sign and price */
+	/** @var bool used for displaying blank between sign and price */
 	public		$blank;
 
 	/** @var string Conversion rate from euros */
@@ -53,10 +53,10 @@ class CurrencyCore extends ObjectModel
 	/** @var int ID used for displaying prices */
 	public		$format;
 
-	/** @var int bool Display decimals on prices */
+	/** @var bool Display decimals on prices */
 	public		$decimals;
 
-	/** @var int bool active */
+	/** @var bool active */
 	public		$active;
 
  	protected 	$fieldsRequired = array('name', 'iso_code', 'sign', 'conversion_rate', 'format', 'decimals');
