@@ -116,7 +116,7 @@ if ($lm->getIncludeTradFilename())
 	<meta name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE" />
 	<title><?php echo sprintf(lang('PrestaShop %s Installer'), INSTALL_VERSION); ?></title>
 	<link rel="stylesheet" type="text/css" media="all" href="view.css"/>
-	<script type="text/javascript" src="<?php echo PS_BASE_URI ?>js/jquery/jquery-1.4.4.min.js"></script>
+	<script type="text/javascript" src="<?php echo PS_BASE_URI ?>js/jquery/jquery.min.js"></script>
 	<script type="text/javascript" src="<?php echo PS_BASE_URI ?>js/jquery/ajaxfileupload.js"></script>
 	<script type="text/javascript" src="<?php echo PS_BASE_URI ?>js/jquery/jquery.pngFix.pack.js"></script>
 	<link rel="shortcut icon" href="<?php echo PS_BASE_URI ?>img/favicon.ico" />

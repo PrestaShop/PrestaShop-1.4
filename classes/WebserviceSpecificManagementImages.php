@@ -881,7 +881,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 	/**
 	 * Write the posted image on disk
 	 * 
-	 * @param string $sreceptionPath
+	 * @param string $receptionPath
 	 * @param int $destWidth
 	 * @param int $destHeight
 	 * @param array $imageTypes
@@ -927,9 +927,8 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 					throw new WebserviceException('Error while copying image to the temporary directory', array(75, 400));
 				// Try to copy image file to the image directory
 				else
-				{
 					$result = $this->writeImageOnDisk($tmpName, $receptionPath, $destWidth, $destHeight, $imageTypes, $parentPath);
-				}
+
 				@unlink($tmpName);
 				return $result;
 			}
@@ -981,7 +980,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 						else
 						{
 							$imagesTypes = ImageType::getImagesTypes('products');
-							foreach ($imagesTypes AS $imageType)
+							foreach ($imagesTypes as $imageType)
 								if (!imageResize($tmpName, _PS_PROD_IMG_DIR_.$image->getExistingImgPath().'-'.stripslashes($imageType['name']).'.'.$image->image_format, $imageType['width'], $imageType['height'], $image->image_format))
 									$this->_errors[] = Tools::displayError('An error occurred while copying image:').' '.stripslashes($imageType['name']);
 						}
@@ -993,12 +992,19 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 							die;
 						}
 					}
-					elseif (isset($this->wsObject->urlSegment[1]) && in_array($this->wsObject->urlSegment[1], array('categories', 'manufacturers', 'suppliers', 'stores')))
+					elseif (isset($this->wsObject->urlSegment[1]) && in_array($this->wsObject->urlSegment[1], array('categories', 'manufacturers', 'suppliers', 'stores')) && isset($this->wsObject->urlSegment[2]))
 					{
 						if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($file['tmp_name'], $tmpName))
 							throw new WebserviceException('An error occurred during the image upload', array(76, 400));
 						elseif (!imageResize($tmpName, $receptionPath))
 							throw new WebserviceException('An error occurred while copying image', array(76, 400));
+						else
+						{			
+							$imagesTypes = ImageType::getImagesTypes('categories');
+							foreach ($imagesTypes as $imageType)
+								if (!imageResize($tmpName, _PS_CAT_IMG_DIR_.(int)$this->wsObject->urlSegment[2].'-'.stripslashes($imageType['name']).'.jpg', (int)$imageType['width'], (int)$imageType['height']))
+									$this->_errors[] = Tools::displayError('An error occurred while copying image:').' '.stripslashes($imageType['name']);
+						}
 						@unlink(_PS_TMP_IMG_DIR_.$tmpName);
 						$this->imgToDisplay = $receptionPath;
 					}

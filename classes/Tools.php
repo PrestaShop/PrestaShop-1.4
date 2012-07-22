@@ -28,8 +28,8 @@
 class ToolsCore
 {
 	protected static $file_exists_cache = array();
-	protected static $_forceCompile;
-	protected static $_caching;
+	protected static $_forceCompile = null;
+	protected static $_caching = null;
 
 	/**
 	* Random password generator
@@ -1792,6 +1792,7 @@ class ToolsCore
 
 		$tab['RewriteRule']['content']['^c/([0-9]+)(\-[_a-zA-Z0-9-]*)/[_a-zA-Z0-9-]*\.jpg$'] = 'img/c/$1$2.jpg [L]';
 		$tab['RewriteRule']['content']['^c/([a-zA-Z-]+)/[a-zA-Z0-9-]+\.jpg$'] = 'img/c/$1.jpg [L]';
+		$tab['RewriteRule']['content']['^c/([0-9]+)/[a-zA-Z0-9-]+\.jpg$'] = 'img/c/$1.jpg [L]';
 
 		if ($multilang)
 		{
@@ -1992,14 +1993,16 @@ FileETag INode MTime Size
 	{
 		global $smarty;
 
-		if (!Configuration::get('PS_SMARTY_CACHE'))
+		if (!Configuration::get('PS_SMARTY_CACHE') || ($smarty->force_compile == 0 && $smarty->caching == $level))
 			return;
-		if ($smarty->force_compile == 0 AND $smarty->caching == $level)
-			return ;
-		self::$_forceCompile = (int)($smarty->force_compile);
-		self::$_caching = (int)($smarty->caching);
+
+		/* Backup current values */
+		self::$_forceCompile = (int)$smarty->force_compile;
+		self::$_caching = (int)$smarty->caching;
+		
+		/* Forcing Smarty to use the cache */
 		$smarty->force_compile = 0;
-		$smarty->caching = (int)($level);
+		$smarty->caching = (int)$level;
 	}
 
 	public static function restoreCacheSettings()
@@ -2007,9 +2010,9 @@ FileETag INode MTime Size
 		global $smarty;
 
 		if (isset(self::$_forceCompile))
-			$smarty->force_compile = (int)(self::$_forceCompile);
+			$smarty->force_compile = (int)self::$_forceCompile;
 		if (isset(self::$_caching))
-			$smarty->caching = (int)(self::$_caching);
+			$smarty->caching = (int)self::$_caching;
 	}
 
 	public static function isCallable($function)

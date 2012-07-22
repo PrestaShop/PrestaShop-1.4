@@ -31,13 +31,10 @@ include_once(dirname(__FILE__).'/../../../init.php');
 include_once(_PS_MODULE_DIR_.'paypal/paypal.php');
 
 if (_PS_VERSION_ < '1.5')
-{
 	require_once(_PS_ROOT_DIR_ . '/controllers/OrderConfirmationController.php');
-}
 
 class PayPalIntegralEvolutionSubmit extends OrderConfirmationControllerCore
 {
-
 	public function __construct()
 	{
 		$this->paypal = new PayPal();
@@ -48,10 +45,10 @@ class PayPalIntegralEvolutionSubmit extends OrderConfirmationControllerCore
 
 	public function getPayPalOrder($id_order)
 	{
-		$query = 'SELECT * FROM `'._DB_PREFIX_.'paypal_order`
-			WHERE `id_order` = '.(int)$id_order;
-
-		return Db::getInstance()->getRow($query);
+		return Db::getInstance()->getRow('
+		SELECT *
+		FROM `'._DB_PREFIX_.'paypal_order`
+		WHERE `id_order` = '.(int)$id_order);
 	}
 
 	public function displayContent()
@@ -71,15 +68,12 @@ class PayPalIntegralEvolutionSubmit extends OrderConfirmationControllerCore
 
 		echo $this->paypal->fetchTemplate('/views/templates/front/', 'order-confirmation');
 	}
-
 }
 
 if (Tools::getValue('id_module') && Tools::getValue('key') && Tools::getValue('id_cart') && Tools::getValue('id_order'))
 {
 	if (_PS_VERSION_ < '1.5')
-	{
 		new PayPalIntegralEvolutionSubmit();
-	}
 }
 else if ($id_cart = Tools::getValue('id_cart'))
 {
@@ -89,19 +83,13 @@ else if ($id_cart = Tools::getValue('id_cart'))
 	$id_order = Order::getOrderByCartId((int)$id_cart);
 
 	// Redirection
-	$array = array(
-		'key' => $customer->secure_key,
-		'id_module' => (int)$paypal->id,
-		'id_cart' => (int)$id_cart,
-		'id_order' => (int)$id_order
-	);
+	$array = array('key' => $customer->secure_key, 'id_module' => (int)$paypal->id, 'id_cart' => (int)$id_cart,
+	'id_order' => (int)$id_order);
 
 	$query = http_build_query($array, '', '&');
 
 	if (_PS_VERSION_ < '1.5')
-	{
 		Tools::redirectLink(__PS_BASE_URI__ . '/modules/paypal/integral_evolution/submit.php?' . $query);
-	}
 	else
 	{
 		$controller = new FrontController();
@@ -110,8 +98,6 @@ else if ($id_cart = Tools::getValue('id_cart'))
 	}
 }
 else
-{
 	Tools::redirectLink(__PS_BASE_URI__);
-}
 
 die();

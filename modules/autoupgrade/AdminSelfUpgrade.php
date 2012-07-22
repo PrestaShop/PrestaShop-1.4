@@ -2962,13 +2962,11 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 
 	public function display()
 	{
-		// We need jquery 1.6 for json 
-		// do we ?
 		echo '<script type="text/javascript">
 		if (jQuery == "undefined")
 			jq13 = jQuery.noConflict(true);
 			</script>
-		<script type="text/javascript" src="'.__PS_BASE_URI__.'modules/autoupgrade/jquery-1.6.2.min.js"></script>';
+		<script type="text/javascript" src="'._PS_JS_DIR_.'jquery/jquery.min.js"></script>';
 		$this->createCustomToken();
 		/* PrestaShop demo mode */
 		if (defined('_PS_MODE_DEMO_') && _PS_MODE_DEMO_)

@@ -26,10 +26,6 @@
 
 <link href="{$new_base_dir}css/style.css" rel="stylesheet" type="text/css" media="all" />
 
-{if $MR_overload_current_jquery}
-	{include file="$MR_local_path/tpl/jquery-overload.tpl"}
-{/if}
-
 <script type="text/javascript">
 	var PS_MR_ACCOUNT_SET = {if $MR_account_set}true{else}false{/if};
 	var _PS_MR_MODULE_DIR_ = "{$new_base_dir}";
@@ -37,6 +33,3 @@
 </script>
 
 <script type="text/javascript" src="{$new_base_dir}js/mondialrelay.js"></script>
-
-
-

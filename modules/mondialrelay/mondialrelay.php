@@ -341,26 +341,21 @@ class MondialRelay extends Module
 			return;
 		
 		DB::getInstance()->execute('
-			UPDATE `'._DB_PREFIX_.'mr_selected`
-			SET `id_order` = '.(int)$params['order']->id.'
-			WHERE `id_cart` = '.(int)$params['cart']->id);
+		UPDATE `'._DB_PREFIX_.'mr_selected`
+		SET `id_order` = '.(int)$params['order']->id.'
+		WHERE `id_cart` = '.(int)$params['cart']->id);
 	}
 
 	public function hookBackOfficeHeader()
 	{
-		$overload_current_jquery = false;
-		if (Tools::getValue('tab') == 'AdminMondialRelay')
-			$overload_current_jquery = true;
+		if (Tools::getValue('tab') == 'AdminMondialRelay' || Tools::getValue('module_name') == 'mondialrelay')
+		{
+			$this->context->smarty->assign(array(
+			'MR_token' => MondialRelay::$MRBackToken, 'MR_local_path' => MondialRelay::$modulePath,
+			'MR_account_set' => MondialRelay::isAccountSet(), 'new_base_dir' => MondialRelay::$moduleURL));
 
-		$this->context->smarty->assign(array(
-			'MR_token' => MondialRelay::$MRBackToken,
-			'MR_jQuery_overload_type' => true,
-			'new_base_dir' => MondialRelay::$moduleURL,
-			'MR_local_path' => MondialRelay::$modulePath,
-			'MR_overload_current_jquery' => $overload_current_jquery,
-			'MR_account_set' => MondialRelay::isAccountSet()
-		));
-		return $this->fetchTemplate('/tpl/', 'bo-header');
+			return $this->fetchTemplate('/tpl/', 'bo-header');
+		}
 	}
 
 	public function hookOrderDetail($params)
@@ -508,8 +503,7 @@ class MondialRelay extends Module
 					'one_page_checkout' => (Configuration::get('PS_ORDER_PROCESS_TYPE') ? Configuration::get('PS_ORDER_PROCESS_TYPE') : 0),
 					'new_base_dir' => MondialRelay::$moduleURL,
 					'MR_local_path' => MondialRelay::$modulePath,
-					'MRToken' => MondialRelay::$MRFrontToken,
-					'MR_overload_current_jquery' => false)
+					'MRToken' => MondialRelay::$MRFrontToken)
 			);
 			return $this->fetchTemplate('/tpl/', 'header');
 		}

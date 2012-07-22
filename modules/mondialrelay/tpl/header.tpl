@@ -24,8 +24,6 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-{include file="$MR_local_path/tpl/jquery-overload.tpl"}
-
 <link href="{$new_base_dir}css/style.css" rel="stylesheet" type="text/css" media="all" />
 <script type="text/javascript">
 	// Global JS Value

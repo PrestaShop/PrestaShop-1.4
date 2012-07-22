@@ -59,7 +59,7 @@ abstract class PayPalAbstract extends PaymentModule
 
 		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('PayPal');
-		$this->description = $this->l('Accepts payments by credit cards (CB, Visa, MasterCard, Amex, Aurore, Cofinoga, 4 stars) with PayPal.');
+		$this->description = $this->l('Accepts payments by credit cards (Visa, MasterCard, Amex...etc.) with PayPal.');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details?');
 
         // Default methods (initialization & checks)
@@ -379,7 +379,8 @@ abstract class PayPalAbstract extends PaymentModule
 			array(
 				'PayPal_payment_type'     => 'product',
 				'PayPal_lang_code'        => $current_lang_code,
-				'PayPal_current_shop_url' => $shop_url . $_SERVER['REQUEST_URI']
+				'PayPal_current_shop_url' => $shop_url . $_SERVER['REQUEST_URI'],
+				'PayPal_tracking_code'    => TRACKING_CODE
 			)
 		);
 
@@ -710,7 +711,9 @@ abstract class PayPalAbstract extends PaymentModule
         {
             $this->getContext()->smarty->assign(
                 array(
-                    'PayPal_module_dir' => _MODULE_DIR_ . $this->name,
+					'css_dir' => _PS_CSS_DIR_,
+					'js_dir' => _PS_JS_DIR_,
+                    'pp_module_dir' => _MODULE_DIR_.$this->name,
                     'PayPal_WPS' => (int)WPS,
                     'PayPal_HSS' => (int)HSS,
                     'PayPal_ECS' => (int)ECS

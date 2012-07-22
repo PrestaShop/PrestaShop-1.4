@@ -1751,6 +1751,7 @@ class Tools14
 
 		$tab['RewriteRule']['content']['^c/([0-9]+)(\-[_a-zA-Z0-9-]*)/[_a-zA-Z0-9-]*\.jpg$'] = 'img/c/$1$2.jpg [L]';
 		$tab['RewriteRule']['content']['^c/([a-zA-Z-]+)/[a-zA-Z0-9-]+\.jpg$'] = 'img/c/$1.jpg [L]';
+		$tab['RewriteRule']['content']['^c/([0-9]+)/[a-zA-Z0-9-]+\.jpg$'] = 'img/c/$1.jpg [L]';
 
 		if ($multilang)
 		{

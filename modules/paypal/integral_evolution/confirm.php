@@ -26,42 +26,15 @@
 */
 
 include_once(dirname(__FILE__).'/../../../config/config.inc.php');
-include_once(dirname(__FILE__).'/../../../init.php');
 
-include_once(_PS_MODULE_DIR_.'paypal/paypal.php');
-
-class PayPalConfirm extends PayPal
+$id_cart = Tools::getValue('id_cart');
+if ($id_cart && $id_order = (int)Order::getOrderByCartId($id_cart))
 {
-
-	public function __construct()
-	{
-		parent::__construct();
-
-		$this->customer_id = $this->context->customer->id;
-
-		if ($id_cart = Tools::getValue('id_cart'))
-		{
-			$this->getCount($id_cart);
-		}
-
-		die(0);
-	}
-
-	public function getCount($id_cart)
-	{
-		$id_order = (int)Order::getOrderByCartId($id_cart);
-
-		$query = 'SELECT * FROM `'._DB_PREFIX_.'paypal_order`
-			WHERE `id_order` = '.(int)$id_order;
-
-		$row = Db::getInstance()->getRow($query);
-
-		if ($row != false)
-			echo $row['id_order'];
-
-		die();
-	}
-
+	if (Db::getInstance()->getValue('
+	SELECT COUNT(*)
+	FROM `'._DB_PREFIX_.'paypal_order`
+	WHERE id_order = '.(int)$id_order))
+		die((string)$id_order);
 }
 
-new PayPalConfirm();
+die('0');

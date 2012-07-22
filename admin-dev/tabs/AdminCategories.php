@@ -182,7 +182,7 @@ class AdminCategories extends AdminTab
 		if (($id_category = (int)(Tools::getValue('id_category'))) AND isset($_FILES) AND sizeof($_FILES) AND $_FILES['image']['name'] != NULL AND file_exists(_PS_CAT_IMG_DIR_.$id_category.'.jpg'))
 		{
 			$imagesTypes = ImageType::getImagesTypes('categories');
-			foreach ($imagesTypes AS $k => $imageType)
+			foreach ($imagesTypes as $k => $imageType)
 				imageResize(_PS_CAT_IMG_DIR_.$id_category.'.jpg', _PS_CAT_IMG_DIR_.$id_category.'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height']));
 		}
 		return $ret;

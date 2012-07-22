@@ -422,7 +422,7 @@ var PS_MRObject = (function($, undifened) {
 
 		// Ajax call to add the selection in the database (compatibility for 1.3)
 		// But keep this way to add a selection better that the hook
-		MRjQuery.ajax({
+		$.ajax({
 			type: 'POST',
 			url: _PS_MR_MODULE_DIR_ + 'ajax.php',
 			data: {'method' : 'addSelectedCarrierToDB',
@@ -649,12 +649,12 @@ var PS_MRObject = (function($, undifened) {
 		blockTR.after(' \
 		<tr class="PS_MRSelectedCarrier" id="PS_MRSelectedCarrier_' + carrier_id + '"> \
 			<td colspan="4"><div> \
-				<img src="' + _PS_MR_MODULE_DIR_ + 'images/loader.gif" /> \
+				<img src="' + _PS_MR_MODULE_DIR_ + 'images/loader.gif" alt="" /> \
 			</div> \
 		</td></tr>');
 
 		fetchingRelayPoint[carrier_id] = $('#PS_MRSelectedCarrier_' + carrier_id);
-		MRjQuery.ajax(
+		$.ajax(
 			{
 				type: 'POST',
 				url: _PS_MR_MODULE_DIR_ + 'ajax.php',

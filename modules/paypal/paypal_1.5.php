@@ -26,34 +26,25 @@
 */
 
 if (!defined('_PS_VERSION_'))
-{
 	exit;
-}
 
 class PayPal extends PayPalAbstract
 {
-
 	public function validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod = 'Unknown', $message = null, $transaction = array(), $currency_special = null, $dont_touch_amount = false, $secure_key = false, Shop $shop = null)
 	{
 		if ($shop != null)
-		{
 			$shop = new Shop($shop->id);
-		}
 
 		if ($this->active)
 		{
 			// Set transaction details if pcc is defined in PaymentModule class_exists
 			if (isset($this->pcc))
-			{
 				$this->pcc->transaction_id = (isset($transaction['transaction_id']) ? $transaction['transaction_id'] : '');
-			}
+
 			parent::validateOrder($id_cart, $id_order_state, $amountPaid, $paymentMethod, $message, $transaction, $currency_special, $dont_touch_amount, $secure_key, $shop);
 
-			$id_order = (int)$this->currentOrder;
 			if (count($transaction) > 0)
-			{
-				$this->_saveTransaction($id_order, $transaction);
-			}
+				$this->_saveTransaction((int)$this->currentOrder, $transaction);
 		}
 	}
 
