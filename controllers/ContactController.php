@@ -69,8 +69,9 @@ class ContactControllerCore extends FrontController
 
 		if (Tools::isSubmit('submitMessage'))
 		{
-			$fileAttachment = NULL;
-			if (isset($_FILES['fileUpload']['name']) AND !empty($_FILES['fileUpload']['name']) AND !empty($_FILES['fileUpload']['tmp_name']))
+			$fileAttachment = null;
+			if (Configuration::get('PS_CUSTOMER_SERVICE_FILE_UPLOAD') && isset($_FILES['fileUpload']['name']) &&
+				!empty($_FILES['fileUpload']['name']) && !empty($_FILES['fileUpload']['tmp_name']))
 			{
 				$extension = array('.txt', '.rtf', '.doc', '.docx', '.pdf', '.zip', '.png', '.jpeg', '.gif', '.jpg');
 				$filename = uniqid().substr($_FILES['fileUpload']['name'], -5);
