@@ -43,7 +43,6 @@ $smarty->force_compile = (bool)Configuration::get('PS_SMARTY_FORCE_COMPILE');
 $smarty->compile_check = false;
 $smarty->debugging = false; 
 $smarty->debugging_ctrl = 'URL'; // 'NONE' on production
-$smarty->deprecation_notices = false; // so many depreciated yet not migrated smarty calls
 
 if (Configuration::get('PS_FORCE_SMARTY_2')) 
 {	
@@ -100,10 +99,8 @@ function smartyTranslate($params, &$smarty)
 	if (Configuration::get('PS_FORCE_SMARTY_2')) /* Keep a backward compatibility for Smarty v2 */
 		$key = $smarty->currentTemplate.'_'.md5($string);
 	else
-	{
-		$filename = ((!isset($smarty->compiler_object) OR !is_object($smarty->compiler_object->template)) ? $smarty->template_filepath : $smarty->compiler_object->template->getTemplateFilepath());
-		$key = Tools::substr(basename($filename), 0, -4).'_'.md5($string);
-	}
+		$key = Tools::substr(basename($smarty->template_resource), 0, -4).'_'.md5($string);
+
 	$lang_array = $_LANG;
 	if ($params['mod'])
 	{
