@@ -220,7 +220,6 @@ abstract class PaymentModuleCore extends Module
 						$ratio = $price / $order->total_products;
 						$order_reduction_amount = ((float)abs($cart->getOrderTotal(false, Cart::ONLY_DISCOUNTS))) * $ratio;
 						$tmp_price = $price - $order_reduction_amount;
-					
 
 						foreach ($allTaxes as $res)
 						{
@@ -232,7 +231,7 @@ abstract class PaymentModuleCore extends Module
 
 							$store_all_taxes[$res->id]['name'] = $res->name[(int)$order->id_lang];
 							$store_all_taxes[$res->id]['rate'] = $res->rate;
-							
+
 							$unit_tax_amount = $tmp_price * ($res->rate * 0.01);
 							$tmp_price = $tmp_price + $unit_tax_amount;
 							$store_all_taxes[$res->id]['amount'] += $unit_tax_amount * $product['cart_quantity'];
@@ -367,7 +366,7 @@ abstract class PaymentModuleCore extends Module
 				/* Store taxes */
 				foreach ($store_all_taxes as $t)
 					Db::getInstance()->Execute('
-					INSERT INTO '._DB_PREFIX_.'order_tax (id_order, tax_name, tax_rate, amount)
+					INSERT INTO `'._DB_PREFIX_.'order_tax` (`id_order`, `tax_name`, `tax_rate`, `amount`)
 					VALUES ('.(int)$order->id.', \''.pSQL($t['name']).'\', '.(float)($t['rate']).', '.(float)$t['amount'].')');
 
 				// Insert discounts from cart into order_discount table

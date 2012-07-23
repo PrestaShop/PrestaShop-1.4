@@ -540,7 +540,7 @@ if ($lm->getIncludeTradFilename())
 				<p id="dbModeSetter" style="line-height: 20px; padding-bottom: 0;">
 					<input value="lite" type="radio" name="db_mode" id="db_mode_simple" style="vertical-align: middle;" /> <label for="db_mode_simple"><?php echo lang('Lite mode: Basic installation')?> <span><?php echo lang('(FREE)'); ?></span></label><br />
 					<span style="font-style: italic;"><?php echo lang('- or -'); ?></span><br />
-					<input value="full" type="radio" name="db_mode" checked="checked" id="db_mode_complet" style="vertical-align: middle;" /> <label for="db_mode_complet"><?php echo lang('Full mode: includes core modules,').' <b>'.lang('100+ additional modules').'</b> '.lang('and demo products'); ?> <span><?php echo lang('(FREE)'); ?></span></label>
+					<input value="full" type="radio" name="db_mode" checked="checked" id="db_mode_complet" style="vertical-align: middle;" /> <label for="db_mode_complet"><?php echo lang('Full mode: includes core modules,').' <b>'.lang('100+ additional modules').'</b> '.lang('and demo products, orders and customers'); ?> <span><?php echo lang('(FREE)'); ?></span></label>
 				</p>
 				</form>
 				<p id="dbCreateResultCheck"></p>
