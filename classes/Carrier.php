@@ -140,6 +140,7 @@ class CarrierCore extends ObjectModel
 		parent::__construct($id, $id_lang);
 		if ($this->name == '0')
 			$this->name = Configuration::get('PS_SHOP_NAME');
+		$this->image_dir = _PS_SHIP_IMG_DIR_;
 	}
 
 	/**
@@ -256,11 +257,11 @@ class CarrierCore extends ObjectModel
 			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT d.`price`
 			FROM `'._DB_PREFIX_.'delivery` d
-			LEFT JOIN `'._DB_PREFIX_.'range_price` r ON d.`id_range_price` = r.`id_range_price`
+			LEFT JOIN `'._DB_PREFIX_.'range_price` r ON (d.`id_range_price` = r.`id_range_price`)
 			WHERE d.`id_zone` = '.(int)($id_zone).'
-			AND '.(float)($orderTotal).' >= r.`delimiter1`
-			AND '.(float)($orderTotal).' < r.`delimiter2`
-			AND d.`id_carrier` = '.(int)($this->id).'
+			AND '.(float)$orderTotal.' >= r.`delimiter1`
+			AND '.(float)$orderTotal.' < r.`delimiter2`
+			AND d.`id_carrier` = '.(int)$this->id.'
 			ORDER BY r.`delimiter1` ASC');
 			if (!isset($result['price']))
 				self::$priceByPrice[$cache_key] = $this->getMaxDeliveryPriceByPrice($id_zone);
@@ -290,13 +291,13 @@ class CarrierCore extends ObjectModel
 			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 			SELECT d.`price`
 			FROM `'._DB_PREFIX_.'delivery` d
-			LEFT JOIN `'._DB_PREFIX_.'range_price` r ON d.`id_range_price` = r.`id_range_price`
-			WHERE d.`id_zone` = '.(int)($id_zone).'
-			AND '.(float)($orderTotal).' >= r.`delimiter1`
-			AND '.(float)($orderTotal).' < r.`delimiter2`
-			AND d.`id_carrier` = '.(int)($id_carrier).'
+			LEFT JOIN `'._DB_PREFIX_.'range_price` r ON (d.`id_range_price` = r.`id_range_price`)
+			WHERE d.`id_zone` = '.(int)$id_zone.'
+			AND '.(float)$orderTotal.' >= r.`delimiter1`
+			AND '.(float)$orderTotal.' < r.`delimiter2`
+			AND d.`id_carrier` = '.(int)$id_carrier.'
 			ORDER BY r.`delimiter1` ASC');
-			self::$priceByPrice2[$cache_key] = (isset($result['price']));
+			self::$priceByPrice2[$cache_key] = isset($result['price']);
 		}
 		return self::$priceByPrice2[$cache_key];
 	}
@@ -306,9 +307,8 @@ class CarrierCore extends ObjectModel
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT d.`price`
 		FROM `'._DB_PREFIX_.'delivery` d
-		INNER JOIN `'._DB_PREFIX_.'range_price` r ON d.`id_range_price` = r.`id_range_price`
-		WHERE d.`id_zone` = '.(int)($id_zone).'
-		AND d.`id_carrier` = '.(int)($this->id).'
+		INNER JOIN `'._DB_PREFIX_.'range_price` r ON (d.`id_range_price` = r.`id_range_price`)
+		WHERE d.`id_zone` = '.(int)$id_zone.' AND d.`id_carrier` = '.(int)$this->id.'
 		ORDER BY r.`delimiter2` DESC LIMIT 1');
 		if (!isset($result[0]['price']))
 			return false;
@@ -327,8 +327,8 @@ class CarrierCore extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT d.`id_'.$rangeTable.'`, d.`id_carrier`, d.`id_zone`, d.`price`
 		FROM `'._DB_PREFIX_.'delivery` d
-		LEFT JOIN `'._DB_PREFIX_.$rangeTable.'` r ON r.`id_'.$rangeTable.'` = d.`id_'.$rangeTable.'`
-		WHERE (d.`id_'.$rangeTable.'` IS NOT NULL AND d.`id_'.$rangeTable.'` != 0 AND d.`id_carrier` = '.(int)($id_carrier).')
+		LEFT JOIN `'._DB_PREFIX_.$rangeTable.'` r ON (r.`id_'.$rangeTable.'` = d.`id_'.$rangeTable.'`)
+		WHERE (d.`id_'.$rangeTable.'` IS NOT NULL AND d.`id_'.$rangeTable.'` != 0 AND d.`id_carrier` = '.(int)$id_carrier.')
 		ORDER BY r.`delimiter1` ASC');
 	}
 
@@ -661,8 +661,8 @@ class CarrierCore extends ObjectModel
 
 			$res2 = Db::getInstance()->ExecuteS('
 			SELECT * FROM `'._DB_PREFIX_.'delivery`
-			WHERE id_carrier = '.(int)($oldId).'
-			AND id_range_price = '.(int)($val['id_range_price']));
+			WHERE id_carrier = '.(int)$oldId.'
+			AND id_range_price = '.(int)$val['id_range_price']);
 
 			if (count($res2))
 			{
@@ -727,10 +727,9 @@ class CarrierCore extends ObjectModel
 	public function isUsed()
 	{
 		return (int)Db::getInstance()->getValue('
-			SELECT COUNT(`id_carrier`) AS total
-			FROM `'._DB_PREFIX__.'orders`
-			WHERE `id_carrier` = '.(int)$this->id.'
-		');
+		SELECT COUNT(`id_carrier`)
+		FROM `'._DB_PREFIX__.'orders`
+		WHERE `id_carrier` = '.(int)$this->id);
 	}
 
 

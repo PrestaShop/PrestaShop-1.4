@@ -267,15 +267,17 @@ class ProductControllerCore extends FrontController
 
 				/* Attributes / Groups & colors */
 				$colors = array();
-				$attributesGroups = $this->product->getAttributesGroups((int)(self::$cookie->id_lang));  // @todo (RM) should only get groups and not all declination ?
+				$attributesGroups = $this->product->getAttributesGroups((int)self::$cookie->id_lang);  // @todo (RM) should only get groups and not all declination ?
 				if (is_array($attributesGroups) AND $attributesGroups)
 				{
 					$groups = array();
-					$combinationImages = $this->product->getCombinationImages((int)(self::$cookie->id_lang));
-					foreach ($attributesGroups AS $k => $row)
+					$combinationImages = $this->product->getCombinationImages((int)self::$cookie->id_lang);
+					foreach ($attributesGroups as $k => $row)
 					{
+						if (!Product::isAvailableWhenOutOfStock($this->product->out_of_stock) && Configuration::get('PS_DISP_UNAVAILABLE_ATTR') == 0 && !$row['quantity'])
+							continue;
 						/* Color management */
-						if (((isset($row['attribute_color']) AND $row['attribute_color']) OR (file_exists(_PS_COL_IMG_DIR_.$row['id_attribute'].'.jpg'))) AND $row['id_attribute_group'] == $this->product->id_color_default)
+						if (((isset($row['attribute_color']) && $row['attribute_color']) || (file_exists(_PS_COL_IMG_DIR_.$row['id_attribute'].'.jpg'))) && $row['id_attribute_group'] == $this->product->id_color_default)
 						{
 							$colors[$row['id_attribute']]['value'] = $row['attribute_color'];
 							$colors[$row['id_attribute']]['name'] = $row['attribute_name'];
@@ -285,13 +287,7 @@ class ProductControllerCore extends FrontController
 						}
 
 						if (!isset($groups[$row['id_attribute_group']]))
-						{
-							$groups[$row['id_attribute_group']] = array(
-								'name' =>			$row['public_group_name'],
-								'is_color_group' =>	$row['is_color_group'],
-								'default' =>		-1,
-							);
-						}
+							$groups[$row['id_attribute_group']] = array('name' => $row['public_group_name'], 'is_color_group' => $row['is_color_group'], 'default' => -1);
 
 						$groups[$row['id_attribute_group']]['attributes'][$row['id_attribute']] = $row['attribute_name'];
 						if ($row['default_on'] && $groups[$row['id_attribute_group']]['default'] == -1)
@@ -313,27 +309,27 @@ class ProductControllerCore extends FrontController
 						$combinations[$row['id_product_attribute']]['id_image'] = isset($combinationImages[$row['id_product_attribute']][0]['id_image']) ? $combinationImages[$row['id_product_attribute']][0]['id_image'] : -1;
 					}
 
-					//wash attributes list (if some attributes are unavailables and if allowed to wash it)
+					/* Clean the attributes list (if some attributes are unavailable and if allowed to remove them) */
 					if (!Product::isAvailableWhenOutOfStock($this->product->out_of_stock) && Configuration::get('PS_DISP_UNAVAILABLE_ATTR') == 0)
 					{
-						foreach ($groups AS &$group)
-							foreach ($group['attributes_quantity'] AS $key => &$quantity)
+						foreach ($groups as &$group)
+							foreach ($group['attributes_quantity'] as $key => &$quantity)
 								if (!$quantity)
 									unset($group['attributes'][$key]);
 
-						foreach ($colors AS $key => $color)
+						foreach ($colors as $key => $color)
 							if (!$color['attributes_quantity'])
 								unset($colors[$key]);
 					}
 
-					foreach ($groups AS &$group)
+					foreach ($groups as &$group)
 						natcasesort($group['attributes']);
 
-					foreach ($combinations AS $id_product_attribute => $comb)
+					foreach ($combinations as $id_product_attribute => $comb)
 					{
 						$attributeList = '';
-						foreach ($comb['attributes'] AS $id_attribute)
-							$attributeList .= '\''.(int)($id_attribute).'\',';
+						foreach ($comb['attributes'] as $id_attribute)
+							$attributeList .= '\''.(int)$id_attribute.'\',';
 						$attributeList = rtrim($attributeList, ',');
 						$combinations[$id_product_attribute]['list'] = $attributeList;
 					}

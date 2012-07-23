@@ -1218,7 +1218,7 @@ class ToolsCore
 			// No cache
 			if (!$_cache)
 			{
-				$tmz = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT `name` FROM '._DB_PREFIX_.'timezone WHERE id_timezone = '.(int)($select));
+				$tmz = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT `name` FROM '._DB_PREFIX_.'timezone WHERE id_timezone = '.(int)$select);
 				$_cache = $tmz['name'];
 			}
 			return $_cache;
@@ -1446,13 +1446,11 @@ class ToolsCore
 		if (strlen($css_content) > 0)
 		{
 			$css_content = preg_replace('#/\*.*?\*/#s', '', $css_content);
-			$css_content = preg_replace_callback('#url\((?:\'|")?([^\)\'"]*)(?:\'|")?\)#s',array('Tools', 'replaceByAbsoluteURL'), $css_content);
+			$css_content = preg_replace_callback('#url\((?:\'|")?([^\)\'"]*)(?:\'|")?\)#s', array('Tools', 'replaceByAbsoluteURL'), $css_content);
 
 			$css_content = preg_replace('#\s+#',' ',$css_content);
 			$css_content = str_replace("\t", '', $css_content);
 			$css_content = str_replace("\n", '', $css_content);
-			//$css_content = str_replace('}', "}\n", $css_content);
-
 			$css_content = str_replace('; ', ';', $css_content);
 			$css_content = str_replace(': ', ':', $css_content);
 			$css_content = str_replace(' {', '{', $css_content);
@@ -1477,14 +1475,13 @@ class ToolsCore
 
 	public static function replaceByAbsoluteURL($matches)
 	{
-		global $current_css_file;
-
-		$protocol_link = self::getCurrentUrlProtocolPrefix();
-
-		if (array_key_exists(1, $matches))
+		if (isset($matches[1]))
 		{
+			if ($matches[1][0] == '/')
+				return 'url('.$matches[1].')';
+			global $current_css_file;
 			$tmp = dirname($current_css_file).'/'.$matches[1];
-			return 'url(\''.$protocol_link.self::getMediaServer($tmp).$tmp.'\')';
+			return 'url(\''.self::getCurrentUrlProtocolPrefix().self::getMediaServer($tmp).$tmp.'\')';
 		}
 		return false;
 	}

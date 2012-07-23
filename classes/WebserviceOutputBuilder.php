@@ -311,8 +311,8 @@ class WebserviceOutputBuilderCore
 					);
 					$output .= $this->objectRender->renderNodeHeader('schema', array(), $more_attr_schema, false);
 					$more_attr_schema = array(
-						'xlink_resource'	=> $this->wsUrl.$resourceName.'?schema=synopsis',
-						'type'				=> 'synopsis',
+						'xlink_resource' => $this->wsUrl.$resourceName.'?schema=synopsis',
+						'type' => 'synopsis',
 					);
 					$output .= $this->objectRender->renderNodeHeader('schema', array(), $more_attr_schema, false);
 				}

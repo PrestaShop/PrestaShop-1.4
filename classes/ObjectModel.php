@@ -710,9 +710,9 @@ abstract class ObjectModelCore
 		if (file_exists(_PS_TMP_IMG_DIR_.$this->table.'_mini_'.$this->id.'.'.$this->image_format) 
 			&& !unlink(_PS_TMP_IMG_DIR_.$this->table.'_mini_'.$this->id.'.'.$this->image_format))
 			return false;
-			
+
 		$types = ImageType::getImagesTypes();
-		foreach ($types AS $image_type)
+		foreach ($types as $image_type)
 			if (file_exists($this->image_dir.$this->id.'-'.stripslashes($image_type['name']).'.'.$this->image_format) 
 			&& !unlink($this->image_dir.$this->id.'-'.stripslashes($image_type['name']).'.'.$this->image_format))
 				return false;
@@ -722,23 +722,17 @@ abstract class ObjectModelCore
 	/**
 	* Specify if an ObjectModel is already in database
 	*
-	* @param $id_entity entity id
+	* @param $id_entity Entity id
+	* @param $table Object type
 	* @return boolean
 	*/
 	public static function existsInDatabase($id_entity, $table)
 	{
-		
-		if ($table == 'orders')
-			$field = 'order';
-		else
-			$field = $table;
+		$field = $table == 'orders' ? 'order' : $table;
 			
-		$row = Db::getInstance()->getRow('
-		SELECT `id_'.$field.'` as id
-		FROM `'._DB_PREFIX_.$table.'` e
-		WHERE e.`id_'.$field.'` = '.(int)($id_entity));
-
-		return isset($row['id']);
+		return (bool)Db::getInstance()->getValue('
+		SELECT `id_'.pSQL($field).'` id
+		FROM `'._DB_PREFIX_.pSQL($table).'` e
+		WHERE e.`id_'.pSQL($field).'` = '.(int)$id_entity);
 	}
 }
-

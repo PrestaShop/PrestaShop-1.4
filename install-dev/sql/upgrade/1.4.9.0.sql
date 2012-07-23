@@ -10,3 +10,5 @@ UPDATE `PREFIX_country` SET `zip_code_format` = 'NNNNN' WHERE `iso_code` = 'MC' 
 UPDATE `PREFIX_county_zip_code` SET `to_zip_code` = `from_zip_code` WHERE `to_zip_code` = 0;
 
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`)(SELECT 'PS_TAX_DISPLAY_ALL', value, NOW(), NOW() FROM `PREFIX_configuration` WHERE name = 'PS_TAX_DISPLAY' LIMIT 1);
+
+ALTER TABLE `PREFIX_feature_lang` ADD INDEX feature_name (`id_lang`, `name`);

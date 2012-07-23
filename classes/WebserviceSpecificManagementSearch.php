@@ -68,8 +68,15 @@ class WebserviceSpecificManagementSearchCore implements WebserviceSpecificManage
 	}
 	
 	/**
-	 * Management of search
-	 * 
+	 * @brief Management of search
+	 *
+	 * URL Fragments:
+	 * - language: Language ID (required)
+	 * - query: Query (required)
+	 * - limit: Results to return (optional, default = 10)
+	 * Known bug: you cannot set the limit to "1" (it will return 10 results)
+	 *
+	 * @throw WebserviceException uppon error
 	 */
 	public function manage()
 	{
@@ -84,12 +91,13 @@ class WebserviceSpecificManagementSearchCore implements WebserviceSpecificManage
 		
 		if (!$this->wsObject->setFieldsToDisplay())
 			return false;
-		
-		$results = Search::find($this->wsObject->urlFragments['language'], $this->wsObject->urlFragments['query'], 1, 1, 'position', 'desc', true, false);
+
+		$results = Search::find($this->wsObject->urlFragments['language'], $this->wsObject->urlFragments['query'], 1, 
+		isset($this->wsObject->urlFragments['limit']) ? (int)$this->wsObject->urlFragments['limit'] : 1, 'position', 'desc', true, false);
 		$categories = array();
 		foreach ($results AS $result)
 		{
-			$current = new Product($result['id_product']);
+			$current = new Product((int)$result['id_product']);
 			$objects_products[] = $current;
 			$categories_result = $current->getWsCategories();
 			foreach ($categories_result as $category_result)

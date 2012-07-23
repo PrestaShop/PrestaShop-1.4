@@ -591,10 +591,11 @@ class AdminImport extends AdminTab
 			if (Tools::getValue('convert'))
 				$line = $this->utf8_encode_array($line);
 			$info = self::getMaskedRow($line);
-			if (array_key_exists('id', $info) AND (int)($info['id']) AND Product::existsInDatabase((int)($info['id']), 'product'))
+			if (array_key_exists('id', $info) && (int)$info['id'] && Product::existsInDatabase((int)$info['id'], 'product'))
 			{
-				$product = new Product((int)($info['id']));
-				$categoryData = Product::getProductCategories((int)($product->id));
+				$product = new Product((int)$info['id']);
+
+				$categoryData = Product::getProductCategories((int)$product->id);
 				foreach ($categoryData as $tmp)
 					$product->category[] = $tmp;
 			}
@@ -737,21 +738,24 @@ class AdminImport extends AdminTab
 				// check quantity
 				if ($product->quantity == null)
 					$product->quantity = 0;
-
-				// If match ref is specified AND ref product AND ref product already in base, trying to update
-				if (Tools::getValue('match_ref') == 1 AND $product->reference AND Product::existsRefInDatabase($product->reference))
+				
+				/* If match ref is specified AND ref product AND ref product already in base, trying to update */
+				if (Tools::getValue('match_ref') == 1 && $product->reference &&
+				$datas = Db::getInstance()->getRow('SELECT `date_add`, `id_product` FROM `'._DB_PREFIX_.'product` WHERE `reference` = \''.pSQL($product->reference).'\''))
 				{
-					$datas = Db::getInstance()->getRow('SELECT `date_add`, `id_product` FROM `'._DB_PREFIX_.'product` WHERE `reference` = "'.$product->reference.'"');
 					$product->id = pSQL($datas['id_product']);
 					$product->date_add = pSQL($datas['date_add']);
 					$res = $product->update();
-				} // Else If id product AND id product already in base, trying to update
-				else if ($product->id AND Product::existsInDatabase((int)($product->id), 'product'))
+				}
+				
+				/* Else If id product AND id product already in base, trying to update */
+				elseif ($product->id &&
+				$datas = Db::getInstance()->getRow('SELECT `date_add` FROM `'._DB_PREFIX_.'product` WHERE `id_product` = '.(int)$product->id))
 				{
-					$datas = Db::getInstance()->getRow('SELECT `date_add` FROM `'._DB_PREFIX_.'product` WHERE `id_product` = '.(int)($product->id));
 					$product->date_add = pSQL($datas['date_add']);
 					$res = $product->update();
 				}
+
 				// If no id_product or update failed
 				if (!$res)
 				{

@@ -547,7 +547,7 @@ abstract class AdminTabCore
 		if (isset($_GET['deleteImage']))
 		{
 			if (Validate::isLoadedObject($object = $this->loadObject()))
-				if (($object->deleteImage()))
+				if ($object->deleteImage())
 					Tools::redirectAdmin($currentIndex.'&add'.$this->table.'&'.$this->identifier.'='.Tools::getValue($this->identifier).'&conf=7&token='.$token);
 			$this->_errors[] = Tools::displayError('An error occurred during image deletion (cannot load object).');
 		}

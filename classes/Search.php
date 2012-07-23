@@ -238,7 +238,7 @@ class SearchCore
 		array_unique($eligibleProducts);
 
 		$productPool = '';
-		foreach ($eligibleProducts AS $id_product)
+		foreach ($eligibleProducts as $id_product)
 			if ($id_product)
 				$productPool .= (int)$id_product.',';
 		if (empty($productPool))
@@ -253,7 +253,8 @@ class SearchCore
 			INNER JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)$id_lang.')
 			INNER JOIN `'._DB_PREFIX_.'category_lang` cl ON (p.`id_category_default` = cl.`id_category` AND cl.`id_lang` = '.(int)$id_lang.')
 			WHERE p.`id_product` '.$productPool.'
-			ORDER BY position DESC LIMIT 10');
+			ORDER BY position DESC
+			LIMIT '.($pageSize != 1 ? (int)$pageSize : 10));
 		}
 
 		$queryResults = '

@@ -158,7 +158,6 @@ class OrderDetailCore extends ObjectModel
 		)
 	);
 	
-	
 	public function getFields()
 	{
 		parent::validateFields();
@@ -195,24 +194,22 @@ class OrderDetailCore extends ObjectModel
 
 	public static function getDownloadFromHash($hash)
 	{
-		if ($hash == '') return false;
-		$sql = 'SELECT *
+		if ($hash == '')
+			return false;
+
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+		SELECT *
 		FROM `'._DB_PREFIX_.'order_detail` od
-		LEFT JOIN `'._DB_PREFIX_.'product_download` pd ON (od.`product_id`=pd.`id_product`)
-		WHERE od.`download_hash` = \''.pSQL(strval($hash)).'\'
-		AND pd.`active` = 1';
-		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($sql);
+		LEFT JOIN `'._DB_PREFIX_.'product_download` pd ON (od.`product_id` = pd.`id_product`)
+		WHERE od.`download_hash` = \''.pSQL(strval($hash)).'\' AND pd.`active` = 1');
 	}
 
 	public static function incrementDownload($id_order_detail, $increment=1)
 	{
-		$sql = 'UPDATE `'._DB_PREFIX_.'order_detail`
-			SET `download_nb` = `download_nb` + '.(int)($increment).'
-			WHERE `id_order_detail`= '.(int)($id_order_detail).'
-			LIMIT 1';
-		return Db::getInstance()->Execute($sql);
+		return Db::getInstance()->Execute('
+		UPDATE `'._DB_PREFIX_.'order_detail`
+		SET `download_nb` = `download_nb` + '.(int)($increment).'
+		WHERE `id_order_detail`= '.(int)($id_order_detail).'
+		LIMIT 1');
 	}
-
 }
-
-

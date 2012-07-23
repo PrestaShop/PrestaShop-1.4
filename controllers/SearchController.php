@@ -47,13 +47,12 @@ class SearchControllerCore extends FrontController
 		if ($this->ajaxSearch)
 		{
 			self::$link = new Link();
-			$searchResults = Search::find((int)(Tools::getValue('id_lang')), $query, 1, 10, 'position', 'desc', true);
-			foreach ($searchResults AS &$product)
+			$searchResults = Search::find((int)Tools::getValue('id_lang'), $query, 1, 10, 'position', 'desc', true);
+			foreach ($searchResults as &$product)
 				$product['product_link'] = self::$link->getProductLink($product['id_product'], $product['prewrite'], $product['crewrite']);
 			die(Tools::jsonEncode($searchResults));
-		}
-		
-		if ($this->instantSearch && !is_array($query))
+		}		
+		elseif ($this->instantSearch && !is_array($query))
 		{
 			$this->productSort();
 			$this->n = abs((int)(Tools::getValue('n', Configuration::get('PS_PRODUCTS_PER_PAGE'))));
@@ -100,13 +99,8 @@ class SearchControllerCore extends FrontController
 			'homeSize' => Image::getSize('home')));
 		}
 		else
-		{
-			self::$smarty->assign(array(
-			'products' => array(),
-			'search_products' => array(),
-			'pages_nb' => 1,
-			'nbProducts' => 0));
-		}
+			self::$smarty->assign(array('products' => array(), 'search_products' => array(), 'pages_nb' => 1, 'nbProducts' => 0));
+
 		self::$smarty->assign('add_prod_display', Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'));
 	}
 	
@@ -138,4 +132,3 @@ class SearchControllerCore extends FrontController
 			Tools::addCSS(_THEME_CSS_DIR_.'product_list.css');
 	}
 }
-

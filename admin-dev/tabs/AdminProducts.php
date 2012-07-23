@@ -1028,7 +1028,7 @@ class AdminProducts extends AdminTab
 					throw new Exception(Tools::displayError('Image is too large').' ('.(filesize($subdir.$file) / 1000).Tools::displayError('kB').'). '.Tools::displayError('Maximum allowed:').' '.($this->maxImageSize / 1000).Tools::displayError('kB'));
 				}
 
-				$ext = (substr($file, -4) == 'jpeg') ? '.jpeg' : substr($file, -4);
+				$ext = strtolower((substr($file, -4) == 'jpeg') ? '.jpeg' : substr($file, -4));
 				$type = (isset($types[$ext]) ? $types[$ext] : '');
 				if (!isPicture(array('tmp_name' => $subdir.$file, 'type' => $type)))
 				{

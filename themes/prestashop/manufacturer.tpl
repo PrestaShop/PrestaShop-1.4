@@ -29,7 +29,7 @@
 {include file="$tpl_dir./errors.tpl"}
 
 {if !isset($errors) OR !sizeof($errors)}
-	<h1>{l s='List of products by manufacturer:'}&nbsp;{$manufacturer->name|escape:'htmlall':'UTF-8'}</h1>
+	<h1>{l s='List of products by manufacturer:'} {$manufacturer->name|escape:'htmlall':'UTF-8'}</h1>
 
 	{if $products}
 		{include file="$tpl_dir./product-sort.tpl"}

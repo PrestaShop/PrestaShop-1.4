@@ -949,6 +949,7 @@ class AdminTranslations extends AdminTab
 		$suhosin_post = ini_get('suhosin.post.max_vars');
 		$suhosin_request = ini_get('suhosin.request.max_vars');
 		$php_max_input = ini_get('max_input_vars');
+
 		if ((!empty($suhosin_post) && ($suhosin_post < $count))
 		 || (!empty($suhosin_request) && ($suhosin_request < $count))
 		 || (!empty($php_max_input) && ($php_max_input < $count)))

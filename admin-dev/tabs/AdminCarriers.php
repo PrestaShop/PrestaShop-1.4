@@ -109,7 +109,9 @@ class AdminCarriers extends AdminTab
 					<p class="clear">'.$this->l('Carrier name displayed during checkout').'<br />'.$this->l('With a value of 0, the carrier name will be replaced by the shop name').'</p>
 				</div>
 				<label>'.$this->l('Logo:').' </label>
-				<div class="margin-form">
+				<div class="margin-form">';
+					$this->displayImage($obj->id, _PS_SHIP_IMG_DIR_.$obj->id.'.jpg', 350, null, null, true);
+				echo '<br />
 					<input type="file" name="logo" />
 					<p>'.$this->l('Upload logo from your computer').' (.gif, .jpg, .jpeg '.$this->l('or').' .png)</p>
 				</div>

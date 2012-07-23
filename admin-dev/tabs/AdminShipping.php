@@ -104,8 +104,8 @@ class AdminShipping extends AdminTab
 							if (strstr($key, 'fees_'))
 							{
 								$tmpArray = explode('_', $key);
-								$priceList .= '('.($shipping_method == Carrier::SHIPPING_METHOD_PRICE ? (int)($tmpArray[2]) : 'NULL').',
-								'.($shipping_method == Carrier::SHIPPING_METHOD_WEIGHT ? (int)($tmpArray[2]) : 'NULL').', '.(int)$carrier->id.',
+								$priceList .= '('.($shipping_method == Carrier::SHIPPING_METHOD_PRICE ? (int)$tmpArray[2] : 'NULL').',
+								'.($shipping_method == Carrier::SHIPPING_METHOD_WEIGHT ? (int)$tmpArray[2] : 'NULL').', '.(int)$carrier->id.',
 								'.(int)$tmpArray[1].', '.number_format(abs(preg_replace("#,#", '.', $value)), 6, '.', '').'),';
 								unset($tmpArray);
 							}
@@ -198,7 +198,7 @@ class AdminShipping extends AdminTab
 		
 		$carrierArray = array();
 		$id_carrier = Tools::getValue('id_carrier');
-		$carriers = Carrier::getCarriers((int)(Configuration::get('PS_LANG_DEFAULT')), true , false,false, NULL, Carrier::PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
+		$carriers = Carrier::getCarriers((int)Configuration::get('PS_LANG_DEFAULT'), true, false, false, null, Carrier::PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
 		foreach ($carriers AS $carrier)
 			if (!$carrier['is_free'])
 				$carrierArray[] = array(

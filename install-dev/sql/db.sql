@@ -610,7 +610,8 @@ CREATE TABLE `PREFIX_feature_lang` (
   `id_feature` int(10) unsigned NOT NULL,
   `id_lang` int(10) unsigned NOT NULL,
   `name` varchar(128) default NULL,
-  PRIMARY KEY  (`id_feature`,`id_lang`)
+  PRIMARY KEY  (`id_feature`,`id_lang`),
+  KEY `feature_name` (`id_lang`,`name`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_feature_product` (

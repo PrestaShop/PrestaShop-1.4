@@ -43,14 +43,14 @@ class ContactControllerCore extends FrontController
 			$products = array();
 			$orders = array();
 			$getOrders = Db::getInstance()->ExecuteS('
-				SELECT id_order
-				FROM '._DB_PREFIX_.'orders
-				WHERE id_customer = '.(int)$customer->id.' ORDER BY date_add');
+			SELECT id_order
+			FROM '._DB_PREFIX_.'orders
+			WHERE id_customer = '.(int)$customer->id.' ORDER BY date_add');
 			foreach ($getOrders as $row)
 			{
-				$order = new Order($row['id_order']);
+				$order = new Order((int)$row['id_order']);
 				$date = explode(' ', $order->date_add);
-				$orders[$row['id_order']] = Tools::displayDate($date[0], self::$cookie->id_lang);
+				$orders[(int)$row['id_order']] = Tools::displayDate($date[0], self::$cookie->id_lang);
 				$tmp = $order->getProducts();
 				foreach ($tmp as $key => $val)
 					$products[$val['product_id']] = $val['product_name'];
@@ -94,7 +94,7 @@ class ContactControllerCore extends FrontController
 				$this->errors[] = Tools::displayError('Bad file extension');
 			else
 			{
-				if ((int)(self::$cookie->id_customer))
+				if ((int)self::$cookie->id_customer)
 					$customer = new Customer((int)(self::$cookie->id_customer));
 				else
 				{
@@ -102,7 +102,7 @@ class ContactControllerCore extends FrontController
 					$customer->getByEmail($from);
 				}
 
-				$contact = new Contact($id_contact, self::$cookie->id_lang);
+				$contact = new Contact((int)$id_contact, (int)self::$cookie->id_lang);
 
 				if (!((
 						$id_customer_thread = (int)Tools::getValue('id_customer_thread')
@@ -112,40 +112,40 @@ class ContactControllerCore extends FrontController
 					) OR (
 						$id_customer_thread = (int)Db::getInstance()->getValue('
 						SELECT cm.id_customer_thread FROM '._DB_PREFIX_.'customer_thread cm
-						WHERE cm.email = \''.pSQL($from).'\' AND cm.id_order = '.(int)(Tools::getValue('id_order')).'')
+						WHERE cm.email = \''.pSQL($from).'\' AND cm.id_order = '.(int)Tools::getValue('id_order'))
 					)))
 				{
 					$fields = Db::getInstance()->ExecuteS('
 					SELECT cm.id_customer_thread, cm.id_contact, cm.id_customer, cm.id_order, cm.id_product, cm.email
 					FROM '._DB_PREFIX_.'customer_thread cm
 					WHERE email = \''.pSQL($from).'\' AND ('.
-						($customer->id ? 'id_customer = '.(int)($customer->id).' OR ' : '').'
-						id_order = '.(int)(Tools::getValue('id_order')).')');
+						($customer->id ? 'id_customer = '.(int)$customer->id.' OR ' : '').'
+						id_order = '.(int)Tools::getValue('id_order').')');
 					$score = 0;
 					foreach ($fields as $key => $row)
 					{
 						$tmp = 0;
-						if ((int)$row['id_customer'] AND $row['id_customer'] != $customer->id AND $row['email'] != $from)
+						if ((int)$row['id_customer'] && $row['id_customer'] != $customer->id && $row['email'] != $from)
 							continue;
-						if ($row['id_order'] != 0 AND Tools::getValue('id_order') != $row['id_order'])
+						if ($row['id_order'] != 0 && Tools::getValue('id_order') != $row['id_order'])
 							continue;
 						if ($row['email'] == $from)
 							$tmp += 4;
 						if ($row['id_contact'] == $id_contact)
 							$tmp++;
-						if (Tools::getValue('id_product') != 0 AND $row['id_product'] ==  Tools::getValue('id_product'))
+						if (Tools::getValue('id_product') != 0 && $row['id_product'] == Tools::getValue('id_product'))
 							$tmp += 2;
-						if ($tmp >= 5 AND $tmp >= $score)
+						if ($tmp >= 5 && $tmp >= $score)
 						{
 							$score = $tmp;
-							$id_customer_thread = $row['id_customer_thread'];
+							$id_customer_thread = (int)$row['id_customer_thread'];
 						}
 					}
 				}
 				$old_message = Db::getInstance()->getValue('
-					SELECT cm.message FROM '._DB_PREFIX_.'customer_message cm
-					WHERE cm.id_customer_thread = '.(int)($id_customer_thread).'
-					ORDER BY date_add DESC');
+				SELECT cm.message FROM '._DB_PREFIX_.'customer_message cm
+				WHERE cm.id_customer_thread = '.(int)$id_customer_thread.'
+				ORDER BY date_add DESC');
 				if ($old_message == htmlentities($message, ENT_COMPAT, 'UTF-8'))
 				{
 					self::$smarty->assign('alreadySent', 1);
@@ -154,8 +154,20 @@ class ContactControllerCore extends FrontController
 				}
 				if (!empty($contact->email))
 				{
-					if (Mail::Send((int)self::$cookie->id_lang, 'contact', Mail::l('Message from contact form', (int)self::$cookie->id_lang), array('{email}' => $from, '{message}' => stripslashes($message)), $contact->email, $contact->name, $from, ((int)(self::$cookie->id_customer) ? $customer->firstname.' '.$customer->lastname : ''), $fileAttachment)
-						AND Mail::Send((int)self::$cookie->id_lang, 'contact_form', Mail::l('Your message has been correctly sent', (int)self::$cookie->id_lang), array('{message}' => stripslashes($message)), $from))
+					$email_variables = array('{email}' => $from, '{message}' => stripslashes($message), '{id_product}' => '', '{id_order}' => '');
+					if (Tools::getValue('id_order'))
+					{
+						$order = new Order((int)Tools::getValue('id_order'));
+						if (Validate::isLoadedObject($order) && $order->id_customer == $customer->id)
+						{
+							$email_variables['{id_order}'] = Mail::l('Related Order ID:').' <b>'.(int)Tools::getValue('id_order').'</b><br /><br />';
+							if (Tools::getValue('id_product') && isset($products[(int)Tools::getValue('id_product')]))
+								$email_variables['{id_product}'] = Mail::l('Related Product:').' <b>'.$products[(int)Tools::getValue('id_product')].'</b><br /><br />';
+						}
+					}
+
+					if (Mail::Send((int)self::$cookie->id_lang, 'contact', Mail::l('Message from contact form', (int)self::$cookie->id_lang), $email_variables, $contact->email, $contact->name, $from, ((int)(self::$cookie->id_customer) ? $customer->firstname.' '.$customer->lastname : ''), $fileAttachment)
+						&& Mail::Send((int)self::$cookie->id_lang, 'contact_form', Mail::l('Your message has been correctly sent', (int)self::$cookie->id_lang), $email_variables, $from))
 						self::$smarty->assign('confirmation', 1);
 					else
 						$this->errors[] = Tools::displayError('An error occurred while sending message.');
@@ -236,7 +248,6 @@ class ContactControllerCore extends FrontController
 			'fileupload' => Configuration::get('PS_CUSTOMER_SERVICE_FILE_UPLOAD')
 		));
 
-
 		if ($id_customer_thread = (int)Tools::getValue('id_customer_thread') AND $token = Tools::getValue('token'))
 		{
 			$customerThread = Db::getInstance()->getRow('
@@ -246,8 +257,7 @@ class ContactControllerCore extends FrontController
 		}
 
 		self::$smarty->assign(array('contacts' => Contact::getContacts((int)(self::$cookie->id_lang)),
-		'message' => html_entity_decode(Tools::getValue('message'))
-		));
+		'message' => html_entity_decode(Tools::getValue('message'))));
 	}
 
 	public function displayContent()
@@ -257,4 +267,3 @@ class ContactControllerCore extends FrontController
 		self::$smarty->display(_PS_THEME_DIR_.'contact-form.tpl');
 	}
 }
-

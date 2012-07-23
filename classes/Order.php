@@ -408,7 +408,7 @@ class OrderCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'order_detail` od
-		WHERE od.`id_order` = '.(int)($this->id));
+		WHERE od.`id_order` = '.(int)$this->id);
 	}
 
 

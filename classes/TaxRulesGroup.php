@@ -44,6 +44,14 @@ class TaxRulesGroupCore extends ObjectModel
 
 	public static $canada_iso = 'CA';
 	public static $canada_states_iso = array('QC', 'PE');
+	
+	protected	$webserviceParameters = array(
+		'objectsNodeName' => 'tax_rule_groups',
+		'fields' => array(
+			'name' => array('i18n' => true, 'required' => true),
+			'active' => array()
+		)
+	);
 
 	public function getFields()
 	{
