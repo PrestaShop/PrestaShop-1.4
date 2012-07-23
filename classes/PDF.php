@@ -1272,9 +1272,7 @@ class PDFCore extends PDF_PageGroupCore
 
 	static protected function convertSign($s)
 	{
-		$arr['before'] = array('€', '£', '¥');
-		$arr['after'] = array(chr(128), chr(163), chr(165));
-		return str_replace($arr['before'], $arr['after'], $s);
+		return str_replace(array('€', '£', '¥'), array(chr(128), chr(163), chr(165)), $s);
 	}
 
 	static protected function l($string)

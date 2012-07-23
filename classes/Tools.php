@@ -441,7 +441,7 @@ class ToolsCore
 		if ($isNegative)
 			$ret = '-'.$ret;
 		if ($no_utf8)
-			return str_replace('€', chr(128), $ret);
+			return str_replace(array('€', '£', '¥'), array(chr(128), chr(163), chr(165)), $ret);
 		return $ret;
 	}
 
@@ -1755,7 +1755,8 @@ class ToolsCore
 
 		if (self::$_cache_nb_media_servers AND ($id_media_server = (abs(crc32($filename)) % self::$_cache_nb_media_servers + 1)))
 			return constant('_MEDIA_SERVER_'.$id_media_server.'_');
-		return self::getHttpHost();
+
+		return Configuration::get('PS_SSL_ENABLED') ? self::getShopDomainSsl(false) : self::getShopDomain(false);
 	}
 
 	public static function generateHtaccess($path, $rewrite_settings, $cache_control, $specific = '', $disableMultiviews = false)

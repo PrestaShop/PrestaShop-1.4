@@ -198,9 +198,12 @@ class LinkCore
 	 * @param string $ids id part of the image filename - can be "id_product-id_image" (legacy support, recommended) or "id_image" (new)
 	 * @param string $type
 	 */
-	public function getImageLink($name, $ids, $type = NULL)
+	public function getImageLink($name, $ids, $type = null)
 	{
 		global $protocol_content;
+		
+		if (empty($protocol_content))
+			$protocol_content = Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://';
 
 		// legacy mode or default image
 		if ((Configuration::get('PS_LEGACY_IMAGES') 

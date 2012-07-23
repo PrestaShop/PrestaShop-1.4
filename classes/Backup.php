@@ -34,7 +34,7 @@ class BackupCore
 	/** @var string default backup directory. */
 	public static $backupDir = '/backups/';
 	/** @var string custom backup directory. */
-	public $customBackupDir = NULL;
+	public $customBackupDir = null;
 
 	public $psBackupAll = true;
 	public $psBackupDropTable = true;
@@ -44,15 +44,15 @@ class BackupCore
 	 *
 	 * @param string $filename Filename of the backup file
 	 */
-	public function __construct($filename = NULL)
+	public function __construct($filename = null)
 	{
 		if ($filename)
 			$this->id = $this->getRealBackupPath($filename);
 
-			$psBackupAll = Configuration::get('PS_BACKUP_ALL');
-			$psBackupDropTable = Configuration::get('PS_BACKUP_DROP_TABLE');
-			$this->psBackupAll = $psBackupAll !== false ? $psBackupAll : true;
-			$this->psBackupDropTable = $psBackupDropTable !== false ? $psBackupDropTable : true;
+		$psBackupAll = Configuration::get('PS_BACKUP_ALL');
+		$psBackupDropTable = Configuration::get('PS_BACKUP_DROP_TABLE');
+		$this->psBackupAll = $psBackupAll !== false ? $psBackupAll : true;
+		$this->psBackupDropTable = $psBackupDropTable !== false ? $psBackupDropTable : true;
 	}
 	
 	/**
@@ -80,17 +80,9 @@ class BackupCore
 	 * @param string $filename filename to use
 	 * @return string full path
 	 */
-	public function getRealBackupPath($filename = NULL)
+	public function getRealBackupPath($filename = null)
 	{
-		$backupDir = Backup::getBackupPath($filename);
-		if (!empty($this->customBackupDir))
-		{
-			$backupDir = str_replace(_PS_ADMIN_DIR_.self::$backupDir, _PS_ADMIN_DIR_.$this->customBackupDir, $backupDir);
-
-			if(strrpos($backupDir,DIRECTORY_SEPARATOR))
-				$backupDir .= DIRECTORY_SEPARATOR;
-		}
-		return $backupDir;
+		return !empty($this->customBackupDir) ? _PS_ADMIN_DIR_.$this->customBackupDir.(substr($this->customBackupDir, -1) != DIRECTORY_SEPARATOR ? DIRECTORY_SEPARATOR : '') : self::getBackupPath($filename);
 	}
 	/**
 	 * Get the full path of the backup file
@@ -276,7 +268,7 @@ class BackupCore
 						}
 						$s = rtrim($s, ',');
 
-						if ($i%200 == 0 AND $i < $sizeof)
+						if ($i % 200 == 0 && $i < $sizeof)
 							$s .= ");\nINSERT INTO `".$schema[0]['Table']."` VALUES\n";
 						elseif ($i < $sizeof)
 							$s .= "),\n";
@@ -301,5 +293,4 @@ class BackupCore
 
 		return true;
 	}
-
 }

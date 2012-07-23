@@ -42,14 +42,14 @@ ini_set('upload_max_filesize', '100M');
 ini_set('default_charset', 'utf-8');
 ini_set('magic_quotes_runtime', 0);
 
-// correct Apache charset (except if it's too late
+/* correct Apache charset (except if it's too late) */
 if (!headers_sent())
 	header('Content-Type: text/html; charset=utf-8');
 
 /* No settings file? goto installer...*/
 if (!file_exists(dirname(__FILE__).'/settings.inc.php'))
 {
-	$dir = ((is_dir($_SERVER['REQUEST_URI']) OR substr($_SERVER['REQUEST_URI'], -1) == '/') ? $_SERVER['REQUEST_URI'] : dirname($_SERVER['REQUEST_URI']).'/');
+	$dir = ((is_dir($_SERVER['REQUEST_URI']) || substr($_SERVER['REQUEST_URI'], -1) == '/') ? $_SERVER['REQUEST_URI'] : dirname($_SERVER['REQUEST_URI']).'/');
 	if (!file_exists(dirname(__FILE__).'/../install'))
 		die('Error: \'install\' directory is missing');
 	header('Location: install/');
@@ -70,34 +70,40 @@ if (!defined('_PS_MYSQL_REAL_ESCAPE_STRING_'))
 require_once(dirname(__FILE__).'/autoload.php');
 
 /* Redefine REQUEST_URI if empty (on some webservers...) */
-if (!isset($_SERVER['REQUEST_URI']) OR empty($_SERVER['REQUEST_URI']))
+if (!isset($_SERVER['REQUEST_URI']) || empty($_SERVER['REQUEST_URI']))
 {
 	if (substr($_SERVER['SCRIPT_NAME'], -9) == 'index.php' && empty($_SERVER['QUERY_STRING']))
 		$_SERVER['REQUEST_URI'] = dirname($_SERVER['SCRIPT_NAME']).'/';
 	else
 	{
 		$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
-		if (isset($_SERVER['QUERY_STRING']) AND !empty($_SERVER['QUERY_STRING']))
+		if (isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']))
 			$_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
 	}
 }
 
 /* Trying to redefine HTTP_HOST if empty (on some webservers...) */
-if (!isset($_SERVER['HTTP_HOST']) OR empty($_SERVER['HTTP_HOST']))
+if (!isset($_SERVER['HTTP_HOST']) || empty($_SERVER['HTTP_HOST']))
 	$_SERVER['HTTP_HOST'] = @getenv('HTTP_HOST');
 
-/* aliases */
-function p($var) {
+/* Aliases */
+function p($var)
+{
 	return (Tools::p($var));
 }
-function d($var) {
+
+function d($var)
+{
 	Tools::d($var);
 }
 
-function ppp($var) {
+function ppp($var)
+{
 	return (Tools::p($var));
 }
-function ddd($var) {
+
+function ddd($var)
+{
 	Tools::d($var);
 }
 
@@ -111,19 +117,19 @@ Configuration::loadConfiguration();
 Language::loadLanguages();
 
 /* Define order state */
-// DEPRECATED : these defines are going to be deleted on 1.6 version of Prestashop
-// USE : Configuration::get() method in order to getting the id of order state
-define('_PS_OS_CHEQUE_',      Configuration::get('PS_OS_CHEQUE'));
-define('_PS_OS_PAYMENT_',     Configuration::get('PS_OS_PAYMENT'));
+/* DEPRECATED : these defines are going to be deleted on 1.6 version of Prestashop */
+/* USE : Configuration::get() method in order to getting the id of order state */
+define('_PS_OS_CHEQUE_', Configuration::get('PS_OS_CHEQUE'));
+define('_PS_OS_PAYMENT_', Configuration::get('PS_OS_PAYMENT'));
 define('_PS_OS_PREPARATION_', Configuration::get('PS_OS_PREPARATION'));
-define('_PS_OS_SHIPPING_',    Configuration::get('PS_OS_SHIPPING'));
-define('_PS_OS_DELIVERED_',   Configuration::get('PS_OS_DELIVERED'));
-define('_PS_OS_CANCELED_',    Configuration::get('PS_OS_CANCELED'));
-define('_PS_OS_REFUND_',      Configuration::get('PS_OS_REFUND'));
-define('_PS_OS_ERROR_',       Configuration::get('PS_OS_ERROR'));
-define('_PS_OS_OUTOFSTOCK_',  Configuration::get('PS_OS_OUTOFSTOCK'));
-define('_PS_OS_BANKWIRE_',    Configuration::get('PS_OS_BANKWIRE'));
-define('_PS_OS_PAYPAL_',      Configuration::get('PS_OS_PAYPAL'));
+define('_PS_OS_SHIPPING_', Configuration::get('PS_OS_SHIPPING'));
+define('_PS_OS_DELIVERED_', Configuration::get('PS_OS_DELIVERED'));
+define('_PS_OS_CANCELED_', Configuration::get('PS_OS_CANCELED'));
+define('_PS_OS_REFUND_', Configuration::get('PS_OS_REFUND'));
+define('_PS_OS_ERROR_', Configuration::get('PS_OS_ERROR'));
+define('_PS_OS_OUTOFSTOCK_', Configuration::get('PS_OS_OUTOFSTOCK'));
+define('_PS_OS_BANKWIRE_', Configuration::get('PS_OS_BANKWIRE'));
+define('_PS_OS_PAYPAL_', Configuration::get('PS_OS_PAYPAL'));
 define('_PS_OS_WS_PAYMENT_', Configuration::get('PS_OS_WS_PAYMENT'));
 
 /* It is not safe to rely on the system's timezone settings, and this would generate a PHP Strict Standards notice. */
