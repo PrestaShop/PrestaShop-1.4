@@ -417,8 +417,6 @@ class PaypalExpressCheckout extends Paypal
 
 	public function redirectToCheckout($customer, $redirect = false)
 	{
-		$link = new Link();
-
 		$this->ready = true;
 		$this->_storeCookieInfo();
 
@@ -438,7 +436,7 @@ class PaypalExpressCheckout extends Paypal
 
 		if ($redirect)
 		{
-			header('Location: '.$link->getPageLink('order.php?step=1'));
+			Tools::redirectLink(__PS_BASE_URI__.'order.php?step=1');
 			exit(0);
 		}
 	}
