@@ -120,7 +120,7 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (30, 'PS_ORDER_RETURN', '0', NOW(), NOW()),
 (31, 'PS_ORDER_RETURN_NB_DAYS', '7', NOW(), NOW()),
 (32, 'PS_MAIL_TYPE', '3', NOW(), NOW()),
-(33, 'PS_PRODUCT_PICTURE_MAX_SIZE', '131072', NOW(), NOW()),
+(33, 'PS_PRODUCT_PICTURE_MAX_SIZE', '2048000', NOW(), NOW()),
 (34, 'PS_PRODUCT_PICTURE_WIDTH', '64', NOW(), NOW()),
 (35, 'PS_PRODUCT_PICTURE_HEIGHT', '64', NOW(), NOW()),
 (36, 'PS_INVOICE_PREFIX', 'IN', NOW(), NOW()),

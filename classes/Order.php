@@ -339,14 +339,23 @@ class OrderCore extends ObjectModel
 
 	public function deleteCustomization($id_customization, $quantity, $orderDetail)
 	{
-		if (!(int)($this->getCurrentState()))
+		if (!(int)$this->getCurrentState())
 			return false;
 
 		if ($this->hasBeenDelivered())
-			return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'customization` SET `quantity_returned` = `quantity_returned` + '.(int)($quantity).' WHERE `id_customization` = '.(int)($id_customization).' AND `id_cart` = '.(int)($this->id_cart).' AND `id_product` = '.(int)($orderDetail->product_id));
+			return Db::getInstance()->Execute('
+			UPDATE `'._DB_PREFIX_.'customization`
+			SET `quantity_returned` = `quantity_returned` + '.(int)($quantity).'
+			WHERE `id_customization` = '.(int)($id_customization).' AND `id_cart` = '.(int)($this->id_cart).' AND `id_product` = '.(int)($orderDetail->product_id));
 		elseif ($this->hasBeenPaid())
-			return Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'customization` SET `quantity_refunded` = `quantity_refunded` + '.(int)($quantity).' WHERE `id_customization` = '.(int)($id_customization).' AND `id_cart` = '.(int)($this->id_cart).' AND `id_product` = '.(int)($orderDetail->product_id));
-		if (!Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'customization` SET `quantity` = `quantity` - '.(int)($quantity).' WHERE `id_customization` = '.(int)($id_customization).' AND `id_cart` = '.(int)($this->id_cart).' AND `id_product` = '.(int)($orderDetail->product_id)))
+			return Db::getInstance()->Execute('
+			UPDATE `'._DB_PREFIX_.'customization`
+			SET `quantity_refunded` = `quantity_refunded` + '.(int)($quantity).'
+			WHERE `id_customization` = '.(int)($id_customization).' AND `id_cart` = '.(int)($this->id_cart).' AND `id_product` = '.(int)($orderDetail->product_id));
+		if (!Db::getInstance()->Execute('
+			UPDATE `'._DB_PREFIX_.'customization`
+			SET `quantity` = `quantity` - '.(int)($quantity).'
+			WHERE `id_customization` = '.(int)($id_customization).' AND `id_cart` = '.(int)($this->id_cart).' AND `id_product` = '.(int)($orderDetail->product_id)))
 			return false;
 		if (!Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customization` WHERE `quantity` = 0'))
 			return false;
@@ -388,7 +397,7 @@ class OrderCore extends ObjectModel
 			FROM `'._DB_PREFIX_.'orders` o
 			LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON o.`id_order` = oh.`id_order`
 			LEFT JOIN `'._DB_PREFIX_.'order_state` os ON os.`id_order_state` = oh.`id_order_state`
-			LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.(int)($id_lang).')
+			LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.(int)$id_lang.')
 			LEFT JOIN `'._DB_PREFIX_.'employee` e ON e.`id_employee` = oh.`id_employee`
 			WHERE oh.id_order = '.(int)($this->id).'
 			'.($no_hidden ? ' AND os.hidden = 0' : '').'

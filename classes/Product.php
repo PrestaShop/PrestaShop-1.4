@@ -2136,7 +2136,7 @@ class ProductCore extends ObjectModel
 		if (Pack::isPack((int)($orderDetail->product_id)))
 		{
 			$products_pack = Pack::getItems((int)($orderDetail->product_id), (int)(Configuration::get('PS_LANG_DEFAULT')));
-			foreach($products_pack AS $product_pack)
+			foreach ($products_pack as $product_pack)
 				if (!$product_pack->addStockMvt((int)($product_pack->pack_quantity * $quantity), _STOCK_MOVEMENT_ORDER_REASON_, (int)$product_pack->id_product_attribute, (int)$orderDetail->id_order, (int)$cookie->id_employee))
 					return false;
 		}
