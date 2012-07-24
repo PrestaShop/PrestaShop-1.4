@@ -485,7 +485,10 @@ class AdminImport extends AdminTab
 				$info['parent'] = 1;
 
 			self::setDefaultValues($info);
-			$category = new Category();
+			if (isset($info['id']) && (int)$info['id'])
+				$category = new Category((int)$info['id']);
+			else
+				$category = new Category();
 			self::array_walk($info, array('AdminImport', 'fillInfo'), $category);
 
 			if (isset($category->parent) AND is_numeric($category->parent))
