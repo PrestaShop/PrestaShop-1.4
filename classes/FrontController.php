@@ -82,14 +82,14 @@ class FrontControllerCore
 		$css_files = array();
 		$js_files = array();
 
-		if ($this->ssl AND !Tools::usingSecureMode() AND Configuration::get('PS_SSL_ENABLED'))
+		if ($this->ssl && !Tools::usingSecureMode() && Configuration::get('PS_SSL_ENABLED'))
 		{
 			header('HTTP/1.1 301 Moved Permanently');
 			header('Cache-Control: no-cache');
 			header('Location: '.Tools::getShopDomainSsl(true).$_SERVER['REQUEST_URI']);
 			exit();
 		}
-		else if (Configuration::get('PS_SSL_ENABLED') AND Tools::usingSecureMode() AND !($this->ssl))
+		elseif (Configuration::get('PS_SSL_ENABLED') && Tools::usingSecureMode() && !($this->ssl))
 		{
 			header('HTTP/1.1 301 Moved Permanently');
 			header('Cache-Control: no-cache');
@@ -101,24 +101,29 @@ class FrontControllerCore
 
 		/* Loading default country */
 		$defaultCountry = new Country((int)Configuration::get('PS_COUNTRY_DEFAULT'), Configuration::get('PS_LANG_DEFAULT'));
-		$cookieLifetime = (time() + (((int)Configuration::get('PS_COOKIE_LIFETIME_FO') > 0 ? (int)Configuration::get('PS_COOKIE_LIFETIME_FO') : 1)* 3600));
+		$cookieLifetime = (time() + (((int)Configuration::get('PS_COOKIE_LIFETIME_FO') > 0 ? (int)Configuration::get('PS_COOKIE_LIFETIME_FO') : 1) * 3600));
 		$cookie = new Cookie('ps', '', $cookieLifetime);
 		$link = new Link();
 
-		if ($this->auth AND !$cookie->isLogged($this->guestAllowed))
+		if ($this->auth && !$cookie->isLogged($this->guestAllowed))
 			Tools::redirect('authentication.php'.($this->authRedirection ? '?back='.$this->authRedirection : ''));
 
 		/* Theme is missing or maintenance */
 		if (!is_dir(_PS_THEME_DIR_))
 			die(Tools::displayError('Current theme unavailable. Please check your theme directory name and permissions.'));
-		elseif (basename($_SERVER['PHP_SELF']) != 'disabled.php' AND !(int)(Configuration::get('PS_SHOP_ENABLE')))
+		elseif (basename($_SERVER['PHP_SELF']) != 'disabled.php' && !(int)(Configuration::get('PS_SHOP_ENABLE')))
 			$this->maintenance = true;
 		elseif (Configuration::get('PS_GEOLOCATION_ENABLED'))
 			$this->geolocationManagement();
 
 		// Switch language if needed and init cookie language
-		if ($iso = Tools::getValue('isolang') AND Validate::isLanguageIsoCode($iso) AND ($id_lang = (int)(Language::getIdByIso($iso))))
-			$_GET['id_lang'] = $id_lang;
+		$iso = Tools::getValue('isolang');
+		if ($iso && Validate::isLanguageIsoCode($iso))
+		{
+			$id_lang = (int)Language::getIdByIso($iso);
+			if ($id_lang)
+				$_GET['id_lang'] = $id_lang;
+		}
 
 		Tools::switchLanguage();
 		Tools::setCookieLanguage();
@@ -127,15 +132,15 @@ class FrontControllerCore
 		if (!defined('_USER_ID_LANG_'))
 			define('_USER_ID_LANG_', (int)$cookie->id_lang);
 
-		if (isset($_GET['logout']) OR ($cookie->logged AND Customer::isBanned((int)$cookie->id_customer)))
+		if (isset($_GET['logout']) || ($cookie->logged && Customer::isBanned((int)$cookie->id_customer)))
 		{
 			$cookie->logout();
-			Tools::redirect(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : NULL);
+			Tools::redirect(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null);
 		}
 		elseif (isset($_GET['mylogout']))
 		{
 			$cookie->mylogout();
-			Tools::redirect(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : NULL);
+			Tools::redirect(isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null);
 		}
 
 		global $currency;
@@ -148,12 +153,12 @@ class FrontControllerCore
 			if ($cart->OrderExists())
 				unset($cookie->id_cart, $cart, $cookie->checkedTOS);
 			/* Delete product of cart, if user can't make an order from his country */
-			elseif (intval(Configuration::get('PS_GEOLOCATION_ENABLED')) AND
-					!in_array(strtoupper($cookie->iso_code_country), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))) AND
-					$cart->nbProducts() AND intval(Configuration::get('PS_GEOLOCATION_NA_BEHAVIOR')) != -1 AND
+			elseif ((int)Configuration::get('PS_GEOLOCATION_ENABLED') &&
+					!in_array(strtoupper($cookie->iso_code_country), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))) &&
+				$cart->nbProducts() && (int)Configuration::get('PS_GEOLOCATION_NA_BEHAVIOR') != -1 &&
 					!self::isInWhitelistForGeolocation())
 				unset($cookie->id_cart, $cart);
-			elseif ($cookie->id_customer != $cart->id_customer OR $cookie->id_lang != $cart->id_lang OR $cookie->id_currency != $cart->id_currency)
+			elseif ($cookie->id_customer != $cart->id_customer || $cookie->id_lang != $cart->id_lang || $cookie->id_currency != $cart->id_currency)
 			{
 				if ($cookie->id_customer)
 					$cart->id_customer = (int)($cookie->id_customer);
@@ -181,7 +186,7 @@ class FrontControllerCore
 			}
 		}
 
-		if (!isset($cart) OR !$cart->id)
+		if (!isset($cart) || !$cart->id)
 		{
 			$cart = new Cart();
 			$cart->id_lang = (int)($cookie->id_lang);
@@ -200,7 +205,7 @@ class FrontControllerCore
 			}
 		}
 		if (!$cart->nbProducts())
-			$cart->id_carrier = NULL;
+			$cart->id_carrier = null;
 
 		$locale = strtolower(Configuration::get('PS_LOCALE_LANGUAGE')).'_'.strtoupper(Configuration::get('PS_LOCALE_COUNTRY').'.UTF-8');
 		setlocale(LC_COLLATE, $locale);
@@ -371,7 +376,7 @@ class FrontControllerCore
 						header('HTTP/1.0 301 Moved Permanently');
 						header('Cache-Control: no-cache');
 					}
-						
+
 					$params = '';
 					$excludedKey = array('isolang', 'id_lang');
 					foreach ($_GET as $key => $value)
@@ -397,7 +402,7 @@ class FrontControllerCore
 			{
 				if (!isset($cookie->iso_code_country) || (isset($cookie->iso_code_country) && !in_array(strtoupper($cookie->iso_code_country), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES')))))
 				{
-          			include_once(_PS_GEOIP_DIR_.'geoipcity.inc');
+					include_once(_PS_GEOIP_DIR_.'geoipcity.inc');
 					include_once(_PS_GEOIP_DIR_.'geoipregionvars.php');
 
 					$gi = geoip_open(realpath(_PS_GEOIP_DIR_.'GeoLiteCity.dat'), GEOIP_STANDARD);
@@ -451,7 +456,7 @@ class FrontControllerCore
 
 		Tools::addCSS(_THEME_CSS_DIR_.'global.css', 'all');
 		Tools::addJS(array(_PS_JS_DIR_.'jquery/jquery.min.js', _PS_JS_DIR_.'jquery/jquery.easing.1.3.js', _PS_JS_DIR_.'tools.js'));
-		if (Tools::isSubmit('live_edit') AND Tools::getValue('ad') AND (Tools::getValue('liveToken') == sha1(Tools::getValue('ad')._COOKIE_KEY_)))
+		if (Tools::isSubmit('live_edit') && Tools::getValue('ad') && Tools::getValue('liveToken') == sha1(Tools::getValue('ad')._COOKIE_KEY_))
 		{
 			Tools::addJS(array(
 							_PS_JS_DIR_.'jquery/jquery-ui-1.8.10.custom.min.js',
