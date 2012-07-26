@@ -995,15 +995,14 @@ class ToolsCore
 		if (_PS_MB_STRING_)
 			$str = mb_strtolower($str, 'utf-8');
 
-		$str = trim($str);
-		$str = self::replaceAccentedChars($str);
-
 		// Remove all non-whitelist chars.
-		$str = preg_replace(array('/[^a-zA-Z0-9\s\'\:\/\[\]-]/', '/[\s\'\:\/\[\]-]+/', '/[ ]/', '/[\/]/'), array('', ' ', '-', '-'), $str);
+		$str = preg_replace(array('/[^a-zA-Z0-9\s\'\:\/\[\]-]/', '/[\s\'\:\/\[\]-]+/', '/[ ]/', '/[\/]/'),
+					 array('', ' ', '-', '-'), self::replaceAccentedChars(trim($str)));
 
 		// If it was not possible to lowercase the string with mb_strtolower, we do it after the transformations.
 		// This way we lose fewer special chars.
-		$str = strtolower($str);
+		if (!_PS_MB_STRING_)
+			$str = strtolower($str);
 
 		return $str;
 	}
@@ -1305,8 +1304,7 @@ class ToolsCore
 	{
 		if (in_array(ini_get('allow_url_fopen'), array('On', 'on', '1')))
 			return simplexml_load_string(Tools::file_get_contents($url), $class_name);
-		else
-			return false;
+		return false;
 	}
 
 	public static $a = 0;
@@ -1368,6 +1366,7 @@ class ToolsCore
 		$b = hexdec(substr($hex, 4, 2));
 		return (($r * 299) + ($g * 587) + ($b * 114)) / 1000;
 	}
+
 	public static function minifyHTMLpregCallback($preg_matches)
 	{
 		$args = array();
@@ -1482,6 +1481,7 @@ class ToolsCore
 	public static function addJS($js_uri)
 	{
 		global $js_files;
+
 		if (!isset($js_files))
 			$js_files = array();
 		// avoid useless operation...
@@ -1573,8 +1573,10 @@ class ToolsCore
 	 * Combine Compress and Cache CSS (ccc) calls
 	 *
 	 */
-	public static function cccCss() {
+	public static function cccCss()
+	{
 		global $css_files;
+
 		//inits
 		$css_files_by_media = array();
 		$compressed_css_files = array();
@@ -1595,10 +1597,7 @@ class ToolsCore
 			$css_files_by_media[$media]['files'][] = $infos;
 			if (!array_key_exists('date', $css_files_by_media[$media]))
 				$css_files_by_media[$media]['date'] = 0;
-			$css_files_by_media[$media]['date'] = max(
-				file_exists($infos['path']) ? filemtime($infos['path']) : 0,
-				$css_files_by_media[$media]['date']
-			);
+			$css_files_by_media[$media]['date'] = max(file_exists($infos['path']) ? filemtime($infos['path']) : 0, $css_files_by_media[$media]['date']);
 
 			if (!array_key_exists($media, $compressed_css_files_infos))
 				$compressed_css_files_infos[$media] = array('key' => '');
@@ -1654,8 +1653,10 @@ class ToolsCore
 	/**
 	 * Combine Compress and Cache (ccc) JS calls
 	 */
-	public static function cccJS() {
+	public static function cccJS()
+	{
 		global $js_files;
+
 		//inits
 		$compressed_js_files_not_found = array();
 		$js_files_infos = array();
@@ -1680,10 +1681,7 @@ class ToolsCore
 				$infos['path'] =_PS_ROOT_DIR_.self::str_replace_once(__PS_BASE_URI__, '/', $url_data['path']);
 				$js_files_infos[] = $infos;
 
-				$js_files_date = max(
-					file_exists($infos['path']) ? filemtime($infos['path']) : 0,
-					$js_files_date
-				);
+				$js_files_date = max(file_exists($infos['path']) ? filemtime($infos['path']) : 0,	$js_files_date);
 				$compressed_js_filename .= $filename;
 			}
 		}
@@ -2079,15 +2077,16 @@ FileETag INode MTime Size
 	 * @desc try to open a zip file in order to check if it's valid
 	 * @return bool success
 	 */
-	public static function ZipTest($fromFile)
+	public static function ZipTest($from_file)
 	{
 		if (class_exists('ZipArchive', false))
 		{
 			$zip = new ZipArchive();
-			return $zip->open($fromFile, ZIPARCHIVE::CHECKCONS) === true;
+			return $zip->open($from_file, ZIPARCHIVE::CHECKCONS) === true;
 		}
 		require_once(dirname(__FILE__).'/../tools/pclzip/pclzip.lib.php');
-		$zip = new PclZip($fromFile);
+		$zip = new PclZip($from_file);
+
 		return $zip->privCheckFormat() === true;
 	}
 
