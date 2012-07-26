@@ -59,12 +59,17 @@ require_once(dirname(__FILE__).'/settings.inc.php');
 
 /* Include all defines */
 require_once(dirname(__FILE__).'/defines.inc.php');
+
 if (!defined('_PS_MAGIC_QUOTES_GPC_'))
 	define('_PS_MAGIC_QUOTES_GPC_', get_magic_quotes_gpc());
 if (!defined('_PS_MODULE_DIR_'))
 	define('_PS_MODULE_DIR_', _PS_ROOT_DIR_.'/modules/');
 if (!defined('_PS_MYSQL_REAL_ESCAPE_STRING_'))
 	define('_PS_MYSQL_REAL_ESCAPE_STRING_', function_exists('mysql_real_escape_string'));
+if (!defined('_PS_MB_STRING_'))
+	define('_PS_MB_STRING_', function_exists('mb_strlen'));
+if (!defined('_PS_ICONV_'))
+	define('_PS_ICONV_', function_exists('iconv'));
 
 /* Autoload */
 require_once(dirname(__FILE__).'/autoload.php');
@@ -89,7 +94,7 @@ if (!isset($_SERVER['HTTP_HOST']) || empty($_SERVER['HTTP_HOST']))
 /* Aliases */
 function p($var)
 {
-	return (Tools::p($var));
+	return Tools::p($var);
 }
 
 function d($var)
@@ -99,7 +104,7 @@ function d($var)
 
 function ppp($var)
 {
-	return (Tools::p($var));
+	return Tools::p($var);
 }
 
 function ddd($var)
@@ -141,4 +146,4 @@ require_once(dirname(__FILE__).'/smarty.config.inc.php');
 /* Possible value are true, false, 'URL'
  (for 'URL' append SMARTY_DEBUG as a parameter to the url)
  default is false for production environment */
-define('SMARTY_DEBUG_CONSOLE', false); 
+define('SMARTY_DEBUG_CONSOLE', false);

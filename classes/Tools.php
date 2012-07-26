@@ -992,7 +992,7 @@ class ToolsCore
 	 */
 	public static function str2url($str)
 	{
-		if (function_exists('mb_strtolower'))
+		if (_PS_MB_STRING_)
 			$str = mb_strtolower($str, 'utf-8');
 
 		$str = trim($str);
@@ -1121,7 +1121,7 @@ class ToolsCore
 	{
 		if (is_array($str))
 			return false;
-		if (function_exists('mb_strtolower'))
+		if (_PS_MB_STRING_)
 			return mb_strtolower($str, 'utf-8');
 		return strtolower($str);
 	}
@@ -1131,7 +1131,7 @@ class ToolsCore
 		if (is_array($str))
 			return false;
 		$str = html_entity_decode($str, ENT_COMPAT, 'UTF-8');
-		if (function_exists('mb_strlen'))
+		if (_PS_MB_STRING_)
 			return mb_strlen($str, $encoding);
 		return strlen($str);
 	}
@@ -1147,7 +1147,7 @@ class ToolsCore
 	{
 		if (is_array($str))
 			return false;
-		if (function_exists('mb_strtoupper'))
+		if (_PS_MB_STRING_)
 			return mb_strtoupper($str, 'utf-8');
 		return strtoupper($str);
 	}
@@ -1156,7 +1156,7 @@ class ToolsCore
 	{
 		if (is_array($str))
 			return false;
-		if (function_exists('mb_substr'))
+		if (_PS_MB_STRING_)
 			return mb_substr($str, (int)($start), ($length === false ? self::strlen($str) : (int)($length)), $encoding);
 		return substr($str, $start, ($length === false ? self::strlen($str) : (int)($length)));
 	}
@@ -1180,7 +1180,7 @@ class ToolsCore
 
 	public static function iconv($from, $to, $string)
 	{
-		if (function_exists('iconv'))
+		if (_PS_ICONV_)
 			return iconv($from, $to.'//TRANSLIT', str_replace('¥', '&yen;', str_replace('£', '&pound;', str_replace('€', '&euro;', $string))));
 		return html_entity_decode(htmlentities($string, ENT_NOQUOTES, $from), ENT_NOQUOTES, $to);
 	}
@@ -2003,7 +2003,7 @@ FileETag INode MTime Size
 	public static function isCallable($function)
 	{
 		$disabled = explode(',', ini_get('disable_functions'));
-		return (!in_array($function, $disabled) AND is_callable($function));
+		return (!in_array($function, $disabled) && is_callable($function));
 	}
 
 	public static function pRegexp($s, $delim)
@@ -2021,7 +2021,6 @@ FileETag INode MTime Size
 			return $haystack;
 		return substr_replace($haystack, $replace, $pos, strlen($needle));
 	}
-
 
 	/**
 	 * Function property_exists does not exist in PHP < 5.1
@@ -2073,7 +2072,7 @@ FileETag INode MTime Size
 		if (strnatcmp(self::checkPhpVersion(),'5.2.0') >= 0)
 			Configuration::updateValue('PS_FORCE_SMARTY_2', 0);
 		else
-			Configuration::updateValue('PS_FORCE_SMARTY_2',1);
+			Configuration::updateValue('PS_FORCE_SMARTY_2', 1);
 	}
 
 	/**
@@ -2085,14 +2084,11 @@ FileETag INode MTime Size
 		if (class_exists('ZipArchive', false))
 		{
 			$zip = new ZipArchive();
-			return ($zip->open($fromFile, ZIPARCHIVE::CHECKCONS) === true);
+			return $zip->open($fromFile, ZIPARCHIVE::CHECKCONS) === true;
 		}
-		else
-		{
-			require_once(dirname(__FILE__).'/../tools/pclzip/pclzip.lib.php');
-			$zip = new PclZip($fromFile);
-			return ($zip->privCheckFormat() === true);
-		}
+		require_once(dirname(__FILE__).'/../tools/pclzip/pclzip.lib.php');
+		$zip = new PclZip($fromFile);
+		return $zip->privCheckFormat() === true;
 	}
 
 	/**
@@ -2171,9 +2167,7 @@ FileETag INode MTime Size
 	public static function convertBytes($value)
 	{
 		if (is_numeric($value))
-		{
 			return $value;
-		}
 		else
 		{
 			$value_length = strlen($value);
@@ -2254,7 +2248,7 @@ FileETag INode MTime Size
 
 	public static function isX86_64arch()
 	{
-		return (PHP_INT_MAX == '9223372036854775807');
+		return PHP_INT_MAX == '9223372036854775807';
 	}
 
 	/**
@@ -2267,7 +2261,7 @@ FileETag INode MTime Size
 	 */
 	public static function apacheModExists($name)
 	{
-		if(function_exists('apache_get_modules'))
+		if (function_exists('apache_get_modules'))
 		{
 			static $apacheModuleList = null;
 
@@ -2276,12 +2270,11 @@ FileETag INode MTime Size
 
 			// we need strpos (example, evasive can be evasive20)
 			foreach($apacheModuleList as $module)
-			{
 				if (strpos($module, $name) !== false)
 					return true;
-			}
 		}
-		else{
+		else
+		{
 			// If apache_get_modules does not exists,
 			// one solution should be parsing httpd.conf,
 			// but we could simple parse phpinfo(INFO_MODULES) return string
