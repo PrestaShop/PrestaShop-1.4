@@ -189,7 +189,7 @@ class ProductCore extends ObjectModel
 	public $cache_has_attachments;
 	public $cache_default_attribute;
 
-	public	static $_taxCalculationMethod = PS_TAX_EXC;
+	public static $_taxCalculationMethod = PS_TAX_EXC;
 	protected static $_prices = array();
 	protected static $_pricesLevel2 = array();
 	protected static $_incat = array();

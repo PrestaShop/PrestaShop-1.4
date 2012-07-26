@@ -87,14 +87,14 @@ class FrontControllerCore
 			header('HTTP/1.1 301 Moved Permanently');
 			header('Cache-Control: no-cache');
 			header('Location: '.Tools::getShopDomainSsl(true).$_SERVER['REQUEST_URI']);
-			exit();
+			exit;
 		}
 		elseif (Configuration::get('PS_SSL_ENABLED') && Tools::usingSecureMode() && !($this->ssl))
 		{
 			header('HTTP/1.1 301 Moved Permanently');
 			header('Cache-Control: no-cache');
 			header('Location: '.Tools::getShopDomain(true).$_SERVER['REQUEST_URI']);
-			exit();
+			exit;
 		}
 
 		ob_start();
@@ -111,7 +111,7 @@ class FrontControllerCore
 		/* Theme is missing or maintenance */
 		if (!is_dir(_PS_THEME_DIR_))
 			die(Tools::displayError('Current theme unavailable. Please check your theme directory name and permissions.'));
-		elseif (basename($_SERVER['PHP_SELF']) != 'disabled.php' && !(int)(Configuration::get('PS_SHOP_ENABLE')))
+		elseif (basename($_SERVER['PHP_SELF']) != 'disabled.php' && !(int)Configuration::get('PS_SHOP_ENABLE'))
 			$this->maintenance = true;
 		elseif (Configuration::get('PS_GEOLOCATION_ENABLED'))
 			$this->geolocationManagement();
@@ -161,9 +161,9 @@ class FrontControllerCore
 			elseif ($cookie->id_customer != $cart->id_customer || $cookie->id_lang != $cart->id_lang || $cookie->id_currency != $cart->id_currency)
 			{
 				if ($cookie->id_customer)
-					$cart->id_customer = (int)($cookie->id_customer);
-				$cart->id_lang = (int)($cookie->id_lang);
-				$cart->id_currency = (int)($cookie->id_currency);
+					$cart->id_customer = (int)$cookie->id_customer;
+				$cart->id_lang = (int)$cookie->id_lang;
+				$cart->id_currency = (int)$cookie->id_currency;
 				$cart->update();
 			}
 			/* Select an address if not set */
@@ -189,13 +189,13 @@ class FrontControllerCore
 		if (!isset($cart) || !$cart->id)
 		{
 			$cart = new Cart();
-			$cart->id_lang = (int)($cookie->id_lang);
-			$cart->id_currency = (int)($cookie->id_currency);
-			$cart->id_guest = (int)($cookie->id_guest);
+			$cart->id_lang = (int)$cookie->id_lang;
+			$cart->id_currency = (int)$cookie->id_currency;
+			$cart->id_guest = (int)$cookie->id_guest;
 			if ($cookie->id_customer)
 			{
-				$cart->id_customer = (int)($cookie->id_customer);
-				$cart->id_address_delivery = (int)(Address::getFirstCustomerAddressId($cart->id_customer));
+				$cart->id_customer = (int)$cookie->id_customer;
+				$cart->id_address_delivery = (int)Address::getFirstCustomerAddressId($cart->id_customer);
 				$cart->id_address_invoice = $cart->id_address_delivery;
 			}
 			else
@@ -245,9 +245,9 @@ class FrontControllerCore
 		Product::initPricesComputation();
 
 		$display_tax_label = $defaultCountry->display_tax_label;
-		if ($cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')})
+		if ($tmp = (int)$cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')})
 		{
-			$infos = Address::getCountryAndState((int)($cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
+			$infos = Address::getCountryAndState($tmp);
 			$country = new Country((int)$infos['id_country']);
 			if (Validate::isLoadedObject($country))
 				$display_tax_label = $country->display_tax_label;
@@ -306,7 +306,7 @@ class FrontControllerCore
 		);
 
 		foreach ($assignArray as $assignKey => $assignValue)
-			if (substr($assignValue, 0, 1) == '/' OR $protocol_content == 'https://')
+			if (substr($assignValue, 0, 1) == '/' || $protocol_content == 'https://')
 				$smarty->assign($assignKey, $protocol_content.Tools::getMediaServer($assignValue).$assignValue);
 			else
 				$smarty->assign($assignKey, $assignValue);
@@ -323,7 +323,7 @@ class FrontControllerCore
 			$this->displayRestrictedCountryPage();
 
 		//live edit
-		if (Tools::isSubmit('live_edit') AND $ad = Tools::getValue('ad') AND (Tools::getValue('liveToken') == sha1(Tools::getValue('ad')._COOKIE_KEY_)))
+		if (Tools::isSubmit('live_edit') && $ad = Tools::getValue('ad') && Tools::getValue('liveToken') == sha1(Tools::getValue('ad')._COOKIE_KEY_))
 			if (!is_dir(_PS_ROOT_DIR_.DIRECTORY_SEPARATOR.$ad))
 				die(Tools::displayError());
 
@@ -360,11 +360,11 @@ class FrontControllerCore
 		if (Configuration::get('PS_CANONICAL_REDIRECT') && strtoupper($_SERVER['REQUEST_METHOD']) == 'GET')
 		{
 			// Automatically redirect to the canonical URL if needed
-			if (isset($this->php_self) AND !empty($this->php_self))
+			if (isset($this->php_self) && !empty($this->php_self))
 			{
 				// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
 				$canonicalURL = $link->getPageLink($this->php_self, $this->ssl, $cookie->id_lang);
-				if (!Tools::getValue('ajax') && !preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', (($this->ssl AND Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+				if (!Tools::getValue('ajax') && !preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', (($this->ssl && Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 				{
 					if ($_SERVER['REQUEST_URI'] == __PS_BASE_URI__)
 					{
@@ -383,7 +383,7 @@ class FrontControllerCore
 						if (!in_array($key, $excludedKey))
 							$params .= ($params == '' ? '?' : '&').$key.'='.$value;
 					Module::hookExec('frontCanonicalRedirect');
-					if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_ AND $_SERVER['REQUEST_URI'] != __PS_BASE_URI__)
+					if (defined('_PS_MODE_DEV_') && _PS_MODE_DEV_ && $_SERVER['REQUEST_URI'] != __PS_BASE_URI__)
 						die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.$params.'">'.$canonicalURL.$params.'</a>');
 					Tools::redirectLink($canonicalURL.$params);
 				}
@@ -425,12 +425,12 @@ class FrontControllerCore
 					}
 				}
 
-				if (isset($cookie->iso_code_country) && (int)($id_country = Country::getByIso(strtoupper($cookie->iso_code_country))))
+				if (isset($cookie->iso_code_country) && $id_country = (int)Country::getByIso(strtoupper($cookie->iso_code_country)))
 				{
 					/* Update defaultCountry */
 					$defaultCountry = new Country($id_country);
 					if (isset($has_been_set) && $has_been_set)
-						$cookie->id_currency = (int)(Currency::getCurrencyInstance($defaultCountry->id_currency ? (int)$defaultCountry->id_currency : Configuration::get('PS_CURRENCY_DEFAULT'))->id);
+						$cookie->id_currency = (int)Currency::getCurrencyInstance($defaultCountry->id_currency ? (int)$defaultCountry->id_currency : (int)Configuration::get('PS_CURRENCY_DEFAULT'))->id;
 				}
 				elseif (Configuration::get('PS_GEOLOCATION_NA_BEHAVIOR') == _PS_GEOLOCATION_NO_CATALOG_)
 					$this->restrictedCountry = true;
@@ -507,7 +507,7 @@ class FrontControllerCore
 			'HOOK_LEFT_COLUMN' => Module::hookExec('leftColumn')
 		));
 
-		if ((Configuration::get('PS_CSS_THEME_CACHE') OR Configuration::get('PS_JS_THEME_CACHE')) AND is_writable(_PS_THEME_DIR_.'cache'))
+		if ((Configuration::get('PS_CSS_THEME_CACHE') || Configuration::get('PS_JS_THEME_CACHE')) && is_writable(_PS_THEME_DIR_.'cache'))
 		{
 			// CSS compressor management
 			if (Configuration::get('PS_CSS_THEME_CACHE'))
@@ -532,10 +532,10 @@ class FrontControllerCore
 		self::$smarty->assign(array(
 			'HOOK_RIGHT_COLUMN' => Module::hookExec('rightColumn', array('cart' => self::$cart)),
 			'HOOK_FOOTER' => Module::hookExec('footer'),
-			'content_only' => (int)(Tools::getValue('content_only'))));
+			'content_only' => (int)Tools::getValue('content_only')));
 		self::$smarty->display(_PS_THEME_DIR_.'footer.tpl');
 		//live edit
-		if (Tools::isSubmit('live_edit') AND $ad = Tools::getValue('ad') AND (Tools::getValue('liveToken') == sha1(Tools::getValue('ad')._COOKIE_KEY_)))
+		if (Tools::isSubmit('live_edit') && $ad = Tools::getValue('ad') && Tools::getValue('liveToken') == sha1(Tools::getValue('ad')._COOKIE_KEY_))
 		{
 			self::$smarty->assign(array('ad' => $ad, 'live_edit' => true));
 			self::$smarty->display(_PS_ALL_THEMES_DIR_.'live_edit.tpl');
@@ -549,7 +549,7 @@ class FrontControllerCore
 		if (!self::$initialized)
 			$this->init();
 
-		$stock_management = (int)(Configuration::get('PS_STOCK_MANAGEMENT')) ? true : false; // no display quantity order if stock management disabled
+		$stock_management = (bool)Configuration::get('PS_STOCK_MANAGEMENT'); // no display quantity order if stock management disabled
 		$this->orderBy = Tools::getProductsOrder('by', Tools::getValue('orderby'));
 		$this->orderWay = Tools::getProductsOrder('way', Tools::getValue('orderway'));
 
@@ -559,7 +559,7 @@ class FrontControllerCore
 			'orderbydefault' => Tools::getProductsOrder('by'),
 			'orderwayposition' => Tools::getProductsOrder('way'), // Deprecated: orderwayposition
 			'orderwaydefault' => Tools::getProductsOrder('way'),
-			'stock_management' => (int)($stock_management)));
+			'stock_management' => (int)$stock_management));
 	}
 
 	public function pagination($nbProducts = 10)
@@ -567,12 +567,12 @@ class FrontControllerCore
 		if (!self::$initialized)
 			$this->init();
 
-		$nArray = (int)(Configuration::get('PS_PRODUCTS_PER_PAGE')) != 10 ? array((int)(Configuration::get('PS_PRODUCTS_PER_PAGE')), 10, 20, 50) : array(10, 20, 50);
+		$nArray = Configuration::get('PS_PRODUCTS_PER_PAGE') != 10 ? array((int)Configuration::get('PS_PRODUCTS_PER_PAGE'), 10, 20, 50) : array(10, 20, 50);
 		// Clean duplicate values
 		$nArray = array_unique($nArray);
 		asort($nArray);
-		$this->n = abs((int)(Tools::getValue('n', ((isset(self::$cookie->nb_item_per_page) AND self::$cookie->nb_item_per_page >= 10) ? self::$cookie->nb_item_per_page : (int)(Configuration::get('PS_PRODUCTS_PER_PAGE'))))));
-		$this->p = abs((int)(Tools::getValue('p', 1)));
+		$this->n = abs((int)Tools::getValue('n', (isset(self::$cookie->nb_item_per_page) && self::$cookie->nb_item_per_page >= 10) ? self::$cookie->nb_item_per_page : (int)Configuration::get('PS_PRODUCTS_PER_PAGE')));
+		$this->p = abs((int)Tools::getValue('p', 1));
 
 		if (!is_numeric(Tools::getValue('p', 1)) || Tools::getValue('p', 1) < 0)
 			Tools::redirect('404.php');
@@ -586,13 +586,13 @@ class FrontControllerCore
 		if ($this->p < 0)
 			$this->p = 0;
 
-		if (isset(self::$cookie->nb_item_per_page) AND $this->n != self::$cookie->nb_item_per_page AND in_array($this->n, $nArray))
+		if (isset(self::$cookie->nb_item_per_page) && $this->n != self::$cookie->nb_item_per_page && in_array($this->n, $nArray))
 			self::$cookie->nb_item_per_page = $this->n;
 
 		if ($this->p > (($nbProducts / $this->n) + 1))
 			Tools::redirect(preg_replace('/[&?]p=\d+/', '', $_SERVER['REQUEST_URI']));
 
-		$pages_nb = ceil($nbProducts / (int)($this->n));
+		$pages_nb = ceil($nbProducts / (int)$this->n);
 
 		$start = (int)($this->p - $range);
 		if ($start < 1)
@@ -622,7 +622,7 @@ class FrontControllerCore
 		if (!is_array(self::$currentCustomerGroups))
 		{
 			self::$currentCustomerGroups = array();
-			$result = Db::getInstance()->ExecuteS('SELECT id_group FROM '._DB_PREFIX_.'customer_group WHERE id_customer = '.(int)self::$cookie->id_customer);
+			$result = Db::getInstance()->ExecuteS('SELECT `id_group` FROM `'._DB_PREFIX_.'customer_group` WHERE `id_customer` = '.(int)self::$cookie->id_customer);
 			foreach ($result as $row)
 				self::$currentCustomerGroups[] = $row['id_group'];
 		}
@@ -634,11 +634,10 @@ class FrontControllerCore
 		$allowed = false;
 		$userIp = Tools::getRemoteAddr();
 		$ips = explode(';', Configuration::get('PS_GEOLOCATION_WHITELIST'));
-		if (is_array($ips) AND sizeof($ips))
-			foreach ($ips AS $ip)
-				if (!empty($ip) AND strpos($userIp, $ip) === 0)
+		if (is_array($ips) && count($ips))
+			foreach ($ips as $ip)
+				if (!empty($ip) && strpos($userIp, $ip) === 0)
 					$allowed = true;
 		return $allowed;
 	}
 }
-
