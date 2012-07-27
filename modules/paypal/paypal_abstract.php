@@ -40,6 +40,7 @@ abstract class PayPalAbstract extends PaymentModule
 	public $iso_code;
 
 	public $context;
+	public $paypal_logos;
 
 	const DEFAULT_COUNTRY_ISO = 'GB';
 
@@ -47,7 +48,7 @@ abstract class PayPalAbstract extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'payments_gateways';
-		$this->version = '3.0.6';
+		$this->version = '3.0.7';
 
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
@@ -58,14 +59,16 @@ abstract class PayPalAbstract extends PaymentModule
 		require(_PS_MODULE_DIR_ . $this->name . '/backward_compatibility/backward.php');
 
 		$this->page = basename(__FILE__, '.php');
+
 		$this->displayName = $this->l('PayPal');
-		$this->description = $this->l('Accepts payments by credit cards (Visa, MasterCard, Amex...etc.) with PayPal.');
+		$this->description = $this->l('Accepts payments by credit cards (CB, Visa, MasterCard, Amex, Aurore, Cofinoga, 4 stars) with PayPal.');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details?');
 
         // Default methods (initialization & checks)
         $this->loadLangDefault();
 		$this->paypal_logos = new PayPalLogos($this->iso_code);
 
+		// Upgrade and compatibility checks
 		$this->runUpgrades();
 		$this->compatibilityCheck();
         $this->warningsCheck();
@@ -293,7 +296,7 @@ abstract class PayPalAbstract extends PaymentModule
 
         $extension = ($extension != false) ? $extension : 'tpl';
 
-		return $this->context->smarty->fetch(dirname(__FILE__) . $path . $name . '.' . $extension);
+		return $this->context->smarty->fetch(_PS_MODULE_DIR_.'/paypal/' . $path . $name . '.' . $extension);
 	}
 
 	public function getContent()
@@ -306,25 +309,25 @@ abstract class PayPalAbstract extends PaymentModule
 			$english_language_id = (int)$id_lang;
 
 		$values = array(
-			'Countries' => Country::getCountries($english_language_id),
-			'PP_errors' => $this->_errors,
-			'PayPal_WPS' => (int)WPS,
-			'PayPal_HSS' => (int)HSS,
-			'PayPal_ECS' => (int)ECS,
-			'PayPal_logo' => $this->paypal_logos->getLogos(),
-			'PayPal_allowed_methods' => $this->getPaymentMethods(),
-			'PayPal_country' => Country::getNameById((int)$english_language_id, (int)$this->default_country),
-			'PayPal_business' => Configuration::get('PAYPAL_BUSINESS'),
-			'PayPal_payment_method' => (int)Configuration::get('PAYPAL_PAYMENT_METHOD'),
-			'PayPal_api_username' => Configuration::get('PAYPAL_API_USER'),
-			'PayPal_api_password' => Configuration::get('PAYPAL_API_PASSWORD'),
-			'PayPal_api_signature' => Configuration::get('PAYPAL_API_SIGNATURE'),
-			'PayPal_api_business_account' => Configuration::get('PAYPAL_BUSINESS_ACCOUNT'),
-			'PayPal_express_checkout_shortcut' => (int)Configuration::get('PAYPAL_EXPRESS_CHECKOUT_SHORTCUT'),
-			'PayPal_sandbox_mode' => (int)Configuration::get('PAYPAL_SANDBOX'),
-			'PayPal_payment_capture' => (int)Configuration::get('PAYPAL_CAPTURE'),
-			'PayPal_country_default' => (int)$this->default_country,
-			'PayPal_change_country_url' => 'index.php?tab=AdminCountries&token=' . Tools::getAdminTokenLite('AdminCountries') . '#footer'
+			'PayPal_WPS'						=> (int)WPS,
+			'PayPal_HSS'						=> (int)HSS,
+			'PayPal_ECS'						=> (int)ECS,
+			'PP_errors'							=> $this->_errors,
+			'PayPal_logo'						=> $this->paypal_logos->getLogos(),
+			'PayPal_allowed_methods'			=> $this->getPaymentMethods(),
+			'PayPal_country'					=> Country::getNameById((int)$english_language_id, (int)$this->default_country),
+			'PayPal_business'					=> Configuration::get('PAYPAL_BUSINESS'),
+			'PayPal_payment_method'				=> (int)Configuration::get('PAYPAL_PAYMENT_METHOD'),
+			'PayPal_api_username'				=> Configuration::get('PAYPAL_API_USER'),
+			'PayPal_api_password'				=> Configuration::get('PAYPAL_API_PASSWORD'),
+			'PayPal_api_signature'				=> Configuration::get('PAYPAL_API_SIGNATURE'),
+			'PayPal_api_business_account'		=> Configuration::get('PAYPAL_BUSINESS_ACCOUNT'),
+			'PayPal_express_checkout_shortcut'	=> (int)Configuration::get('PAYPAL_EXPRESS_CHECKOUT_SHORTCUT'),
+			'PayPal_sandbox_mode'				=> (int)Configuration::get('PAYPAL_SANDBOX'),
+			'PayPal_payment_capture'			=> (int)Configuration::get('PAYPAL_CAPTURE'),
+			'PayPal_country_default'			=> (int)$this->default_country,
+			'PayPal_change_country_url'			=> 'index.php?tab=AdminCountries&token=' . Tools::getAdminTokenLite('AdminCountries') . '#footer',
+			'Countries'							=> Country::getCountries($english_language_id),
 		);
 
 		$this->context->smarty->assign($values);
@@ -347,9 +350,15 @@ abstract class PayPalAbstract extends PaymentModule
 
 		// Backward compatibility
 		if (_PS_VERSION_ < '1.5')
+		{
 			Tools::addCSS(_MODULE_DIR_ . $this->name . '/css/paypal.css');
+			Tools::addJS(_MODULE_DIR_ . $this->name . '/js/jquery-1.7.2.min.js');
+		}
 		else
+		{
 			$this->context->controller->addCSS(_MODULE_DIR_ . $this->name . '/css/paypal.css');
+			$this->context->controller->addJS(_MODULE_DIR_ . $this->name . '/js/jquery-1.7.2.min.js');
+		}
 
 		$output = $this->fetchTemplate('/js/', 'front_office', 'js');
 			
@@ -366,21 +375,16 @@ abstract class PayPalAbstract extends PaymentModule
 			return '';
 		}
 
-		$iso_lang = array('en' => 'en_US', 'fr' => 'fr_FR');
-
-		$current_lang_code = (isset($iso_lang[$this->context->language->iso_code])) ? $iso_lang[$this->context->language->iso_code] : 'en_US';
-
-		if (method_exists('Tools', 'getShopDomainSsl'))
-			$shop_url = Tools::getShopDomainSsl(true, true);
-		else
-			$shop_url = PayPal::getShopDomainSsl(true, true);
+		$iso_lang			= array('en' => 'en_US', 'fr' => 'fr_FR');
+		$shop_url			= PayPal::getShopDomainSsl(true, true);
+		$current_iso_code	= $this->context->language->iso_code;
+		$current_lang_code	= (isset($iso_lang[$current_iso_code])) ? $iso_lang[$current_iso_code] : 'en_US';
 
 		$this->context->smarty->assign(
 			array(
 				'PayPal_payment_type'     => 'product',
 				'PayPal_lang_code'        => $current_lang_code,
-				'PayPal_current_shop_url' => $shop_url . $_SERVER['REQUEST_URI'],
-				'PayPal_tracking_code'    => TRACKING_CODE
+				'PayPal_current_shop_url' => $shop_url . $_SERVER['REQUEST_URI']
 			)
 		);
 
@@ -395,15 +399,7 @@ abstract class PayPalAbstract extends PaymentModule
 		}
 
 		$method = Configuration::get('PAYPAL_PAYMENT_METHOD');
-
-		if (method_exists('Tools', 'getShopDomainSsl'))
-		{
-			$shop_url = Tools::getShopDomainSsl(true, true);
-		}
-		else
-		{
-			$shop_url = PayPal::getShopDomainSsl(true, true);
-		}
+		$shop_url = PayPal::getShopDomainSsl(true, true);
 
 		if (isset($this->context->cookie->express_checkout))
 		{
@@ -428,14 +424,16 @@ abstract class PayPalAbstract extends PaymentModule
 
 		if ($method == HSS)
 		{
-			$billing_address = new Address($this->context->cart->id_address_invoice);
-			$delivery_address = new Address($this->context->cart->id_address_delivery);
-			$billing_address->country = new Country($billing_address->id_country);
-			$billing_address->state = new State($billing_address->id_state);
-			$delivery_address->country = new Country($delivery_address->id_country);
-			$delivery_address->state = new State($delivery_address->id_state);
-			$cart_details = $this->context->cart->getSummaryDetails();
-			$hash = sha1(serialize($this->context->cart->getProducts()));
+			$billing_address			= new Address($this->context->cart->id_address_invoice);
+			$delivery_address			= new Address($this->context->cart->id_address_delivery);
+			$billing_address->country	= new Country($billing_address->id_country);
+			$delivery_address->country	= new Country($delivery_address->id_country);
+			$billing_address->state		= new State($billing_address->id_state);
+			$delivery_address->state	= new State($delivery_address->id_state);
+
+			$cart			= new Cart($this->context->cart->id);
+			$cart_details	= $cart->getSummaryDetails(null, true);
+			$cart_hash		= sha1(serialize($cart->nbProducts()));
 
 			// Backward compatibility
 			if (_PS_VERSION_ < '1.5')
@@ -460,12 +458,15 @@ abstract class PayPalAbstract extends PaymentModule
 				'customer'          => $this->context->customer,
 				'business_account'  => Configuration::get('PAYPAL_BUSINESS_ACCOUNT'),
 				'custom'            => json_encode(
-					array('id_cart' => $this->context->cart->id, 'hash'    => $hash)
+					array(
+						'id_cart'	=> $this->context->cart->id,
+						'hash'		=> $cart_hash)
 				),
 				'gift_price'        => (float)Configuration::get('PS_GIFT_WRAPPING_PRICE'),
 				'billing_address'   => $billing_address,
 				'delivery_address'  => $delivery_address,
 				'shipping'          => $shipping,
+				'subtotal'			=> $cart_details['total_price_without_tax'] - $shipping,
 				'time'				=> time(),
 				'cancel_return'     => $shop_url . '/order.php',
 				'notify_url'        => $shop_url . _MODULE_DIR_ . $this->name . '/integral_evolution/notifier.php',
@@ -512,13 +513,9 @@ abstract class PayPalAbstract extends PaymentModule
 		}
 
 		$values = array('en' => 'en_US', 'fr' => 'fr_FR');
-		$lang_iso_code = $this->context->language->iso_code;
-		$current_lang_code = (isset($values[$lang_iso_code])) ? $values[$lang_iso_code] : 'en_US';
-
-		if (method_exists('Tools', 'getShopDomainSsl'))
-			$shop_url = Tools::getShopDomainSsl(true, true);
-		else
-			$shop_url = PayPal::getShopDomainSsl(true, true);
+		$current_iso_code = $this->context->language->iso_code;
+		$current_lang_code = (isset($values[$current_iso_code])) ? $values[$current_iso_code] : 'en_US';
+		$shop_url = PayPal::getShopDomainSsl(true, true);
 
 		$this->context->smarty->assign(
 			array(
@@ -655,46 +652,43 @@ abstract class PayPalAbstract extends PaymentModule
 
 	public function hookCancelProduct($params)
 	{
-		if (Tools::isSubmit('generateDiscount'))
+		if (Tools::isSubmit('generateDiscount') || !$this->isPayPalAPIAvailable())
 		{
 			return false;
 		}
-		if (!$this->isPayPalAPIAvailable())
+		else if ($params['order']->module != $this->name || !($order = $params['order']) || !Validate::isLoadedObject($order))
 		{
 			return false;
 		}
-		if ($params['order']->module != $this->name)
-		{
-			return false;
-		}
-		if (!($order = $params['order']) || !Validate::isLoadedObject($order))
-		{
-			return false;
-		}
-		if (!$order->hasBeenPaid())
-		{
-			return false;
-		}
-		if (!($order_detail = new OrderDetail((int)$params['id_order_detail'])) || !Validate::isLoadedObject($order_detail))
+		else if (!$order->hasBeenPaid())
 		{
 			return false;
 		}
 
-		$id_transaction = $this->_getTransactionId((int)$order->id);
-		if (!$id_transaction)
+		$order_detail = new OrderDetail((int)$params['id_order_detail']);
+		if (!$order_detail || !Validate::isLoadedObject($order_detail))
 		{
 			return false;
 		}
 
-		$products = $order->getProducts();
-		$amt = $products[(int)$order_detail->id]['product_price_wt'] * (int)($_POST['cancelQuantity'][(int)$order_detail->id]);
-
-		$response = $this->_makeRefund($id_transaction, $order->id, (float)($amt));
-		$message = $this->l('Cancel products result:') . '<br>';
-		foreach ($response as $key => $value)
+		$paypal_order = PayPalOrder::getOrderById((int)$order->id);
+		if (!$paypal_order)
 		{
-			$message .= $key . ': ' . $value . '<br>';
+			return false;
 		}
+
+		$products			= $order->getProducts();
+		$product_price		= $products[$order_detail->id]['product_price_wt'];
+
+		$cancel_quantity	= Tools::getValue('cancelQuantity');
+		$quantity			= $cancel_quantity[(int)$order_detail->id];
+
+		$amt				= (int)($product_price * (int)($quantity));
+
+		$response			= $this->_makeRefund($paypal_order->id_transaction, $order->id, (float)($amt));
+		$message			= $this->l('Cancel products result:') . '<br>';
+
+		PayPalTools::formatMessage($response, $message);
 		$this->_addNewPrivateMessage((int)$order->id, $message);
 	}
 
@@ -711,9 +705,7 @@ abstract class PayPalAbstract extends PaymentModule
         {
             $this->getContext()->smarty->assign(
                 array(
-					'css_dir' => _PS_CSS_DIR_,
-					'js_dir' => _PS_JS_DIR_,
-                    'pp_module_dir' => _MODULE_DIR_.$this->name,
+                    'PayPal_module_dir' => _MODULE_DIR_ . $this->name,
                     'PayPal_WPS' => (int)WPS,
                     'PayPal_HSS' => (int)HSS,
                     'PayPal_ECS' => (int)ECS
@@ -752,7 +744,7 @@ abstract class PayPalAbstract extends PaymentModule
 				{
 					$content = (array)$country;
 				}
-				if ($country_iso == 'default')
+				else if ($country_iso == 'default')
 				{
 					$default = (array)$country;
 				}
@@ -826,9 +818,9 @@ abstract class PayPalAbstract extends PaymentModule
 	{
 		global $cookie;
 
-		$cart = new Cart((int)$cookie->id_cart);
-		$address = new Address((int)$cart->id_address_invoice);
-		$country = new Country((int)$address->id_country);
+		$cart		= new Cart((int)$cookie->id_cart);
+		$address	= new Address((int)$cart->id_address_invoice);
+		$country	= new Country((int)$address->id_country);
 
 		return $country->iso_code;
 	}
@@ -879,35 +871,6 @@ abstract class PayPalAbstract extends PaymentModule
 		}
 
 		return $this->fetchTemplate('/views/templates/front/', 'error');
-	}
-
-	public function _saveTransaction($id_order, $transaction)
-	{
-		$id_order = (int)$id_order;
-		$id_transaction = pSQL($transaction['id_transaction']);
-		$id_invoice = pSQL($transaction['id_invoice']);
-		$currency = pSQL($transaction['currency']);
-		$shipping = (float)$transaction['shipping'];
-		$payment_date = pSQL($transaction['payment_date']);
-		$capture = (int)Configuration::get('PAYPAL_CAPTURE');
-		$payment_method = (int)Configuration::get('PAYPAL_PAYMENT_METHOD');
-
-		$order = new Order($id_order);
-
-		if ($order->gift)
-		{
-			$total_paid = (float)$transaction['total_paid'] + (float)Configuration::get('PS_GIFT_WRAPPING_PRICE');
-		}
-		else
-		{
-			$total_paid = (float)$transaction['total_paid'];
-		}
-
-		$sql = 'INSERT INTO `' . _DB_PREFIX_ . 'paypal_order`
-				(`id_order`, `id_transaction`, `id_invoice`, `currency`, `total_paid`, `shipping`, `payment_date`, `payment_method`, `capture`)
-				VALUES (' . $id_order . ', \'' . $id_transaction . '\', \'' . $id_invoice . '\', \'' . $currency . '\', \'' . $total_paid . '\', \'' . $shipping . '\', \'' . $payment_date . '\', ' . $payment_method . ', ' . $capture . ')';
-
-		Db::getInstance()->Execute($sql);
 	}
 
 	private function _canRefund($id_order)
@@ -1055,20 +1018,6 @@ abstract class PayPalAbstract extends PaymentModule
 		return;
 	}
 
-	private function _getTransactionId($id_order)
-	{
-		if (!(int)$id_order)
-		{
-			return false;
-		}
-
-		$sql = 'SELECT `id_transaction`
-				FROM `' . _DB_PREFIX_ . 'paypal_order`
-				WHERE `id_order` = ' . (int)$id_order;
-
-		return Db::getInstance()->getValue($sql);
-	}
-
 	private function _makeRefund($id_transaction, $id_order, $amt = false)
 	{
 		include_once(_PS_MODULE_DIR_ . 'paypal/api/paypal_lib.php');
@@ -1077,28 +1026,27 @@ abstract class PayPalAbstract extends PaymentModule
 		{
 			die(Tools::displayError('Fatal Error: no API Credentials are available'));
 		}
-		if (!$id_transaction)
+		else if (!$id_transaction)
 		{
 			die(Tools::displayError('Fatal Error: id_transaction is null'));
 		}
 
 		if (!$amt)
 		{
-			$request = array(
+			$params = array(
 				'TRANSACTIONID' => $id_transaction,
 				'REFUNDTYPE'    => 'Full'
 			);
 		}
 		else
 		{
-			$sql = 'SELECT `iso_code`
-					FROM `' . _DB_PREFIX_ . 'orders` o
+			$sql = 'SELECT `iso_code` FROM `' . _DB_PREFIX_ . 'orders` o
 					LEFT JOIN `' . _DB_PREFIX_ . 'currency` c ON (o.`id_currency` = c.`id_currency`)
 					WHERE o.`id_order` = ' . (int)$id_order;
 
 			$isoCurrency = Db::getInstance()->getValue($sql);
 
-			$request = array(
+			$params = array(
 				'TRANSACTIONID'	=> $id_transaction,
 				'REFUNDTYPE'	=> 'Partial',
 				'AMT'			=> (float)$amt,
@@ -1106,42 +1054,38 @@ abstract class PayPalAbstract extends PaymentModule
 			);
 		}
 
-		$paypal_lib = new PaypalLib();
-		$request = '&' . http_build_query($request, '', '&');
+		$paypal_lib	= new PaypalLib();
+		$request	= '&' . http_build_query($params, '', '&');
 
 		return $paypal_lib->makeCall($this->getAPIURL(), $this->getAPIScript(), 'RefundTransaction', $request);
 	}
 
-	private function _addNewPrivateMessage($id_order, $message)
+	public function _addNewPrivateMessage($id_order, $message)
 	{
 		if (!$id_order)
 		{
 			return false;
 		}
 
-		$msg = new Message();
-		$message = strip_tags($message, '<br>');
+		$new_message	= new Message();
+		$message		= strip_tags($message, '<br>');
+
 		if (!Validate::isCleanHtml($message))
 		{
 			$message = $this->l('Payment message is not valid, please check your module.');
 		}
 
-		$msg->message = $message;
-		$msg->id_order = (int)$id_order;
-		$msg->private = 1;
+		$new_message->message	= $message;
+		$new_message->id_order	= (int)$id_order;
+		$new_message->private	= 1;
 
-		return $msg->add();
+		return $new_message->add();
 	}
 
 	private function _doTotalRefund($id_order)
 	{
-		if (!$this->isPayPalAPIAvailable() || !$id_order)
-		{
-			return false;
-		}
-
-		$id_transaction = $this->_getTransactionId((int)$id_order);
-		if (!$id_transaction)
+		$paypal_order = PayPalOrder::getOrderById((int)$id_order);
+		if (!$this->isPayPalAPIAvailable() || !$paypal_order)
 		{
 			return false;
 		}
@@ -1151,13 +1095,14 @@ abstract class PayPalAbstract extends PaymentModule
 		{
 			return false;
 		}
-		$products = $order->getProducts();
 
-		$currency = new Currency((int)$this->context->cart->id_currency);
+		$products	= $order->getProducts();
+		$currency	= new Currency((int)$this->context->cart->id_currency);
 		if (!Validate::isLoadedObject($currency))
 		{
 			$this->_errors[] = $this->l('Not a valid currency');
 		}
+
 		if (sizeof($this->_errors))
 		{
 			return false;
@@ -1178,11 +1123,11 @@ abstract class PayPalAbstract extends PaymentModule
 		// check if total or partial
 		if (Tools::ps_round($order->total_paid_real, $decimals) == Tools::ps_round($amt, $decimals))
 		{
-			$response = $this->_makeRefund($id_transaction, $id_order);
+			$response = $this->_makeRefund($paypal_order->id_transaction, $id_order);
 		}
 		else
 		{
-			$response = $this->_makeRefund($id_transaction, $id_order, (float)($amt));
+			$response = $this->_makeRefund($paypal_order->id_transaction, $id_order, (float)($amt));
 		}
 
 		$message = $this->l('Refund operation result:') . '<br>';
@@ -1215,37 +1160,29 @@ abstract class PayPalAbstract extends PaymentModule
 	{
 		include_once(_PS_MODULE_DIR_ . 'paypal/api/paypal_lib.php');
 
-		if (!$this->isPayPalAPIAvailable())
-		{
-			return false;
-		}
-		if (!$id_order)
-		{
-			return false;
-		}
-
-		$id_transaction = $this->_getTransactionId((int)$id_order);
-		if (!$id_transaction)
+		$paypal_order = PayPalOrder::getOrderById((int)$id_order);
+		if (!$this->isPayPalAPIAvailable() || !$paypal_order)
 		{
 			return false;
 		}
 
-		$order = new Order((int)$id_order);
-		$currency = new Currency((int)$order->id_currency);
-		$request = array(
+		$order			= new Order((int)$id_order);
+		$currency		= new Currency((int)$order->id_currency);
+		$params			= array(
 			'AMT'             => (float)$order->total_paid,
-			'AUTHORIZATIONID' => $id_transaction,
+			'AUTHORIZATIONID' => $paypal_order->id_transaction,
 			'CURRENCYCODE'    => $currency->iso_code,
 			'COMPLETETYPE'    => 'Complete');
-		$request = '&' . http_build_query($request, '', '&');
 
-		$paypalLib = new PaypalLib();
-		$response = $paypalLib->makeCall($this->getAPIURL(), $this->getAPIScript(), 'DoCapture', $request);
 
-		$message = $this->l('Capture operation result:') . '<br>';
-		foreach ($response AS $k => $value)
+		$paypal_lib	= new PaypalLib();
+		$request	= '&' . http_build_query($params, '', '&');
+		$response	= $paypal_lib->makeCall($this->getAPIURL(), $this->getAPIScript(), 'DoCapture', $request);
+		$message	= $this->l('Capture operation result:') . '<br>';
+
+		foreach ($response as $key => $value)
 		{
-			$message .= $k . ': ' . $value . '<br>';
+			$message .= $key . ': ' . $value . '<br>';
 		}
 
 		if ((array_key_exists('ACK', $response)) && ($response['ACK'] == 'Success') && ($response['PAYMENTSTATUS'] == 'Completed'))
@@ -1278,57 +1215,49 @@ abstract class PayPalAbstract extends PaymentModule
 	{
 		include_once(_PS_MODULE_DIR_ . 'paypal/api/paypal_lib.php');
 
-		if (!$this->isPayPalAPIAvailable())
-		{
-			return false;
-		}
-		if (!$id_order)
+		if (!$id_order || !$this->isPayPalAPIAvailable())
 		{
 			return false;
 		}
 
-		$id_transaction = $this->_getTransactionId((int)$id_order);
-		if (!$id_transaction)
+		$paypal_order = PayPalOrder::getOrderById((int)$id_order);
+		if (!$paypal_order)
 		{
 			return false;
 		}
 
-		$request = array('TRANSACTIONID' => $id_transaction);
-		$request = '&' . http_build_query($request, '', '&');
 
-		$paypalLib = new PaypalLib();
-		$response = $paypalLib->makeCall($this->getAPIURL(), $this->getAPIScript(), 'GetTransactionDetails', $request);
+		$paypal_lib	= new PaypalLib();
+		$request	= '&' . http_build_query(array('TRANSACTIONID' => $paypal_order->id_transaction), '', '&');
+		$response	= $paypal_lib->makeCall($this->getAPIURL(), $this->getAPIScript(), 'GetTransactionDetails', $request);
+
 		if (array_key_exists('ACK', $response))
 		{
 			if ($response['ACK'] == 'Success')
 			{
 				if (isset($response['PAYMENTSTATUS']))
 				{
+					$history = new OrderHistory();
+					$history->id_order = (int)$id_order;
+
 					if ($response['PAYMENTSTATUS'] == 'Completed')
 					{
-						$history = new OrderHistory();
-						$history->id_order = (int)$id_order;
 						$history->changeIdOrderState(Configuration::get('PS_OS_PAYMENT'), (int)$id_order);
-						$history->addWithemail();
 					}
 					else if (($response['PAYMENTSTATUS'] == 'Pending') && ($response['PENDINGREASON'] == 'authorization'))
 					{
-						$history = new OrderHistory();
-						$history->id_order = (int)$id_order;
 						$history->changeIdOrderState((int)(Configuration::get('PAYPAL_OS_AUTHORIZATION')), (int)$id_order);
-						$history->addWithemail();
 					}
 					else if ($response['PAYMENTSTATUS'] == 'Reversed')
 					{
-						$history = new OrderHistory();
-						$history->id_order = (int)$id_order;
 						$history->changeIdOrderState(Configuration::get('PS_OS_ERROR'), (int)$id_order);
-						$history->addWithemail();
 					}
+					$history->addWithemail();
 
 					$sql = 'UPDATE `' . _DB_PREFIX_ . 'paypal_order`
 							SET `payment_status` = \'' . pSQL($response['PAYMENTSTATUS']) . ($response['PENDINGREASON'] == 'authorization' ? '_authorization' : '') . '\'
 							WHERE `id_order` = ' . (int)$id_order;
+
 					if (!Db::getInstance()->Execute($sql))
 					{
 						die(Tools::displayError('Error when updating PayPal database'));
@@ -1336,34 +1265,25 @@ abstract class PayPalAbstract extends PaymentModule
 				}
 			}
 
-			$message = $this->l('Verification status:') . '<br>';
-			foreach ($response AS $k => $value)
-			{
-				$message .= $k . ': ' . $value . '<br>';
-			}
+			$message = $this->l('Verification status :') . '<br>';
+			PayPalTools::formatMessage($response, $message);
 
 			$this->_addNewPrivateMessage((int)$id_order, $message);
+
 			return $response;
 		}
+
 		return false;
 	}
 
-	public function getOrder($id_transaction)
-	{
-		return Db::getInstance()->getValue('
-		SELECT `id_order`
-		FROM `' . _DB_PREFIX_ . 'paypal_order`
-		WHERE `id_transaction` = \'' . pSQL($id_transaction) . '\'');
-	}
-
-	// Retrocompatibility to 1.3
-	const ONLY_PRODUCTS = 1;
-	const ONLY_DISCOUNTS = 2;
-	const BOTH = 3;
-	const BOTH_WITHOUT_SHIPPING = 4;
-	const ONLY_SHIPPING = 5;
-	const ONLY_WRAPPING = 6;
-	const ONLY_PRODUCTS_WITHOUT_SHIPPING = 7;
+	// Prestashop 1.3 retro-compatibility
+	const ONLY_PRODUCTS						= 1;
+	const ONLY_DISCOUNTS					= 2;
+	const BOTH								= 3;
+	const BOTH_WITHOUT_SHIPPING				= 4;
+	const ONLY_SHIPPING						= 5;
+	const ONLY_WRAPPING						= 6;
+	const ONLY_PRODUCTS_WITHOUT_SHIPPING	= 7;
 
 	/**
 	 * Return the complete URI for a module
@@ -1378,32 +1298,18 @@ abstract class PayPalAbstract extends PaymentModule
 	{
 		$url = __PS_BASE_URI__ . 'modules/' . $this->name . '/' . (!empty($file) ? $file : '');
 
-		$query = null;
-		if (is_array($options))
-		{
-			$query = '?' . http_build_query($options, '', '&');
-		}
-
-		if (method_exists('Tools', 'getShopDomainSsl'))
-		{
-			return Tools::getShopDomainSsl() . $url . $query;
-		}
-		else
-		{
-			return PayPal::getShopDomainSsl() . url . $query;
-		}
+		return PayPal::getShopDomainSsl() . $url . '?' . http_build_query($options, '', '&');
 	}
 
-	public static function getIdCustomerWithPPEmail($email)
+	public static function getPayPalCustomerIdByEmail($email)
 	{
-		$sql = 'SELECT `id_customer`
-				FROM `' . _DB_PREFIX_ . 'paypal_customer`
+		$sql = 'SELECT `id_customer` FROM `' . _DB_PREFIX_ . 'paypal_customer`
 				WHERE paypal_email ="' . pSQL($email) . '"';
 
 		return Db::getInstance()->getValue($sql);
 	}
 
-	public static function getPPEMailByIdCustomer($id_customer)
+	public static function getPayPalEmailByIdCustomer($id_customer)
 	{
 		$sql = 'SELECT `paypal_email`
 				FROM `' . _DB_PREFIX_ . 'paypal_customer`
@@ -1412,9 +1318,9 @@ abstract class PayPalAbstract extends PaymentModule
 		return Db::getInstance()->getValue($sql);
 	}
 
-	public static function addPPCustomer($id_customer, $email)
+	public static function addPayPalCustomer($id_customer, $email)
 	{
-		if (!PayPal::getPPEMailByIdCustomer($id_customer))
+		if (!PayPal::getPayPalEmailByIdCustomer($id_customer))
 		{
 			$sql = 'INSERT INTO `' . _DB_PREFIX_ . 'paypal_customer`
 					(`id_customer`, `paypal_email`)
@@ -1448,11 +1354,11 @@ abstract class PayPalAbstract extends PaymentModule
     private function loadLangDefault()
     {
         // Get values
-        $ps_country_default = Configuration::get('PS_COUNTRY_DEFAULT');
-        $paypal_country_default = (int)Configuration::get('PAYPAL_COUNTRY_DEFAULT');
+        $ps_country_default		= Configuration::get('PS_COUNTRY_DEFAULT');
+        $paypal_country_default	= (int)Configuration::get('PAYPAL_COUNTRY_DEFAULT');
 
-        $this->default_country = (int)($paypal_country_default ? $paypal_country_default : $ps_country_default);
-        $this->iso_code = $this->getCountryDependency(Country::getIsoById((int)$this->default_country));
+        $this->default_country	= (int)($paypal_country_default ? $paypal_country_default : $ps_country_default);
+        $this->iso_code			= $this->getCountryDependency(Country::getIsoById((int)$this->default_country));
     }
 
 	public function getContext()
@@ -1460,25 +1366,27 @@ abstract class PayPalAbstract extends PaymentModule
 		return $this->context;
 	}
 
-	public static function getShopDomain($http = false, $entities = false)
-	{
-		if (!($domain = Configuration::get('PS_SHOP_DOMAIN')))
-			$domain = self::getHttpHost();
-		if ($entities)
-			$domain = htmlspecialchars($domain, ENT_COMPAT, 'UTF-8');
-		if ($http)
-			$domain = 'http://'.$domain;
-		return $domain;
-	}
-
 	public static function getShopDomainSsl($http = false, $entities = false)
 	{
-		if (!($domain = Configuration::get('PS_SHOP_DOMAIN_SSL')))
-			$domain = self::getHttpHost();
-		if ($entities)
-			$domain = htmlspecialchars($domain, ENT_COMPAT, 'UTF-8');
-		if ($http)
-			$domain = (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$domain;
-		return $domain;
+		if (method_exists('Tools', 'getShopDomainSsl'))
+		{
+			return Tools::getShopDomainSsl($http, $entities);
+		}
+		else
+		{
+			if (!($domain = Configuration::get('PS_SHOP_DOMAIN_SSL')))
+			{
+				$domain = self::getHttpHost();
+			}
+			if ($entities)
+			{
+				$domain = htmlspecialchars($domain, ENT_COMPAT, 'UTF-8');
+			}
+			if ($http)
+			{
+				$domain = (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$domain;
+			}
+			return $domain;
+		}
 	}
 }

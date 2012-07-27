@@ -27,15 +27,22 @@
 
 if (!defined('_PS_VERSION_'))
 	exit;
-	
-define('WPS', 1);
-define('HSS', 2);
-define('ECS', 4);
-define('TRACKING_CODE', 'FR_PRESTASHOP_H3S');
-define('_PAYPAL_LOGO_XML_', 'logos.xml');
-define('_PAYPAL_MODULE_DIRNAME_', 'paypal');
-define('_PAYPAL_TRANSLATIONS_XML_', 'translations.xml');
 
 include(_PS_MODULE_DIR_.'/paypal/paypal_abstract.php');
 include(_PS_MODULE_DIR_.'/paypal/paypal_logos.php');
-include(_PS_MODULE_DIR_.'/paypal/paypal_'.(_PS_VERSION_ < '1.5' ? '1.4' : '1.5').'.php');
+include(_PS_MODULE_DIR_.'/paypal/paypal_orders.php');
+
+if (_PS_VERSION_ < '1.5')
+	include(_PS_MODULE_DIR_.'/paypal/paypal_1.4.php');
+else
+	include(_PS_MODULE_DIR_.'/paypal/paypal_1.5.php');
+
+define('WPS', 1);
+define('HSS', 2);
+define('ECS', 4);
+
+define('TRACKING_CODE', 'FR_PRESTASHOP_H3S');
+
+define('_PAYPAL_LOGO_XML_', 'logos.xml');
+define('_PAYPAL_MODULE_DIRNAME_', 'paypal');
+define('_PAYPAL_TRANSLATIONS_XML_', 'translations.xml');

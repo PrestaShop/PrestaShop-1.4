@@ -26,15 +26,25 @@
 */
 
 include_once(dirname(__FILE__).'/../../../config/config.inc.php');
+include_once(dirname(__FILE__).'/../../../init.php');
 
-$id_cart = Tools::getValue('id_cart');
-if ($id_cart && $id_order = (int)Order::getOrderByCartId($id_cart))
+if ($id_cart = Tools::getValue('id_cart'))
 {
-	if (Db::getInstance()->getValue('
-	SELECT COUNT(*)
-	FROM `'._DB_PREFIX_.'paypal_order`
-	WHERE id_order = '.(int)$id_order))
-		die((string)$id_order);
-}
+	$id_order = (int)Order::getOrderByCartId($id_cart);
 
-die('0');
+	$sql = 'SELECT * FROM `'._DB_PREFIX_.'paypal_order`
+			WHERE `id_order` = '.(int)$id_order;
+
+	$row = Db::getInstance()->getRow($sql);
+
+	if ($row != false)
+	{
+		echo $row['id_order'];
+	}
+
+	die();
+}
+else
+{
+	die(0);
+}

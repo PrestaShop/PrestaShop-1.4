@@ -50,62 +50,79 @@ define('VERIFY_SIGN', 'verify_sign');
 
 define('DEBUG_FILE', 'debug.log');
 
+/*
+ * Instant payment notification class.
+ * (wait for PayPal payment confirmation, then validate order)
+ */
 class PayPalNotifier extends PayPal {
 
 	public function __construct()
 	{
 		parent::__construct();
-
-		if (isset($_POST) && !empty($_POST))
-		{
-			$data = Tools::getValue('custom');
-			$result = json_decode($data, true);
-
-			$this->confirmOrder($result);
-		}
 	}
 
-	private function confirmOrder($custom)
+	public function confirmOrder($custom)
 	{
-		$cart = new Cart($custom['id_cart']);
-		$cart_details = $cart->getSummaryDetails();
-		$cart_hash = sha1(serialize($cart->getProducts()));
+		$cart 			= new Cart((int)$custom['id_cart']);
+		$cart_details	= $cart->getSummaryDetails(null, true);
+		$cart_hash		= sha1(serialize($cart->nbProducts()));
 
-		$mc_gross = Tools::getValue('mc_gross');
-		$total_price = $cart_details['total_price'];
+		$this->createLog($cart->getProducts(true));
 
-		$result = $this->verify();
+		$mc_gross		= Tools::getValue('mc_gross');
+		$total_price	= Tools::ps_round($cart_details['total_price'], 2);
+
+		$message		= null;
+		$result			= $this->verify();
 
 		if (strcmp($result, VERIFIED) == 0)
 		{
-			if (($mc_gross == $total_price) && ($custom['hash'] == $cart_hash))
+			if ($mc_gross != $total_price)
 			{
-				$payment = Configuration::get('PS_OS_PAYMENT');
+				$payment	= Configuration::get('PS_OS_ERROR');
+				$message	= $this->l('Price payed on paypal is not the same that on PrestaShop.').'<br />';
+			}
+			elseif ($custom['hash'] != $cart_hash)
+			{
+				$payment	= Configuration::get('PS_OS_ERROR');
+				$message	= $this->l('Cart changed, please retry.').'<br />';
 			}
 			else
 			{
-				$payment = Configuration::get('PS_OS_ERROR');
+				$payment	= Configuration::get('PS_OS_PAYMENT');
+				$message	= $this->l('Payment accepted.').'<br />';
 			}
 
-			$this->validateOrder($cart->id, $payment, $total_price, $this->displayName);
-			$this->save($cart->id);
+			$customer = new Customer($cart->id_customer);
+
+			$id_order = (int)Order::getOrderByCartId($id_cart);
+
+			$transaction = array(
+				'currency'			=> pSQL(Tools::getValue(CURRENCY)),
+				'id_invoice'		=> pSQL(Tools::getValue(ID_INVOICE)),
+				'id_transaction'	=> pSQL(Tools::getValue(ID_TRANSACTION)),
+				'payment_date'		=> pSQL(Tools::getValue(PAYMENT_DATE)),
+				'shipping'			=> (float)Tools::getValue(SHIPPING),
+				'total_paid'		=> (float)Tools::getValue(TOTAL_PAID),
+			);
+
+			$this->validateOrder($cart->id, $payment, $total_price, $this->displayName, $message, $transaction, $cart->id_currency, false, $customer->secure_key);
+
 		}
 	}
 
 	public function save($id_cart)
 	{
-		$id_order = (int)Order::getOrderByCartId($id_cart);
+	}
 
-		$transaction = array(
-			'id_transaction' => pSQL(Tools::getValue(ID_TRANSACTION)),
-			'id_invoice' => pSQL(Tools::getValue(ID_INVOICE)),
-			'currency' => pSQL(Tools::getValue(CURRENCY)),
-			'total_paid' => (float)Tools::getValue(TOTAL_PAID),
-			'shipping' => (float)Tools::getValue(SHIPPING),
-			'payment_date' => pSQL(Tools::getValue(PAYMENT_DATE))
-		);
+	public function verify()
+	{
+		$url	= $this->getPaypalStandardUrl();
+		$array	= array_merge(array('cmd' => '_notify-validate'), $_POST);
+		$data	= http_build_query($array, '', '&');
 
-		$this->_saveTransaction($id_order, $transaction);
+		/* Get confirmation from PayPal */
+		return $this->fetchResponse($url, $data);
 	}
 
 	public function fetchResponse($url, $data)
@@ -125,17 +142,30 @@ class PayPalNotifier extends PayPal {
 
 		return $result;
 	}
-
-	public function verify()
+	
+	public function createLog($data, $file = false)
 	{
-		$url = $this->getPaypalStandardUrl();
-		$array = array_merge(array('cmd' => '_notify-validate'), $_POST);
-
-		$data = http_build_query($array, '', '&');
-
-		return $this->fetchResponse($url, $data);
+		// Integral Evolution log file generation
+		ob_start();
+		var_dump($data);
+		$buff = ob_get_contents();
+		ob_end_clean();
+	
+		$file = $file ? : 'log.txt';
+		$handle = @fopen($file, 'w+');
+		fwrite($handle, $buff);
+		fclose($handle);
 	}
 
 }
 
-new PayPalNotifier();
+if ($custom = Tools::getValue('custom'))
+{
+	$notifier	= new PayPalNotifier();
+	$result		= json_decode($custom, true);
+
+//	$notifier->createLog($result, 'result.txt');
+//	die();
+
+	$notifier->confirmOrder($result);
+}

@@ -33,47 +33,61 @@ class PayPalSubmitModuleFrontController extends ModuleFrontController
 {
 	public $display_column_left = false;
 
-	public function getPayPalOrder($id_order)
-	{
-		$sql = 'SELECT *
-				FROM `' . _DB_PREFIX_ . 'paypal_order`
-				WHERE `id_order` = ' . (int)$id_order;
-
-		return Db::getInstance()->getRow($sql);
-	}
-
 	public function initContent()
 	{
 		parent::initContent();
 
-		$this->paypal = new PayPal();
-		$this->context = Context::getContext();
+		$this->paypal		= new PayPal();
+		$this->context		= Context::getContext();
 
-		$this->id_module = (int)Tools::getValue('id_module');
-		$this->id_order = (int)Tools::getValue('id_order');
-		$this->order = new Order($this->id_order);
+		$this->id_module	= (int)Tools::getValue('id_module');
+		$this->order		= PayPalOrder::getOrderById((int)$this->order->id_order);
 
 		$this->context->smarty->assign(
-			array('order'                   => $this->order,
-		          'id_order'                => $this->id_order,
-		          'currency'                => $this->context->currency,
-		          'is_guest'                => $this->context->customer->is_guest,
-		          'paypal_order'            => $this->getPayPalOrder($this->id_order),
-		          'HOOK_ORDER_CONFIRMATION' => $this->displayOrderConfirmation(),
-		          'HOOK_PAYMENT_RETURN'     => $this->displayPaymentReturn())
+			array(
+		    	'currency'               	=> $this->context->currency,
+		        'is_guest'               	=> $this->context->customer->is_guest,
+		        'order'						=> $this->order,
+		        'HOOK_ORDER_CONFIRMATION'	=> $this->displayOrderConfirmation(),
+		        'HOOK_PAYMENT_RETURN'    	=> $this->displayPaymentReturn()
+			)
 		);
 
 		if ($this->context->customer->is_guest)
 		{
-			$this->context->smarty->assign(array('id_order'           => $this->id_order,
-			                                     'id_order_formatted' => sprintf('#%06d', $this->id_order)));
+			$this->context->smarty->assign(
+				array(
+					'id_order'           => $this->order->id_order,
+			        'id_order_formatted' => sprintf('#%06d', $this->order->id_order)
+				)
+			);
+
 			/* If guest we clear the cookie for security reason */
 			$this->context->customer->mylogout();
 		}
 
-
-
 		$this->setTemplate('order-confirmation.tpl');
+	}
+
+	private function displayHook()
+	{
+		if (Validate::isUnsignedId($this->order->id_order) && Validate::isUnsignedId($this->id_module))
+		{
+			$order		= new Order($this->order->id_order);
+			$currency	= new Currency($order->id_currency);
+
+			if (Validate::isLoadedObject($order))
+			{
+				$params['objOrder']		= $order;
+				$params['currencyObj']	= $currency;
+				$params['currency']		= $currency->sign;
+				$params['total_to_pay']	= $order->getOrdersTotalPaid();
+
+				return $params;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -81,23 +95,16 @@ class PayPalSubmitModuleFrontController extends ModuleFrontController
 	 */
 	public function displayPaymentReturn()
 	{
-		if (Validate::isUnsignedId($this->id_order) && Validate::isUnsignedId($this->id_module))
+		$params = $this->displayHook();
+
+		if ($params && is_array($params))
 		{
-			$params = array();
-			$order = new Order($this->id_order);
-			$currency = new Currency($order->id_currency);
-
-			if (Validate::isLoadedObject($order))
-			{
-				$params['total_to_pay'] = $order->getOrdersTotalPaid();
-				$params['currency'] = $currency->sign;
-				$params['objOrder'] = $order;
-				$params['currencyObj'] = $currency;
-
-				return Hook::exec('displayPaymentReturn', $params, $this->id_module);
-			}
+			return Hook::exec('displayPaymentReturn', $params, $this->id_module);
 		}
-		return false;
+		else
+		{
+			return false;
+		}
 	}
 
 	/**
@@ -105,22 +112,15 @@ class PayPalSubmitModuleFrontController extends ModuleFrontController
 	 */
 	public function displayOrderConfirmation()
 	{
-		if (Validate::isUnsignedId($this->id_order))
+		$params = $this->displayHook();
+
+		if ($params && is_array($params))
 		{
-			$params = array();
-			$order = new Order($this->id_order);
-			$currency = new Currency($order->id_currency);
-
-			if (Validate::isLoadedObject($order))
-			{
-				$params['total_to_pay'] = $order->getOrdersTotalPaid();
-				$params['currency'] = $currency->sign;
-				$params['objOrder'] = $order;
-				$params['currencyObj'] = $currency;
-
-				return Hook::exec('displayOrderConfirmation', $params);
-			}
+			return Hook::exec('displayOrderConfirmation', $params);
 		}
-		return false;
+		else
+		{
+			return false;
+		}
 	}
 }

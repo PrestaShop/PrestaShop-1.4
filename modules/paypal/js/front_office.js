@@ -1,13 +1,15 @@
 {literal}
+jQuery.noConflict(true);
+
 jQuery(document).ready( function() {
 
 	jQuery('#payment_paypal_express_checkout').click(function() {
 		var nb = jQuery('#quantity_wanted').val();
 		var id = jQuery('#idCombination').val();
 
-		jQuery('#paypal_express_checkout_form input[name=quantity]').val(nb);
-		jQuery('#paypal_express_checkout_form input[name=id_p_attr]').val(id);
-		jQuery('#paypal_express_checkout_form').submit();
+		jQuery('#paypal_payment_form input[name=quantity]').val(nb);
+		jQuery('#paypal_payment_form input[name=id_p_attr]').val(id);
+		jQuery('#paypal_payment_form').submit();
 	});
 
 	if (jQuery('form[target="hss_iframe"]').length == 0) {
@@ -18,7 +20,7 @@ jQuery(document).ready( function() {
 		var subFolder = '/integral_evolution';
 		var fullPath = hostname + modulePath + subFolder;
 
-		var confirmTimer = setInterval(getOrdersCount, 200);
+		var confirmTimer = setInterval(getOrdersCount, 1000);
 	}
 
 	function getOrdersCount() {

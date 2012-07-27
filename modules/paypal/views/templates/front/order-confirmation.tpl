@@ -39,16 +39,16 @@
 
 <br />
 
-<p>{l s='Total of the transaction (taxes incl.) :'} <span class="bold">{$order->total_paid_real}{$currency->sign}</span></p>
-<p>{l s='Your order ID is :'} <span class="bold">{$id_order}</span></p>
-<p>{l s='Your PayPal transaction ID is :'} <span class="bold">{$id_transaction}</span></p>
+<p>{l s='Total of the transaction (taxes incl.) :'} <span class="bold">{$order.total_paid}{$currency->sign}</span></p>
+<p>{l s='Your order ID is :'} <span class="bold">{$order.id_order}</span></p>
+<p>{l s='Your PayPal transaction ID is :'} <span class="bold">{$order.id_transaction}</span></p>
 
 <br />
 
 {if $is_guest}
-<a href="{$link->getPageLink('guest-tracking.php', true)}?id_order={$id_order}" title="{l s='Follow my order'}"><img src="{$img_dir}icon/order.gif" alt="{l s='Follow my order'}" class="icon" /></a>
-<a href="{$link->getPageLink('guest-tracking.php', true)}?id_order={$id_order}" title="{l s='Follow my order'}">{l s='Follow my order'}</a>
-	{else}
-<a href="{$link->getPageLink('history.php', true)}" title="{l s='Back to orders'}"><img src="{$img_dir}icon/order.gif" alt="{l s='Back to orders'}" class="icon" /></a>
-<a href="{$link->getPageLink('history.php', true)}" title="{l s='Back to orders'}">{l s='Back to orders'}</a>
+	<a href="{$link->getPageLink('guest-tracking.php', true)}?id_order={$order.id_order}" title="{l s='Follow my order'}"><img src="{$img_dir}icon/order.gif" alt="{l s='Follow my order'}" class="icon" /></a>
+	<a href="{$link->getPageLink('guest-tracking.php', true)}?id_order={$order.id_order}" title="{l s='Follow my order'}">{l s='Follow my order'}</a>
+{else}
+	<a href="{$link->getPageLink('history.php', true)}" title="{l s='Back to orders'}"><img src="{$img_dir}icon/order.gif" alt="{l s='Back to orders'}" class="icon" /></a>
+	<a href="{$link->getPageLink('history.php', true)}" title="{l s='Back to orders'}">{l s='Back to orders'}</a>
 {/if}

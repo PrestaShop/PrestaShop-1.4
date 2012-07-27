@@ -33,7 +33,7 @@
 {include file="$tpl_dir./order-steps.tpl"}
 
 <h3>{l s='PayPal payment' mod='paypal'}</h3>
-<form action="{$submit_express_checkout}" method="POST">
+<form action="{$form_action}" method="post">
 	<p>
 		<img src="{$logos.LocalPayPalLogoMedium}" alt="{l s='PayPal' mod='paypal'}" style="margin-bottom: 5px" />
 		<br />{l s='You have chosen to pay with PayPal.' mod='paypal'}

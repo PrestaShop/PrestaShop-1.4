@@ -49,26 +49,14 @@ class PayPalExpressCheckoutSubmit extends OrderConfirmationControllerCore
 		$this->run();
 	}
 
-	public function getECSOrder($id_order)
-	{
-		$query = 'SELECT * FROM `' . _DB_PREFIX_ . 'paypal_order`
-                        WHERE `id_order` = ' . (int)$id_order;
-
-		return Db::getInstance()->getRow($query);
-	}
-
 	public function displayContent()
 	{
-		$id_order = (int)Tools::getValue('id_order');
-		$order = new Order($id_order);
-		$ecs_order = $this->getECSOrder($id_order);
+		$order = PayPalOrder::getOrderById((int)(Tools::getValue('id_order')));
 
 		$this->context->smarty->assign(
 			array(
 				'order' => $order,
-				'id_order' => $id_order,
-				'currency' => $this->context->currency,
-				'id_transaction' => $ecs_order['id_transaction']
+				'currency' => $this->context->currency
 			)
 		);
 
@@ -85,8 +73,8 @@ if (Tools::getValue('id_module') && Tools::getValue('key') && Tools::getValue('i
 }
 else
 {
-	$request_type = Tools::getValue('express_checkout');
-	$ppec = new PaypalExpressCheckout($request_type);
+	$request_type	= Tools::getValue('express_checkout');
+	$ppec			= new PaypalExpressCheckout($request_type);
 
 	if ($request_type && $ppec->type)
 	{
@@ -100,20 +88,25 @@ else
             {
                 // Create new Cart to avoid any refresh or other bad manipulations
                 $ppec->context->cart = new Cart();
-                $ppec->context->cart->id_currency = (int)$ppec->context->currency->id;
-                $ppec->context->cart->id_lang = (int)$ppec->context->language->id;
+
+                $ppec->context->cart->id_currency	= (int)$ppec->context->currency->id;
+                $ppec->context->cart->id_lang		= (int)$ppec->context->language->id;
 
                 $secure_key = isset($ppec->context->customer) ? $ppec->context->customer->secure_key : '';
-                $ppec->context->cart->secure_key = $secure_key;
+                $ppec->context->cart->secure_key	= $secure_key;
 
                 // Customer settings
-                $ppec->context->cart->id_guest = (int)$ppec->context->cookie->id_guest;
-                $ppec->context->cart->id_customer = (int)$ppec->context->customer->id;
+                $ppec->context->cart->id_guest		= (int)$ppec->context->cookie->id_guest;
+                $ppec->context->cart->id_customer	= (int)$ppec->context->customer->id;
 
                 if (!$ppec->context->cart->add())
+				{
                     $ppec->logs[] = $ppec->l('Cannot create new cart');
-                else
-                    $ppec->context->cookie->id_cart = (int)$ppec->context->cart->id;
+				}
+				else
+				{
+					$ppec->context->cookie->id_cart = (int)$ppec->context->cart->id;
+				}
             }
 
 			$ppec->context->cart->updateQty((int)$product_quantity, (int)$id_product, (int)$id_product_attribute);
@@ -137,6 +130,7 @@ else
 	{
 		// Get payment infos from paypal
 		$ppec->getExpressCheckout();
+
 		if ($ppec->hasSucceedRequest() && !empty($ppec->token))
 		{
             $address = null;
@@ -145,10 +139,11 @@ else
 			// Create Customer if not exist with address etc
 			if ($ppec->getContext()->cookie->logged)
 			{
-				if (!($id_customer = Paypal::getIdCustomerWithPPEmail($ppec->result['EMAIL'])))
+				if (!($id_customer = Paypal::getPayPalCustomerIdByEmail($ppec->result['EMAIL'])))
 				{
-					PayPal::addPPCustomer($ppec->getContext()->customer->id, $ppec->result['EMAIL']);
+					PayPal::addPayPalCustomer($ppec->getContext()->customer->id, $ppec->result['EMAIL']);
 				}
+
 				$customer = $ppec->getContext()->customer;
 			}
 			else if (($id_customer = Customer::customerExists($ppec->result['EMAIL'], true)))
@@ -157,14 +152,16 @@ else
 			}
 			else
 			{
-				$customer = new Customer();
-				$customer->email = $ppec->result['EMAIL'];
-				$customer->lastname = $ppec->result['LASTNAME'];
-				$customer->firstname = $ppec->result['FIRSTNAME'];
-				$customer->passwd = Tools::encrypt(Tools::passwdGen());
+				$customer				= new Customer();
+
+				$customer->email		= $ppec->result['EMAIL'];
+				$customer->lastname		= $ppec->result['LASTNAME'];
+				$customer->firstname	= $ppec->result['FIRSTNAME'];
+				$customer->passwd		= Tools::encrypt(Tools::passwdGen());
+
 				$customer->add();
 
-				PayPal::addPPCustomer($customer->id, $ppec->result['EMAIL']);
+				PayPal::addPayPalCustomer($customer->id, $ppec->result['EMAIL']);
 			}
 
 			if (!$customer->id)
@@ -184,15 +181,17 @@ else
 			// Create address
 			if ((!$address || !$address->id) && $customer->id)
 			{
-				$address = new Address();
-				$address->id_country = Country::getByIso($ppec->result['COUNTRYCODE']);
-				$address->alias = 'Paypal_Address';
-				$address->lastname = $customer->lastname;
-				$address->firstname = $customer->firstname;
-				$address->address1 = $ppec->result['PAYMENTREQUEST_0_SHIPTOSTREET'];
-				$address->city = $ppec->result['PAYMENTREQUEST_0_SHIPTOCITY'];
-				$address->postcode = $ppec->result['SHIPTOZIP'];
-				$address->id_customer = $customer->id;
+				$address				= new Address();
+
+				$address->id_country	= Country::getByIso($ppec->result['COUNTRYCODE']);
+				$address->alias			= 'Paypal_Address';
+				$address->lastname		= $customer->lastname;
+				$address->firstname		= $customer->firstname;
+				$address->address1		= $ppec->result['PAYMENTREQUEST_0_SHIPTOSTREET'];
+				$address->city			= $ppec->result['PAYMENTREQUEST_0_SHIPTOCITY'];
+				$address->postcode		= $ppec->result['SHIPTOZIP'];
+				$address->id_customer	= $customer->id;
+
 				$address->add();
 			}
 
@@ -225,9 +224,9 @@ else
 		// Check modification on the product cart / quantity
 		if ($ppec->isProductsListStillRight())
 		{
-			$order = NULL;
-			$cart = $ppec->getContext()->cart;
-			$customer = new Customer((int)$cart->id_customer);
+			$order		= null;
+			$cart		= $ppec->getContext()->cart;
+			$customer	= new Customer((int)$cart->id_customer);
 
 			// When all information are checked before, we can validate the payment to paypal
 			// and create the prestashop order
@@ -236,51 +235,51 @@ else
 			/// Check payment (real paid))
 			if ($ppec->hasSucceedRequest() && !empty($ppec->token) && $ppec->rightPaymentProcess())
 			{
-				$transaction = array('id_transaction' => pSQL($ppec->result['PAYMENTINFO_0_TRANSACTIONID']),
-				                     'id_invoice'     => null,
-				                     'currency'       => pSQL($ppec->result['PAYMENTINFO_0_CURRENCYCODE']),
-				                     'total_paid'     => (float)$ppec->result['PAYMENTINFO_0_AMT'],
-				                     'shipping'       => (float)$ppec->result['PAYMENTINFO_0_FEEAMT'],
-				                     'payment_date'   => pSQL($ppec->result['PAYMENTINFO_0_ORDERTIME']));
+				$transaction	= array(
+									'id_transaction' => pSQL($ppec->result['PAYMENTINFO_0_TRANSACTIONID']),
+				                   	'id_invoice'     => null,
+				                   	'currency'       => pSQL($ppec->result['PAYMENTINFO_0_CURRENCYCODE']),
+				                   	'total_paid'     => (float)$ppec->result['PAYMENTINFO_0_AMT'],
+				                   	'shipping'       => (float)$ppec->result['PAYMENTINFO_0_FEEAMT'],
+				                   	'payment_date'   => pSQL($ppec->result['PAYMENTINFO_0_ORDERTIME'])
+				);
 
-				if (_PS_VERSION_ >= '1.5')
-				{
-					$shop = $ppec->getContext()->shop;
-					$ppec->getContext()->cookie->id_cart = $cart->id;
-					$ppec->validateOrder($cart->id, Configuration::get('PS_OS_PAYMENT'), floatval($cart->getOrderTotal(true, 3)), 'PayPal', NULL, $transaction, (int)$cart->id_currency, false, $customer->secure_key, $shop);
-				}
-				else
-				{
-					$ppec->validateOrder($cart->id, Configuration::get('PS_OS_PAYMENT'), floatval($cart->getOrderTotal(true, 3)), 'PayPal', NULL, $transaction, (int)$cart->id_currency, false, $customer->secure_key);
-				}
-
-				if (!$ppec->currentOrder)
-				{
-					$ppec->logs[] = $this->l('Cannot create order');
-				}
-				else
-				{
-					$order = new Order($ppec->currentOrder);
-					$order->total_paid = $ppec->getTotalPaid();
-				}
+				$payment_type	= (int)Configuration::get('PS_OS_PAYMENT');
+				$message		= $ppec->l('Payment accepted.').'<br />';;
 			}
 			else
 			{
-				if (_PS_VERSION_ >= '1.5')
-				{
-					$shop = $ppec->getContext()->shop;
-					$ppec->getContext()->cookie->id_cart = $cart->id;
-					$ppec->validateOrder($cart->id, Configuration::get('PS_OS_ERROR'), floatval($cart->getOrderTotal(true, 3)), 'PayPal', $ppec->l('Price payed on paypal is not the same that on PrestaShop') . '<br />', array(), (int)$cart->id_currency, false, $customer->secure_key, $shop);
-				}
-				else
-				{
-					$ppec->validateOrder($cart->id, Configuration::get('PS_OS_ERROR'), floatval($cart->getOrderTotal(true, 3)), 'PayPal', $ppec->l('Price payed on paypal is not the same that on PrestaShop') . '<br />', array(), (int)$cart->id_currency, false, $customer->secure_key);
-				}
-
-				$order = new Order($ppec->currentOrder);
-				$order->total_paid = $ppec->getTotalPaid();
+				$transaction 	= array();
+				$payment_type	= (int)Configuration::get('PS_OS_ERROR');
+				$message		= $ppec->l('Price payed on paypal is not the same that on PrestaShop.').'<br />';
 			}
+
+			if (_PS_VERSION_ >= '1.5')
+			{
+				$shop									= $ppec->getContext()->shop;
+				$ppec->getContext()->cookie->id_cart	= $cart->id;
+
+				$ppec->validateOrder($cart->id, $payment_type, floatval($cart->getOrderTotal(true, 3)), 'PayPal', $message, $transaction, (int)$cart->id_currency, false, $customer->secure_key, $shop);
+			}
+			else
+			{
+				$ppec->validateOrder($cart->id, Configuration::get('PS_OS_PAYMENT'), floatval($cart->getOrderTotal(true, 3)), 'PayPal', $message, $transaction, (int)$cart->id_currency, false, $customer->secure_key);
+			}
+
+			if (!$ppec->currentOrder)
+			{
+				$ppec->logs[] = $this->l('Cannot create order');
+			}
+			else
+			{
+				$id_order 			= (int)$ppec->currentOrder;
+				$order				= new Order($id_order);
+				$order->total_paid	= $ppec->getTotalPaid();
+			}
+
 			unset(Context::getContext()->cookie->{PaypalExpressCheckout::$COOKIE_NAME});
+
+			$ppec->_addNewPrivateMessage((int)$id_order, $message);
 
 			// Update for the Paypal shipping cost
 			if ($order)
@@ -302,6 +301,7 @@ else
 				{
 					$controller = new FrontController();
 					$controller->init();
+
 					Tools::redirect(Context::getContext()->link->getModuleLink('paypal', 'submit', $values));
 				}
 			}
@@ -315,22 +315,18 @@ else
 	}
 
 	$display = new BWDisplay();
-
-	if (method_exists('Tools', 'getShopDomainSsl'))
-		$shop_url = Tools::getShopDomainSsl(true, true);
-	else
-		$shop_url = PayPal::getShopDomainSsl(true, true);
+	$shop_url = PayPal::getShopDomainSsl(true, true);
 
 	// Display payment confirmation
 	if ($ppec->ready && Tools::getValue('get_confirmation'))
 	{
 		$ppec->getContext()->smarty->assign(
-			array('logos'                   => $ppec->paypal_logos->getLogos(),
-                  'cust_currency'           => $ppec->getContext()->cart->id_currency,
-                  'currency'                => new Currency((int)$ppec->getContext()->cart->id_currency),
-                  'total'                   => $ppec->getContext()->cart->getOrderTotal(true),
-                  'submit_express_checkout' => $shop_url . _MODULE_DIR_ . $ppec->name . '/express_checkout/submit.php',
-                  'mode'                    => 'payment/')
+			array(
+                'form_action'	=> $shop_url . _MODULE_DIR_ . $ppec->name . '/express_checkout/submit.php',
+				'currency'    => new Currency((int)$ppec->getContext()->cart->id_currency),
+				'total'       => $ppec->getContext()->cart->getOrderTotal(true),
+				'logos'       => $ppec->paypal_logos->getLogos(),
+			)
 		);
 
 		$display->setTemplate(_PS_MODULE_DIR_.'paypal/views/templates/front/express_checkout/payment.tpl');
@@ -338,8 +334,12 @@ else
 	// Display result if error occurred
 	else
 	{
-		$ppec->getContext()->smarty->assign(array('message' => $ppec->l('Error occurred:'),
-		                                          'logs'    => $ppec->logs));
+		$ppec->getContext()->smarty->assign(
+			array(
+				'message' => $ppec->l('Error occurred:'),
+		        'logs'    => $ppec->logs
+			)
+		);
 
 		$display->setTemplate(_PS_MODULE_DIR_.'paypal/views/templates/front/error.tpl');
 	}

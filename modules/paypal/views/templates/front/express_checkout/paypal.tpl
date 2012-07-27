@@ -25,7 +25,7 @@
 *}
 
 <p class="payment_module">
-	<a href="javascript:onclick($('#paypal_express_checkout_form').submit())" title="{l s='Pay with PayPal' mod='paypal'}">
+	<a href="javascript:onclick($('#paypal_payment_form').submit())" title="{l s='Pay with PayPal' mod='paypal'}">
 		{if isset($logos.LocalPayPalHorizontalSolutionPP) && $PayPal_payment_method == $PayPal_integral}
 			<img src="{$logos.LocalPayPalHorizontalSolutionPP}" alt="{$PayPal_content.payment_choice}" height="48px" />
 		{else}
@@ -35,7 +35,7 @@
 	</a>
 </p>
 
-<form id="paypal_express_checkout_form" action="{$base_dir_ssl}modules/paypal/express_checkout/submit.php" title="{l s='Pay with PayPal' mod='paypal'}" method="post">
+<form id="paypal_payment_form" action="{$base_dir_ssl}modules/paypal/express_checkout/submit.php" title="{l s='Pay with PayPal' mod='paypal'}" method="post">
 	<input type="hidden" name="express_checkout" value="{$PayPal_payment_type}"/>
 	<input type="hidden" name="current_shop_url" value="{$PayPal_current_shop_url}" />
 </form>

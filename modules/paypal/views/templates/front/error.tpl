@@ -32,7 +32,7 @@
 	<div class="error">
 		<p><b>{l s='Please refer to logs:' mod='paypal'}</b></p>
 		<ol>
-		{foreach from=$logs key=k item=log}
+		{foreach from=$logs key=key item=log}
 			<li>{$log}</li>
 		{/foreach}
 		</ol>

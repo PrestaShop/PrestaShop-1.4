@@ -37,6 +37,14 @@ class PayPalTools
 		$this->name = $module_name;
 	}
 
+	public static function formatMessage($response, &$message)
+	{
+		foreach ($response as $key => $value)
+		{
+			$message .= $key . ': ' . $value . '<br>';
+		}
+	}
+
 	public function moveTopPayments($position)
 	{
 		if (_PS_VERSION_ < '1.5')

@@ -61,7 +61,7 @@
 	{if ($cart->gift == 1)}
 		<input type="hidden" name="handling" value="{$gift_price}" />
 	{/if}
-	<input type="hidden" name="subtotal" value="{$cart_details.total_price_without_tax - $shipping}" />
+	<input type="hidden" name="subtotal" value="{$subtotal}" />
 
 	<input type="hidden" name="custom" value="{$custom|escape:'htmlall'}" />
 	<input type="hidden" name="notify_url" value="{$notify_url}" />
