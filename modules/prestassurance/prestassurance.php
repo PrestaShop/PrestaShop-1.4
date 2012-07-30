@@ -720,8 +720,12 @@ class prestassurance extends ModuleGraph
 		foreach($psa_products as $product)
 			if (!$product['deleted'])
 				$nbr_insurance +=1;
-	
-		$psa_customer_alert = psaTools::openPopIn();
+				
+		if ($this->_cartHasInssurance() || !psaTools::openPopIn())
+			$psa_customer_alert = false;
+		else
+			$psa_customer_alert = true;
+
 		$cms = '';
 		if (Configuration::get('PSA_CMS_PAGE_ALERT') != 0 and !$nbr_insurance)
 			$cms = new CMS((int)(Configuration::get('PSA_CMS_PAGE_ALERT')), (int)$cookie->id_lang);

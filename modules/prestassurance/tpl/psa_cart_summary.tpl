@@ -6,7 +6,9 @@
 	<a href="#psa_customer_alert_content" id="psa_customer_alert" style="display:none"></a>
 	<div style="display:none">
 		<div id="psa_customer_alert_content" style="width:800px">
-			{$alert_psa_cms->content}
+			{if isset($alert_psa_cms->content)}
+				{$alert_psa_cms->content}
+			{/if}
 			<div >
 				<a style="float:left" href="#" onclick="$.fancybox.close();" class="button_large" title="{l s='Add Insurance' mod='prestassurance'}">
 					{l s='Add Insurance' mod='prestassurance'}
