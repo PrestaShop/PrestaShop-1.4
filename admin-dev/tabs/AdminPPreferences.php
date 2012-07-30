@@ -55,8 +55,7 @@ class AdminPPreferences extends AdminPreferences
 					array('id' => '2', 'name' => $this->l('Product add date')),
 					array('id' => '3', 'name' => $this->l('Product modified date')),
 					array('id' => '4', 'name' => $this->l('Position inside category')),
-					array('id' => '5', 'name' => $this->l('Manufacturer')),
-					array('id' => '6', 'name' => $this->l('Quantity'))
+					array('id' => '5', 'name' => $this->l('Manufacturer'))
 				), 'identifier' => 'id'),
 			'PS_PRODUCTS_ORDER_WAY' => array('title' => $this->l('Default order way:'), 'desc' => $this->l('Default order way for product list'), 'type' => 'select', 'list' => array(array('id' => '0', 'name' => $this->l('Ascending')), array('id' => '1', 'name' => $this->l('Descending'))), 'identifier' => 'id'),
 			'PS_PRODUCT_SHORT_DESC_LIMIT' => array('title' => $this->l('Max size of short description'), 'desc' => $this->l('Set the maximum size of product short description'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'text'),
