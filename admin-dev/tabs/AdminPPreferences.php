@@ -33,7 +33,7 @@ class AdminPPreferences extends AdminPreferences
 	{
 		$this->className = 'Configuration';
 		$this->table = 'configuration';
- 		
+
  		$this->_fieldsProduct = array(
 			'PS_CATALOG_MODE' => array('title' => $this->l('Catalog mode:'), 'desc' => $this->l('When this parameter is enabled, all shopping features will be disabled'), 'validation' => 'isBool', 'cast' => 'intval', 'required' => true, 'type' => 'bool'),
  			'PS_ORDER_OUT_OF_STOCK' => array('title' => $this->l('Allow ordering out-of-stock product:'), 'desc' => $this->l('Add to cart button is hidden when product is unavailable'), 'validation' => 'isBool', 'cast' => 'intval', 'required' => true, 'type' => 'bool'),
@@ -48,14 +48,15 @@ class AdminPPreferences extends AdminPreferences
 			'PS_NB_DAYS_NEW_PRODUCT' => array('title' => $this->l('Number of days during which the product is considered \'new\':'), 'validation' => 'isUnsignedInt', 'cast' => 'intval', 'type' => 'text'),
 			'PS_CART_REDIRECT' => array('title' => $this->l('Re-direction after adding product to cart:'), 'desc' => $this->l('Concerns only the non-AJAX version of the cart'), 'cast' => 'intval', 'show' => true, 'required' => true, 'type' => 'radio', 'validation' => 'isBool', 'choices' => array(0 => $this->l('previous page'), 1 => $this->l('cart summary'))),
 			'PS_PRODUCTS_PER_PAGE' => array('title' => $this->l('Products per page:'), 'desc' => $this->l('Products displayed per page. Default is 10.'), 'validation' => 'isUnsignedInt', 'cast' => 'intval', 'type' => 'text'),
-			'PS_PRODUCTS_ORDER_BY' => array('title' => $this->l('Default order by:'), 'desc' => $this->l('Default order by for product list'), 'type' => 'select', 'list' => 
+			'PS_PRODUCTS_ORDER_BY' => array('title' => $this->l('Default order by:'), 'desc' => $this->l('Default order by for product list'), 'type' => 'select', 'list' =>
 				array(
 					array('id' => '0', 'name' => $this->l('Product name')),
 					array('id' => '1', 'name' => $this->l('Product price')),
 					array('id' => '2', 'name' => $this->l('Product add date')),
+					array('id' => '3', 'name' => $this->l('Product modified date')),
 					array('id' => '4', 'name' => $this->l('Position inside category')),
 					array('id' => '5', 'name' => $this->l('Manufacturer')),
-					array('id' => '3', 'name' => $this->l('Product modified date'))
+					array('id' => '6', 'name' => $this->l('Quantity'))
 				), 'identifier' => 'id'),
 			'PS_PRODUCTS_ORDER_WAY' => array('title' => $this->l('Default order way:'), 'desc' => $this->l('Default order way for product list'), 'type' => 'select', 'list' => array(array('id' => '0', 'name' => $this->l('Ascending')), array('id' => '1', 'name' => $this->l('Descending'))), 'identifier' => 'id'),
 			'PS_PRODUCT_SHORT_DESC_LIMIT' => array('title' => $this->l('Max size of short description'), 'desc' => $this->l('Set the maximum size of product short description'), 'validation' => 'isInt', 'cast' => 'intval', 'type' => 'text'),
@@ -66,10 +67,10 @@ class AdminPPreferences extends AdminPreferences
 			'PS_LEGACY_IMAGES' => array('title' => $this->l('Use the legacy image filesystem:'), 'desc' => $this->l('This should be set to yes unless you successfully moved images in Preferences > Images tab'), 'validation' => 'isBool', 'cast' => 'intval', 'required' => true, 'type' => 'bool'),
 			'PS_QTY_DISCOUNT_ON_COMBINATION' => array('title' => $this->l('Quantity discounts based on:'), 'desc' => $this->l('How to calculate quantity discounts'), 'cast' => 'intval', 'show' => true, 'required' => true, 'type' => 'radio', 'validation' => 'isBool', 'choices' => array(0 => $this->l('Products'), 1 => $this->l('Combinations')))
 		);
-	
+
 		parent::__construct();
 	}
-	
+
 	public function postProcess()
 	{
 		if (isset($_POST['submitProducts'.$this->table]))
