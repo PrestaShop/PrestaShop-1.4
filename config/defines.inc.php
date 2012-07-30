@@ -107,8 +107,7 @@ if (!defined('_PS_MYSQL_REAL_ESCAPE_STRING_'))
 
 define('_CAN_LOAD_FILES_', 1);
 
-/* Order states */
-// Order states has been moved in config.inc.php file for backward compatibility reasons
+/* Order states have been moved in config.inc.php file for backward compatibility reasons */
 
 /* Tax behavior */
 define('PS_PRODUCT_TAX', 0);
@@ -126,8 +125,7 @@ define('PS_ROUND_UP', 0);
 define('PS_ROUND_DOWN', 1);
 define('PS_ROUND_HALF', 2);
 
-/* Carrier::getCarriers() filter */
-// these defines are DEPRECATED since 1.4.5 version
+/* Carrier::getCarriers() filter - DEPRECATED since 1.4.5 version */
 define('PS_CARRIERS_ONLY', 1);
 define('CARRIERS_MODULE', 2);
 define('CARRIERS_MODULE_NEED_RANGE', 3);
@@ -154,3 +152,9 @@ define('_PS_GEOLOCATION_NO_ORDER_', 1);
 
 if (!defined('_PS_CACHE_ENABLED_'))
     define('_PS_CACHE_ENABLED_', 0);
+	
+/* Charset */
+if (!defined('_PS_MB_STRING_'))
+	define('_PS_MB_STRING_', function_exists('mb_strlen'));
+if (!defined('_PS_ICONV_'))
+	define('_PS_ICONV_', function_exists('iconv'));

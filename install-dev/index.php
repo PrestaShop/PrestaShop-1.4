@@ -54,7 +54,7 @@ if (version_compare(phpversion(), '5.0.0', '<'))
 	die;
 }
 
-require_once(dirname(__FILE__).'/../config/autoload.php');
+require_once(INSTALL_PATH.'/../config/autoload.php');
 require_once(INSTALL_PATH.'/classes/ToolsInstall.php');
 require_once(INSTALL_PATH.'/classes/GetVersionFromDb.php');
 
@@ -1319,20 +1319,6 @@ if ($lm->getIncludeTradFilename())
 				<p style="padding-bottom: 5px;"><a href="javascript:showUpdateLog()"><?php echo lang('view the log'); ?></a></p>
 				<div id="updateLog"></div>
 				<p><?php echo lang('You have just updated and configured PrestaShop as your online shop. We wish you all the best with the success of your online shop.'); ?></p>
-
-				<?php
-
-					if (@fsockopen('www.prestashop.com', 80, $errno, $errst, 3))
-					{
-						echo '
-						<h2>'.lang('New features in PrestaShop v').INSTALL_VERSION.'</h2>
-						<iframe style="width: 638px; margin-top: 5px; padding: 5px; border: 1px solid #BBB;" src="http://features.prestashop.com/lang/'.$lm->getIsoCodeSelectedLang().'/version/'.INSTALL_VERSION.'">
-							<p>Your browser does not support iframes.</p>
-						</iframe>';
-					}
-
-				?>
-
 				<div class="infosBlock">
 					<?php echo lang('WARNING: For security purposes, you must delete the "install" folder.'); ?>
 				</div>

@@ -33,4 +33,3 @@ $module_list = Module::getNonNativeModuleList();
 if (sizeof($module_list))
 	die(Tools::jsonEncode($module_list));
 die(Tools::jsonEncode(array()));
-

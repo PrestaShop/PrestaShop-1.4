@@ -24,6 +24,13 @@
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
+
+/* Charset */
+if (!defined('_PS_MB_STRING_'))
+	define('_PS_MB_STRING_', function_exists('mb_strlen'));
+if (!defined('_PS_ICONV_'))
+	define('_PS_ICONV_', function_exists('iconv'));
+
 class ToolsInstall
 {
 	/**

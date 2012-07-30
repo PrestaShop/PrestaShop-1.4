@@ -405,10 +405,10 @@ function verifyDbAccess ()
 
 function createDB()
 {
-	$("#dbResultCheck").hide();
+	$('#dbResultCheck').hide();
 	$.ajax(
 	{
-	   url: "model.php",
+	   url: 'model.php',
 	   cache: false,
 	   data:
 	   	"method=createDB"
@@ -426,19 +426,18 @@ function createDB()
 	   success: function(ret)
 	   {
 			var action_ret;
-			try {
+
+			try
+			{
 				action_ret = ret.getElementsByTagName('action')[0];
-			} catch (e) {
-				$("#dbCreateResultCheck")
-					.addClass("errorBlock")
-					.removeClass("okBlock")
-					.removeClass('infosBlock')
-					.html(ret)
-					.show();
+			}
+			catch (e)
+			{
+				$('#dbCreateResultCheck').addClass('errorBlock').removeClass('okBlock').removeClass('infosBlock').html(ret).show();
 				$('#stepList_3 li:contains("Etape 3")').addClass('ko');
 				return;
 			}
-			if (action_ret.getAttribute("result") == "ok")
+			if (action_ret.getAttribute('result') == 'ok')
 			{
 				var countries_ret = ret.getElementsByTagName('country');
 				var timezone_ret = ret.getElementsByTagName('timezone');
