@@ -1,0 +1,14 @@
+Bonjour {firstname} {lastname},
+
+Nous avons bien enregistré voter déclaration de sinister.
+Voici un rappel des informations que vous avez fournit :
+
+N° de sinister : {id_disaster}
+Commande : {detail_order}
+Produit : {detail_product}
+Raison : {reason}
+Commentaire : {comment}
+
+Nous vous tiendrons informé de l'avancé de cette déclaration directement par mail ainsi que dans votre espace client
+
+Merci et à bientôt sur {shop_name}.

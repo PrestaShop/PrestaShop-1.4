@@ -1,0 +1,38 @@
+button.my_button {
+background: -moz-linear-gradient(center top , #f9F9F9, #ededed) repeat scroll 0 0 transparent;
+background: -webkit-gradient(linear, center top ,center bottom, from(#F9F9F9), to(#ededed)) repeat scroll 0 0 transparent;
+border-color: #CCCCCC #BBBBBB #A0A0A0;
+border-style: solid;
+border-width: 1px;
+font-size: 12px;
+text-shadow: 0 1px 0 #FFFFFF;
+padding: 2px 4px;
+border-radius: 3px;
+-moz-border-radius: 3px;
+-webkit-border-radius: 3px;
+    background: transparent url(images/sprites-button.png) repeat-x scroll left top !ie;
+    padding:2px 0 !ie;
+
+} 
+
+button.my_button:hover {
+background: -moz-linear-gradient(center top , #ffffff, #ededed) repeat scroll 0 0 transparent;
+background: -webkit-gradient(linear, center top ,center bottom, from(#ffffff), to(#ededed)) repeat scroll 0 0 transparent;
+border: 1px solid #A0A0A0;
+cursor: pointer;
+    background-position: left center !ie;
+
+}
+
+
+button.my_button:active {
+background: -moz-linear-gradient(center top , #ededed, #f9F9F9) repeat scroll 0 0 transparent;
+background: -webkit-gradient(linear, center top ,center bottom, from(#ededed), to(#f9F9F9)) repeat scroll 0 0 transparent;
+border: 1px solid #A0A0A0;
+border-bottom: 1px solid #ccc;
+text-shadow: 0 -1px 0 #FFFFFF;
+background-position: left bottom !ie;
+}
+.help_psa { margin-left: 5px}
+
+#inscription{height:44px;background:url(https://assurance.prestashop.com/images/background_button_next_step.png) repeat-x;padding:0 28px;border:1px solid #FFF;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;-webkit-box-shadow:0px 1px 4px #777;-moz-box-shadow:0px 1px 4px #777;box-shadow:0px 1px 4px #777;color:#FFF;font-weight:bold;font-size: 15px;behavior: url(PIE.htc);}

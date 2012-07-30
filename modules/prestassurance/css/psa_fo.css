@@ -1,0 +1,47 @@
+.add_psa_link {
+	width: 16px;
+	height: 16px;
+	margin-left: 3px;
+	float: right;
+	font-size: 0;
+	display: block;
+	background: transparent url('../img/add.png');
+}
+
+.psa_confirm {
+    color: #374853; 
+    background-color: #DFFAD3; 
+    margin-bottom:10px; 
+    padding: 4px; 
+    border: 1px solid #72CB67
+}
+.psa_error {
+   border: 1px solid #EC9B9B;
+	background-color: #FAE2E3; 
+    margin-bottom:10px; 
+    padding: 4px; 
+    border: 1px solid #72CB67
+}
+.psa_disaster_form label
+{
+	width:30%;
+	text-align: left !important;
+	float:left;
+	margin-left: 0.7em;
+	font-weight: bold
+}
+
+ul.legend_status
+{
+	margin-left: 40px;
+	margin-bottom: 5px
+}
+
+ul.legend_status li {list-style-type:none}
+
+ul.legend_status li#wait {list-style-image: url('../img/wait.png');}
+ul.legend_status li#more_info {list-style-image: url('../img/more_info.png');}
+ul.legend_status li#warn {list-style-image: url('../img/warn.png');}
+ul.legend_status li#canceled {list-style-image: url('../img/cancel.png');}
+ul.legend_status li#accepted {list-style-image: url('../img/accept.png');}
+ul.legend_status li#closed {list-style-image: url('../img/closed.png');}
