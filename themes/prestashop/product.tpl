@@ -23,7 +23,6 @@
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
-
 {include file="$tpl_dir./errors.tpl"}
 {if $errors|@count == 0}
 <script type="text/javascript">
@@ -49,10 +48,10 @@ var allowBuyWhenOutOfStock = {if $allow_oosp == 1}true{else}false{/if};
 var availableNowValue = '{$product->available_now|escape:'quotes':'UTF-8'}';
 var availableLaterValue = '{$product->available_later|escape:'quotes':'UTF-8'}';
 var productPriceTaxExcluded = {$product->getPriceWithoutReduct(true)|default:'null'} - {$product->ecotax};
-var reduction_percent = {if $product->specificPrice AND $product->specificPrice.reduction AND $product->specificPrice.reduction_type == 'percentage'}{$product->specificPrice.reduction*100}{else}0{/if};
-var reduction_price = {if $product->specificPrice AND $product->specificPrice.reduction AND $product->specificPrice.reduction_type == 'amount'}{$product->specificPrice.reduction}{else}0{/if};
-var specific_price = {if $product->specificPrice AND $product->specificPrice.price}{$product->specificPrice.price}{else}0{/if};
 var specific_currency = {if $product->specificPrice AND $product->specificPrice.id_currency}true{else}false{/if};
+var reduction_percent = {if $product->specificPrice AND $product->specificPrice.reduction AND $product->specificPrice.reduction_type == 'percentage'}{$product->specificPrice.reduction*100}{else}0{/if};
+var reduction_price = {if $product->specificPrice AND $product->specificPrice.reduction AND $product->specificPrice.reduction_type == 'amount'}(specific_currency ? {$product->specificPrice.reduction} : {$product->specificPrice.reduction} * currencyRate){else}0{/if};
+var specific_price = {if $product->specificPrice AND $product->specificPrice.price}{$product->specificPrice.price}{else}0{/if};
 var group_reduction = '{$group_reduction}';
 var default_eco_tax = {$product->ecotax};
 var ecotaxTax_rate = {$ecotaxTax_rate};

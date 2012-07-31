@@ -306,10 +306,9 @@ function updateDisplay()
 		var reduction = 0;
 		if (reduction_price || reduction_percent)
 		{
-            reduction_price = (specific_currency ? reduction_price : reduction_price * currencyRate);
-			reduction = productPrice * (parseFloat(reduction_percent) / 100) + reduction_price;
-			if (reduction_price && (displayPrice || noTaxForThisProduct))
-				reduction = ps_round(reduction / tax, 6);
+		    reduction = productPrice * (parseFloat(reduction_percent) / 100) + reduction_price;
+		    if (reduction_price && (displayPrice || noTaxForThisProduct))
+			reduction = ps_round(reduction / tax, 6);
 		}
 
 		if (!specific_price)
