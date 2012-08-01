@@ -33,9 +33,9 @@ class PackCore extends Product
 
 	public static function isPack($id_product)
 	{
-		if (!array_key_exists($id_product, self::$cacheIsPack))
+		if (!isset(self::$cacheIsPack[$id_product]))
 		{
-			$result = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'pack WHERE id_product_pack = '.(int)($id_product));
+			$result = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'pack WHERE id_product_pack = '.(int)$id_product);
 			self::$cacheIsPack[$id_product] = ($result > 0);
 		}
 		return self::$cacheIsPack[$id_product];
@@ -43,9 +43,9 @@ class PackCore extends Product
 
 	public static function isPacked($id_product)
 	{
-		if (!array_key_exists($id_product, self::$cacheIsPacked))
+		if (!isset(self::$cacheIsPacked[$id_product]))
 		{
-			$result = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'pack WHERE id_product_item = '.(int)($id_product));
+			$result = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'pack WHERE id_product_item = '.(int)$id_product);
 			self::$cacheIsPacked[$id_product] = ($result > 0);
 		}
 		return self::$cacheIsPacked[$id_product];
@@ -66,7 +66,7 @@ class PackCore extends Product
 	{
 		if (array_key_exists($id_product, self::$cachePackItems))
 			return self::$cachePackItems[$id_product];
-		$result = Db::getInstance()->ExecuteS('SELECT id_product_item, quantity FROM '._DB_PREFIX_.'pack where id_product_pack = '.(int)($id_product));
+		$result = Db::getInstance()->ExecuteS('SELECT id_product_item, quantity FROM '._DB_PREFIX_.'pack where id_product_pack = '.(int)$id_product);
 		$arrayResult = array();
 		foreach ($result AS $row)
 		{

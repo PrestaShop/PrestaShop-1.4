@@ -44,19 +44,19 @@ class AdminPayment extends AdminTab
 				{
 					if (!get_class($module) == 'SimpleXMLElement')
 						$module->country = array();
-					$countries = DB::getInstance()->ExecuteS('SELECT id_country FROM '._DB_PREFIX_.'module_country WHERE id_module = '.(int)($module->id));
+					$countries = Db::getInstance()->ExecuteS('SELECT id_country FROM '._DB_PREFIX_.'module_country WHERE id_module = '.(int)($module->id));
 					foreach ($countries as $country)
 						$module->country[] = $country['id_country'];
 
 					if (!get_class($module) == 'SimpleXMLElement')
 						$module->currency = array();
-					$currencies = DB::getInstance()->ExecuteS('SELECT id_currency FROM '._DB_PREFIX_.'module_currency WHERE id_module = '.(int)($module->id));
+					$currencies = Db::getInstance()->ExecuteS('SELECT id_currency FROM '._DB_PREFIX_.'module_currency WHERE id_module = '.(int)($module->id));
 					foreach ($currencies as $currency)
 						$module->currency[] = $currency['id_currency'];
 
 					if (!get_class($module) == 'SimpleXMLElement')
 						$module->group = array();
-					$groups = DB::getInstance()->ExecuteS('SELECT id_group FROM '._DB_PREFIX_.'module_group WHERE id_module = '.(int)($module->id));
+					$groups = Db::getInstance()->ExecuteS('SELECT id_group FROM '._DB_PREFIX_.'module_group WHERE id_module = '.(int)($module->id));
 					foreach ($groups as $group)
 						$module->group[] = $group['id_group'];
 				}
@@ -101,17 +101,12 @@ class AdminPayment extends AdminTab
 	{
 		global $cookie;
 
-		$displayRestrictions = false;
-
-		$currencies = Currency::getCurrencies();
-		$countries = Country::getCountries((int)($cookie->id_lang));
-		$groups = Group::getGroups((int)($cookie->id_lang));
-
 		$tokenModules = Tools::getAdminToken('AdminModules'.(int)(Tab::getIdFromClassName('AdminModules')).(int)($cookie->id_employee));
 		echo '<h2 class="space">'.$this->l('Payment modules list').'</h2>';
 		if (isset($this->paymentModules[0]))
 			echo '<input type="button" class="button" onclick="document.location=\'index.php?tab=AdminModules&token='.$tokenModules.'&module_name='.$this->paymentModules[0]->name.'&tab_module=payments_gateways\'" value="'.$this->l('Click to see the list of payment modules.').'" /><br>';
 
+		$displayRestrictions = false;
 		foreach ($this->paymentModules as $module)
 			if ($module->active)
 				$displayRestrictions= true;
@@ -119,21 +114,20 @@ class AdminPayment extends AdminTab
 		{
 
 			echo '<br /><h2 class="space">'.$this->l('Payment module restrictions').'</h2>';
-			$textCurrencies = $this->l('Please mark the checkbox(es) for the currency or currencies for which you want the payment module(s) to be available.');
-			$textCountries = $this->l('Please mark the checkbox(es) for the country or countries for which you want the payment module(s) to be available.');
+			$textCurrencies = $this->l('Please mark the checkbox(es) for the currency or currencies for which you want the payment module(s) to be available.').'<br /><em>'.$this->l('Only active currencies are listed.').'</em>';
+			$textCountries = $this->l('Please mark the checkbox(es) for the country or countries for which you want the payment module(s) to be available.').'<br /><em>'.$this->l('Only active countries are listed.').'</em>';
 			$textGroups = $this->l('Please mark the checkbox(es) for the groups for which you want the payment module(s) available.');
-			$this->displayModuleRestrictions($currencies, $this->l('Currency restrictions'), 'currency', $textCurrencies, 'dollar');
+			$this->displayModuleRestrictions(Currency::getCurrencies(false, true), $this->l('Currency restrictions'), 'currency', $textCurrencies, 'dollar');
 			echo '<br />';
-			$this->displayModuleRestrictions($groups, $this->l('Group restrictions'), 'group', $textGroups, 'group');
+			$this->displayModuleRestrictions(Group::getGroups((int)($cookie->id_lang)), $this->l('Group restrictions'), 'group', $textGroups, 'group');
 			echo '<br />';
-			$this->displayModuleRestrictions($countries, $this->l('Country restrictions'), 'country', $textCountries, 'world');
+			$this->displayModuleRestrictions(Country::getCountries((int)$cookie->id_lang, true, false, false), $this->l('Country restrictions'), 'country', $textCountries, 'world');
 		}
 		else
 		{
 			echo '<br>';
 			echo $this->displayWarning($this->l('No payment module installed'));
 		}
-
 	}
 
 	public function displayModuleRestrictions($items, $title, $nameId, $desc, $icon)
@@ -144,7 +138,7 @@ class AdminPayment extends AdminTab
 		echo '
 		<form action="'.$currentIndex.'&token='.$this->token.'" method="post" id="form_'.$nameId.'">
 			<fieldset>
-				<legend><img src="../img/admin/'.$icon.'.gif" />'.$title.'</legend>
+				<legend><img src="../img/admin/'.$icon.'.gif" alt="" />'.$title.'</legend>
 				<p>'.$desc.'<p>
 				<table cellpadding="0" cellspacing="0" class="table">
 					<tr>
@@ -155,13 +149,13 @@ class AdminPayment extends AdminTab
 			{
 				echo '
 						<th>';
-				if ($nameId != 'currency' OR ($nameId == 'currency' AND $module->currencies_mode == 'checkbox'))
+				if ($nameId != 'currency' || ($nameId == 'currency' && $module->currencies_mode == 'checkbox'))
 					echo '
 							<input type="hidden" id="checkedBox_'.$nameId.'_'.$module->name.'" value="checked">
 							<a href="javascript:checkPaymentBoxes(\''.$nameId.'\', \''.$module->name.'\')" style="text-decoration:none;">';
 				echo '
 							&nbsp;<img src="'.__PS_BASE_URI__.'modules/'.$module->name.'/logo.gif" alt="'.$module->name.'" title="'.$module->displayName.'" />';
-				if ($nameId != 'currency' OR ($nameId == 'currency' AND $module->currencies_mode == 'checkbox'))
+				if ($nameId != 'currency' || ($nameId == 'currency' && $module->currencies_mode == 'checkbox'))
 					echo '
 							</a>';
 				echo '

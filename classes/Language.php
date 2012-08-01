@@ -406,16 +406,16 @@ class LanguageCore extends ObjectModel
 
 		// Database translations deletion
 		$result = Db::getInstance()->ExecuteS('SHOW TABLES FROM `'._DB_NAME_.'`');
-		foreach ($result AS $row)
-			if (preg_match('/_lang/', $row['Tables_in_'._DB_NAME_]))
-				if (!Db::getInstance()->Execute('DELETE FROM `'.$row['Tables_in_'._DB_NAME_].'` WHERE `id_lang` = '.(int)($this->id)))
+		foreach ($result as $row)
+			if (preg_match('/^'._DB_PREFIX_.'.*_lang$/', $row['Tables_in_'._DB_NAME_]))
+				if (!Db::getInstance()->Execute('DELETE FROM `'.$row['Tables_in_'._DB_NAME_].'` WHERE `id_lang` = '.(int)$this->id))
 					return false;
 
 		// Delete tags
-		Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'tag WHERE id_lang = '.(int)($this->id));
+		Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'tag WHERE id_lang = '.(int)$this->id);
 
 		// Delete search words
-		Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'search_word WHERE id_lang = '.(int)($this->id));
+		Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'search_word WHERE id_lang = '.(int)$this->id);
 
 		// Files deletion
 		foreach (self::getFilesList($this->iso_code, _THEME_NAME_, false, false, false, true, true) as $key => $file)

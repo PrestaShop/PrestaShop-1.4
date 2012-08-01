@@ -304,7 +304,7 @@
 
 				<p class="checkbox is_customer_param">
 					<input type="checkbox" name="invoice_address" id="invoice_address" />
-					<label for="invoice_address"><b>{l s='Please use another address for invoice'}</b></label>
+					<label for="invoice_address"><b>{l s='Use another address for invoice'}</b></label>
 				</p>
 			
 				<div id="opc_invoice_address" class="is_customer_param">

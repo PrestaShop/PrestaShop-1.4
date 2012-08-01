@@ -345,19 +345,19 @@ class CurrencyCore extends ObjectModel
 
 		if (!self::$current)
 		{
-			if (isset($cookie->id_currency) AND $cookie->id_currency)
-				self::$current = new Currency((int)($cookie->id_currency));
+			if (isset($cookie->id_currency) && $cookie->id_currency)
+				self::$current = new Currency((int)$cookie->id_currency);
 			else
-				self::$current = new Currency((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
+				self::$current = new Currency((int)Configuration::get('PS_CURRENCY_DEFAULT'));
 		}
 		return self::$current;
 	}
 
 	public static function getCurrencyInstance($id)
 	{
-		if (!array_key_exists($id, self::$currencies))
-			self::$currencies[(int)($id)] = new Currency((int)($id));
-		return self::$currencies[(int)($id)];
+		if (!isset(self::$currencies[(int)$id]))
+			self::$currencies[(int)$id] = new Currency((int)$id);
+		return self::$currencies[(int)$id];
 	}
 }
 

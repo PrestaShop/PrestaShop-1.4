@@ -40,7 +40,7 @@ class AdminGeolocation extends AdminTab
 		
 		echo '
 		<form method="POST" action="'.$currentIndex.'&token='.Tools::getValue('token').'">
-			<fieldset class="width3">
+			<fieldset class="width4">
 				<legend><img src="../img/admin/world.gif" alt="" />'.$this->l('Geolocation by IP').'</legend>
 				
 				<label>'.$this->l('Geolocation by IP:').'</label>
@@ -59,7 +59,7 @@ class AdminGeolocation extends AdminTab
 		$allowedCountries = explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'));
 		echo '
 		<form method="POST" action="'.$currentIndex.'&token='.Tools::getValue('token').'">
-			<fieldset style="margin-top: 10px;" class="width3">
+			<fieldset style="margin-top: 10px;" class="width4">
 				<legend><img src="../img/admin/world.gif" alt="" />'.$this->l('Options').'</legend>
 				
 				<div class="hint" style="display:block;margin-bottom:20px;">
@@ -88,7 +88,7 @@ class AdminGeolocation extends AdminTab
 				<div class="clear" style="margin-top:10px;"></div>
 				
 				<label>'.$this->l('Select countries that can access your store:').'</label>
-				<div class="margin-form" style="float: left; padding-left: 0; width: 317px; margin-top: 6px; height: 300px; overflow-y: auto;">
+				<div class="margin-form" style="float: left; padding-left: 0; width: 317px; margin-top: 6px;">
 					<table class="table" cellspacing="0">
 						<thead>
 							<tr>
@@ -98,16 +98,17 @@ class AdminGeolocation extends AdminTab
 						</thead>
 						<tbody>
 		';
-		foreach (Country::getCountries(intval($cookie->id_lang)) AS $country)
+		foreach (Country::getCountries((int)$cookie->id_lang, true, false, false) as $country)
 			echo '
 				<tr>
-					<td><input type="checkbox" name="countries[]" value="'.strtoupper(Tools::htmlentitiesUTF8($country['iso_code'])).'" '.(in_array(strtoupper($country['iso_code']), $allowedCountries) ? 'checked="checked"' : '').' /></td>
+					<td><input type="checkbox" name="countries[]" value="'.Tools::strtoupper($country['iso_code']).'" '.(in_array(Tools::strtoupper($country['iso_code']), $allowedCountries) ? 'checked="checked"' : '').' /></td>
 					<td>'.Tools::htmlentitiesUTF8($country['name']).'</td>
 				</tr>
 			';
 		echo '
 						</tbody>
-					</table>
+					</table><br />
+					<em>'.$this->l('Only active countries are listed.').'</em>
 				</div>
 				<div class="clear"></div>
 				<br />
@@ -118,7 +119,7 @@ class AdminGeolocation extends AdminTab
 		</form>
 		
 		<form method="POST" action="'.$currentIndex.'&token='.Tools::getValue('token').'">
-			<fieldset style="margin-top: 10px;" class="width3">
+			<fieldset style="margin-top: 10px;" class="width4">
 				<legend><img src="../img/admin/world.gif" alt="" />'.$this->l('Whitelist of IP addresses').'</legend>
 				
 				<div class="hint" style="display:block;margin-bottom:20px;">

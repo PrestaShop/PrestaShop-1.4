@@ -359,22 +359,24 @@ class ToolsCore
 	{
 		global $cookie;
 
-		if (self::isSubmit('SubmitCurrency'))
-			if (isset($_POST['id_currency']) && is_numeric($_POST['id_currency']))
+		if (self::isSubmit('SubmitCurrency') && isset($_POST['id_currency']) && is_numeric($_POST['id_currency']))
+		{
+			$currency = Currency::getCurrencyInstance((int)$_POST['id_currency']);
+			if ($currency->id && !$currency->deleted && $currency->active)
 			{
-				$currency = Currency::getCurrencyInstance((int)($_POST['id_currency']));
-				if (is_object($currency) && $currency->id && !$currency->deleted)
-					$cookie->id_currency = (int)($currency->id);
+				$cookie->id_currency = (int)$currency->id;
+				return $currency;
 			}
+		}
 
 		if ((int)$cookie->id_currency)
 		{
 			$currency = Currency::getCurrencyInstance((int)$cookie->id_currency);
-			if (is_object($currency) && (int)$currency->id && (int)$currency->deleted != 1 && $currency->active)
+			if ((int)$currency->id && !$currency->deleted && $currency->active)
 				return $currency;
 		}
-		$currency = Currency::getCurrencyInstance((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
-		if (is_object($currency) && $currency->id)
+		$currency = Currency::getCurrencyInstance((int)Configuration::get('PS_CURRENCY_DEFAULT'));
+		if ($currency->id)
 			$cookie->id_currency = (int)$currency->id;
 		return $currency;
 	}

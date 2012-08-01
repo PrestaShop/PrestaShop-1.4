@@ -235,17 +235,10 @@ class CustomerCore extends ObjectModel
 	  */
 	public static function isBanned($id_customer)
 	{
-	 	if (!Validate::isUnsignedId($id_customer))
-			return true;
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+		return !Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT `id_customer`
 		FROM `'._DB_PREFIX_.'customer`
-		WHERE `id_customer` = \''.(int)($id_customer).'\'
-		AND active = 1
-		AND `deleted` = 0');
-		if (isset($result['id_customer']))
-			return false;
-        return true;
+		WHERE `id_customer` = '.(int)$id_customer.' AND `active` = 1 AND `deleted` = 0');
 	}
 
 	/**

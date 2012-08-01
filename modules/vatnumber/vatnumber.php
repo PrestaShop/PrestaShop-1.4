@@ -165,7 +165,7 @@ class VatNumber extends Module
 				<div class="margin-form">
 					<select name="vatnumber_country">
 						<option value="0">'.$this->l('-- Choose a country --').'</option>';
-		foreach (Country::getCountries((int)($cookie->id_lang)) as $country)
+		foreach (Country::getCountries((int)$cookie->id_lang, false, false, false) as $country)
 			echo '		<option value="'.$country['id_country'].'" '.(Tools::getValue('VATNUMBER_COUNTRY', Configuration::get('VATNUMBER_COUNTRY')) == $country['id_country'] ? 'selected="selected"' : '').'>'.$country['name'].'</option>';
 		echo '		</select>
 				</div>

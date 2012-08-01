@@ -463,7 +463,7 @@ class CanadaPost extends CarrierModule
 						<select name="cp_carrier_country" id="cp_carrier_country">
 							<option value="0">'.$this->l('Select a country ...').'</option>';
 							$idcountries = array();
-							foreach (Country::getCountries((int)$this->context->language->id) as $v)
+							foreach (Country::getCountries((int)$this->context->language->id, false, false, false) as $v)
 							{
 								$html .= '<option value="'.$v['id_country'].'" '.($v['id_country'] == (int)(Tools::getValue('cp_carrier_country', Configuration::get('CP_CARRIER_COUNTRY'))) ? 'selected="selected"' : '').'>'.$v['name'].'</option>';
 								$idcountries[] = $v['id_country'];

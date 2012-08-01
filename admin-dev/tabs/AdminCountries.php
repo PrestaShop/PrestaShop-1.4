@@ -51,7 +51,7 @@ class AdminCountries extends AdminTab
 
 		$this->optionTitle = $this->l('Countries options');
 		$this->_fieldsOptions = array(
-			'PS_COUNTRY_DEFAULT' => array('title' => $this->l('Default country:'), 'desc' => $this->l('The default country used in shop'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'id_country', 'list' => Country::getCountries((int)($cookie->id_lang))),
+			'PS_COUNTRY_DEFAULT' => array('title' => $this->l('Default country:'), 'desc' => $this->l('The default country used in shop'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'id_country', 'list' => Country::getCountries((int)$cookie->id_lang), false, false, false),
 			'PS_RESTRICT_DELIVERED_COUNTRIES' => array('title' => $this->l('Restrict countries in FO by those delivered by active carriers'), 'cast' => 'intval', 'type' => 'bool', 'default' => '0')
 		);
 
@@ -60,7 +60,7 @@ class AdminCountries extends AdminTab
 
 	public function postProcess()
 	{
-		if (isset($_GET['delete'.$this->table]) OR Tools::getValue('submitDel'.$this->table))
+		if (isset($_GET['delete'.$this->table]) || Tools::getValue('submitDel'.$this->table))
 			$this->_errors[] = Tools::displayError('You cannot delete a country. If you do not want it available for customers, please disable it.');
 		else
 		{

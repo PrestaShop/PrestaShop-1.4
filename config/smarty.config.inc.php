@@ -25,10 +25,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-if (Configuration::get('PS_FORCE_SMARTY_2'))
-	define('_PS_SMARTY_DIR_', _PS_TOOL_DIR_.'smarty_v2/');
-else
-	define('_PS_SMARTY_DIR_', _PS_TOOL_DIR_.'smarty/');
+define('_PS_SMARTY_DIR_', _PS_TOOL_DIR_.(Configuration::get('PS_FORCE_SMARTY_2') ? 'smarty_v2' : 'smarty').'/');
 
 require_once(_PS_SMARTY_DIR_.'Smarty.class.php');
 
@@ -88,7 +85,7 @@ function smartyTranslate($params, &$smarty)
 	 * "$this->currentTemplate = Tools::substr(basename($resource_name), 0, -4);" into the "fetch" method
 	 * Notice : before 1.4.2.5, this modification was in the display method
 	 *
-	 * In Smarty-v3 : No modifications, using the existing var $this->smarty->_current_file instead
+	 * In Smarty-v3 : No modifications, using the existing var $smarty->template_resource instead
 	 */
 	global $_LANG, $_MODULES, $cookie, $_MODULE;
 	if (!isset($params['js'])) $params['js'] = 0;
@@ -125,9 +122,9 @@ function smartyTranslate($params, &$smarty)
 		$lang_array = $_MODULES;
 	}
 	
-	if (is_array($lang_array) AND key_exists($key, $lang_array))
+	if (is_array($lang_array) && key_exists($key, $lang_array))
 		$msg = $lang_array[$key];
-	elseif (is_array($lang_array) AND key_exists(Tools::strtolower($key), $lang_array))
+	elseif (is_array($lang_array) && key_exists(Tools::strtolower($key), $lang_array))
 		$msg = $lang_array[Tools::strtolower($key)];
 	else
 		$msg = $params['s'];

@@ -100,9 +100,8 @@ class FrontControllerCore
 		ob_start();
 
 		/* Loading default country */
-		$defaultCountry = new Country((int)Configuration::get('PS_COUNTRY_DEFAULT'), Configuration::get('PS_LANG_DEFAULT'));
-		$cookieLifetime = (time() + (((int)Configuration::get('PS_COOKIE_LIFETIME_FO') > 0 ? (int)Configuration::get('PS_COOKIE_LIFETIME_FO') : 1) * 3600));
-		$cookie = new Cookie('ps', '', $cookieLifetime);
+		$defaultCountry = new Country((int)Configuration::get('PS_COUNTRY_DEFAULT'), (int)Configuration::get('PS_LANG_DEFAULT'));
+		$cookie = new Cookie('ps', '', time() + (((int)Configuration::get('PS_COOKIE_LIFETIME_FO') > 0 ? (int)Configuration::get('PS_COOKIE_LIFETIME_FO') : 1) * 3600));
 		$link = new Link();
 
 		if ($this->auth && !$cookie->isLogged($this->guestAllowed))
@@ -227,8 +226,7 @@ class FrontControllerCore
 		$smarty->assign('request_uri', Tools::safeOutput(urldecode($_SERVER['REQUEST_URI'])));
 
 		/* Breadcrumb */
-		$navigationPipe = (Configuration::get('PS_NAVIGATION_PIPE') ? Configuration::get('PS_NAVIGATION_PIPE') : '>');
-		$smarty->assign('navigationPipe', $navigationPipe);
+		$smarty->assign('navigationPipe', (Configuration::get('PS_NAVIGATION_PIPE') ? Configuration::get('PS_NAVIGATION_PIPE') : '>'));
 
 		$protocol_link = (Configuration::get('PS_SSL_ENABLED') || Tools::usingSecureMode()) ? 'https://' : 'http://';
 
@@ -348,7 +346,7 @@ class FrontControllerCore
 	{
 		global $smarty;
 
-		header('HTTP/1.1 503 temporarily overloaded');
+		header('HTTP/1.1 503 Service Unavailable');
 		$smarty->display(_PS_THEME_DIR_.'restricted-country.tpl');
 		exit;
 	}
@@ -393,7 +391,7 @@ class FrontControllerCore
 
 	protected function geolocationManagement()
 	{
-		global $cookie, $smarty;
+		global $cookie, $smarty, $defaultCountry;
 
 		if (!in_array($_SERVER['SERVER_NAME'], array('localhost', '127.0.0.1')))
 		{
@@ -428,7 +426,7 @@ class FrontControllerCore
 				if (isset($cookie->iso_code_country) && $id_country = (int)Country::getByIso(strtoupper($cookie->iso_code_country)))
 				{
 					/* Update defaultCountry */
-					$defaultCountry = new Country($id_country);
+					$defaultCountry = new Country($id_country, Configuration::get('PS_LANG_DEFAULT'));
 					if (isset($has_been_set) && $has_been_set)
 						$cookie->id_currency = (int)Currency::getCurrencyInstance($defaultCountry->id_currency ? (int)$defaultCountry->id_currency : (int)Configuration::get('PS_CURRENCY_DEFAULT'))->id;
 				}

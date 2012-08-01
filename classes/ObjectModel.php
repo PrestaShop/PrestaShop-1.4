@@ -161,7 +161,7 @@ abstract class ObjectModelCore
 		{
 			$fields = $this->getfieldsRequiredDatabase(true);
 			if ($fields)
-				foreach ($fields AS $row)
+				foreach ($fields as $row)
 					self::$fieldsRequiredDatabase[$row['object_name']][(int)$row['id_required_field']] = pSQL($row['field_name']);
 			else
 				self::$fieldsRequiredDatabase = array();

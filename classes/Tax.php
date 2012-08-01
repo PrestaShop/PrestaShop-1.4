@@ -278,36 +278,34 @@ class TaxCore extends ObjectModel
 	}
 
 	/**
-	 * Return the product tax
+	 * Return the product tax rate
 	 *
 	 * @param integer $id_product
-	 * @param integer $id_country
+	 * @param integer $id_address
 	 * @return Tax
 	 */
-	public static function getProductTaxRate($id_product, $id_address = NULL)
+	public static function getProductTaxRate($id_product, $id_address = null)
 	{
-  	      $id_country = (int)Country::getDefaultCountryId();
-         $id_state = 0;
-         $id_county = 0;
-         $rate = 0;
-         if (!empty($id_address))
-         {
-             $address_infos = Address::getCountryAndState($id_address);
-         	 if ($address_infos['id_country'])
-             {
-	          		$id_country = (int)($address_infos['id_country']);
-	               $id_state = (int)$address_infos['id_state'];
-	               $id_county = (int)County::getIdCountyByZipCode($address_infos['id_state'], $address_infos['postcode']);
-             }
+		$id_country = (int)Country::getDefaultCountryId();
+		$id_state = 0;
+		$id_county = 0;
+		$rate = 0;
 
-		    if (!empty($address_infos['vat_number']) AND $address_infos['id_country'] != Configuration::get('VATNUMBER_COUNTRY') AND Configuration::get('VATNUMBER_MANAGEMENT'))
-				    return 0;
+		if (!empty($id_address))
+		{
+			$address_infos = Address::getCountryAndState($id_address);
+			if ($address_infos['id_country'])
+			{
+				$id_country = (int)($address_infos['id_country']);
+				$id_state = (int)$address_infos['id_state'];
+				$id_county = (int)County::getIdCountyByZipCode($address_infos['id_state'], $address_infos['postcode']);
+			}
+
+			if (!empty($address_infos['vat_number']) && $address_infos['id_country'] != Configuration::get('VATNUMBER_COUNTRY') && Configuration::get('VATNUMBER_MANAGEMENT'))
+				return 0;
 		}
 
-	    if ($rate = Tax::getProductTaxRateViaRules((int)$id_product, (int)$id_country, (int)$id_state, (int)$id_county))
-	        return $rate;
-
-		return $rate;
+		return Tax::getProductTaxRateViaRules((int)$id_product, (int)$id_country, (int)$id_state, (int)$id_county);
 	}
 
 	public static function getProductEcotaxRate($id_address = NULL)
@@ -346,10 +344,7 @@ class TaxCore extends ObjectModel
 	public static function getProductTaxRateViaRules($id_product, $id_country, $id_state, $id_county)
 	{
 		if (!isset(self::$_product_tax_via_rules[$id_product.'-'.$id_country.'-'.$id_state.'-'.$id_county]))
-		{
-		    $tax_rate = TaxRulesGroup::getTaxesRate((int)Product::getIdTaxRulesGroupByIdProduct((int)$id_product), (int)$id_country, (int)$id_state, (int)$id_county);
-		    self::$_product_tax_via_rules[$id_product.'-'.$id_country.'-'.$id_county] =  $tax_rate;
-		}
+		    self::$_product_tax_via_rules[$id_product.'-'.$id_country.'-'.$id_county] = TaxRulesGroup::getTaxesRate((int)Product::getIdTaxRulesGroupByIdProduct((int)$id_product), (int)$id_country, (int)$id_state, (int)$id_county);
 
 		return self::$_product_tax_via_rules[$id_product.'-'.$id_country.'-'.$id_county];
 	}

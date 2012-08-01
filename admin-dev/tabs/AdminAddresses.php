@@ -51,8 +51,8 @@ class AdminAddresses extends AdminTab
 		$this->_join = 'LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON
 		(cl.`id_country` = a.`id_country` AND cl.`id_lang` = '.(int)($cookie->id_lang).')';
 
-		$countries = Country::getCountries((int)($cookie->id_lang));
-		foreach ($countries AS $country)
+		$countries = Country::getCountries((int)$cookie->id_lang, false, false, false);
+		foreach ($countries as $country)
 			$this->countriesArray[$country['id_country']] = $country['name'];
 
 		$this->fieldsDisplay = array(

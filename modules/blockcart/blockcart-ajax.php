@@ -25,12 +25,17 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-global $cookie;
+global $cookie, $cart;
 
 include(dirname(__FILE__).'/blockcart.php');
 
-$cart = new Cart((int)($cookie->id_cart));
-$cart->id_lang = (int)($cookie->id_lang);
+if (!isset($cart->id) || $cart->id != $cookie->id_cart)
+{
+	$c = new Cart((int)$cookie->id_cart);
+	$c->id_lang = (int)$cookie->id_lang;
+}
+else
+	$c = $cart;
 
 $blockCart = new BlockCart();
-echo $blockCart->hookAjaxCall(array('cookie' => $cookie, 'cart' => $cart));
+echo $blockCart->hookAjaxCall(array('cookie' => $cookie, 'cart' => $c));

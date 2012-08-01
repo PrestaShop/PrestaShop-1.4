@@ -173,7 +173,7 @@ class ProductDownloadCore extends ObjectModel
 	 */
 	public static function getIdFromIdProduct($id_product)
 	{
-		if (array_key_exists($id_product, self::$_productIds))
+		if (isset(self::$_productIds[$id_product]))
 			return self::$_productIds[$id_product];
 			
 		self::$_productIds[$id_product] = (int)Db::getInstance()->getValue('

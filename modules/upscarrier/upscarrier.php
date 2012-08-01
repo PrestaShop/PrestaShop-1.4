@@ -526,7 +526,7 @@ class UpsCarrier extends CarrierModule
 						<select name="ups_carrier_country" id="ups_carrier_country">
 							<option value="0">'.$this->l('Select a country ...').'</option>';
 							$idcountries = array();
-							foreach (Country::getCountries($this->context->language->id) as $v)
+							foreach (Country::getCountries($this->context->language->id, false, false, false) as $v)
 							{
 								$html .= '<option value="'.$v['id_country'].'" '.($v['id_country'] == (int)(Tools::getValue('ups_carrier_country', Configuration::get('UPS_CARRIER_COUNTRY'))) ? 'selected="selected"' : '').'>'.$v['name'].'</option>';
 								$idcountries[] = $v['id_country'];

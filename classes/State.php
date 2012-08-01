@@ -181,8 +181,7 @@ class StateCore extends ObjectModel
         return Db::getInstance()->ExecuteS('
         SELECT *
         FROM `'._DB_PREFIX_.'state` s
-        WHERE s.`id_country` = '.(int)$id_country
-        );
+        WHERE s.`id_country` = '.(int)$id_country);
     }
 
 	public static function hasCounties($id_state)

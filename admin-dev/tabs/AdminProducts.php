@@ -1670,9 +1670,9 @@ class AdminProducts extends AdminTab
 		{
 			$shops = Shop::getShops();
 			$currencies = Currency::getCurrencies();
-			$countries = Country::getCountries((int)($cookie->id_lang));
-			$groups = Group::getGroups((int)($cookie->id_lang));
-			$defaultCurrency = new Currency((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
+			$countries = Country::getCountries((int)$cookie->id_lang, true, false, false);
+			$groups = Group::getGroups((int)$cookie->id_lang);
+			$defaultCurrency = new Currency((int)Configuration::get('PS_CURRENCY_DEFAULT'));
 			$this->_displaySpecificPriceAdditionForm($defaultCurrency, $shops, $currencies, $countries, $groups);
 			$this->_displaySpecificPriceModificationForm($defaultCurrency, $shops, $currencies, $countries, $groups);
 		}

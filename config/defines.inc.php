@@ -152,7 +152,7 @@ define('_PS_GEOLOCATION_NO_ORDER_', 1);
 
 if (!defined('_PS_CACHE_ENABLED_'))
     define('_PS_CACHE_ENABLED_', 0);
-	
+
 /* Charset */
 if (!defined('_PS_MB_STRING_'))
 	define('_PS_MB_STRING_', function_exists('mb_strlen'));

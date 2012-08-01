@@ -134,11 +134,11 @@ class AdminCounty extends AdminTab
 				if (!isset($obj->id))
 					echo '<div class="hint clear" style="display:block;">&nbsp;'.$this->l('Save this county then you will be able to associate zipcodes').'</div><br />';
 
-		$countries = Country::getCountries($cookie->id_lang, true, true);
+		$countries = Country::getCountries($cookie->id_lang, true, true, false);
 		echo '<label>'.$this->l('Country:').'</label> 
 				<div class="margin-form"><select id="id_country" onchange="populateStates($(this).val(), '.(int)($this->getFieldValue($obj, 'id_state')).');">';
 
-		foreach ($countries AS $country)
+		foreach ($countries as $country)
 			echo '<option value="'.(int)$country['id_country'].'" '.($cur_id_country == $country['id_country'] ? 'selected' : '').'>'.Tools::htmlentitiesUTF8($country['name']).'</option>';
 
 		echo '</select></div>';

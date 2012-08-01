@@ -55,11 +55,11 @@ class Newsletter extends Module
 			$this->_postValid = array();
 
 			// Getting data...
-			$_countries = Country::getCountries((int)$cookie->id_lang);
+			$all_countries = Country::getCountries((int)$cookie->id_lang, false, false, false);
 
 			// ...formatting array
 			$countries[0] = $this->l('All countries');
-			foreach ($_countries as $country)
+			foreach ($all_countries as $country)
 				$countries[$country['id_country']] = $country['name'];
 
 			// And filling fields to show !

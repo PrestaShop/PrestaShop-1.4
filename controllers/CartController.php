@@ -85,12 +85,14 @@ class CartControllerCore extends FrontController
 	{
 		parent::preProcess();
 
-		$orderTotal = self::$cart->getOrderTotal(true, Cart::ONLY_PRODUCTS);
-
 		$this->cartDiscounts = self::$cart->getDiscounts();
-		foreach ($this->cartDiscounts AS $k => $this->cartDiscount)
-			if ($error = self::$cart->checkDiscountValidity(new Discount((int)($this->cartDiscount['id_discount'])), $this->cartDiscounts, $orderTotal, self::$cart->getProducts()))
-				self::$cart->deleteDiscount((int)($this->cartDiscount['id_discount']));
+		if (count($this->cartDiscounts))
+		{
+			$orderTotal = self::$cart->getOrderTotal(true, Cart::ONLY_PRODUCTS);
+			foreach ($this->cartDiscounts as $k => $this->cartDiscount)
+				if ($error = self::$cart->checkDiscountValidity(new Discount((int)($this->cartDiscount['id_discount'])), $this->cartDiscounts, $orderTotal, self::$cart->getProducts()))
+					self::$cart->deleteDiscount((int)($this->cartDiscount['id_discount']));
+		}
 
 		$add = Tools::getIsset('add') ? 1 : 0;
 		$delete = Tools::getIsset('delete') ? 1 : 0;

@@ -87,6 +87,12 @@ class DiscountCore extends ObjectModel
 
 	/** @var string Object last modification date */
 	public 		$date_upd;
+	
+	/** @var array Cache for categories related to a Discount ID */
+	protected static $cache_categories = array();
+	
+	/** @var array Cache for the used discounts related to a Customer ID */
+	protected static $cache_customers_usage = array();
 
 	protected	$fieldsRequired = array('id_discount_type', 'name', 'value', 'quantity', 'quantity_per_user', 'date_from', 'date_to');
 	protected	$fieldsSize = array('name' => '32', 'date_from' => '32', 'date_to' => '32');
@@ -153,7 +159,7 @@ class DiscountCore extends ObjectModel
 
 	public function add($autodate = true, $nullValues = false, $categories = null)
 	{
-		$ret = NULL;
+		$ret = null;
 		if (parent::add($autodate, $nullValues))
 			$ret = true;
 
@@ -254,15 +260,19 @@ class DiscountCore extends ObjectModel
 		return $res;
 	}
 
-	public function usedByCustomer($id_customer)
+	public function usedByCustomer($id_customer, $refresh = true)
 	{
-		return Db::getInstance()->getValue('
-		SELECT COUNT(*)
-		FROM `'._DB_PREFIX_.'order_discount` od
-		LEFT JOIN `'._DB_PREFIX_.'orders` o ON (od.`id_order` = o.`id_order`)
-		WHERE od.`id_discount` = '.(int)($this->id).'
-		AND o.`id_customer` = '.(int)($id_customer)
-		);
+		if (!$id_customer)
+			return 0;
+			
+		if ($refresh || !isset(self::$cache_customers_usage[(int)$id_customer.'_'.(int)$this->id]))
+			self::$cache_customers_usage[(int)$id_customer.'_'.(int)$this->id] = (int)Db::getInstance()->getValue('
+			SELECT COUNT(*)
+			FROM `'._DB_PREFIX_.'order_discount` od
+			LEFT JOIN `'._DB_PREFIX_.'orders` o ON (od.`id_order` = o.`id_order`)
+			WHERE od.`id_discount` = '.(int)$this->id.' AND o.`id_customer` = '.(int)$id_customer);
+			
+		return (int)self::$cache_customers_usage[(int)$id_customer.'_'.(int)$this->id];
 	}
 
 	/**
@@ -270,60 +280,74 @@ class DiscountCore extends ObjectModel
 	  *
 	  * @param integer $nb_discounts Number of discount currently in cart
 	  * @param boolean $order_total_products Total cart products amount
+	  * @param boolean $shipping_fees Total cart products amount
+	  * @param integer $id_cart Cart ID
+	  * @param boolean $use_tax Enable tax calculations
 	  * @return mixed Return a float value or '!' if reduction is 'Shipping free'
 	  */
-	public function getValue($nb_discounts = 0, $order_total_products = 0, $shipping_fees = 0, $idCart = false, $useTax = true)
+	public function getValue($nb_discounts = 0, $order_total_products = 0, $shipping_fees = 0, $id_cart = 0, $use_tax = true)
 	{
+		global $cart;
+
+		$c = ($id_cart && $cart->id == $id_cart) ? $cart : ($id_cart ? new Cart((int)$id_cart) : null);
+
+		if (!Validate::isLoadedObject($c) ||
+			((!$this->cumulable && (int)$nb_discounts > 1) || !$this->active || (!$this->quantity && !$c->OrderExists())) ||
+			($c->id_customer && ($this->usedByCustomer((int)$c->id_customer, false) >= $this->quantity_per_user) && !$c->OrderExists()) ||
+			((time() < strtotime($this->date_from) || time() > strtotime($this->date_to)) && !$c->OrderExists()))
+			return 0;
+
+		$products = $c->getProducts();
+		$categories = self::getCategories((int)$this->id, false);
+
 		$totalAmount = 0;
-
-		$cart = new Cart((int)($idCart));
-		if (!Validate::isLoadedObject($cart))
-			return 0;
-
-		if ((!$this->cumulable AND (int)($nb_discounts) > 1) OR !$this->active OR (!$this->quantity AND !$cart->OrderExists()))
-			return 0;
-
-		if ($this->usedByCustomer((int)($cart->id_customer)) >= $this->quantity_per_user AND !$cart->OrderExists())
-			return 0;
-
-		$date_start = strtotime($this->date_from);
-		$date_end = strtotime($this->date_to);
-		if ((time() < $date_start OR time() > $date_end) AND !$cart->OrderExists()) return 0;
-
-		$products = $cart->getProducts();
-		$categories = Discount::getCategories((int)($this->id));
-
-		foreach ($products AS $product)
-			if (count($categories) AND Product::idIsOnCategoryId($product['id_product'], $categories))
+		foreach ($products as $product)
+			if (count($categories) && Product::idIsOnCategoryId($product['id_product'], $categories))
 				$totalAmount += $this->include_tax ? $product['total_wt'] : $product['total'];
-		if ($this->minimal > 0 AND $totalAmount < $this->minimal)
+		if ($this->minimal > 0 && $totalAmount < $this->minimal)
 			return 0;
+
 		switch ($this->id_discount_type)
 		{
 			/* Relative value (% of the order total) */
 			case 1:
 				$amount = 0;
 				$percentage = $this->value / 100;
-				foreach ($products AS $product)
-						if (Product::idIsOnCategoryId($product['id_product'], $categories))
-							if ($this->cumulable_reduction OR (!$product['reduction_applies'] AND !$product['on_sale']))
-								$amount += ($useTax? $product['total_wt'] : $product['total']) * $percentage;
+				foreach ($products as $product)
+						if (Product::idIsOnCategoryId($product['id_product'], $categories) &&
+						($this->cumulable_reduction || (!$product['reduction_applies'] && !$product['on_sale'])))
+							$amount += ($use_tax ? $product['total_wt'] : $product['total']) * $percentage;
 				return $amount;
 
 			/* Absolute value */
 			case 2:
-				// An "absolute" voucher is available in one currency only
-				$currency = ((int)$cart->id_currency ? Currency::getCurrencyInstance($cart->id_currency) : Currency::getCurrent());
-				if ($this->id_currency != $currency->id)
+				
+				/* This type of voucher is restricted to a specific currency */
+				if ($c->id_currency)
+					$id_currency = (int)$c->id_currency;
+				else
+				{
+					global $cookie;
+					if ($cookie->id_currency)
+						$id_currency = (int)$cookie->id_currency;
+				}
+				
+				if (!isset($id_currency))
+					$id_currency = (int)Configuration::get('PS_CURRENCY_DEFAULT');
+
+				if ($this->id_currency != $id_currency)
 					return 0;
 
-				$taxDiscount = Cart::getTaxesAverageUsed((int)($cart->id));
-				if (!$useTax AND isset($taxDiscount) AND $taxDiscount != 1)
-					$this->value = abs($this->value / (1 + $taxDiscount * 0.01));
+				if (!$use_tax)
+				{
+					$taxDiscount = Cart::getTaxesAverageUsed((int)$c->id);
+					if ($taxDiscount != 1)
+						$this->value = abs($this->value / (1 + $taxDiscount * 0.01));
+				}
 
 				// Main return
 				$value = 0;
-				foreach ($products AS $product)
+				foreach ($products as $product)
 					if (Product::idIsOnCategoryId($product['id_product'], $categories))
 						$value = $this->value;
 				// Return 0 if there are no applicable categories
@@ -353,12 +377,15 @@ class DiscountCore extends ObjectModel
 		return false;
 	}
 
-	public static function getCategories($id_discount)
+	public static function getCategories($id_discount, $refresh = true)
 	{
-		return Db::getInstance()->ExecuteS('
-		SELECT `id_category`
-		FROM `'._DB_PREFIX_.'discount_category`
-		WHERE `id_discount` = '.(int)($id_discount));
+		if ($refresh || !isset(self::$cache_categories[(int)$id_discount]))
+			self::$cache_categories[(int)$id_discount] = Db::getInstance()->ExecuteS('
+			SELECT `id_category`
+			FROM `'._DB_PREFIX_.'discount_category`
+			WHERE `id_discount` = '.(int)$id_discount);
+		
+		return self::$cache_categories[(int)$id_discount];
 	}
 
 	public function updateCategories($categories)
@@ -376,7 +403,7 @@ class DiscountCore extends ObjectModel
 		}
 		elseif (!is_array($categories) OR !sizeof($categories))
 			return false;
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_category` WHERE `id_discount`='.(int)($this->id));
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_category` WHERE `id_discount`='.(int)$this->id);
 		foreach($categories AS $category)
 		{
 			Db::getInstance()->ExecuteS('

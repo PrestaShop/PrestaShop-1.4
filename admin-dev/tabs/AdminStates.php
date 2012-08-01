@@ -123,8 +123,7 @@ class AdminStates extends AdminTab
 				<label>'.$this->l('Country:').' </label>
 				<div class="margin-form">
 					<select name="id_country">';
-				$countries = Country::getCountries((int)($cookie->id_lang), false, true);
-				foreach ($countries AS $country)
+				foreach (Country::getCountries((int)$cookie->id_lang, false, true, false) as $country)
 					echo '<option value="'.(int)($country['id_country']).'"'.(($this->getFieldValue($obj, 'id_country') == $country['id_country']) ? ' selected="selected"' : '').'>'.$country['name'].'</option>';
 				echo '
 					</select>

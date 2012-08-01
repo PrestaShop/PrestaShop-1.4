@@ -1395,6 +1395,7 @@ CREATE TABLE `PREFIX_state` (
   `tax_behavior` smallint(1) NOT NULL default '0',
   `active` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`id_state`),
+  KEY `name` (`name`),
   KEY `id_country` (`id_country`),
   KEY `id_zone` (`id_zone`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;

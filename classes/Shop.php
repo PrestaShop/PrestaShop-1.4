@@ -29,24 +29,16 @@ class ShopCore extends ObjectModel
 {
 	public function __construct()
 	{
-	
 	}
 	
+	/* This class is not in use yet, it has been implemented to prepare the switch to v1.5.x */
 	public static function getShops()
 	{
-		/*return Db::getInstance()->ExecuteS('
-			SELECT * FROM `'._DB_PREFIX_.'shops`
-		');*/
-		return array(
-			array('id_shop' => 1, 'name' => 'Default shop')
-		);
+		return array(array('id_shop' => 1, 'name' => 'Default shop'));
 	}
 
 	public static function getCurrentShop()
 	{
-		// During implementation, remind you to NOT trust the cookie, you may be called from a payment module (Mouhahahaha!)
 		return 1;
 	}
 }
-
-

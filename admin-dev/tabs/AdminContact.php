@@ -48,7 +48,7 @@ class AdminContact extends AdminPreferences
 		
 		$countryList = array();
 		$countryList[] = array('id' => '0', 'name' => $this->l('Choose your country'));
-		foreach (Country::getCountries(intval($cookie->id_lang)) AS $country)
+		foreach (Country::getCountries((int)$cookie->id_lang, false, false, false) as $country)
 			$countryList[] = array('id' => $country['id_country'], 'name' => $country['name']);
 		$stateList = array();
 		$stateList[] = array('id' => '0', 'name' => $this->l('Choose your state (if applicable)'));

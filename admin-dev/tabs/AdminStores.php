@@ -49,8 +49,7 @@ class AdminStores extends AdminTab
 		LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (cl.`id_country` = a.`id_country` AND cl.`id_lang` = '.(int)$cookie->id_lang.')
 		LEFT JOIN `'._DB_PREFIX_.'state` st ON (st.`id_state` = a.`id_state`)';
 
-		$countries = Country::getCountries((int)($cookie->id_lang));
-		foreach ($countries AS $country)
+		foreach (Country::getCountries((int)$cookie->id_lang, false, false, false) as $country)
 			$this->countriesArray[$country['id_country']] = $country['name'];
 
 		$this->fieldsDisplay = array(
@@ -209,7 +208,7 @@ class AdminStores extends AdminTab
 					</div>
 					<label>'.$this->l('Postcode/ Zip Code:').'</label>
 					<div class="margin-form">
-						<input type="text" size="6" name="postcode" value="'.htmlentities($this->getFieldValue($obj, 'postcode'), ENT_COMPAT, 'UTF-8').'" />
+						<input type="text" size="6" name="postcode" value="'.htmlentities($this->getFieldValue($obj, 'postcode'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 					</div>
 					<label>'.$this->l('City:').'</label>
 					<div class="margin-form">

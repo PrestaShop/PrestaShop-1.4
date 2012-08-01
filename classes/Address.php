@@ -321,10 +321,9 @@ class AddressCore extends ObjectModel
 	public static function getFirstCustomerAddressId($id_customer, $active = true)
 	{
 		return Db::getInstance()->getValue('
-			SELECT `id_address`
-			FROM `'._DB_PREFIX_.'address`
-			WHERE `id_customer` = '.(int)($id_customer).' AND `deleted` = 0'.($active ? ' AND `active` = 1' : '')
-		);
+		SELECT `id_address`
+		FROM `'._DB_PREFIX_.'address`
+		WHERE `id_customer` = '.(int)$id_customer.' AND `deleted` = 0'.($active ? ' AND `active` = 1' : ''));
 	}
 }
 

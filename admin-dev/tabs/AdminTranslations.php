@@ -209,7 +209,7 @@ class AdminTranslations extends AdminTab
 		$this->_errors[] = Tools::displayError('Please choose a language and theme.');
 	}
 	
-	public function checkAndAddMailsFiles ($iso_code, $files_list)
+	public function checkAndAddMailsFiles($iso_code, $files_list)
 	{
 		// 1 - Scan mails files
 		$mails = scandir(_PS_MAIL_DIR_.'en/');
@@ -367,10 +367,8 @@ class AdminTranslations extends AdminTab
 		{
 			$str_write = '';
 			$_cache_file[($is_default ? self::DEFAULT_THEME_NAME : $theme_name).'-'.$file_name] = true;
-			if (!file_exists($file_name))
-				file_put_contents($file_name, '');
-			if (!is_writable($file_name))
-				die ($this->l('Cannot write the theme\'s language file ').'('.$file_name.')'.$this->l('. Please check write permissions.'));
+			if (!is_writable(dirname($file_name)))
+				die($this->l('Cannot write the theme\'s language file ').'('.$file_name.')'.$this->l('. Please check write permissions.'));
 				
 			// this string is initialized one time for a file
 			$str_write .= "<?php\n\nglobal \$_MODULE;\n\$_MODULE = array();\n";
@@ -395,7 +393,7 @@ class AdminTranslations extends AdminTab
 				{
 					$post_key = md5(strtolower($module_name).'_'.($is_default ? self::DEFAULT_THEME_NAME : strtolower($theme_name)).'_'.strtolower($template_name).'_'.md5($key));
 					$pattern = '\'<{'.strtolower($module_name).'}'.($is_default ? 'prestashop' : strtolower($theme_name)).'>'.strtolower($template_name).'_'.md5($key).'\'';
-					if (array_key_exists($post_key, $_POST) AND !empty($_POST[$post_key]) AND !in_array($pattern, $array_check_duplicate))
+					if (isset($_POST[$post_key]) && !empty($_POST[$post_key]) && !in_array($pattern, $array_check_duplicate))
 					{
 						$array_check_duplicate[] = $pattern;
 						$str_write .= '$_MODULE['.$pattern.'] = \''.pSQL(str_replace(array("\r\n", "\r", "\n"), ' ', $_POST[$post_key])).'\';'."\n";
@@ -407,22 +405,18 @@ class AdminTranslations extends AdminTab
 		if (isset($_cache_file[($is_default ? self::DEFAULT_THEME_NAME : $theme_name).'-'.$file_name]) AND $str_write != "<?php\n\nglobal \$_MODULE;\n\$_MODULE = array();\n")
 			file_put_contents($file_name, $str_write);
 	}
-	public function clearModuleFiles ($files, $type_clear = 'file', $path = '')
+
+	public function clearModuleFiles($files, $type_clear = 'file', $path = '')
 	{
-		$arr_exclude = array('img', 'js', 'mails');
-		$arr_good_ext = array('.tpl', '.php');
-		foreach ($files as $key=>$file)
-		{
-			if ($file{0} === '.' OR in_array(substr($file, 0, strrpos($file,'.')), $this->all_iso_lang))
+		foreach ($files as $key => $file)
+			if (($file{0} == '.' || in_array(substr($file, 0, strrpos($file, '.')), $this->all_iso_lang)) ||
+			($type_clear == 'file' && !in_array(substr($file, strrpos($file, '.')), array('.tpl', '.php'))) ||
+			($type_clear == 'directory' && (!is_dir($path.$file) || in_array($file, array('img', 'js', 'mails')))))
 				unset($files[$key]);
-			elseif ($type_clear === 'file' AND !in_array(substr($file, strrpos($file,'.')),$arr_good_ext))
-				unset($files[$key]);
-			elseif ($type_clear === 'directory' AND (!is_dir($path.$file) OR in_array($file, $arr_exclude)))
-				unset($files[$key]);
-				
-		}
+
 		return $files;
 	}
+
 	/**
 	 * This method get translation for each files of a module,
 	 * compare with global $_MODULES array and fill AdminTranslations::modules_translations array

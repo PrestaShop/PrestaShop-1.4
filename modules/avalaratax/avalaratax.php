@@ -480,12 +480,12 @@ class AvalaraTax extends Module
 		
 		$stateList = array();
 		$stateList[] = array('id' => '0', 'name' => $this->l('Choose your state (if applicable)'), 'iso_code' => '--');
-		foreach (State::getStates(intval($cookie->id_lang)) as $state)
+		foreach (State::getStates((int)$cookie->id_lang) as $state)
 			$stateList[] = array('id' => $state['id_state'], 'name' => $state['name'], 'iso_code' => $state['iso_code']);
 		
 		$countryList = array();
 		$countryList[] = array('id' => '0', 'name' => $this->l('Choose your country'), 'iso_code' => '--');
-		foreach (Country::getCountries(intval($cookie->id_lang)) as $country)
+		foreach (Country::getCountries((int)$cookie->id_lang, false, false, false) as $country)
 			$countryList[] = array('id' => $country['id_country'], 'name' => $country['name'], 'iso_code' => $country['iso_code']);
 		
 		$buffer .= '

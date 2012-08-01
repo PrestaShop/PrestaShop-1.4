@@ -179,11 +179,11 @@ class CarrierCompare extends Module
 		$refresh_method = Configuration::get('SE_RERESH_METHOD');
 
 		$this->smarty->assign(array(
-			'countries' => Country::getCountries((int)$cookie->id_lang),
+			'countries' => Country::getCountries((int)$cookie->id_lang, true, false, false),
 			'id_carrier' => ($params['cart']->id_carrier ? $params['cart']->id_carrier : Configuration::get('PS_CARRIER_DEFAULT')),
 			'id_country' => (isset($cookie->id_country) ? $cookie->id_country : Configuration::get('PS_COUNTRY_DEFAULT')),
 			'id_state' => (isset($cookie->id_state) ? $cookie->id_state : 0),
-			'zipcode' => (isset($cookie->postcode) ? $cookie->postcode : ''),
+			'zipcode' => ((isset($cookie->postcode) && $cookie->postcode != 'undefined') ? $cookie->postcode : ''),
 			'currencySign' => $currency->sign,
 			'currencyRate' => $currency->conversion_rate,
 			'currencyFormat' => $currency->format,
@@ -197,13 +197,10 @@ class CarrierCompare extends Module
 
 	/*
 	** Get states by Country id, called by the ajax process
-	** id_state allow to preselect the selection option
 	*/
-	public function getStatesByIdCountry($id_country, $id_state = '')
+	public function getStatesByIdCountry($id_country)
 	{
-		$states = State::getStatesByIdCountry($id_country);
-
-		return (sizeof($states) ? $states : array());
+		return State::getStatesByIdCountry((int)$id_country);
 	}
 
 	/*

@@ -43,8 +43,8 @@ class AdminManufacturers extends AdminTab
 	 	$this->delete = true;
 
 		// Sub tab addresses
-		$countries = Country::getCountries((int)($cookie->id_lang));
-		foreach ($countries AS $country)
+		$countries = Country::getCountries((int)$cookie->id_lang, false, false, false);
+		foreach ($countries as $country)
 			$this->countriesArray[$country['id_country']] = $country['name'];
 		
 		$this->fieldsDisplayAddresses = array(

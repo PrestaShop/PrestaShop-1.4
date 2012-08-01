@@ -191,6 +191,7 @@ class ProductCore extends ObjectModel
 
 	public static $_taxCalculationMethod = PS_TAX_EXC;
 	protected static $_prices = array();
+	protected static $_prices_static = array();
 	protected static $_pricesLevel2 = array();
 	protected static $_incat = array();
 	protected static $_cart_quantity = array();
@@ -409,27 +410,27 @@ class ProductCore extends ObjectModel
 		return $fields;
 	}
 
-	public static function initPricesComputation($id_customer = NULL)
+	public static function initPricesComputation($id_customer = null)
 	{
 		global $cookie;
 
 		if ($id_customer)
 		{
-			$customer = new Customer((int)($id_customer));
+			$customer = new Customer((int)$id_customer);
 			if (!Validate::isLoadedObject($customer))
 				die(Tools::displayError());
 			self::$_taxCalculationMethod = Group::getPriceDisplayMethod((int)($customer->id_default_group));
 		}
 		elseif ($cookie->id_customer)
 		{
-			$customer = new Customer((int)($cookie->id_customer));
+			$customer = new Customer((int)$cookie->id_customer);
 			self::$_taxCalculationMethod = Group::getPriceDisplayMethod((int)($customer->id_default_group));
 		}
 		else
 			self::$_taxCalculationMethod = Group::getDefaultPriceDisplayMethod();
 	}
 
-	public static function getTaxCalculationMethod($id_customer = NULL)
+	public static function getTaxCalculationMethod($id_customer = null)
 	{
 		if ($id_customer)
 			self::initPricesComputation((int)($id_customer));
@@ -1579,8 +1580,7 @@ class ProductCore extends ObjectModel
 		$ret = array();
 		if ($row = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT `id_category` FROM `'._DB_PREFIX_.'category_product`
-		WHERE `id_product` = '.(int)$id_product)
-		)
+		WHERE `id_product` = '.(int)$id_product))
 			foreach ($row as $val)
 				$ret[] = $val['id_category'];
 		return $ret;
@@ -1621,7 +1621,7 @@ class ProductCore extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT `id_category`
 		FROM `'._DB_PREFIX_.'category_product`
-		WHERE `id_product` = '.(int)($id_product));
+		WHERE `id_product` = '.(int)$id_product);
 	}
 
 	/**
@@ -1718,71 +1718,77 @@ class ProductCore extends ObjectModel
 	* @param boolean $with_ecotax insert ecotax in price output.
 	* @return float Product price
 	*/
-	public static function getPriceStatic($id_product, $usetax = true, $id_product_attribute = NULL, $decimals = 6, $divisor = NULL, $only_reduc = false,
-	$usereduc = true, $quantity = 1, $forceAssociatedTax = false, $id_customer = NULL, $id_cart = NULL, $id_address = NULL, &$specificPriceOutput = NULL, $with_ecotax = true, $use_groupReduction = true)
+	public static function getPriceStatic($id_product, $usetax = true, $id_product_attribute = null, $decimals = 6, $divisor = null, $only_reduc = false,
+	$usereduc = true, $quantity = 1, $forceAssociatedTax = false, $id_customer = null, $id_cart = null, $id_address = null, &$specificPriceOutput = null, $with_ecotax = true, $use_groupReduction = true)
 	{
 		global $cookie, $cart;
 		$cur_cart = $cart;
+		
+		$cache_key = (int)$id_product.'_'.(int)$usetax.'_'.(int)$id_product_attribute.'_'.(int)$decimals.'_'.(int)$divisor.'_'.(int)$only_reduc.'_'.(int)$usereduc.'_'.(int)$quantity.'_'.
+		(int)$forceAssociatedTax.'_'.(int)$id_customer.'_'.(int)$id_cart.'_'.(int)$id_address.'_'.(int)$specificPriceOutput.'_'.(int)$with_ecotax.'_'.(int)$use_groupReduction.'_'.
+		(isset($cookie->id_customer) ? (int)$cookie->id_customer : 0).'_'.(isset($cookie->id_cart) ? (int)$cookie->id_cart : 0).'_'.
+		(isset($cookie->id_country) ? (int)$cookie->id_country : 0).'_'.(isset($cookie->id_state) ? (int)$cookie->id_state : 0).'_'.
+		(isset($cookie->postcode) ? (int)$cookie->postcode : 0).'_'.(isset($cookie->id_currency) ? (int)$cookie->id_currency : 0).'_'.
+		(isset($cur_cart->id_currency) ? (int)$cur_cart->id_currency : 0);
+		
+		if (isset(self::$_prices_static[$cache_key]))
+			return self::$_prices_static[$cache_key];
 
 		if (isset($divisor))
 			Tools::displayParameterAsDeprecated('divisor');
 
-		if (!Validate::isBool($usetax) OR !Validate::isUnsignedId($id_product))
+		if (!Validate::isBool($usetax) || !Validate::isUnsignedId($id_product))
 			die(Tools::displayError());
 
 		// Initializations
 		if (!$id_customer)
-			$id_customer = ((Validate::isCookie($cookie) AND isset($cookie->id_customer) AND $cookie->id_customer) ? (int)($cookie->id_customer) : NULL);
-		$id_group = $id_customer ? (int)(Customer::getDefaultGroupId($id_customer)) : _PS_DEFAULT_CUSTOMER_GROUP_;
-		if (!is_object($cur_cart) OR (Validate::isUnsignedInt($id_cart) AND $id_cart))
-		{
-			/*
-			* When a user (e.g., guest, customer, Google...) is on PrestaShop, he has already its cart as the global (see /init.php)
-			* When a non-user calls directly this method (e.g., payment module...) is on PrestaShop, he does not have already it BUT knows the cart ID
-			*/
-			if (!$id_cart AND !Validate::isCookie($cookie))
-				die(Tools::displayError());
-			$cur_cart = $id_cart ? new Cart((int)($id_cart)) : new Cart((int)($cookie->id_cart));
-		}
-
+			$id_customer = ((Validate::isCookie($cookie) && isset($cookie->id_customer) && $cookie->id_customer) ? (int)$cookie->id_customer : null);
+		$id_group = $id_customer ? (int)Customer::getDefaultGroupId($id_customer) : _PS_DEFAULT_CUSTOMER_GROUP_;
+		
+		if (!is_object($cur_cart) && !$id_cart && !Validate::isCookie($cookie))
+			die(Tools::displayError());
+		
+		/*
+		* When a user (e.g., guest, customer, Google...) is on PrestaShop, he has already its cart as the global (see /init.php)
+		* When a non-user calls directly this method (e.g., payment module...) is on PrestaShop, he does not have already it BUT knows the cart ID
+		*/
+		if (!is_object($cur_cart) && ((int)$id_cart > 0 || (Validate::isCookie($cookie) && $cookie->id_cart)))
+			$cur_cart = $id_cart ? new Cart((int)$id_cart) : new Cart((int)$cookie->id_cart);
+		
 		$cart_quantity = 0;
-		if ((int)($id_cart))
+		if ((int)$id_cart)
 		{
-			$condition = '';
-			$cache_name = (int)($id_cart).'_'.(int)($id_product);
-			
-			if(Configuration::get('PS_QTY_DISCOUNT_ON_COMBINATION'))
+			$calc_qty_discounts_with_combinations = (int)Configuration::get('PS_QTY_DISCOUNT_ON_COMBINATION');
+			$cache_name = (int)$id_cart.'_'.(int)$id_product.($calc_qty_discounts_with_combinations ? '_'.(int)$id_product_attribute : '');
+
+			if (!isset(self::$_cart_quantity) || !count(self::$_cart_quantity) || !isset(self::$_cart_quantity[$cache_name]))
 			{
-				$cache_name = (int)($id_cart).'_'.(int)($id_product).'_'.(int)($id_product_attribute);
-				$condition = ' AND `id_product_attribute` = '.(int)($id_product_attribute);
-			}
-				
-			if (!isset(self::$_cart_quantity[$cache_name]) OR self::$_cart_quantity[$cache_name] !=  (int)($quantity))
-			{
-				self::$_cart_quantity[$cache_name] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
-				SELECT SUM(`quantity`)
+				$quantities = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+				SELECT id_product, '.($calc_qty_discounts_with_combinations ? 'id_product_attribute, quantity' : 'SUM(`quantity`) quantity').'
 				FROM `'._DB_PREFIX_.'cart_product`
-				WHERE `id_product` = '.(int)($id_product).' 
-				AND `id_cart` = '.(int)($id_cart).' '.$condition					
-				);
+				WHERE `id_cart` = '.(int)$id_cart.'
+				'.($calc_qty_discounts_with_combinations ? ', id_product_attribute' : ' GROUP BY id_product'), false);
 				
-				$cart_quantity = self::$_cart_quantity[$cache_name];
+				while ($row = DB::getInstance()->nextRow($quantities))
+					self::$_cart_quantity[(int)$id_cart.'_'.(int)$row['id_product'].($calc_qty_discounts_with_combinations ? '_'.(int)$row['id_product_attribute'] : '')] = $row['quantity'];
 			}
+			
+			$cart_quantity = self::$_cart_quantity[$cache_name];
 		}
-		$quantity = ($id_cart AND $cart_quantity) ? $cart_quantity : $quantity;
+		$quantity = ($id_cart && $cart_quantity) ? $cart_quantity : $quantity;
+		
 		$id_currency = (int)(Validate::isLoadedObject($cur_cart) ? $cur_cart->id_currency : ((isset($cookie->id_currency) AND (int)($cookie->id_currency)) ? $cookie->id_currency : Configuration::get('PS_CURRENCY_DEFAULT')));
 
 		// retrieve address informations
-		$id_country = (int)Country::getDefaultCountryId();
 		$id_state = 0;
 		$id_county = 0;
 
-		if (!$id_address)
+		if (!$id_address && Validate::isLoadedObject($cur_cart))
 			$id_address = $cur_cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
 
 		if ($id_address)
 		{
-			$address_infos = Address::getCountryAndState($id_address);
+			$address_infos = Address::getCountryAndState((int)$id_address);
 			if ($address_infos['id_country'])
 			{
 				$id_country = (int)($address_infos['id_country']);
@@ -1801,23 +1807,26 @@ class ProductCore extends ObjectModel
 
 			$id_county = (int)County::getIdCountyByZipCode($id_state, $postcode);
 		}
+		
+		if (!isset($id_country))
+			$id_country = (int)Country::getDefaultCountryId();
 
 		if (Tax::excludeTaxeOption())
 			$usetax = false;
 
-		if ($usetax != false AND !empty($address_infos['vat_number']) AND $address_infos['id_country'] != Configuration::get('VATNUMBER_COUNTRY') AND Configuration::get('VATNUMBER_MANAGEMENT'))
+		if ($usetax != false && !empty($address_infos['vat_number']) && $address_infos['id_country'] != Configuration::get('VATNUMBER_COUNTRY') && Configuration::get('VATNUMBER_MANAGEMENT'))
 			$usetax = false;
 
-		$id_shop = (int)(Shop::getCurrentShop());
-
-		return Product::priceCalculation($id_shop, $id_product, $id_product_attribute, $id_country,  $id_state, $id_county, $id_currency, $id_group, $quantity, $usetax, $decimals, $only_reduc,
+		self::$_prices_static[$cache_key] = Product::priceCalculation(0, $id_product, $id_product_attribute, $id_country, $id_state, $id_county, $id_currency, $id_group, $quantity, $usetax, $decimals, $only_reduc,
 		$usereduc, $with_ecotax, $specificPriceOutput, $use_groupReduction);
+		
+		return self::$_prices_static[$cache_key];
 	}
 
 	/**
 	* Price calculation / Get product price
 	*
-	* @param integer $id_shop Shop id
+	* @param integer $id_shop Shop id - Unused
 	* @param integer $id_product Product id
 	* @param integer $id_product_attribute Product attribute id
 	* @param integer $id_country Country id
@@ -1956,16 +1965,15 @@ class ProductCore extends ObjectModel
 		$id_customer = ((Validate::isCookie($cookie) AND isset($cookie->id_customer) AND $cookie->id_customer) ? (int)($cookie->id_customer) : NULL);
 		$id_group = $id_customer ? (int)(Customer::getDefaultGroupId($id_customer)) : _PS_DEFAULT_CUSTOMER_GROUP_;
 		$cart_quantity = !$cart ? 0 : Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
-			SELECT SUM(`quantity`)
-			FROM `'._DB_PREFIX_.'cart_product`
-			WHERE `id_product` = '.(int)($id_product).' AND `id_cart` = '.(int)($cart->id)
-		);
+		SELECT SUM(`quantity`)
+		FROM `'._DB_PREFIX_.'cart_product`
+		WHERE `id_product` = '.(int)$id_product.' AND `id_cart` = '.(int)$cart->id);
 		$quantity = $cart_quantity ? $cart_quantity : $quantity;
 		$id_currency = (int)(Validate::isLoadedObject($cart) ? $cart->id_currency : ((isset($cookie->id_currency) AND (int)($cookie->id_currency)) ? $cookie->id_currency : Configuration::get('PS_CURRENCY_DEFAULT')));
 		$ids = Address::getCountryAndState((int)($cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
 		$id_country = (int)($ids['id_country'] ? $ids['id_country'] : Configuration::get('PS_COUNTRY_DEFAULT'));
-		$id_shop = (int)(Shop::getCurrentShop());
-		return (bool)SpecificPrice::getSpecificPrice((int)$id_product, $id_shop, $id_currency, $id_country, $id_group, $quantity);
+
+		return (bool)SpecificPrice::getSpecificPrice((int)$id_product, 0, $id_currency, $id_country, $id_group, $quantity);
 	}
 
 	/**
@@ -2082,18 +2090,17 @@ class ProductCore extends ObjectModel
 	* @param integer $id_product_attribute Product attribute id (optional)
 	* @return integer Available quantities
 	*/
-	public static function getQuantity($id_product, $id_product_attribute = NULL, $cache_is_pack = NULL)
+	public static function getQuantity($id_product, $id_product_attribute = null, $cache_is_pack = null)
 	{
-		$lang = Configuration::get('PS_LANG_DEFAULT');
-		if (((int)$cache_is_pack OR ($cache_is_pack === NULL AND Pack::isPack((int)$id_product, (int)$lang))) AND !Pack::isInStock((int)$id_product, (int)$lang))
+		if (((int)$cache_is_pack || ($cache_is_pack === null && Pack::isPack((int)$id_product))) && !Pack::isInStock((int)$id_product))
 			return 0;
 
 		return Db::getInstance()->getValue('
-		SELECT IF(COUNT(id_product_attribute), SUM(pa.`quantity`), p.`quantity`) as total
+		SELECT IF(COUNT(*), SUM(pa.`quantity`), p.`quantity`) total
 		FROM `'._DB_PREFIX_.'product` p
-		LEFT JOIN `'._DB_PREFIX_.'product_attribute` AS pa ON pa.`id_product` = p.`id_product`
+		LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pa.`id_product` = p.`id_product`)
 		WHERE p.`id_product` = '.(int)($id_product).'
-		'.(isset($id_product_attribute) ? 'AND `id_product_attribute` = '.(int)($id_product_attribute) : '').'
+		'.(isset($id_product_attribute) ? 'AND `id_product_attribute` = '.(int)$id_product_attribute : '').'
 		GROUP BY p.`id_product`');
 	}
 
@@ -2103,7 +2110,7 @@ class ProductCore extends ObjectModel
 	* @param array $product Array with ordered product (quantity, id_product_attribute if applicable)
 	* @return mixed Query result
 	*/
-	public static function updateQuantity($product, $id_order = NULL)
+	public static function updateQuantity($product, $id_order = null)
 	{
 		if (!is_array($product))
 			die (Tools::displayError());
@@ -2355,42 +2362,48 @@ class ProductCore extends ObjectModel
 
 	public static function getFeaturesStatic($id_product)
 	{
-		if (!array_key_exists($id_product, self::$_cacheFeatures))
+		if (!isset(self::$_cacheFeatures[$id_product]))
 			self::$_cacheFeatures[$id_product] = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT id_feature, id_product, id_feature_value
 			FROM `'._DB_PREFIX_.'feature_product`
 			WHERE `id_product` = '.(int)$id_product);
+
 		return self::$_cacheFeatures[$id_product];
 	}
 
-	public static function cacheProductsFeatures($productIds)
+	public static function cacheProductsFeatures($product_ids)
 	{
-		$productImplode = array();
-		foreach ($productIds as $id_product)
-			if ((int)$id_product AND !array_key_exists($id_product, self::$_cacheFeatures))
-				$productImplode[] = (int)$id_product;
-		if (!count($productImplode))
+		$product_implode = array();
+		foreach ($product_ids as $id_product)
+			if ((int)$id_product && !isset(self::$_cacheFeatures[$id_product]))
+				$product_implode[] = (int)$id_product;
+		if (!count($product_implode))
 			return;
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT id_feature, id_product, id_feature_value
 		FROM `'._DB_PREFIX_.'feature_product`
-		WHERE `id_product` IN ('.implode($productImplode, ',').')');
+		WHERE `id_product` IN ('.implode($product_implode, ',').')');
 		foreach ($result as $row)
 		{
-			if (!array_key_exists($row['id_product'], self::$_cacheFeatures))
+			if (!isset(self::$_cacheFeatures[$row['id_product']]))
 				self::$_cacheFeatures[$row['id_product']] = array();
 			self::$_cacheFeatures[$row['id_product']][] = $row;
 		}
+		
+		/* Even the products without features should be listed */
+		foreach ($product_ids as $id_product)
+			if (!isset(self::$_cacheFeatures[$id_product]))
+				self::$_cacheFeatures[$id_product] = array();
 	}
 
-	public static function cacheFrontFeatures($productIds, $id_lang)
+	public static function cacheFrontFeatures($product_ids, $id_lang)
 	{
-		$productImplode = array();
-		foreach ($productIds as $id_product)
-			if ((int)$id_product AND !array_key_exists($id_product.'-'.$id_lang, self::$_cacheFeatures))
-				$productImplode[] = (int)$id_product;
-		if (!count($productImplode))
+		$product_implode = array();
+		foreach ($product_ids as $id_product)
+			if ((int)$id_product && !isset(self::$_cacheFeatures[$id_product.'-'.$id_lang]))
+				$product_implode[] = (int)$id_product;
+		if (!count($product_implode))
 			return;
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
@@ -2398,11 +2411,11 @@ class ProductCore extends ObjectModel
 		FROM '._DB_PREFIX_.'feature_product pf
 		LEFT JOIN '._DB_PREFIX_.'feature_lang fl ON (fl.id_feature = pf.id_feature AND fl.id_lang = '.(int)$id_lang.')
 		LEFT JOIN '._DB_PREFIX_.'feature_value_lang fvl ON (fvl.id_feature_value = pf.id_feature_value AND fvl.id_lang = '.(int)$id_lang.')
-		WHERE `id_product` IN ('.implode($productImplode, ',').')');
+		WHERE `id_product` IN ('.implode($product_implode, ',').')');
 
 		foreach ($result as $row)
 		{
-			if (!array_key_exists($row['id_product'].'-'.$id_lang, self::$_frontFeaturesCache))
+			if (!isset(self::$_frontFeaturesCache[$row['id_product'].'-'.$id_lang]))
 				self::$_frontFeaturesCache[$row['id_product'].'-'.$id_lang] = array();
 			self::$_frontFeaturesCache[$row['id_product'].'-'.$id_lang][] = $row;
 		}
@@ -2815,36 +2828,45 @@ class ProductCore extends ObjectModel
 	public static function getAllCustomizedDatas($id_cart, $id_lang = null)
 	{
 		global $cookie;
-		// No need to query if there isn't any real cart!
+		
+		/* Cart ID is required */
 		if (!$id_cart)
 			return false;
-		if (!$id_lang AND !is_null($cookie) AND $cookie->id_lang)
+
+		if (!$id_lang && !is_null($cookie) && $cookie->id_lang)
 			$id_lang = $cookie->id_lang;
 		else
 		{
-			$cart = new Cart((int)($id_cart));
-			$id_lang = (int)($cart->id_lang);
+			global $cart;
+			$c = ($id_cart && $cart->id == $id_cart) ? $cart : ($id_cart ? new Cart((int)$id_cart) : null);
+			$id_lang = (int)$c->id_lang;
 		}
 
 		if (!$result = Db::getInstance()->ExecuteS('
 			SELECT cd.`id_customization`, c.`id_product`, cfl.`id_customization_field`, c.`id_product_attribute`, cd.`type`, cd.`index`, cd.`value`, cfl.`name`
 			FROM `'._DB_PREFIX_.'customized_data` cd
 			NATURAL JOIN `'._DB_PREFIX_.'customization` c
-			LEFT JOIN `'._DB_PREFIX_.'customization_field_lang` cfl ON (cfl.id_customization_field = cd.`index` AND id_lang = '.(int)($id_lang).')
+			LEFT JOIN `'._DB_PREFIX_.'customization_field_lang` cfl ON (cfl.id_customization_field = cd.`index` AND id_lang = '.(int)$id_lang.')
 			WHERE c.`id_cart` = '.(int)$id_cart.'
 			ORDER BY `id_product`, `id_product_attribute`, `type`, `index`'))
 			return false;
+
 		$customizedDatas = array();
-		foreach ($result AS $row)
-			$customizedDatas[(int)($row['id_product'])][(int)($row['id_product_attribute'])][(int)($row['id_customization'])]['datas'][(int)($row['type'])][] = $row;
-		if (!$result = Db::getInstance()->ExecuteS('SELECT `id_product`, `id_product_attribute`, `id_customization`, `quantity`, `quantity_refunded`, `quantity_returned` FROM `'._DB_PREFIX_.'customization` WHERE `id_cart` = '.(int)($id_cart)))
+		foreach ($result as $row)
+			$customizedDatas[(int)$row['id_product']][(int)$row['id_product_attribute']][(int)$row['id_customization']]['datas'][(int)$row['type']][] = $row;
+		if (!$result = Db::getInstance()->ExecuteS('
+			SELECT `id_product`, `id_product_attribute`, `id_customization`, `quantity`, `quantity_refunded`, `quantity_returned`
+			FROM `'._DB_PREFIX_.'customization`
+			WHERE `id_cart` = '.(int)$id_cart))
 			return false;
-		foreach ($result AS $row)
+
+		foreach ($result as $row)
 		{
-			$customizedDatas[(int)($row['id_product'])][(int)($row['id_product_attribute'])][(int)($row['id_customization'])]['quantity'] = (int)($row['quantity']);
-			$customizedDatas[(int)($row['id_product'])][(int)($row['id_product_attribute'])][(int)($row['id_customization'])]['quantity_refunded'] = (int)($row['quantity_refunded']);
-			$customizedDatas[(int)($row['id_product'])][(int)($row['id_product_attribute'])][(int)($row['id_customization'])]['quantity_returned'] = (int)($row['quantity_returned']);
+			$customizedDatas[(int)$row['id_product']][(int)$row['id_product_attribute']][(int)$row['id_customization']]['quantity'] = (int)$row['quantity'];
+			$customizedDatas[(int)$row['id_product']][(int)$row['id_product_attribute']][(int)$row['id_customization']]['quantity_refunded'] = (int)$row['quantity_refunded'];
+			$customizedDatas[(int)$row['id_product']][(int)$row['id_product_attribute']][(int)$row['id_customization']]['quantity_returned'] = (int)$row['quantity_returned'];
 		}
+
 		return $customizedDatas;
 	}
 
@@ -3070,7 +3092,7 @@ class ProductCore extends ObjectModel
 
 		if (!Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql))
 			return false;
-		self::$_incat[md5($sql)] =  (Db::getInstance(_PS_USE_SQL_SLAVE_)->NumRows() > 0 ? true : false);
+		self::$_incat[md5($sql)] = Db::getInstance(_PS_USE_SQL_SLAVE_)->NumRows() > 0;
 		return self::$_incat[md5($sql)];
 	}
 
@@ -3087,13 +3109,13 @@ class ProductCore extends ObjectModel
 			FROM `'._DB_PREFIX_.'category_product` cp
 			INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
 			WHERE cp.`id_product` = '.(int)$this->id.' AND ctg.`id_group` = 1');
-		else
-			return (bool)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
-			SELECT cg.`id_group`
-			FROM `'._DB_PREFIX_.'category_product` cp
-			INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
-			INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
-			WHERE cp.`id_product` = '.(int)$this->id.' AND cg.`id_customer` = '.(int)$id_customer);
+
+		return (bool)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+		SELECT cg.`id_group`
+		FROM `'._DB_PREFIX_.'category_product` cp
+		INNER JOIN `'._DB_PREFIX_.'category_group` ctg ON (ctg.`id_category` = cp.`id_category`)
+		INNER JOIN `'._DB_PREFIX_.'customer_group` cg ON (cg.`id_group` = ctg.`id_group`)
+		WHERE cp.`id_product` = '.(int)$this->id.' AND cg.`id_customer` = '.(int)$id_customer);
 	}
 
 	/**

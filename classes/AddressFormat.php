@@ -506,9 +506,9 @@ class AddressFormatCore extends ObjectModel
 	private function _getFormatDB($id_country)
 	{
 		$result = Db::getInstance()->getRow('
-		SELECT format 
+		SELECT `format`
 		FROM `'._DB_PREFIX_.$this->table.'`
-		WHERE `id_country` = '.(int)($id_country));
+		WHERE `id_country` = '.(int)$id_country);
 
 		return isset($result['format']) ? trim($result['format']) : '';
 	}

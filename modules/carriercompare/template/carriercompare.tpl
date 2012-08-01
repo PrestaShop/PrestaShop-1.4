@@ -39,7 +39,6 @@
 	var SE_RefreshStateTS = "{l s='Checking available states…' mod='carriercompare'}";
 	var SE_RetrievingInfoTS = "{l s='Retrieving information…' mod='carriercompare'}";
 	var SE_RefreshMethod = {$refresh_method};
-
 	var txtFree = "{l s='Free!' mod='carriercompare'}";
 	
 	PS_SE_HandleEvent();
@@ -67,18 +66,16 @@
 		
 		<p id="states" style="display: none;">
 			<label for="id_state">{l s='State' mod='carriercompare'}</label>
-			<select name="id_state" id="id_state">
-				
-			</select>
+			<select name="id_state" id="id_state"></select>
 		</p>
 		
 		<p>
 			<label for="zipcode">{l s='Zipcode' mod='carriercompare'}</label>
-			<input type="text" name="zipcode" id="zipcode" value="{$zipcode|escape:'htmlall':'UTF-8'}"/> ({l s='Needed for certain carriers' mod='carriercompare'})
+			<input type="text" name="zipcode" id="zipcode" value="{if isset($zipcode)}{$zipcode|escape:'htmlall':'UTF-8'}{/if}"/> ({l s='Needed for certain carriers' mod='carriercompare'})
 		</p>
 		
 		<div id="SE_AjaxDisplay">
-			<img src="{$new_base_dir}loader.gif" /><br />
+			<img src="{$new_base_dir}loader.gif" alt="" /><br />
 			<p></p>
 		</div>
 		
@@ -92,9 +89,7 @@
 						<th class="carrier_price last_item">{l s='Price' mod='carriercompare'}</th>
 					</tr>
 				</thead>
-				<tbody id="carriers_list">
-					
-				</tbody>
+				<tbody id="carriers_list"></tbody>
 			</table>
 		</div>
 		<p class="warning center" id="noCarrier" style="display: none;">{l s='No carrier is available for this selection' mod='carriercompare'}</p>

@@ -115,6 +115,7 @@ var ajaxCart = {
 			}
 		});
 	},
+	
 	// cart to fix display when using back and previous browsers buttons
 	refresh : function(){
 		//send the ajax request to the server
@@ -639,13 +640,13 @@ var ajaxCart = {
 $(document).ready(function(){
 
 	// expand/collapse management
-	$('#block_cart_collapse').click(function(){
-			ajaxCart.collapse();
-	});
-	$('#block_cart_expand').click(function(){
-			ajaxCart.expand();
-	});
+	$('#block_cart_collapse').click(function(){ ajaxCart.collapse(); });
+	$('#block_cart_expand').click(function(){ ajaxCart.expand(); });
 	ajaxCart.overrideButtonsInThePage();
-	ajaxCart.refresh();
+	
+	/* Disabled to avoid a useless Ajax call on each page
+	** Downside: If the user clicks "Back", the cart will not be refreshed
+	** If you would like to force this behavior, just uncomment the following line:
+	*/
+	// ajaxCart.refresh();
 });
-

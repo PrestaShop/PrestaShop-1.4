@@ -312,7 +312,7 @@ class AuthControllerCore extends FrontController
 			if (Configuration::get('PS_RESTRICT_DELIVERED_COUNTRIES'))
 				$countries = Carrier::getDeliveredCountries((int)self::$cookie->id_lang, true, true);
 			else
-				$countries = Country::getCountries((int)self::$cookie->id_lang, true);
+				$countries = Country::getCountries((int)self::$cookie->id_lang, true, false, true);
 
 
 			self::$smarty->assign(array(
@@ -374,7 +374,7 @@ class AuthControllerCore extends FrontController
 				if (Configuration::get('PS_RESTRICT_DELIVERED_COUNTRIES'))
 					$countries = Carrier::getDeliveredCountries((int)self::$cookie->id_lang, true, true);
 				else
-					$countries = Country::getCountries((int)self::$cookie->id_lang, true);
+					$countries = Country::getCountries((int)self::$cookie->id_lang, true, false, true);
 
 				self::$smarty->assign(array(
 					'inOrderProcess' => true,

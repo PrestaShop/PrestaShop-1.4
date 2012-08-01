@@ -536,7 +536,7 @@ class FedexCarrier extends CarrierModule
 						<select name="fedex_carrier_country" id="fedex_carrier_country">
 							<option value="0">'.$this->l('Select a country ...').'</option>';
 							$idcountries = array();
-							foreach (Country::getCountries($this->context->language->id) as $v)
+							foreach (Country::getCountries($this->context->language->id, false, false, false) as $v)
 							{
 								$html .= '<option value="'.$v['id_country'].'" '.($v['id_country'] == (int)(Tools::getValue('fedex_carrier_country', Configuration::get('FEDEX_CARRIER_COUNTRY'))) ? 'selected="selected"' : '').'>'.$v['name'].'</option>';
 								$idcountries[] = $v['id_country'];
