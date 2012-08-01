@@ -247,8 +247,7 @@ class PaypalExpressCheckout extends Paypal
 		// Required field
 		$fields['RETURNURL']			= $shop_url . _MODULE_DIR_ . $this->name . '/express_checkout/submit.php';
 		$fields['REQCONFIRMSHIPPING']	= '0';
-		$fields['NOSHIPPING']			= '2';
-		$fields['LOCALECODE']			= '2';
+		$fields['NOSHIPPING']			= '1';
 		$fields['BUTTONSOURCE']			= TRACKING_CODE;
 
 		// Products
@@ -256,6 +255,10 @@ class PaypalExpressCheckout extends Paypal
 		$total	= 0;
 		$index	= -1;
 
+		$id_address = (int)$this->context->cart->id_address_invoice;
+		$this->setShippingAddress($fields, $id_address);
+
+		// Set cart products list
 		$this->setProductsList($fields, $index, $total, $taxes);
 		$this->setDiscountsList($fields, $index, $total, $taxes);
 		$this->setGiftWrapping($fields, $index, $total);
@@ -270,6 +273,26 @@ class PaypalExpressCheckout extends Paypal
 				$field = str_replace(',', '.', $field);
 			}
 		}
+	}
+
+	private function setShippingAddress(&$fields, $id_address)
+	{
+		$address	= new Address($id_address);
+
+		$fields['ADDROVERRIDE']							= '1';
+		$fields['PAYMENTREQUEST_0_SHIPTOSTREET']		= $address->address1;
+		$fields['PAYMENTREQUEST_0_SHIPTOSTREET2']		= $address->address2;
+		$fields['PAYMENTREQUEST_0_SHIPTOCITY'] 			= $address->city;
+
+		if ($address->id_state)
+		{
+			$state	= new State((int)$address->id_state);
+			$fields['PAYMENTREQUEST_0_SHIPTOSTATE'] 	= $state->name;
+		}
+
+		$country	= new Country((int)$address->id_country);
+		$fields['PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE']	= $country->iso_code;
+		$fields['PAYMENTREQUEST_0_SHIPTOZIP'] 			= $address->postcode;
 	}
 
 	private function setProductsList(&$fields, &$index, &$total, &$taxes)

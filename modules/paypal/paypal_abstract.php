@@ -48,7 +48,7 @@ abstract class PayPalAbstract extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'payments_gateways';
-		$this->version = '3.0.7';
+		$this->version = '3.0.8';
 
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
@@ -244,7 +244,7 @@ abstract class PayPalAbstract extends PaymentModule
 	{
 		if (file_exists(_PS_ROOT_DIR_ . '/modules/paypalapi/paypalapi.php') && $this->active)
 		{
-			$this->warning = $this->l('All features of Paypal API module are be include in the new Paypal module. In order to do not have any conflict, please do not use and remove PayPalAPI module.');
+			$this->warning = $this->l('All features of Paypal API module are include in the new Paypal module. In order to do not have any conflict, please do not use and remove PayPalAPI module.');
 		}
 
 		/* For 1.4.3 and less compatibility */
@@ -344,7 +344,7 @@ abstract class PayPalAbstract extends PaymentModule
 		$this->context->smarty->assign(
 			array(
 				'base_uri' => __PS_BASE_URI__,
-				'id_cart'  => $this->context->cart->id
+				'id_cart'  => (int)$this->context->cart->id
 			)
 		);
 
@@ -352,17 +352,17 @@ abstract class PayPalAbstract extends PaymentModule
 		if (_PS_VERSION_ < '1.5')
 		{
 			Tools::addCSS(_MODULE_DIR_ . $this->name . '/css/paypal.css');
-			Tools::addJS(_MODULE_DIR_ . $this->name . '/js/jquery-1.7.2.min.js');
 		}
 		else
 		{
 			$this->context->controller->addCSS(_MODULE_DIR_ . $this->name . '/css/paypal.css');
-			$this->context->controller->addJS(_MODULE_DIR_ . $this->name . '/js/jquery-1.7.2.min.js');
 		}
 
 		$output = $this->fetchTemplate('/js/', 'front_office', 'js');
 			
-		return '<script type="text/javascript">' . $output . '</script>';
+		return '
+			<script type="text/javascript" src="'._MODULE_DIR_ . $this->name . '/js/jquery-1.7.2.min.js"></script>
+			<script type="text/javascript">' . $output . '</script>';
 	}
 
 	public function hookProductFooter()

@@ -78,9 +78,9 @@ else
 
 	if ($request_type && $ppec->type)
 	{
-		$id_product = (int)Tools::getValue('id_product');
-		$id_product_attribute = (int)Tools::getValue('id_p_attr');
-		$product_quantity = (int)Tools::getValue('quantity');
+		$id_product 			= (int)Tools::getValue('id_product');
+		$id_product_attribute	= (int)Tools::getValue('id_p_attr');
+		$product_quantity		= (int)Tools::getValue('quantity');
 
 		if ($id_product && $id_product_attribute && $product_quantity)
 		{
@@ -169,9 +169,9 @@ else
 				$ppec->logs[] = $ppec->l('Cannot create customer');
 			}
 
-			foreach ($customer->getAddresses($ppec->getContext()->language->id) as $addr)
+			foreach ($customer->getAddresses($ppec->getContext()->language->id) as $address)
 			{
-				if ($addr['alias'] == 'Paypal_Address')
+				if ($address['alias'] == 'Paypal_Address')
 				{
 					$address = new Address($address['id_address']);
 					break;

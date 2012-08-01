@@ -26,7 +26,7 @@
 
 <iframe name="hss_iframe" width="556px" height="540px" style="overflow: hidden; border: none" class="payment_module"></iframe>
 
-<form style="display: none" target="hss_iframe" name="form_iframe" method="post" action="{$action_url}">
+<form style="display: none" target="hss_iframe" id="paypal_hss_iframe" name="form_iframe" method="post" action="{$action_url}">
 	<input type="hidden" name="cmd" value="_hosted-payment" />
 
 	<input type="hidden" name="billing_first_name" value="{$billing_address->firstname}" />
@@ -75,5 +75,7 @@
 </form>
 
 <script type="text/javascript">
-	document.form_iframe.submit();
+	$(document).ready( function() {
+		$('#paypal_hss_iframe').submit();
+	});
 </script>
