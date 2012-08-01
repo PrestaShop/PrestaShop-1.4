@@ -288,11 +288,11 @@ abstract class AdminTabCore
 	public function displayRequiredFields()
 	{
 		global $currentIndex;
-		if (!$this->tabAccess['add'] OR !$this->tabAccess['delete'] === '1' OR !$this->requiredDatabase)
+		if (!$this->tabAccess['add'] || !$this->tabAccess['delete'] === '1' || !$this->requiredDatabase)
 			return;
 		$rules = call_user_func_array(array($this->className, 'getValidationRules'), array($this->className));
 		$required_class_fields = array($this->identifier);
-		foreach ($rules['required'] AS $required)
+		foreach ($rules['required'] as $required)
 			$required_class_fields[] = $required;
 
 		echo '<br />
@@ -311,14 +311,15 @@ abstract class AdminTabCore
 		$res = $object->getFieldsRequiredDatabase();
 
 		$required_fields = array();
-		foreach ($res AS $row)
+		foreach ($res as $row)
 			$required_fields[(int)$row['id_required_field']] = $row['field_name'];
-
 
 		$table_fields = Db::getInstance()->ExecuteS('SHOW COLUMNS FROM '.pSQL(_DB_PREFIX_.$this->table));
 		$irow = 0;
-		foreach ($table_fields AS $field)
+		foreach ($table_fields as $field)
 		{
+			if ($this->className == 'Customer' && $field['Field'] == 'note')
+				continue;
 			if (in_array($field['Field'], $required_class_fields))
 				continue;
 			echo '<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">

@@ -212,7 +212,6 @@ $_LANG['This information is not required, it will only be used for statistical p
 $_LANG['Invalid shop name'] = 'Nom de boutique invalide';
 $_LANG['Your firstname contains some invalid characters'] = 'Votre prénom contient des caractères invalides';
 $_LANG['Your lastname contains some invalid characters'] = 'Votre nom contient des caractères invalides';
-$_LANG['PrestaShop %s Installer'] = '';
 $_LANG['+33 (0)1.40.18.30.04'] = '+33 (0)1.40.18.30.04';
 $_LANG['(FREE)'] = '(GRATUIT)';
 $_LANG['Shop configuration'] = 'Configuration de la boutique';
@@ -243,7 +242,7 @@ $_LANG['seconds'] = 'secondes';
 $_LANG['second'] = 'seconde';
 $_LANG['Depending on your server and the size of your shop'] = 'Selon la puissance de votre serveur et la taille de votre boutique...';
 $_LANG['You have not updated your shop in a while,'] = 'Vous n\'avez pas mis à jour votre boutique depuis un moment,';
-$_LANG['stable releases have been made ​​available since.'] = 'versions majeures ont été mis à disposition depuis.';
+$_LANG['stable releases have been made available since.'] = 'versions majeures ont été mis à disposition depuis.';
 $_LANG['This is not a problem however the update may take several minutes, try to update your shop more frequently.'] = 'Ce n\'est pas un problème cependant la mise à jour risque de durer quelques minutes. A l\'avenir, essayez de mettre à jour votre boutique plus souvent.';
 $_LANG['No files to process, this might be an error.'] = 'Aucun fichier à traiter, il s\'agit probablement d\'une erreur';
 $_LANG['Hosting parameters'] = 'Paramètres hébergement';

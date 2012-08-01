@@ -256,10 +256,8 @@ class CartCore extends ObjectModel
 				return self::$_discountsLite[$this->id];
 		}
 
-		if ($lite)
-			self::$_discountsLite[$this->id] = array();
-		else
-			self::$_discounts[$this->id] = array();
+		self::$_discountsLite[$this->id] = array();
+		self::$_discounts[$this->id] = array();
 
 		$result = Db::getInstance()->ExecuteS('
 		SELECT d.*, `id_cart`

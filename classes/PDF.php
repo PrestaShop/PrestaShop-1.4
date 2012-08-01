@@ -288,6 +288,10 @@ class PDFCore extends PDF_PageGroupCore
 
 		$merchantDetailFooter = $this->_builMerchantFooterDetail($conf);
 		$totalLineDetailFooter = count(explode("\n", $merchantDetailFooter));
+		
+		global $cookie;
+		if ($freeText = Configuration::get('PS_INVOICE_FREE_TEXT', (int)$cookie->id_lang))
+			$totalLineDetailFooter += count(explode("\n", $freeText));
 
 		// A point equals 1/72 of inch, that is to say about 0.35 mm (an inch being 2.54 cm).
 		// This is a very common unit in typography; font sizes are expressed in that unit.
@@ -296,11 +300,9 @@ class PDFCore extends PDF_PageGroupCore
 		$this->SetFont(self::fontname(), '', 7);
 		$this->Cell(190, 5, Tools::iconv('utf-8', self::encoding(), self::l('P. ')).$this->GroupPageNo().' / '.$this->PageGroupAlias(), 'T', 1, 'R');
 
-		global $cookie;
-		if (Configuration::get('PS_INVOICE_FREE_TEXT', $cookie->id_lang))
+		if ($freeText)
 		{
-
-			$this->Cell(0, 10, utf8_decode(Configuration::get('PS_INVOICE_FREE_TEXT', $cookie->id_lang)), 0, 0, 'C', 0);
+			$this->Cell(0, 5, utf8_decode($freeText), 0, 0, 'C', 0);
 			$this->Ln(4);
 		}
 
