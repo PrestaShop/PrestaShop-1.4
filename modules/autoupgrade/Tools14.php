@@ -1275,16 +1275,14 @@ class Tools14
 			curl_close($curl);
 			return $content;
 		}
-		else
-			return false;
+		return false;
 	}
 
 	public static function simplexml_load_file($url, $class_name = null)
 	{
 		if (in_array(ini_get('allow_url_fopen'), array('On', 'on', '1')))
 			return simplexml_load_string(Tools::file_get_contents($url), $class_name);
-		else
-			return false;
+		return false;
 	}
 
 	public static function minifyHTML($html_content)
@@ -1292,35 +1290,11 @@ class Tools14
 		if (strlen($html_content) > 0)
 		{
 			//set an alphabetical order for args
-			$html_content = preg_replace_callback(
-				'/(<[a-zA-Z0-9]+)((\s?[a-zA-Z0-9]+=[\"\\\'][^\"\\\']*[\"\\\']\s?)*)>/'
-				,array('Tools', 'minifyHTMLpregCallback')
-				,$html_content);
+			$html_content = preg_replace_callback('/(<[a-zA-Z0-9]+)((\s?[a-zA-Z0-9]+=[\"\\\'][^\"\\\']*[\"\\\']\s?)*)>/', array('Tools', 'minifyHTMLpregCallback'), $html_content);
 
 			require_once(_PS_TOOL_DIR_.'minify_html/minify_html.class.php');
-			$html_content = str_replace(chr(194) . chr(160), '&nbsp;', $html_content);
-			$html_content = Minify_HTML::minify($html_content, array('xhtml', 'cssMinifier', 'jsMinifier'));
 
-			if (Configuration::get('PS_HIGH_HTML_THEME_COMPRESSION'))
-			{
-				//$html_content = preg_replace('/"([^\>\s"]*)"/i', '$1', $html_content);//FIXME create a js bug
-				$html_content = preg_replace('/<!DOCTYPE \w[^\>]*dtd\">/is', '', $html_content);
-				$html_content = preg_replace('/\s\>/is', '>', $html_content);
-				$html_content = str_replace('</li>', '', $html_content);
-				$html_content = str_replace('</dt>', '', $html_content);
-				$html_content = str_replace('</dd>', '', $html_content);
-				$html_content = str_replace('</head>', '', $html_content);
-				$html_content = str_replace('<head>', '', $html_content);
-				$html_content = str_replace('</html>', '', $html_content);
-				$html_content = str_replace('</body>', '', $html_content);
-				//$html_content = str_replace('</p>', '', $html_content);//FIXME doesnt work...
-				$html_content = str_replace("</option>\n", '', $html_content);//TODO with bellow
-				$html_content = str_replace('</option>', '', $html_content);
-				$html_content = str_replace('<script type=text/javascript>', '<script>', $html_content);//Do a better expreg
-				$html_content = str_replace("<script>\n", '<script>', $html_content);//Do a better expreg
-			}
-
-			return $html_content;
+			return Minify_HTML::minify(str_replace(chr(194) . chr(160), '&nbsp;', $html_content), array('xhtml', 'cssMinifier', 'jsMinifier'));
 		}
 		return false;
 	}
@@ -1345,6 +1319,7 @@ class Tools14
 		$b = hexdec(substr($hex, 4, 2));
 		return (($r * 299) + ($g * 587) + ($b * 114)) / 1000;
 	}
+
 	public static function minifyHTMLpregCallback($preg_matches)
 	{
 		$args = array();
@@ -1360,14 +1335,12 @@ class Tools14
 		if (strlen($html_content) > 0)
 		{
 			$htmlContentCopy = $html_content;
-			$html_content = preg_replace_callback(
-				'/\\s*(<script\\b[^>]*?>)([\\s\\S]*?)(<\\/script>)\\s*/i'
-				,array('Tools', 'packJSinHTMLpregCallback')
-				,$html_content);
-			
+			$html_content = preg_replace_callback('/\\s*(<script\\b[^>]*?>)([\\s\\S]*?)(<\\/script>)\\s*/i', array('Tools', 'packJSinHTMLpregCallback'), $html_content);
+
 			// If the string is too big preg_replace return an error
 			// In this case, we don't compress the content
-			if ( preg_last_error() == PREG_BACKTRACK_LIMIT_ERROR ) {
+			if (preg_last_error() == PREG_BACKTRACK_LIMIT_ERROR)
+			{
 				error_log('ERROR: PREG_BACKTRACK_LIMIT_ERROR in function packJSinHTML');
 				return $htmlContentCopy;
 			}
@@ -1380,10 +1353,9 @@ class Tools14
 	{
 		$preg_matches[1] = $preg_matches[1].'/* <![CDATA[ */';
 		$preg_matches[2] = self::packJS($preg_matches[2]);
-		$preg_matches[count($preg_matches)-1] = '/* ]]> */'.$preg_matches[count($preg_matches)-1];
+		$preg_matches[count($preg_matches) - 1] = '/* ]]> */'.$preg_matches[count($preg_matches) - 1];
 		unset($preg_matches[0]);
-		$output = implode('', $preg_matches);
-		return $output;
+		return implode('', $preg_matches);
 	}
 
 

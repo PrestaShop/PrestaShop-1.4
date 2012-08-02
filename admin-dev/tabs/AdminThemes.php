@@ -35,24 +35,23 @@ class AdminThemes extends AdminPreferences
 	 * @static
 		*/
 	public static $check_features_version = '1.4';
-	
+
 	/** $check_features is a multidimensional array used to check [theme]/config.xml values, 
 	 * and also checks prestashop current configuration if not match.
 	 * @static
 	 */
 	public static $check_features = array(
-		'ccc' => array( // feature key name
+		'ccc' => array( /* feature key name */
 			'attributes' => array(
-				'available' => array( 
-					'value' => 'true', // accepted attribute value
-					// if value doesnt match, 
-					// prestashop configuration value must have thoses values
-					'check_if_not_valid' => array( 
+				'available' => array(
+					'value' => 'true', /* accepted attribute value */
+					/* if value doesnt match, */
+					/* prestashop configuration value must have thoses values */
+					'check_if_not_valid' => array(
 						'PS_CSS_THEME_CACHE' => 0,
 						'PS_JS_THEME_CACHE' => 0,
 						'PS_HTML_THEME_COMPRESSION' => 0,
-						'PS_JS_HTML_THEME_COMPRESSION' => 0,
-						'PS_HIGH_HTML_THEME_COMPRESSION' => 0,
+						'PS_JS_HTML_THEME_COMPRESSION' => 0
 					),
 				),
 			),
@@ -65,7 +64,7 @@ class AdminThemes extends AdminPreferences
 				'value' => 'true',
 				'check_if_not_valid' => array('PS_GUEST_CHECKOUT_ENABLED' => 0)
 				),
-			), 
+			),
 			'error' => 'This theme may not correctly use "guest checkout"',
 			'tab' => 'AdminPreferences',
 		),

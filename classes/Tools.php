@@ -1315,35 +1315,11 @@ class ToolsCore
 		if (strlen($html_content) > 0)
 		{
 			//set an alphabetical order for args
-			$html_content = preg_replace_callback(
-				'/(<[a-zA-Z0-9]+)((\s?[a-zA-Z0-9]+=[\"\\\'][^\"\\\']*[\"\\\']\s?)*)>/'
-				,array('Tools', 'minifyHTMLpregCallback')
-				,$html_content);
+			$html_content = preg_replace_callback('/(<[a-zA-Z0-9]+)((\s?[a-zA-Z0-9]+=[\"\\\'][^\"\\\']*[\"\\\']\s?)*)>/', array('Tools', 'minifyHTMLpregCallback'), $html_content);
 
 			require_once(_PS_TOOL_DIR_.'minify_html/minify_html.class.php');
-			$html_content = str_replace(chr(194) . chr(160), '&nbsp;', $html_content);
-			$html_content = Minify_HTML::minify($html_content, array('xhtml', 'cssMinifier', 'jsMinifier'));
 
-			if (Configuration::get('PS_HIGH_HTML_THEME_COMPRESSION'))
-			{
-				//$html_content = preg_replace('/"([^\>\s"]*)"/i', '$1', $html_content);//FIXME create a js bug
-				$html_content = preg_replace('/<!DOCTYPE \w[^\>]*dtd\">/is', '', $html_content);
-				$html_content = preg_replace('/\s\>/is', '>', $html_content);
-				$html_content = str_replace('</li>', '', $html_content);
-				$html_content = str_replace('</dt>', '', $html_content);
-				$html_content = str_replace('</dd>', '', $html_content);
-				$html_content = str_replace('</head>', '', $html_content);
-				$html_content = str_replace('<head>', '', $html_content);
-				$html_content = str_replace('</html>', '', $html_content);
-				$html_content = str_replace('</body>', '', $html_content);
-				//$html_content = str_replace('</p>', '', $html_content);//FIXME doesnt work...
-				$html_content = str_replace("</option>\n", '', $html_content);//TODO with bellow
-				$html_content = str_replace('</option>', '', $html_content);
-				$html_content = str_replace('<script type=text/javascript>', '<script>', $html_content);//Do a better expreg
-				$html_content = str_replace("<script>\n", '<script>', $html_content);//Do a better expreg
-			}
-
-			return $html_content;
+			return Minify_HTML::minify(str_replace(chr(194).chr(160), '&nbsp;', $html_content), array('xhtml', 'cssMinifier', 'jsMinifier'));
 		}
 		return false;
 	}
@@ -1375,12 +1351,9 @@ class ToolsCore
 		preg_match_all('/[a-zA-Z0-9]+=[\"\\\'][^\"\\\']*[\"\\\']/is', $preg_matches[2], $args);
 		$args = $args[0];
 		sort($args);
+
 		// if there is no args in the balise, we don't write a space (avoid previous : <title >, now : <title>)
-		if (empty($args))
-			$output = $preg_matches[1].'>';
-		else
-			$output = $preg_matches[1].' '.implode(' ', $args).'>';
-		return $output;
+		return empty($args) ? $preg_matches[1].'>' : $preg_matches[1].' '.implode(' ', $args).'>';
 	}
 
 	public static function packJSinHTML($html_content)
@@ -1411,8 +1384,7 @@ class ToolsCore
 		$preg_matches[2] = self::packJS($preg_matches[2]);
 		$preg_matches[count($preg_matches)-1] = '/* ]]> */'.$preg_matches[count($preg_matches)-1];
 		unset($preg_matches[0]);
-		$output = implode('', $preg_matches);
-		return $output;
+		return implode('', $preg_matches);
 	}
 
 
