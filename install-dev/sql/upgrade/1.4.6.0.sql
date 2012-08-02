@@ -12,9 +12,7 @@ ALTER TABLE  `PREFIX_compare_product` DROP  `id_compare_product` , DROP  `id_gue
 
 ALTER TABLE `PREFIX_compare_product`
 	ADD `id_compare` int(10) unsigned NOT NULL,
-   ADD PRIMARY KEY(
-     `id_compare`,
-     `id_product`);
+   ADD PRIMARY KEY(`id_compare`, `id_product`);
 
 ALTER TABLE `PREFIX_store` CHANGE `latitude` `latitude` DECIMAL(11, 8) NULL DEFAULT NULL;
 ALTER TABLE `PREFIX_store` CHANGE `longitude` `longitude` DECIMAL(11, 8) NULL DEFAULT NULL;

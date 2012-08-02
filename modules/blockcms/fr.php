@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{blockcms}prestashop>blockcms_cd275312651aebf8cbbb8d3bb1c086ae'] = 'Bloc CMS';
-$_MODULE['<{blockcms}prestashop>blockcms_cdca12007979fc49008fd125cdb775fc'] = 'Ajoute un bloc contenant plusieurs lien vers vos CMS';
+$_MODULE['<{blockcms}prestashop>blockcms_cdca12007979fc49008fd125cdb775fc'] = 'Ajoute un bloc contenant plusieurs liens vers vos CMS';
 $_MODULE['<{blockcms}prestashop>blockcms_97390dd0b5ba7867120aee2ff22bfa38'] = 'Configuration des blocs CMS';
 $_MODULE['<{blockcms}prestashop>blockcms_1cd127158cfd245511751206f4b3c6f0'] = 'Ajouter un nouveau bloc CMS';
 $_MODULE['<{blockcms}prestashop>blockcms_6e1ea63625a85f6d2d9ecbfb79586351'] = 'Liste des blocs CMS de gauche';

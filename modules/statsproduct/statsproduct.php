@@ -96,13 +96,15 @@ class StatsProduct extends ModuleGraph
 	
 	private function getProducts($id_lang)
 	{
+		global $cookie;
+	
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.`id_product`, p.reference, pl.`name`, IFNULL((SELECT SUM(pa.quantity) FROM '._DB_PREFIX_.'product_attribute pa WHERE pa.id_product = p.id_product), p.quantity) as quantity
 		FROM `'._DB_PREFIX_.'product` p
-		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON p.`id_product` = pl.`id_product`
-		'.(Tools::getValue('id_category') ? 'LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON p.`id_product` = cp.`id_product`' : '').'
-		WHERE pl.`id_lang` = '.(int)($id_lang).'
-		'.(Tools::getValue('id_category') ? 'AND cp.id_category = '.(int)(Tools::getValue('id_category')) : '').'
+		INNER JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)$cookie->id_lang.')
+		'.((int)$cookie->id_category ? 'LEFT JOIN '._DB_PREFIX_.'category_product cp ON (cp.id_product = p.id_product)' : '').'
+		WHERE p.active = 1
+		'.((int)$cookie->id_category ? ' AND cp.id_category = '.(int)$cookie->id_category.' GROUP BY p.id_product' : '').'
 		ORDER BY pl.`name`');
 	}
 	
@@ -141,6 +143,10 @@ class StatsProduct extends ModuleGraph
 	public function hookAdminStatsModules($params)
 	{
 		global $cookie, $currentIndex;
+
+		if (Tools::isSubmit('submitCategory'))
+			$cookie->id_category = (int)Tools::getValue('id_category');
+
 		$id_category = (int)(Tools::getValue('id_category'));
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 		
@@ -235,10 +241,11 @@ class StatsProduct extends ModuleGraph
 			<label>'.$this->l('Choose a category').'</label>
 			<div class="margin-form">
 				<form action="" method="post" id="categoriesForm">
-					<select name="id_category" onchange="$(\'#categoriesForm\').submit();">
+					<input type="hidden" name="submitCategory" value="1" />
+					<select name="id_category" onchange="this.form.submit();">
 						<option value="0">'.$this->l('All').'</option>';
 			foreach ($categories as $category)
-				$this->_html .= '<option value="'.$category['id_category'].'"'.($id_category == $category['id_category'] ? ' selected="selected"' : '').'>'.$category['name'].'</option>';
+				$this->_html .= '<option value="'.(int)$category['id_category'].'"'.($cookie->id_category == $category['id_category'] ? ' selected="selected"' : '').'>'.$category['name'].'</option>';
 			$this->_html .= '
 					</select>
 				</form>
@@ -266,10 +273,10 @@ class StatsProduct extends ModuleGraph
 		<fieldset class="width3"><legend><img src="../img/admin/comment.gif" /> '.$this->l('Guide').'</legend>
 		<h2>'.$this->l('Number of purchases compared to number of viewings').'</h2>
 			<p>
-				'.$this->l('After choosing a category and selecting a product, informational graphs will appear. You will then be able to analyze them.').'
+				'.$this->l('After choosing a category and selecting a product, informational graphs will appear. Then, you will be able to analyze them.').'
 				<ul>
-					<li class="bullet">'.$this->l('If you notice that a product is successful, purchased often, but viewed infrequently, you should feature it more prominently on your webshop front-office.').'</li>
-					<li class="bullet">'.$this->l('On the other hand, if a product has many viewings but is not purchased that often, we advise you to check or modify this product\'s information, description and photography again.').'
+					<li class="bullet">'.$this->l('If you notice that a product is successful and often purchased, but viewed infrequently, you should put it more prominently on your webshop front-office.').'</li>
+					<li class="bullet">'.$this->l('On the other hand, if a product has many viewings but is not often purchased, we advise you to check or modify this product\'s information, description and photography again.').'
 					</li>
 				</ul>
 			</p>
