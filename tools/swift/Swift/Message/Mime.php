@@ -442,8 +442,10 @@ abstract class Swift_Message_Mime
     $id = (string) $id;
     if (!$this->hasChild($id))
     {
-      throw new Swift_Message_MimeException(
-      "Cannot remove child part identified by '" . $id . "' as it does not exist. Consider using hasChild() to check.");
+	  // Added by PrestaShop http://www.prestashop.com/forums/topic/178615-swift-message-mimeexception-probleme-de-commande-fantome-et-mot-de-passe-oublie/
+	  return;
+      // throw new Swift_Message_MimeException(
+      // "Cannot remove child part identified by '" . $id . "' as it does not exist. Consider using hasChild() to check.");
     }
     else
     {

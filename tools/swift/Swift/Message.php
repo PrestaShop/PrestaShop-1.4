@@ -620,7 +620,9 @@ class Swift_Message extends Swift_Message_Mime
         case "mixed": $this->getReference("mixed", $tag)->addChild($ref, $id, $sign);
           break;
       }
-      $this->getReference("parent", $old_branch)->removeChild($id);
+	  // Added by PrestaShop http://www.prestashop.com/forums/topic/178615-swift-message-mimeexception-probleme-de-commande-fantome-et-mot-de-passe-oublie/
+	  if ($this->getReference("parent", $old_branch)->hasChild($id))
+	 	$this->getReference("parent", $old_branch)->removeChild($id);
     }
     $this->setReference("parent", $old_branch, $new); //parentRefs[$old_branch] = $new;
   }
