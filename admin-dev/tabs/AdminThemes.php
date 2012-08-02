@@ -149,7 +149,7 @@ class AdminThemes extends AdminPreferences
 	{
 		$dir = opendir(_PS_ALL_THEMES_DIR_);
 		while ($folder = readdir($dir))
-			if ($folder != '.' AND $folder != '..' AND is_dir(_PS_ALL_THEMES_DIR_.$folder) AND file_exists(_PS_ALL_THEMES_DIR_.'/'.$folder.'/preview.jpg'))
+			if ($folder != '.' && $folder != '..' && is_dir(_PS_ALL_THEMES_DIR_.$folder) && file_exists(_PS_ALL_THEMES_DIR_.'/'.$folder.'/preview.jpg'))
 				$themes[$folder]['name'] = $folder;
 		closedir($dir);	
 		return isset($themes) ? $themes : array();

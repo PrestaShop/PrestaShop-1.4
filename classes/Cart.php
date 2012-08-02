@@ -210,7 +210,7 @@ class CartCore extends ObjectModel
 	{
 		global $cart;
 		
-		$c = ($id_cart && $cart->id == $id_cart) ? $cart : ($id_cart ? new Cart((int)$id_cart) : null);
+		$c = ($id_cart && isset($cart->id) && $cart->id == $id_cart) ? $cart : ($id_cart ? new Cart((int)$id_cart) : null);
 		if (!Validate::isLoadedObject($c))
 			die(Tools::displayError());
 
@@ -256,8 +256,8 @@ class CartCore extends ObjectModel
 				return self::$_discountsLite[$this->id];
 		}
 
-		self::$_discountsLite[$this->id] = array();
-		self::$_discounts[$this->id] = array();
+		self::$_discountsLite[$this->id] = null;
+		self::$_discounts[$this->id] = null;
 
 		$result = Db::getInstance()->ExecuteS('
 		SELECT d.*, `id_cart`
@@ -306,7 +306,12 @@ class CartCore extends ObjectModel
 			}
 		}
 
-		return $lite ? self::$_discountsLite[$this->id] : self::$_discounts[$this->id];
+		if ($lite && self::$_discountsLite[$this->id])
+			return self::$_discountsLite[$this->id];
+		elseif (!$lite && self::$_discounts[$this->id])
+			return self::$_discounts[$this->id];
+
+		return array();
 	}
 
 	public function getDiscountsCustomer($id_discount)
@@ -835,7 +840,7 @@ class CartCore extends ObjectModel
 	{
 		global $cart;
 		
-		$c = ($id_cart && $cart->id == $id_cart) ? $cart : ($id_cart ? new Cart((int)$id_cart) : null);
+		$c = ($id_cart && isset($cart->id) && $cart->id == $id_cart) ? $cart : ($id_cart ? new Cart((int)$id_cart) : null);
 		if (!Validate::isLoadedObject($c))
 			die(Tools::displayError());
 		$with_taxes = $use_tax_display ? $c->_taxCalculationMethod != PS_TAX_EXC : true;
@@ -952,10 +957,11 @@ class CartCore extends ObjectModel
 			}
 			$wrapping_fees = Tools::convertPrice(Tools::ps_round($wrapping_fees, 2), Currency::getCurrencyInstance((int)($this->id_currency)));
 		}
+		
 		if ($type != Cart::ONLY_PRODUCTS)
 		{
 			$discounts = array();
-
+		
 			/* Firstly get all discounts, looking for a free shipping one (in order to substract shipping fees to the total amount) */
 			if ($discountIds = $this->getDiscounts(true, false))
 			{
@@ -1001,8 +1007,8 @@ class CartCore extends ObjectModel
 		if ($type == Cart::ONLY_SHIPPING) return $shipping_fees;
 		if ($type == Cart::ONLY_WRAPPING) return $wrapping_fees;
 		if ($type == Cart::BOTH) $order_total += $shipping_fees + $wrapping_fees;
-		if ($order_total < 0 AND $type != Cart::ONLY_DISCOUNTS) return 0;
-		if ($type == Cart::ONLY_DISCOUNTS AND isset($order_total_discount))
+		if ($order_total < 0 && $type != Cart::ONLY_DISCOUNTS) return 0;
+		if ($type == Cart::ONLY_DISCOUNTS && isset($order_total_discount))
 			return Tools::ps_round((float)$order_total_discount, 2);
 		return Tools::ps_round((float)$order_total, 2);
 	}
@@ -1486,12 +1492,12 @@ class CartCore extends ObjectModel
 		{
 			$products = $this->getProducts();
 
-			if (!sizeof($products))
+			if (!count($products))
 				return false;
 
 			$list = '';
-			foreach ($products AS $product)
-				$list .= (int)($product['id_product']).',';
+			foreach ($products as $product)
+				$list .= (int)$product['id_product'].',';
 			$list = rtrim($list, ',');
 
 			$n = (int)Db::getInstance()->getValue('

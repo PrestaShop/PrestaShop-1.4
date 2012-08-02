@@ -128,7 +128,7 @@ class AddressCore extends ObjectModel
 	 *
 	 * @param integer $id_address Existing address id in order to load object (optional)
 	 */
-	public	function __construct($id_address = NULL, $id_lang = NULL)
+	public	function __construct($id_address = null, $id_lang = null)
 	{
 		parent::__construct($id_address);
 
@@ -137,8 +137,8 @@ class AddressCore extends ObjectModel
 		{
 			$result = Db::getInstance()->getRow('
 			SELECT `name` FROM `'._DB_PREFIX_.'country_lang`
-			WHERE `id_country` = '.(int)($this->id_country).'
-			AND `id_lang` = '.($id_lang ? (int)($id_lang) : Configuration::get('PS_LANG_DEFAULT')));
+			WHERE `id_country` = '.(int)$this->id_country.'
+			AND `id_lang` = '.($id_lang ? (int)$id_lang : (int)Configuration::get('PS_LANG_DEFAULT')));
 			$this->country = $result['name'];
 		}
 	}
@@ -152,6 +152,24 @@ class AddressCore extends ObjectModel
 			Customer::resetAddressCache($this->id_customer);
 		return true;
 	}
+	
+	public function update($nullValues = false)
+	{
+		return parent::update($nullValues) && self::_cleanCart($this->id);
+	}
+	
+	protected static function _cleanCart($id_address)
+	{
+		if ((int)$id_address)
+			return Db::getInstance()->Execute('
+			UPDATE `'._DB_PREFIX_.'cart` SET id_address_delivery = 0
+			WHERE id_address_delivery = '.(int)$id_address.' AND id_cart NOT IN (SELECT id_cart FROM '._DB_PREFIX_.'orders)') &&
+			Db::getInstance()->Execute('
+			UPDATE `'._DB_PREFIX_.'cart` SET id_address_invoice = 0
+			WHERE id_address_invoice = '.(int)$id_address.' AND id_cart NOT IN (SELECT id_cart FROM '._DB_PREFIX_.'orders)');
+
+		return false;
+	}
 
 	public function delete()
 	{
@@ -159,7 +177,7 @@ class AddressCore extends ObjectModel
 			Customer::resetAddressCache($this->id_customer);
 
 		if (!$this->isUsed())
-			return parent::delete();
+			return parent::delete() && self::_cleanCart((int)$this->id);
 		else
 		{
 			$this->deleted = true;
@@ -179,9 +197,6 @@ class AddressCore extends ObjectModel
 		unset($tmp_addr);
 		return $out;
 	}
-
-
-
 
 	public function getFields()
 	{
@@ -206,7 +221,7 @@ class AddressCore extends ObjectModel
 		$fields['phone_mobile'] = pSQL($this->phone_mobile);
 		$fields['vat_number'] = pSQL($this->vat_number);
 		$fields['dni'] = pSQL($this->dni);
-		$fields['deleted'] = (int)($this->deleted);
+		$fields['deleted'] = (int)$this->deleted;
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
 		return $fields;
@@ -238,9 +253,9 @@ class AddressCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'address` a
 		LEFT JOIN `'._DB_PREFIX_.'country` c ON c.`id_country` = a.`id_country`
 		LEFT JOIN `'._DB_PREFIX_.'state` s ON s.`id_state` = a.`id_state`
-		WHERE a.`id_address` = '.(int)($id_address));
+		WHERE a.`id_address` = '.(int)$id_address);
 
-		self::$_idZones[$id_address] = (int)((int)($result['id_zone_state']) ? $result['id_zone_state'] : $result['id_zone']);
+		self::$_idZones[$id_address] = (int)((int)$result['id_zone_state'] ? $result['id_zone_state'] : $result['id_zone']);
 		return self::$_idZones[$id_address];
 	}
 
@@ -256,7 +271,7 @@ class AddressCore extends ObjectModel
 		SELECT c.`active`
 		FROM `'._DB_PREFIX_.'address` a
 		LEFT JOIN `'._DB_PREFIX_.'country` c ON c.`id_country` = a.`id_country`
-		WHERE a.`id_address` = '.(int)($id_address)))
+		WHERE a.`id_address` = '.(int)$id_address))
 			return false;
 		return ($result['active']);
 	}
@@ -269,10 +284,9 @@ class AddressCore extends ObjectModel
 	public function isUsed()
 	{
 		$result = Db::getInstance()->getRow('
-		SELECT COUNT(`id_order`) AS used
+		SELECT COUNT(`id_order`) used
 		FROM `'._DB_PREFIX_.'orders`
-		WHERE `id_address_delivery` = '.(int)($this->id).'
-		OR `id_address_invoice` = '.(int)($this->id));
+		WHERE `id_address_delivery` = '.(int)$this->id.' OR `id_address_invoice` = '.(int)$this->id);
 
 		return isset($result['used']) ? $result['used'] : false;
 	}

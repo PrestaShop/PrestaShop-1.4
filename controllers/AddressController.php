@@ -47,7 +47,7 @@ class AddressControllerCore extends FrontController
 		if ($mod = Tools::getValue('mod'))
 			self::$smarty->assign('mod', Tools::safeOutput($mod));
 		
-		if (Tools::isSubmit('ajax') AND Tools::isSubmit('type'))
+		if (Tools::isSubmit('ajax') && Tools::isSubmit('type'))
 		{
 			if (Tools::getValue('type') == 'delivery')
 				$id_address = isset(self::$cart->id_address_delivery) ? (int)self::$cart->id_address_delivery : 0;
@@ -62,7 +62,7 @@ class AddressControllerCore extends FrontController
 		if ($id_address)
 		{
 			$this->_address = new Address((int)$id_address);
-			if (Validate::isLoadedObject($this->_address) AND Customer::customerHasAddress((int)(self::$cookie->id_customer), (int)($id_address)))
+			if (Validate::isLoadedObject($this->_address) && Customer::customerHasAddress((int)self::$cookie->id_customer, (int)$id_address))
 			{
 				if (Tools::isSubmit('delete'))
 				{
@@ -85,9 +85,9 @@ class AddressControllerCore extends FrontController
 		{
 			$address = new Address();
 			$this->errors = $address->validateControler();
-			$address->id_customer = (int)(self::$cookie->id_customer);
+			$address->id_customer = (int)self::$cookie->id_customer;
 
-			if (!Tools::getValue('phone') AND !Tools::getValue('phone_mobile'))
+			if (!Tools::getValue('phone') && !Tools::getValue('phone_mobile'))
 				$this->errors[] = Tools::displayError('You must register at least one phone number');
 			if (!$country = new Country((int)$address->id_country) OR !Validate::isLoadedObject($country))
 				die(Tools::displayError());
@@ -164,7 +164,7 @@ class AddressControllerCore extends FrontController
 						}
 						else
 						{
-							$address->id = (int)($address_old->id);
+							$address->id = (int)$address_old->id;
 							$address->date_add = $address_old->date_add;
 						}
 					}

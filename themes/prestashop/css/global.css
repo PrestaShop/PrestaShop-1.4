@@ -1071,7 +1071,7 @@ td.cart_quantity p, td.cart_quantity a {
 td.cart_quantity p { padding-right: 0.3em }
 td.cart_quantity .icon { margin-top: 0.6em }
 td.cart_quantity a.cart_quantity_up,
- td.cart_quantity a.cart_quantity_down { display: block }
+td.cart_quantity a.cart_quantity_down { display: block }
 tr.cart_free_shipping { white-space: normal }
 tr.cart_total_price { font-weight: bold }
 #order tfoot p {

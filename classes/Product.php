@@ -2838,7 +2838,7 @@ class ProductCore extends ObjectModel
 		else
 		{
 			global $cart;
-			$c = ($id_cart && $cart->id == $id_cart) ? $cart : ($id_cart ? new Cart((int)$id_cart) : null);
+			$c = ($id_cart && isset($cart->id) && $cart->id == $id_cart) ? $cart : ($id_cart ? new Cart((int)$id_cart) : null);
 			$id_lang = (int)$c->id_lang;
 		}
 
@@ -2882,7 +2882,7 @@ class ProductCore extends ObjectModel
 		if (Pack::isPack((int)($product['id_product'])))
 		{
 			$products_pack = Pack::getItems((int)($product['id_product']), (int)(Configuration::get('PS_LANG_DEFAULT')));
-			foreach($products_pack AS $product_pack)
+			foreach ($products_pack as $product_pack)
 			{
 				$tab_product_pack['id_product'] = (int)($product_pack->id);
 				$tab_product_pack['id_product_attribute'] = self::getDefaultAttribute($tab_product_pack['id_product'], 1);
@@ -2892,7 +2892,7 @@ class ProductCore extends ObjectModel
 		}
 		if (($result = Db::getInstance()->ExecuteS('SELECT `value` FROM `'._DB_PREFIX_.'customized_data` WHERE `id_customization` = '.(int)($id_customization).' AND `type` = '._CUSTOMIZE_FILE_)) === false)
 			return false;
-		foreach ($result AS $row)
+		foreach ($result as $row)
 			if (!@unlink(_PS_UPLOAD_DIR_.$row['value']) OR !@unlink(_PS_UPLOAD_DIR_.$row['value'].'_small'))
 				return false;
 		return (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customization` WHERE `id_customization` = '.(int)($id_customization)) AND Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customized_data` WHERE `id_customization` = '.(int)($id_customization)));
@@ -2900,7 +2900,7 @@ class ProductCore extends ObjectModel
 
 	public static function addCustomizationPrice(&$products, &$customizedDatas)
 	{
-		foreach ($products AS &$productUpdate)
+		foreach ($products as &$productUpdate)
 		{
 			$customizationQuantity = 0;
 			$customizationQuantityRefunded = 0;
@@ -2912,7 +2912,7 @@ class ProductCore extends ObjectModel
 			$price = isset($productUpdate['price']) ? $productUpdate['price'] : $productUpdate['product_price'];
 			$priceWt = $price * (1 + ((isset($productUpdate['tax_rate']) ? $productUpdate['tax_rate'] : $productUpdate['rate']) * 0.01));
 			if (isset($customizedDatas[$productId][$productAttributeId]))
-				foreach ($customizedDatas[$productId][$productAttributeId] AS $customization)
+				foreach ($customizedDatas[$productId][$productAttributeId] as $customization)
 				{
 					$customizationQuantity += (int)($customization['quantity']);
 					$customizationQuantityRefunded += (int)($customization['quantity_refunded']);

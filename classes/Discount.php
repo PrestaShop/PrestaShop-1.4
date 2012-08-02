@@ -289,7 +289,7 @@ class DiscountCore extends ObjectModel
 	{
 		global $cart;
 
-		$c = ($id_cart && $cart->id == $id_cart) ? $cart : ($id_cart ? new Cart((int)$id_cart) : null);
+		$c = ($id_cart && isset($cart->id) && $cart->id == $id_cart) ? $cart : ($id_cart ? new Cart((int)$id_cart) : null);
 
 		if (!Validate::isLoadedObject($c) ||
 			((!$this->cumulable && (int)$nb_discounts > 1) || !$this->active || (!$this->quantity && !$c->OrderExists())) ||

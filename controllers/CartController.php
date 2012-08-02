@@ -228,9 +228,9 @@ class CartControllerCore extends FrontController
 						}
 					}
 					$discounts = self::$cart->getDiscounts();
-					foreach($discounts AS $discount)
+					foreach ($discounts as $discount)
 					{
-						$discountObj = new Discount((int)($discount['id_discount']), (int)(self::$cookie->id_lang));
+						$discountObj = new Discount((int)$discount['id_discount'], (int)self::$cookie->id_lang);
 						if ($error = self::$cart->checkDiscountValidity($discountObj, $discounts, self::$cart->getOrderTotal(true, Cart::ONLY_PRODUCTS), self::$cart->getProducts()))
 						{
 							self::$cart->deleteDiscount((int)($discount['id_discount']));

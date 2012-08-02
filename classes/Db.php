@@ -78,7 +78,7 @@ abstract class DbCore
 	 */
 	public static function getInstance($master = 1)
 	{
-		if ($master OR ($nServers = sizeof(self::$_servers)) == 1)
+		if ($master || ($nServers = count(self::$_servers)) == 1)
 			$idServer = 0;
 		else
 			$idServer = ($nServers > 2 AND ($id = ++self::$_idServer % (int)$nServers) !== 0) ? $id : 1;
@@ -123,7 +123,7 @@ abstract class DbCore
 	 */
 	public function	autoExecute($table, $values, $type, $where = false, $limit = false, $use_cache = 1)
 	{
-		if (!sizeof($values))
+		if (!count($values))
 			return true;
 
 		if (strtoupper($type) == 'INSERT')
@@ -167,7 +167,7 @@ abstract class DbCore
 	 */
 	public function	autoExecuteWithNullValues($table, $values, $type, $where = false, $limit = false)
 	{
-		if (!sizeof($values))
+		if (!count($values))
 			return true;
 
 		if (strtoupper($type) == 'INSERT')

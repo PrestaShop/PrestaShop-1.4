@@ -54,7 +54,7 @@ class BlockCart extends Module
 		else
 			$currency = new Currency((int)$params['cart']->id_currency);
 		if (!Validate::isLoadedObject($currency))
-			$currency = new Currency((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
+			$currency = new Currency((int)Configuration::get('PS_CURRENCY_DEFAULT'));
 
 		if ($params['cart']->id_customer)
 		{

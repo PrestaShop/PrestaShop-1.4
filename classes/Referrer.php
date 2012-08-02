@@ -144,7 +144,7 @@ class ReferrerCore extends ObjectModel
 			$join = 'LEFT JOIN `'._DB_PREFIX_.'page` p ON cp.`id_page` = p.`id_page`
 					 LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON pt.`id_page_type` = p.`id_page_type`';
 			$where = 'AND pt.`name` = \'product.php\'
-					  AND p.`id_object` = '.(int)($id_product);
+					  AND p.`id_object` = '.(int)$id_product;
 		}
 
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
@@ -158,7 +158,7 @@ class ReferrerCore extends ObjectModel
 		LEFT JOIN '._DB_PREFIX_.'connections_page cp ON cp.id_connections = c.id_connections
 		'.$join.'
 		WHERE cs.date_add BETWEEN '.ModuleGraph::getDateBetween($employee).'
-		AND rc.id_referrer = '.(int)($this->id).'
+		AND rc.id_referrer = '.(int)$this->id.'
 		'.$where);
 	}
 	
@@ -229,24 +229,24 @@ class ReferrerCore extends ObjectModel
 	
 	public static function refreshCache($referrers = null, $employee = null)
 	{
-		if (!$referrers OR !is_array($referrers))
+		if (!$referrers || !is_array($referrers))
 			$referrers = Db::getInstance()->ExecuteS('SELECT id_referrer FROM '._DB_PREFIX_.'referrer');
 		foreach ($referrers as $row)
 		{
-			$referrer = new Referrer((int)($row['id_referrer']));
+			$referrer = new Referrer((int)$row['id_referrer']);
 			$statsVisits = $referrer->getStatsVisits(null, $employee);
 			$referrer->cache_visitors = $statsVisits['uniqs'];
 			$referrer->cache_visits = $statsVisits['visits'];
 			$referrer->cache_pages = $statsVisits['pages'];
 			$registrations = $referrer->getRegistrations(null, $employee);
-			$referrer->cache_registrations = (int)($registrations);
+			$referrer->cache_registrations = (int)$registrations;
 			$statsSales = $referrer->getStatsSales(null, $employee);
-			$referrer->cache_orders = (int)($statsSales['orders']);
+			$referrer->cache_orders = (int)$statsSales['orders'];
 			$referrer->cache_sales = number_format($statsSales['sales'], 2, '.', '');
-			$referrer->cache_reg_rate = $statsVisits['uniqs'] ? (int)($registrations) / $statsVisits['uniqs'] : 0;
-			$referrer->cache_order_rate = $statsVisits['uniqs'] ? (int)($statsSales['orders']) / $statsVisits['uniqs'] : 0;
+			$referrer->cache_reg_rate = $statsVisits['uniqs'] ? (int)$registrations / $statsVisits['uniqs'] : 0;
+			$referrer->cache_order_rate = $statsVisits['uniqs'] ? (int)$statsSales['orders'] / $statsVisits['uniqs'] : 0;
 			if (!$referrer->update())
-				Tools::dieObject(mysql_error());
+				die(Tools::displayError());
 			Configuration::updateValue('PS_REFERRERS_CACHE_LIKE', ModuleGraph::getDateBetween($employee));
 			Configuration::updateValue('PS_REFERRERS_CACHE_DATE', date('Y-m-d H:i:s'));
 		}
@@ -255,28 +255,32 @@ class ReferrerCore extends ObjectModel
 	
 	public static function refreshIndex($referrers = null)
 	{
-		if (!$referrers OR !is_array($referrers))
+		if (!$referrers || !is_array($referrers))
 		{
 			Db::getInstance()->Execute('TRUNCATE '._DB_PREFIX_.'referrer_cache');
 			Db::getInstance()->Execute('
 			INSERT INTO '._DB_PREFIX_.'referrer_cache (id_referrer, id_connections_source) (
 				SELECT id_referrer, id_connections_source
 				FROM '._DB_PREFIX_.'referrer r
-				LEFT JOIN '._DB_PREFIX_.'connections_source cs ON ('.self::$_join.')
-			)');
+				LEFT JOIN '._DB_PREFIX_.'connections_source cs ON ('.self::$_join.'))');
 		}
 		else
 			foreach ($referrers as $row)
 			{
-				Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'referrer_cache WHERE id_referrer = '.(int)($row['id_referrer']));
+				Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'referrer_cache WHERE id_referrer = '.(int)$row['id_referrer']);
 				Db::getInstance()->Execute('
 				INSERT INTO '._DB_PREFIX_.'referrer_cache (id_referrer, id_connections_source) (
 					SELECT id_referrer, id_connections_source
 					FROM '._DB_PREFIX_.'referrer r
 					LEFT JOIN '._DB_PREFIX_.'connections_source cs ON ('.self::$_join.')
-					WHERE id_referrer = '.(int)($row['id_referrer']).'
+					WHERE id_referrer = '.(int)$row['id_referrer'].'
 				)');
 			}
+	}
+	
+	public function delete()
+	{
+		return Db::getInstance()->Execute('DELETE FROM `referrer_cache` WHERE id_referrer = '.(int)$this->id) && parent::delete();
 	}
 	
 	public static function getAjaxProduct($id_referrer, $id_product, $employee = null)

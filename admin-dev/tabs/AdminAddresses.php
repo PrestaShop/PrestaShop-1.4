@@ -293,8 +293,6 @@ class AdminAddresses extends AdminTab
 		$addresses_fields = $this->processAddressFormat();
 		$addresses_fields = $addresses_fields["dlv_all_fields"];	// we use  delivery address
 
-
-
 		foreach($addresses_fields as $addr_field_item)
 		{
 			if ($addr_field_item == 'company')
@@ -451,38 +449,29 @@ class AdminAddresses extends AdminTab
 				<label>'.$this->l('Home phone').'</label>
 				<div class="margin-form">
 					<input type="text" size="33" name="phone" value="'.htmlentities($this->getFieldValue($obj, 'phone'), ENT_COMPAT, 'UTF-8').'" />
-				</div>';
-
-			echo '
+				</div>
 				<label>'.$this->l('Mobile phone').'</label>
 				<div class="margin-form">
 					<input type="text" size="33" name="phone_mobile" value="'.htmlentities($this->getFieldValue($obj, 'phone_mobile'), ENT_COMPAT, 'UTF-8').'" />
-				</div>';
-
-
-			echo '
+				</div>
 				<label>'.$this->l('Other').'</label>
 				<div class="margin-form">
 					<textarea name="other" cols="36" rows="4">'.htmlentities($this->getFieldValue($obj, 'other'), ENT_COMPAT, 'UTF-8').'</textarea>
 					<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
-				</div>';
-
-			echo '
+				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
 				</div>
 				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
-			</fieldset>';
-		echo '
+			</fieldset>
 		</form>';
 	}
 
 	protected function processAddressFormat()
 	{
-		$tmp_addr = new Address((int)Tools::getValue("id_address"));
+		$tmp_addr = new Address((int)Tools::getValue('id_address'));
 
-		$selectedCountry = ($tmp_addr && $tmp_addr->id_country) ? $tmp_addr->id_country :
-				(int)(Configuration::get('PS_COUNTRY_DEFAULT'));
+		$selectedCountry = ($tmp_addr && $tmp_addr->id_country) ? $tmp_addr->id_country : (int)Configuration::get('PS_COUNTRY_DEFAULT');
 
 		$inv_adr_fields = AddressFormat::getOrderedAddressFields($selectedCountry, false, true);
 		$dlv_adr_fields = AddressFormat::getOrderedAddressFields($selectedCountry, false, true);
@@ -495,16 +484,31 @@ class AdminAddresses extends AdminTab
 		foreach (array('inv','dlv') as $adr_type)
 		{
 			foreach (${$adr_type.'_adr_fields'} as $fields_line)
-				foreach(explode(' ',$fields_line) as $field_item)
+				foreach (explode(' ', $fields_line) as $field_item)
 					${$adr_type.'_all_fields'}[] = trim($field_item);
 
-
-			$out[$adr_type.'_adr_fields'] =  ${$adr_type.'_adr_fields'};
-			$out[$adr_type.'_all_fields'] =  ${$adr_type.'_all_fields'};
+			$out[$adr_type.'_adr_fields'] = ${$adr_type.'_adr_fields'};
+			$out[$adr_type.'_all_fields'] = ${$adr_type.'_all_fields'};
 		}
 
 		return $out;
 	}
+	
+	public function afterDelete($new_address, $id_address_old)
+	{
+		if (Validate::isLoadedObject($new_address))
+		{
+			$result = Db::getInstance()->Execute('
+			UPDATE `'._DB_PREFIX_.'cart` SET id_address_delivery = '.(int)$new_address->id.'
+			WHERE id_address_delivery = '.(int)$id_address_old.' AND id_cart NOT IN (SELECT id_cart FROM '._DB_PREFIX_.'orders)');
+
+			$result &= Db::getInstance()->Execute('
+			UPDATE `'._DB_PREFIX_.'cart` SET id_address_invoice = '.(int)$new_address->id.'
+			WHERE id_address_invoice = '.(int)$id_address_old.' AND id_cart NOT IN (SELECT id_cart FROM '._DB_PREFIX_.'orders)');
+
+			return $result;
+		}
+		
+		return false;
+	}
 }
-
-

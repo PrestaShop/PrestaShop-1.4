@@ -236,7 +236,7 @@ abstract class ObjectModelCore
 		/* Automatically fill dates */
 		if (key_exists('date_upd', $this))
 			$this->date_upd = date('Y-m-d H:i:s');
-
+		
 		/* Database update */
 		if ($nullValues)
 			$result = Db::getInstance()->autoExecuteWithNullValues(_DB_PREFIX_.$this->table, $this->getFields(), 'UPDATE', '`'.pSQL($this->identifier).'` = '.(int)($this->id));
@@ -681,9 +681,9 @@ abstract class ObjectModelCore
 
 	public function clearCache($all = false)
 	{
-		if ($all AND isset(self::$_cache[$this->table]))
+		if ($all && isset(self::$_cache[$this->table]))
 			unset(self::$_cache[$this->table]);
-		elseif ($this->id AND isset(self::$_cache[$this->table][(int)$this->id]))
+		elseif ($this->id && isset(self::$_cache[$this->table][(int)$this->id]))
 			unset(self::$_cache[$this->table][(int)$this->id]);
 	}
 	

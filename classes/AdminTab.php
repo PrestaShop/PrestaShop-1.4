@@ -663,7 +663,7 @@ abstract class AdminTabCore
 				$id = (int)(Tools::getValue($this->identifier));
 
 				/* Object update */
-				if (isset($id) AND !empty($id))
+				if (isset($id) && !empty($id))
 				{
 					if ($this->tabAccess['edit'] === '1' OR ($this->table == 'employee' AND $cookie->id_employee == Tools::getValue('id_employee') AND Tools::isSubmit('updateemployee')))
 					{
@@ -671,7 +671,7 @@ abstract class AdminTabCore
 						if (Validate::isLoadedObject($object))
 						{
 							/* Specific to objects which must not be deleted */
-							if ($this->deleted AND $this->beforeDelete($object))
+							if ($this->deleted && $this->beforeDelete($object))
 							{
 								// Create new one with old objet values
 								$objectNew = new $this->className($object->id);
@@ -757,7 +757,7 @@ abstract class AdminTabCore
 		elseif (isset($_POST['submitReset'.$this->table]))
 		{
 			$filters = $cookie->getFamily($this->table.'Filter_');
-			foreach ($filters AS $cookieKey => $filter)
+			foreach ($filters as $cookieKey => $filter)
 				if (strncmp($cookieKey, $this->table.'Filter_', 7 + Tools::strlen($this->table)) == 0)
 					{
 						$key = substr($cookieKey, 7 + Tools::strlen($this->table));

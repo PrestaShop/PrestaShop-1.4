@@ -323,12 +323,10 @@ class ThemeInstallator extends Module
 	{
 		/* PrestaShop demo mode */
 		if (_PS_MODE_DEMO_)
-		{
 			return '<div class="error">'.Tools::displayError('This functionnality has been disabled.').'</div>';
-			
-		}
+
 		self::init_defines();
-		if (!Tools::isSubmit('cancelExport') AND $this->page == 'exportPage')
+		if (!Tools::isSubmit('cancelExport') && $this->page == 'exportPage')
 			return self::getContentExport();
 		self::handleInformations();
 		switch ($this->page)
@@ -346,6 +344,22 @@ class ThemeInstallator extends Module
 				self::_displayForm4();
 				break;
 		}
+		
+		/* Display a confirmation message if a theme has been successfully installed */
+		if (Tools::isSubmit('submitFinish'))
+		{
+			$confirmation_msg = $this->l('Congratulations, your theme was successfully installed');
+			if (Tools::getValue('theme_name'))
+			{
+				if (rewriteSettingsFile(null, Tools::getValue('theme_name'), null))
+					$confirmation_msg .= ' '.$this->l('and set as your current theme');
+				else
+					$confirmation_msg .= ' '.$this->l('but there was an error while trying to set it as your current theme');
+			}
+			$this->_msg = parent::displayConfirmation($confirmation_msg).$this->_msg;
+			
+		}
+
 		return $this->errors.$this->_msg.$this->_html;
 	}
 	
@@ -538,13 +552,14 @@ class ThemeInstallator extends Module
 						}
 				}
 		}
-		if ((int)(Tools::getValue('imagesConfig')) != 3 AND self::updateImages())
+		if ((int)Tools::getValue('imagesConfig') != 3 && self::updateImages())
 			$msg .= '<br /><b>'.$this->l('Images have been correctly updated in database').'</b><br />';
 
 		$this->_msg .= parent::displayConfirmation($msg);
 		$this->_html .= '
-			<input type="submit" class="button" name="submitThemes" value="'.$this->l('Previous').'" />
-			<input type="submit" class="button" name="Finish" value="'.$this->l('Finish').'" />
+			<input type="submit" class="button" name="submitThemes" value="'.$this->l('Previous').'" style="padding-left: 10px; padding-right: 10px;" />
+			<input type="submit" class="button" name="submitFinish" value="'.$this->l('Finish').'" style="padding-left: 10px; padding-right: 10px;" />
+			'.((isset($xml['name']) && !empty($xml['name'])) ? '<input type="hidden" name="theme_name" value="'.Tools::safeOutput($xml['name']).'" />' : '').'
 		</form>';
 		
 	}
@@ -577,7 +592,7 @@ class ThemeInstallator extends Module
 		self::getModules();
 		if (file_exists(_IMPORT_FOLDER_.'doc') AND sizeof($xml->docs->doc) != 0)
 			self::_loadDocForm();
-		$this->_html .= '<fieldset>';
+
 		if ($this->to_install AND sizeof($this->to_install) > 0)
 		{
 			$var = '';
@@ -589,35 +604,34 @@ class ThemeInstallator extends Module
 			if ($var != '')
 				$this->_html .= '
 					<fieldset>
-						<legend>'.$this->l('Select the theme\'s modules you wish to install').'</legend>
+						<legend><img src="../img/admin/tab-plugins.gif" alt="" />'.$this->l('Select the theme\'s modules you wish to install').'</legend>
 						<p class="margin-form">'.$var.'</p>
 					</fieldset>
 					<p>&nbsp;</p>';
 		}
 		$this->_html .= '
-			<fieldset>
-				<legend>'.$this->l('Native modules configuration').'</legend>
-				<ul class="margin-form" style="list-style:none">
-					<li><input type="radio" name="nativeModules" value="1" id="nativemoduleconfig1"/> <label style="display:bock;float:none" for="nativemoduleconfig1">'.$this->l('Current configuration').'</label>
-					<li><input type="radio" name="nativeModules" value="2" id="nativemoduleconfig2" checked="checked" /> <label style="display:bock;float:none" for="nativemoduleconfig2">'.$this->l('Theme\'s configuration').'</label>
+			<fieldset style="width: 420px; float: left; min-height: 160px;">
+				<legend><img src="../img/admin/tab-plugins.gif" alt="" />'.$this->l('Native modules configuration').'</legend>
+				<p>'.$this->l('This option determines which existing native modules have to be enabled/disabled').'</p>
+				<ul style="list-style:none; margin-left: 0; color: #7F7F7F; font-size: 0.85em;">
+					<li><input type="radio" name="nativeModules" value="1" id="nativemoduleconfig1"/> <label style="display:bock;float:none" for="nativemoduleconfig1">'.$this->l('Keep my current configuration').'</label><br /><br />
+					<li><input type="radio" name="nativeModules" value="2" id="nativemoduleconfig2" checked="checked" /> <label style="display:bock;float:none" for="nativemoduleconfig2">'.$this->l('Use theme\'s configuration (recommended)').'</label><br /><br />
 					<li><input type="radio" name="nativeModules" value="3" id="nativemoduleconfig3" /> <label style="display:bock;float:none" for="nativemoduleconfig3">'.$this->l('Both').'</label>
 				</ul>
 			</fieldset>
-			<p>&nbsp;</p>';		
-		$this->_html .= '
-			<fieldset>
-				<legend>'.$this->l('Theme images configuration').'</legend>
-				<ul class="margin-form" style="list-style:none">
-					<li><input type="radio" name="imagesConfig" value="1" id="imageconfig1" checked /> <label style="display:bock;float:none" for="imageconfig1">'.$this->l('Add new configuration').'</label>
-					<li><input type="radio" name="imagesConfig" value="2" id="imageconfig2" /> <label style="display:bock;float:none" for="imageconfig2">'.$this->l('Add all (you may lose your current config)').'</label>
+			<fieldset style="width: 420px; float: left; margin-left: 30px; min-height: 160px;">
+				<legend><img src="../img/admin/themes.gif" alt="" />'.$this->l('Theme images configuration').'</legend>
+				<ul style="list-style:none; margin-left: 0; color: #7F7F7F; font-size: 0.85em;">
+					<li><input type="radio" name="imagesConfig" value="1" id="imageconfig1" /> <label style="display:bock;float:none" for="imageconfig1">'.$this->l('Only add missing Image formats to my configuration').'<br /><em>'.$this->l('(not recommended as some themes need to modify the dimensions of existing image formats)').'</em></label><br /><br />
+					<li><input type="radio" name="imagesConfig" value="2" id="imageconfig2" checked="checked" /> <label style="display:bock;float:none" for="imageconfig2">'.$this->l('Add missing Image formats and modify the dimensions of existing ones if necessary (recommended)').'</label><br /><br />
 					<li><input type="radio" name="imagesConfig" value="3" id="imageconfig3" /> <label style="display:bock;float:none" for="imageconfig3">'.$this->l('Don\'t change anything').'</label>
 				</ul>
-			</fieldset>';
-		$this->_html .= '
+			</fieldset>
 			<p class="clear">&nbsp;</p>
-			<input type="submit" class="button" name="prevThemes" value="'.$this->l('Previous').'" />
-			<input type="submit" class="button" name="submitModules" value="'.$this->l('Next').'" />
-		</fieldset>
+			<div style="width: 600px; margin: 0 auto; text-align: center;">
+				<input type="submit" class="button" name="prevThemes" value="'.$this->l('Previous').'" style="padding-left: 15px; padding-right: 15px;" />
+				<input type="submit" class="button" name="submitModules" value="'.$this->l('Next').'" style="margin-left: 15px; padding-left: 15px; padding-right: 15px;" />
+			</div>
 		</form>';
 	}
 	
@@ -668,64 +682,41 @@ class ThemeInstallator extends Module
 				</div>
 				<h3>'.$this->l('Select the variations you wish to import').'</h3>
 				<p class="margin-form">'.$var.'</p>
-				<input type="submit" class="button" name="cancel" value="'.$this->l('Previous').'" />
-				<input type="submit" class="button" name="submitThemes" value="'.$this->l('Next').'" />
+				<input type="submit" class="button" name="cancel" value="'.$this->l('Previous').'" style="padding-left: 10px; padding-right: 10px;" />
+				<input type="submit" class="button" name="submitThemes" value="'.$this->l('Next').'" style="padding-left: 10px; padding-right: 10px;" />
 			</fieldset>';
 		}
 		else
 			$this->_html .= '
 				<input type="hidden" name="variation[]" value="'.$xml->variations->variation[0]['directory'].'" />
-				<input type="submit" class="button" name="cancel" value="'.$this->l('Previous').'" />
-				<input type="submit" class="button" name="submitThemes" value="'.$this->l('Next').'" />
+				<input type="submit" class="button" name="cancel" value="'.$this->l('Previous').'" style="padding-left: 10px; padding-right: 10px;" />
+				<input type="submit" class="button" name="submitThemes" value="'.$this->l('Next').'" style="padding-left: 10px; padding-right: 10px;" />
 ';
 		$this->_html .= '</form>';
 	}
 	
 	private function _displayForm1()
 	{
-		$tmp = scandir(_PS_ALL_THEMES_DIR_);
-		$themeList = array();
-		
-		foreach ($tmp as $row)
-			if (is_dir(_PS_ALL_THEMES_DIR_.$row) AND file_exists(_PS_ALL_THEMES_DIR_.$row.'/index.tpl') AND $row != 'prestashop')
-				$themeList[] = $row;
-		if (count($themeList) >  0)
-		{
-			$tmp = '';			
-			foreach ($themeList as $row)
-				$tmp .= '<option value="'.$row.'" '.($row == _THEME_NAME_ ? 'selected="selected"' : '').'>'.$row.'</option>';
-			$this->_html .= '
-				<fieldset>
-					<legend>'.$this->l('Export a theme').'</legend>
-					<label>'.$this->l('Select a theme').'</label>
-					<div class="margin-form">
-						<select style="width:350px" name="mainTheme">'.$tmp.'</select>
-					</div>
-					<input type="submit" class="button" name="exportTheme" value="'.$this->l('Export this theme').'" />
-				</fieldset>
-				<div class="clear">&nbsp;</div>';
-		}
 		$this->_html .= '
-			<fieldset>
-				<legend>'.$this->l('Import from your computer').'</legend>
+			<h2>'.$this->l('Import a theme').'</h2>
+			<p>'.$this->l('Importing a theme in PrestaShop has never been easier! Please select one of these three methods to import your theme:').'</p>
+			<fieldset style="width: 750px; text-align: center; margin-top: 15px;">
+				<legend><img src="../img/admin/import.gif" alt="" />'.sprintf($this->l('Method %d'), 1).' - '.$this->l('Import from your computer').'</legend>
 				<input type="hidden" name="MAX_FILE_SIZE" value="100000000" />
-				<label for="themearchive">'.$this->l('Archive File').'</label>
+				<label for="themearchive">'.$this->l('Upload the theme .zip file').'</label>
 				<div class="margin-form">
-					<input type="file"  id="themearchive" name="themearchive" />
-					<p class="clear">'.$this->l('Where is your zip file?').'</p>
+					<input type="file" id="themearchive" name="themearchive" style="width: 350px; float: left;" />
+					<input type="submit" class="button" name="submitImport1" value="'.$this->l('Import this theme').'" style="margin-left: 10px; float: left; padding-left: 5px; padding-right: 5px;" />					
 				</div>
-				<input type="submit" class="button" name="submitImport1" value="'.$this->l('Next').'">
 			</fieldset>
 			<div class="clear">&nbsp;</div>
-		';
-		$this->_html .= '
-			<fieldset>
-				<legend>'.$this->l('Import from the web').'</legend>
-				<label for="linkurl">'.$this->l('Archive URL').'</label>
+			<fieldset style="width: 750px; text-align: center;">
+				<legend><img src="../img/admin/import.gif" alt="" />'.sprintf($this->l('Method %d'), 2).' - '.$this->l('Import from the web').'</legend>
+				<label for="linkurl">'.$this->l('URL of the theme .zip file').'</label>
 				<div class="margin-form">
-					<input type="text"  id="linkurl" name="linkurl" value="'.(Tools::getValue('linkurl') ? Tools::safeOutput(Tools::getValue('linkurl')) : 'http://').'"/>
+					<input type="text" id="linkurl" name="linkurl" value="'.(Tools::getValue('linkurl') ? Tools::safeOutput(Tools::getValue('linkurl')) : 'http://').'" style="width: 340px; float: left;" />
+					<input type="submit" class="button" name="submitImport2" value="'.$this->l('Import this theme').'" style="margin-left: 10px; float: left; padding-left: 5px; padding-right: 5px;" />
 				</div>
-				<input type="submit" class="button" name="submitImport2" value="'.$this->l('Next').'">
 			</fieldset>
 			<div class="clear">&nbsp;</div>';
 
@@ -737,19 +728,45 @@ class ThemeInstallator extends Module
 		$tmp = '';
 		foreach ($list as $row)
 			$tmp .= '<option value="'.$row.'">'.$row.'</option>';
+		if (!count($list))
+			$tmp = '<option disabled="disabled">'.$this->l('No .zip file found').'</option>';
+			
 		$this->_html .= '
-			<fieldset>
-				<legend>'.$this->l('Import from FTP').'</legend>
-				<label for="linkurl">'.$this->l('Select archive').'</label>
+			<fieldset style="width: 750px; text-align: center;">
+				<legend><img src="../img/admin/import.gif" alt="" />'.sprintf($this->l('Method %d'), 3).' - '.$this->l('Import from FTP folder').' (/modules/themeinstallator/import/)</legend>
+				<label for="linkurl">'.$this->l('Select the theme .zip file').'</label>
 				<div class="margin-form">
-					<select name="ArchiveName" style="width:350px">
-						'.$tmp.'
-					</select>
+					<select name="ArchiveName" style="width: 350px; float: left;">'.$tmp.'</select>
+					<input type="submit" class="button" name="submitImport3" value="'.$this->l('Import this theme').'" style="margin-left: 10px; float: left; padding-left: 5px; padding-right: 5px;" />
 				</div>
-				<input type="submit" class="button" name="submitImport3" value="'.$this->l('Next').'">
 			</fieldset>
-			<div class="clear">&nbsp;</div>
-		</form>';
+			<div class="clear">&nbsp;</div>';
+		
+		$tmp = scandir(_PS_ALL_THEMES_DIR_);
+		$themeList = array();
+		foreach ($tmp as $row)
+			if (is_dir(_PS_ALL_THEMES_DIR_.$row) AND file_exists(_PS_ALL_THEMES_DIR_.$row.'/index.tpl') AND $row != 'prestashop')
+				$themeList[] = $row;
+		if (count($themeList) >  0)
+		{
+			$tmp = '';			
+			foreach ($themeList as $row)
+				$tmp .= '<option value="'.$row.'" '.($row == _THEME_NAME_ ? 'selected="selected"' : '').'>'.$row.'</option>';
+			$this->_html .= '
+				<hr size="1" noshade style="width: 776px; margin: 10px 0 25px 0;" />
+				<h2>'.$this->l('Export a theme').'</h2>
+				<fieldset style="width: 750px; text-align: center;">
+					<legend><img src="../img/admin/export.gif" alt="" />'.$this->l('Export a theme').'</legend>
+					<label>'.$this->l('Select a theme').'</label>
+					<div class="margin-form">
+						<select style="width: 350px; float: left;" name="mainTheme">'.$tmp.'</select>
+						<input type="submit" class="button" name="exportTheme" value="'.$this->l('Export this theme').'" style="margin-left: 10px; float: left; padding-left: 5px; padding-right: 5px;" />						
+					</div>
+				</fieldset>
+				<div class="clear">&nbsp;</div>';
+		}
+		
+		$this->_html .= '</form>';
 	}
 /*
 ** EXPORT FUNCTIONS ########################################
