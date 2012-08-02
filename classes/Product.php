@@ -2092,11 +2092,11 @@ class ProductCore extends ObjectModel
 	*/
 	public static function getQuantity($id_product, $id_product_attribute = null, $cache_is_pack = null)
 	{
-		if (((int)$cache_is_pack || ($cache_is_pack === null && Pack::isPack((int)$id_product))) && !Pack::isInStock((int)$id_product))
+		if (((int)$cache_is_pack || (!$cache_is_pack && Pack::isPack((int)$id_product))) && !Pack::isInStock((int)$id_product))
 			return 0;
 
 		return Db::getInstance()->getValue('
-		SELECT IF(COUNT(*), SUM(pa.`quantity`), p.`quantity`) total
+		SELECT IF(COUNT(`id_product_attribute`), SUM(pa.`quantity`), p.`quantity`) total
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pa.`id_product` = p.`id_product`)
 		WHERE p.`id_product` = '.(int)($id_product).'
