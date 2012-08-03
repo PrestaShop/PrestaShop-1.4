@@ -45,7 +45,7 @@ class StatsForecast extends Module
 	{
 		$this->name = 'statsforecast';
 		$this->tab = 'analytics_stats';
-		$this->version = 1.1;
+		$this->version = 1.2;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
@@ -57,49 +57,49 @@ class StatsForecast extends Module
 
 	public function install()
 	{
-		return (parent::install() && $this->registerHook('AdminStatsModules'));
+		return parent::install() && $this->registerHook('AdminStatsModules');
 	}
-	
+
 	public function getContent()
 	{
 		Tools::redirectAdmin('index.php?tab=AdminStats&module=statsforecast&token='.Tools::getAdminTokenLite('AdminStats'));
 	}
-	
+
 	public function hookAdminStatsModules()
 	{
 		global $cookie, $currentIndex;
-		define('PS_BASE_URI', '/');
+
 		$ru = $currentIndex.'&module='.$this->name.'&token='.Tools::getValue('token');
-		
+
 		$db = Db::getInstance();
-		
+
 		if (!isset($cookie->stats_granularity))
 			$cookie->stats_granularity = 10;
 		if (Tools::isSubmit('submitIdZone'))
 			$cookie->stats_id_zone = (int)Tools::getValue('stats_id_zone');
 		if (Tools::isSubmit('submitGranularity'))
 			$cookie->stats_granularity = Tools::getValue('stats_granularity');
-		
+
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 		$employee = new Employee((int)($cookie->id_employee));
-		
+
 		/* Date range */
-		$from = strtotime($employee->stats_date_from.' 00:00:00');		
+		$from = strtotime($employee->stats_date_from.' 00:00:00');
 		$to = strtotime($employee->stats_date_to.' 23:59:59');
 		$to2 = min(time(), $to);
 		$interval = ($to - $from) / 60 / 60 / 24;
 		$interval2 = ($to2 - $from) / 60 / 60 / 24;
 		$prop30 = $interval / $interval2;
-		
+
 		if ($cookie->stats_granularity == 7)
 			$intervalAvg = $interval2 / 30;
-		if ($cookie->stats_granularity == 4)
+		elseif ($cookie->stats_granularity == 4)
 			$intervalAvg = $interval2 / 365;
-		if ($cookie->stats_granularity == 10)
+		elseif ($cookie->stats_granularity == 10)
 			$intervalAvg = $interval2;
-		if ($cookie->stats_granularity == 42)
+		elseif ($cookie->stats_granularity == 42)
 			$intervalAvg = $interval2 / 7;
-		
+
 		$dataTable = array();
 		if ($cookie->stats_granularity == 10)
 			for ($i = $from; $i <= $to2; $i = strtotime('+1 day', $i))
@@ -107,17 +107,17 @@ class StatsForecast extends Module
 
 		$dateFromGAdd = ($cookie->stats_granularity != 42
 			? 'LEFT(date_add, '.(int)$cookie->stats_granularity.')'
-			: 'IFNULL(MAKEDATE(YEAR(date_add),DAYOFYEAR(date_add)-WEEKDAY(date_add)), CONCAT(YEAR(date_add),"-01-01*"))');
+			: 'IFNULL(MAKEDATE(YEAR(date_add), DAYOFYEAR(date_add) - WEEKDAY(date_add)), CONCAT(YEAR(date_add), "-01-01*"))');
 		$dateFromGInvoice = ($cookie->stats_granularity != 42
 			? 'LEFT(invoice_date, '.(int)$cookie->stats_granularity.')'
-			: 'IFNULL(MAKEDATE(YEAR(invoice_date),DAYOFYEAR(invoice_date)-WEEKDAY(invoice_date)), CONCAT(YEAR(invoice_date),"-01-01*"))');
-		
+			: 'IFNULL(MAKEDATE(YEAR(invoice_date), DAYOFYEAR(invoice_date) - WEEKDAY(invoice_date)), CONCAT(YEAR(invoice_date), "-01-01*"))');
+
 		$result = $db->ExecuteS('
-		SELECT '.$dateFromGInvoice.' fix_date, COUNT(DISTINCT o.id_order) countOrders, 
-		(SELECT SUM(od.product_quantity) FROM '._DB_PREFIX_.'order_detail od WHERE od.id_order = o.id_order) countProducts,
-		SUM(o.total_products / o.conversion_rate) totalProducts, SUM(o.total_shipping / (1 + carrier_tax_rate * 0.01)) totalShipping
-		FROM '._DB_PREFIX_.'orders o
-		WHERE o.valid = 1 AND o.invoice_date BETWEEN '.ModuleGraph::getDateBetween().'
+		SELECT '.$dateFromGInvoice.' fix_date, COUNT(DISTINCT o.`id_order`) countOrders,  SUM(od.`product_quantity`) countProducts,
+		SUM(o.`total_products` / o.`conversion_rate`) totalProducts, SUM(o.`total_shipping` / (1 + o.`carrier_tax_rate` * 0.01)) totalShipping
+		FROM `'._DB_PREFIX_.'orders` o
+		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON (o.`id_order` = od.`id_order`)
+		WHERE o.`valid` = 1 AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween().'
 		GROUP BY '.$dateFromGInvoice, false);
 
 		while ($row = $db->nextRow($result))
@@ -149,14 +149,14 @@ class StatsForecast extends Module
 					<th style="width:100px;text-align:center">'.$this->l('Products Sales').'</th>
 					<th style="width:100px;text-align:center">'.$this->l('Shipping').'</th>
 				</tr>';
-		
+
 		$visitArray = array();
-		$visits = Db::getInstance()->ExecuteS('SELECT '.$dateFromGAdd.' as fix_date, COUNT(*) as visits FROM '._DB_PREFIX_.'connections c WHERE c.date_add BETWEEN '.ModuleGraph::getDateBetween().' GROUP BY '.$dateFromGAdd, false);
+		$visits = $db->ExecuteS('SELECT '.$dateFromGAdd.' as fix_date, COUNT(*) as visits FROM '._DB_PREFIX_.'connections c WHERE c.date_add BETWEEN '.ModuleGraph::getDateBetween().' GROUP BY '.$dateFromGAdd, false);
 		while ($row = $db->nextRow($visits))
 			$visitArray[$row['fix_date']] = (int)$row['visits'];
-			
+
 		$discountArray = array();
-		$discounts = Db::getInstance()->ExecuteS('
+		$discounts = $db->ExecuteS('
 		SELECT '.$dateFromGInvoice.' as fix_date, SUM(od.value) as total
 		FROM '._DB_PREFIX_.'orders o
 		LEFT JOIN '._DB_PREFIX_.'order_discount od ON (o.id_order = od.id_order)
@@ -164,22 +164,20 @@ class StatsForecast extends Module
 		GROUP BY '.$dateFromGInvoice, false);
 		while ($row = $db->nextRow($discounts))
 			$discountArray[$row['fix_date']] = $row['total'];
-		
+
 		/* Order results by date ASC */
 		ksort($dataTable);
 
 		foreach ($dataTable as $row)
 		{
-			$discountToday = (isset($discountArray[$row['fix_date']]) ? $discountArray[$row['fix_date']] : 0);
-			$visitsToday = (int)(isset($visitArray[$row['fix_date']]) ? $visitArray[$row['fix_date']] : 0);
-			
-			$dateFromGReg = ($cookie->stats_granularity != 42
-				? 'LIKE \''.pSQL($row['fix_date']).'%\''
-				: 'BETWEEN \''.substr($row['fix_date'], 0, 10).' 00:00:00\' AND DATE_ADD(\''.substr($row['fix_date'], 0, 8).substr($row['fix_date'], 8, 2).' 23:59:59\', INTERVAL 7 DAY)');
-			$row['registrations'] = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer WHERE date_add BETWEEN '.ModuleGraph::getDateBetween().' AND date_add '.$dateFromGReg);
+			$discountToday = isset($discountArray[$row['fix_date']]) ? $discountArray[$row['fix_date']] : 0;
+			$visitsToday = isset($visitArray[$row['fix_date']]) ? (int)$visitArray[$row['fix_date']] : 0;
 
-			$this->_html .= '
-			<tr>
+			$dateFromGReg = ($cookie->stats_granularity != 42	? 'LIKE \''.pSQL($row['fix_date']).'%\'' :
+				'BETWEEN \''.substr($row['fix_date'], 0, 10).' 00:00:00\' AND DATE_ADD(\''.substr($row['fix_date'], 0, 8).substr($row['fix_date'], 8, 2).' 23:59:59\', INTERVAL 7 DAY)');
+			$row['registrations'] = $db->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'customer WHERE date_add BETWEEN '.ModuleGraph::getDateBetween().' AND date_add '.$dateFromGReg);
+
+			$this->_html .= '<tr>
 				<td>'.$row['fix_date'].'</td>
 				<td align="center">'.$visitsToday.'</td>
 				<td align="center">'.(int)($row['registrations']).'</td>
@@ -188,10 +186,10 @@ class StatsForecast extends Module
 				<td align="center">'.($visitsToday ? min(100, round(100 * (int)($row['registrations']) / $visitsToday, 2)).'%' : '-').'</td>
 				<td align="center">'.($visitsToday ? min(100, round(100 * (int)($row['countOrders']) / $visitsToday, 2)).'%' : '-').'</td>
 				<td align="right">'.Tools::displayPrice($discountToday, $currency).'</td>
-				<td align="right" >'.Tools::displayPrice($row['totalProducts'], $currency).'</td>
-				<td align="right" >'.Tools::displayPrice($row['totalShipping'], $currency).'</td>
+				<td align="right">'.Tools::displayPrice($row['totalProducts'], $currency).'</td>
+				<td align="right">'.Tools::displayPrice($row['totalShipping'], $currency).'</td>
 			</tr>';
-			
+
 			$this->t1 += $visitsToday;
 			$this->t2 += (int)($row['registrations']);
 			$this->t3 += (int)($row['countOrders']);
@@ -201,8 +199,7 @@ class StatsForecast extends Module
 			$this->t9 += $row['totalShipping'];
 		}
 
-		$this->_html .= '
-				<tr>
+		$this->_html .= '<tr>
 					<th style="width:70px;text-align:center"></th>
 					<th style="text-align:center">'.$this->l('Visits').'</th>
 					<th style="text-align:center">'.$this->l('Reg.').'</th>
@@ -252,15 +249,15 @@ class StatsForecast extends Module
 				</tr>
 			</table>
 		</fieldset>';
-		
+
 		$ca = $this->getRealCA();
-		
-		$visitors = Db::getInstance()->getValue('SELECT COUNT(DISTINCT id_guest) FROM '._DB_PREFIX_.'connections WHERE date_add BETWEEN '.ModuleGraph::getDateBetween());
-		$customers = Db::getInstance()->getValue('SELECT COUNT(DISTINCT id_customer) FROM '._DB_PREFIX_.'connections c INNER JOIN '._DB_PREFIX_.'guest g ON c.id_guest = g.id_guest WHERE id_customer != 0 AND c.date_add BETWEEN '.ModuleGraph::getDateBetween());
-		$carts = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'cart WHERE id_cart IN (SELECT id_cart FROM '._DB_PREFIX_.'cart_product) AND (date_add BETWEEN '.ModuleGraph::getDateBetween().' OR date_upd BETWEEN '.ModuleGraph::getDateBetween().')');
-		$fullcarts = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'cart WHERE id_cart IN (SELECT id_cart FROM '._DB_PREFIX_.'cart_product) AND id_address_invoice != 0 AND (date_add BETWEEN '.ModuleGraph::getDateBetween().' OR date_upd BETWEEN '.ModuleGraph::getDateBetween().')');
-		$orders = Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'orders WHERE valid = 1 AND date_add BETWEEN '.ModuleGraph::getDateBetween());
-		
+
+		$visitors = $db->getValue('SELECT COUNT(DISTINCT id_guest) FROM '._DB_PREFIX_.'connections WHERE date_add BETWEEN '.ModuleGraph::getDateBetween());
+		$customers = $db->getValue('SELECT COUNT(DISTINCT id_customer) FROM '._DB_PREFIX_.'connections c INNER JOIN '._DB_PREFIX_.'guest g ON c.id_guest = g.id_guest WHERE id_customer != 0 AND c.date_add BETWEEN '.ModuleGraph::getDateBetween());
+		$carts = $db->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'cart WHERE id_cart IN (SELECT id_cart FROM '._DB_PREFIX_.'cart_product) AND (date_add BETWEEN '.ModuleGraph::getDateBetween().' OR date_upd BETWEEN '.ModuleGraph::getDateBetween().')');
+		$fullcarts = $db->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'cart WHERE id_cart IN (SELECT id_cart FROM '._DB_PREFIX_.'cart_product) AND id_address_invoice != 0 AND (date_add BETWEEN '.ModuleGraph::getDateBetween().' OR date_upd BETWEEN '.ModuleGraph::getDateBetween().')');
+		$orders = $db->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'orders WHERE valid = 1 AND date_add BETWEEN '.ModuleGraph::getDateBetween());
+
 		$this->_html .= '<div class="clear">&nbsp;</div>
 		<fieldset><legend><img src="../modules/'.$this->name.'/funnel.png" /> '.$this->l('Conversion').'</legend>
 			<span style="float:left;text-align:center;margin-right:10px;padding-top:15px">'.$this->l('Visitors').'<br />'.$visitors.'</span>
@@ -295,8 +292,8 @@ class StatsForecast extends Module
 			'.$this->l('Turn your visitors into money:').'
 			<br />'.$this->l('Each visitor yields').' <b>'.Tools::displayPrice($ca['ventil']['total'] / max(1, $visitors), $currency).'.</b>
 			<br />'.$this->l('Each registered visitor yields').' <b>'.Tools::displayPrice($ca['ventil']['total'] / max(1, $customers), $currency).'</b>.
-		</fieldset>';		
-		
+		</fieldset>';
+
 		$from = strtotime($employee->stats_date_from.' 00:00:00');
 		$to = strtotime($employee->stats_date_to.' 23:59:59');
 		$interval = ($to - $from) / 60 / 60 / 24;
@@ -423,7 +420,7 @@ class StatsForecast extends Module
 		$this->_html .= '</table>
 		</fieldset>
 		</div>';
-		
+
 		return $this->_html;
 	}
 
@@ -431,15 +428,15 @@ class StatsForecast extends Module
 	{
 		global $cookie;
 		$employee = new Employee($cookie->id_employee);
-		
+
 		if ((int)$cookie->stats_id_zone)
 		{
 			$join =  ' LEFT JOIN `'._DB_PREFIX_.'address` a ON o.id_address_invoice = a.id_address LEFT JOIN `'._DB_PREFIX_.'country` co ON co.id_country = a.id_country';
 			$where = ' AND co.id_zone = '.(int)$cookie->stats_id_zone.' ';
 		}
-		
+
 		$ca = array();
-		
+
 		$ca['cat'] = Db::getInstance()->ExecuteS('
 		SELECT SUM(od.`product_price` * od.`product_quantity` / o.conversion_rate) as orderSum, COUNT(*) AS orderQty, cl.name, AVG(od.`product_price` / o.conversion_rate) as priveAvg
 		FROM `'._DB_PREFIX_.'orders` o
@@ -452,26 +449,26 @@ class StatsForecast extends Module
 		'.((int)$cookie->stats_id_zone ? $where : '').'
 		GROUP BY p.id_category_default');
 		uasort($ca['cat'], 'statsforecast_sort');
-		
+
 		$langValues = '';
 		$languages = Db::getInstance()->ExecuteS('SELECT id_lang, iso_code FROM `'._DB_PREFIX_.'lang` WHERE active = 1');
 		foreach ($languages as $language)
 			$langValues .= 'SUM(IF(o.id_lang = '.(int)$language['id_lang'].', total_products / o.conversion_rate, 0)) as '.pSQL($language['iso_code']).',';
 		$langValues = rtrim($langValues, ',');
-		
+
 		$ca['lang'] = Db::getInstance()->getRow('
 		SELECT '.$langValues.'
 		FROM `'._DB_PREFIX_.'orders` o
 		WHERE o.valid = 1
 		AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween());
 		arsort($ca['lang']);
-		
+
 		$ca['langprev'] = Db::getInstance()->getRow('
 		SELECT '.$langValues.'
 		FROM `'._DB_PREFIX_.'orders` o
 		WHERE o.valid = 1
 		AND ADDDATE(o.`invoice_date`, interval 30 day) BETWEEN \''.$employee->stats_date_from.' 00:00:00\' AND \''.min(date('Y-m-d H:i:s'), $employee->stats_date_to.' 23:59:59').'\'');
-		
+
 		$ca['payment'] = Db::getInstance()->ExecuteS('
 		SELECT module, SUM(total_products / o.conversion_rate) as total, COUNT(*) as nb, AVG(total_products / o.conversion_rate) as cart
 		FROM `'._DB_PREFIX_.'orders` o
@@ -481,7 +478,7 @@ class StatsForecast extends Module
 		'.((int)$cookie->stats_id_zone ? $where : '').'
 		GROUP BY o.module
 		ORDER BY total DESC');
-		
+
 		$ca['zones'] = Db::getInstance()->ExecuteS('
 		SELECT z.name, SUM(o.total_products / o.conversion_rate) as total, COUNT(*) as nb
 		FROM `'._DB_PREFIX_.'orders` o
@@ -492,7 +489,7 @@ class StatsForecast extends Module
 		AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween().'
 		GROUP BY c.id_zone
 		ORDER BY total DESC');
-		
+
 		$ca['currencies'] = Db::getInstance()->ExecuteS('
 		SELECT cu.name, SUM(o.total_products / o.conversion_rate) as total, COUNT(*) as nb
 		FROM `'._DB_PREFIX_.'orders` o
@@ -503,13 +500,13 @@ class StatsForecast extends Module
 		'.((int)$cookie->stats_id_zone ? $where : '').'
 		GROUP BY o.id_currency
 		ORDER BY total DESC');
-		
+
 		$ca['ventil'] = Db::getInstance()->getRow('
 		SELECT SUM(total_products / o.conversion_rate) as total, COUNT(*) AS nb
 		FROM `'._DB_PREFIX_.'orders` o
 		WHERE o.valid = 1
 		AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween());
-		
+
 		$ca['attributes'] = Db::getInstance()->ExecuteS('
 		SELECT /*pac.id_attribute,*/ agl.name as gname, al.name as aname, COUNT(*) as total
 		FROM '._DB_PREFIX_.'orders o
