@@ -1044,8 +1044,8 @@ form.std p.cart_navigation span {
 	font-size: 1em;
 	text-decoration: none
 }
-tr.cart_item td { padding: 0.5em 0 }
-td.cart_product a { margin: 0 0.6em }
+
+tr.cart_item td { padding: 0.4em 0.5em; }
 td.cart_product a img {
 	border: 1px solid #d0d1d5;
 	width: 45px;

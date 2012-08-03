@@ -390,4 +390,3 @@
 	<span id="HOOK_SHOPPING_CART_EXTRA">{$HOOK_SHOPPING_CART_EXTRA}</span>
 </p>
 {/if}
-

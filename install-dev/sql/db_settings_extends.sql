@@ -4,7 +4,7 @@ SET NAMES 'utf8';
 INSERT INTO `PREFIX_carrier` (`id_carrier`, `id_tax_rules_group`, `name`, `active`, `deleted`, `shipping_handling`, `is_free`) VALUES (2, 1, 'My carrier', 1, 0, 1, 0);
 INSERT INTO `PREFIX_carrier_group` (`id_carrier`, `id_group`) VALUES (2, 1);
 INSERT INTO `PREFIX_carrier_lang` (`id_carrier`, `id_lang`, `delay`) VALUES (2, 1, 'Delivery next day!'),(2, 2, 'Livraison le lendemain !'),(2, 3, '¡Entrega día siguiente!'),(2, 4, 'Zustellung am nächsten Tag!'),(2, 5, 'Consegna il giorno dopo!');
-INSERT INTO `PREFIX_carrier_zone` (`id_carrier`, `id_zone`) VALUES (2, 1),(2, 2);
+INSERT INTO `PREFIX_carrier_zone` (`id_carrier`, `id_zone`) VALUES (2, 1),(2, 2),(2, 3),(2, 4),(2, 5),(2, 6),(2, 7),(2, 8);
 
 UPDATE `PREFIX_configuration` SET `value` = '2' WHERE `name` = 'PS_CARRIER_DEFAULT';
 
@@ -145,7 +145,7 @@ INSERT INTO `PREFIX_editorial_lang` (`id_editorial`, `id_lang`, `body_title`, `b
 INSERT INTO `PREFIX_range_price` (`id_range_price`, `id_carrier`, `delimiter1`, `delimiter2`) VALUES (1, 2, 0, 10000);
 INSERT INTO `PREFIX_range_weight` (`id_range_weight`, `id_carrier`, `delimiter1`, `delimiter2`) VALUES (1, 2, 0, 10000);
 INSERT INTO `PREFIX_delivery` (`id_delivery`, `id_range_price`, `id_range_weight`, `id_carrier`, `id_zone`, `price`) VALUES
-(1, NULL, 1, 2, 1, 5.00),(2, NULL, 1, 2, 2, 5.00),(4, 1, NULL, 2, 1, 5.00),(5, 1, NULL, 2, 2, 5.00);
+(9, NULL, 1, 2, 1, 5.00),(10, NULL, 1, 2, 2, 5.00),(11, NULL, 1, 2, 3, 5.00),(12, NULL, 1, 2, 4, 5.00),(13, NULL, 1, 2, 5, 5.00),(14, NULL, 1, 2, 6, 5.00),(15, NULL, 1, 2, 7, 5.00),(16, NULL, 1, 2, 8, 5.00);
 
 INSERT INTO `PREFIX_customer_group` (`id_customer`, `id_group`) VALUES (1, 1);
 INSERT INTO `PREFIX_category_group` (`id_category`, `id_group`) VALUES (2, 1),(3, 1),(4, 1);

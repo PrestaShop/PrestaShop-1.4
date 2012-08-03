@@ -1163,7 +1163,10 @@ INSERT INTO `PREFIX_carrier_group` (`id_carrier`, `id_group`) VALUES (1, 1);
 
 INSERT INTO `PREFIX_carrier_lang` (`id_carrier`, `id_lang`, `delay`) VALUES (1, 1, 'Pick up in-store'),(1, 2, 'Retrait au magasin'),(1, 3, 'Recogida en la tienda'),(1, 4, 'Abholung im Geschäft'),(1, 5, 'Ritiro in magazzino');
 
-INSERT INTO `PREFIX_carrier_zone` (`id_carrier`, `id_zone`) VALUES (1, 1);
+INSERT INTO `PREFIX_carrier_zone` (`id_carrier`, `id_zone`) VALUES (1, 1),(1, 2),(1, 3),(1, 4),(1, 5),(1, 6),(1, 7),(1, 8);
+
+INSERT INTO `PREFIX_delivery` (`id_delivery`, `id_range_price`, `id_range_weight`, `id_carrier`, `id_zone`, `price`) VALUES
+(1, NULL, 1, 1, 1, 5.00),(2, NULL, 1, 1, 2, 5.00),(3, NULL, 1, 1, 3, 5.00),(4, NULL, 1, 1, 4, 5.00),(5, NULL, 1, 1, 5, 5.00),(6, NULL, 1, 1, 6, 5.00),(7, NULL, 1, 1, 7, 5.00),(8, NULL, 1, 1, 8, 5.00);
 
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES	('PS_CARRIER_DEFAULT', '1', NOW(), NOW());
 

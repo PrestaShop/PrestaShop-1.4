@@ -327,7 +327,7 @@ class AdminCustomers extends AdminTab
 		</fieldset>
 		<div class="clear">&nbsp;</div>';
 
-		echo '<fieldset style="height:190px"><legend><img src="../img/admin/cms.gif" /> '.$this->l('Add a private note').'</legend>
+		echo '<fieldset class="width4"><legend><img src="../img/admin/cms.gif" /> '.$this->l('Add a private note').'</legend>
 			<p>'.$this->l('This note will be displayed to all the employees but not to the customer.').'</p>
 			<form action="ajax.php" method="post" onsubmit="saveCustomerNote();return false;" id="customer_note">
 				<textarea name="note" id="noteContent" style="width:600px;height:100px" onkeydown="$(\'#submitCustomerNote\').removeAttr(\'disabled\');">'.Tools::htmlentitiesUTF8($customer->note).'</textarea><br />
