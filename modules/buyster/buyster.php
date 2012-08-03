@@ -20,7 +20,7 @@ class Buyster extends PaymentModule
 	{
 		$this->name = 'buyster';
 		$this->tab = 'payments_gateways';
-		$this->version = 1.4 ;
+		$this->version = '1.4.1';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 
@@ -139,7 +139,7 @@ class Buyster extends PaymentModule
 	
 	public function getContent()
 	{
-		$this->_html .= '<h2><a href="http://buyster.fr/accueil-marchand?format=Pro"><img src="'.$this->_path.'logo.png" alt="" /></a></h2>';
+		$this->_html .= '<h2><a href="http://buyster.fr/solution-de-paiement-en-ligne-securisee-par-mobile-pour-votre-e-commerce?format=Pro"><img src="'.$this->_path.'logo.png" alt="" /></a></h2>';
 		if (!empty($_POST) AND Tools::isSubmit('submitSave'))
 		{
 			$this->_postValidation();
