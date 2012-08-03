@@ -449,25 +449,32 @@ class Loyalty extends Module
 		{
 			if (Validate::isLoadedObject($params['cart']))
 			{
-				$pointsBefore = (int)(LoyaltyModule::getCartNbPoints($params['cart']));
-				$pointsAfter = (int)(LoyaltyModule::getCartNbPoints($params['cart'], $product));
+				$pointsBefore = (int)LoyaltyModule::getCartNbPoints($params['cart']);
+				$pointsAfter = (int)LoyaltyModule::getCartNbPoints($params['cart'], $product);
 				$points = (int)($pointsAfter - $pointsBefore);
 			}
 			else
 			{
-				if (!(int)(Configuration::get('PS_LOYALTY_NONE_AWARD')) AND Product::isDiscounted((int)$product->id))
+				if (!(int)Configuration::get('PS_LOYALTY_NONE_AWARD') && Product::isDiscounted((int)$product->id))
 				{
 					$points = 0;
 					$smarty->assign('no_pts_discounted', 1);
 				}
-				else			
-					$points = (int)(LoyaltyModule::getNbPointsByPrice($product->getPrice(Product::getTaxCalculationMethod() == PS_TAX_EXC ? false : true, (int)($product->getIdProductAttributeMostExpensive()))));
+				else
+				{
+					global $cookie;
+					if (isset($cookie->id_currency))
+						$points = (int)LoyaltyModule::getNbPointsByPrice($product->getPrice(Product::getTaxCalculationMethod() == PS_TAX_EXC ? false : true, (int)$product->getIdProductAttributeMostExpensive()), (int)$cookie->id_currency);
+					else
+						$points = 0;
+				}
+
 				$pointsAfter = $points;
 				$pointsBefore = 0;
 			}
 			$smarty->assign(array(
-				'points' => (int)($points),
-				'total_points' => (int)($pointsAfter),
+				'points' => (int)$points,
+				'total_points' => (int)$pointsAfter,
 				'point_rate' => Configuration::get('PS_LOYALTY_POINT_RATE'),
 				'point_value' => Configuration::get('PS_LOYALTY_POINT_VALUE'),
 				'points_in_cart' => (int)$pointsBefore,
@@ -493,23 +500,33 @@ class Loyalty extends Module
 	/* Catch product returns and substract loyalty points */
 	public function hookOrderReturn($params)
 	{
+		if (!Validate::isLoadedObject($params['orderReturn']))
+			return false;
+
 		include_once(dirname(__FILE__).'/LoyaltyStateModule.php');
 		include_once(dirname(__FILE__).'/LoyaltyModule.php');
 		
 		$totalPrice = 0;
-		$details = OrderReturn::getOrdersReturnDetail((int)($params['orderReturn']->id));
-		foreach ($details AS $detail)
+		$details = OrderReturn::getOrdersReturnDetail((int)$params['orderReturn']->id);
+		foreach ($details as $detail)
 		{
 			$price_wt = Db::getInstance()->getValue('
 			SELECT product_price * (1 + (tax_rate / 100)) price
 			FROM '._DB_PREFIX_.'order_detail od
-			WHERE id_order_detail = '.(int)($detail['id_order_detail']));
+			WHERE id_order_detail = '.(int)$detail['id_order_detail']);
 
 			$totalPrice += number_format($price_wt, 2, '.', '') * $detail['product_quantity'];
 		}
 		
+		if (!isset($params['order']) || !Validate::isLoadedObject($params['order']))
+		{
+			$params['order'] = new Order((int)$params['orderReturn']->id_order);
+			if (!Validate::isLoadedObject($params['order']))
+				return false;
+		}
+		
 		$loyaltyNew = new LoyaltyModule();
-		$loyaltyNew->points = (int)(-1 * LoyaltyModule::getNbPointsByPrice($totalPrice));
+		$loyaltyNew->points = (int)(-1 * LoyaltyModule::getNbPointsByPrice($totalPrice, (int)$params['order']->id_currency));
 		$loyaltyNew->id_loyalty_state = (int)LoyaltyStateModule::getCancelId();
 		$loyaltyNew->id_order = (int)$params['orderReturn']->id_order;
 		$loyaltyNew->id_customer = (int)$params['orderReturn']->id_customer;
@@ -655,7 +672,7 @@ class Loyalty extends Module
 			return false;
 		
 		$loyaltyNew = new LoyaltyModule();
-		$loyaltyNew->points = -1 * LoyaltyModule::getNbPointsByPrice(number_format($orderDetail->product_price * (1 + $orderDetail->tax_rate / 100), 2, '.', '')) * $orderDetail->product_quantity;
+		$loyaltyNew->points = -1 * LoyaltyModule::getNbPointsByPrice(number_format($orderDetail->product_price * (1 + $orderDetail->tax_rate / 100), 2, '.', ''), (int)$params['order']->id_currency) * $orderDetail->product_quantity;
 		$loyaltyNew->id_loyalty_state = (int)LoyaltyStateModule::getCancelId();
 		$loyaltyNew->id_order = (int)$params['order']->id;
 		$loyaltyNew->id_customer = (int)$loyalty->id_customer;

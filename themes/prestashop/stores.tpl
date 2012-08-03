@@ -27,7 +27,7 @@
 {capture name=path}{l s='Our stores'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
-<script src="http://maps.google.com/maps/api/js?sensor=true">// DEBUG </script>
+<script src="http://maps.google.com/maps/api/js?sensor=true"></script>
 
 <h1>{l s='Our stores'}</h1>
 
@@ -40,13 +40,14 @@
 			<p>
 				<b>{$store.name|escape:'htmlall':'UTF-8'}</b><br />
 				{$store.address1|escape:'htmlall':'UTF-8'}<br />
-				{if $store.address2}{$store.address2|escape:'htmlall':'UTF-8'}{/if}<br />
-				{$store.postcode} {$store.city|escape:'htmlall':'UTF-8'}{if $store.state}, {$store.state}{/if}<br />
+				{if $store.address2}{$store.address2|escape:'htmlall':'UTF-8'}<br />{/if}
+				{$store.postcode} {$store.city|escape:'htmlall':'UTF-8'}{if $store.state}, {$store.state|escape:'htmlall':'UTF-8'}{/if}<br />
 				{$store.country|escape:'htmlall':'UTF-8'}<br />
-				{if $store.phone}{l s='Phone:' js=0} {$store.phone}{/if}
+				{if $store.phone}{l s='Phone:' js=0} {$store.phone|escape:'htmlall':'UTF-8'}{/if}
 			</p>
 		</div>
 	{/foreach}
+	<div class="clear"></div>
 	{/if}
 {else}
 	<script type="text/javascript">

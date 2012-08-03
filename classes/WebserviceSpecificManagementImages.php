@@ -56,7 +56,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 	/**
 	 * @var string The image type (product, category, general,...)
 	 */
-	private $imageType = NULL;
+	private $imageType = null;
 	
 	/**
 	 * @var int The maximum size supported when uploading images, in bytes
@@ -71,7 +71,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 	/**
 	 * @var string The product image declination id
 	 */
-	protected $productImageDeclinationId = NULL;
+	protected $productImageDeclinationId = null;
 	
 	/**
 	 * @var boolean If the current image management has to manage a "default" image (i.e. "No product available")
@@ -118,7 +118,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 		if ($this->output != '')
 			return $this->objOutput->getObjectRender()->overrideContent($this->output);
 		// display image content if needed
-		else if ($this->imgToDisplay)
+		elseif ($this->imgToDisplay)
 		{
 			$imageResource = false;
 			$types = array('jpg' => array('function' => 'imagecreatefromjpeg', 'Content-Type' => 'image/jpeg'),
@@ -128,7 +128,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 			if (array_key_exists($this->imgExtension, $types))
 				$imageResource = @$types[$this->imgExtension]['function']($this->imgToDisplay);
 
-			if(!$imageResource)
+			if (!$imageResource)
 				throw new WebserviceException(sprintf('Unable to load the image "%s"', str_replace(_PS_ROOT_DIR_, '[SHOP_ROOT_DIR]', $this->imgToDisplay)), array(47, 500));
 			else
 			{
@@ -183,32 +183,32 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 		 *   images/[categories,+]/default/[en,+]/[small,+] ("normal_default_i18n_resized")  (N-5)
 		 *   	GET    (bin)
 		 *   
-		 *   images/product ("product_list")  (N-2)
+		 *   images/products ("product_list")  (N-2)
 		 *   	GET    (xml) (list of image)
-		 *   images/product/[1,+] ("product_description")  (N-3)
-		 *   	GET    (xml) (legend, declinations, xlink to images/product/[1,+]/bin)
-		 *   images/product/[1,+]/bin ("product_bin")  (N-4)
+		 *   images/products/[1,+] ("product_description")  (N-3)
+		 *   	GET    (xml) (legend, declinations, xlink to images/products/[1,+]/bin)
+		 *   images/products/[1,+]/bin ("product_bin")  (N-4)
 		 *   	GET    (bin)
 		 *      POST   (bin) (if image does not exists)
-		 *   images/product/[1,+]/[1,+] ("product_declination")  (N-4)
+		 *   images/products/[1,+]/[1,+] ("product_declination")  (N-4)
 		 *   	GET    (bin)
 		 *   	POST   (xml) (legend)
 		 *   	PUT    (xml) (legend)
 		 *      DELETE
-		 *   images/product/[1,+]/[1,+]/bin ("product_declination_bin") (N-5)
+		 *   images/products/[1,+]/[1,+]/bin ("product_declination_bin") (N-5)
 		 *   	POST   (bin) (if image does not exists)
 		 *   	GET    (bin)
 		 *   	PUT    (bin)
-		 *   images/product/[1,+]/[1,+]/[small,+] ("product_declination_resized") (N-5)
+		 *   images/products/[1,+]/[1,+]/[small,+] ("product_declination_resized") (N-5)
 		 *   	GET    (bin)
-		 *   images/product/default ("product_default") (N-3)
+		 *   images/products/default ("product_default") (N-3)
 		 *   	GET    (bin)
-		 *   images/product/default/[en,+] ("product_default_i18n") (N-4)
+		 *   images/products/default/[en,+] ("product_default_i18n") (N-4)
 		 *   	GET    (bin)
 		 *      POST   (bin)
 		 *      PUT   (bin)
 		 *      DELETE
-		 *   images/product/default/[en,+]/[small,+] ("product_default_i18n_resized") (N-5)
+		 *   images/products/default/[en,+]/[small,+] ("product_default_i18n_resized") (N-5)
 		 * 		GET    (bin)
 		 * 
 		 */
@@ -216,37 +216,36 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 		
 		/* Declinated
 		 *ok    GET    (bin)
-		 *ok images/product ("product_list")  (N-2)
+		 *ok images/products ("product_list")  (N-2)
 		 *ok	GET    (xml) (list of image)
-		 *ok images/product/[1,+] ("product_description")  (N-3)
-		 *   	GET    (xml) (legend, declinations, xlink to images/product/[1,+]/bin)
-		 *ok images/product/[1,+]/bin ("product_bin")  (N-4)
+		 *ok images/products/[1,+] ("product_description")  (N-3)
+		 *   	GET    (xml) (legend, declinations, xlink to images/products/[1,+]/bin)
+		 *ok images/products/[1,+]/bin ("product_bin")  (N-4)
 		 *ok 	GET    (bin)
 		 *      POST   (bin) (if image does not exists)
-		 *ok images/product/[1,+]/[1,+] ("product_declination")  (N-4)
+		 *ok images/products/[1,+]/[1,+] ("product_declination")  (N-4)
 		 *ok 	GET    (bin)
 		 *   	POST   (xml) (legend)
 		 *   	PUT    (xml) (legend)
 		 *      DELETE
-		 *ok images/product/[1,+]/[1,+]/bin ("product_declination_bin") (N-5)
+		 *ok images/products/[1,+]/[1,+]/bin ("product_declination_bin") (N-5)
 		 *   	POST   (bin) (if image does not exists)
 		 *ok 	GET    (bin)
 		 *   	PUT    (bin)
-		 *   images/product/[1,+]/[1,+]/[small,+] ("product_declination_resized") (N-5)
+		 *   images/products/[1,+]/[1,+]/[small,+] ("product_declination_resized") (N-5)
 		 *ok 	GET    (bin)
-		 *ok images/product/default ("product_default") (N-3)
+		 *ok images/products/default ("product_default") (N-3)
 		 *ok 	GET    (bin)
-		 *ok images/product/default/[en,+] ("product_default_i18n") (N-4)
+		 *ok images/products/default/[en,+] ("product_default_i18n") (N-4)
 		 *ok 	GET    (bin)
 		 *      POST   (bin)
 		 *      PUT   (bin)
 		 *      DELETE
-		 *ok images/product/default/[en,+]/[small,+] ("product_default_i18n_resized") (N-5)
+		 *ok images/products/default/[en,+]/[small,+] ("product_default_i18n_resized") (N-5)
 		 *ok	GET    (bin)
 		 * 
 		 * */
-		
-		
+
 		// Pre configuration...
 		if (isset($this->wsObject->urlSegment))
 			for ($i = 1; $i < 6; $i++)
@@ -393,7 +392,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 				break;
 			case 'PUT':
 				
-				if ($this->writePostedImageOnDisk($path, NULL, NULL))
+				if ($this->writePostedImageOnDisk($path, null, null))
 				{
 					if ($this->wsObject->urlSegment[2] == 'header')
 					{
@@ -425,7 +424,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 		}
 		
 		// Display list of languages
-		if($this->wsObject->urlSegment[3] == '' && $this->wsObject->method == 'GET')
+		if ($this->wsObject->urlSegment[3] == '' && $this->wsObject->method == 'GET')
 		{
 			$this->output .= $this->objOutput->getObjectRender()->renderNodeHeader('languages', array());
 			foreach ($langList as $lang)
@@ -567,7 +566,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 				}
 			}
 			// display the list of declinated images
-			else if ($this->wsObject->method == 'GET' || $this->wsObject->method == 'HEAD')
+			elseif ($this->wsObject->method == 'GET' || $this->wsObject->method == 'HEAD')
 			{
 				if ($available_image_ids)
 				{
@@ -684,7 +683,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 			// Modify the image
 			case 'PUT':
 				if ($filename_exists)
-					if ($this->writePostedImageOnDisk($filename, NULL, NULL, $imageSizes, $directory))
+					if ($this->writePostedImageOnDisk($filename, null, null, $imageSizes, $directory))
 					{
 						$this->imgToDisplay = $filename;
 						return true;
@@ -716,7 +715,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 					throw new WebserviceException('This image already exists. To modify it, please use the PUT method', array(65, 400));
 				else
 				{
-					if ($this->writePostedImageOnDisk($filename, NULL, NULL, $imageSizes, $directory))
+					if ($this->writePostedImageOnDisk($filename, null, null, $imageSizes, $directory))
 						return true;
 					else
 						throw new WebserviceException('Unable to save this image', array(66, 500));
@@ -735,7 +734,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 	 * @param string $parentPath The parent path
 	 * @return boolean
 	 */
-	private function deleteImageOnDisk($filePath, $imageTypes = NULL, $parentPath = NULL)
+	private function deleteImageOnDisk($filePath, $imageTypes = null, $parentPath = null)
 	{
 		$this->wsObject->setOutputEnabled(false);
 		if (file_exists($filePath))
@@ -778,13 +777,13 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 	 * @param string $parentPath
 	 * @return string
 	 */
-	private function writeImageOnDisk($basePath, $newPath, $destWidth = NULL, $destHeight = NULL, $imageTypes = NULL, $parentPath = NULL)
+	private function writeImageOnDisk($basePath, $newPath, $destWidth = null, $destHeight = null, $imageTypes = null, $parentPath = null)
 	{
 		list($sourceWidth, $sourceHeight, $type, $attr) = getimagesize($basePath);
 		if (!$sourceWidth)
 			throw new WebserviceException('Image width was null', array(68, 400));
-		if ($destWidth == NULL) $destWidth = $sourceWidth;
-		if ($destHeight == NULL) $destHeight = $sourceHeight;
+		if ($destWidth == null) $destWidth = $sourceWidth;
+		if ($destHeight == null) $destHeight = $sourceHeight;
 		switch ($type)
 		{
 			case 1:
@@ -888,11 +887,11 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 	 * @param string $parentPath
 	 * @return boolean
 	 */
-	private function writePostedImageOnDisk($receptionPath, $destWidth = NULL, $destHeight = NULL, $imageTypes = NULL, $parentPath = NULL)
+	private function writePostedImageOnDisk($receptionPath, $destWidth = null, $destHeight = null, $imageTypes = null, $parentPath = null)
 	{
 		if ($this->wsObject->method == 'PUT')
 		{
-			if (isset($_FILES['image']['tmp_name']) AND $_FILES['image']['tmp_name'])
+			if (isset($_FILES['image']['tmp_name']) && $_FILES['image']['tmp_name'])
 			{
 				$file = $_FILES['image'];
 				if ($file['size'] > $this->imgMaxUploadSize)
@@ -937,7 +936,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 		}
 		elseif ($this->wsObject->method == 'POST')
 		{
-			if (isset($_FILES['image']['tmp_name']) AND $_FILES['image']['tmp_name'])
+			if (isset($_FILES['image']['tmp_name']) && $_FILES['image']['tmp_name'])
 			{
 				$file = $_FILES['image'];
 				if ($file['size'] > $this->imgMaxUploadSize)
@@ -945,7 +944,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 				require_once(_PS_ROOT_DIR_.'/images.inc.php');
 				if ($error = checkImageUploadError($file))
 					throw new WebserviceException('Image upload error : '.$error, array(76, 400));
-				if (isset($file['tmp_name']) AND $file['tmp_name'] != NULL)
+				if (isset($file['tmp_name']) && $file['tmp_name'] != null)
 				{
 					if ($this->imageType == 'products')
 					{

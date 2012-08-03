@@ -1632,19 +1632,19 @@ class CartCore extends ObjectModel
 		if (!Validate::isLoadedObject($this))
 			return false;
 		$cart = new Cart($this->id);
-		$cart->id = NULL;
+		$cart->id = null;
 		$cart->add();
 
 		if (!Validate::isLoadedObject($cart))
 			return false;
 
 		$success = true;
-		$products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'cart_product` WHERE `id_cart` = '.(int)$this->id);
-		foreach ($products AS $product)
-			$success &= $cart->updateQty($product['quantity'], (int)$product['id_product'], (int)$product['id_product_attribute'], NULL, 'up');
+		$products = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'cart_product` WHERE `id_cart` = '.(int)$this->id);
+		foreach ($products as $product)
+			$success &= $cart->updateQty($product['quantity'], (int)$product['id_product'], (int)$product['id_product_attribute'], null, 'up');
 
 		// Customized products
-		$customs = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		$customs = Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM '._DB_PREFIX_.'customization c
 		LEFT JOIN '._DB_PREFIX_.'customized_data cd ON cd.id_customization = c.id_customization
@@ -1652,7 +1652,7 @@ class CartCore extends ObjectModel
 
 		// Get datas from customization table
 		$customsById = array();
-		foreach ($customs AS $custom)
+		foreach ($customs as $custom)
 		{
 			if (!isset($customsById[$custom['id_customization']]))
 				$customsById[$custom['id_customization']] = array('id_product_attribute' => $custom['id_product_attribute'],
@@ -1663,10 +1663,10 @@ class CartCore extends ObjectModel
 		$custom_ids = array();
 		foreach($customsById as $customizationId => $val)
 		{
-			Db::getInstance(_PS_USE_SQL_SLAVE_)->Execute('
+			Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'customization` (id_cart, id_product_attribute, id_product, quantity)
 			VALUES('.(int)$cart->id.', '.(int)$val['id_product_attribute'].', '.(int)$val['id_product'].', '.(int)$val['quantity'].')');
-			$custom_ids[$customizationId] = Db::getInstance(_PS_USE_SQL_SLAVE_)->Insert_ID();
+			$custom_ids[$customizationId] = Db::getInstance()->Insert_ID();
 		}
 
 		// Insert customized_data
@@ -1682,7 +1682,7 @@ class CartCore extends ObjectModel
 					$first = false;
 				$sql_custom_data .= '('.(int)$custom_ids[$custom['id_customization']].', '.(int)$custom['type'].', '.(int)$custom['index'].', \''.pSQL($custom['value']).'\')';
 			}
-			Db::getInstance(_PS_USE_SQL_SLAVE_)->Execute($sql_custom_data);
+			Db::getInstance()->Execute($sql_custom_data);
 		}
 
 		return array('cart' => $cart, 'success' => $success);

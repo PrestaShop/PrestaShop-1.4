@@ -94,7 +94,7 @@
 <div>
 	- {l s='All merchandise must be returned in its original packaging and in its original state.'}
 	<br />- {l s='Please print out the'} <a href="{$link->getPageLink('pdf-order-return.php', true)}?id_order_return={$orderRet->id|intval}">{l s='PDF document'}</a> {l s='and slip it into your package.'}
-	<br />- {l s='Please see PDF document'} (<a href="{$link->getPageLink('pdf-order-return.php', true)}?id_order_return={$orderRet->id|intval}">{l s='for the correct address'}</a>)
+	<br />- {l s='Please send your package to the address specified in this same document'}
 	<br /><br />
 	{l s='Upon receiving the package we will refund your order and will notify you by email.'}
 	<br /><br /><a href="{$link->getPageLink('contact-form.php', true)}">{l s='Let us know if you have any questions.'}</a>

@@ -389,21 +389,21 @@ class CategoryCore extends ObjectModel
 	{
 		/* Gets all children */
 		$categories = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-			SELECT id_category, id_parent, level_depth
-			FROM '._DB_PREFIX_.'category
-			WHERE id_parent = '.(int)$id_category);
+		SELECT id_category, id_parent, level_depth
+		FROM '._DB_PREFIX_.'category
+		WHERE id_parent = '.(int)$id_category);
 		/* Gets level_depth */
 		$level = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-			SELECT level_depth
-			FROM '._DB_PREFIX_.'category
-			WHERE id_category = '.(int)$id_category);
+		SELECT level_depth
+		FROM '._DB_PREFIX_.'category
+		WHERE id_category = '.(int)$id_category);
 		/* Updates level_depth for all children */
 		foreach ($categories as $sub_category)
 		{
-			Db::getInstance(_PS_USE_SQL_SLAVE_)->Execute('
-				UPDATE '._DB_PREFIX_.'category
-				SET level_depth = '.(int)($level['level_depth'] + 1).'
-				WHERE id_category = '.(int)$sub_category['id_category']);
+			Db::getInstance()->Execute('
+			UPDATE '._DB_PREFIX_.'category
+			SET level_depth = '.(int)($level['level_depth'] + 1).'
+			WHERE id_category = '.(int)$sub_category['id_category']);
 			/* Recursive call */
 			$this->recalculateLevelDepth($sub_category['id_category']);
 		}

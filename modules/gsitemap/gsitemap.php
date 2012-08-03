@@ -114,7 +114,7 @@ XML;
 		'.(Configuration::get('GSITEMAP_ALL_PRODUCTS') ? '' : 'HAVING level_depth IS NOT NULL').'
 		ORDER BY pl.id_product, pl.id_lang ASC';
 
-		$resource = Db::getInstance(_PS_USE_SQL_SLAVE_)->Execute($sql);
+		$resource = Db::getInstance()->Execute($sql);
 
 		// array used to know which product/image was already added (blacklist)
 		$done = null;

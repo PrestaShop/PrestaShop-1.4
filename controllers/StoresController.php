@@ -98,13 +98,13 @@ class StoresControllerCore extends FrontController
 				$days[6] = 'Saturday';
 				$days[7] = 'Sunday';
 
-				foreach ($stores AS $store)
+				foreach ($stores as $store)
 				{
 					$days_datas = array();
 					$node = $dom->createElement('marker');
 					$newnode = $parnode->appendChild($node);
 					$newnode->setAttribute('name', $store['name']);
-					$address =  $this->_processStoreAddress($store);
+					$address = $this->_processStoreAddress($store);
  
 					$other = '';
 					if (!empty($store['hours']))
@@ -149,10 +149,7 @@ class StoresControllerCore extends FrontController
 
 	private function _processStoreAddress($store)
 	{
-		$ignore_field = array(
-					'firstname'	=>1
-					, 'lastname'	=>1
-				);
+		$ignore_field = array('firstname' => 1, 'lastname' => 1, 'phone_mobile' => 1, 'phone' => 1);
 
 		$out = '';
 		$out_datas = array();

@@ -28,91 +28,91 @@
 class AddressCore extends ObjectModel
 {
 	/** @var integer Customer id which address belongs */
-	public		$id_customer = NULL;
+	public $id_customer = null;
 
 	/** @var integer Manufacturer id which address belongs */
-	public		$id_manufacturer = NULL;
+	public $id_manufacturer = null;
 
 	/** @var integer Supplier id which address belongs */
-	public		$id_supplier = NULL;
+	public $id_supplier = null;
 
 	/** @var integer Country id */
-	public		$id_country;
+	public $id_country;
 
 	/** @var integer State id */
-	public		$id_state;
+	public $id_state;
 
 	/** @var string Country name */
-	public		$country;
+	public $country;
 
 	/** @var string Alias (eg. Home, Work...) */
-	public		$alias;
+	public $alias;
 
 	/** @var string Company (optional) */
-	public 		$company;
+	public $company;
 
 	/** @var string Lastname */
-	public 		$lastname;
+	public $lastname;
 
 	/** @var string Firstname */
-	public 		$firstname;
+	public $firstname;
 
 	/** @var string Address first line */
-	public 		$address1;
+	public $address1;
 
 	/** @var string Address second line (optional) */
-	public 		$address2;
+	public $address2;
 
 	/** @var string Postal code */
-	public 		$postcode;
+	public $postcode;
 
 	/** @var string City */
-	public 		$city;
+	public $city;
 
 	/** @var string Any other useful information */
-	public 		$other;
+	public $other;
 
 	/** @var string Phone number */
-	public 		$phone;
+	public $phone;
 
 	/** @var string Mobile phone number */
-	public 		$phone_mobile;
+	public $phone_mobile;
 
 	/** @var string VAT number */
-	public 		$vat_number;
+	public $vat_number;
 
 	/** @var string DNI number */
-	public		$dni;
+	public $dni;
 
 	/** @var string Object creation date */
-	public 		$date_add;
+	public $date_add;
 
 	/** @var string Object last modification date */
-	public 		$date_upd;
+	public $date_upd;
 
 	/** @var boolean True if address has been deleted (staying in database as deleted) */
-	public 		$deleted = 0;
+	public $deleted = 0;
 
 	protected static $_idZones = array();
 	protected static $_idCountries = array();
 
-	protected	$fieldsRequired = array('id_country', 'alias', 'lastname', 'firstname', 'address1', 'city');
-	protected	$fieldsSize = array('alias' => 32, 'company' => 32, 'lastname' => 32, 'firstname' => 32,
+	protected $fieldsRequired = array('id_country', 'alias', 'lastname', 'firstname', 'address1', 'city');
+	protected $fieldsSize = array('alias' => 32, 'company' => 32, 'lastname' => 32, 'firstname' => 32,
 									'address1' => 128, 'address2' => 128, 'postcode' => 12, 'city' => 64,
 									'other' => 300, 'phone' => 16, 'phone_mobile' => 16, 'dni' => 16);
-	protected	$fieldsValidate = array('id_customer' => 'isNullOrUnsignedId', 'id_manufacturer' => 'isNullOrUnsignedId',
+	protected $fieldsValidate = array('id_customer' => 'isNullOrUnsignedId', 'id_manufacturer' => 'isNullOrUnsignedId',
 										'id_supplier' => 'isNullOrUnsignedId', 'id_country' => 'isUnsignedId', 'id_state' => 'isNullOrUnsignedId',
 										'alias' => 'isGenericName', 'company' => 'isGenericName', 'lastname' => 'isName','vat_number' => 'isGenericName',
 										'firstname' => 'isName', 'address1' => 'isAddress', 'address2' => 'isAddress', 'postcode'=>'isPostCode',
 										'city' => 'isCityName', 'other' => 'isMessage',
 										'phone' => 'isPhoneNumber', 'phone_mobile' => 'isPhoneNumber', 'deleted' => 'isBool', 'dni' => 'isDniLite');
-	protected	$exclude_copy_post = array('id_manufacturer', 'id_supplier', 'date_add', 'date_upd');
-	protected 	$table = 'address';
-	protected 	$identifier = 'id_address';
-	protected	$_includeVars = array('addressType' => 'table');
-	protected	$_includeContainer = false;
+	protected $exclude_copy_post = array('id_manufacturer', 'id_supplier', 'date_add', 'date_upd');
+	protected $table = 'address';
+	protected $identifier = 'id_address';
+	protected $_includeVars = array('addressType' => 'table');
+	protected $_includeContainer = false;
 
-	protected	$webserviceParameters = array(
+	protected $webserviceParameters = array(
 		'objectsNodeName' => 'addresses',
 		'fields' => array(
 			'id_customer' => array('xlink_resource'=> 'customers'),
@@ -128,7 +128,7 @@ class AddressCore extends ObjectModel
 	 *
 	 * @param integer $id_address Existing address id in order to load object (optional)
 	 */
-	public	function __construct($id_address = null, $id_lang = null)
+	public function __construct($id_address = null, $id_lang = null)
 	{
 		parent::__construct($id_address);
 
@@ -249,10 +249,10 @@ class AddressCore extends ObjectModel
 			return self::$_idZones[$id_address];
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT s.`id_zone` AS id_zone_state, c.`id_zone`
+		SELECT s.`id_zone` id_zone_state, c.`id_zone`
 		FROM `'._DB_PREFIX_.'address` a
-		LEFT JOIN `'._DB_PREFIX_.'country` c ON c.`id_country` = a.`id_country`
-		LEFT JOIN `'._DB_PREFIX_.'state` s ON s.`id_state` = a.`id_state`
+		LEFT JOIN `'._DB_PREFIX_.'country` c ON (c.`id_country` = a.`id_country`)
+		LEFT JOIN `'._DB_PREFIX_.'state` s ON (s.`id_state` = a.`id_state`)
 		WHERE a.`id_address` = '.(int)$id_address);
 
 		self::$_idZones[$id_address] = (int)((int)$result['id_zone_state'] ? $result['id_zone_state'] : $result['id_zone']);

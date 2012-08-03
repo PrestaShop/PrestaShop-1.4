@@ -83,14 +83,14 @@ class LoyaltyModule extends ObjectModel
 		return self::getCartNbPoints(new Cart((int)$order->id_cart));
 	}
 
-	public static function getCartNbPoints($cart, $newProduct = NULL)
+	public static function getCartNbPoints($cart, $newProduct = null)
 	{
 		$total = 0;
 		if (Validate::isLoadedObject($cart))
 		{
 			$cartProducts = $cart->getProducts();
 			$taxesEnabled = Product::getTaxCalculationMethod();
-			if (isset($newProduct) AND !empty($newProduct))
+			if (isset($newProduct) && !empty($newProduct))
 			{
 				$cartProductsNew['id_product'] = (int)$newProduct->id;
 				if ($taxesEnabled == PS_TAX_EXC)
@@ -100,22 +100,22 @@ class LoyaltyModule extends ObjectModel
 				$cartProductsNew['cart_quantity'] = 1;
 				$cartProducts[] = $cartProductsNew;
 			}
-			foreach ($cartProducts AS $product)
+			foreach ($cartProducts as $product)
 			{
-				if (!(int)(Configuration::get('PS_LOYALTY_NONE_AWARD')) AND Product::isDiscounted((int)$product['id_product']))
+				if (!(int)Configuration::get('PS_LOYALTY_NONE_AWARD') && Product::isDiscounted((int)$product['id_product']))
 				{
 					global $smarty;
-					if (isset($smarty) AND is_object($newProduct) AND $product['id_product'] == $newProduct->id)
+					if (isset($smarty) && is_object($newProduct) && $product['id_product'] == $newProduct->id)
 						$smarty->assign('no_pts_discounted', 1);
 					continue;
 				}
-				$total += ($taxesEnabled == PS_TAX_EXC ? $product['price'] : $product['price_wt'])* (int)($product['cart_quantity']);
+				$total += ($taxesEnabled == PS_TAX_EXC ? $product['price'] : $product['price_wt']) * (int)$product['cart_quantity'];
 			}
-			foreach ($cart->getDiscounts(false) AS $discount)
+			foreach ($cart->getDiscounts(false) as $discount)
 				$total -= $discount['value_real'];
 		}
 
-		return self::getNbPointsByPrice($total);
+		return self::getNbPointsByPrice($total, isset($cart->id_currency) ? (int)$cart->id_currency : 0);
 	}
 
 	public static function getVoucherValue($nbPoints, $id_currency = NULL)
@@ -128,20 +128,21 @@ class LoyaltyModule extends ObjectModel
 		return (int)$nbPoints * (float)Tools::convertPrice(Configuration::get('PS_LOYALTY_POINT_VALUE'), new Currency((int)$id_currency));
 	}
 
-	public static function getNbPointsByPrice($price)
+	public static function getNbPointsByPrice($price, $id_currency = 0)
 	{
-		global $cookie;
+		if (!$id_currency)
+			return 0;
 
-		if (Configuration::get('PS_CURRENCY_DEFAULT') != $cookie->id_currency)
+		if (Configuration::get('PS_CURRENCY_DEFAULT') != $id_currency)
 		{
-			$currency = new Currency((int)($cookie->id_currency));
-			if ($currency->conversion_rate)
+			$currency = new Currency((int)$id_currency);
+			if (Validate::isLoadedObject($currency) && $currency->conversion_rate)
 				$price = $price / $currency->conversion_rate;
 		}
 
 		/* Prevent division by zero */
 		$points = 0;
-		if ($pointRate = (float)(Configuration::get('PS_LOYALTY_POINT_RATE')))
+		if ($pointRate = (float)Configuration::get('PS_LOYALTY_POINT_RATE'))
 			$points = floor(number_format($price, 2, '.', '') / $pointRate);
 
 		return (int)$points;

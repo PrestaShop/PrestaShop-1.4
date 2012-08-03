@@ -285,7 +285,8 @@ body.mceContentBody {
 .rte h1,.rte h2,.rte h3,.rte h4,.rte h5,.rte h6,
  .mceContentBody h1, .mceContentBody h2, .mceContentBody h3, .mceContentBody h4, .mceContentBody h5, .mceContentBody h6 {
 	margin: 0.75em 0 0.3em 0;
-	color: #374853
+	color: #374853;
+	height: auto;
 }
 .rte h1,
  .mceContentBody h1 {

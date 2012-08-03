@@ -98,21 +98,16 @@ if (ob_get_length() != 0)
 	header('Content-Type: application/javascript'); // Useful for debug...
 
 // Manage cache
-if (isset($_SERVER['HTTP_LOCAL_CONTENT_SHA1']) && $_SERVER['HTTP_LOCAL_CONTENT_SHA1'] == $result['content_sha1']) {
+if (isset($_SERVER['HTTP_LOCAL_CONTENT_SHA1']) && $_SERVER['HTTP_LOCAL_CONTENT_SHA1'] == $result['content_sha1'])
 	$result['status'] = $_SERVER['SERVER_PROTOCOL'].' 304 Not Modified';
-}
 
 foreach ($result['headers'] as $param_value)
-{
 	header($param_value);
-}
+
 if (isset($result['type']))
 {
-//	header($result['content_sha1']);
 	if (!isset($_SERVER['HTTP_LOCAL_CONTENT_SHA1']) || $_SERVER['HTTP_LOCAL_CONTENT_SHA1'] != $result['content_sha1'])
-	{
 		echo $result['content'];
-	}
 		
 }
 ob_end_flush();

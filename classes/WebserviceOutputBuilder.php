@@ -122,11 +122,11 @@ class WebserviceOutputBuilderCore
 	public function buildHeader()
 	{
 		$return = array();
+
 		$return[] = $this->status;
 		foreach ($this->headerParams as $key => $param)
-		{
 			$return[] = trim($key).': '.$param;
-		}
+
 		return $return;
 	}
 	
@@ -372,7 +372,6 @@ class WebserviceOutputBuilderCore
 		if (is_null($this->schemaToDisplay))
 		{
 			foreach ($objects as $key => $object)
-			{
 				if ($key !== 'empty')
 				{
 					if ($this->fieldsToDisplay  === 'minimum')
@@ -380,7 +379,6 @@ class WebserviceOutputBuilderCore
 					else
 						$output .= $this->renderEntity($object, $depth);
 				}
-			}
 		}
 		else
 			$output .= $this->renderSchema($objects['empty'], $ws_params);
@@ -444,7 +442,7 @@ class WebserviceOutputBuilderCore
 	{
 		$output = '';
 		$ws_params = $object->getWebserviceParameters();
-		foreach ($this->wsParamOverrides AS $p)
+		foreach ($this->wsParamOverrides as $p)
 		{
 			$o = $p['object'];
 			$ws_params = $o->{$p['method']}($ws_params);
@@ -459,7 +457,6 @@ class WebserviceOutputBuilderCore
 				$ws_params['fields'] = array_merge($ws_params['fields'], $virtual_fields);
 			
 			foreach ($ws_params['fields'] as $field_name => $field)
-			{
 				if ($this->fieldsToDisplay === 'full' || array_key_exists($field_name, $this->fieldsToDisplay))
 				{
 					$field['object_id'] = $object->id;
@@ -467,7 +464,6 @@ class WebserviceOutputBuilderCore
 					$field['entities_name'] = $ws_params['objectsNodeName'];
 					$output .= $this->renderField($object, $ws_params, $field_name, $field, $depth);
 				}
-			}
 		}
 		$subexists = false;
 		if (is_array($this->fieldsToDisplay))
@@ -581,12 +577,8 @@ class WebserviceOutputBuilderCore
 				{
 					$association_resources = call_user_func($getter, $object);
 					if (is_array($association_resources) && !empty($association_resources))
-					{
 						foreach ($association_resources as $association_resource)
-						{
 							$objects_assoc[] = $association_resource;
-						}
-					}
 				}
 				else
 				{
@@ -594,17 +586,11 @@ class WebserviceOutputBuilderCore
 					{
 						$association_resources = $object->$getter();
 						if (is_array($association_resources) && !empty($association_resources))
-						{
 							foreach ($association_resources as $association_resource)
-							{
 								$objects_assoc[] = $association_resource;
-							}
-						}
 					}
 					else
-					{
 						$objects_assoc[] = '';
-					}
 				}
 				
 				$class_name = null;
@@ -625,13 +611,11 @@ class WebserviceOutputBuilderCore
 					else
 					{
 						foreach ($object_assoc as $id)
-						{
 							if ($class_name !== null)
 							{
 								$child_object = new $class_name($id);
 								$output_details .= $this->renderEntity($child_object, ($depth-2 ? 0 : $depth-2));
 							}
-						}
 					}
 				}
 				if ($output_details != '')
@@ -664,7 +648,6 @@ class WebserviceOutputBuilderCore
 		$output .= $this->setIndent($depth-1).$this->objectRender->renderNodeHeader($resource_name, array(), $more_attr);
 		
 		foreach ($fields_assoc as $field_name=>$field)
-		{
 			if (!is_array($this->fieldsToDisplay) || in_array($field_name, $this->fieldsToDisplay[$assoc_name]))
 			{
 				if ($field_name == 'id' && !isset($field['sqlId']))
@@ -685,7 +668,7 @@ class WebserviceOutputBuilderCore
 				$field['is_association'] = true;
 				$output .= $this->setIndent($depth-1).$this->objectRender->renderField($field);
 			}
-		}
+
 		$output .= $this->setIndent($depth-1).$this->objectRender->renderNodeFooter($resource_name, array());
 		return $output;
 	}

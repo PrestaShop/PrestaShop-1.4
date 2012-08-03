@@ -510,9 +510,8 @@ class WebserviceRequestCore
 				}
 			}
 		}
+
 		return $this->returnOutput();
-		unset($webservice_call);
-		unset ($display_errors);
 	}
 	
 	protected function webserviceChecks()
@@ -1589,7 +1588,7 @@ class WebserviceRequestCore
 	protected function returnOutput()
 	{
 		$return = array();
-		
+
 		// write headers
 		$this->objOutput->setHeaderParams('Access-Time', time())
 						->setHeaderParams('X-Powered-By', 'PrestaShop Webservice')
@@ -1658,6 +1657,7 @@ class WebserviceRequestCore
 			}
 		}
 		
+		
 		// if the output is not enable, delete the content
 		// the type content too
 		if (!$this->_outputEnabled)
@@ -1680,11 +1680,11 @@ class WebserviceRequestCore
 		}
 		
 		if (!isset($return['content']) || strlen($return['content']) <= 0)
-		{
 			$this->objOutput->setHeaderParams('Content-Type', '');
-		}
+
 		$return['headers'] = $this->objOutput->buildHeader();
 		restore_error_handler();
+
 		return $return;
 	}
 }
