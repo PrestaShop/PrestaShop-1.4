@@ -131,4 +131,22 @@ class SearchControllerCore extends FrontController
 		if (!$this->instantSearch AND !$this->ajaxSearch)
 			Tools::addCSS(_THEME_CSS_DIR_.'product_list.css');
 	}
+	
+	public function productSort()
+	{
+		if (!self::$initialized)
+			$this->init();
+
+		$this->orderBy = Tools::getProductsOrder('by', Tools::getValue('orderby', 'position'));
+		$this->orderWay = Tools::getProductsOrder('way', Tools::getValue('orderway', 'desc'));
+
+		self::$smarty->assign(array(
+			'orderby' => $this->orderBy,
+			'orderway' => $this->orderWay,
+			'orderbydefault' => 'position',
+			'orderwayposition' => $this->orderWay, // Deprecated: orderwayposition
+			'orderwaydefault' => 'desc',
+			'stock_management' => Configuration::get('PS_STOCK_MANAGEMENT')
+		));
+	}
 }
