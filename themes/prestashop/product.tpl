@@ -126,8 +126,8 @@ var fieldRequired = '{l s='Please fill in all required fields, then save your cu
 	<div id="admin-action">
 		<p>{l s='This product is not visible to your customers.'}
 		<input type="hidden" id="admin-action-product-id" value="{$product->id}" />
-		<input type="submit" value="{l s='Publish'}" class="exclusive" onclick="submitPublishProduct('{$base_dir}{$smarty.get.ad}', 0)"/>
-		<input type="submit" value="{l s='Back'}" class="exclusive" onclick="submitPublishProduct('{$base_dir}{$smarty.get.ad}', 1)"/>
+		<input type="submit" value="{l s='Publish'}" class="exclusive" onclick="submitPublishProduct('{$base_dir}{$smarty.get.ad|escape:'htmlall':'UTF-8'}', 0)"/>
+		<input type="submit" value="{l s='Back'}" class="exclusive" onclick="submitPublishProduct('{$base_dir}{$smarty.get.ad|escape:'htmlall':'UTF-8'}', 1)"/>
 		</p>
 		<div class="clear" ></div>
 		<p id="admin-action-result"></p>
