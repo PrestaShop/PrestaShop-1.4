@@ -151,7 +151,7 @@ class StatsForecast extends Module
 				</tr>';
 
 		$visitArray = array();
-		$visits = $db->ExecuteS('SELECT '.$dateFromGAdd.' as fix_date, COUNT(*) as visits FROM '._DB_PREFIX_.'connections c WHERE c.date_add BETWEEN '.ModuleGraph::getDateBetween().' GROUP BY '.$dateFromGAdd, false);
+		$visits = $db->ExecuteS('SELECT '.$dateFromGAdd.' fix_date, COUNT(*) visits FROM `'._DB_PREFIX_.'connections` c WHERE c.`date_add` BETWEEN '.ModuleGraph::getDateBetween().' GROUP BY '.$dateFromGAdd, false);
 		while ($row = $db->nextRow($visits))
 			$visitArray[$row['fix_date']] = (int)$row['visits'];
 
@@ -427,6 +427,7 @@ class StatsForecast extends Module
 	private function getRealCA()
 	{
 		global $cookie;
+
 		$employee = new Employee($cookie->id_employee);
 
 		if ((int)$cookie->stats_id_zone)
@@ -529,5 +530,3 @@ function statsforecast_sort($a, $b)
 		return 0;
 	return ($a['orderSum'] > $b['orderSum']) ? -1 : 1;
 }
-
-?>

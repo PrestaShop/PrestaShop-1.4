@@ -51,7 +51,7 @@ class AdminOrders extends AdminTab
 		$statesArray = array();
 		$states = OrderState::getOrderStates((int)($cookie->id_lang));
 
-		foreach ($states AS $state)
+		foreach ($states as $state)
 			$statesArray[$state['id_order_state']] = $state['name'];
  		$this->fieldsDisplay = array(
 		'id_order' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
@@ -98,7 +98,7 @@ class AdminOrders extends AdminTab
 						'{id_order}' => (int)($order->id)
 					);
 					@Mail::Send((int)$order->id_lang, 'in_transit', Mail::l('Package in transit', (int)$order->id_lang), $templateVars,
-						$customer->email, $customer->firstname.' '.$customer->lastname, NULL, NULL, NULL, NULL,
+						$customer->email, $customer->firstname.' '.$customer->lastname, null, null, null, null,
 						_PS_MAIL_DIR_, true);
 				}
 			}
@@ -187,7 +187,7 @@ class AdminOrders extends AdminTab
 								$varsTpl = array('{lastname}' => $customer->lastname, '{firstname}' => $customer->firstname, '{id_order}' => $message->id_order, '{message}' => (Configuration::get('PS_MAIL_TYPE') == 2 ? $message->message : nl2br2($message->message)));
 								if (@Mail::Send((int)($order->id_lang), 'order_merchant_comment',
 									Mail::l('New message regarding your order', (int)($order->id_lang)), $varsTpl, $customer->email,
-									$customer->firstname.' '.$customer->lastname, NULL, NULL, NULL, NULL, _PS_MAIL_DIR_, true))
+									$customer->firstname.' '.$customer->lastname, null, null, null, null, _PS_MAIL_DIR_, true))
 									Tools::redirectAdmin($currentIndex.'&id_order='.$id_order.'&vieworder&conf=11'.'&token='.$this->token);
 							}
 						}
@@ -200,7 +200,7 @@ class AdminOrders extends AdminTab
 		}
 
 		/* Cancel product from order */
-		elseif (Tools::isSubmit('cancelProduct') AND Validate::isLoadedObject($order = new Order((int)(Tools::getValue('id_order')))))
+		elseif (Tools::isSubmit('cancelProduct') && Validate::isLoadedObject($order = new Order((int)Tools::getValue('id_order'))))
 		{
 			if ($this->tabAccess['delete'] === '1')
 			{
@@ -228,7 +228,7 @@ class AdminOrders extends AdminTab
 						$id_cart = Cart::getCartIdByOrderId($order->id);
 						$customization_quantities = Customization::countQuantityByCart($id_cart);
 
-						foreach ($productList AS $key => $id_order_detail)
+						foreach ($productList as $key => $id_order_detail)
 						{
 							$qtyCancelProduct = abs($qtyList[$key]);
 							if (!$qtyCancelProduct)
@@ -238,13 +238,14 @@ class AdminOrders extends AdminTab
 							$order_detail = new OrderDetail($id_order_detail);
 							$customization_quantity = 0;
 							if (array_key_exists($order_detail->product_id, $customization_quantities) && array_key_exists($order_detail->product_attribute_id, $customization_quantities[$order_detail->product_id]))
-								$customization_quantity =  (int) $customization_quantities[$order_detail->product_id][$order_detail->product_attribute_id];
+								$customization_quantity = (int)$customization_quantities[$order_detail->product_id][$order_detail->product_attribute_id];
 
 							if (($order_detail->product_quantity - $customization_quantity - $order_detail->product_quantity_refunded - $order_detail->product_quantity_return) < $qtyCancelProduct)
 								$this->_errors[] = Tools::displayError('Invalid quantity selected for product.');
 
 						}
 					}
+
 					if ($customizationList)
 					{
 						$customization_quantities = Customization::retrieveQuantitiesFromIds(array_keys($customizationList));
@@ -263,31 +264,33 @@ class AdminOrders extends AdminTab
 					}
 
 					if (!count($this->_errors) && $productList)
-						foreach ($productList AS $key => $id_order_detail)
+						foreach ($productList as $key => $id_order_detail)
 						{
 							$qtyCancelProduct = abs($qtyList[$key]);
 							$orderDetail = new OrderDetail((int)$id_order_detail);
 
 							// Reinject product
-							if (!$order->hasBeenDelivered() OR ($order->hasBeenDelivered() AND Tools::isSubmit('reinjectQuantities')))
+							if (!$order->hasBeenDelivered() || ($order->hasBeenDelivered() && Tools::isSubmit('reinjectQuantities')))
 							{
-								$reinjectableQuantity = (int)($orderDetail->product_quantity) - (int)($orderDetail->product_quantity_reinjected);
+								$reinjectableQuantity = (int)$orderDetail->product_quantity - (int)$orderDetail->product_quantity_reinjected;
+
 								$quantityToReinject = $qtyCancelProduct > $reinjectableQuantity ? $reinjectableQuantity : $qtyCancelProduct;
 								if (!Product::reinjectQuantities($orderDetail, $quantityToReinject))
-									$this->_errors[] = Tools::displayError('Cannot re-stock product').' <span class="bold">'.$orderDetail->product_name.'</span>';
+									$this->_errors[] = Tools::displayError('Cannot re-stock product').' <span class="bold">'.Tools::safeOutput($orderDetail->product_name).'</span>';
 								else
 								{
-									$updProductAttributeID = !empty($orderDetail->product_attribute_id) ? (int)($orderDetail->product_attribute_id) : NULL;
-									$newProductQty = Product::getQuantity((int)($orderDetail->product_id), $updProductAttributeID);
-									$product = get_object_vars(new Product((int)($orderDetail->product_id), false, (int)($cookie->id_lang)));
+									$updProductAttributeID = !empty($orderDetail->product_attribute_id) ? (int)$orderDetail->product_attribute_id : null;
+
+									$newProductQty = Product::getQuantity((int)$orderDetail->product_id, $updProductAttributeID);
+									$product = get_object_vars(new Product((int)$orderDetail->product_id, false, (int)$cookie->id_lang));
 									if (!empty($orderDetail->product_attribute_id))
 									{
-										$updProduct['quantity_attribute'] = (int)($newProductQty);
+										$updProduct['quantity_attribute'] = (int)$newProductQty;
 										$product['quantity_attribute'] = $updProduct['quantity_attribute'];
 									}
 									else
 									{
-										$updProduct['stock_quantity'] = (int)($newProductQty);
+										$updProduct['stock_quantity'] = (int)$newProductQty;
 										$product['stock_quantity'] = $updProduct['stock_quantity'];
 									}
 									Hook::updateQuantity($product, $order);
@@ -296,8 +299,8 @@ class AdminOrders extends AdminTab
 
 							// Delete product
 							if (!$order->deleteProduct($order, $orderDetail, $qtyCancelProduct))
-								$this->_errors[] = Tools::displayError('An error occurred during deletion of the product.').' <span class="bold">'.$orderDetail->product_name.'</span>';
-							Module::hookExec('cancelProduct', array('order' => $order, 'id_order_detail' => $id_order_detail));
+								$this->_errors[] = Tools::displayError('An error occurred during deletion of the product.').' <span class="bold">'.Tools::safeOutput($orderDetail->product_name).'</span>';
+							Module::hookExec('cancelProduct', array('order' => $order, 'id_order_detail' => (int)$id_order_detail));
 						}
 
 					if (!count($this->_errors) && $customizationList)
@@ -305,12 +308,12 @@ class AdminOrders extends AdminTab
 						{
 							$orderDetail = new OrderDetail((int)$id_order_detail);
 							$qtyCancelProduct = abs($customizationQtyList[$id_customization]);
-							if (!$order->deleteCustomization($id_customization, $qtyCancelProduct, $orderDetail))
-								$this->_errors[] = Tools::displayError('An error occurred during deletion of product customization.').' '.$id_customization;
+							if (!$order->deleteCustomization((int)$id_customization, (int)$qtyCancelProduct, $orderDetail))
+								$this->_errors[] = Tools::displayError('An error occurred during deletion of product customization.').' '.(int)$id_customization;
 							elseif (!$order->hasBeenDelivered() || ($order->hasBeenDelivered() && Tools::isSubmit('reinjectQuantities')))
-							{							
-								if (!Product::reinjectQuantities($orderDetail, $qtyCancelProduct))
-									$this->_errors[] = Tools::displayError('Cannot re-stock product').' <span class="bold">'.$orderDetail->product_name.'</span>';
+							{
+								if (!Product::reinjectQuantities($orderDetail, (int)$qtyCancelProduct))
+									$this->_errors[] = Tools::displayError('Cannot re-stock product').' <span class="bold">'.Tools::safeOutput($orderDetail->product_name).'</span>';
 								$product = get_object_vars(new Product((int)$orderDetail->product_id, false, (int)$cookie->id_lang));
 								if (!empty($orderDetail->product_attribute_id))
 								{
@@ -324,19 +327,19 @@ class AdminOrders extends AdminTab
 								}
 								Hook::updateQuantity($product, $order);
 							}
-						}						
+						}
 
 					// E-mail params
-					if ((isset($_POST['generateCreditSlip']) OR isset($_POST['generateDiscount'])) AND !sizeof($this->_errors))
+					if ((isset($_POST['generateCreditSlip']) || isset($_POST['generateDiscount'])) && !count($this->_errors))
 					{
-						$customer = new Customer((int)($order->id_customer));
+						$customer = new Customer((int)$order->id_customer);
 						$params['{lastname}'] = $customer->lastname;
 						$params['{firstname}'] = $customer->firstname;
 						$params['{id_order}'] = $order->id;
 					}
 
 					// Generate credit slip
-					if (isset($_POST['generateCreditSlip']) AND !sizeof($this->_errors))
+					if (isset($_POST['generateCreditSlip']) && !count($this->_errors))
 					{
 						if (!OrderSlip::createOrderSlip($order, $full_product_list, $full_quantity_list, isset($_POST['shippingBack'])))
 							$this->_errors[] = Tools::displayError('Cannot generate credit slip');
@@ -344,13 +347,13 @@ class AdminOrders extends AdminTab
 						{
 							Module::hookExec('orderSlip', array('order' => $order, 'productList' => $full_product_list, 'qtyList' => $full_quantity_list));
 							@Mail::Send((int)$order->id_lang, 'credit_slip', Mail::l('New credit slip regarding your order', (int)$order->id_lang),
-							$params, $customer->email, $customer->firstname.' '.$customer->lastname, NULL, NULL, NULL, NULL,
+							$params, $customer->email, $customer->firstname.' '.$customer->lastname, null, null, null, null,
 							_PS_MAIL_DIR_, true);
 						}
 					}
 
 					// Generate voucher
-					if (isset($_POST['generateDiscount']) AND !sizeof($this->_errors))
+					if (isset($_POST['generateDiscount']) && !count($this->_errors))
 					{
 						if (!$voucher = Discount::createOrderDiscount($order, $full_product_list, $full_quantity_list, $this->l('Credit Slip concerning the order #'), isset($_POST['shippingBack'])))
 							$this->_errors[] = Tools::displayError('Cannot generate voucher');
@@ -360,8 +363,8 @@ class AdminOrders extends AdminTab
 							$params['{voucher_amount}'] = Tools::displayPrice($voucher->value, $currency, false);
 							$params['{voucher_num}'] = $voucher->name;
 							@Mail::Send((int)$order->id_lang, 'voucher', Mail::l('New voucher regarding your order', (int)$order->id_lang),
-							$params, $customer->email, $customer->firstname.' '.$customer->lastname, NULL, NULL, NULL,
-							NULL, _PS_MAIL_DIR_, true);
+							$params, $customer->email, $customer->firstname.' '.$customer->lastname, null, null, null,
+							null, _PS_MAIL_DIR_, true);
 						}
 					}
 				}
@@ -369,16 +372,15 @@ class AdminOrders extends AdminTab
 					$this->_errors[] = Tools::displayError('No product or quantity selected.');
 
 				// Redirect if no errors
-				if (!sizeof($this->_errors))
+				if (!count($this->_errors))
 					Tools::redirectAdmin($currentIndex.'&id_order='.$order->id.'&vieworder&conf=24&token='.$this->token);
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
 		}
 		elseif (isset($_GET['messageReaded']))
-		{
 			Message::markAsReaded((int)($_GET['messageReaded']), (int)($cookie->id_employee));
-		}
+
 		parent::postProcess();
 	}
 
@@ -725,8 +727,7 @@ class AdminOrders extends AdminTab
 		$has_been_delivered = $order->hasBeenDelivered();
 		$has_been_paid = $order->hasBeenPaid();
 
-		echo '
-		<a name="products"><br /></a>
+		echo '<a name="products"><br /></a>
 		<form action="'.$currentIndex.'&submitCreditSlip&vieworder&token='.$this->token.'" method="post" onsubmit="return orderDeleteProduct(\''.$this->l('Cannot return this product').'\', \''.$this->l('Quantity to cancel is greater than quantity available').'\');">
 			<input type="hidden" name="id_order" value="'.$order->id.'" />
 			<fieldset style="width: 868px; ">
@@ -742,24 +743,20 @@ class AdminOrders extends AdminTab
 							'.($has_been_delivered ? '<th style="width: 20px; text-align: center">'.$this->l('Returned').'</th>' : '').'
 							<th style="width: 30px; text-align: center">'.$this->l('Stock').'</th>
 							<th style="width: 90px; text-align: center">'.$this->l('Total').' <sup>*</sup></th>
-							<th style="width: 120px;"><img src="../img/admin/delete.gif" alt="'.$this->l('Products').'" /> '.(($has_been_delivered || $order->hasBeenShipped()) ? $this->l('Return') : ($has_been_paid ? $this->l('Refund') : $this->l('Cancel'))).'</th>';
-		echo '
+							<th style="width: 120px;"><img src="../img/admin/delete.gif" alt="'.$this->l('Products').'" /> '.(($has_been_delivered || $order->hasBeenShipped()) ? $this->l('Return') : ($has_been_paid ? $this->l('Refund') : $this->l('Cancel'))).'</th>
 						</tr>';
-						$tokenCatalog = Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee));
+						$tokenCatalog = Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)$cookie->id_employee);
+
 						foreach ($products as $k => $product)
 						{
-							if ($order->getTaxCalculationMethod() == PS_TAX_EXC)
-								$product_price = $product['product_price'] + $product['ecotax'];
-							else
-								$product_price = $product['product_price_wt'];
-
+							$product_price = $order->getTaxCalculationMethod() == PS_TAX_EXC ? $product['product_price'] + $product['ecotax'] : $product['product_price_wt'];
 							$image = array();
-							if (isset($product['product_attribute_id']) AND (int)($product['product_attribute_id']))
+							if (isset($product['product_attribute_id']) && (int)$product['product_attribute_id'])
 								$image = Db::getInstance()->getRow('
 								SELECT id_image
 								FROM '._DB_PREFIX_.'product_attribute_image
 								WHERE id_product_attribute = '.(int)($product['product_attribute_id']));
-						 	if (!isset($image['id_image']) OR !$image['id_image'])
+						 	if (!isset($image['id_image']) || !$image['id_image'])
 								$image = Db::getInstance()->getRow('
 								SELECT id_image
 								FROM '._DB_PREFIX_.'image
@@ -807,8 +804,7 @@ class AdminOrders extends AdminTab
 										<input type="hidden" name="totalQty" id="totalQty" value="'.(int)($product['product_quantity']).'" />
 										<input type="hidden" name="productName" id="productName" value="'.$product['product_name'].'" />';
 								if ((!$has_been_delivered || Configuration::get('PS_ORDER_RETURN')) && (int)$product['product_quantity_return'] < (int)$product['product_quantity'])
-									echo '
-										<input type="checkbox" name="id_order_detail['.$k.']" id="id_order_detail['.$k.']" value="'.$product['id_order_detail'].'" onchange="setCancelQuantity(this, '.(int)($product['id_order_detail']).', '.(int)($product['product_quantity_in_stock'] - $product['customizationQuantityTotal'] - $product['product_quantity_reinjected']).')" '.(((int)($product['product_quantity_return'] + $product['product_quantity_refunded']) >= (int)($product['product_quantity'])) ? 'disabled="disabled" ' : '').'/>';
+									echo '<input type="checkbox" name="id_order_detail['.$k.']" id="id_order_detail['.$k.']" value="'.$product['id_order_detail'].'" onchange="setCancelQuantity(this, '.(int)($product['id_order_detail']).', '.(int)($product['product_quantity_in_stock'] - $product['customizationQuantityTotal'] - $product['product_quantity_reinjected']).')" '.(((int)($product['product_quantity_return'] + $product['product_quantity_refunded']) >= (int)($product['product_quantity'])) ? 'disabled="disabled" ' : '').'/>';
 
 								if ((int)($product['product_quantity_return'] + $product['product_quantity_refunded']) >= (int)($product['product_quantity']))
 									echo '<input type="hidden" name="cancelQuantity['.$k.']" value="0" />';
@@ -820,13 +816,11 @@ class AdminOrders extends AdminTab
 								</tr>';
 							}
 						}
-					echo '
-					</table>
-					<div style="float:left; width:280px; margin-top:15px;"><sup>*</sup> '.$this->l('According to this customer\'s group, prices are displayed:').' '.($order->getTaxCalculationMethod() == PS_TAX_EXC ? $this->l('tax excluded.') : $this->l('tax included.')).(!Configuration::get('PS_ORDER_RETURN') ? '<br /><br />'.$this->l('Merchandise returns are disabled') : '').'</div>';
+					echo '</table>
+					<div style="float:left; width:370px; margin-top:15px;"><sup>*</sup> '.$this->l('According to this customer\'s group, prices are displayed:').' '.($order->getTaxCalculationMethod() == PS_TAX_EXC ? $this->l('tax excluded.') : $this->l('tax included.')).(!Configuration::get('PS_ORDER_RETURN') ? '<br /><br />'.$this->l('Merchandise returns are disabled') : '').'</div>';
 					if (sizeof($discounts))
 					{
-						echo '
-					<div style="float:right; width:280px; margin-top:15px;">
+						echo '<div style="float:right; width:370px; margin-top:15px;">
 					<table cellspacing="0" cellpadding="0" class="table" style="width:100%;">
 						<tr>
 							<th><img src="../img/admin/coupon.gif" alt="'.$this->l('Discounts').'" />'.$this->l('Discount name').'</th>
@@ -838,31 +832,25 @@ class AdminOrders extends AdminTab
 							<td>'.$discount['name'].'</td>
 							<td align="center">'.($discount['value'] != 0.00 ? '- ' : '').Tools::displayPrice($discount['value'], $currency, false).'</td>
 						</tr>';
-						echo '
-					</table></div>';
+						echo '</table></div>';
 					}
-				echo '
-				</div>';
+				echo '</div>';
 
 				/* Cancel product */
-				echo '
-				<div style="clear:both; height:15px;">&nbsp;</div>
-				<div style="float: right; width: 160px;">';
+				echo '<div style="clear:both; height:15px;">&nbsp;</div><div style="float: right; width: 160px;">';
+
 				if ($has_been_delivered && Configuration::get('PS_ORDER_RETURN'))
-					echo '
-					<input type="checkbox" id="reinjectQuantities" name="reinjectQuantities" class="button" />
+					echo '<input type="checkbox" id="reinjectQuantities" name="reinjectQuantities" class="button" />
 					<label for="reinjectQuantities" style="float:none; font-weight:normal;">'.$this->l('Re-stock products').'</label><br />';
 				if ((!$has_been_delivered && $has_been_paid) || ($has_been_delivered && Configuration::get('PS_ORDER_RETURN')))
-					echo '
-					<input type="checkbox" id="generateCreditSlip" name="generateCreditSlip" class="button" onclick="toogleShippingCost(this)" />&nbsp;<label for="generateCreditSlip" style="float:none; font-weight:normal;">'.$this->l('Generate a credit slip').'</label><br />
+					echo '<input type="checkbox" id="generateCreditSlip" name="generateCreditSlip" class="button" onclick="toogleShippingCost(this)" />&nbsp;<label for="generateCreditSlip" style="float:none; font-weight:normal;">'.$this->l('Generate a credit slip').'</label><br />
 					<input type="checkbox" id="generateDiscount" name="generateDiscount" class="button" onclick="toogleShippingCost(this)" />&nbsp;<label for="generateDiscount" style="float:none; font-weight:normal;">'.$this->l('Generate a voucher').'</label><br />
 					<span id="spanShippingBack" style="display:none;"><input type="checkbox" id="shippingBack" name="shippingBack" class="button" />&nbsp;<label for="shippingBack" style="float:none; font-weight:normal;">'.$this->l('Repay shipping costs').'</label><br /></span>';
 				if (!$has_been_delivered || ($has_been_delivered && Configuration::get('PS_ORDER_RETURN')))
 					echo '
 					<div style="text-align:center; margin-top:5px;"><input type="submit" name="cancelProduct" value="'.($has_been_delivered ? $this->l('Return products') : ($has_been_paid ? $this->l('Refund products') : $this->l('Cancel products'))).'" class="button" style="margin-top:8px;" /></div>';
 				echo '
-				</div>';
-			echo '
+				</div>
 			</fieldset>
 		</form>
 		<div class="clear" style="height:20px;">&nbsp;</div>';
@@ -870,8 +858,7 @@ class AdminOrders extends AdminTab
 		/* Display send a message to customer & returns/credit slip*/
 		$returns = OrderReturn::getOrdersReturn($order->id_customer, $order->id);
 		$slips = OrderSlip::getOrdersSlip($order->id_customer, $order->id);
-		echo '
-		<div style="float: left">
+		echo '<div style="float: left">
 			<form action="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'&token='.$this->token.'" method="post" onsubmit="if (getE(\'visibility\').checked == true) return confirm(\''.$this->l('Do you want to send this message to the customer?', __CLASS__, true, false).'\');">
 			<fieldset style="width: 400px;">
 				<legend style="cursor: pointer;" onclick="$(\'#message\').slideToggle();$(\'#message_m\').slideToggle();return false"><img src="../img/admin/email_edit.gif" /> '.$this->l('New message').'</legend>
@@ -881,8 +868,8 @@ class AdminOrders extends AdminTab
 				<div id="message" style="display: '.(Tools::getValue('message') ? 'block' : 'none').'">
 					<select name="order_message" id="order_message" onchange="orderOverwriteMessage(this, \''.$this->l('Do you want to overwrite your existing message?').'\')">
 						<option value="0" selected="selected">-- '.$this->l('Choose a standard message').' --</option>';
-		$orderMessages = OrderMessage::getOrderMessages((int)($order->id_lang));
-		foreach ($orderMessages AS $orderMessage)
+		$orderMessages = OrderMessage::getOrderMessages((int)$order->id_lang);
+		foreach ($orderMessages as $orderMessage)
 			echo '		<option value="'.htmlentities($orderMessage['message'], ENT_COMPAT, 'UTF-8').'">'.$orderMessage['name'].'</option>';
 		echo '		</select><br /><br />
 					<b>'.$this->l('Display to consumer?').'</b>
@@ -899,8 +886,7 @@ class AdminOrders extends AdminTab
 		/* Display list of messages */
 		if (sizeof($messages))
 		{
-			echo '
-			<br />
+			echo '<br />
 			<fieldset style="width: 400px;">
 			<legend><img src="../img/admin/email.gif" /> '.$this->l('Messages').'</legend>';
 			foreach ($messages as $message)
@@ -911,12 +897,10 @@ class AdminOrders extends AdminTab
 				echo $this->l('At').' <i>'.Tools::displayDate($message['date_add'], (int)($cookie->id_lang), true);
 				echo '</i> '.$this->l('from').' <b>'.(($message['elastname']) ? ($message['efirstname'].' '.$message['elastname']) : ($message['cfirstname'].' '.$message['clastname'])).'</b>';
 				echo ((int)($message['private']) == 1 ? '<span style="color:red; font-weight:bold;">'.$this->l('Private:').'</span>' : '');
-				echo '<p>'.nl2br2($message['message']).'</p>';
-				echo '</div>';
-				echo '<br />';
+				echo '<p>'.nl2br2($message['message']).'</p></div><br />';
 			}
-			echo '<p class="info">'.$this->l('When you read a message, please click on the green check.').'</p>';
-			echo '</fieldset>';
+			echo '<p class="info">'.$this->l('When you read a message, please click on the green check.').'</p>
+			</fieldset>';
 		}
 		echo '</div>';
 
@@ -937,8 +921,7 @@ class AdminOrders extends AdminTab
 		echo '</fieldset>';
 
 		/* Display credit slip */
-		echo '
-				<br />
+		echo '<br />
 				<fieldset style="width: 400px;">
 					<legend><img src="../img/admin/slip.gif" alt="'.$this->l('Credit slip').'" />'.$this->l('Credit slip').'</legend>';
 		if (!sizeof($slips))
@@ -946,20 +929,14 @@ class AdminOrders extends AdminTab
 		else
 			foreach ($slips as $slip)
 				echo '('.Tools::displayDate($slip['date_upd'], $cookie->id_lang).') : <b><a href="pdf.php?id_order_slip='.$slip['id_order_slip'].'">'.$this->l('#').sprintf('%06d', $slip['id_order_slip']).'</a></b><br />';
-		echo '</fieldset>
-		</div>';
-		echo '<div class="clear">&nbsp;</div>';
-		echo '<br /><br /><a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to list').'</a><br />';
+		echo '</fieldset></div>
+		<div class="clear">&nbsp;</div>
+		<br /><br /><a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to list').'</a><br />';
 	}
 
 	public function displayAddressDetail($addressDelivery)
 	{
-		// Allow to add specific rules
-		$patternRules = array(
-			'avoid' => array()
-			//'avoid' => array('address2')
-		);
-		return AddressFormat::generateAddress($addressDelivery, $patternRules, '<br />');
+		return AddressFormat::generateAddress($addressDelivery, array('avoid' => array()), '<br />');
 	}
 
 	public function display()
@@ -970,8 +947,8 @@ class AdminOrders extends AdminTab
 			$this->viewDetails();
 		else
 		{
-			$this->getList((int)($cookie->id_lang), !Tools::getValue($this->table.'Orderby') ? 'date_add' : NULL, !Tools::getValue($this->table.'Orderway') ? 'DESC' : NULL);
-			$currency = new Currency((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
+			$this->getList((int)$cookie->id_lang, !Tools::getValue($this->table.'Orderby') ? 'date_add' : null, !Tools::getValue($this->table.'Orderway') ? 'DESC' : null);
+			$currency = new Currency((int)Configuration::get('PS_CURRENCY_DEFAULT'));
 			$this->displayList();
 			echo '<h2 class="space" style="text-align:right; margin-right:44px;">'.$this->l('Total:').' '.Tools::displayPrice($this->getTotal(), $currency).'</h2>';
 		}
@@ -980,13 +957,13 @@ class AdminOrders extends AdminTab
 	private function getTotal()
 	{
 		$total = 0;
-		foreach($this->_list AS $item)
+		foreach ($this->_list as $item)
 			if ($item['id_currency'] == Configuration::get('PS_CURRENCY_DEFAULT'))
-				$total += (float)($item['total_paid']);
+				$total += (float)$item['total_paid'];
 			else
 			{
-				$currency = new Currency((int)($item['id_currency']));
-				$total += Tools::ps_round((float)($item['total_paid']) / (float)($currency->conversion_rate), 2);
+				$currency = new Currency((int)$item['id_currency']);
+				$total += Tools::ps_round((float)$item['total_paid'] / (float)$currency->conversion_rate, 2);
 			}
 		return $total;
 	}

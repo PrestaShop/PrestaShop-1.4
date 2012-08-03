@@ -2099,7 +2099,7 @@ class ProductCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pa.`id_product` = p.`id_product`)
 		WHERE p.`id_product` = '.(int)($id_product).'
-		'.(isset($id_product_attribute) ? 'AND `id_product_attribute` = '.(int)$id_product_attribute : '').'
+		'.(isset($id_product_attribute) && (int)$id_product_attribute ? 'AND `id_product_attribute` = '.(int)$id_product_attribute : '').'
 		GROUP BY p.`id_product`');
 	}
 
