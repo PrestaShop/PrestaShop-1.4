@@ -449,19 +449,18 @@ class ProductCore extends ObjectModel
 			SELECT cp.`id_product`, cp.`position`, cp.`id_category`
 			FROM `'._DB_PREFIX_.'category_product` cp
 			WHERE cp.`id_category` = '.(int)(Tools::getValue('id_category', 1)).'
-			ORDER BY cp.`position` ASC'
-		))
+			ORDER BY cp.`position` ASC'))
 			return false;
 
-		foreach ($res AS $product)
-			if ((int)($product['id_product']) == (int)($this->id))
+		foreach ($res as $product)
+			if ((int)$product['id_product'] == (int)$this->id)
 				$movedProduct = $product;
 
 		if (!isset($movedProduct) || !isset($position))
 			return false;
 
-		// < and > statements rather than BETWEEN operator
-		// since BETWEEN is treated differently according to databases
+		/* < and > statements rather than BETWEEN operator */
+		/* since BETWEEN is treated differently according to databases */
 		return (Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'category_product`
 			SET `position`= `position` '.($way ? '- 1' : '+ 1').'
@@ -470,7 +469,7 @@ class ProductCore extends ObjectModel
 				? '> '.(int)($movedProduct['position']).' AND `position` <= '.(int)($position)
 				: '< '.(int)($movedProduct['position']).' AND `position` >= '.(int)($position)).'
 			AND `id_category`='.(int)($movedProduct['id_category']))
-		AND Db::getInstance()->Execute('
+		&& Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'category_product`
 			SET `position` = '.(int)($position).'
 			WHERE `id_product` = '.(int)($movedProduct['id_product']).'

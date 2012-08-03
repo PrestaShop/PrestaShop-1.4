@@ -53,15 +53,15 @@
 				{/if}
 				<br /><br />
 
-				<div style="width: 136px; height: 165px; float: left; padding-top:40px; padding-right: 20px; border-right: 1px solid #DDD;">
+				<div style="width: 136px; height: 145px; float: left; padding-top:40px; padding-right: 20px; border-right: 1px solid #DDD;">
 					<img src="{$module_dir}logoa.gif" alt="secure payment" />
 				</div>
 
 				<input type="hidden" name="x_invoice_num" value="{$x_invoice_num}" />
 
-				<label style="margin-top: 4px; margin-left: 40px;display: block;width: 90px;float: left;">{l s='Full name' mod='authorizeaim'}</label> <input type="text" name="name" id="fullname" size="30" maxlength="25S" /><img src="{$module_dir}secure.png" alt="" style="margin-left: 5px;" /><br /><br />
+				<label style="margin-top: 4px; margin-left: 35px;display: block;width: 90px;float: left;">{l s='Full name' mod='authorizeaim'}</label> <input type="text" name="name" id="fullname" size="30" maxlength="25S" /><img src="{$module_dir}secure.png" alt="" style="margin-left: 5px;" /><br /><br />
 
-				<label style="margin-top: 4px; margin-left: 40px;display: block;width: 90px;float: left;">{l s='Card Type' mod='authorizeaim'}</label>
+				<label style="margin-top: 4px; margin-left: 35px; display: block;width: 90px;float: left;">{l s='Card Type' mod='authorizeaim'}</label>
 				<select id="cardType">
 					{if $cards.ax == 1}<option value="AmEx">American Express</option>{/if}
 					{if $cards.visa == 1}<option value="Visa">Visa</option>{/if}
@@ -70,8 +70,8 @@
 				</select>
 				<img src="{$module_dir}secure.png" alt="" style="margin-left: 5px;" /><br /><br />
 
-				<label style="margin-top: 4px; margin-left: 40px;display: block;width: 90px;float: left;">{l s='Card number' mod='authorizeaim'}</label> <input type="text" name="x_card_num" id="cardnum" size="30" maxlength="16" autocomplete="Off" /><img src="{$module_dir}secure.png" alt="" style="margin-left: 5px;" /><br /><br />
-				<label style="margin-top: 4px; margin-left: 40px;display: block;width: 90px;float: left;">{l s='Expiration date' mod='authorizeaim'}</label>
+				<label style="margin-top: 4px; margin-left: 35px; display: block; width: 90px; float: left;">{l s='Card number' mod='authorizeaim'}</label> <input type="text" name="x_card_num" id="cardnum" size="30" maxlength="16" autocomplete="Off" /><img src="{$module_dir}secure.png" alt="" style="margin-left: 5px;" /><br /><br />
+				<label style="margin-top: 4px; margin-left: 35px; display: block; width: 90px; float: left;">{l s='Expiration date' mod='authorizeaim'}</label>
 				<select id="x_exp_date_m" name="x_exp_date_m" style="width:60px;">{section name=date_m start=01 loop=13}
 					<option value="{$smarty.section.date_m.index}">{$smarty.section.date_m.index}</option>{/section}
 				</select>
@@ -80,9 +80,10 @@
 					<option value="{$smarty.section.date_y.index}">20{$smarty.section.date_y.index}</option>{/section}
 				</select>
 				<img src="{$module_dir}secure.png" alt="" style="margin-left: 5px;" /><br /><br />
-				<label style="margin-top: 4px; margin-left: 40px;display: block;width: 90px;float: left;">{l s='CVV' mod='authorizeaim'}</label> <input type="text" name="x_card_code" id="x_card_code" size="4" maxlength="4" /><img src="{$module_dir}secure.png" alt="" style="margin-left: 5px;"/> <img src="{$module_dir}help.png" id="cvv_help" title="{l s='the 3 last digits on the back of your credit card' mod='authorizeaim'}" alt="" /><br /><br />
+				<label style="margin-top: 4px; margin-left: 35px; display: block; width: 90px; float: left;">{l s='CVV' mod='authorizeaim'}</label> <input type="text" name="x_card_code" id="x_card_code" size="4" maxlength="4" /><img src="{$module_dir}secure.png" alt="" style="margin-left: 5px;"/> <img src="{$module_dir}help.png" id="cvv_help" title="{l s='the 3 last digits on the back of your credit card' mod='authorizeaim'}" alt="" /><br /><br />
 			<img src="{$module_dir}cvv.png" id="cvv_help_img" alt=""style="display: none;margin-left: 211px;" />
-				<input type="button" id="asubmit" value="{l s='Validate order' mod='authorizeaim'}" style="margin-left: 129px; padding-left: 25px; padding-right: 25px;" class="button" />
+				<input type="button" id="asubmit" value="{l s='Validate order' mod='authorizeaim'}" style="margin-left: 129px; padding-left: 25px; padding-right: 25px; float: left;" class="button" />
+				<br class="clear" />
 			</div>
 		</span>
 	</form>

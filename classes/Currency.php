@@ -27,54 +27,52 @@
 
 class CurrencyCore extends ObjectModel
 {
-	public 		$id;
+	public $id;
 
 	/** @var string Name */
-	public 		$name;
+	public $name;
 
 	/** @var string Iso code */
-	public 		$iso_code;
+	public $iso_code;
 
 	/** @var string Iso code numeric */
-	public 		$iso_code_num;
+	public $iso_code_num;
 
 	/** @var string Symbol for short display */
-	public 		$sign;
+	public $sign;
 
 	/** @var bool used for displaying blank between sign and price */
-	public		$blank;
+	public $blank;
 
 	/** @var string Conversion rate from euros */
-	public 		$conversion_rate;
+	public $conversion_rate;
 
 	/** @var boolean True if currency has been deleted (staying in database as deleted) */
-	public 		$deleted = 0;
+	public $deleted = 0;
 
 	/** @var int ID used for displaying prices */
-	public		$format;
+	public $format;
 
 	/** @var bool Display decimals on prices */
-	public		$decimals;
+	public $decimals;
 
 	/** @var bool active */
-	public		$active;
+	public $active;
 
- 	protected 	$fieldsRequired = array('name', 'iso_code', 'sign', 'conversion_rate', 'format', 'decimals');
- 	protected 	$fieldsSize = array('name' => 32, 'iso_code' => 3, 'iso_code_num' => 3, 'sign' => 8);
- 	protected 	$fieldsValidate = array('name' => 'isGenericName', 'iso_code' => 'isLanguageIsoCode', 'iso_code_num' => 'isNumericIsoCode', 'blank' => 'isInt', 'sign' => 'isGenericName',
-		'format' => 'isUnsignedId', 'decimals' => 'isBool', 'conversion_rate' => 'isFloat', 'deleted' => 'isBool', 'active' => 'isBool');
+ 	protected $fieldsRequired = array('name', 'iso_code', 'sign', 'conversion_rate', 'format', 'decimals');
+ 	protected $fieldsSize = array('name' => 32, 'iso_code' => 3, 'iso_code_num' => 3, 'sign' => 8);
+ 	protected $fieldsValidate = array('name' => 'isGenericName', 'iso_code' => 'isLanguageIsoCode', 'iso_code_num' => 'isNumericIsoCode', 'blank' => 'isInt', 'sign' => 'isGenericName',
+																'format' => 'isUnsignedId', 'decimals' => 'isBool', 'conversion_rate' => 'isFloat', 'deleted' => 'isBool', 'active' => 'isBool');
 
-	protected 	$table = 'currency';
-	protected 	$identifier = 'id_currency';
+	protected $table = 'currency';
+	protected $identifier = 'id_currency';
 
 	/** @var Currency Current currency */
-	static protected	$current = NULL;
+	static protected $current = null;
 	/** @var array Currency cache */
-	static protected	$currencies = array();
+	static protected $currencies = array();
 
-	protected	$webserviceParameters = array(
-		'objectsNodeName' => 'currencies',
-	);
+	protected	$webserviceParameters = array('objectsNodeName' => 'currencies');
 
 
 	/**
@@ -94,19 +92,11 @@ class CurrencyCore extends ObjectModel
 	 * @param int|string $iso_code int for iso code number string for iso code
 	 * @return boolean
 	 */
-	public static function exists ($iso_code)
+	public static function exists($iso_code)
 	{
-		if (is_int($iso_code))
-			$id_currency_exists = Currency::getIdByIsoCodeNum($iso_code);
-		else
-			$id_currency_exists = Currency::getIdByIsoCode($iso_code);
-
-		if ($id_currency_exists){
-			return true;
-		} else {
-			return false;
-		}
+		return (bool)(is_int($iso_code) ? Currency::getIdByIsoCodeNum((int)$iso_code) : Currency::getIdByIsoCode($iso_code));
 	}
+
 	public function getFields()
 	{
 		parent::validateFields();
@@ -127,16 +117,19 @@ class CurrencyCore extends ObjectModel
 
 	public function deleteSelection($selection)
 	{
-		if (!is_array($selection) OR !Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
+		if (!is_array($selection) || !Validate::isTableOrIdentifier($this->identifier) || !Validate::isTableOrIdentifier($this->table))
 			die(Tools::displayError());
+
 		foreach ($selection AS $id)
 		{
 			$obj = new Currency((int)($id));
 			$res[$id] = $obj->delete();
 		}
-		foreach ($res AS $value)
+
+		foreach ($res as $value)
 			if (!$value)
 				return false;
+
 		return true;
 	}
 
@@ -150,37 +143,36 @@ class CurrencyCore extends ObjectModel
 			Configuration::updateValue('PS_CURRENCY_DEFAULT', $result['id_currency']);
 		}
 		$this->deleted = 1;
+
 		return $this->update();
 	}
 
 	/**
-	  * Return formated sign
-	  *
-	  * @param string $side left or right
-	  * @return string formated sign
-	  */
+	 * Return formated sign
+	 *
+	 * @param string $side left or right
+	 * @return string formated sign
+	 */
 	public function getSign($side=NULL)
 	{
 		if (!$side)
 			return $this->sign;
-		$formated_strings = array(
-			'left' => $this->sign.' ',
-			'right' => ' '.$this->sign
-		);
+
+		$formated_strings = array('left' => $this->sign.' ', 'right' => ' '.$this->sign);
 		$formats = array(
 			1 => array('left' => &$formated_strings['left'], 'right' => ''),
 			2 => array('left' => '', 'right' => &$formated_strings['right']),
 			3 => array('left' => &$formated_strings['left'], 'right' => ''),
 			4 => array('left' => '', 'right' => &$formated_strings['right']),
 		);
-		return ($formats[$this->format][$side]);
+		return $formats[$this->format][$side];
 	}
 
 	/**
-	  * Return available currencies
-	  *
-	  * @return array Currencies
-	  */
+	 * Return available currencies
+	 *
+	 * @return array Currencies
+	 */
 	public static function getCurrencies($object = false, $active = 1)
 	{
 		$tab = Db::getInstance()->ExecuteS('
@@ -189,9 +181,11 @@ class CurrencyCore extends ObjectModel
 		WHERE `deleted` = 0
 		'.($active == 1 ? 'AND `active` = 1' : '').'
 		ORDER BY `name` ASC');
+
 		if ($object)
 			foreach ($tab as $key => $currency)
 				$tab[$key] = Currency::getCurrencyInstance($currency['id_currency']);
+
 		return $tab;
 	}
 
@@ -200,7 +194,7 @@ class CurrencyCore extends ObjectModel
 		return Db::getInstance()->getRow('
 		SELECT mc.*
 		FROM `'._DB_PREFIX_.'module_currency` mc
-		WHERE mc.`id_module` = '.(int)($id_module));
+		WHERE mc.`id_module` = '.(int)$id_module);
 	}
 
 	public static function getPaymentCurrencies($id_module)
@@ -210,8 +204,8 @@ class CurrencyCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'module_currency` mc
 		LEFT JOIN `'._DB_PREFIX_.'currency` c ON c.`id_currency` = mc.`id_currency`
 		WHERE c.`deleted` = 0
-		AND mc.`id_module` = '.(int)($id_module).'
-		AND c.`active` = 1 
+		AND mc.`id_module` = '.(int)$id_module.'
+		AND c.`active` = 1
 		ORDER BY c.`name` ASC');
 	}
 
@@ -241,6 +235,7 @@ class CurrencyCore extends ObjectModel
 		AND `iso_code` = \''.pSQL($iso_code).'\'');
 		return $result['id_currency'];
 	}
+
 	public static function getIdByIsoCodeNum($iso_code)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
@@ -252,20 +247,20 @@ class CurrencyCore extends ObjectModel
 	}
 
 	/**
-	* Refresh the currency conversion rate
-	* The XML file define conversion rate for each from a default currency ($isoCodeSource).
-	*
-	* @param $data XML content which contains all the conversion rates
-	* @param $isoCodeSource The default currency used in the XML file
-	* @param $defaultCurrency The default currency object
-	*/
+	 * Refresh the currency conversion rate
+	 * The XML file define conversion rate for each from a default currency ($isoCodeSource).
+	 *
+	 * @param $data XML content which contains all the conversion rates
+	 * @param $isoCodeSource The default currency used in the XML file
+	 * @param $defaultCurrency The default currency object
+	 */
 	public function refreshCurrency($data, $isoCodeSource, $defaultCurrency)
 	{
 		// fetch the conversion rate of the default currency
 		$conversion_rate = 1;
 		if ($defaultCurrency->iso_code != $isoCodeSource)
 		{
-			foreach ($data->currency AS $currency)
+			foreach ($data->currency as $currency)
 				if ($currency['iso_code'] == $defaultCurrency->iso_code)
 				{
 					$conversion_rate = round((float)$currency['rate'], 6);
@@ -281,7 +276,7 @@ class CurrencyCore extends ObjectModel
 				$rate = 1;
 			else
 			{
-				foreach ($data->currency AS $obj)
+				foreach ($data->currency as $obj)
 					if ($this->iso_code == strval($obj['iso_code']))
 					{
 						$rate = (float) $obj['rate'];
@@ -295,8 +290,8 @@ class CurrencyCore extends ObjectModel
 	}
 
 	/**
- 	* @deprecated
-	**/
+	 * @deprecated
+	 **/
 	public static function refreshCurrenciesGetDefault($data, $isoCodeSource, $idCurrency)
 	{
 		Tools::displayAsDeprecated();
@@ -315,6 +310,7 @@ class CurrencyCore extends ObjectModel
 	public static function getDefaultCurrency()
 	{
 		$id_currency = (int)Configuration::get('PS_CURRENCY_DEFAULT');
+
 		if ($id_currency == 0)
 			return false;
 
@@ -336,7 +332,6 @@ class CurrencyCore extends ObjectModel
 		$currencies = self::getCurrencies(true);
 		foreach ($currencies as $currency)
 			$currency->refreshCurrency($feed->list, $isoCodeSource, $default_currency);
-
 	}
 
 	public static function getCurrent()
@@ -360,4 +355,3 @@ class CurrencyCore extends ObjectModel
 		return self::$currencies[(int)$id];
 	}
 }
-

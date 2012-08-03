@@ -97,9 +97,9 @@ abstract class PaymentModuleCore extends Module
 		if (!$this->active)
 			die(Tools::displayError());
 
-		if (Validate::isLoadedObject($cart) AND $cart->OrderExists() == false)
+		if (Validate::isLoadedObject($cart) && $cart->OrderExists() == false)
 		{
-			if ($secure_key !== false AND $secure_key != $cart->secure_key)
+			if ($secure_key !== false && $secure_key != $cart->secure_key)
 				die(Tools::displayError());
 
 			// Copying data from cart

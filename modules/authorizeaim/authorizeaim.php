@@ -34,7 +34,7 @@ class authorizeAIM extends PaymentModule
 	{
 		$this->name = 'authorizeaim';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.4.2';
+		$this->version = '1.4.3';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
@@ -132,8 +132,7 @@ class authorizeAIM extends PaymentModule
 		// For Hold for Review
 		$orderStates = OrderState::getOrderStates((int)$this->context->cookie->id_lang);
 
-		$html .= '
-		<h2>'.$this->displayName.'</h2>
+		$html .= '<h2>'.$this->displayName.'</h2>
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Help').'</legend>
 			<a href="http://api.prestashop.com/partner/authorize.net/" target="_blank" style="float: right;"><img src="../modules/'.$this->name.'/logo_authorize.png" alt="" /></a>
 			<h3>'.$this->l('In your PrestaShop admin panel').'</h3>
@@ -177,28 +176,27 @@ class authorizeAIM extends PaymentModule
 				<option value="'.(int)$os['id_order_state'].'"'.((int)$os['id_order_state'] == (int)Configuration::get('AUTHORIZE_AIM_HOLD_REVIEW_OS') ? ' selected' : '').'>'.
 			Tools::stripslashes($os['name']).
 			'</option>'."\n";
-		$html .= '
-				</select></div>
-
-
+		return $html.'</select></div>
 				<br /><center><input type="submit" name="submitModule" value="'.$this->l('Update settings').'" class="button" /></center>
 			</fieldset>
 		</form>';
-
-		return $html;
 	}
 
 	public function hookPayment($params)
 	{
+		$currency = Currency::getCurrencyInstance($this->context->cookie->id_currency);
+		if (!Validate::isLoadedObject($currency) || $currency->iso_code != 'USD')
+			return false;
+
 		if (Configuration::get('PS_SSL_ENABLED') || (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) != 'off'))
 		{
 			$isFailed = Tools::getValue('aimerror');
 
 			$cards = array();
-			$cards['visa'] = Configuration::get('AUTHORIZE_AIM_CARD_VISA') == 'on' ? 1 : 0;
-			$cards['mastercard'] = Configuration::get('AUTHORIZE_AIM_CARD_MASTERCARD') == 'on' ? 1 : 0;
-			$cards['discover'] = Configuration::get('AUTHORIZE_AIM_CARD_DISCOVER') == 'on' ? 1 : 0;
-			$cards['ax'] = Configuration::get('AUTHORIZE_AIM_CARD_AX') == 'on' ? 1 : 0;
+			$cards['visa'] = Configuration::get('AUTHORIZE_AIM_CARD_VISA') == 'on';
+			$cards['mastercard'] = Configuration::get('AUTHORIZE_AIM_CARD_MASTERCARD') == 'on';
+			$cards['discover'] = Configuration::get('AUTHORIZE_AIM_CARD_DISCOVER') == 'on';
+			$cards['ax'] = Configuration::get('AUTHORIZE_AIM_CARD_AX') == 'on';
 
 			if (method_exists('Tools', 'getShopDomainSsl'))
 				$url = 'https://'.Tools::getShopDomainSsl().__PS_BASE_URI__.'/modules/'.$this->name.'/';
