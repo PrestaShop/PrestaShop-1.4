@@ -517,12 +517,14 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 			// Get available image ids
 			$available_image_ids = array();
 			
-			// New Behavior
-			$languages = Language::getLanguages();
-			foreach ($languages as $language)
-				foreach (Image::getImages($language['id_lang'], $object_id) as $image)
+			$images = Db::getInstance()->ExecuteS('
+				SELECT `id_image`, `id_product`
+				FROM `'._DB_PREFIX_.'image`
+				WHERE id_product = '.(int)$object_id.'
+				ORDER BY `position` ASC');
+			if ($images)
+				foreach ($images as $image)
 					$available_image_ids[] = $image['id_image'];
-			
 			
 			// Old Behavior
 			$nodes = scandir($directory);
@@ -534,6 +536,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 					if (isset($matches[1]))
 						$available_image_ids[] = $matches[1];
 				}
+			$available_image_ids = array_unique($available_image_ids);
 			
 			// If an image id is specified
 			if ($this->wsObject->urlSegment[3] != '')
