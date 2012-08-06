@@ -27,6 +27,7 @@ class Wexpay extends PaymentModule
 		$this->tab = 'payments_gateways';
 		$this->version = '2.1';
 		$this->module_key = '5299896ce976397cf90610f8073eb6de';
+		$this->limited_countries = array('fr');
 
 		$config = Configuration::getMultiple(array('WEXPAY_MERCHANT_ID'));
 		if (isset($config['WEXPAY_MERCHANT_ID']))

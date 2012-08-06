@@ -20,7 +20,7 @@
 *
 *  @author PrestaShop SA <contact@prestashop.com>
 *  @copyright  2007-2011 PrestaShop SA
-*  @version  Release: $Revision$
+*  @version  Release: $Revision: 11550 $
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -28,24 +28,22 @@
 if (!defined('_CAN_LOAD_FILES_'))
 	exit;
 
-require_once(_PS_MODULE_DIR_.'kiala/classes/KialaRequest.php');
-require_once(_PS_MODULE_DIR_.'kiala/classes/ExportFormat.php');
-require_once(_PS_MODULE_DIR_.'kiala/classes/KialaOrder.php');
-require_once(_PS_MODULE_DIR_.'kiala/classes/KialaCountry.php');
+require_once(_PS_MODULE_DIR_.'kialasmall/classes/SmKialaRequest.php');
+require_once(_PS_MODULE_DIR_.'kialasmall/classes/SmExportFormat.php');
+require_once(_PS_MODULE_DIR_.'kialasmall/classes/SmKialaOrder.php');
+require_once(_PS_MODULE_DIR_.'kialasmall/classes/SmKialaCountry.php');
 
-class Kiala extends Module
+class Kialasmall extends Module
 {
 	protected $default_preparation_delay = 2;
-	protected $countries = array('BE', 'ES', 'FR', 'NL', 'GB');
+	protected $countries = array('BE', 'ES', 'NL');
 	/**
 	 * @var bool $compatibility_mode set to true if for version 1.4
 	 */
 	protected $compatibility_mode;
-	
-	protected $account_request_form_errors = array();
 
 	protected $_config = array(
-		'name' => 'Kiala',
+		'name' => 'kialasmall',
 		'id_tax' => 1,
 		'active' => true,
 		'deleted' => 0,
@@ -57,41 +55,47 @@ class Kiala extends Module
 						 'es' => 'Entrega en el punto Kiala'),
 		'is_module' => true,
 		'shipping_external'=> true,
-		'external_module_name'=> 'kiala',
+		'external_module_name'=> 'kialasmall',
 		'need_range' => true,
 		'price' => 2.99,
 		);
 
 	public function __construct()
 	{
-		$this->name		= 'kiala';
-		$this->author = 'PrestaShop';
+		$this->name		= 'kialasmall';
 		$this->tab		= 'shipping_logistics';
-		$this->version	= '1.3.1';
-		$this->module_key = '9d77262bd27f8a9340855def9c137832';
+		$this->version	= '1.4';
 		$this->compatibility_mode = version_compare(_PS_VERSION_, '1.5.0.0', '<');
-		$this->limited_countries = array('es', 'fr');
+		$this->author = 'PrestaShop';
+		$this->need_instance = false;
+		$this->module_key = '25f29a96e4beacf0477f93993aa86087';
+		$this->limited_countries = array('es');
 
 		parent::__construct();
 
 		$this->page = basename(__FILE__, '.php');
-		$this->displayName = $this->l('Kiala Comprehensive datafile integration – Kiala contract holders only');
+		$this->displayName = $this->l('Kiala Light webservice integration');
 		$this->description = $this->l('Offer delivery choice and savings to your customers. Activate the Kiala collection Point delivery option.');
 		$this->register_link = 'http://www.kiala.com';
+		$this->ws_url = 'http://packandship-ws.kiala.com/psws/order?wsdl';
 	}
 
-	public function  install()
+	public function install()
 	{
-		global $defaultCountry;
-
-		if (!parent::install() OR
-			!$this->installExternalCarrier($this->_config) OR
-			!Configuration::updateValue('EXTERNAL_CARRIER_OVERCOST', 5) OR
-			!$this->registerHook('updateCarrier') OR
-			!$this->registerHook('extraCarrier') OR
-			!$this->registerHook('newOrder') OR
-			!$this->registerHook('processCarrier') OR
-			!$this->registerHook('orderDetailDisplayed'))
+		if (!parent::install() ||
+			!$this->installExternalCarrier($this->_config) ||
+			!Configuration::updateValue('EXTERNAL_CARRIER_OVERCOST', 5) ||
+			!$this->registerHook('updateCarrier') ||
+			!$this->registerHook('extraCarrier') ||
+			!$this->registerHook('newOrder') ||
+			!$this->registerHook('processCarrier') ||
+			!$this->registerHook('orderDetailDisplayed') ||
+			!$this->registerHook('updateOrderStatus') ||
+			!Configuration::updateValue('KIALASMALL_VERSION', $this->version) ||
+			!Configuration::updateValue('KIALASMALL_SECURITY_TOKEN', Tools::passwdGen(30)) ||
+			!Configuration::updateValue('KIALASMALL_WS_URL', $this->ws_url) ||
+			!Configuration::updateValue('KIALASMALL_SEARCH_BY', 'order')
+		)
 			return false;
 
 		// Install SQL
@@ -106,52 +110,31 @@ class Kiala extends Module
 			$id_country = Country::getByIso($iso_code);
 			if ($id_country)
 			{
-				$kiala_country = new KialaCountry();
+				$kiala_country = new SmKialaCountry();
 				$kiala_country->id_country = $id_country;
 				$kiala_country->preparation_delay = $this->default_preparation_delay;
 				$kiala_country->active = 0;
 				// Is this the merchant home country?
-				if ($id_country == Configuration::get('PS_COUNTRY_DEFAULT'))
+				if ($id_country == Country::getByIso('ES'))
+				{
 					$kiala_country->pickup_country = 1;
+					$kiala_country->dspid = '34600160';
+				}
 				$kiala_country->save();
 			}
-		}
-
-		$result = Db::getInstance()->getRow('
-			SELECT `id_tab`
-			FROM `'._DB_PREFIX_.'tab`
-			WHERE `class_name` = "AdminKiala"');
-
-		if (!$result)
-		{
-			/*tab install */
-			$tab = new Tab();
-			$tab->class_name = 'AdminKiala';
-			$tab->id_parent = (int)Tab::getIdFromClassName('AdminOrders');
-			$tab->module = 'kiala';
-			$tab->name[(int)Configuration::get('PS_LANG_DEFAULT')] = $this->l('Kiala');
-			$tab->add();
-			@copy(_PS_MODULE_DIR_.'kiala/logo.gif', _PS_ADMIN_IMG_.'/AdminKiala.gif');
-		}
-
-		// If module isn't installed, set default values
-		if (!Configuration::get('KIALA_VERSION'))
-		{
-			Configuration::updateValue('KIALA_VERSION', $this->version);
-			Configuration::updateValue('KIALA_EXPORT_FOLDER', str_replace('\\', '/', _PS_MODULE_DIR_).'kiala/export/');
-			Configuration::updateValue('KIALA_EXPORT_SINGLE', '1');
-			Configuration::updateValue('KIALA_SECURITY_TOKEN', Tools::passwdGen(30));
-			Configuration::updateValue('KIALA_SEARCH_BY', 'order');
 		}
 
 		return true;
 	}
 
+	/*
+	 * Generate configuration page
+	 */
 	public function getContent()
 	{
 		global $cookie, $currentIndex;
 
-		$this->_html .= '<h2>' . $this->l('Kiala Comprehensive datafile integration – Kiala contract holders only').'</h2>';
+		$this->_html .= '<h2>' . $this->l('Kiala Light webservice integration').'</h2>';
 
 		// Checking Extension
 		if (!extension_loaded('curl') || !ini_get('allow_url_fopen'))
@@ -163,84 +146,35 @@ class Kiala extends Module
 			if (!ini_get('allow_url_fopen'))
 				return $this->_html.$this->displayError($this->l('You must enable allow_url_fopen option on your server if you want to use this module.'));
 		}
+        if (!extension_loaded('soap'))
+            return $this->_html.$this->displayError($this->l('You must enable SOAP extension on your server if you want to use this module.'));
 
 		// Only one Kiala module can be active at any time
-		$kiala_small = Module::getInstanceByName('kialasmall');
-		if (Validate::isLoadedObject($kiala_small) && $kiala_small->active)
+		$kiala = Module::getInstanceByName('kiala');
+		if (Validate::isLoadedObject($kiala) && $kiala->active)
 		{
 			$this->active = false;
-			return $this->_html.$this->displayError($this->l('You must deactivate the Kiala Small module before you can configure this module.'));
+			return $this->_html.$this->displayError($this->l('You must deactivate the Kiala module before you can configure this module.'));
 		}
 
 		// Process POST & GET
 		$this->_postProcess();
-		
-		if (Tools::isSubmit('editCountry') && Tools::getValue('id_kiala_country'))
+
+		if (Tools::isSubmit('editCountry') && Tools::getValue('id_sm_kiala_country'))
 		{
-			$this->_html .= $this->_displayEditCountry(Tools::getValue('id_kiala_country'));
+			$this->_html .= $this->_displayEditCountry(Tools::getValue('id_sm_kiala_country'));
 			return $this->_html;
 		}
 
 		$this->_html .= '<a href="'.$this->register_link.'"><img src="'.$this->_path.'big_kiala.png"></a><br /><br />';
-		
-		$this->_displayGeneralInformation();
+
 		$this->_displayStatus();
 		$this->_displayDescription();
-		$countries = KialaCountry::getKialaCountries();
+		$countries = SmKialaCountry::getKialaCountries();
 		$this->_displayCountries($countries, $cookie->id_lang);
 		$this->_displayForm();
 
 		return $this->_html;
-	}
-
-	private function processAccountRequestForm()
-	{
-		if (!Tools::isSubmit('submit_account_request'))
-			return false;
-		
-		// Check inputs validity
-		if (Tools::isEmpty(Tools::getValue('lastname')) || !Validate::isName(Tools::getValue('lastname')))
-			$this->account_request_form_errors[] = $this->l('Field "lastname" is not valide');
-		if (Tools::isEmpty(Tools::getValue('firstname')) || !Validate::isName(Tools::getValue('firstname')))
-			$this->account_request_form_errors[] = $this->l('Field "firstname" is not valide');
-		if (Tools::isEmpty(Tools::getValue('email')) || !Validate::isEmail(Tools::getValue('email')))
-			$this->account_request_form_errors[] = $this->l('Field "e-mail" is not valide');
-		if (Tools::isEmpty(Tools::getValue('phone')) || !Validate::isPhoneNumber(Tools::getValue('phone')))
-			$this->account_request_form_errors[] = $this->l('Field "phone number" is not valide');
-		if (Tools::isEmpty(Tools::getValue('shop_name')) || !Validate::isGenericName(Tools::getValue('shop_name')))
-			$this->account_request_form_errors[] = $this->l('Field "shop name" is not valide');
-		if (!is_numeric(Tools::getValue('packages_per_year')) || Tools::getValue('packages_per_year') <= 0)
-			$this->account_request_form_errors[] = $this->l('Field "packages per year" is not valide');
-		if (!is_numeric(Tools::getValue('package_weight')) || Tools::getValue('package_weight') <= 0)
-			$this->account_request_form_errors[] = $this->l('Field "average weight of a package" is not valide');
-		
-		// Validation error dont send mail
-		if (count($this->account_request_form_errors))
-			return false;
-		
-		return true;
-	}
-	
-	private function _displayGeneralInformation()
-	{
-	$this->_html .= '<fieldset>
-		<legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('General Information').'</legend>';
-		$this->_html .= '<div style="float: left; width: 80%">';
-		$this->_html .= '<p>'
-			.$this->l('Kiala advanced module allows you to offer the option package delivery in Kiala Point as an alternative to home delivery.').'
-			'.$this->l('Thus, you can offer a choice of extra delivery to your customers.').'
-			</p><p>
-			'.$this->l('Package delivery via Kiala is generally 10-20% cheaper than home delivery.').'
-			'.$this->l('Kiala is leader in Europe of networks relay points, the latter being managed by a dedicated technology platform for delivering packages to end consumers and mobile professionals.').'
-			</p><p>
-			'.$this->l('The 7000 Kiala collecting points are local shops (newsstands, gas stations etc..) where people can recover, pay and / or return their parcels quickly, when it suits them the best.').'
-			</p><p>
-			'.$this->l('More information about Kiala:').'
-			<br />
-			<a href="http://www.prestashop.com/fr/partenaires/livraison/kiala">http://www.prestashop.com/fr/partenaires/livraison/kiala</a>
-			</p>';
-		$this->_html .= '</fieldset><div class="clear">&nbsp;</div>';
-
 	}
 
 	/**
@@ -252,100 +186,29 @@ class Kiala extends Module
 		// Test alert
 		$alert = array();
 
-		if (!KialaCountry::getKialaCountries(true))
+		if (!SmKialaCountry::getKialaCountries(true))
 			$alert['registration'] = 1;
 		if (!ini_get('allow_url_fopen'))
 			$alert['allowurlfopen'] = 1;
 		if (!extension_loaded('curl'))
 			$alert['curl'] = 1;
-		if (!is_dir(Configuration::get('KIALA_EXPORT_FOLDER')))
-			$alert['folder'] = 1;
-		if (!Configuration::get('KIALA_REQUEST_SENT'))
-			$alert['request_sent'] = 1;
 
 		// Displaying page
-		$this->_html .= '<fieldset>
-		<legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('Kiala Module Status').'</legend>';
+		$this->_html .= '<fieldset>	<legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('Kiala Module Status').'</legend>';
 		$this->_html .= '<div style="float: left; width: 80%">';
 		if (!count($alert))
-		{
 			$this->_html .= '<img src="../modules/kiala/valid.png" /><strong>'.$this->l('Kiala Module is configured and online!').'</strong>';
-			$this->_html .= '<br /><br /><a style="text-decoration:underline" href="index.php?tab=AdminKiala&token='.Tools::safeOutput(Tools::getAdminToken('AdminKiala'.(int)Tab::getIdFromClassName('AdminKiala').(int)$cookie->id_employee)).'">';
-			$this->_html .=	$this->l('Click here to review and export orders shipped with Kiala').'</a><br /><br />';
-			$this->_html .= '<div class="hint" style="display:block;">'.$this->l('Exported orders can then be imported into the Kiala Pack&Ship software, Keops. It will synchronize your orders with your Kiala account.').'</div>';
-		}
 		else
 		{
 			$this->_html .= '<img src="../modules/kiala/warn.png" /><strong>'.$this->l('Kiala Module is not configured yet, you must:').'</strong>';
 			$this->_html .= '<br />'.(isset($alert['registration']) ? '<img src="../modules/kiala/warn.png" />'
-				: '<img src="../modules/kiala/valid.png" />').' 1) <a href="'.$this->register_link.'" style="text-decoration:underline">'
-				.$this->l('Register an account with Kiala').'</a> '.$this->l(' then configure and activate Kiala delivery for your country (see ').' <a href="#country_settings" style="text-decoration:underline">'.$this->l('country settings').'</a>'.$this->l(')');
+				: '<img src="../modules/kiala/valid.png" />').' 1) <a href="http://www.kiala.com" style="text-decoration:underline">'
+				.$this->l('Register an account with Kiala').'</a> '.$this->l(' then configure and activate Kiala delivery for your country (see ').' <a href="#country_settings" style="text-decoration:underline">country settings</a>'.$this->l(')');
 			$this->_html .= '<br />'.(isset($alert['allowurlfopen']) ? '<img src="../modules/kiala/warn.png" />' : '<img src="../modules/kiala/valid.png" />').' 2) '.$this->l('Allow url fopen');
 			$this->_html .= '<br />'.(isset($alert['curl']) ? '<img src="../modules/kiala/warn.png" />' : '<img src="../modules/kiala/valid.png" />').' 3) '.$this->l('Enable cURL');
-			$this->_html .= '<br />'.(isset($alert['folder']) ? '<img src="../modules/kiala/warn.png" />' : '<img src="../modules/kiala/valid.png" />').' 4) '.$this->l('Set a valid export folder');
-			
-			if (!$this->processAccountRequestForm())
-			{
-				$errors = '';
-				foreach ($this->account_request_form_errors as $error)
-					$errors .= $error.'<br />';
-				
-				$this->_html .= '
-					<form method="post" action="'.htmlentities($_SERVER['REQUEST_URI']).'" style="margin-top: 40px;">';
-					
-				if (strlen($errors) > 0)
-					$this->_html .= $this->displayError($errors);
-				
-				$this->_html .= '
-						<div style="margin-top: 10px;">
-							<label for="lastname">'.$this->l('Lastname:').'</label><input type="text" value="'.Tools::getValue('lastname').'" name="lastname" id="lastname" />
-						</div>
-						<div style="margin-top: 10px;">
-							<label for="firstname">'.$this->l('Firstname:').'</label><input type="text" value="'.Tools::getValue('firstname').'" name="firstname" id="firstname" />
-						</div>
-						<div style="margin-top: 10px;">
-							<label for="email">'.$this->l('E-mail:').'</label><input type="text" value="'.Tools::getValue('email').'" name="email" id="email" />
-						</div>
-						<div style="margin-top: 10px;">
-							<label for="phone">'.$this->l('Phone number:').'</label><input type="text" value="'.Tools::getValue('phone').'" name="phone" id="phone" />
-						</div>
-						<div style="margin-top: 10px;">
-							<label for="shop_name">'.$this->l('Shop name:').'</label><input type="text" value="'.Tools::getValue('shop_name').'" name="shop_name" id="shop_name" />
-						</div>
-						<div style="margin-top: 10px;">
-							<label for="packages_per_year">'.$this->l('Number of packages per year:').'</label><input type="text" value="'.Tools::getValue('packages_per_year').'" name="packages_per_year" id="packages_per_year" />
-						</div>
-						<div style="margin-top: 10px;">
-							<label for="package_weight">'.$this->l('Average weight of a package:').'</label><input type="text" value="'.Tools::getValue('package_weight').'" name="package_weight" id="package_weight" />
-						</div>
-						<div style="margin-top: 15px; margin-left: 200px;">
-							<input type="submit" name="submit_account_request" value="'.$this->l('Send the request').'" />
-						</div>
-					</form>
-				';
-			}
-			else
-			{
-				$this->displayConfirmFormAccountRequest();
-			}
 		}
 		$this->_html .= '</div>';
 		$this->_html .= '</fieldset><div class="clear">&nbsp;</div>';
-	}
-
-	private function displayConfirmFormAccountRequest()
-	{
-		Configuration::updateValue('KIALA_REQUEST_SENT', 1);
-		
-		$this->_html .= '<br /><br />'.$this->displayConfirmation($this->l('Your registration is effective. You will be contacted shortly.')).'
-		<img src="http://www.prestashop.com/partner/kiala/image.php?firstname='.
-		htmlentities(Tools::getValue('firstname')).'&lastname='.
-		htmlentities(Tools::getValue('lastname')).'&email='.
-		htmlentities(Tools::getValue('email')).'&phone='.
-		htmlentities(Tools::getValue('phone')).'&shop_name='.
-		htmlentities(Tools::getValue('shop_name')).'&packages_per_year='.
-		htmlentities(Tools::getValue('packages_per_year')).'&package_weight='.
-		htmlentities(Tools::getValue('package_weight')).'" border="0" />';
 	}
 
 	/**
@@ -360,8 +223,7 @@ class Kiala extends Module
 				<div style="float: left;">
 					'.$this->l('As e-merchant, proposing the Kiala option often means proposing extra delivery choice while doing some savings on the delivery costs. As a consequence, it will be critical to properly position the Kiala delivery option on the check-out page in order to make this “delivery choice” visible and generate the expected savings. Applying the recommended Kiala positioning will allow to achieve a service penetration up to 3 times higher.').
 					'<br /><br />'.$this->l('Key elements for a great positioning are:').'<br />
-					<ul style="list-style: disc; padding-left: 40px; margin-top: 10px;">
-						<li>'.$this->l('Kiala proposed as first choice in the list of delivery options').'</li>
+					<ul>
 						<li>'.$this->l('The Kiala option is pre-clicked by default').'</li>
 						<li>'.$this->l('The Kiala option is proposed at a lower delivery charge than home delivery').'</li>
 					</ul>
@@ -380,8 +242,8 @@ class Kiala extends Module
 						$this->l('Kiala is Europe’s leading service provider of collection points networks, which are supported by a dedicated technological platform, for the delivery of parcels to end-consumers and nomad professionals. The 7.000 Kiala collection Points consists of local shops (newsagents, petrol stations, ...) where people can collect, pay for and/or return their parcels quickly, when it suits them best.').
 						$this->l('The Kiala technological platform automates all transportation and delivery activities (Track and trace, automatic notification upon  parcel arrival, reminder, cash-on-delivery, …').'<br /><br />'.
 						$this->l('Kiala is available at the majority of the leading internet pure play sites such as AchatVIP, Amazon, Bol, BuyVIP, CDiscount, Privalia,  Sarenza, …, multi channel retailers such as Esprit, Etam, H&M, Nespresso, Promod ... and traditional mail order companies such as Bertelsmann, Neckermann, Yves Rocher …').'<br /><br />'.
-						$this->l('The Kiala module can be activated for Belgium, France, Luxembourg, Netherlands and Spain.').'<br /><br />'.
-						$this->l('This module includes a very comprehensive Kiala integration, requiring an advanced shipping rate of at least 10 parcels per day. You will need to sign up for a Kiala contract and get a Kiala ID number in order to exploit this module. Alternatively, you can use the other Kiala addon “Kiala Light webservice integration”.').'
+						$this->l('The Kiala module can be activated for Spain (soon in Belgium, France, Luxembourg, Netherlands).').'<br /><br />'.
+						$this->l('You will need to register on the Kiala website, within the shipment section. If you currently ship more than 10 parcels per day, you may be interested to get in touch with Kiala in order to activate the other more comprehensive Kiala Addons, “Kiala Comprehensive datafile integration – Kiala contract holders only”').'
 						<br /><br />
 					</div>
 				</div>
@@ -398,29 +260,22 @@ class Kiala extends Module
 					<legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Kiala advanced settings').'</legend>
 					<br class="clear"/>
 					<div class="margin-form">
-						<label class="t" for="kialaFolder">'.$this->l('Export folder').'&nbsp;&nbsp;</label><input id="kialaFolder" type="text" name="kialaFolder" size="60" value="'.htmlentities(Configuration::get('KIALA_EXPORT_FOLDER'), ENT_NOQUOTES, 'UTF-8').'" />
-					</div>
-					<br class="clear"/>
-					<div class="margin-form">
 						<label class="t" for="kialaPrefix">'.$this->l('Prefix for order and parcel number').'&nbsp;&nbsp;</label>
-						<input id="kialaPrefix" type="text" name="kialaPrefix" size="16" value="'.htmlentities(Configuration::get('KIALA_NUMBER_PREFIX'), ENT_NOQUOTES, 'UTF-8').'" />
-					</div>
-					<div class="margin-form">
-						<label class="t">'.$this->l('Export on each order?').'&nbsp;&nbsp;</label>
-						<input id="exportOn" type="radio" '.(Configuration::get('KIALA_EXPORT_SINGLE') ? 'checked="checked"' : '').' name="kialaExportSingle" value="1" />
-						<label class="t" for="exportOn"> <img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
-						<input id="exportOff" type="radio" '.(Configuration::get('KIALA_EXPORT_SINGLE') ? '' : 'checked="checked"').' name="kialaExportSingle" value="0" />
-						<label class="t" for="exportOff"> <img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" title="'.$this->l('Disabled').'" /></label>
-						<p>'.$this->l('If activated a Kiala export file will be created each time an order is passed.').'</p>
+						<input id="kialaPrefix" type="text" name="kialaPrefix" size="16" value="'.htmlentities(Configuration::get('KIALASMALL_NUMBER_PREFIX'), ENT_NOQUOTES, 'UTF-8').'" />
 					</div>
 					<br class="clear"/>
 					<div class="margin-form">
 						<label class="t">'.$this->l('Parcel tracking criterion?').'&nbsp;&nbsp;</label>
-						<input id="searchByCustomer" type="radio" '.(Configuration::get('KIALA_SEARCH_BY') == 'customer' ? 'checked="checked"' : '').' name="kialaSearchBy" value="customer" />
+						<input id="searchByCustomer" type="radio" '.(Configuration::get('KIALASMALL_SEARCH_BY') == 'customer' ? 'checked="checked"' : '').' name="kialaSearchBy" value="customer" />
 						<label class="t" for="searchByCustomer">'.$this->l('Customer').'</label>
-						<input id="searchByOrder" type="radio" '.(Configuration::get('KIALA_SEARCH_BY') == 'customer' ? '' : 'checked="checked"').' name="kialaSearchBy" value="order" />
+						<input id="searchByOrder" type="radio" '.(Configuration::get('KIALASMALL_SEARCH_BY') == 'customer' ? '' : 'checked="checked"').' name="kialaSearchBy" value="order" />
 						<label class="t" for="searchByOrder">'.$this->l('Order').'</label>
-					</div>
+					</div>';
+					/*<div class="margin-form">
+						<label class="t" for="kialaWsUrl">'.$this->l('URL to use for the webservice').'&nbsp;&nbsp;</label>
+						<input id="kialaWsUrl" type="text" name="kialaWsUrl" size="80" value="'.htmlentities(Configuration::get('KIALASMALL_WS_URL'), ENT_NOQUOTES, 'UTF-8').'" />
+					</div>*/
+					$this->_html .=	'<br />
 					<div align="center">
 						<input type="submit" name="settings" id="button_kiala" class="button" value="'.$this->l('Save settings').'" />
 					</div>
@@ -430,7 +285,7 @@ class Kiala extends Module
 
 	public function hookUpdateCarrier($params)
 	{
-		Configuration::updateValue('KIALA_CARRIER_ID', (int)($params['carrier']->id));
+		Configuration::updateValue('KIALASMALL_CARRIER_ID', (int)($params['carrier']->id));
 	}
 
 	public static function installExternalCarrier($config)
@@ -483,7 +338,7 @@ class Kiala extends Module
 				VALUES (\''.(int)($carrier->id).'\',\''.(int)($rangePrice->id).'\',NULL,\''.(int)$id_zone.'\',\''.(float)$config['price'].'\'),
 					   (\''.(int)($carrier->id).'\',NULL,\''.(int)($rangeWeight->id).'\',\''.(int)$id_zone.'\',\''.(float)$config['price'].'\')');
 
-			Configuration::updateValue('KIALA_CARRIER_ID', (int)($carrier->id));
+			Configuration::updateValue('KIALASMALL_CARRIER_ID', (int)($carrier->id));
 			//copy logo
 			if (!copy(dirname(__FILE__).'/carrier.jpg', _PS_SHIP_IMG_DIR_.'/'.(int)$carrier->id.'.jpg'))
 				return false;
@@ -498,7 +353,7 @@ class Kiala extends Module
 		if (!$this->active || !$cart->id_address_delivery)
 			return false;
 		$address = new Address($cart->id_address_delivery);
-		$kiala_country = KialaCountry::getByIdCountry($address->id_country);
+        $kiala_country = SmKialaCountry::getByIdCountry($address->id_country);
         if (Validate::isLoadedObject($kiala_country) && $kiala_country->isActive())
 			return $shipping_cost;
 		else
@@ -513,16 +368,14 @@ class Kiala extends Module
 	public function uninstall()
 	{
 		// Uninstall Carriers
-		$success = Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier', array('deleted' => 1), 'UPDATE', '`external_module_name` = \'kiala\'');
+		$success = Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier', array('deleted' => 1), 'UPDATE', '`external_module_name` = \'kialasmall\'');
 
 		// Uninstall Config
-		$success &= Configuration::deleteByName('KIALA_VERSION')
-			&& Configuration::deleteByName('KIALA_EXPORT_FOLDER')
-			&& Configuration::deleteByName('KIALA_LAST_EXPORT_FILE')
-			&& Configuration::deleteByName('KIALA_EXPORT_SINGLE')
-			&& Configuration::deleteByName('KIALA_CARRIER_ID')
-			&& Configuration::deleteByName('KIALA_SECURITY_TOKEN')
-			&& Configuration::deleteByName('KIALA_SEARCH_BY');
+		$success &= Configuration::deleteByName('KIALASMALL_VERSION')
+			&& Configuration::deleteByName('KIALASMALL_CARRIER_ID')
+			&& Configuration::deleteByName('KIALASMALL_SECURITY_TOKEN')
+			&& Configuration::deleteByName('KIALASMALL_NUMBER_PREFIX')
+			&& Configuration::deleteByName('KIALASMALL_SEARCH_BY');
 
 		// Uninstall SQL
 		include(dirname(__FILE__).'/sql-uninstall.php');
@@ -530,15 +383,13 @@ class Kiala extends Module
 			if (!Db::getInstance()->Execute($s))
 				$success = false;
 
-		// Uninstall tab
-		$tab = new Tab(Tab::getIdFromClassName('AdminKiala'));
-		$success &= $tab->delete();
-
 		// Uninstall Module
 		$success &= parent::uninstall()
 			&& $this->unregisterHook('updateCarrier')
 			&& $this->unregisterHook('extraCarrier')
-			&& $this->unregisterHook('newOrder');
+			&& $this->unregisterHook('newOrder')
+			&& $this->unregisterHook('orderDetailDisplayed')
+			&& $this->unregisterHook('hookUpdateOrderStatus');
 
 		return $success;
 	}
@@ -556,7 +407,7 @@ class Kiala extends Module
 
 		// Cart::carrierIsSelected() added in version 1.5
 		if (method_exists($cart, 'carrierIsSelected'))
-			if (!$cart->carrierIsSelected(Configuration::get('KIALA_CARRIER_ID'), $params['address']->id))
+			if (!$cart->carrierIsSelected(Configuration::get('KIALASMALL_CARRIER_ID'), $params['address']->id))
 				return;
 
 		if ($this->compatibility_mode)
@@ -569,20 +420,19 @@ class Kiala extends Module
 				$page_name = 'order';
 		}
 
-		if ($cart->id_carrier == Configuration::get('KIALA_CARRIER_ID'))
+		if ($cart->id_carrier == Configuration::get('KIALASMALL_CARRIER_ID'))
 			$content = $this->displayPoint($page_name);
 
 		$smarty->assign(array(
-			'kiala_module_dir' => _MODULE_DIR_.$this->name.'/',
-			'kiala_carrier_id' => Configuration::get('KIALA_CARRIER_ID'),
-			'kiala_content' => isset($content) ? $content : '',
-			'kiala_token' => Configuration::get('KIALA_SECURITY_TOKEN'),
-			'kiala_page_name' => Tools::safeOutput($page_name),
-			'kiala_is_opc' => Configuration::get('PS_ORDER_PROCESS_TYPE'),
-			'kiala_compatibility_mode' => $this->compatibility_mode
+			'ks_kiala_module_dir' => _MODULE_DIR_.$this->name.'/',
+			'ks_kiala_carrier_id' => Configuration::get('KIALASMALL_CARRIER_ID'),
+			'ks_content' => isset($content) ? $content : '',
+			'ks_kiala_token' => Configuration::get('KIALASMALL_SECURITY_TOKEN'),
+			'ks_page_name' => Tools::safeOutput($page_name),
+			'ks_is_opc' => Configuration::get('PS_ORDER_PROCESS_TYPE'),
+			'ks_compatibility_mode' => $this->compatibility_mode
 		));
-
-		return $this->display(__FILE__, 'kiala.tpl');
+		return $this->display(__FILE__, 'kialasmall.tpl');
 	}
 
 	/**
@@ -599,7 +449,7 @@ class Kiala extends Module
 		if (!$point)
 			return $this->l('No Kiala point was found');
 
-		$kiala_order = KialaOrder::getEmptyKialaOrder($cart->id);
+		$kiala_order = SmKialaOrder::getEmptyKialaOrder($cart->id);
 		$kiala_order->point_short_id = (string)$point->short_id;
 		$kiala_order->point_name = $point->name;
 		$kiala_order->point_street = $point->street;
@@ -610,21 +460,19 @@ class Kiala extends Module
 		$kiala_order->save();
 
 		$address = new Address($cart->id_address_delivery);
-		$kiala_request = new KialaRequest();
-
+		$kiala_request = new SmKialaRequest();
 		$page_link = $link->getPageLink(strip_tags($page_name)).'?';
 
 		// Only for 5-steps checkout
 		if (!Configuration::get('PS_ORDER_PROCESS_TYPE'))
 			$page_link .= 'step=2';
-
 		$url = $kiala_request->getSearchRequest($address, $cart->id_lang, $page_link);
 
 		$smarty->assign(array(
-			'kiala_module_dir' => _MODULE_DIR_.$this->name.'/',
+			'ks_kiala_module_dir' => _MODULE_DIR_.$this->name.'/',
 			'point' => $point,
-			'search_link' => Tools::safeOutput($url),
-			'id_customer' => (int)$cart->id_customer,
+			'ks_search_link' => Tools::safeOutput($url),
+			'ks_id_customer' => (int)$cart->id_customer,
 		));
 
 		// Load a different TPL for version 1.4
@@ -639,17 +487,18 @@ class Kiala extends Module
 	/**
 	 * Return Kiala point filled with data from POST
 	 *
-	 * @return boolean|KialaPoint Kiala point or false
+	 * @return boolean|SmKialaPoint Kiala point or false
 	 */
 	public function getPointFromPost()
 	{
 		global $smarty, $cart;
 		if (!$short_id = Tools::getValue('shortkpid'))
 			return false;
-		$kiala_request = new KialaRequest();
+		$kiala_request = new SmKialaRequest();
 
 		$points = $kiala_request->getPointList($short_id);
 		$point = $points[0];
+
 		if (isset ($point->short_id) && $point->short_id == $short_id)
 		{
 			$point->status = 'selection';
@@ -662,16 +511,16 @@ class Kiala extends Module
 	/**
 	 * Return the Kiala point returned by the Kiala webservice
 	 *
-	 * @return boolean|KialaPoint Kiala point or false
+	 * @return boolean|SmKialaPoint Kiala point or false
 	 */
 	public function getPointFromWs()
 	{
 		global $smarty, $cart;
 
-		$kiala_request = new KialaRequest();
+		$kiala_request = new SmKialaRequest();
 
 		// If the customer used Kiala before, get the latest point he selected
-		$existing_point = KialaOrder::getLatestByCustomer($cart->id_customer);
+		$existing_point = SmKialaOrder::getLatestByCustomer($cart->id_customer);
 
 		if (Validate::isLoadedObject($existing_point))
 			$points = $kiala_request->getPointList($existing_point->point_short_id);
@@ -693,7 +542,7 @@ class Kiala extends Module
 			{
 				$point = $points[1];
 				$point->status = 'point_unavailable';
-				$smarty->assign('unavailable_point_name', Tools::safeOutput($points[0]->name));
+				$smarty->assign('ks_unavailable_point_name', Tools::safeOutput($points[0]->name));
 			}
 		}
 		else
@@ -713,13 +562,13 @@ class Kiala extends Module
 	public function hookNewOrder($params)
 	{
 		// Get the kiala order created when the user selected a Kiala point
-		$kiala_order = KialaOrder::getEmptyKialaOrder($params['cart']->id);
+		$kiala_order = SmKialaOrder::getEmptyKialaOrder($params['cart']->id);
 
 		if (!Validate::isLoadedObject($kiala_order) || !$kiala_order->point_short_id)
 			return;
 
 		// If the kiala carrier was selected at some point, but another carrier was the final choice, delete the uncomplete kiala order
-		if ($params['cart']->id_carrier != Configuration::get('KIALA_CARRIER_ID'))
+		if ($params['cart']->id_carrier != Configuration::get('KIALASMALL_CARRIER_ID'))
 		{
 			$kiala_order->delete();
 			return;
@@ -729,7 +578,7 @@ class Kiala extends Module
 		$kiala_order->id_cart = $params['cart']->id;
 		$kiala_order->id_order = $params['order']->id;
 
-		$kiala_country_pickup = KialaCountry::getPickupCountry();
+		$kiala_country_pickup = SmKialaCountry::getPickupCountry();
 
 		$kiala_order->id_country_pickup = $kiala_country_pickup->id_country;
 
@@ -761,15 +610,39 @@ class Kiala extends Module
 			$order->update();
 		}
 
-		if (Configuration::get('KIALA_EXPORT_SINGLE'))
-		{
-			$export = new ExportFormat($this);
-			$export->export($kiala_order);
-			$kiala_order->exported = 1;
-		}
 		$kiala_order->save();
 	}
 
+
+	/**
+	 * Check if the order is validated for the first time to send a creation request to Kiala WS
+	 *
+	 * @param $params
+	 * @return bool
+	 */
+	public function hookUpdateOrderStatus($params)
+	{
+		$kiala_order = SmKialaOrder::getByOrder($params['id_order']);
+		// if order did not use Kiala, stop here
+		if (!$kiala_order)
+			return true;
+
+		// if the payment been validated, send order creation request to Kiala WS
+		$new_state = $params['newOrderStatus'];
+		if ($new_state->logable == 1 && $kiala_order->tracking_number == '')
+		{
+			$export_format = new SmExportFormat($this);
+			$request = new SmKialaRequest();
+			$data = $export_format->initRecordData($kiala_order, null);
+			$params = $request->getCreateOrderRequest($data, $kiala_order);
+			$tracking_number = $request->makeRequestSoap($params);
+			if ($tracking_number){
+				$kiala_order->tracking_number = $tracking_number;
+				$kiala_order->save();
+			}
+		}
+		return true;
+	}
 	/**
 	 * Handle post data
 	 */
@@ -778,22 +651,20 @@ class Kiala extends Module
 		$errors = array();
 		if (Tools::isSubmit('settings'))
 		{
-			if (isset($_POST['kialaFolder']) && is_dir(pSQL(str_replace('\\', '/', $_POST['kialaFolder']))))
-				Configuration::updateValue('KIALA_EXPORT_FOLDER', pSQL(str_replace('\\', '/', $_POST['kialaFolder'])));
-			else
-				$errors[] = $this->l('Export folder cannot be located.');
-
-			Configuration::updateValue('KIALA_EXPORT_SINGLE', (int)Tools::getValue('kialaExportSingle'));
-			Configuration::updateValue('KIALA_NUMBER_PREFIX', Tools::getValue('kialaPrefix'));
-			Configuration::updateValue('KIALA_SEARCH_BY', Tools::getValue('kialaSearchBy'));
+			Configuration::updateValue('KIALASMALL_NUMBER_PREFIX', Tools::getValue('kialaPrefix'));
+			Configuration::updateValue('KIALASMALL_SEARCH_BY', Tools::getValue('kialaSearchBy'));
 		}
 		elseif (Tools::isSubmit('submitEditCountry'))
 		{
-			$kiala_country = new KialaCountry(Tools::getValue('id_kiala_country'));
+			$kiala_country = new SmKialaCountry(Tools::getValue('id_sm_kiala_country'));
 			if (Validate::isLoadedObject($kiala_country))
 			{
 				if (Tools::getValue('dspid'))
 					$kiala_country->dspid = Tools::getValue('dspid');
+                if (Tools::getValue('sender_id'))
+                    $kiala_country->sender_id = Tools::getValue('sender_id');
+                if (Tools::getValue('password'))
+                    $kiala_country->password = Tools::getValue('password');
 				if (Tools::getValue('preparation_delay') && Validate::isUnsignedInt(Tools::getValue('preparation_delay')))
 					$kiala_country->preparation_delay = (int)Tools::getValue('preparation_delay');
 				else
@@ -803,9 +674,9 @@ class Kiala extends Module
 				$kiala_country->save();
 			}
 		}
-		elseif (Tools::getValue('active_country') !== false && Tools::getValue('id_kiala_country'))
+		elseif (Tools::getValue('active_country') !== false && Tools::getValue('id_sm_kiala_country'))
 		{
-			$kiala_country = new KialaCountry(Tools::getValue('id_kiala_country'));
+			$kiala_country = new SmKialaCountry(Tools::getValue('id_sm_kiala_country'));
 			if (Validate::isLoadedObject($kiala_country))
 			{
 				$kiala_country->active = Tools::getValue('active_country') ? 1 : 0;
@@ -816,10 +687,13 @@ class Kiala extends Module
 		}
 
 		if (empty($errors))
-		{
 			if (Tools::isSubmit('settings') || Tools::isSubmit('submitEditCountry') || Tools::getValue('active_country') !== false)
-				$this->_html .= '<div class="conf confirm"><img src="'._PS_ADMIN_IMG_.'/ok.gif" alt="" /> '.$this->l('Settings updated').'</div>';
-		}
+			{
+				$this->_html .= '<div class="conf confirm">';
+				if ($this->compatibility_mode)
+					$this->_html .= '<img src="'._PS_ADMIN_IMG_.'/ok.gif" alt="" />';
+				$this->_html .= $this->l('Settings updated').'</div>';
+			}
 		else
 			foreach ($errors AS $err)
 				$this->_html .= '<div class="alert error"><img src="../modules/kiala/forbbiden.gif" alt="nok" />&nbsp;'.$err.'</div>';
@@ -841,8 +715,9 @@ class Kiala extends Module
 		$this->_html .= '<div class="margin-form"><table class="table" cellspacing="0" cellpadding="0" id="table_left" class="tableDnD">
 		<thead>
 			<tr class="nodrag nodrop">
-				<th width="100px" class="center">'.$this->l('Country').'</th>
+				<th width="80px" class="center">'.$this->l('Country').'</th>
 				<th width="80px" class="center">'.$this->l('User ID').'</th>
+				<th width="200px" class="center">'.$this->l('Sender ID').'</th>
 				<th width="100px" class="center">'.$this->l('Preparation delay (days)').'</th>
 				<th width="30px" class="center">'.$this->l('Active').'</th>
 				<th width="30px" class="center">'.$this->l('Edit').'</th>
@@ -855,33 +730,28 @@ class Kiala extends Module
 		foreach ($countries as $country)
 		{
 			$country_name = Country::getNameById($id_lang, $country['id_country']);
-			if (Country::getIsoById($country['id_country']) == 'BE')
-			{
-				$luxemburg = new Country(Country::getByIso('LU'), $id_lang);
-				$country_name .= ' / '.$luxemburg->name;
-			}
-			$active_url = Tools::safeOutput($base_url.'&active_country='.($country['active'] ? '0' : '1').'&id_kiala_country='.(int)$country['id_kiala_country']);
-			
+			$active_url = Tools::safeOutput($base_url.'&active_country='.($country['active'] ? '0' : '1').'&id_sm_kiala_country='.(int)$country['id_sm_kiala_country']);
 			$this->_html .= '
-				<tr id="tr_0_'.$country['id_kiala_country'].'" '.($irow++ % 2 ? 'class="alt_row"' : '').'>
+				<tr id="tr_0_'.$country['id_sm_kiala_country'].'" '.($irow++ % 2 ? 'class="alt_row"' : '').'>
 					<td class="center">'.Tools::safeOutput($country_name).'</td>
 					<td class="center">'.Tools::safeOutput($country['dspid']).'</td>
+					<td class="center">'.Tools::safeOutput($country['sender_id']).'</td>
 					<td class="center">'.(int)$country['preparation_delay'].'</td>
 					<td class="center">
 						<a href="'.$active_url.'">
 	        				<img src="../img/admin/'.($country['active'] ? 'enabled.gif' : 'disabled.gif').'"
 	        					alt="'.($country['active'] ? $this->l('Enabled') : $this->l('Disabled')).'" title="'.($country['active'] ? $this->l('Enabled') : $this->l('Disabled')).'" />
 	        			</a>
-					</td>
+	        		</td>
 					<td class="center">
-						<a href="index.php?tab='.Tools::safeOutput(Tools::getValue('tab').'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::getValue('module_name').'&editCountry&id_kiala_country='.(int)$country['id_kiala_country']).'" title="'.$this->l('Edit').'"><img src="'._PS_ADMIN_IMG_.'edit.gif" alt="" /></a>
+						<a href="'.Tools::safeOutput($base_url.'&editCountry&id_sm_kiala_country='.(int)$country['id_sm_kiala_country']).'" title="'.$this->l('Edit').'"><img src="'._PS_ADMIN_IMG_.'edit.gif" alt="" /></a>
 					</td>
 				</tr>';
 		}
 		$this->_html .= '
 			</tbody>
-			</table></div>
-			</fieldset><br />';
+			</table></div>';
+		$this->_html .= '</fieldset><br />';
 	}
 
 	/**
@@ -894,21 +764,21 @@ class Kiala extends Module
 	{
 		global $smarty;
 
-		$kiala_order = KialaOrder::getByOrder($params['order']->id);
+		$kiala_order = SmKialaOrder::getByOrder($params['order']->id);
 		if (!Validate::isLoadedObject($kiala_order))
 			return false;
-		$address = new Address($params['order']->id_address_delivery);
-		$kiala_country = KialaCountry::getByIdCountry($address->id_country);
-		$search_by = Configuration::get('KIALA_SEARCH_BY');
 
+		$address = new Address($params['order']->id_address_delivery);
+		$kiala_country = SmKialaCountry::getByIdCountry($address->id_country);
+		$search_by = Configuration::get('KIALASMALL_SEARCH_BY');
 		if ($search_by == 'customer')
 			$id = $kiala_order->id_customer;
 		elseif ($search_by == 'order')
-			$id = Configuration::get('KIALA_NUMBER_PREFIX').$kiala_order->id;
+			$id = Configuration::get('KIALASMALL_NUMBER_PREFIX').$kiala_order->id;
 		else
 			return false;
 
-		$kiala_request = new KialaRequest();
+		$kiala_request = new SmKialaRequest();
 		$url = $kiala_request->getTrackingRequest($address, $kiala_country, $params['order']->id_lang, $id, $search_by);
 
 		$smarty->assign('url_tracking', Tools::safeOutput($url));
@@ -918,13 +788,13 @@ class Kiala extends Module
 	/**
 	 * Display edit country settings page
 	 *
-	 * @param int $id_kiala_country
+	 * @param int $id_sm_kiala_country
 	 * @return string
 	 */
-	function _displayEditCountry($id_kiala_country)
+	function _displayEditCountry($id_sm_kiala_country)
 	{
-		global $cookie;
-		$kiala_country = new KialaCountry($id_kiala_country);
+		global $cookie, $currentIndex;
+		$kiala_country = new SmKialaCountry($id_sm_kiala_country);
 		return '
 		<form action="index.php?tab='.htmlentities(Tools::getValue('tab')).'&configure='.Tools::getValue('configure').'&token='.Tools::getValue('token').'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::getValue('module_name').'" method="post">
 			<fieldset>
@@ -932,6 +802,14 @@ class Kiala extends Module
 				<label>'.$this->l('Kiala User ID:').' </label>
 				<div class="margin-form">
 					<input type="text" name="dspid" id="dspid" size="30" value="'.htmlentities($kiala_country->dspid, ENT_COMPAT, 'UTF-8').'" />
+				</div>
+				<label>'.$this->l('Kiala Sender ID:').' </label>
+				<div class="margin-form">
+					<input type="text" name="sender_id" id="sender_id" size="30" value="'.htmlentities($kiala_country->sender_id, ENT_COMPAT, 'UTF-8').'" />
+				</div>
+				<label>'.$this->l('Kiala password:').' </label>
+				<div class="margin-form">
+					<input type="password" name="password" id="password" size="30" value="'.htmlentities($kiala_country->password, ENT_COMPAT, 'UTF-8').'" />
 				</div>
 				<label>'.$this->l('Preparation delay:').' </label>
 				<div class="margin-form">
@@ -945,7 +823,7 @@ class Kiala extends Module
 					<label class="t" for="active_off"><img src="../img/admin/disabled.gif" alt="'.$this->l('Disabled').'" /></label>
 					<p>'.$this->l('If not active Kiala will not be available for customers of this country').'</p>
 				</div>
-				<input type="hidden" name="id_kiala_country" value="'.(int)$id_kiala_country.'"/>
+				<input type="hidden" name="id_sm_kiala_country" value="'.(int)$id_sm_kiala_country.'"/>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitEditCountry" class="button" />
 				</div>
