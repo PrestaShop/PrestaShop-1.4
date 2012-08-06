@@ -34,7 +34,5 @@ include(dirname(__FILE__).'/shoppingfluxexport.php');
 //xml output
 header ("Content-Type:text/xml");
 
-$f = new shoppingfluxexport();
-echo $f->generateFlux();
-
-
+$f = new ShoppingFluxExport();
+echo $f->generateFeed();
