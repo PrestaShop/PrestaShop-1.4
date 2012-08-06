@@ -24,6 +24,16 @@ International Registred Trademark & Property of PrestaShop SA
 Release Notes for PrestaShop 1.4
 --------------------------------
 ####################################
+#   v1.4.8.3 - N/A (2012-08-01)    #
+####################################
+
+	Fixed bugs:
+
+	[-] MO : Fix typo on Authorize.net description
+	[-] MO : Update version number in config.xml Authorize.net
+	[-] MO : Security fix on Authorize.net
+
+####################################
 #   v1.4.8.2 - 15288 (2012-05-14)  #
 ####################################
 
