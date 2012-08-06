@@ -152,100 +152,6 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 	 */
 	private function manageImages()
 	{
-		/*
-		 * available cases api/... :
-		 *   
-		 *   images ("types_list") (N-1)
-		 *   	GET    (xml)
-		 *   images/general ("general_list") (N-2)
-		 *   	GET    (xml)
-		 *   images/general/[header,+] ("general") (N-3)
-		 *   	GET    (bin)
-		 *   	PUT    (bin)
-		 *   
-		 *   
-		 *   images/[categories,+] ("normal_list") (N-2) ([categories,+] = categories, manufacturers, ...) 
-		 *   	GET    (xml)
-		 *   images/[categories,+]/[1,+] ("normal") (N-3)
-		 *   	GET    (bin)
-		 *   	PUT    (bin)
-		 *   	DELETE
-		 *   	POST   (bin) (if image does not exists)
-		 *   images/[categories,+]/[1,+]/[small,+] ("normal_resized") (N-4)
-		 *   	GET    (bin)
-		 *   images/[categories,+]/default ("display_list_of_langs") (N-3)
-		 *   	GET    (xml)
-		 *   images/[categories,+]/default/[en,+] ("normal_default_i18n")  (N-4)
-		 *   	GET    (bin)
-		 *   	POST   (bin) (if image does not exists)
-		 *      PUT    (bin)
-		 *      DELETE
-		 *   images/[categories,+]/default/[en,+]/[small,+] ("normal_default_i18n_resized")  (N-5)
-		 *   	GET    (bin)
-		 *   
-		 *   images/products ("product_list")  (N-2)
-		 *   	GET    (xml) (list of image)
-		 *   images/products/[1,+] ("product_description")  (N-3)
-		 *   	GET    (xml) (legend, declinations, xlink to images/products/[1,+]/bin)
-		 *   images/products/[1,+]/bin ("product_bin")  (N-4)
-		 *   	GET    (bin)
-		 *      POST   (bin) (if image does not exists)
-		 *   images/products/[1,+]/[1,+] ("product_declination")  (N-4)
-		 *   	GET    (bin)
-		 *   	POST   (xml) (legend)
-		 *   	PUT    (xml) (legend)
-		 *      DELETE
-		 *   images/products/[1,+]/[1,+]/bin ("product_declination_bin") (N-5)
-		 *   	POST   (bin) (if image does not exists)
-		 *   	GET    (bin)
-		 *   	PUT    (bin)
-		 *   images/products/[1,+]/[1,+]/[small,+] ("product_declination_resized") (N-5)
-		 *   	GET    (bin)
-		 *   images/products/default ("product_default") (N-3)
-		 *   	GET    (bin)
-		 *   images/products/default/[en,+] ("product_default_i18n") (N-4)
-		 *   	GET    (bin)
-		 *      POST   (bin)
-		 *      PUT   (bin)
-		 *      DELETE
-		 *   images/products/default/[en,+]/[small,+] ("product_default_i18n_resized") (N-5)
-		 * 		GET    (bin)
-		 * 
-		 */
-		
-		
-		/* Declinated
-		 *ok    GET    (bin)
-		 *ok images/products ("product_list")  (N-2)
-		 *ok	GET    (xml) (list of image)
-		 *ok images/products/[1,+] ("product_description")  (N-3)
-		 *   	GET    (xml) (legend, declinations, xlink to images/products/[1,+]/bin)
-		 *ok images/products/[1,+]/bin ("product_bin")  (N-4)
-		 *ok 	GET    (bin)
-		 *      POST   (bin) (if image does not exists)
-		 *ok images/products/[1,+]/[1,+] ("product_declination")  (N-4)
-		 *ok 	GET    (bin)
-		 *   	POST   (xml) (legend)
-		 *   	PUT    (xml) (legend)
-		 *      DELETE
-		 *ok images/products/[1,+]/[1,+]/bin ("product_declination_bin") (N-5)
-		 *   	POST   (bin) (if image does not exists)
-		 *ok 	GET    (bin)
-		 *   	PUT    (bin)
-		 *   images/products/[1,+]/[1,+]/[small,+] ("product_declination_resized") (N-5)
-		 *ok 	GET    (bin)
-		 *ok images/products/default ("product_default") (N-3)
-		 *ok 	GET    (bin)
-		 *ok images/products/default/[en,+] ("product_default_i18n") (N-4)
-		 *ok 	GET    (bin)
-		 *      POST   (bin)
-		 *      PUT   (bin)
-		 *      DELETE
-		 *ok images/products/default/[en,+]/[small,+] ("product_default_i18n_resized") (N-5)
-		 *ok	GET    (bin)
-		 * 
-		 * */
-
 		// Pre configuration...
 		if (isset($this->wsObject->urlSegment))
 			for ($i = 1; $i < 6; $i++)
@@ -253,6 +159,11 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 					$this->wsObject->urlSegment[$i] = '';
 		
 		$this->imageType = $this->wsObject->urlSegment[1];
+		
+		$directories = array('categories' => _PS_CAT_IMG_DIR_,
+							'manufacturers' => _PS_MANU_IMG_DIR_,
+							'suppliers' => _PS_SUPP_IMG_DIR_,
+							'stores' => _PS_STORE_IMG_DIR_);
 		
 		switch ($this->wsObject->urlSegment[1])
 		{
@@ -265,22 +176,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 			case 'manufacturers':
 			case 'suppliers':
 			case 'stores':
-				switch ($this->wsObject->urlSegment[1])
-				{
-					case 'categories':
-						$directory = _PS_CAT_IMG_DIR_;
-						break;
-					case 'manufacturers':
-						$directory = _PS_MANU_IMG_DIR_;
-						break;
-					case 'suppliers':
-						$directory = _PS_SUPP_IMG_DIR_;
-						break;
-					case 'stores':
-						$directory = _PS_STORE_IMG_DIR_;
-						break;
-				}
-				return $this->manageDeclinatedImages($directory);
+				return $this->manageDeclinatedImages($directories[$this->wsObject->urlSegment[1]]);
 				break;
 			
 			// product image management : many image for one entity (product)
