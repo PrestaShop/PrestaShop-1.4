@@ -94,13 +94,13 @@ class ConfigurationCore extends ObjectModel
 	{
 	 	if (!Validate::isConfigName($key))
 			return false;
-		
+
 		/* Delete the key from the main configuration table */
 		if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'configuration` WHERE `id_configuration` = '.(int)self::$_CONF_IDS[$key].' LIMIT 1'))
 			unset(self::$_CONF[$key]);
 		else
 			return false;
-			
+
 		/* Determine if the key is present in the multi-lingual table */
 		$is_multilingual = false;
 		foreach (self::$_CONF_LANG as $id_lang => $values)
@@ -109,12 +109,12 @@ class ConfigurationCore extends ObjectModel
 				unset(self::$_CONF_LANG[(int)$id_lang][$key]);
 				$is_multilingual |= true;
 			}
-			
+
 		if ($is_multilingual && !Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'configuration_lang` WHERE `id_configuration` = '.(int)self::$_CONF_IDS[$key]))
 			return false;
-	
+
 		unset(self::$_CONF_IDS[$key]);
-		
+
 		return true;
 	}
 
@@ -135,7 +135,7 @@ class ConfigurationCore extends ObjectModel
 	}
 
 	/**
-	  * Set TEMPORARY a single configuration value (in one language only)
+	  * Set TEMPORARY a single configuration value
 	  *
 	  * @param string $key Key wanted
 	  * @param mixed $values $values is an array if the configuration is multilingual, a single string else.
@@ -146,7 +146,10 @@ class ConfigurationCore extends ObjectModel
 	 		die(Tools::displayError());
 	 	/* Update classic values */
 		if (!is_array($values))
+		{
 			self::$_CONF[$key] = $values;
+			self::$_CONF_IDS[$key] = Db::getInstance()->getValue('SELECT `id_configuraton` FROM `'._DB_PREFIX_.'configuration` WHERE `name` = \''.pSQL($key).'\'');
+		}
 		/* Update multilingual values */
 		else
 			/* Add multilingual values */
@@ -162,11 +165,9 @@ class ConfigurationCore extends ObjectModel
 	  */
 	public static function getInt($key)
 	{
-		$languages = Language::getLanguages();
-		$resultsArray = array();
-		foreach($languages as $language)
+		foreach (Language::getLanguages() as $language)
 			$resultsArray[$language['id_lang']] = self::get($key, $language['id_lang']);
-		return $resultsArray;
+		return isset($resultsArray) ? $resultsArray : array();
 	}
 
 	/**
@@ -178,19 +179,17 @@ class ConfigurationCore extends ObjectModel
 	  */
 	public static function getMultiple($keys, $id_lang = NULL)
 	{
-	 	if (!is_array($keys) OR !is_array(self::$_CONF) OR ($id_lang AND !is_array(self::$_CONF_LANG)))
+	 	if (!is_array($keys) || !is_array(self::$_CONF) || ($id_lang && !is_array(self::$_CONF_LANG)))
 	 		die(Tools::displayError());
 
 		$resTab = array();
 		if (!$id_lang)
-		{
-			foreach ($keys AS $key)
-				if (key_exists($key, self::$_CONF))
+			foreach ($keys as $key)
+				if (array_key_exists($key, self::$_CONF))
 					$resTab[$key] = self::$_CONF[$key];
-		}
-		elseif (key_exists($id_lang, self::$_CONF_LANG))
-			foreach ($keys AS $key)
-				if (key_exists($key, self::$_CONF_LANG[(int)($id_lang)]))
+		elseif (array_key_exists($id_lang, self::$_CONF_LANG))
+			foreach ($keys as $key)
+				if (array_key_exists($key, self::$_CONF_LANG[(int)$id_lang]))
 					$resTab[$key] = self::$_CONF_LANG[(int)($id_lang)][$key];
 		return $resTab;
 	}
@@ -205,11 +204,9 @@ class ConfigurationCore extends ObjectModel
 	public static function getMultipleInt($keys)
 	{
 		Tools::displayAsDeprecated();
-		$languages = Language::getLanguages();
-		$resultsArray = array();
-		foreach($languages as $language)
+		foreach (Language::getLanguages() as $language)
 			$resultsArray[$language['id_lang']] = self::getMultiple($keys, $language['id_lang']);
-		return $resultsArray;
+		return isset($resultsArray) ? $resultsArray : array();
 	}
 
 	/**
@@ -219,7 +216,7 @@ class ConfigurationCore extends ObjectModel
 	  * @param string $value Value
 	  * @eturn boolean Insert result
 	  */
-	static protected function _addConfiguration($key, $value = NULL)
+	protected static function _addConfiguration($key, $value = null)
 	{
 		$newConfig = new Configuration();
 		$newConfig->name = $key;
@@ -234,24 +231,28 @@ class ConfigurationCore extends ObjectModel
 	  * @param string $key Key
 	  * @param mixed $values $values is an array if the configuration is multilingual, a single string else.
 	  * @param boolean $html Specify if html is authorized in value
+		*
 	  * @return boolean Update result
 	  */
 	public static function updateValue($key, $values, $html = false)
 	{
-		if ($key == null) return;
+		if ($key == null)
+			return;
+
 		if (!Validate::isConfigName($key))
 	 		die(Tools::displayError());
+
 		$db = Db::getInstance();
-		
 		$current_value = Configuration::get($key);
-		
+
 		/* Update classic values */
 		if (!is_array($values))
 		{
-		 	if ($current_value !== false)
+			/* If the current value exists but the _CONF_IDS[$key] does not, it mean the value has been set but not save, we need to add */
+		 	if ($current_value !== false && isset(self::$_CONF_IDS[$key]) && self::$_CONF_IDS[$key])
 		 	{
 		 		$values = pSQL($values, $html);
-				
+
 				/* Do not update the database if the current value is the same one than the new one */
 				if ($values == $current_value)
 					$result = true;
@@ -267,7 +268,10 @@ class ConfigurationCore extends ObjectModel
 			{
 				$result = self::_addConfiguration($key, $values);
 				if ($result)
+				{
 					self::$_CONF[$key] = stripslashes($values);
+					self::$_CONF_IDS[$key] = (int)$result;
+				}
 			}
 		}
 
@@ -275,9 +279,9 @@ class ConfigurationCore extends ObjectModel
 		else
 		{
 			$result = true;
-			
+
 			/* Add the key in the configuration table if it does not already exist... */
-			$id_configuration = ($current_value === false) ? self::_addConfiguration($key) : (int)self::$_CONF_IDS[$key];
+			$id_configuration = $current_value === false || !isset(self::$_CONF_IDS[$key]) || !self::$_CONF_IDS[$key] ? self::_addConfiguration($key) : (int)self::$_CONF_IDS[$key];
 
 			$to_insert = '';
 			$current_date = date('Y-m-d H:i:s');
@@ -287,7 +291,7 @@ class ConfigurationCore extends ObjectModel
 				$value = pSQL($value, $html);
 				if (!isset(self::$_CONF_LANG[(int)$id_lang][$key]))
 					$to_insert .= '('.(int)$id_configuration.', '.(int)$id_lang.', \''.$value.'\', NOW()),';
-				elseif ((isset(self::$_CONF_LANG[(int)$id_lang][$key]) && self::$_CONF_LANG[(int)$id_lang][$key] != $value))
+				elseif (isset(self::$_CONF_LANG[(int)$id_lang][$key]) && self::$_CONF_LANG[(int)$id_lang][$key] != $value)
 				{
 					$update_main_key |= true;
 					$result &= $db->AutoExecute(_DB_PREFIX_.'configuration_lang', array('value' => $value, 'date_upd' => $current_date),
@@ -300,7 +304,7 @@ class ConfigurationCore extends ObjectModel
 				$result &= $db->Execute('INSERT INTO `'._DB_PREFIX_.'configuration_lang` (`id_configuration`, `id_lang`, `value`, `date_upd`) VALUES '.rtrim($to_insert, ','));
 				$update_main_key |= true;
 			}
-			
+
 			/* Update the date_upd in the main configuration table too */
 			if ($result && $update_main_key)
 				$result &= $db->AutoExecute(_DB_PREFIX_.'configuration', array('date_upd' => $current_date), 'UPDATE', 'id_configuration = '.(int)$id_configuration, true, true);
@@ -319,7 +323,7 @@ class ConfigurationCore extends ObjectModel
 		SELECT c.`id_configuration`, c.`name`, cl.`id_lang`, cl.`value` cl_value, c.`value` c_value
 		FROM `'._DB_PREFIX_.'configuration` c
 		LEFT JOIN `'._DB_PREFIX_.'configuration_lang` cl ON (c.id_configuration = cl.id_configuration)', false);
-		
+
 		if ($result)
 			while ($row = $db->nextRow($result))
 			{
@@ -329,10 +333,10 @@ class ConfigurationCore extends ObjectModel
 					self::$_CONF_LANG[(int)$row['id_lang']][$row['name']] = $row['cl_value'];
 			}
 	}
-	
+
 	/**
 	 * This method is override to allow TranslatedConfiguration entity
-	 * 
+	 *
 	 * @param $sql_join
 	 * @param $sql_filter
 	 * @param $sql_sort
@@ -341,16 +345,15 @@ class ConfigurationCore extends ObjectModel
 	 */
 	public function getWebserviceObjectList($sql_join, $sql_filter, $sql_sort, $sql_limit)
 	{
-		$query = '
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT DISTINCT main.`'.$this->identifier.'` FROM `'._DB_PREFIX_.$this->table.'` main
 		'.$sql_join.'
-		WHERE id_configuration NOT IN 
+		WHERE id_configuration NOT IN
 		(	SELECT id_configuration
 			FROM '._DB_PREFIX_.$this->table.'_lang
 		) '.$sql_filter.'
 		'.($sql_sort != '' ? $sql_sort : '').'
 		'.($sql_limit != '' ? $sql_limit : '').'
-		';
-		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($query);
+		');
 	}
 }
