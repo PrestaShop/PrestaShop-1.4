@@ -165,6 +165,7 @@ class BlockCategories extends Module
 		$id_lang = (int)($params['cookie']->id_lang);
 		$smartyCacheId = 'blockcategories|'.$groups.'_'.$id_lang.'_'.$id_product.'_'.$id_category;
 
+		$smarty->cache_lifetime = 31536000; // 1 Year
 		Tools::enableCache();
 		if (!$this->isCached('blockcategories.tpl', $smartyCacheId))
 		{
@@ -219,7 +220,6 @@ class BlockCategories extends Module
 				$smarty->assign('branche_tpl_path', _PS_MODULE_DIR_.'blockcategories/category-tree-branch.tpl');
 			$smarty->assign('isDhtml', $isDhtml);
 		}
-		$smarty->cache_lifetime = 31536000; // 1 Year
 		$display = $this->display(__FILE__, 'blockcategories.tpl', $smartyCacheId);
 		Tools::restoreCacheSettings();
 		return $display;
@@ -237,6 +237,7 @@ class BlockCategories extends Module
 		$id_lang = (int)($params['cookie']->id_lang);
 		$smartyCacheId = 'blockcategories|'.$groups.'_'.$id_lang.'_'.$id_product.'_'.$id_category;
 
+		$smarty->cache_lifetime = 31536000; // 1 Year
 		Tools::enableCache();
 		if (!$this->isCached('blockcategories_footer.tpl', $smartyCacheId))
 		{
@@ -298,7 +299,7 @@ class BlockCategories extends Module
 				$smarty->assign('branche_tpl_path', _PS_MODULE_DIR_.'blockcategories/category-tree-branch.tpl');
 			$smarty->assign('isDhtml', $isDhtml);
 		}
-		$smarty->cache_lifetime = 31536000; // 1 Year
+
 		$display = $this->display(__FILE__, 'blockcategories_footer.tpl', $smartyCacheId);
 		Tools::restoreCacheSettings();
 		return $display;
