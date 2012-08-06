@@ -29,14 +29,15 @@ if (!defined('_PS_VERSION_'))
 	exit;
 
 class GAdsense extends Module
-{	
+{
 	function __construct()
 	{
 		$this->name = 'gadsense';
 		$this->tab = 'advertising_marketing';
-		$this->version = '1.2';
+		$this->version = '1.2.1';
 		$this->author = 'PrestaShop';
 		$this->displayName = $this->l('Google Adsense');
+		$this->module_key = 'a5d4df8c62133ad7aa9049dc3ef2e5fd';
 
 		parent::__construct();
 
@@ -55,18 +56,18 @@ class GAdsense extends Module
 			return false;
 		return true;
 	}
-	
+
 	function uninstall()
 	{
 		if (!Configuration::deleteByName('GADSENSE_ID') || !parent::uninstall())
 			return false;
 		return true;
 	}
-	
+
 	public function getContent()
 	{
 		$output = '<h2>'.$this->displayName.'</h2>';
-		if (Tools::isSubmit('submitGAdsense') AND ($gai = Tools::getValue('gadsense_id')))
+		if (Tools::isSubmit('submitGAdsense') && ($gai = Tools::getValue('gadsense_id')))
 		{
 			$gai = htmlentities($gai, ENT_COMPAT, 'UTF-8');
 			Configuration::updateValue('GADSENSE_ID', $gai);
@@ -81,7 +82,7 @@ class GAdsense extends Module
 
 	public function displayForm()
 	{
-		$output = '
+		return '
 		<form action="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'" method="post">
 			<fieldset><legend>'.$this->l('Settings').'</legend>
 				<label>'.$this->l('Your code').'</label>
@@ -89,10 +90,9 @@ class GAdsense extends Module
 					<textarea name="gadsense_id" cols="90" rows="10" />'.Tools::safeOutput(Tools::getValue('gadsense_id', Configuration::get('GADSENSE_ID'))).'</textarea>
 					<p class="clear">'.$this->l('Example:').' <br /><br /><img src="../modules/gadsense/adsense_script.gif"></p>
 				</div>
-				<center><input type="submit" name="submitGAdsense" value="'.$this->l('Update settings').'" class="button" /></center>			
+				<center><input type="submit" name="submitGAdsense" value="'.$this->l('Update settings').'" class="button" /></center>
 			</fieldset>
 		</form>';
-		return $output;
 	}
 
 	function hookLeftColumn($params)
@@ -112,8 +112,6 @@ class GAdsense extends Module
 
 	function hookHome($params)
 	{
-		$output = html_entity_decode(Configuration::get('GADSENSE_ID'), ENT_COMPAT, 'UTF-8');
-		return $output;
+		return html_entity_decode(Configuration::get('GADSENSE_ID'), ENT_COMPAT, 'UTF-8');
 	}
-
 }
