@@ -166,8 +166,8 @@ class ConfigurationCore extends ObjectModel
 	public static function getInt($key)
 	{
 		foreach (Language::getLanguages() as $language)
-			$resultsArray[$language['id_lang']] = self::get($key, $language['id_lang']);
-		return isset($resultsArray) ? $resultsArray : array();
+			$results_array[$language['id_lang']] = self::get($key, $language['id_lang']);
+		return isset($results_array) ? $results_array : array();
 	}
 
 	/**
@@ -205,8 +205,8 @@ class ConfigurationCore extends ObjectModel
 	{
 		Tools::displayAsDeprecated();
 		foreach (Language::getLanguages() as $language)
-			$resultsArray[$language['id_lang']] = self::getMultiple($keys, $language['id_lang']);
-		return isset($resultsArray) ? $resultsArray : array();
+			$results_array[$language['id_lang']] = self::getMultiple($keys, $language['id_lang']);
+		return isset($results_array) ? $results_array : array();
 	}
 
 	/**
