@@ -191,7 +191,7 @@ class ShoppingFluxExport extends Module
 		<form method="post" action="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'">
 			<fieldset>
 				<legend>'.$this->l('Demandez ici votre clé d\'activation').'</legend>
-				<p style="margin-bottom:20px" >'.$this->l('Ce module vous est offert par Shopping Flux et est utilisable via une souscription mensuelle au service. Envoyez-nous simplement ce formualaire :').'</p>
+				<p style="margin-bottom:20px" >'.$this->l('Ce module vous est offert par Shopping Flux et est utilisable via une souscription mensuelle au service. Envoyez-nous simplement ce formulaire :').'</p>
 				<p><label>'.$this->l('Nom du site').' : </label><input type="text" name="site" value="'.Configuration::get('PS_SHOP_NAME').'"></p>
 				<p><label>'.$this->l('Nom').' : </label><input type="text" name="nom" value="'.$owner->lastname.'"></p>
 				<p><label>'.$this->l('Prenom').' : </label><input type="text" name="prenom" value="'.$owner->firstname.'"></p>
