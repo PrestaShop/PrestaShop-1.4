@@ -25,10 +25,9 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-
 if (!defined('_PS_VERSION_'))
 	exit;
-	
+
 class Ekomi extends Module
 {
 	private $_html = '';
@@ -44,6 +43,7 @@ class Ekomi extends Module
 		$this->author = 'PrestaShop';
 		$this->version = 1.3;
 		$this->need_instance = 0;
+		$this->module_key = 'dcf80333f30761ab70a9efa8a7fd8a5a';
 
 		parent::__construct();
 
@@ -119,12 +119,12 @@ class Ekomi extends Module
 			return;
 		return stripslashes(html_entity_decode(Configuration::get('PS_EKOMI_SCRIPT'))).'<br clear="left" /><br />';
 	}
-		
+
 	public function hookLeftColumn($params)
 	{
 		return $this->hookRightColumn($params);
 	}
-		
+
 	public function hookNewOrder($params)
 	{
 		if (!Configuration::get('PS_EKOMI_EMAIL'))
