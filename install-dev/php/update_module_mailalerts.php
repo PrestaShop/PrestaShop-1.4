@@ -27,8 +27,6 @@
 
 include('../../config/config.inc.php');
 
-var_dump(update_module_mailalerts());
-
 function update_module_mailalerts()
 {
 	if (Db::getInstance()->getValue('SELECT id_module FROM  `'._DB_PREFIX_.'module` WHERE name = \'mailalerts\''))
