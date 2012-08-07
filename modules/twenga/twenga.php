@@ -654,7 +654,6 @@ class Twenga extends PaymentModule
 			$str_error .= '</ol>';
 			$this->_errors[] = $str_error;
 		}
-
 		
 		if ($isoUser == 'en')
 			$tarifs_link = 'https://rts.twenga.com/media/prices_uk.jpg';
@@ -730,6 +729,11 @@ class Twenga extends PaymentModule
 			$lost_link = 'https://rts.twenga.co.uk/lost_password';
 		else
 			$lost_link = 'https://rts.twenga.'.$isoUser.'/lost_password';
+
+		if ($isoUser == 'en')
+			$tarifs_link = 'https://rts.twenga.com/media/prices_uk.jpg';
+		else
+			$tarifs_link = 'https://rts.twenga.com/media/prices_'.$isoUser.'.jpg';
 
 		return '
 		<form name="form_set_hashkey" action="" method="post">	
