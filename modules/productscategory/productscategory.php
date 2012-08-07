@@ -35,45 +35,45 @@ class productsCategory extends Module
 	public function __construct()
  	{
  	 	$this->name = 'productscategory';
- 	 	$this->version = '1.3';
+ 	 	$this->version = '1.3.1';
 		$this->author = 'PrestaShop';
  	 	$this->tab = 'front_office_features';
 		$this->need_instance = 0;
-		
+
 		parent::__construct();
-		
+
 		$this->displayName = $this->l('Products Category');
 		$this->description = $this->l('Display products of the same category on the product page.');
-		
+
 		if (!$this->isRegisteredInHook('header'))
 			$this->registerHook('header');
  	}
 
 	public function install()
 	{
-	 	if (!parent::install() OR !$this->registerHook('productfooter') OR !$this->registerHook('header') OR !Configuration::updateValue('PRODUCTSCATEGORY_DISPLAY_PRICE', 0))
+	 	if (!parent::install() ||% !$this->registerHook('productfooter') || !$this->registerHook('header') || !Configuration::updateValue('PRODUCTSCATEGORY_DISPLAY_PRICE', 0))
 	 		return false;
 	 	return true;
 	}
-	
+
 	public function uninstall()
 	{
-	 	if (!parent::uninstall() OR !Configuration::deleteByName('PRODUCTSCATEGORY_DISPLAY_PRICE'))
+	 	if (!parent::uninstall() || !Configuration::deleteByName('PRODUCTSCATEGORY_DISPLAY_PRICE'))
 	 		return false;
 	 	return true;
 	}
-	
+
 	public function getContent()
 	{
 		$this->_html = '';
-		if (Tools::isSubmit('submitCross') AND Tools::getValue('displayPrice') != 0 AND Tools::getValue('displayPrice') != 1)
+		if (Tools::isSubmit('submitCross') && Tools::getValue('displayPrice') != 0 && Tools::getValue('displayPrice') != 1)
 			$this->_html .= $this->displayError('Invalid displayPrice');
 		elseif (Tools::isSubmit('submitCross'))
 		{
 			Configuration::updateValue('PRODUCTSCATEGORY_DISPLAY_PRICE', Tools::getValue('displayPrice'));
 			$this->_html .= $this->displayConfirmation($this->l('Settings updated successfully'));
 		}
-		$this->_html .= '
+		return $this->_html. '
 		<form action="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'" method="post">
 		<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" title="" />'.$this->l('Settings').'</legend>
 			<label>'.$this->l('Display price on products').'</label>
@@ -87,24 +87,23 @@ class productsCategory extends Module
 			<center><input type="submit" name="submitCross" value="'.$this->l('Save').'" class="button" /></center>
 		</fieldset>
 		</form>';
-		return $this->_html;
 	}
-	
+
 	private function getCurrentProduct($products, $id_current)
 	{
 		if ($products)
-			foreach ($products AS $key => $product)
+			foreach ($products as $key => $product)
 				if ($product['id_product'] == $id_current)
 					return $key;
 		return false;
 	}
-	
+
 	public function hookProductFooter($params)
 	{
 		global $smarty, $cookie;
-		
-		$idProduct = (int)(Tools::getValue('id_product'));
-		$product = new Product((int)($idProduct));
+
+		$idProduct = (int)Tools::getValue('id_product');
+		$product = new Product((int)$idProduct);
 
 		/* If the visitor has came to this product by a category, use this one */
 		if (isset($params['category']->id_category))
@@ -112,22 +111,22 @@ class productsCategory extends Module
 		/* Else, use the default product category */
 		else
 		{
-			if (isset($product->id_category_default) AND $product->id_category_default > 1)
-				$category = New Category((int)($product->id_category_default));
+			if (isset($product->id_category_default) && $product->id_category_default > 1)
+				$category = new Category((int)$product->id_category_default);
 		}
-		
-		if (!Validate::isLoadedObject($category) OR !$category->active) 
+
+		if (!isset($category) || !Validate::isLoadedObject($category) || !$category->active)
 			return;
 
 		// Get infos
-		$categoryProducts = $category->getProducts((int)($cookie->id_lang), 1, 100); /* 100 products max. */
-		$sizeOfCategoryProducts = (int)sizeof($categoryProducts);
+		$categoryProducts = $category->getProducts((int)$cookie->id_lang, 1, 100); /* 100 products max. */
+		$sizeOfCategoryProducts = (int)count($categoryProducts);
 		$middlePosition = 0;
-		
+
 		// Remove current product from the list
-		if (is_array($categoryProducts) AND sizeof($categoryProducts))
+		if (is_array($categoryProducts) && count($categoryProducts))
 		{
-			foreach ($categoryProducts AS $key => $categoryProduct)
+			foreach ($categoryProducts as $key => $categoryProduct)
 				if ($categoryProduct['id_product'] == $idProduct)
 				{
 					unset($categoryProducts[$key]);
@@ -136,19 +135,19 @@ class productsCategory extends Module
 
 			$taxes = Product::getTaxCalculationMethod();
 			if (Configuration::get('PRODUCTSCATEGORY_DISPLAY_PRICE'))
-				foreach ($categoryProducts AS $key => $categoryProduct)
+				foreach ($categoryProducts as $key => $categoryProduct)
 					if ($categoryProduct['id_product'] != $idProduct)
 					{
-						if ($taxes == 0 OR $taxes == 2)
-							$categoryProducts[$key]['displayed_price'] = Product::getPriceStatic((int)$categoryProduct['id_product'], true, NULL, 2);
+						if ($taxes == 0 || $taxes == 2)
+							$categoryProducts[$key]['displayed_price'] = Product::getPriceStatic((int)$categoryProduct['id_product'], true, null, 2);
 						elseif ($taxes == 1)
-							$categoryProducts[$key]['displayed_price'] = Product::getPriceStatic((int)$categoryProduct['id_product'], false, NULL, 2);
+							$categoryProducts[$key]['displayed_price'] = Product::getPriceStatic((int)$categoryProduct['id_product'], false, null, 2);
 					}
-		
+
 			// Get positions
 			$middlePosition = round($sizeOfCategoryProducts / 2, 0);
 			$productPosition = $this->getCurrentProduct($categoryProducts, (int)$idProduct);
-		
+
 			// Flip middle product with current product
 			if ($productPosition)
 			{
@@ -156,7 +155,7 @@ class productsCategory extends Module
 				$categoryProducts[$middlePosition-1] = $categoryProducts[$productPosition];
 				$categoryProducts[$productPosition] = $tmp;
 			}
-		
+
 			// If products tab higher than 30, slice it
 			if ($sizeOfCategoryProducts > 30)
 			{
@@ -164,7 +163,7 @@ class productsCategory extends Module
 				$middlePosition = 15;
 			}
 		}
-		
+
 		// Display tpl
 		$smarty->assign(array(
 			'categoryProducts' => $categoryProducts,
@@ -173,7 +172,7 @@ class productsCategory extends Module
 
 		return $this->display(__FILE__, 'productscategory.tpl');
 	}
-	
+
 	public function hookHeader($params)
 	{
 		Tools::addCSS($this->_path.'productscategory.css', 'all');
