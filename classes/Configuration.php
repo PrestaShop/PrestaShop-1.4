@@ -125,36 +125,13 @@ class ConfigurationCore extends ObjectModel
 	  * @param integer $id_lang Language ID
 	  * @return string Value
 	  */
-	public static function get($key, $id_lang = NULL)
+	public static function get($key, $id_lang = null)
 	{
 		if ($id_lang && isset(self::$_CONF_LANG[(int)$id_lang][$key]))
 			return self::$_CONF_LANG[(int)$id_lang][$key];
 		elseif (isset(self::$_CONF[$key]))
 			return self::$_CONF[$key];
 		return false;
-	}
-
-	/**
-	  * Set TEMPORARY a single configuration value
-	  *
-	  * @param string $key Key wanted
-	  * @param mixed $values $values is an array if the configuration is multilingual, a single string else.
-	  */
-	public static function set($key, $values)
-	{
-		if (!Validate::isConfigName($key))
-	 		die(Tools::displayError());
-	 	/* Update classic values */
-		if (!is_array($values))
-		{
-			self::$_CONF[$key] = $values;
-			self::$_CONF_IDS[$key] = Db::getInstance()->getValue('SELECT `id_configuraton` FROM `'._DB_PREFIX_.'configuration` WHERE `name` = \''.pSQL($key).'\'');
-		}
-		/* Update multilingual values */
-		else
-			/* Add multilingual values */
-			foreach ($values as $k => $value)
-				self::$_CONF_LANG[(int)($k)][$key] = $value;
 	}
 
 	/**
@@ -177,7 +154,7 @@ class ConfigurationCore extends ObjectModel
 	  * @param integer $id_lang Language ID
 	  * @return array Values
 	  */
-	public static function getMultiple($keys, $id_lang = NULL)
+	public static function getMultiple($keys, $id_lang = null)
 	{
 	 	if (!is_array($keys) || !is_array(self::$_CONF) || ($id_lang && !is_array(self::$_CONF_LANG)))
 	 		die(Tools::displayError());
@@ -249,7 +226,7 @@ class ConfigurationCore extends ObjectModel
 		if (!is_array($values))
 		{
 			/* If the current value exists but the _CONF_IDS[$key] does not, it mean the value has been set but not save, we need to add */
-		 	if ($current_value !== false && isset(self::$_CONF_IDS[$key]) && self::$_CONF_IDS[$key])
+		 	if ($current_value !== false && isset(self::$_CONF_IDS[$key]))
 		 	{
 		 		$values = pSQL($values, $html);
 
@@ -259,7 +236,7 @@ class ConfigurationCore extends ObjectModel
 				else
 				{
 					$result = $db->AutoExecute(_DB_PREFIX_.'configuration', array('value' => $values, 'date_upd' => date('Y-m-d H:i:s')),
-					'UPDATE', '`id_configuration` = \''.(int)self::$_CONF_IDS[$key].'\'', true, true);
+					'UPDATE', '`id_configuration` = '.(int)self::$_CONF_IDS[$key], true, true);
 					if ($result)
 						self::$_CONF[$key] = stripslashes($values);
 				}
@@ -281,7 +258,7 @@ class ConfigurationCore extends ObjectModel
 			$result = true;
 
 			/* Add the key in the configuration table if it does not already exist... */
-			$id_configuration = $current_value === false || !isset(self::$_CONF_IDS[$key]) || !self::$_CONF_IDS[$key] ? self::_addConfiguration($key) : (int)self::$_CONF_IDS[$key];
+			$id_configuration = ($current_value === false || !isset(self::$_CONF_IDS[$key])) ? self::_addConfiguration($key) : (int)self::$_CONF_IDS[$key];
 
 			$to_insert = '';
 			$current_date = date('Y-m-d H:i:s');
@@ -353,7 +330,6 @@ class ConfigurationCore extends ObjectModel
 			FROM '._DB_PREFIX_.$this->table.'_lang
 		) '.$sql_filter.'
 		'.($sql_sort != '' ? $sql_sort : '').'
-		'.($sql_limit != '' ? $sql_limit : '').'
-		');
+		'.($sql_limit != '' ? $sql_limit : ''));
 	}
 }

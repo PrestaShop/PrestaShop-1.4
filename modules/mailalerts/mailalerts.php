@@ -44,7 +44,7 @@ class MailAlerts extends Module
 	{
 		$this->name = 'mailalerts';
 		$this->tab = 'administration';
-		$this->version = '2.2';
+		$this->version = '2.3';
 		$this->author = 'PrestaShop';
 
 		parent::__construct();
@@ -59,50 +59,34 @@ class MailAlerts extends Module
 
 	public function install()
 	{
-		if (!parent::install() OR
-			!$this->registerHook('newOrder') OR
-			!$this->registerHook('updateQuantity') OR
-			!$this->registerHook('productOutOfStock') OR
-			!$this->registerHook('customerAccount') OR
-			!$this->registerHook('updateProduct') OR
-			!$this->registerHook('deleteProduct') OR
-			!$this->registerHook('deleteProductAttribute') OR
-			!$this->registerHook('updateProductAttribute')
-		)
-			return false;
-
-		Configuration::updateValue('MA_MERCHANT_ORDER', 1);
-		Configuration::updateValue('MA_MERCHANT_OOS', 1);
-		Configuration::updateValue('MA_CUSTOMER_QTY', 1);
-		Configuration::updateValue('MA_MERCHANT_MAILS', Configuration::get('PS_SHOP_EMAIL'));
-		Configuration::updateValue('MA_LAST_QTIES', Configuration::get('PS_LAST_QTIES'));
-
-		if (!Db::getInstance()->Execute('
-			CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'mailalert_customer_oos` (
-				`id_customer` int(10) unsigned NOT NULL,
-				`customer_email` varchar(128) NOT NULL,
-				`id_product` int(10) unsigned NOT NULL,
-				`id_product_attribute` int(10) unsigned NOT NULL,
-				PRIMARY KEY  (`id_customer`,`customer_email`,`id_product`,`id_product_attribute`)
-			) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci')
-		)
-			return false;
-
-		/* This hook is optional */
-		$this->registerHook('myAccountBlock');
-		return true;
+		return parent::install() && $this->registerHook('newOrder') && $this->registerHook('updateQuantity') &&
+		$this->registerHook('productOutOfStock') && $this->registerHook('customerAccount') &&
+		$this->registerHook('updateProduct') && $this->registerHook('deleteProduct') &&
+		$this->registerHook('deleteProductAttribute') && $this->registerHook('updateProductAttribute') &&
+		$this->registerHook('myAccountBlock') && Configuration::updateValue('MA_MERCHANT_ORDER', 1) &&
+		Configuration::updateValue('MA_MERCHANT_OOS', 1) && Configuration::updateValue('MA_CUSTOMER_QTY', 1) &&
+		Configuration::updateValue('MA_MERCHANT_MAILS', Configuration::get('PS_SHOP_EMAIL')) &&
+		Configuration::updateValue('MA_LAST_QTIES', Configuration::get('PS_LAST_QTIES')) &&
+		Db::getInstance()->Execute('
+		CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'mailalert_customer_oos` (
+		  `id_customer` int(10) unsigned NOT NULL,
+		  `customer_email` varchar(128) NOT NULL,
+		  `id_product` int(10) unsigned NOT NULL,
+		  `id_product_attribute` int(10) unsigned NOT NULL,
+		  `id_lang` int(10) unsigned NOT NULL,
+		  `date_add` datetime NOT NULL,
+		  PRIMARY KEY (`id_customer`, `customer_email`, `id_product`, `id_product_attribute`, `id_lang`),
+		  KEY `customer_email` (`customer_email`),
+		  KEY `id_product` (`id_product`,`id_product_attribute`)
+		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;');
 	}
 
 	public function uninstall()
 	{
-		Configuration::deleteByName('MA_MERCHANT_ORDER');
-		Configuration::deleteByName('MA_MERCHANT_OOS');
-		Configuration::deleteByName('MA_CUSTOMER_QTY');
-		Configuration::deleteByName('MA_MERCHANT_MAILS');
-		Configuration::deleteByName('MA_LAST_QTIES');
-		if (!Db::getInstance()->Execute('DROP TABLE '._DB_PREFIX_.'mailalert_customer_oos'))
-			return false;
-		return parent::uninstall();
+		return Configuration::deleteByName('MA_MERCHANT_ORDER') && Configuration::deleteByName('MA_MERCHANT_OOS') &&
+		Configuration::deleteByName('MA_CUSTOMER_QTY') && Configuration::deleteByName('MA_MERCHANT_MAILS') &&
+		Configuration::deleteByName('MA_LAST_QTIES') && 
+		Db::getInstance()->Execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'mailalert_customer_oos') && parent::uninstall();
 	}
 	
 	private function _refreshProperties()
@@ -115,7 +99,7 @@ class MailAlerts extends Module
 
 	public function hookNewOrder($params)
 	{
-		if (!$this->_merchant_order OR empty($this->_merchant_mails))
+		if (!$this->_merchant_order || empty($this->_merchant_mails))
 			return;
 
 		// Getting differents vars
@@ -129,15 +113,14 @@ class MailAlerts extends Module
 		$order_date_text = Tools::displayDate($order->date_add, (int)($id_lang));
 		$carrier = new Carrier((int)($order->id_carrier));
 		$message = $order->getFirstMessage();
-		if (!$message OR empty($message))
+		if (!$message || empty($message))
 			$message = $this->l('No message');
 
 		$itemsTable = '';
-		
 		$products = $params['order']->getProducts();
-		$customizedDatas = Product::getAllCustomizedDatas(intval($params['cart']->id));
+		$customizedDatas = Product::getAllCustomizedDatas((int)$params['cart']->id);
 		Product::addCustomizationPrice($products, $customizedDatas);
-		foreach ($products AS $key => $product)
+		foreach ($products as $key => $product)
 		{
 			$unit_price = $product['product_price_wt'];
 			$price = $product['total_price'];
@@ -146,14 +129,14 @@ class MailAlerts extends Module
 			if (isset($customizedDatas[$product['product_id']][$product['product_attribute_id']]))
 			{
 
-				foreach ($customizedDatas[$product['product_id']][$product['product_attribute_id']] AS $customization)
+				foreach ($customizedDatas[$product['product_id']][$product['product_attribute_id']] as $customization)
 				{
 					if (isset($customization['datas'][_CUSTOMIZE_TEXTFIELD_]))
-						foreach ($customization['datas'][_CUSTOMIZE_TEXTFIELD_] AS $text)
+						foreach ($customization['datas'][_CUSTOMIZE_TEXTFIELD_] as $text)
 							$customizationText .= $text['name'].':'.' '.$text['value'].'<br />';
 					
 					if (isset($customization['datas'][_CUSTOMIZE_FILE_]))
-						$customizationText .= sizeof($customization['datas'][_CUSTOMIZE_FILE_]) .' '. Tools::displayError('image(s)').'<br />';
+						$customizationText .= count($customization['datas'][_CUSTOMIZE_FILE_]) .' '. Tools::displayError('image(s)').'<br />';
 						
 					$customizationText .= '---<br />';
 				}
@@ -170,7 +153,7 @@ class MailAlerts extends Module
 					<td style="padding:0.6em 0.4em; text-align:right;">'.Tools::displayPrice(($unit_price * $product['product_quantity']), $currency, false).'</td>
 				</tr>';
 		}
-		foreach ($params['order']->getDiscounts() AS $discount)
+		foreach ($params['order']->getDiscounts() as $discount)
 		{
 			$itemsTable .=
 			'<tr style="background-color:#EBECEE;">
@@ -236,9 +219,9 @@ class MailAlerts extends Module
 			'{currency}' => $currency->sign,
 			'{message}' => $message
 		);
-		$iso = Language::getIsoById((int)($id_lang));
-		if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/'.$template.'.txt') AND file_exists(dirname(__FILE__).'/mails/'.$iso.'/'.$template.'.html'))
-			Mail::Send((int)$id_lang, $template, $subject, $templateVars, explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, $configuration['PS_SHOP_EMAIL'], $configuration['PS_SHOP_NAME'], NULL, NULL, dirname(__FILE__).'/mails/');
+		$iso = Language::getIsoById((int)$id_lang);
+		if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/'.$template.'.txt') && file_exists(dirname(__FILE__).'/mails/'.$iso.'/'.$template.'.html'))
+			Mail::Send((int)$id_lang, $template, $subject, $templateVars, explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), null, $configuration['PS_SHOP_EMAIL'], $configuration['PS_SHOP_NAME'], null, null, dirname(__FILE__).'/mails/');
 	}
 
 
@@ -255,40 +238,24 @@ class MailAlerts extends Module
 		global $smarty, $cookie;
 
 		if (!$this->_customer_qty)
-			return ;
-
-		$id_product = (int)($params['product']->id);
-		$id_product_attribute = 0;
+			return;
 
 		if (!$cookie->isLogged())
 			$smarty->assign('email', 1);
-		else
-		{
-			$id_customer = (int)($params['cookie']->id_customer);
-			if ($this->customerHasNotification($id_customer, $id_product, $id_product_attribute))
-				return ;
-		}
 
-		$smarty->assign(array(
-			'id_product' => $id_product,
-			'id_product_attribute' => $id_product_attribute));
+		$smarty->assign('id_product', (int)$params['product']->id);
 
 		return $this->display(__FILE__, 'product.tpl');
 	}
 
 	public function customerHasNotification($id_customer, $id_product, $id_product_attribute)
 	{
-		$customer = new Customer($id_customer);
-		$customer_email = $customer->email;
-
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-			SELECT * 
-			FROM `'._DB_PREFIX_.'mailalert_customer_oos` 
-			WHERE (`id_customer` = '.(int)($id_customer).'
-			OR `customer_email` = \''.pSQL($customer_email).'\') 
-			AND `id_product` = '.(int)($id_product).' 
-			AND `id_product_attribute` = '.(int)($id_product_attribute));
-		return sizeof($result);
+		return (int)Db::getInstance()->getValue('
+		SELECT COUNT(*)
+		FROM `'._DB_PREFIX_.'customer` c
+		LEFT JOIN `'._DB_PREFIX_.'mailalert_customer_oos` mco ON (mco.`id_customer` = c.`id_customer` OR mco.`customer_email` = c.`email`)
+		WHERE c.`id_customer` = '.(int)$id_customer.'
+		AND mco.`id_product` = '.(int)$id_product.' AND mco.`id_product_attribute` = '.(int)$id_product_attribute);
 	}
 
 	public function hookUpdateQuantity($params)
@@ -305,29 +272,29 @@ class MailAlerts extends Module
 			$params['product']['id'] = (int)$params['product']['id_product'];
 
 		$qty = (int)$params['product']['quantity'];
-		if ($qty <= (int)(Configuration::get('MA_LAST_QTIES')) AND !(!$this->_merchant_oos OR empty($this->_merchant_mails)) AND Configuration::get('PS_STOCK_MANAGEMENT'))
+		if ($qty <= (int)Configuration::get('MA_LAST_QTIES') && !(!$this->_merchant_oos || empty($this->_merchant_mails)) && Configuration::get('PS_STOCK_MANAGEMENT'))
 		{
 			$templateVars = array(
 				'{qty}' => $qty,
 				'{last_qty}' => (int)(Configuration::get('MA_LAST_QTIES')),
 				'{product}' => strval($params['product']['name']).(isset($params['product']['attributes_small']) ? ' '.$params['product']['attributes_small'] : ''));
-			$id_lang = (is_object($cookie) AND isset($cookie->id_lang)) ? (int)$cookie->id_lang : (int)Configuration::get('PS_LANG_DEFAULT');
+			$id_lang = (is_object($cookie) && isset($cookie->id_lang)) ? (int)$cookie->id_lang : (int)Configuration::get('PS_LANG_DEFAULT');
 			$iso = Language::getIsoById((int)$id_lang);
 			
 			if ($params['product']['active'] == 1)
 			{
-				if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.txt') AND file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.html'))
-					Mail::Send((int)Configuration::get('PS_LANG_DEFAULT'), 'productoutofstock', Mail::l('Product out of stock', (int)Configuration::get('PS_LANG_DEFAULT')), $templateVars, explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
+				if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.txt') && file_exists(dirname(__FILE__).'/mails/'.$iso.'/productoutofstock.html'))
+					Mail::Send((int)Configuration::get('PS_LANG_DEFAULT'), 'productoutofstock', Mail::l('Product out of stock', (int)Configuration::get('PS_LANG_DEFAULT')), $templateVars, explode(self::__MA_MAIL_DELIMITOR__, $this->_merchant_mails), null, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), null, null, dirname(__FILE__).'/mails/');
 			}
 		}
-		if ($this->_customer_qty AND $params['product']['quantity'] > 0)
+		if ($this->_customer_qty && $params['product']['quantity'] > 0)
 			$this->sendCustomerAlert((int)$params['product']['id'], 0);
 	}
 
 	public function hookUpdateProduct($params)
 	{
 		/* We specify 0 as an id_product_attribute because this hook is called when the main product is updated */
-		if ($this->_customer_qty AND $params['product']->quantity > 0)
+		if ($this->_customer_qty && $params['product']->quantity > 0)
 			$this->sendCustomerAlert((int)$params['product']->id, 0);
 	}
 
@@ -338,52 +305,50 @@ class MailAlerts extends Module
 		FROM `'._DB_PREFIX_.'product_attribute` 
 		WHERE `id_product_attribute` = '.(int)$params['id_product_attribute']);
 
-		if ($this->_customer_qty AND $result['quantity'] > 0)
+		if ($this->_customer_qty && $result['quantity'] > 0)
 			$this->sendCustomerAlert((int)$result['id_product'], (int)$params['id_product_attribute']);
 	}
 	
 	public function sendCustomerAlert($id_product, $id_product_attribute)
 	{
-		global $cookie, $link;
-
 		$link = new Link();
-		
+
 		$customers = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT id_customer, customer_email
+		SELECT id_customer, id_lang, customer_email
 		FROM `'._DB_PREFIX_.'mailalert_customer_oos`
 		WHERE `id_product` = '.(int)$id_product.' AND `id_product_attribute` = '.(int)$id_product_attribute);
-		
-		$product = new Product((int)$id_product, false, (int)$cookie->id_lang);
-		$templateVars = array(
-			'{product}' => (is_array($product->name) ? $product->name[(int)Configuration::get('PS_LANG_DEFAULT')] : $product->name),
-			'{product_link}' => $link->getProductLink($product)
-		);
-		foreach ($customers AS $cust)
-		{
-			if ($cust['id_customer'])
+
+		if (count($customers) && $product = new Product((int)$id_product, false))
+			foreach ($customers as $cust)
 			{
-				$customer = new Customer((int)$cust['id_customer']);
-				$customer_email = $customer->email;
-				$customer_id = (int)$customer->id;
+				if ($cust['id_customer'])
+				{
+					$customer = new Customer((int)$cust['id_customer']);
+					$customer_email = $customer->email;
+					$customer_id = (int)$customer->id;
+				}
+				else
+				{
+					$customer_email = $cust['customer_email'];
+					$customer_id = 0;
+				}
+				
+				$product_name = (!isset($product->name[(int)$cust['id_lang']]) || empty($product->name[(int)$cust['id_lang']])) ? 
+				$product->name[(int)Configuration::get('PS_LANG_DEFAULT')] : $product->name[(int)$cust['id_lang']];				
+
+				$templateVars = array('{product}' => $product_name, '{product_link}' => $link->getProductLink($product, null, null, null, (int)$cust['id_lang']));		
+				$iso = Language::getIsoById((int)$cust['id_lang']);
+				
+				if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/customer_qty.txt') && file_exists(dirname(__FILE__).'/mails/'.$iso.'/customer_qty.html'))
+					Mail::Send((int)$cust['id_lang'], 'customer_qty', Mail::l('Product available', (int)$cust['id_lang']), $templateVars, strval($customer_email), null, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), null, null, dirname(__FILE__).'/mails/');
+				
+				self::deleteAlert((int)$customer_id, strval($customer_email), (int)$id_product, (int)$id_product_attribute);
 			}
-			else
-			{
-				$customer_email = $cust['customer_email'];
-				$customer_id = 0;
-			}
-			$id_lang = (is_object($cookie) AND isset($cookie->id_lang)) ? (int)$cookie->id_lang : (int)Configuration::get('PS_LANG_DEFAULT');
-			$iso = Language::getIsoById((int)$id_lang);
-			
-			if (file_exists(dirname(__FILE__).'/mails/'.$iso.'/customer_qty.txt') AND file_exists(dirname(__FILE__).'/mails/'.$iso.'/customer_qty.html'))
-				Mail::Send((int)Configuration::get('PS_LANG_DEFAULT'), 'customer_qty', Mail::l('Product available', (int)Configuration::get('PS_LANG_DEFAULT')), $templateVars, strval($customer_email), NULL, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
-			
-			self::deleteAlert((int)$customer_id, strval($customer_email), (int)$id_product, (int)$id_product_attribute);
-		}
 	}
 	
 	public function hookCustomerAccount($params)
 	{
-		return $this->_customer_qty ? $this->display(__FILE__, 'my-account.tpl') : NULL;
+		return $this->_customer_qty ? $this->display(__FILE__, 'my-account.tpl') : null;
 	}
 	
 	public function hookMyAccountBlock($params)
@@ -434,7 +399,7 @@ class MailAlerts extends Module
 				</div>
 				<label>'.$this->l('Alert threshold:').'</label>
 				<div class="margin-form">
-					<input type="text" name="MA_LAST_QTIES" value="'.(Tools::getValue('MA_LAST_QTIES') != NULL ? (int)(Tools::getValue('MA_LAST_QTIES')) : Configuration::get('MA_LAST_QTIES')).'" size="3" />
+					<input type="text" name="MA_LAST_QTIES" value="'.(Tools::getValue('MA_LAST_QTIES') != null ? (int)(Tools::getValue('MA_LAST_QTIES')) : Configuration::get('MA_LAST_QTIES')).'" size="3" />
 					<p>'.$this->l('Quantity for which a product is regarded as out of stock').'</p>
 				</div>
 				<label>'.$this->l('Send to these e-mail addresses:').' </label>
@@ -459,7 +424,7 @@ class MailAlerts extends Module
 	{
 		if (Tools::isSubmit('submitMACustomer'))
 		{
-			if (!Configuration::updateValue('MA_CUSTOMER_QTY', (int)(Tools::getValue('mA_customer_qty'))))
+			if (!Configuration::updateValue('MA_CUSTOMER_QTY', (int)Tools::getValue('mA_customer_qty')))
 				$this->_html .= '<div class="alert error">'.$this->l('Cannot update settings').'</div>';
 			else
 				$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Settings updated').'</div>';
@@ -467,17 +432,17 @@ class MailAlerts extends Module
 		elseif (Tools::isSubmit('submitMAMerchant'))
 		{
 			$emails = strval(Tools::getValue('ma_merchant_mails'));
-			if (!$emails OR empty($emails))
+			if (!$emails || empty($emails))
 				$this->_html .= '<div class="alert error">'.$this->l('Please type one (or more) e-mail address').'</div>';
 			else
 			{
 				$emails = explode("\n", $emails);
-				foreach ($emails AS $k => $email)
+				foreach ($emails as $k => $email)
 				{
 					$email = trim($email);
-					if (!empty($email) AND !Validate::isEmail($email))
+					if (!empty($email) && !Validate::isEmail($email))
 						return ($this->_html .= '<div class="alert error">'.$this->l('Invalid e-mail:').' '.$email.'</div>');
-					if (!empty($email) AND sizeof($email))
+					if (!empty($email) && count($email))
 						$emails[$k] = $email;
 					else
 						unset($emails[$k]);
@@ -500,62 +465,57 @@ class MailAlerts extends Module
 
 	public static function getProductsAlerts($id_customer, $id_lang)
 	{
-		if (!Validate::isUnsignedId($id_customer) OR
-			!Validate::isUnsignedId($id_lang)
-		)
+		if (!Validate::isUnsignedId($id_customer) || !Validate::isUnsignedId($id_lang))
 			die (Tools::displayError());
 
-		$customer = new Customer($id_customer);
+		$customer = new Customer((int)$id_customer);
 		$customer_email = $customer->email;
 
 		$products = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-			SELECT ma.`id_product`, p.`quantity` AS product_quantity, pl.`name`, ma.`id_product_attribute`
-			FROM `'._DB_PREFIX_.'mailalert_customer_oos` ma
-			JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = ma.`id_product`
-			JOIN `'._DB_PREFIX_.'product_lang` pl ON pl.`id_product` = ma.`id_product`
-			WHERE p.`active` = 1
-			AND (ma.`id_customer` = '.(int)($id_customer).'
-			OR ma.`customer_email` = \''.pSQL($customer_email).'\')
-			AND pl.`id_lang` = '.(int)($id_lang));
-		if (empty($products) === true OR !sizeof($products))
+		SELECT ma.`id_product`, p.`quantity` product_quantity, pl.`name`, ma.`id_product_attribute`
+		FROM `'._DB_PREFIX_.'mailalert_customer_oos` ma
+		JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = ma.`id_product`
+		JOIN `'._DB_PREFIX_.'product_lang` pl ON pl.`id_product` = ma.`id_product`
+		WHERE p.`active` = 1 AND (ma.`id_customer` = '.(int)$id_customer.' OR ma.`customer_email` = \''.pSQL($customer_email).'\')
+		AND pl.`id_lang` = '.(int)$id_lang);
+		if (empty($products) === true || !count($products))
 			return array();
-		for ($i = 0; $i < sizeof($products); ++$i)
+		for ($i = 0; $i < count($products); ++$i)
 		{
 			$obj = new Product((int)($products[$i]['id_product']), false, (int)($id_lang));
 			if (!Validate::isLoadedObject($obj))
 				continue;
 
-			if (isset($products[$i]['id_product_attribute']) AND
-				Validate::isUnsignedInt($products[$i]['id_product_attribute']))
+			if (isset($products[$i]['id_product_attribute']) && Validate::isUnsignedInt($products[$i]['id_product_attribute']))
 			{
 				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-					SELECT al.`name` AS attribute_name
-					FROM `'._DB_PREFIX_.'product_attribute_combination` pac
-					LEFT JOIN `'._DB_PREFIX_.'attribute` a ON (a.`id_attribute` = pac.`id_attribute`)
-					LEFT JOIN `'._DB_PREFIX_.'attribute_group` ag ON (ag.`id_attribute_group` = a.`id_attribute_group`)
-					LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = '.(int)($id_lang).')
-					LEFT JOIN `'._DB_PREFIX_.'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND agl.`id_lang` = '.(int)($id_lang).')
-					LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pac.`id_product_attribute` = pa.`id_product_attribute`)
-					WHERE pac.`id_product_attribute` = '.(int)($products[$i]['id_product_attribute']));
+				SELECT al.`name` attribute_name
+				FROM `'._DB_PREFIX_.'product_attribute_combination` pac
+				LEFT JOIN `'._DB_PREFIX_.'attribute` a ON (a.`id_attribute` = pac.`id_attribute`)
+				LEFT JOIN `'._DB_PREFIX_.'attribute_group` ag ON (ag.`id_attribute_group` = a.`id_attribute_group`)
+				LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = '.(int)$id_lang.')
+				LEFT JOIN `'._DB_PREFIX_.'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND agl.`id_lang` = '.(int)$id_lang.')
+				LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pac.`id_product_attribute` = pa.`id_product_attribute`)
+				WHERE pac.`id_product_attribute` = '.(int)$products[$i]['id_product_attribute']);
 				$products[$i]['attributes_small'] = '';
 				if ($result)
-					foreach ($result AS $k => $row)
+					foreach ($result as $k => $row)
 						$products[$i]['attributes_small'] .= $row['attribute_name'].', ';
 				$products[$i]['attributes_small'] = rtrim($products[$i]['attributes_small'], ', ');
 				
 				// cover
 				$attrgrps = $obj->getAttributesGroups((int)($id_lang));
-				foreach ($attrgrps AS $attrgrp)
-					if ($attrgrp['id_product_attribute'] == (int)($products[$i]['id_product_attribute']) AND $images = Product::_getAttributeImageAssociations((int)($attrgrp['id_product_attribute'])))
+				foreach ($attrgrps as $attrgrp)
+					if ($attrgrp['id_product_attribute'] == (int)$products[$i]['id_product_attribute'] && $images = Product::_getAttributeImageAssociations((int)($attrgrp['id_product_attribute'])))
 					{
 						$products[$i]['cover'] = $obj->id.'-'.array_pop($images);
 						break;
 					}
 			}
-			if (!isset($products[$i]['cover']) OR !$products[$i]['cover'])
+			if (!isset($products[$i]['cover']) || !$products[$i]['cover'])
 			{
 				$images = $obj->getImages((int)($id_lang));
-				foreach ($images AS $k => $image)
+				foreach ($images as $k => $image)
 					if ($image['cover'])
 					{
 						$products[$i]['cover'] = $obj->id.'-'.$image['id_image'];
@@ -575,10 +535,10 @@ class MailAlerts extends Module
 		return Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'mailalert_customer_oos` 
 		WHERE '.(($id_customer > 0) ? '(`customer_email` = \''.pSQL($customer_email).'\'
-		OR `id_customer` = '.(int)($id_customer).')' : 
+		OR `id_customer` = '.(int)$id_customer.')' : 
 		'`customer_email` = \''.pSQL($customer_email).'\'').
-		' AND `id_product` = '.(int)($id_product).'
-		AND `id_product_attribute` = '.(int)($id_product_attribute));
+		' AND `id_product` = '.(int)$id_product.'
+		AND `id_product_attribute` = '.(int)$id_product_attribute);
 	}
 	
 	public function hookDeleteProduct($params)

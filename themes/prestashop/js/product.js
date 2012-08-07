@@ -323,7 +323,6 @@ function updateDisplay()
 		productPrice += ecotaxAmount;
 		productPriceWithoutReduction += ecotaxAmount;
 
-		//productPrice = ps_round(productPrice * currencyRate, 2);
 		if (productPrice > 0)
 			$('#our_price_display').text(formatCurrency(productPrice, currencyFormat, currencySign, currencyBlank));
 		else
@@ -338,7 +337,7 @@ function updateDisplay()
 			var productPricePretaxed = productPrice;
 		$('#pretaxe_price_display').text(formatCurrency(productPricePretaxed, currencyFormat, currencySign, currencyBlank));
 		/* Unit price */
-        productUnitPriceRatio = parseFloat(productUnitPriceRatio);
+		productUnitPriceRatio = parseFloat(productUnitPriceRatio);
 		if (productUnitPriceRatio > 0 )
 		{
         	newUnitPrice = (productPrice / parseFloat(productUnitPriceRatio)) + selectedCombination['unit_price'];
@@ -477,6 +476,13 @@ $(document).ready(function()
 		findCombination(true);
 	else if (typeof productHasAttributes != 'undefined' && !productHasAttributes)
 		refreshProductImages(0);
+		
+	if (typeof productHasAttributes != 'undefined' && !productHasAttributes && productAvailableForOrder == 1 && !quantityAvailable)
+	{
+		$('#oosHook').show();
+		if ($('#oosHook').length > 0 && function_exists('oosHookJsCode'))
+			oosHookJsCode();
+	}
 
 	$('a#resetImages').click(function() {
 		updateColorSelect(0);
@@ -486,7 +492,7 @@ $(document).ready(function()
 		'hideOnContentClick': true,
 		'transitionIn'	: 'elastic',
 		'transitionOut'	: 'elastic'
-	});
+	});	
 });
 
 function saveCustomization()

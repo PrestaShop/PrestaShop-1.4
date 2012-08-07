@@ -241,7 +241,7 @@ class ProductControllerCore extends FrontController
 
 				$images = $this->product->getImages((int)self::$cookie->id_lang);
 				$productImages = array();
-				foreach ($images AS $k => $image)
+				foreach ($images as $k => $image)
 				{
 					if ($image['cover'])
 					{

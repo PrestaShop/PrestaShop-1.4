@@ -63,7 +63,7 @@ class LinkCore
 	  * @param string $alias Friendly URL (only if $id_OBJ is the object)
 	  * @return string link
 	  */
-	public function getProductLink($id_product, $alias = NULL, $category = NULL, $ean13 = NULL, $id_lang = NULL)
+	public function getProductLink($id_product, $alias = null, $category = null, $ean13 = null, $id_lang = null)
 	{
 		global $cookie;
 

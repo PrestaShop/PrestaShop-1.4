@@ -44,7 +44,7 @@ class GuestTrackingControllerCore extends FrontController
 		
 		parent::process();
 		
-		if (Tools::isSubmit('submitGuestTracking') OR Tools::isSubmit('submitTransformGuestToCustomer'))
+		if (Tools::isSubmit('submitGuestTracking') || Tools::isSubmit('submitTransformGuestToCustomer'))
 		{
 			$id_order = (int)Tools::getValue('id_order');
 			$email = Tools::getValue('email');

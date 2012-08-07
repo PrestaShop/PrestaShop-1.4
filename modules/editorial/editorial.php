@@ -150,7 +150,8 @@ class Editorial extends Module
 			/* upload the image */
 			if (isset($_FILES['body_homepage_logo']) AND isset($_FILES['body_homepage_logo']['tmp_name']) AND !empty($_FILES['body_homepage_logo']['tmp_name']))
 			{
-				Configuration::set('PS_IMAGE_GENERATION_METHOD', 1);
+				$ps_image_regeneration_method = (int)Configuration::get('PS_IMAGE_GENERATION_METHOD');
+				Configuration::updateValue('PS_IMAGE_GENERATION_METHOD', 1);
 				if (file_exists(dirname(__FILE__).'/homepage_logo.jpg'))
 					unlink(dirname(__FILE__).'/homepage_logo.jpg');
 				if ($error = checkImage($_FILES['body_homepage_logo'], $this->maxImageSize))
@@ -161,6 +162,7 @@ class Editorial extends Module
 					$errors .= $this->displayError($this->l('An error occurred during the image upload.'));
 				if (isset($tmpName))
 					unlink($tmpName);
+				Configuration::updateValue('PS_IMAGE_GENERATION_METHOD', (int)$ps_image_regeneration_method);
 			}
 			$this->_html .= $errors == '' ? $this->displayConfirmation($this->l('Settings updated successfully')) : $errors;
 			if (file_exists(dirname(__FILE__).'/homepage_logo.jpg'))

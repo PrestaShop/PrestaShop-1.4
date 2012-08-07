@@ -27,24 +27,32 @@
 // <![CDATA[
 oosHookJsCodeFunctions.push('oosHookJsCodeMailAlert');
 
-function clearText() {
+function clearText()
+{
 	if ($('#oos_customer_email').val() == '{/literal}{l s='your@email.com' mod='mailalerts'}{literal}')
 		$('#oos_customer_email').val('');
 }
 
-function oosHookJsCodeMailAlert() {
+function oosHookJsCodeMailAlert()
+{
 	$.ajax({
 		type: 'POST',
 		url: '{/literal}{$base_dir}{literal}modules/mailalerts/mailalerts-ajax_check.php',
 		data: 'id_product={/literal}{$id_product}{literal}&id_product_attribute='+$('#idCombination').val(),
-		success: function (msg) {
-			if (msg == '0') {
+		success: function (msg)
+		{
+			if (msg == '0')
+			{
 				$('#mailalert_link').show();
 				$('#oos_customer_email').show();
+				$('#oos_customer_email_result').show();
 			}
-			else {
+			else
+			{
 				$('#mailalert_link').hide();
 				$('#oos_customer_email').hide();
+				$('#oos_customer_email_result').html('{/literal}{l s='You already set an alert for this product' mod='mailalerts'}{literal}');
+				$('#oos_customer_email_result').css('color', 'green').show();
 			}
 		}
 	});
@@ -56,14 +64,16 @@ function  addNotification() {
 		url: '{/literal}{$base_dir}{literal}modules/mailalerts/mailalerts-ajax_add.php',
 		data: 'id_product={/literal}{$id_product}{literal}&id_product_attribute='+$('#idCombination').val()+'&customer_email='+$('#oos_customer_email').val()+'',
 		success: function (msg) {
-			if (msg == '1') {
+			if (msg == '1')
+			{
 				$('#mailalert_link').hide();
 				$('#oos_customer_email').hide();
-				$('#oos_customer_email_result').html("{/literal}{l s='Request notification registered' mod='mailalerts'}{literal}");
+				$('#oos_customer_email_result').html('{/literal}{l s='Request notification registered' mod='mailalerts'}{literal}');
 				$('#oos_customer_email_result').css('color', 'green').show();
 			}
-			else {
-				$('#oos_customer_email_result').html("{/literal}{l s='Your e-mail address is invalid' mod='mailalerts'}{literal}");
+			else
+			{
+				$('#oos_customer_email_result').html('{/literal}{l s='Your e-mail address is invalid' mod='mailalerts'}{literal}');
 				$('#oos_customer_email_result').css('color', 'red').show();
 			}
 		}

@@ -36,10 +36,10 @@ class IdentityControllerCore extends FrontController
 	{
 		parent::preProcess();
 
-		$customer = new Customer((int)(self::$cookie->id_customer));
+		$customer = new Customer((int)self::$cookie->id_customer);
 
-		if (isset($_POST['years']) AND isset($_POST['months']) AND isset($_POST['days']))
-			$customer->birthday = (int)($_POST['years']).'-'.(int)($_POST['months']).'-'.(int)($_POST['days']);
+		if (isset($_POST['years']) && isset($_POST['months']) && isset($_POST['days']))
+			$customer->birthday = (int)$_POST['years'].'-'.(int)$_POST['months'].'-'.(int)$_POST['days'];
 
 		if (Tools::isSubmit('submitIdentity'))
 		{
@@ -53,18 +53,19 @@ class IdentityControllerCore extends FrontController
 			if (!isset($_POST['id_gender']))
 				$_POST['id_gender'] = 9;
 
-			if (!@checkdate(Tools::getValue('months'), Tools::getValue('days'), Tools::getValue('years')) AND
-			!(Tools::getValue('months') == '' AND Tools::getValue('days') == '' AND Tools::getValue('years') == ''))
+			if (!@checkdate(Tools::getValue('months'), Tools::getValue('days'), Tools::getValue('years')) &&
+			!(Tools::getValue('months') == '' && Tools::getValue('days') == '' && Tools::getValue('years') == ''))
 				$this->errors[] = Tools::displayError('Invalid date of birth');
 			else
 			{
 				$customer->birthday = (empty($_POST['years']) ? '' : (int)($_POST['years']).'-'.(int)($_POST['months']).'-'.(int)($_POST['days']));
 
-				if (Customer::customerExists(Tools::getValue('email'), false, false))
+				$id_customer_exists = (int)Customer::customerExists(Tools::getValue('email'), true, false);
+				if ($id_customer_exists && $id_customer_exists != (int)self::$cookie->id_customer)
 					$this->errors[] = Tools::displayError('An account is already registered with this e-mail.');
 
 				$_POST['old_passwd'] = trim($_POST['old_passwd']);
-				if (empty($_POST['old_passwd']) OR (Tools::encrypt($_POST['old_passwd']) != self::$cookie->passwd))
+				if (empty($_POST['old_passwd']) || (Tools::encrypt($_POST['old_passwd']) != self::$cookie->passwd))
 					$this->errors[] = Tools::displayError('Your password is incorrect.');
 				elseif ($_POST['passwd'] != $_POST['confirmation'])
 					$this->errors[] = Tools::displayError('Password and confirmation do not match');
@@ -75,7 +76,7 @@ class IdentityControllerCore extends FrontController
 				}
 				if (!count($this->errors))
 				{
-					$customer->id_default_group = (int)($prev_id_default_group);
+					$customer->id_default_group = (int)$prev_id_default_group;
 					$customer->firstname = Tools::ucfirst(Tools::strtolower($customer->firstname));
 					if (Tools::getValue('passwd'))
 						self::$cookie->passwd = $customer->passwd;
@@ -93,21 +94,11 @@ class IdentityControllerCore extends FrontController
 		else
 			$_POST = array_map('stripslashes', $customer->getFields());
 
-		if ($customer->birthday)
-			$birthday = explode('-', $customer->birthday);
-		else
-			$birthday = array('-', '-', '-');
+		$birthday = $customer->birthday ? explode('-', $customer->birthday) : array('-', '-', '-');
 
 		/* Generate years, months and days */
-		self::$smarty->assign(array(
-			'years' => Tools::dateYears(),
-			'sl_year' => $birthday[0],
-			'months' => Tools::dateMonths(),
-			'sl_month' => $birthday[1],
-			'days' => Tools::dateDays(),
-			'sl_day' => $birthday[2],
-			'errors' => $this->errors
-		));
+		self::$smarty->assign(array('years' => Tools::dateYears(), 'sl_year' => $birthday[0], 'months' => Tools::dateMonths(),
+		'sl_month' => $birthday[1], 'days' => Tools::dateDays(), 'sl_day' => $birthday[2], 'errors' => $this->errors));
 
 		self::$smarty->assign('newsletter', (int)Module::getInstanceByName('blocknewsletter')->active);
 	}

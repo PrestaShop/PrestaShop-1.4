@@ -249,7 +249,7 @@ class CustomerCore extends ObjectModel
 	  * @param $ignoreGuest boolean, to exclude guest customer
 	  * @return Customer ID if found, false otherwise
 	  */
-	public static function customerExists($email, $return_id = false, $ignoreGuest = false)
+	public static function customerExists($email, $return_id = false, $ignoreGuest = true)
 	{
 	 	if (!Validate::isEmail($email))
 			return false;
@@ -259,6 +259,9 @@ class CustomerCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'customer`
 		WHERE `email` = \''.pSQL($email).'\''
 		.($ignoreGuest ? 'AND `is_guest` = 0' : ''));
+
+		if (!$result)
+			return false;
 
 		return $return_id ? (int)$result['id_customer'] : isset($result['id_customer']);
 	}

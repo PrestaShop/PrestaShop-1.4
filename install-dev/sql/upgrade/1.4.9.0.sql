@@ -13,6 +13,8 @@ UPDATE `PREFIX_country` SET `zip_code_format` = 'NNNNN' WHERE `iso_code` = 'MC' 
 UPDATE `PREFIX_county_zip_code` SET `to_zip_code` = `from_zip_code` WHERE `to_zip_code` = 0;
 UPDATE `PREFIX_configuration` SET `value` = 0 WHERE `name` = 'PS_HIGH_HTML_THEME_COMPRESSION' LIMIT 1;
 
-INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`)(SELECT 'PS_TAX_DISPLAY_ALL', value, NOW(), NOW() FROM `PREFIX_configuration` WHERE name = 'PS_TAX_DISPLAY' LIMIT 1);
+INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`)(SELECT 'PS_TAX_DISPLAY_ALL', `value`, NOW(), NOW() FROM `PREFIX_configuration` WHERE name = 'PS_TAX_DISPLAY' LIMIT 1);
 
 DELETE FROM `PREFIX_referrer_cache` WHERE id_referrer NOT IN (SELECT id_referrer FROM `PREFIX_referrer`);
+
+/* PHP:update_module_mailalert(); */;
