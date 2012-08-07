@@ -119,6 +119,31 @@ class ConfigurationCore extends ObjectModel
 	}
 
 	/**
+	  * Set TEMPORARY a single configuration value
+	  *
+	  * @param string $key Key wanted
+	  * @param mixed $values $values is an array if the configuration is multilingual, a single string else.
+		*
+	  */
+	public static function set($key, $values)
+	{
+		if (!Validate::isConfigName($key))
+	 		die(Tools::displayError());
+
+		if (!isset(self::$_CONF_IDS[$key]))
+			self::$_CONF_IDS[$key] = null;
+
+	 	/* Update classic values */
+		if (!is_array($values))
+			self::$_CONF[$key] = $values;
+		/* Update multilingual values */
+		else
+			/* Add multilingual values */
+			foreach ($values as $k => $value)
+				self::$_CONF_LANG[(int)($k)][$key] = $value;
+	}
+
+	/**
 	  * Get a single configuration value (in one language only)
 	  *
 	  * @param string $key Key wanted
