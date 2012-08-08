@@ -51,7 +51,7 @@ class productsCategory extends Module
 
 	public function install()
 	{
-	 	if (!parent::install() ||% !$this->registerHook('productfooter') || !$this->registerHook('header') || !Configuration::updateValue('PRODUCTSCATEGORY_DISPLAY_PRICE', 0))
+	 	if (!parent::install() || !$this->registerHook('productfooter') || !$this->registerHook('header') || !Configuration::updateValue('PRODUCTSCATEGORY_DISPLAY_PRICE', 0))
 	 		return false;
 	 	return true;
 	}
