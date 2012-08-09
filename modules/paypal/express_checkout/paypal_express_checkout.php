@@ -190,10 +190,12 @@ class PaypalExpressCheckout extends Paypal
 		// Set payment detail (reference)
 		$this->_setPaymentDetails($fields);
 		$fields['SOLUTIONTYPE']	= 'Sole';
-		$fields['LANDINGPAGE']	= 'Billing';
+		$fields['LANDINGPAGE']	= 'Login';
 
-		// Seller
-		$fields['PAYMENTREQUEST_0_SELLERPAYPALACCOUNTID'] = Configuration::get('PS_SHOP_EMAIL');
+		// Seller informations
+		$fields['USER']			= Configuration::get('PAYPAL_API_USER');
+		$fields['PWD']			= Configuration::get('PAYPAL_API_PASSWORD');
+		$fields['SIGNATURE']	= Configuration::get('PAYPAL_API_SIGNATURE');
 
 		$this->callAPI($fields);
 		$this->_storeToken();
@@ -277,6 +279,9 @@ class PaypalExpressCheckout extends Paypal
 
 	private function setShippingAddress(&$fields, $id_address)
 	{
+		if (! $id_address)
+			return;
+
 		$address	= new Address($id_address);
 
 		$fields['ADDROVERRIDE']							= '1';
@@ -356,17 +361,20 @@ class PaypalExpressCheckout extends Paypal
 	{
 		if (_PS_VERSION_ < '1.5')
 		{
-			$shipping_cost	= $this->context->cart->getOrderShippingCost();
+			$shipping_cost		= $this->context->cart->getOrderShippingCost(null, false);
+			$shipping_cost_wt	= $this->context->cart->getOrderShippingCost();
 		}
 		else
 		{
-			$shipping_cost	= $this->context->cart->getTotalShippingCost();
+			$shipping_cost	= $this->context->cart->getTotalShippingCost(null, true);
+			$shipping_cost_wt	= $this->context->cart->getTotalShippingCost();
 		}
 
 		$fields['PAYMENTREQUEST_0_PAYMENTACTION']	= 'Sale';
 		$fields['PAYMENTREQUEST_0_CURRENCYCODE']	= $this->currency->iso_code;
 
-		$fields['PAYMENTREQUEST_0_SHIPPINGAMT']		= Tools::ps_round($shipping_cost, $this->decimals);
+		$fields['PAYMENTREQUEST_0_SHIPPINGAMT']		= Tools::ps_round($shipping_cost_wt, $this->decimals);
+		$shipping_tax 								= $shipping_cost_wt - $shipping_cost;
 
 		$fields['PAYMENTREQUEST_0_ITEMAMT']			= Tools::ps_round($total, $this->decimals);
 		$fields['PAYMENTREQUEST_0_TAXAMT']			= Tools::ps_round($taxes, $this->decimals);
