@@ -42,7 +42,7 @@ $_MODULE['<{cloudcache}prestashop>backofficetop_69595fc8764ca77da1ca3cab85ba38b1
 $_MODULE['<{cloudcache}prestashop>backofficetop_938d6948b598780c6d713b7cd350e963'] = 'activant le module CloudCache';
 $_MODULE['<{cloudcache}prestashop>backofficetop_fa65e0f3acb9c0b1d8243c3edeebe058'] = 'Tout les paramètres sont corrects pour CloudCache';
 $_MODULE['<{cloudcache}prestashop>content2_41902f7e9bb357cbada1d47b0c252f23'] = 'Ouvrir un compte chez CloudCache.com';
-$_MODULE['<{cloudcache}prestashop>content2_d500acbdf6da11b99ba163036743bd67'] = 'CloudCache fournis aux utilsiateurs de PrestaShop une réduction exclusive de 25% par mois sur tous les pack disponible. Cliquez sur le logo ci-dessous pour s\'inscrire:';
+$_MODULE['<{cloudcache}prestashop>content2_d500acbdf6da11b99ba163036743bd67'] = 'CloudCache fournis aux utilisateurs de PrestaShop une réduction exclusive de 25% par mois sur tous les pack disponible. Cliquez sur le logo ci-dessous pour s\'inscrire:';
 $_MODULE['<{cloudcache}prestashop>content2_38d9b91c515b7d3a97f2bf6e72cd24ec'] = 'Ce module permet d\'accélérer votre PrestaShop grâce au Content Delivery Network de CloudCache';
 $_MODULE['<{cloudcache}prestashop>content2_03894b6f1d0447b352ae5093b25beb3d'] = 'Un Content Delivery Network (CDN) est pour un webmaster qui cherche de hautes performances et qui préviligie l\'expérience utilisateur.';
 $_MODULE['<{cloudcache}prestashop>content2_0bcf4cd42f3d29472055668091d3ebc6'] = 'Vérification de compatiblité pour CloudCache';
@@ -72,7 +72,7 @@ $_MODULE['<{cloudcache}prestashop>content2_727283f37d3e70d3faceb71761d0fb51'] = 
 $_MODULE['<{cloudcache}prestashop>content2_0bae64ec079443c47750df1bdbf35871'] = 'Un Content Delivery Network (CDN) est pour tout webmaster qui veut des hautes performances. Pourquoi? Parce que notre CDN hébérge vos fichiers téléchargeables (images, vidéos, scripts, css) avec des temps de chargement extrêmement rapide.';
 $_MODULE['<{cloudcache}prestashop>content2_343618e9fcce53224cc7a47c2145c5e5'] = 'Quelles modifications le module apporte à mon magasin?';
 $_MODULE['<{cloudcache}prestashop>content2_082be8b13b40bfbf9c9cc70316bc1fec'] = 'Le fichier Tools.php va être surchargé.';
-$_MODULE['<{cloudcache}prestashop>content2_21ce50e4e30845efcb5005cdaa912bfd'] = '[Onglet Préférences -> Performance -> Servers de média] va afficher un lien vers la page de configuration du module CloudCache que celui ci est actif.';
+$_MODULE['<{cloudcache}prestashop>content2_21ce50e4e30845efcb5005cdaa912bfd'] = '[Onglet Préférences -> Performance -> Servers de média] va afficher un lien vers la page de configuration du module CloudCache quand celui ci est actif.';
 $_MODULE['<{cloudcache}prestashop>content2_b480863a2096d2a5fca0cb3460b79c1e'] = 'Un erreur est survenue pendant le test de la connexion.';
 $_MODULE['<{cloudcache}prestashop>content2_7b7a50ca29dc790353366a07600b1fbb'] = 'Succès ! C\'est tout ce que vous avez à faire!';
 $_MODULE['<{cloudcache}prestashop>content2_633d7bd9ecfcb1b67fa03b8a281aa8dd'] = 'est maintenant accéléré par CloudCache.com';
