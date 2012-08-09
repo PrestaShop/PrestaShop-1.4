@@ -213,14 +213,14 @@ class UpsCarrier extends CarrierModule
 	public function disable($forceAll = false)
 	{
 		// Disable Carriers
-		Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier', array('active' => 0), 'UPDATE', '`external_module_name` = \'upscarrier\' OR `id_carrier` IN (SELECT DISTINCT(`id_carrier`) FROM `'._DB_PREFIX_.'ups_rate_service_code`)');	
+		Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier', array('active' => 0), 'UPDATE', '`external_module_name` = \'upscarrier\' OR `id_carrier` IN (SELECT DISTINCT(`id_carrier`) FROM `'._DB_PREFIX_.'ups_rate_service_code`)');
 		parent::disable($forceAll);
 	}
 
 	public function enable($forceAll = false)
 	{
 		// Disable Carriers
-		Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier', array('active' => 1), 'UPDATE', '`external_module_name` = \'upscarrier\' OR `id_carrier` IN (SELECT DISTINCT(`id_carrier`) FROM `'._DB_PREFIX_.'ups_rate_service_code`)');	
+		Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier', array('active' => 1), 'UPDATE', '`external_module_name` = \'upscarrier\' OR `id_carrier` IN (SELECT DISTINCT(`id_carrier`) FROM `'._DB_PREFIX_.'ups_rate_service_code`)');
 		parent::enable($forceAll);
 	}
 
@@ -252,7 +252,7 @@ class UpsCarrier extends CarrierModule
 				Db::getInstance()->autoExecute(_DB_PREFIX_.'ups_rate_service_code', array('id_carrier' => (int)($id_carrier), 'id_carrier_history' => (int)($id_carrier)), 'UPDATE', '`id_ups_rate_service_code` = '.(int)($rateService['id_ups_rate_service_code']));
 			}
 	}
-	
+
 	public static function installExternalCarrier($config)
 	{
 		$carrier = new Carrier();
@@ -494,7 +494,7 @@ class UpsCarrier extends CarrierModule
 					<div class="margin-form">
 						<input type="text" size="5" name="ups_carrier_handling_fee" value="'.Tools::safeOutput(Tools::getValue('ups_carrier_handling_fee', Configuration::get('UPS_CARRIER_HANDLING_FEE'))).'" />
 						'.$configCurrency->sign.'
-					</div>	
+					</div>
 				</fieldset>
 
 				<fieldset style="border: 0px;">
@@ -525,35 +525,35 @@ class UpsCarrier extends CarrierModule
 					<div class="margin-form">
 						<select name="ups_carrier_country" id="ups_carrier_country">
 							<option value="0">'.$this->l('Select a country ...').'</option>';
-							$idcountries = array();
-							foreach (Country::getCountries($this->context->language->id, false, false, false) as $v)
-							{
-								$html .= '<option value="'.$v['id_country'].'" '.($v['id_country'] == (int)(Tools::getValue('ups_carrier_country', Configuration::get('UPS_CARRIER_COUNTRY'))) ? 'selected="selected"' : '').'>'.$v['name'].'</option>';
-								$idcountries[] = $v['id_country'];
-							}
-						$html .= '</select>
+		$idcountries = array();
+		foreach (Country::getCountries($this->context->language->id, false, false, false) as $v)
+		{
+			$html .= '<option value="'.$v['id_country'].'" '.($v['id_country'] == (int)(Tools::getValue('ups_carrier_country', Configuration::get('UPS_CARRIER_COUNTRY'))) ? 'selected="selected"' : '').'>'.$v['name'].'</option>';
+			$idcountries[] = $v['id_country'];
+		}
+		$html .= '</select>
 						<p>' . $this->l('Select country from within the list.') . '</p>
 					</div>
 					<label>'.$this->l('State').' : </label>
 					<div class="margin-form">';
-						$id_country_current = 0;
-						$statesList = Db::getInstance()->executeS('
+		$id_country_current = 0;
+		$statesList = Db::getInstance()->executeS('
 						SELECT `id_state`, `id_country`, `name`
 						FROM `'._DB_PREFIX_.'state` WHERE `active` = 1
 						ORDER BY `id_country`, `name` ASC');
-						foreach ($statesList as $v)
-						{
-							if ($id_country_current != $v['id_country'])
-							{
-								if ($id_country_current != 0)
-									$html .= '</select>';
-								$html .= '<select id="ups_carrier_state_'.$v['id_country'].'" class="stateInput">
+		foreach ($statesList as $v)
+		{
+			if ($id_country_current != $v['id_country'])
+			{
+				if ($id_country_current != 0)
+					$html .= '</select>';
+				$html .= '<select id="ups_carrier_state_'.$v['id_country'].'" class="stateInput">
 									<option value="0">'.$this->l('Select a state ...').'</option>';
-							}
-							$html .= '<option value="'.$v['id_state'].'" '.($v['id_state'] == (int)(Tools::getValue('ups_carrier_state', Configuration::get('UPS_CARRIER_STATE'))) ? 'selected="selected"' : '').'>'.$v['name'].'</option>';		
-							$id_country_current = $v['id_country'];
-						}
-						$html .= '</select><div id="ups_carrier_state_none" class="stateInput selected">'.$this->l('There is no state configuration for this country').'</div>
+			}
+			$html .= '<option value="'.$v['id_state'].'" '.($v['id_state'] == (int)(Tools::getValue('ups_carrier_state', Configuration::get('UPS_CARRIER_STATE'))) ? 'selected="selected"' : '').'>'.$v['name'].'</option>';
+			$id_country_current = $v['id_country'];
+		}
+		$html .= '</select><div id="ups_carrier_state_none" class="stateInput selected">'.$this->l('There is no state configuration for this country').'</div>
 						<input type="hidden" id="ups_carrier_state" name="ups_carrier_state" value="s" />
 					</div>
 				</fieldset>
@@ -564,66 +564,66 @@ class UpsCarrier extends CarrierModule
 					<div class="margin-form">
 						<select name="ups_carrier_rate_service_group">
 							<option value="0">'.$this->l('Select a rate service group ...').'</option>';
-							$idrateservicegroups = array();
-							$rateServiceGroupList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'ups_rate_service_group` ORDER BY `id_ups_rate_service_group`');
-							foreach ($rateServiceGroupList as $v)
-							{
-								$html .= '<option value="'.$v['id_ups_rate_service_group'].'" '.($v['id_ups_rate_service_group'] == (int)(Tools::getValue('ups_carrier_rate_service_group', Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'))) ? 'selected="selected"' : '').'>'.$this->_rateServiceGroupList[$v['name']].'</option>';
-								$idrateservicegroups[] = $v['id_ups_rate_service_group'];
-							}
-						$html .= '</select>
+		$idrateservicegroups = array();
+		$rateServiceGroupList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'ups_rate_service_group` ORDER BY `id_ups_rate_service_group`');
+		foreach ($rateServiceGroupList as $v)
+		{
+			$html .= '<option value="'.$v['id_ups_rate_service_group'].'" '.($v['id_ups_rate_service_group'] == (int)(Tools::getValue('ups_carrier_rate_service_group', Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'))) ? 'selected="selected"' : '').'>'.$this->_rateServiceGroupList[$v['name']].'</option>';
+			$idrateservicegroups[] = $v['id_ups_rate_service_group'];
+		}
+		$html .= '</select>
 						<p>' . $this->l('Shipments originating.') . '</p>
 					</div>
 					<label>'.$this->l('Pickup Type').' : </label>
 						<div class="margin-form">
 							<select name="ups_carrier_pickup_type">
 								<option value="0">'.$this->l('Select a pickup type ...').'</option>';
-								$idpickups = array();
-								foreach($this->_pickupTypeList as $kpickup => $vpickup)
-								{
-									$html .= '<option value="'.$kpickup.'" '.($kpickup == (int)(Tools::getValue('ups_carrier_pickup_type', Configuration::get('UPS_CARRIER_PICKUP_TYPE'))) ? 'selected="selected"' : '').'>'.$vpickup.'</option>';
-									$idpickups[] = $kpickup;
-								}
-					$html .= '</select>
+		$idpickups = array();
+		foreach($this->_pickupTypeList as $kpickup => $vpickup)
+		{
+			$html .= '<option value="'.$kpickup.'" '.($kpickup == (int)(Tools::getValue('ups_carrier_pickup_type', Configuration::get('UPS_CARRIER_PICKUP_TYPE'))) ? 'selected="selected"' : '').'>'.$vpickup.'</option>';
+			$idpickups[] = $kpickup;
+		}
+		$html .= '</select>
 					<p>' . $this->l('Select pickup type from within the list.') . '</p>
 					</div>
 					<label>'.$this->l('Packaging Type').' : </label>
 						<div class="margin-form">
 							<select name="ups_carrier_packaging_type">
 								<option value="0">'.$this->l('Select a packaging type ...').'</option>';
-								$idpackagings = array();
-								foreach($this->_packagingTypeList as $kpackaging => $vpackaging)
-								{
-									$html .= '<option value="'.$kpackaging.'" '.($kpackaging == (Tools::getValue('ups_carrier_packaging_type', Configuration::get('UPS_CARRIER_PACKAGING_TYPE'))) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
-									$idpackagings[] = $kpackaging;
-								}
-					$html .= '</select>
+		$idpackagings = array();
+		foreach($this->_packagingTypeList as $kpackaging => $vpackaging)
+		{
+			$html .= '<option value="'.$kpackaging.'" '.($kpackaging == (Tools::getValue('ups_carrier_packaging_type', Configuration::get('UPS_CARRIER_PACKAGING_TYPE'))) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
+			$idpackagings[] = $kpackaging;
+		}
+		$html .= '</select>
 					<p>' . $this->l('Select packaging type from within the list.') . '</p>
 					</div>
 
 					<label>'.$this->l('Calcul mode').' : </label>
 						<div class="margin-form">
 							<select name="ups_carrier_calcul_mode">';
-								$idcalculmode = array();
-								foreach($this->_calculModeList as $kcalculmode => $vcalculmode)
-									$html .= '<option value="'.$kcalculmode.'" '.($kcalculmode == (Tools::getValue('ups_carrier_calcul_mode', Configuration::get('UPS_CARRIER_CALCUL_MODE'))) ? 'selected="selected"' : '').'>'.$vcalculmode.'</option>';
-					$html .= '</select>
+		$idcalculmode = array();
+		foreach($this->_calculModeList as $kcalculmode => $vcalculmode)
+			$html .= '<option value="'.$kcalculmode.'" '.($kcalculmode == (Tools::getValue('ups_carrier_calcul_mode', Configuration::get('UPS_CARRIER_CALCUL_MODE'))) ? 'selected="selected"' : '').'>'.$vcalculmode.'</option>';
+		$html .= '</select>
 					<p>' . $this->l('Using the calculate mode "All items in one package" will automatically use default packaging size, packaging type and delivery services. Specific configurations for categories or product won\'t be used.') . '</p>
 					</div>';
 
-					if (Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'))
-					{
-						$html .= '<label>'.$this->l('Delivery Service').' : </label>
+		if (Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'))
+		{
+			$html .= '<label>'.$this->l('Delivery Service').' : </label>
 							<div class="margin-form">';
-								$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'ups_rate_service_code` WHERE `id_ups_rate_service_group` = '.(int)Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'));	
-								foreach($rateServiceList as $rateService)
-									$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_ups_rate_service_code'].'" '.(($rateService['active'] == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].' '.($this->webserviceTest($rateService['code']) ? '('.$this->l('Available').')' : '('.$this->l('Not available').')').'<br />';
-						$html .= '
+			$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'ups_rate_service_code` WHERE `id_ups_rate_service_group` = '.(int)Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'));
+			foreach($rateServiceList as $rateService)
+				$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_ups_rate_service_code'].'" '.(($rateService['active'] == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].' '.($this->webserviceTest($rateService['code']) ? '('.$this->l('Available').')' : '('.$this->l('Not available').')').'<br />';
+			$html .= '
 						<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
 						</div>';
-					}
-				$html .= '</fieldset>
-				
+		}
+		$html .= '</fieldset>
+
 				<div class="margin-form"><input class="button" name="submitSave" type="submit"></div>
 			</form>
 
@@ -767,11 +767,11 @@ class UpsCarrier extends CarrierModule
 			$nCategories = (int)sizeof($categories);
 			foreach ($categories AS $category)
 				$pathTab[] = htmlentities($category['name'], ENT_NOQUOTES, 'UTF-8');
-		
+
 			return $pathTab;
 		}
 	}
-	
+
 	private function _getChildCategories($categories, $id, $path = array(), $pathAdd = '')
 	{
 		$html = '';
@@ -800,7 +800,7 @@ class UpsCarrier extends CarrierModule
 					return 1;
 		return 0;
 	}
-	
+
 	private function _displayFormCategory()
 	{
 		// Check if the module is configured
@@ -882,7 +882,7 @@ class UpsCarrier extends CarrierModule
 		{
 			// Loading config
 			$configSelected = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'ups_rate_config` WHERE `id_ups_rate_config` = '.(int)(Tools::getValue('id_ups_rate_config')));
-			
+
 			// Category Path
 			$path = '';
 			$pathTab = $this->_getPathInTab($configSelected['id_category']);
@@ -900,21 +900,21 @@ class UpsCarrier extends CarrierModule
 							<div class="margin-form">
 								<select name="packaging_type_code">
 									<option value="0">'.$this->l('Select a packaging type ...').'</option>';
-									foreach($this->_packagingTypeList as $kpackaging => $vpackaging)
-										$html .= '<option value="'.$kpackaging.'" '.($kpackaging == pSQL(Tools::getValue('packaging_type_code', $configSelected['packaging_type_code'])) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
-						$html .= '</select>
+			foreach($this->_packagingTypeList as $kpackaging => $vpackaging)
+				$html .= '<option value="'.$kpackaging.'" '.($kpackaging == pSQL(Tools::getValue('packaging_type_code', $configSelected['packaging_type_code'])) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
+			$html .= '</select>
 						</div>
 						<label>'.$this->l('Additional charges').' : </label>
 						<div class="margin-form"><input type="text" size="20" name="additionnal_charges" value="'.Tools::safeOutput(Tools::getValue('additionnal_charges', $configSelected['additionnal_charges'])).'" /></div><br />
 						<label>'.$this->l('Delivery Service').' : </label>
 							<div class="margin-form">';
-								$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'ups_rate_service_code` WHERE `id_ups_rate_service_group` = '.(int)Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'));	
-								foreach($rateServiceList as $rateService)
-								{
-									$configServiceSelected = Db::getInstance()->getValue('SELECT `id_ups_rate_service_code` FROM `'._DB_PREFIX_.'ups_rate_config_service` WHERE `id_ups_rate_config` = '.(int)(Tools::getValue('id_ups_rate_config')).' AND `id_ups_rate_service_code` = '.(int)($rateService['id_ups_rate_service_code']));
-									$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_ups_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_ups_rate_service_code']) == 1 || $configServiceSelected > 0) ? 'checked="checked"' : '').' /> '.$rateService['service'].'<br />';
-								}
-						$html .= '
+			$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'ups_rate_service_code` WHERE `id_ups_rate_service_group` = '.(int)Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'));
+			foreach($rateServiceList as $rateService)
+			{
+				$configServiceSelected = Db::getInstance()->getValue('SELECT `id_ups_rate_service_code` FROM `'._DB_PREFIX_.'ups_rate_config_service` WHERE `id_ups_rate_config` = '.(int)(Tools::getValue('id_ups_rate_config')).' AND `id_ups_rate_service_code` = '.(int)($rateService['id_ups_rate_service_code']));
+				$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_ups_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_ups_rate_service_code']) == 1 || $configServiceSelected > 0) ? 'checked="checked"' : '').' /> '.$rateService['service'].'<br />';
+			}
+			$html .= '
 						<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
 						</div>
 						<div class="margin-form"><input class="button" name="submitSave" type="submit"></div>
@@ -935,18 +935,18 @@ class UpsCarrier extends CarrierModule
 							<div class="margin-form">
 								<select name="packaging_type_code">
 									<option value="0">'.$this->l('Select a packaging type ...').'</option>';
-									foreach($this->_packagingTypeList as $kpackaging => $vpackaging)
-										$html .= '<option value="'.$kpackaging.'" '.($kpackaging === pSQL(Tools::getValue('packaging_type_code')) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
-						$html .= '</select>
+			foreach($this->_packagingTypeList as $kpackaging => $vpackaging)
+				$html .= '<option value="'.$kpackaging.'" '.($kpackaging === pSQL(Tools::getValue('packaging_type_code')) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
+			$html .= '</select>
 						</div>
 						<label>'.$this->l('Additional charges').' : </label>
 						<div class="margin-form"><input type="text" size="20" name="additionnal_charges" value="'.Tools::safeOutput(Tools::getValue('additionnal_charges')).'" /></div><br />
 						<label>'.$this->l('Delivery Service').' : </label>
 							<div class="margin-form">';
-								$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'ups_rate_service_code` WHERE `id_ups_rate_service_group` = '.(int)Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'));	
-								foreach($rateServiceList as $rateService)
-									$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_ups_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_ups_rate_service_code']) == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].'<br />';
-						$html .= '
+			$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'ups_rate_service_code` WHERE `id_ups_rate_service_group` = '.(int)Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'));
+			foreach($rateServiceList as $rateService)
+				$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_ups_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_ups_rate_service_code']) == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].'<br />';
+			$html .= '
 						<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
 						</div>
 						<div class="margin-form"><input class="button" name="submitSave" type="submit"></div>
@@ -1047,7 +1047,7 @@ class UpsCarrier extends CarrierModule
 			if ($result1)
 				$this->_html .= $this->displayConfirmation($this->l('Settings updated'));
 			else
-				$this->_html .= $this->displayErrors($this->l('Settings failed'));			
+				$this->_html .= $this->displayErrors($this->l('Settings failed'));
 		}
 	}
 
@@ -1143,21 +1143,21 @@ class UpsCarrier extends CarrierModule
 							<div class="margin-form">
 								<select name="packaging_type_code">
 									<option value="0">'.$this->l('Select a packaging type ...').'</option>';
-									foreach($this->_packagingTypeList as $kpackaging => $vpackaging)
-										$html .= '<option value="'.$kpackaging.'" '.($kpackaging == pSQL(Tools::getValue('packaging_type_code', $configSelected['packaging_type_code'])) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
-						$html .= '</select>
+			foreach($this->_packagingTypeList as $kpackaging => $vpackaging)
+				$html .= '<option value="'.$kpackaging.'" '.($kpackaging == pSQL(Tools::getValue('packaging_type_code', $configSelected['packaging_type_code'])) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
+			$html .= '</select>
 						</div>
 						<label>'.$this->l('Additional charges').' : </label>
 						<div class="margin-form"><input type="text" size="20" name="additionnal_charges" value="'.Tools::safeOutput(Tools::getValue('additionnal_charges', $configSelected['additionnal_charges'])).'" /></div><br />
 						<label>'.$this->l('Delivery Service').' : </label>
 							<div class="margin-form">';
-								$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'ups_rate_service_code` WHERE `id_ups_rate_service_group` = '.(int)Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'));	
-								foreach($rateServiceList as $rateService)
-								{
-									$configServiceSelected = Db::getInstance()->getValue('SELECT `id_ups_rate_service_code` FROM `'._DB_PREFIX_.'ups_rate_config_service` WHERE `id_ups_rate_config` = '.(int)(Tools::getValue('id_ups_rate_config')).' AND `id_ups_rate_service_code` = '.(int)($rateService['id_ups_rate_service_code']));
-									$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_ups_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_ups_rate_service_code']) == 1 || $configServiceSelected > 0) ? 'checked="checked"' : '').' /> '.$rateService['service'].'<br />';
-								}
-						$html .= '
+			$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'ups_rate_service_code` WHERE `id_ups_rate_service_group` = '.(int)Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'));
+			foreach($rateServiceList as $rateService)
+			{
+				$configServiceSelected = Db::getInstance()->getValue('SELECT `id_ups_rate_service_code` FROM `'._DB_PREFIX_.'ups_rate_config_service` WHERE `id_ups_rate_config` = '.(int)(Tools::getValue('id_ups_rate_config')).' AND `id_ups_rate_service_code` = '.(int)($rateService['id_ups_rate_service_code']));
+				$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_ups_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_ups_rate_service_code']) == 1 || $configServiceSelected > 0) ? 'checked="checked"' : '').' /> '.$rateService['service'].'<br />';
+			}
+			$html .= '
 						<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
 						</div>
 						<div class="margin-form"><input class="button" name="submitSave" type="submit"></div>
@@ -1171,31 +1171,31 @@ class UpsCarrier extends CarrierModule
 						<div class="margin-form">
 							<select name="id_product">
 								<option value="0">'.$this->l('Select a product ...').'</option>';
-						$productsList = Db::getInstance()->executeS('
+			$productsList = Db::getInstance()->executeS('
 						SELECT pl.* FROM `'._DB_PREFIX_.'product` p
 						LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang` = 2'.(version_compare(_PS_VERSION_, '1.5.0') >= 0 ? ' '.$this->context->shop->addSqlRestrictionOnLang('pl') : '').')
 						WHERE p.`active` = 1
 						ORDER BY pl.`name`');
-						foreach ($productsList as $product)
-							$html .= '<option value="'.$product['id_product'].'" '.($product['id_product'] == (int)(Tools::getValue('id_product')) ? 'selected="selected"' : '').'>'.$product['name'].'</option>';
-						$html .= '</select>
+			foreach ($productsList as $product)
+				$html .= '<option value="'.$product['id_product'].'" '.($product['id_product'] == (int)(Tools::getValue('id_product')) ? 'selected="selected"' : '').'>'.$product['name'].'</option>';
+			$html .= '</select>
 						</div>
 						<label>'.$this->l('Packaging Type').' : </label>
 							<div class="margin-form">
 								<select name="packaging_type_code">
 									<option value="0">'.$this->l('Select a packaging type ...').'</option>';
-									foreach($this->_packagingTypeList as $kpackaging => $vpackaging)
-										$html .= '<option value="'.$kpackaging.'" '.($kpackaging === pSQL(Tools::getValue('packaging_type_code')) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
-						$html .= '</select>
+			foreach($this->_packagingTypeList as $kpackaging => $vpackaging)
+				$html .= '<option value="'.$kpackaging.'" '.($kpackaging === pSQL(Tools::getValue('packaging_type_code')) ? 'selected="selected"' : '').'>'.$vpackaging.'</option>';
+			$html .= '</select>
 						</div>
 						<label>'.$this->l('Additional charges').' : </label>
 						<div class="margin-form"><input type="text" size="20" name="additionnal_charges" value="'.Tools::safeOutput(Tools::getValue('additionnal_charges')).'" /></div><br />
 						<label>'.$this->l('Delivery Service').' : </label>
 							<div class="margin-form">';
-								$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'ups_rate_service_code` WHERE `id_ups_rate_service_group` = '.(int)Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'));	
-								foreach($rateServiceList as $rateService)
-									$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_ups_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_ups_rate_service_code']) == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].'<br />';
-						$html .= '
+			$rateServiceList = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'ups_rate_service_code` WHERE `id_ups_rate_service_group` = '.(int)Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'));
+			foreach($rateServiceList as $rateService)
+				$html .= '<input type="checkbox" name="service[]" value="'.$rateService['id_ups_rate_service_code'].'" '.(($this->_isPostCheck($rateService['id_ups_rate_service_code']) == 1) ? 'checked="checked"' : '').' /> '.$rateService['service'].'<br />';
+			$html .= '
 						<p>' . $this->l('Choose the delivery service which will be available for customers.') . '</p>
 						</div>
 						<div class="margin-form"><input class="button" name="submitSave" type="submit"></div>
@@ -1204,7 +1204,7 @@ class UpsCarrier extends CarrierModule
 
 		return $html;
 	}
-	
+
 	private function _postValidationProduct()
 	{
 		// Check post values
@@ -1228,7 +1228,7 @@ class UpsCarrier extends CarrierModule
 				$this->_postErrors[]  = $this->l('An error occurred, please try again.');
 		}
 	}
-	
+
 	private function _postProcessProduct()
 	{
 		// Init Var
@@ -1296,7 +1296,7 @@ class UpsCarrier extends CarrierModule
 			if ($result1)
 				$this->_html .= $this->displayConfirmation($this->l('Settings updated'));
 			else
-				$this->_html .= $this->displayErrors($this->l('Settings failed'));			
+				$this->_html .= $this->displayErrors($this->l('Settings failed'));
 		}
 	}
 
@@ -1365,7 +1365,7 @@ class UpsCarrier extends CarrierModule
 		}
 		return $conversionRate;
 	}
-	
+
 	public function getOrderShippingCostHash($wsParams)
 	{
 		$paramHash = '';
@@ -1378,7 +1378,7 @@ class UpsCarrier extends CarrierModule
 		}
 		foreach ($wsParams as $k => $v)
 			if ($k != 'products')
-			$paramHash .= '/'.$v;
+				$paramHash .= '/'.$v;
 		return md5($productHash.$paramHash.Configuration::get('UPS_CARRIER_CALCUL_MODE'));
 	}
 
@@ -1400,7 +1400,7 @@ class UpsCarrier extends CarrierModule
 			// Return Cache
 			return $row;
 		}
-		
+
 		return false;
 	}
 
@@ -1428,7 +1428,7 @@ class UpsCarrier extends CarrierModule
 	{
 		// Init var
 		$config = array();
-	
+
 		// Check if there is a specific product configuration
 		if ($product['id_product'] > 0)
 		{
@@ -1510,38 +1510,37 @@ class UpsCarrier extends CarrierModule
 		}
 		else
 		{
-		// Getting shipping cost for each product
-		foreach ($wsParams['products'] as $product)
-		{
-			// Load specific configuration
-			$config = $this->loadShippingCostConfig($product);
+			// Getting shipping cost for each product
+			foreach ($wsParams['products'] as $product)
+			{
+				// Load specific configuration
+				$config = $this->loadShippingCostConfig($product);
 
-			// Get service in adequation with carrier and check if available
-			$serviceSelected = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'ups_rate_service_code` WHERE `id_carrier` = '.(int)($this->id_carrier));
-			if (!isset($config['services'][$serviceSelected['id_ups_rate_service_code']]))
-				return false;
+				// Get service in adequation with carrier and check if available
+				$serviceSelected = Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'ups_rate_service_code` WHERE `id_carrier` = '.(int)($this->id_carrier));
+				if (!isset($config['services'][$serviceSelected['id_ups_rate_service_code']]))
+					return false;
 
-			// Load param product
-			$wsParams['service'] = $serviceSelected['code'];
-			for ($qty = 0; $qty < $product['quantity']; $qty++)
-				$wsParams['package_list'][] = array(
+				// Load param product
+				$wsParams['service'] = $serviceSelected['code'];
+				for ($qty = 0; $qty < $product['quantity']; $qty++)
+					$wsParams['package_list'][] = array(
 						'width' => ($product['width'] ? $product['width'] : 7),
 						'height' => ($product['height'] ? $product['height'] : 3),
 						'depth' => ($product['depth'] ? $product['depth'] : 5),
 						'weight' => ($product['weight'] > 0.1 ? $product['weight'] : 0.1),
-					'packaging_type' => ($config['packaging_type_code'] ? $config['packaging_type_code'] : Configuration::get('UPS_CARRIER_PACKAGING_TYPE')),
-				);
+						'packaging_type' => ($config['packaging_type_code'] ? $config['packaging_type_code'] : Configuration::get('UPS_CARRIER_PACKAGING_TYPE')),
+					);
 
-			// If Additional charges
-			if (isset($config['id_currency']) && isset($config['additionnal_charges']))
-			{
-				$conversionRate = 1;
+				// If Additional charges
+				if (isset($config['id_currency']) && isset($config['additionnal_charges']))
+				{
+					$conversionRate = 1;
 					$conversionRate = $this->getCartCurrencyRate((int)($config['id_currency']), (int)$wsParams['id_cart']);
-				$cost += ($config['additionnal_charges'] * $conversionRate);
+					$cost += ($config['additionnal_charges'] * $conversionRate);
+				}
 			}
 		}
-		}
-
 
 		// If webservice return a cost, we add it, else, we return the original shipping cost
 		$result = $this->getUpsShippingCost($wsParams);
@@ -1551,7 +1550,7 @@ class UpsCarrier extends CarrierModule
 	}
 
 	public function getOrderShippingCost($params, $shipping_cost)
-	{	
+	{
 		// Init var
 		$address = new Address($params->id_address_delivery);
 		if (!Validate::isLoadedObject($address))
@@ -1613,13 +1612,10 @@ class UpsCarrier extends CarrierModule
 		return $this->getOrderShippingCost($params, 23);
 	}
 
-
-
 	/*
 	** Webservices Methods
 	**
 	*/
-
 	public function parseXML($valTab)
 	{
 		$level = 0;
@@ -1684,7 +1680,7 @@ class UpsCarrier extends CarrierModule
 		if (!empty($service))
 			$servicesList = array(array('code' => $service));
 		else
-			$servicesList = Db::getInstance()->executeS('SELECT `code` FROM `'._DB_PREFIX_.'ups_rate_service_code` WHERE `id_ups_rate_service_group` = '.(int)Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'));	
+			$servicesList = Db::getInstance()->executeS('SELECT `code` FROM `'._DB_PREFIX_.'ups_rate_service_code` WHERE `id_ups_rate_service_group` = '.(int)Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'));
 
 		// Testing Service
 		foreach ($servicesList as $service)
@@ -1751,10 +1747,9 @@ class UpsCarrier extends CarrierModule
 		$errno = $errstr = $result = '';
 		$xml = $this->getXml($wsParams);
 
-
 		// Make the request
 		$opts = array(
-  			'http'=>array(
+			'http'=>array(
 				'method'=> 'POST',
 				'content' => $xml,
 				'header'  => 'Content-type: application/x-www-form-urlencoded',
@@ -1765,7 +1760,6 @@ class UpsCarrier extends CarrierModule
 		$result = @file_get_contents('https://www.ups.com/ups.app/xml/Rate', false, $context);
 		if (!$result)
 			$this->_webserviceError = $this->l('Could not connect to UPS.com');
-
 
 		// Get xml from HTTP Result
 		$data = strstr($result, '<?');
@@ -1790,7 +1784,6 @@ class UpsCarrier extends CarrierModule
 			$replace = array($p['packaging_type'], $p['weight'], $this->_weightUnit, $p['width'], $p['height'], $p['depth'], $this->_dimensionUnit);
 			$xmlPackageList .= str_replace($search, $replace, $xmlPackageTemplate);
 		}
-			
 
 		$search = array(
 			'[[AccessLicenseNumber]]',
@@ -1853,8 +1846,4 @@ class UpsCarrier extends CarrierModule
 
 		return $xml;
 	}
-
 }
-
-?>
-
