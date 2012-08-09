@@ -34,7 +34,7 @@
   {/if}
   <form action="{$var.currentIndex}&view{$var.table}&token={$var.token}" method="post" style="margin-top:10px;">
     {if $var.date}
-    {l s='You must change the expedition date. PLease do not enter holidays date.' mod='tntcarrier'}<br/><br/>
+    {l s='You must change the expedition date. Please do not enter holidays date.' mod='tntcarrier'}<br/><br/>
     {l s='Date' mod='tntcarrier'} : <input type="text" value="{$var.date}" name="dateErrorOrder" /><br/><br/>
 <input type="submit" value="{l s='Modify' mod='tntcarrier'}" class="button" />
     {/if}

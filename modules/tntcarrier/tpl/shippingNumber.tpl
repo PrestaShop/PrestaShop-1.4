@@ -27,7 +27,8 @@
 <fieldset style="width:400px">
 			<legend><img src="../img/admin/delivery.gif" />{l s='Shipping information'}</legend>
 			{if isset($weight)}
-			{l s='Each package must be at' mod='tntcarrier'} {$weight} {l s='Kg' mod='tntcarrier'}.<br/><br/>
+			{l s='Please make sure each package weight a maximum of' mod='tntcarrier'} {$weight} {l s='Kg' mod='tntcarrier'}.<br/><br/>
+			{l s='In order to have a shipping number, please change the order\'s status to Shipped' mod='tntcarrier'}<br/><br/>
 			{/if}
 			{$var.error}
 			{if $var.shipping_numbers && $var.sticker}

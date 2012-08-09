@@ -27,7 +27,7 @@ class TntCarrier extends CarrierModule
 	{
 		$this->name = 'tntcarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.7.2';
+		$this->version = '1.7.3';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 		$this->module_key = 'd4dcfde9937b67002235598ac35cbdf8';
@@ -997,7 +997,7 @@ class TntCarrier extends CarrierModule
 				if (strrpos($e->faultstring, "sender"))
 				{
 					$senderError = 1;
-					$errorFriendly = $this->l('Can you please modify the field').' '.substr($e->faultstring, strpos($e->faultstring, "sender") + 7, strpos($e->faultstring, "'", strpos($e->faultstring, "sender" ) - strpos($e->faultstring, "sender")) + 1).' '.$this->l('in you tnt module configuration.');
+					$errorFriendly = $this->l('Can you please modify the field').' '.substr($e->faultstring, strpos($e->faultstring, "sender") + 7, strpos($e->faultstring, "'", strpos($e->faultstring, "sender" ) - strpos($e->faultstring, "sender")) + 1).' '.$this->l('in your tnt module configuration.');
 				}
 
 				$error = $this->l("Problem : ") . $e->faultstring;

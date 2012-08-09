@@ -132,7 +132,7 @@ class TntWebService
 			'contactLastName' => (strlen(Configuration::get('TNT_CARRIER_SHIPPING_LASTNAME')) > 19 ? substr(Configuration::get('TNT_CARRIER_SHIPPING_LASTNAME'), 0, 19) : Configuration::get('TNT_CARRIER_SHIPPING_LASTNAME')),
 			'contactFirstName' => (strlen(Configuration::get('TNT_CARRIER_SHIPPING_FIRSTNAME')) > 12 ? substr(Configuration::get('TNT_CARRIER_SHIPPING_FIRSTNAME'), 0, 12) : Configuration::get('TNT_CARRIER_SHIPPING_FIRSTNAME')),
 			'emailAddress' => Configuration::get('TNT_CARRIER_SHIPPING_EMAIL'),
-			'phoneNumber' => Configuration::get('TNT_CARRIER_SHIPPING_PHONE'),
+			'phoneNumber' => str_replace(' ', '', Configuration::get('TNT_CARRIER_SHIPPING_PHONE')),
 			'faxNumber' => '' //may be later
 		);
 
@@ -149,7 +149,7 @@ class TntWebService
 				'contactLastName' => (strlen($info[0]['lastname']) > 19 ? substr($info[0]['lastname'], 0, 19) : $info[0]['lastname']),
 				'contactFirstName' => (strlen($info[0]['firstname']) > 12 ? substr($info[0]['firstname'], 0, 12) : $info[0]['firstname']),
 				'emailAddress' => $info[0]['email'],
-				'phoneNumber' => (isset($info[0]['phone_mobile']) && $info[0]['phone_mobile'] != '' ? $info[0]['phone_mobile'] : $info[0]['phone']),
+				'phoneNumber' => (isset($info[0]['phone_mobile']) && $info[0]['phone_mobile'] != '' ? str_replace(' ', '', $info[0]['phone_mobile']) : str_replace(' ', '', $info[0]['phone'])),
 				'accessCode' => '',
 				'floorNumber' => '',
 				'buildingId' => '',
@@ -168,7 +168,7 @@ class TntWebService
 				'contactLastName' => (strlen($info[0]['lastname']) > 19 ? substr($info[0]['lastname'], 0, 19) : $info[0]['lastname']),
 				'contactFirstName' => (strlen($info[0]['firstname']) > 12 ? substr($info[0]['firstname'], 0, 12) : $info[0]['firstname']),
 				'emailAddress' => $info[0]['email'],
-				'phoneNumber' => (isset($info[0]['phone_mobile']) && $info[0]['phone_mobile'] != '' ? $info[0]['phone_mobile'] : $info[0]['phone']),
+				'phoneNumber' => (isset($info[0]['phone_mobile']) && $info[0]['phone_mobile'] != '' ? str_replace(' ', '', $info[0]['phone_mobile']) : str_replace(' ', '', $info[0]['phone'])),
 				'accessCode' => '',
 				'floorNumber' => '',
 				'buildingId' => '',
