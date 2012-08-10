@@ -37,7 +37,7 @@ class Gsitemap extends Module
 	{
 		$this->name = 'gsitemap';
 		$this->tab = 'seo';
-		$this->version = '1.8';
+		$this->version = '1.9';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
@@ -114,7 +114,7 @@ XML;
 		'.(Configuration::get('GSITEMAP_ALL_PRODUCTS') ? '' : 'HAVING level_depth IS NOT NULL').'
 		ORDER BY pl.id_product, pl.id_lang ASC';
 
-		$resource = Db::getInstance()->Execute($sql);
+		$resource = Db::getInstance()->ExecuteS($sql, false);
 
 		// array used to know which product/image was already added (blacklist)
 		$done = null;
@@ -124,30 +124,28 @@ XML;
 		while ($product = Db::getInstance()->nextRow($resource))
 		{
 			// if the product has not been added
-			$id_product = $product['id_product'];
-			if (!isset($done[$id_product]['added']))
+			if (!isset($done[$product['id_product'].'_'.$product['id_lang']]['added']))
 			{
 				// priority
 				if (($priority = 0.7 - ($product['level_depth'] / 10)) < 0.1)
 					$priority = 0.1;
 
 				// adds the product
-				$tmpLink = $link->getProductLink((int)($product['id_product']), $product['link_rewrite'], $product['category'], $product['ean13'], (int)($product['id_lang']));
+				$tmpLink = $link->getProductLink((int)$product['id_product'], $product['link_rewrite'], $product['category'], $product['ean13'], (int)$product['id_lang']);
 				$sitemap = $this->_addSitemapNode($xml, $tmpLink, $priority, 'weekly', substr($product['date_upd'], 0, 10));
 
 				// considers the product has added
-				$done[$id_product]['added'] = true;
+				$done[$product['id_product'].'_'.$product['id_lang']]['added'] = true;
 			}
 
 			// if the image has not been added
-			$id_image = $product['id_image'];
-			if (!isset($done[$id_product][$id_image]) && $id_image)
+			if (!isset($done[$product['id_product'].'_'.$product['id_lang']][$product['id_image']]) && (int)$product['id_image'])
 			{
 				// adds the image
 				$this->_addSitemapNodeImage($sitemap, $product);
 
 				// considers the image as added
-				$done[$id_product][$id_image] = true;
+				$done[$product['id_product'].'_'.$product['id_lang']][$product['id_image']] = true;
 			}
 		}
 
@@ -166,8 +164,7 @@ XML;
 			FROM '._DB_PREFIX_.'category c
 			ORDER BY c.id_category ASC');
 
-
-		foreach($categories as $category)
+		foreach ($categories as $category)
 		{
 			if (($priority = 0.9 - ($category['level_depth'] / 10)) < 0.1)
 				$priority = 0.1;
@@ -184,7 +181,7 @@ XML;
 			LEFT JOIN '._DB_PREFIX_.'lang l ON (cl.id_lang = l.id_lang)
 			WHERE l.`active` = 1
 			ORDER BY cl.id_cms, cl.id_lang ASC';
-		else if (Module::isInstalled('blockcms'))
+		elseif (Module::isInstalled('blockcms'))
 			$sql_cms = '
 			SELECT DISTINCT '.(Configuration::get('PS_REWRITING_SETTINGS') ? 'cl.id_cms, cl.link_rewrite, cl.id_lang' : 'cl.id_cms').
 			' FROM '._DB_PREFIX_.'cms_block_page b
@@ -193,23 +190,11 @@ XML;
 			WHERE l.`active` = 1
 			ORDER BY cl.id_cms, cl.id_lang ASC';
 
-		$cmss = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql_cms);
-		foreach($cmss as $cms)
-		{
-			$tmpLink = Configuration::get('PS_REWRITING_SETTINGS') ? $link->getCMSLink((int)$cms['id_cms'], $cms['link_rewrite'], false, (int)$cms['id_lang']) : $link->getCMSLink((int)$cms['id_cms']);
-			$this->_addSitemapNode($xml, $tmpLink, '0.8', 'daily');
-		}
+		foreach (Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql_cms) as $cms)
+			$this->_addSitemapNode($xml, Configuration::get('PS_REWRITING_SETTINGS') ? $link->getCMSLink((int)$cms['id_cms'], $cms['link_rewrite'], false, (int)$cms['id_lang']) : $link->getCMSLink((int)$cms['id_cms']), '0.8', 'daily');
 
 		/* Add classic pages (contact, best sales, new products...) */
-		$pages = array(
-			'supplier' => false,
-			'manufacturer' => false,
-			'new-products' => false,
-			'prices-drop' => false,
-			'stores' => false,
-			'authentication' => true,
-			'best-sales' => false,
-			'contact-form' => true);
+		$pages = array('supplier' => false, 'manufacturer' => false, 'new-products' => false, 'prices-drop' => false, 'stores' => false, 'authentication' => true, 'best-sales' => false, 'contact-form' => true);
 
 		// Don't show suppliers and manufacturers if they are disallowed
 		if (!Module::getInstanceByName('blockmanufacturer')->id && !Configuration::get('PS_DISPLAY_SUPPLIERS'))
@@ -222,7 +207,7 @@ XML;
 		if (Configuration::get('PS_REWRITING_SETTINGS'))
 			foreach ($pages as $page => $ssl)
 				foreach($langs as $lang)
-					$this->_addSitemapNode($xml, $link->getPageLink($page.'.php', $ssl, $lang['id_lang']), '0.5', 'monthly');
+				$this->_addSitemapNode($xml, $link->getPageLink($page.'.php', $ssl, (int)$lang['id_lang']), '0.5', 'monthly');
 		else
 			foreach($pages as $page => $ssl)
 				$this->_addSitemapNode($xml, $link->getPageLink($page.'.php', $ssl), '0.5', 'monthly');
@@ -323,4 +308,3 @@ XML;
 		return $this->_html;
 	}
 }
-
