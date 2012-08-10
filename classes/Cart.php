@@ -1377,11 +1377,11 @@ class CartCore extends ObjectModel
 	{
 		global $cookie;
 
-		$delivery = (int)$this->id_address_delivery ? new Address((int)$this->id_address_delivery) : new Address;
+		$delivery = (int)$this->id_address_delivery ? new Address((int)$this->id_address_delivery) : new Address();
 		if ($this->id_address_delivery == $this->id_address_invoice)
 			$invoice = $delivery;
 		else
-			$invoice = (int)$this->id_address_invoice ? new Address((int)$this->id_address_invoice) : new Address;
+			$invoice = (int)$this->id_address_invoice ? new Address((int)$this->id_address_invoice) : new Address();
 
 		// New layout system with personalization fields
 		$formattedAddresses['invoice'] = $this->id_address_invoice ? AddressFormat::getFormattedLayoutData($invoice) : array();

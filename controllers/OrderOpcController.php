@@ -58,20 +58,15 @@ class OrderOpcControllerCore extends ParentOrderController
 							}
 							break;
 						case 'updateCarrierAndGetPayments':
-							if (Tools::isSubmit('id_carrier') AND Tools::isSubmit('recyclable') AND Tools::isSubmit('gift') AND Tools::isSubmit('gift_message'))
+							if (Tools::isSubmit('id_carrier') && Tools::isSubmit('recyclable') && Tools::isSubmit('gift') && Tools::isSubmit('gift_message'))
 							{
 								if ($this->_processCarrier())
-								{
-									$return = array(
-										'summary' => self::$cart->getSummaryDetails(),
-										'HOOK_TOP_PAYMENT' => Module::hookExec('paymentTop'),
-										'HOOK_PAYMENT' => $this->_getPaymentMethods()
-									);
-									die(Tools::jsonEncode($return));
-								}
+									die(Tools::jsonEncode(array('summary' => self::$cart->getSummaryDetails(), 'HOOK_TOP_PAYMENT' => Module::hookExec('paymentTop'),
+												'HOOK_PAYMENT' => $this->_getPaymentMethods())));
 								else
 									$this->errors[] = Tools::displayError('Error occurred updating cart.');
-								if (sizeof($this->errors))
+
+								if (count($this->errors))
 									die('{"hasError" : true, "errors" : ["'.implode('\',\'', $this->errors).'"]}');
 								exit;
 							}
