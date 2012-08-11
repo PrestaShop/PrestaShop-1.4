@@ -24,7 +24,6 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-
 //JS Object : update the cart by ajax actions
 var ajaxCart = {
 
@@ -115,7 +114,7 @@ var ajaxCart = {
 			}
 		});
 	},
-	
+
 	// cart to fix display when using back and previous browsers buttons
 	refresh : function(){
 		//send the ajax request to the server
@@ -563,9 +562,9 @@ var ajaxCart = {
 			if (jsonData.hasError)
 			{
 				var errors = '';
-				for(error in jsonData.errors)
+				for (error in jsonData.errors)
 					//IE6 bug fix
-					if(error != 'indexOf')
+					if (error != 'indexOf')
 						errors += jsonData.errors[error] + "\n";
 				alert(errors);
 			}
@@ -579,10 +578,9 @@ var ajaxCart = {
 				//update 'first' and 'last' item classes
 				$(['left_column', 'right_column']).each(function(id, parentId)
 				{
-					$('#'+parentId+' #cart_block dl.products dt').removeClass('first_item').removeClass('last_item').removeClass('item');
-					$('#'+parentId+' #cart_block dl.products dt:first').addClass('first_item');
-					$('#'+parentId+' #cart_block dl.products dt:not(:first,:last)').addClass('item');
-					$('#'+parentId+' #cart_block dl.products dt:last').addClass('last_item');
+				    $('#'+parentId+' #cart_block dl.products dt').removeClass('first_item').removeClass('last_item').addClass('item');
+				    $('#'+parentId+' #cart_block dl.products dt:first').addClass('first_item').removeClass('item');
+				    $('#'+parentId+' #cart_block dl.products dt:last').addClass('last_item').removeClass('item');
 				});
 
 				//reset the onlick events in relation to the cart block (it allow to bind the onclick event to the new 'delete' buttons added)
@@ -597,56 +595,43 @@ var ajaxCart = {
 		$('.ajax_cart_tax_cost').text(jsonData.taxCost);
 		$('.cart_block_wrapping_cost').text(jsonData.wrappingCost);
 		$('.ajax_block_cart_total').text(jsonData.total);
-		if(parseInt(jsonData.nbTotalProducts) > 0)
+		if (parseInt(jsonData.nbTotalProducts) > 0)
 		{
 			$('.ajax_cart_no_product').hide();
 			$('.ajax_cart_quantity').text(jsonData.nbTotalProducts);
 			$('.ajax_cart_quantity').fadeIn('slow');
 			$('.ajax_cart_total').fadeIn('slow');
 
-			if(parseInt(jsonData.nbTotalProducts) > 1)
+			if (parseInt(jsonData.nbTotalProducts) > 1)
 			{
-				$('.ajax_cart_product_txt').each( function () {
-					$(this).hide	();
-				});
-
-				$('.ajax_cart_product_txt_s').each( function () {
-					$(this).show();
-				});
-
+			    $('.ajax_cart_product_txt').hide();
+			    $('.ajax_cart_product_txt_s').show();
 			}
 			else
 			{
-				$('.ajax_cart_product_txt').each( function () {
-					$(this).show();
-				});
-
-				$('.ajax_cart_product_txt_s').each( function () {
-					$(this).hide();
-				});
+			    $('.ajax_cart_product_txt').show();
+			    $('.ajax_cart_product_txt_s').hide();
 			}
 		}
 		else
 		{
-			$('.ajax_cart_quantity, .ajax_cart_product_txt_s, .ajax_cart_product_txt, .ajax_cart_total').each( function () {
-					$(this).hide();
-				});
-			$('.ajax_cart_no_product').show('slow');
+		    $('.ajax_cart_quantity, .ajax_cart_product_txt_s, .ajax_cart_product_txt, .ajax_cart_total').hide();
+		    $('.ajax_cart_no_product').show('slow');
 		}
 	}
 };
 
 //when document is loaded...
-$(document).ready(function(){
+$(document).ready(function() {
 
 	// expand/collapse management
-	$('#block_cart_collapse').click(function(){ ajaxCart.collapse(); });
-	$('#block_cart_expand').click(function(){ ajaxCart.expand(); });
+	$('#block_cart_collapse').click(ajaxCart.collapse);
+	$('#block_cart_expand').click(ajaxCart.expand);
 	ajaxCart.overrideButtonsInThePage();
-	
-	/* Disabled to avoid a useless Ajax call on each page
-	** Downside: If the user clicks "Back", the cart will not be refreshed
-	** If you would like to force this behavior, just uncomment the following line:
-	*/
-	// ajaxCart.refresh();
+
+    /** Disabled to avoid a useless Ajax call on each page
+     * Downside: If the user clicks "Back", the cart will not be refreshed
+     * If you would like to force this behavior, just uncomment the following line:
+     */
+    // ajaxCart.refresh();
 });
