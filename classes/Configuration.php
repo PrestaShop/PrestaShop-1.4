@@ -64,11 +64,7 @@ class ConfigurationCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['name'] = pSQL($this->name);
-		$fields['value'] = pSQL($this->value);
-		$fields['date_add'] = pSQL($this->date_add);
-		$fields['date_upd'] = pSQL($this->date_upd);
-		return $fields;
+		return array('name' => pSQL($this->name), 'value' => pSQL($this->value), 'date_add' => pSQL($this->date_add), 'date_upd' => pSQL($this->date_upd));
 	}
 
 	/**
@@ -140,7 +136,7 @@ class ConfigurationCore extends ObjectModel
 		else
 			/* Add multilingual values */
 			foreach ($values as $k => $value)
-				self::$_CONF_LANG[(int)($k)][$key] = $value;
+				self::$_CONF_LANG[(int)$k][$key] = $value;
 	}
 
 	/**
