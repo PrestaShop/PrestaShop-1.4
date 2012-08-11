@@ -32,7 +32,7 @@ class AdminSearch extends AdminTab
 	{
 		if (!ip2long(trim($query)))
 			return;
-			
+
 		$this->_list['customers'] = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT DISTINCT c.*
 		FROM `'._DB_PREFIX_.'customer` c
@@ -40,7 +40,7 @@ class AdminSearch extends AdminTab
 		LEFT JOIN `'._DB_PREFIX_.'connections` co ON g.id_guest = co.id_guest
 		WHERE co.`ip_address` = \''.ip2long(trim($query)).'\'');
 	}
-	
+
 	/**
 	* Search a specific string in the products and categories
 	*
@@ -49,7 +49,7 @@ class AdminSearch extends AdminTab
 	public function searchCatalog($query)
 	{
 		global $cookie;
-		
+
 		$this->_list['products'] = Product::searchByName((int)$cookie->id_lang, $query);
 		if (!empty($this->_list['products']))
 			for ($i = 0; $i < count($this->_list['products']); $i++)
@@ -71,18 +71,18 @@ class AdminSearch extends AdminTab
 	function postProcess()
 	{
 		global $cookie;
-		
+
 		$query = trim(Tools::getValue('bo_query'));
 		$searchType = (int)Tools::getValue('bo_search_type');
-		
+
 		/* Handle empty search field */
 		if (empty($query))
 			$this->_errors[] = Tools::displayError('Please fill in search form first.');
 		else
 		{
 			echo '<h2>'.$this->l('Search results').'</h2>';
-			
-			if (!$searchType and strlen($query) > 1)
+
+			if (!$searchType && strlen($query) > 1)
 			{
 				global $_LANGADM;
 				$tabs = array();
@@ -91,26 +91,26 @@ class AdminSearch extends AdminTab
 					$tabs[$row['class_name']] = $row['name'];
 				foreach (AdminTab::$tabParenting as $key => $value)
 					$tabs[$key] = $tabs[$value];
-				$matchingResults = array();
 
+				$matchingResults = array();
 				foreach ($_LANGADM as $key => $value)
 					if (stripos($value, $query) !== false)
 					{
 						$key = substr($key, 0, -32);
-						if (in_array($key, array('AdminTab', 'index')))
+						if (in_array($key, array('AdminTab', 'index')) || !isset($tabs[$key]))
 							continue;
+
 						if (!isset($matchingResults[$tabs[$key]]))
 							$matchingResults[$tabs[$key]] = array();
 						$matchingResults[$tabs[$key]][] = array('tab' => $key, 'value' => $value);
 					}
-				
+
 				if (count($matchingResults))
 				{
 					arsort($matchingResults);
 					echo '<h3>'.$this->l('Features matching your query:').' '.count($matchingResults).'</h3>
 					<table class="table" cellpadding="0" cellspacing="0">';
 					foreach ($matchingResults as $key => $tab)
-					{
 						for ($i = 0; isset($tab[$i]); ++$i)
 							echo '<tr>
 							<th>'.($i == 0 ? htmlentities($key, ENT_COMPAT, 'utf-8') : '&nbsp;').'</th>
@@ -120,14 +120,12 @@ class AdminSearch extends AdminTab
 								</a>
 							</td>
 						</tr>';
-					}
 					echo '</table><div class="clear">&nbsp;</div>';
 				}
 			}
-			
-			
+
 			/* Product research */
-			if (!$searchType OR $searchType == 1)
+			if (!$searchType || $searchType == 1)
 			{
 				$this->fieldsDisplay['catalog'] = (array(
 					'ID' => array('title' => $this->l('ID')),
@@ -174,7 +172,7 @@ class AdminSearch extends AdminTab
 					/* Normal customer search */
 					$this->searchCustomer($query);
 				}
-				
+
 				if ($searchType == 6)
 					$this->searchIP($query);
 			}
@@ -186,7 +184,7 @@ class AdminSearch extends AdminTab
 					Tools::redirectAdmin('index.php?tab=AdminOrders&id_order='.(int)($order->id).'&vieworder'.'&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)));
 				$this->_errors[] = Tools::displayError('No order found with this ID:').' '.Tools::htmlentitiesUTF8($query);
 			}
-			
+
 			/* Invoices */
 			if ($searchType == 4)
 			{
@@ -202,7 +200,7 @@ class AdminSearch extends AdminTab
 					Tools::redirectAdmin('index.php?tab=AdminCarts&id_cart='.(int)($cart->id).'&viewcart'.'&token='.Tools::getAdminToken('AdminCarts'.(int)(Tab::getIdFromClassName('AdminCarts')).(int)($cookie->id_employee)));
 				$this->_errors[] = Tools::displayError('No cart found with this ID:').' '.Tools::htmlentitiesUTF8($query);
 			}
-			
+
 			/* IP */
 			// 6 - but it is included in the customer block
 		}
@@ -215,7 +213,7 @@ class AdminSearch extends AdminTab
 		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
 		$query = trim(Tools::getValue('bo_query'));
 		$nbCategories = $nbProducts = $nbCustomers = 0;
-		
+
 		/* Display categories if any has been matching */
 		if (isset($this->_list['categories']) AND $nbCategories = sizeof($this->_list['categories']))
 		{
@@ -298,7 +296,7 @@ class AdminSearch extends AdminTab
 			echo '</table>
 			<div class="clear">&nbsp;</div>';
 		}
-			
+
 		/* Display error if nothing has been matching */
 		if (!$nbCategories AND !$nbProducts AND !$nbCustomers)
 			echo '<h3>'.$this->l('Nothing found for').' "'.Tools::htmlentitiesUTF8($query).'"</h3>';
