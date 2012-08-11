@@ -302,3 +302,4 @@ $_LANG['Warning, we detected that the version specified in your config/settings.
 $_LANG['Warning, the installer was unable to detect what is your current PrestaShop version from a database structure analysis. This means some fields or tables are missing, and upgrade is under your own risk.'] = '';
 $_LANG['However the installer has detected that the version stored in your configuration table is %1$s'] = '';
 $_LANG['Dom extension loaded'] = '';
+$_LANG['translations'] = 'ubersetzungen';
