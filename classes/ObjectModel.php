@@ -32,7 +32,7 @@ abstract class ObjectModelCore
 
 	/** @var integer lang id */
 	protected $id_lang = NULL;
-	
+
 	/** @var string SQL Table name */
 	protected $table = NULL;
 
@@ -67,10 +67,10 @@ abstract class ObjectModelCore
  	protected $webserviceParameters = array();
 
 	protected static $_cache = array();
-	
+
 	/** @var  string path to image directory. Used for image deletion. */
 	protected $image_dir = NULL;
-	
+
 	/** @var string file type of image files. Used for image deletion. */
 	protected $image_format = 'jpg';
 
@@ -113,7 +113,7 @@ abstract class ObjectModelCore
 			$this->id_lang = Language::getLanguage((int)$id_lang) ? (int)$id_lang : (int)Configuration::get('PS_LANG_DEFAULT');
 			$id_lang = $this->id_lang;
 		}
-			
+
 	 	/* Connect to database and check SQL table/identifier */
 	 	if (!Validate::isTableOrIdentifier($this->identifier) || !Validate::isTableOrIdentifier($this->table))
 			die(Tools::displayError());
@@ -136,13 +136,13 @@ abstract class ObjectModelCore
 				foreach ($result as $key => $value)
 					if (key_exists($key, $this))
 						$this->{$key} = $value;
-	
+
 				/* Join multilingual tables */
 				if (!$id_lang AND method_exists($this, 'getTranslationsFieldsChild'))
 				{
 					$result = Db::getInstance()->ExecuteS('
-					SELECT * 
-					FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` 
+					SELECT *
+					FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang`
 					WHERE `'.$this->identifier.'` = '.(int)$id);
 					if ($result)
 						foreach ($result as $row)
@@ -236,7 +236,7 @@ abstract class ObjectModelCore
 		/* Automatically fill dates */
 		if (key_exists('date_upd', $this))
 			$this->date_upd = date('Y-m-d H:i:s');
-		
+
 		/* Database update */
 		if ($nullValues)
 			$result = Db::getInstance()->autoExecuteWithNullValues(_DB_PREFIX_.$this->table, $this->getFields(), 'UPDATE', '`'.pSQL($this->identifier).'` = '.(int)($this->id));
@@ -245,7 +245,7 @@ abstract class ObjectModelCore
 		if (!$result)
 			return false;
 
-		// Database update for multilingual fields related to the object 
+		// Database update for multilingual fields related to the object
 		if (method_exists($this, 'getTranslationsFieldsChild'))
 		{
 			$fields = $this->getTranslationsFieldsChild();
@@ -277,7 +277,7 @@ abstract class ObjectModelCore
 	 */
 	public function delete()
 	{
-	 	if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
+	 	if (!Validate::isTableOrIdentifier($this->identifier) || !Validate::isTableOrIdentifier($this->table))
 	 		die(Tools::displayError());
 
 		$this->clearCache();
@@ -361,7 +361,7 @@ abstract class ObjectModelCore
 	protected function makeTranslationFields(&$fields, &$fieldsArray, $id_language)
 	{
 		$fields[$id_language]['id_lang'] = $id_language;
-		$fields[$id_language][$this->identifier] = (int)($this->id);
+		$fields[$id_language][$this->identifier] = (int)$this->id;
 		foreach ($fieldsArray as $field)
 		{
 			/* Check fields validity */
@@ -369,8 +369,8 @@ abstract class ObjectModelCore
 				die(Tools::displayError());
 
 			/* Copy the field, or the default language field if it's both required and empty */
-			if ((!$this->id_lang AND isset($this->{$field}[$id_language]) AND !empty($this->{$field}[$id_language])) 
-			OR ($this->id_lang AND isset($this->$field) AND !empty($this->$field)))
+			if ((!$this->id_lang && isset($this->{$field}[$id_language]) && !empty($this->{$field}[$id_language]))
+				|| ($this->id_lang && isset($this->$field) && !empty($this->$field)))
 				$fields[$id_language][$field] = $this->id_lang ? pSQL($this->$field) : pSQL($this->{$field}[$id_language]);
 			elseif (in_array($field, $this->fieldsRequiredLang))
 				$fields[$id_language][$field] = $this->id_lang ? pSQL($this->$field) : pSQL($this->{$field}[Configuration::get('PS_LANG_DEFAULT')]);
@@ -491,7 +491,7 @@ abstract class ObjectModelCore
 		/* Checking for fields validity */
 		foreach ($this->fieldsValidate AS $field => $function)
 		{
-			
+
 			if ($copy_post && is_array($this->exclude_copy_post) && in_array($field, $this->exclude_copy_post))
 				continue;
 
@@ -686,7 +686,7 @@ abstract class ObjectModelCore
 		elseif ($this->id && isset(self::$_cache[$this->table][(int)$this->id]))
 			unset(self::$_cache[$this->table][(int)$this->id]);
 	}
-	
+
 	/**
 	 * Delete images associated with the object
 	 *
@@ -700,20 +700,20 @@ abstract class ObjectModelCore
 		/* Deleting object images and thumbnails (cache) */
 		if ($this->image_dir)
 		{
-			if (file_exists($this->image_dir.$this->id.'.'.$this->image_format) 
+			if (file_exists($this->image_dir.$this->id.'.'.$this->image_format)
 				&& !unlink($this->image_dir.$this->id.'.'.$this->image_format))
 				return false;
 		}
-		if (file_exists(_PS_TMP_IMG_DIR_.$this->table.'_'.$this->id.'.'.$this->image_format) 
+		if (file_exists(_PS_TMP_IMG_DIR_.$this->table.'_'.$this->id.'.'.$this->image_format)
 			&& !unlink(_PS_TMP_IMG_DIR_.$this->table.'_'.$this->id.'.'.$this->image_format))
 			return false;
-		if (file_exists(_PS_TMP_IMG_DIR_.$this->table.'_mini_'.$this->id.'.'.$this->image_format) 
+		if (file_exists(_PS_TMP_IMG_DIR_.$this->table.'_mini_'.$this->id.'.'.$this->image_format)
 			&& !unlink(_PS_TMP_IMG_DIR_.$this->table.'_mini_'.$this->id.'.'.$this->image_format))
 			return false;
 
 		$types = ImageType::getImagesTypes();
 		foreach ($types as $image_type)
-			if (file_exists($this->image_dir.$this->id.'-'.stripslashes($image_type['name']).'.'.$this->image_format) 
+			if (file_exists($this->image_dir.$this->id.'-'.stripslashes($image_type['name']).'.'.$this->image_format)
 			&& !unlink($this->image_dir.$this->id.'-'.stripslashes($image_type['name']).'.'.$this->image_format))
 				return false;
 		return true;
@@ -729,7 +729,7 @@ abstract class ObjectModelCore
 	public static function existsInDatabase($id_entity, $table)
 	{
 		$field = $table == 'orders' ? 'order' : $table;
-			
+
 		return (bool)Db::getInstance()->getValue('
 		SELECT `id_'.pSQL($field).'` id
 		FROM `'._DB_PREFIX_.pSQL($table).'` e

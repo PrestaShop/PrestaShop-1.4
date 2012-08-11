@@ -533,8 +533,7 @@ class ProductCore extends ObjectModel
 
 	public static function updateDefaultAttribute($id_product)
 	{
-		$id_product_attribute = self::getDefaultAttribute($id_product);
-		Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET cache_default_attribute = '.(int)($id_product_attribute).' WHERE id_product = '.(int)($id_product).' LIMIT 1');
+		Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET cache_default_attribute = '.(int)self::getDefaultAttribute($id_product).' WHERE id_product = '.(int)$id_product.' LIMIT 1');
 	}
 
 	public function validateFieldsLang($die = true, $errorReturn = false)
@@ -553,47 +552,37 @@ class ProductCore extends ObjectModel
 		return parent::validateFieldsLang($die, $errorReturn);
 	}
 
-	public function delete()
+	public function delete($force_delete = false)
 	{
 		// check if the product is not used in a non validated order
-		if (!$this->isDeletable())
+		if (!$force_delete && !$this->isDeletable())
 			return false;
 
-		if (!GroupReduction::deleteProductReduction($this->id))
+		if (!$force_delete && !GroupReduction::deleteProductReduction($this->id))
 			return false;
 
 		Hook::deleteProduct($this);
-		if (!parent::delete() OR
-			!$this->deleteCategories(true) OR
-			!$this->deleteProductAttributes() OR
-			!$this->deleteProductFeatures() OR
-			!$this->deleteTags() OR
-			!$this->deleteCartProducts() OR
-			!$this->deleteAttributesImpacts() OR
-			!$this->deleteAttachments() OR
-			!$this->deleteCustomization() OR
-			!SpecificPrice::deleteByProductId((int)($this->id)) OR
-			!$this->deletePack() OR
-			!$this->deleteProductSale() OR
-			!$this->deleteSceneProducts() OR
-			!$this->deleteSearchIndexes() OR
-			!$this->deleteAccessories() OR
-			!$this->deleteFromAccessories())
-		return false;
+		if (!parent::delete() || !$this->deleteCategories(true) || !$this->deleteProductAttributes() ||
+			!$this->deleteProductFeatures() || !$this->deleteTags() || !$this->deleteCartProducts() ||
+			!$this->deleteAttributesImpacts() || !$this->deleteAttachments() ||	!$this->deleteCustomization() ||
+			!SpecificPrice::deleteByProductId((int)($this->id)) || !$this->deletePack() || !$this->deleteProductSale() ||
+			!$this->deleteSceneProducts() || !$this->deleteSearchIndexes() || !$this->deleteAccessories() || !$this->deleteFromAccessories())
+			return false;
 
-		if (!_PS_MODE_DEMO_ AND !$this->deleteImages())
+		if (!_PS_MODE_DEMO_ && !$this->deleteImages())
 			return false;
 
 		if ($id = ProductDownload::getIdFromIdProduct($this->id))
-			if ($productDownload = new ProductDownload($id) AND !$productDownload->delete(true))
-				return false;
+			if ($productDownload = new ProductDownload($id))
+				if (!$productDownload->delete(true))
+					return false;
 		return true;
 	}
 
 	public function deleteSelection($products)
 	{
 		$return = 1;
-		foreach ($products AS $id_product)
+		foreach ($products as $id_product)
 		{
 			$product = new Product((int)$id_product);
 			$return &= $product->delete();
@@ -764,10 +753,7 @@ class ProductCore extends ObjectModel
 	*/
 	public function deleteImages()
 	{
-		$result = Db::getInstance()->ExecuteS('
-		SELECT `id_image`
-		FROM `'._DB_PREFIX_.'image`
-		WHERE `id_product` = '.(int)($this->id));
+		$result = Db::getInstance()->ExecuteS('SELECT `id_image` FROM `'._DB_PREFIX_.'image` WHERE `id_product` = '.(int)$this->id);
 
 		$status = true;
 		if ($result)
@@ -781,11 +767,7 @@ class ProductCore extends ObjectModel
 
 	public static function getProductAttributePrice($id_product_attribute)
 	{
-		$rq = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT `price`
-		FROM `'._DB_PREFIX_.'product_attribute`
-		WHERE `id_product_attribute` = '.(int)($id_product_attribute));
-		return $rq['price'];
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT `price` FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product_attribute` = '.(int)$id_product_attribute);
 	}
 
 	/**
@@ -800,9 +782,9 @@ class ProductCore extends ObjectModel
 	*/
 	public static function getProducts($id_lang, $start, $limit, $orderBy, $orderWay, $id_category = false, $only_active = false)
 	{
-		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay))
+		if (!Validate::isOrderBy($orderBy) || !Validate::isOrderWay($orderWay))
 			die (Tools::displayError());
-		if ($orderBy == 'id_product' OR	$orderBy == 'price' OR	$orderBy == 'date_add')
+		if ($orderBy == 'id_product' ||	$orderBy == 'price' ||	$orderBy == 'date_add')
 			$orderByPrefix = 'p';
 		elseif ($orderBy == 'name')
 			$orderByPrefix = 'pl';
@@ -1363,11 +1345,11 @@ class ProductCore extends ObjectModel
 		if ($nbProducts < 1) $nbProducts = 10;
 		if (empty($orderBy) || $orderBy == 'position') $orderBy = 'date_add';
 		if (empty($orderWay)) $orderWay = 'DESC';
-		if ($orderBy == 'id_product' OR $orderBy == 'price' OR $orderBy == 'date_add')
+		if ($orderBy == 'id_product' || $orderBy == 'price' || $orderBy == 'date_add')
 			$orderByPrefix = 'p';
 		elseif ($orderBy == 'name')
 			$orderByPrefix = 'pl';
-		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay))
+		if (!Validate::isOrderBy($orderBy) || !Validate::isOrderWay($orderWay))
 			die(Tools::displayError());
 
 		$groups = FrontController::getCurrentCustomerGroups();
@@ -1506,11 +1488,11 @@ class ProductCore extends ObjectModel
 		if ($nbProducts < 1) $nbProducts = 10;
 		if (empty($orderBy) || $orderBy == 'position') $orderBy = 'price';
 		if (empty($orderWay)) $orderWay = 'DESC';
-		if ($orderBy == 'id_product' OR $orderBy == 'price' OR $orderBy == 'date_add')
+		if ($orderBy == 'id_product' || $orderBy == 'price' || $orderBy == 'date_add')
 			$orderByPrefix = 'p';
 		elseif ($orderBy == 'name')
 			$orderByPrefix = 'pl';
-		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay))
+		if (!Validate::isOrderBy($orderBy) || !Validate::isOrderWay($orderWay))
 			die (Tools::displayError());
 		$currentDate = date('Y-m-d H:i:s');
 		$ids_product = self::_getProductIdByDate((!$beginning ? $currentDate : $beginning), (!$ending ? $currentDate : $ending));
@@ -1722,14 +1704,14 @@ class ProductCore extends ObjectModel
 	{
 		global $cookie, $cart;
 		$cur_cart = $cart;
-		
+
 		$cache_key = (int)$id_product.'_'.(int)$usetax.'_'.(int)$id_product_attribute.'_'.(int)$decimals.'_'.(int)$divisor.'_'.(int)$only_reduc.'_'.(int)$usereduc.'_'.(int)$quantity.'_'.
 		(int)$forceAssociatedTax.'_'.(int)$id_customer.'_'.(int)$id_cart.'_'.(int)$id_address.'_'.(int)$specificPriceOutput.'_'.(int)$with_ecotax.'_'.(int)$use_groupReduction.'_'.
 		(isset($cookie->id_customer) ? (int)$cookie->id_customer : 0).'_'.(isset($cookie->id_cart) ? (int)$cookie->id_cart : 0).'_'.
 		(isset($cookie->id_country) ? (int)$cookie->id_country : 0).'_'.(isset($cookie->id_state) ? (int)$cookie->id_state : 0).'_'.
 		(isset($cookie->postcode) ? (int)$cookie->postcode : 0).'_'.(isset($cookie->id_currency) ? (int)$cookie->id_currency : 0).'_'.
 		(isset($cur_cart->id_currency) ? (int)$cur_cart->id_currency : 0);
-		
+
 		if (isset(self::$_prices_static[$cache_key]))
 			return self::$_prices_static[$cache_key];
 
@@ -1743,17 +1725,17 @@ class ProductCore extends ObjectModel
 		if (!$id_customer)
 			$id_customer = ((Validate::isCookie($cookie) && isset($cookie->id_customer) && $cookie->id_customer) ? (int)$cookie->id_customer : null);
 		$id_group = $id_customer ? (int)Customer::getDefaultGroupId($id_customer) : _PS_DEFAULT_CUSTOMER_GROUP_;
-		
+
 		if (!is_object($cur_cart) && !$id_cart && !Validate::isCookie($cookie))
 			die(Tools::displayError());
-		
+
 		/*
 		* When a user (e.g., guest, customer, Google...) is on PrestaShop, he has already its cart as the global (see /init.php)
 		* When a non-user calls directly this method (e.g., payment module...) is on PrestaShop, he does not have already it BUT knows the cart ID
 		*/
 		if (!is_object($cur_cart) && ((int)$id_cart > 0 || (Validate::isCookie($cookie) && $cookie->id_cart)))
 			$cur_cart = $id_cart ? new Cart((int)$id_cart) : new Cart((int)$cookie->id_cart);
-		
+
 		$cart_quantity = 0;
 		if ((int)$id_cart)
 		{
@@ -1767,15 +1749,15 @@ class ProductCore extends ObjectModel
 				FROM `'._DB_PREFIX_.'cart_product`
 				WHERE `id_cart` = '.(int)$id_cart.'
 				'.($calc_qty_discounts_with_combinations ? ', id_product_attribute' : ' GROUP BY id_product'), false);
-				
+
 				while ($row = DB::getInstance()->nextRow($quantities))
 					self::$_cart_quantity[(int)$id_cart.'_'.(int)$row['id_product'].($calc_qty_discounts_with_combinations ? '_'.(int)$row['id_product_attribute'] : '')] = $row['quantity'];
 			}
-			
+
 			$cart_quantity = self::$_cart_quantity[$cache_name];
 		}
 		$quantity = ($id_cart && $cart_quantity) ? $cart_quantity : $quantity;
-		
+
 		$id_currency = (int)(Validate::isLoadedObject($cur_cart) ? $cur_cart->id_currency : ((isset($cookie->id_currency) AND (int)($cookie->id_currency)) ? $cookie->id_currency : Configuration::get('PS_CURRENCY_DEFAULT')));
 
 		// retrieve address informations
@@ -1806,7 +1788,7 @@ class ProductCore extends ObjectModel
 
 			$id_county = (int)County::getIdCountyByZipCode($id_state, $postcode);
 		}
-		
+
 		if (!isset($id_country))
 			$id_country = (int)Country::getDefaultCountryId();
 
@@ -1818,7 +1800,7 @@ class ProductCore extends ObjectModel
 
 		self::$_prices_static[$cache_key] = Product::priceCalculation(0, $id_product, $id_product_attribute, $id_country, $id_state, $id_county, $id_currency, $id_group, $quantity, $usetax, $decimals, $only_reduc,
 		$usereduc, $with_ecotax, $specificPriceOutput, $use_groupReduction);
-		
+
 		return self::$_prices_static[$cache_key];
 	}
 
@@ -2389,7 +2371,7 @@ class ProductCore extends ObjectModel
 				self::$_cacheFeatures[$row['id_product']] = array();
 			self::$_cacheFeatures[$row['id_product']][] = $row;
 		}
-		
+
 		/* Even the products without features should be listed */
 		foreach ($product_ids as $id_product)
 			if (!isset(self::$_cacheFeatures[$id_product]))
@@ -2827,7 +2809,7 @@ class ProductCore extends ObjectModel
 	public static function getAllCustomizedDatas($id_cart, $id_lang = null)
 	{
 		global $cookie;
-		
+
 		/* Cart ID is required */
 		if (!$id_cart)
 			return false;
@@ -3377,7 +3359,7 @@ class ProductCore extends ObjectModel
 		SELECT position
 		FROM `'._DB_PREFIX_.'category_product`
 		WHERE id_category = '.(int)$this->id_category_default.' AND id_product = '.(int)$this->id);
-		
+
 		return $position ? (int)$position : '';
 	}
 
@@ -3425,7 +3407,7 @@ class ProductCore extends ObjectModel
 		}
 		return $images;
 	}
-	
+
 	public function setWsImages($images)
 	{
 		$result = true;
@@ -3439,7 +3421,7 @@ class ProductCore extends ObjectModel
 		}
 		return $result;
 	}
-	
+
 	public function getWsTags()
 	{
 		return Db::getInstance()->ExecuteS('
@@ -3492,14 +3474,14 @@ class ProductCore extends ObjectModel
 		Module::hookExec('afterSaveProduct', array('id_product' => $this->id));
 		return $return;
 	}
-	
+
 	public function update($nullValues = false)
 	{
 		$return = parent::update($nullValues);
 		Module::hookExec('afterSaveProduct', array('id_product' => $this->id));
 		return $return;
 	}
-	
+
 	public function addWs($autodate = true, $nullValues = false)
 	{
 		$success = parent::add($autodate, $nullValues);
@@ -3507,7 +3489,7 @@ class ProductCore extends ObjectModel
 			Search::indexation(false, $this->id);
 		return $success;
 	}
-	
+
 	public function updateWs($nullValues = false)
 	{
 		$success = parent::update($nullValues);
@@ -3518,7 +3500,7 @@ class ProductCore extends ObjectModel
 
 	/**
 	 * check if a product can be deleted (in a non-valid order)
-	 * @return boolean 
+	 * @return boolean
 	 */
 	protected function isDeletable()
 	{

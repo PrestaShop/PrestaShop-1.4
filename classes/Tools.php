@@ -502,8 +502,9 @@ class ToolsCore
 	{
 	 	if (!$date || !($time = strtotime($date)))
 	 		return $date;
+
 		if (!Validate::isDate($date) || !Validate::isBool($full))
-			die (self::displayError('Invalid date'));
+			die(self::displayError('Invalid date'));
 
 		$language = Language::getLanguage((int)$id_lang);
 		return date($full ? $language['date_format_full'] : $language['date_format_lite'], $time);
