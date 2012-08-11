@@ -1337,17 +1337,17 @@ class AdminProducts extends AdminTab
 		{
 			if (!Tools::getValue('virtual_product_name'))
 			{
-				$this->_errors[] = $this->l('the field').' <b>'.$this->l('display filename').'</b> '.$this->l('is required');
+				$this->_errors[] = $this->l('the field').' <strong class="bold">'.$this->l('display filename').'</strong> '.$this->l('is required');
 				return false;
 			}
 			if (Tools::getValue('virtual_product_nb_days') === false)
 			{
-				$this->_errors[] = $this->l('the field').' <b>'.$this->l('number of days').'</b> '.$this->l('is required');
+				$this->_errors[] = $this->l('the field').' <strong class="bold">'.$this->l('number of days').'</strong> '.$this->l('is required');
 				return false;
 			}
-			if (Tools::getValue('virtual_product_expiration_date') AND !Validate::isDate(Tools::getValue('virtual_product_expiration_date')))
+			if (Tools::getValue('virtual_product_expiration_date') && !Validate::isDate(Tools::getValue('virtual_product_expiration_date')))
 			{
-				$this->_errors[] = $this->l('the field').' <b>'.$this->l('expiration date').'</b> '.$this->l('is not valid');
+				$this->_errors[] = $this->l('the field').' <strong class="bold">'.$this->l('expiration date').'</strong> '.$this->l('is not valid');
 				return false;
 			}
 			// The oos behavior MUST be "Deny orders" for virtual products
