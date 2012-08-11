@@ -182,7 +182,7 @@ if (document.getElementById('email')) document.getElementById('email').focus();
 echo '
 				</form>
 			</div>
-			<h2><a href="http://www.prestashop.com">&copy; Copyright by PrestaShop. all rights reserved.</a></h2>
+			<h2><a href="http://www.prestashop.com">Copyright &copy; 2012 PrestaShop. all rights reserved.</a></h2>
 		</div>
 	</body>
 </html>';
