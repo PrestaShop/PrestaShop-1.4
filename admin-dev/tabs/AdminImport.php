@@ -1646,7 +1646,7 @@ class AdminImport extends AdminTab
 				$customers = Db::getInstance()->ExecuteS('SELECT `id_customer` FROM `'._DB_PREFIX_.'customer`');
 				foreach ($customers as $customer)
 				{
-					$c = new Customer((int)$product['id_customer']);
+					$c = new Customer((int)$customer['id_customer']);
 					$c->delete();
 				}
 				break;
