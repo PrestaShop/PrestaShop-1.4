@@ -299,3 +299,5 @@ $_LANG['Warning, the installer was unable to detect what is your current PrestaS
 $_LANG['However the installer has detected that the version stored in your configuration table is %1$s'] = '';
 $_LANG['Dom extension loaded'] = '';
 $_LANG['translations'] = 'traducciones';
+$_LANG['-- Select your country --'] = '';
+$_LANG['-- Select your timezone --'] = '';
