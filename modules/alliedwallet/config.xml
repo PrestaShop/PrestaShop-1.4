@@ -2,8 +2,8 @@
 <module>
 	<name>alliedwallet</name>
 	<displayName><![CDATA[Allied Wallet]]></displayName>
-	<version><![CDATA[1.2]]></version>
-	<description><![CDATA[Accept credit and debit cards online with Allied Wallet. You&#039;ll be able to accept 164 different currencies around the globe with safety and security.]]></description>
+	<version><![CDATA[1.2.1]]></version>
+	<description><![CDATA[Accept credit and debit cards online with Allied Wallet. You&#039;ll be able to accept 164 different currencies around the globe with the safety and security of our PCI Level 1 compliance and our proprietary fraud scrub. You&rsquo;ll have 24 hour customer support and a state-of-the-art payment gateway to track your transactions all for a rate as low as 1.94%.]]></description>
 	<author><![CDATA[PrestaShop]]></author>
 	<tab><![CDATA[payments_gateways]]></tab>
 	<confirmUninstall>Are you sure you want to delete your details?</confirmUninstall>

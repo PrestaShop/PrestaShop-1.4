@@ -3,13 +3,14 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_ee1e9cbe2a66a3a7ecc434049bd67339'] = 'Allied Wallet';
-$_MODULE['<{alliedwallet}prestashop>alliedwallet_0e8331ca0283467f5c129fbc4ff873b2'] = 'Acceptez dès maintenant les cartes de crédit et de débit en ligne avec Allied Wallet.  Vous serez en mesure d\'accepter 164 devises différentes autour du globe,  vous bénéficierez d’un support client 24/24 et de transactions traitées en toute sécurité au taux exceptionnel de 1.94%.';
-$_MODULE['<{alliedwallet}prestashop>alliedwallet_449602445d0a5f0612e7ccac073f6c9e'] = 'Acceptez les paiements avec Allied Wallet dès maintenant !';
-$_MODULE['<{alliedwallet}prestashop>alliedwallet_18071bcaa1bfb301a06e742589b0e671'] = 'Etes-vous prêt à accepter 164 devises différentes à travers le monde, et via presque toutes les cartes bancaires ?';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_f07f88ab41e6962023b8c557170c59d6'] = 'Acceptez dès maintenant les cartes de crédit et de débit en ligne avec Allied Wallet.  Vous serez en mesure d\'accepter 164 devises différentes autour du globe,  vous bénéficierez d’un support client 24/24 et de transactions traitées en toute sécurité au taux exceptionnel de 1.95%.';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = 'Etes-vous sur de vouloir supprimer vos informations?';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_449602445d0a5f0612e7ccac073f6c9e'] = 'Acceptez les paiements avec Allied Wallet dès maintenant !';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_18071bcaa1bfb301a06e742589b0e671'] = 'Etes-vous prêt à accepter 164 devises différentes à travers le monde, et via presque toutes les cartes bancaires ?';
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_4bc8c0475362544165beb73c959ff0d5'] = 'Etes-vous prêt à protéger votre entreprise avec  le meilleur de la sécurité en ligne ?';
-$_MODULE['<{alliedwallet}prestashop>alliedwallet_e7f7a7fbd7a2aee4a841df02673b84ee'] = 'Plus de facilité dans vos rapports de vente ?';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_e7f7a7fbd7a2aee4a841df02673b84ee'] = 'Plus de facilité dans vos rapports de vente ?';
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_025a0837741cee4848215e3a34483c7b'] = 'Associez dès maintenant votre boutique PrestaShop avec la solution de paiement la plus innovante et riche en fonctionnalités du marché.';
-$_MODULE['<{alliedwallet}prestashop>alliedwallet_d7768ee6edc282e5c6ca5c0588118159'] = 'Si vous n\'avez pas encore de compte avec Allied Wallet,';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_f4630e8842962f9dbc9e5498def9f749'] = 'Si vous n\'avez pas encore de compte avec Allied Wallet,';
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_a0f10515a6cd3f7d2956509b24327dba'] = 'inscrivez-vous dès aujourd\'hui';
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_3363195c99c79528c3f4593ed3dc6f35'] = 'et commencez à recevoir vos paiements en 24 heures à un taux de départ aussi bas que 1,95%.';
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_d2198f8429396f037b796aa94ece06ac'] = 'L\'identifiant Marchand Allied Wallet est requis';
@@ -28,3 +29,4 @@ $_MODULE['<{alliedwallet}prestashop>alliedwallet_3ca7ca93df600ffff03ee0e7eac6950
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_158135b3055bf30a67347a09e85c6bce'] = 'Indiquez ici l\'URL de la page vers laquelle les clients doivent être redirigés après leurs commandes.';
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_b17f3f4dcf653a5776792498a9b44d6a'] = 'Mettre à jour les paramètres';
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_24fc650b2c2e8c2f119a577d67efe0c5'] = 'Payer avec Allied Wallet';
+$_MODULE['<{alliedwallet}prestashop>validation_f674cd246b3a1611c24a9f2b93d85ac0'] = 'Action interdite.';
