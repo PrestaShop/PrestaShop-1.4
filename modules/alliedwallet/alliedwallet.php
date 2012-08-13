@@ -39,13 +39,13 @@ class Alliedwallet extends PaymentModule
 		$this->tab = 'payments_gateways';
 		$this->author = 'PrestaShop';
 
-		$this->version = '1.2.1';
+		$this->version = '1.2';
 
 		parent::__construct();
 
 		$this->page = basename(__FILE__, '.php');
 		$this->displayName = $this->l('Allied Wallet');
-		$this->description = $this->l('Accept credit and debit cards online with Allied Wallet. You\'ll be able to accept 164 different currencies around the globe with the safety and security of our PCI Level 1 compliance and our proprietary fraud scrub. You’ll have 24 hour customer support and a state-of-the-art payment gateway to track your transactions all for a rate as low as 1.95%.');
+		$this->description = $this->l('Accept credit and debit cards online with Allied Wallet. You\'ll be able to accept 164 different currencies around the globe with safety and security.');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details?');
 
 		/** Backward compatibility 1.4 and 1.5 */
@@ -54,11 +54,11 @@ class Alliedwallet extends PaymentModule
 
 	public function install()
 	{
-		if (!parent::install() || !Configuration::updateValue('ALLIEDWALLET_MERCHANT_ID', '') ||
-		!Configuration::updateValue('ALLIEDWALLET_SITE_ID', '')	||
+		if (!parent::install() || !Configuration::updateValue('ALLIEDWALLET_MERCHANT_ID', '') || 
+		!Configuration::updateValue('ALLIEDWALLET_SITE_ID', '')	|| 
 		!Configuration::updateValue('ALLIEDWALLET_CONFIRM_PAGE', 'http://'.Tools::safeOutput($_SERVER['HTTP_HOST']).
-		__PS_BASE_URI__.'modules/alliedwallet/validation.php') ||
-		!Configuration::updateValue('ALLIEDWALLET_RETURN_PAGE', 'http://'.Tools::safeOutput($_SERVER['HTTP_HOST']).__PS_BASE_URI__.'history.php') ||
+		__PS_BASE_URI__.'modules/alliedwallet/validation.php') || 
+		!Configuration::updateValue('ALLIEDWALLET_RETURN_PAGE', 'http://'.Tools::safeOutput($_SERVER['HTTP_HOST']).__PS_BASE_URI__.'history.php') || 
 		!$this->registerHook('payment'))
 			return false;
 		return true;
@@ -75,13 +75,8 @@ class Alliedwallet extends PaymentModule
 	{
 		$this->_html = '<h2>'.$this->displayName.'</h2>
 		<p><img src="../modules/alliedwallet/alliedwallet.gif" alt="alliedwallet"/></p>
-		<fieldset style="margin-bottom:10px"><b>'.$this->l('Accept payments with Allied Wallet now.').'</b><br/><br/>'.
-			$this->l('Are you ready to begin accepting 164 different currencies in nearly every card brand, direct debit, and ACH?').'<br/>'.
-			$this->l('Are you ready to protect your business with state-of-the-art security?').'<br/>'.
-			$this->l('Are you ready to see more ease in your business with our tracking and reporting?').'<br/><br/>'.
-			$this->l('Pair your PrestaShop store with the most innovative and fully-featured payment solution available. See your profit today and use the module below.').'<br/><br/>'.
-			$this->l('If you have yet to sign up with Allied Wallet,').' <a target="_BLANK" style="color:blue;text-decoration:underline" href="https://www.alliedwallet.com/sign-up"><b>'.$this->l('sign up today').'</b></a> '.
-			$this->l('and begin processing in as little as 24 hours at a rate starting as low as 1.95%.').'</fieldset>';
+		<fieldset style="margin-bottom:10px">
+<b>'.$this->l('Accept payments with Allied Wallet now.').'</b><br/><br/>'.$this->l('Are you ready to begin accepting 164 different currencies in nearly every card brand, direct debit, and ACH?').'<br/>'.$this->l('Are you ready to protect your business with state-of-the-art security?').'<br/>'.$this->l('Are you ready to see more ease in your business with our tracking and reporting?').'<br/><br/>'.$this->l('Pair your PrestaShop store with the most innovative and fully-featured payment solution available. See your profit today and use the module below.').'<br/><br/>'.$this->l('If you don\'t have an Allied Wallet account yet,').' <a target="_BLANK" style="color:blue;text-decoration:underline" href="https://www.alliedwallet.com/sign-up"><b>'.$this->l('sign up today').'</b></a> '.$this->l('and begin processing in as little as 24 hours at a rate starting as low as 1.95%.').'</fieldset>';
 
 		if (isset($_POST['submitAlliedwallet']))
 		{
@@ -110,7 +105,11 @@ class Alliedwallet extends PaymentModule
 
 	public function displayConf()
 	{
-		$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />'.$this->l('Settings updated').'</div>';
+		$this->_html .= '
+		<div class="conf confirm">
+			<img src="../img/admin/ok.gif" alt="'.$this->l('Confirmation').'" />
+			'.$this->l('Settings updated').'
+		</div>';
 	}
 
 	public function displayErrors()
