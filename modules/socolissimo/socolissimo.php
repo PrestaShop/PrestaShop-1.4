@@ -376,7 +376,7 @@ class Socolissimo extends CarrierModule
 		}
 		else
 			$gender = new Gender($customer->id_gender);
-			
+
 		$carrierSo = new Carrier((int)(Configuration::get('SOCOLISSIMO_CARRIER_ID')));
 
 		if (isset($carrierSo) AND $carrierSo->active)
@@ -415,8 +415,8 @@ class Socolissimo extends CarrierModule
 			foreach($inputs as $key => $val)
 				$serialsInput .= '&'.$key.'='.$val;
 			$serialsInput = ltrim($serialsInput, '&');
-			
-			// Backward compatibility 1.5 
+
+			// Backward compatibility 1.5
 			$id_carrier = 0;
 			// For now works only with single shipping !
 			if (method_exists($params['cart'], 'carrierIsSelected'))
@@ -425,9 +425,9 @@ class Socolissimo extends CarrierModule
 					$id_carrier = (int)$carrierSo->id;
 			}
 			// 1.4
-			else 
+			else
 				$id_carrier = $carrierSo->id;
-			
+
 			$this->context->smarty->assign(array(
 				'select_label' => $this->l('Select delivery mode'),
 				'edit_label' => $this->l('Edit delivery mode'),
@@ -535,7 +535,6 @@ class Socolissimo extends CarrierModule
 			$html .= '</fieldset>';
 			return $html;
 		}
-
 	}
 
 	public function hookupdateCarrier($params)
@@ -554,13 +553,13 @@ class Socolissimo extends CarrierModule
 			if (!Db::getInstance()->getValue('SELECT count(*) FROM '._DB_PREFIX_.'socolissimo_delivery_info WHERE id_cart =\''.(int)($params['cart']->id).'\' AND id_customer =\''.(int)($params['cart']->id_customer).'\''))
 			{
 				echo '<div class="error">
-						<p>'.$this->l('Fatal Error: Please check JavaScript is activated and').'<a href=".'.$_SERVER['REQUEST_URI'].'?step=2">'.$this->l('retry').'</a>'.$this->l(' the operation.').'</p>
+						<p>'.$this->l('Fatal Error: Please check JavaScript is activated and').'<a href="/.'.$_SERVER['REQUEST_URI'].'?step=2">'.$this->l('retry').'</a>'.$this->l(' the operation.').'</p>
 					</div>';
 				// A proper way would be to go back to the previous page
 				// We cannot did it, because the hook is called before starting the render of the page
 				die(); // Die, to assure the payment method are not showed
 			}
-		
+
 			$params['cart']->id_carrier = 0;
 			if (method_exists($params['cart'], 'setDeliveryOption'))
 			{
