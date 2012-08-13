@@ -229,10 +229,13 @@ class OrderControllerCore extends ParentOrderController
 	{
 		if (!Tools::isSubmit('id_address_delivery') OR !Address::isCountryActiveById((int)Tools::getValue('id_address_delivery')))
 			$this->errors[] = Tools::displayError('This address is not in a valid area.');
+		elseif (!Customer::customerHasAddress((int)self::$cookie->id_customer, (int)Tools::getValue('id_address_delivery'))
+			|| (Tools::isSubmit('same') && !Customer::customerHasAddress((int)self::$cookie->id_customer, (int)Tools::getValue('id_address_invoice'))))
+			$this->errors[] = Tools::displayError('Invalid address');
 		else
 		{
-			self::$cart->id_address_delivery = (int)(Tools::getValue('id_address_delivery'));
-			self::$cart->id_address_invoice = Tools::isSubmit('same') ? self::$cart->id_address_delivery : (int)(Tools::getValue('id_address_invoice'));
+			self::$cart->id_address_delivery = (int)Tools::getValue('id_address_delivery');
+			self::$cart->id_address_invoice = Tools::isSubmit('same') ? self::$cart->id_address_delivery : (int)Tools::getValue('id_address_invoice');
 			if (!self::$cart->update())
 				$this->errors[] = Tools::displayError('An error occurred while updating your cart.');
 
