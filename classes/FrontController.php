@@ -610,6 +610,7 @@ class FrontControllerCore
 			'stop' => $stop,
 			'current_url' => $current_url
 		);
+
 		self::$smarty->assign($pagination_infos);
 	}
 

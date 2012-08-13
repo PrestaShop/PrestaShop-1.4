@@ -261,7 +261,7 @@ class Kialasmall extends Module
 					<br class="clear"/>
 					<div class="margin-form">
 						<label class="t" for="kialaPrefix">'.$this->l('Prefix for order and parcel number').'&nbsp;&nbsp;</label>
-						<input id="kialaPrefix" type="text" name="kialaPrefix" size="16" value="'.htmlentities(Configuration::get('KIALASMALL_NUMBER_PREFIX'), ENT_NOQUOTES, 'UTF-8').'" />
+						<input id="kialaPrefix" type="text" name="kialaPrefix" size="16" value="'.htmlentities(Configuration::get('KIALASMALL_NUMBER_PREFIX'), ENT_QUOTES, 'UTF-8').'" />
 					</div>
 					<br class="clear"/>
 					<div class="margin-form">
@@ -270,12 +270,8 @@ class Kialasmall extends Module
 						<label class="t" for="searchByCustomer">'.$this->l('Customer').'</label>
 						<input id="searchByOrder" type="radio" '.(Configuration::get('KIALASMALL_SEARCH_BY') == 'customer' ? '' : 'checked="checked"').' name="kialaSearchBy" value="order" />
 						<label class="t" for="searchByOrder">'.$this->l('Order').'</label>
-					</div>';
-					/*<div class="margin-form">
-						<label class="t" for="kialaWsUrl">'.$this->l('URL to use for the webservice').'&nbsp;&nbsp;</label>
-						<input id="kialaWsUrl" type="text" name="kialaWsUrl" size="80" value="'.htmlentities(Configuration::get('KIALASMALL_WS_URL'), ENT_NOQUOTES, 'UTF-8').'" />
-					</div>*/
-					$this->_html .=	'<br />
+					</div>
+					<br />
 					<div align="center">
 						<input type="submit" name="settings" id="button_kiala" class="button" value="'.$this->l('Save settings').'" />
 					</div>

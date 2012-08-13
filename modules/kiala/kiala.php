@@ -403,7 +403,7 @@ class Kiala extends Module
 					<br class="clear"/>
 					<div class="margin-form">
 						<label class="t" for="kialaPrefix">'.$this->l('Prefix for order and parcel number').'&nbsp;&nbsp;</label>
-						<input id="kialaPrefix" type="text" name="kialaPrefix" size="16" value="'.htmlentities(Configuration::get('KIALA_NUMBER_PREFIX'), ENT_NOQUOTES, 'UTF-8').'" />
+						<input id="kialaPrefix" type="text" name="kialaPrefix" size="16" value="'.htmlentities(Configuration::get('KIALA_NUMBER_PREFIX'), ENT_QUOTES, 'UTF-8').'" />
 					</div>
 					<div class="margin-form">
 						<label class="t">'.$this->l('Export on each order?').'&nbsp;&nbsp;</label>

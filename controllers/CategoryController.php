@@ -61,7 +61,7 @@ class CategoryControllerCore extends FrontController
 			{
 				header('HTTP/1.0 301 Moved');
 				header('Cache-Control: no-cache');
-				if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_ )
+				if (defined('_PS_MODE_DEV_') && _PS_MODE_DEV_)
 					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$currentURL.'">'.$currentURL.'</a>');
 				Tools::redirectLink($currentURL);
 			}
@@ -106,7 +106,7 @@ class CategoryControllerCore extends FrontController
 				/* Scenes images formats */
 				if ($sceneImageTypes = ImageType::getImagesTypes('scenes'))
 				{
-					foreach ($sceneImageTypes AS $sceneImageType)
+					foreach ($sceneImageTypes as $sceneImageType)
 					{
 						if ($sceneImageType['name'] == 'thumb_scene')
 							$thumbSceneImageType = $sceneImageType;
@@ -121,7 +121,7 @@ class CategoryControllerCore extends FrontController
 				$subCategories = $this->category->getSubCategories((int)self::$cookie->id_lang);
 				self::$smarty->assign('category', $this->category);
 				
-				if (isset($subCategories) AND !empty($subCategories) AND $subCategories)
+				if (isset($subCategories) && !empty($subCategories) && $subCategories)
 				{
 					self::$smarty->assign('subcategories', $subCategories);
 					self::$smarty->assign(array(

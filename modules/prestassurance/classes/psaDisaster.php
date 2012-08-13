@@ -27,26 +27,20 @@
 
 class psaDisaster extends ObjectModel
 {
-	public 		$id_order;
-	public 		$id_psa_disaster;
-	public 		$id_product;
-	public 		$status;
-	public 		$reason;
-	public 		$date_add;
+	public $id_order;
+	public $id_psa_disaster;
+	public $id_product;
+	public $status;
+	public $reason;
+	public $date_add;
 		
- 	protected 	$fieldsRequired = array('id_order', 'id_psa_disaster', 'id_product', 'status', 'reason');
+ 	protected $fieldsRequired = array('id_order', 'id_psa_disaster', 'id_product', 'status', 'reason');
  	
- 	protected 	$fieldsValidate = array(
- 		'id_order' => 'isUnsignedId',
- 		'id_psa_disaster' => 'isUnsignedId',
- 		'status' => 'isUnsignedId',
- 		'status' => 'isGenericName',
- 		'reason' => 'isGenericName'
- 		);
+ 	protected $fieldsValidate = array('id_order' => 'isUnsignedId', 'id_psa_disaster' => 'isUnsignedId',
+ 	'status' => 'isUnsignedId', 'status' => 'isGenericName', 'reason' => 'isGenericName');
 		
-	protected 	$table = 'psa_disaster';
-	
-	protected 	$identifier = 'id_disaster';
+	protected $table = 'psa_disaster';
+	protected $identifier = 'id_disaster';
 	
 	public function getFields()
 	{
@@ -61,10 +55,9 @@ class psaDisaster extends ObjectModel
 		
 		return $fields;
 	}
-	
-	public function add()
-	{
-		return parent::add(true);
-	}
 
+	public function add($autodate = true, $nullValues = false)
+	{
+		return parent::add(true, $nullValues);
+	}
 }

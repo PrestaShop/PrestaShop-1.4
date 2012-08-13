@@ -25,7 +25,7 @@ class Wexpay extends PaymentModule
 	{
 		$this->name = 'wexpay';
 		$this->tab = 'payments_gateways';
-		$this->version = '2.1';
+		$this->version = '2.2';
 		$this->module_key = '5299896ce976397cf90610f8073eb6de';
 		$this->limited_countries = array('fr');
 
@@ -47,66 +47,62 @@ class Wexpay extends PaymentModule
 
 	public function install()
 	{
-		if (!parent::install() OR !$this->registerHook('payment'))
-			return false;
-		return true;
+		return parent::install() && $this->registerHook('payment');
 	}
 
 	public function uninstall()
 	{
-		if (!Configuration::deleteByName('WEXPAY_MERCHANT_ID')
-				OR !parent::uninstall())
-			return false;
-		return true;
+		return Configuration::deleteByName('WEXPAY_MERCHANT_ID') && parent::uninstall();
 	}
 
 	private function _postValidation()
 	{
-		if (isset($_POST['submitWexpay']))
-		{
-			if (empty($_POST['merchant_id']))
-				$this->_postErrors[] = $this->l('account merchant id is required.');
-		}
+		if (isset($_POST['submitWexpay']) && empty($_POST['merchant_id']))
+			$this->_postErrors[] = $this->l('account merchant id is required.');
 	}
 
 	private function _postProcess()
 	{
 		if (isset($_POST['submitWexpay']))
 		{
-			Configuration::updateValue('WEXPAY_MERCHANT_ID', $_POST['merchant_id']);
+			if (Tools::getValue('merchant_id'))
+				Configuration::updateValue('WEXPAY_MERCHANT_ID', Tools::getValue('merchant_id'));
 			$this->_html .= '<div class="conf confirm"><img src="../img/admin/ok.gif" alt="'.$this->l('ok').'" /> '.$this->l('Settings updated').'</div>';
 		}
 	}
 
 	private function _displayWexpay()
 	{
-		$this->_html .= '<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('weXpay').'</legend>
-		<div style="float: right; width: 340px; height: 200px; border: dashed 1px #666; padding: 8px; margin-left: 12px; margin-top:-15px;">
-			<h2 style="color:#7DA61F;">'.$this->l('Contactez l\'équipe weXpay').'</h2>
-			<div style="clear: both;"></div>
-			<p>'.$this->l('Contactez nous / ou faites vous appeler par un de nos chargés de clientèle :').'<br />'.$this->l('Mail : ').'<a href="mailto:marchand@wexpay.com" style="color:#7DA61F;">marchand@wexpay.com</a><br />'.$this->l('Tel : 01 46 08 68 94').'</p>
-			<p style="padding-top:40px;"><b>'.$this->l('Faites une demande d`information ou de contrat et nous vous rappelons : ').'</b><br /><a href="https://www.wexpay.com/sites-marchands" target="_blank" style="color:#7DA61F;">https://www.wexpay.com/sites-marchand</a></p>
-			<div style="margin-top:50px;margin-left:-10px;"><object width="360" height="60" data="../modules/'.$this->name.'/img/banniere360x60.swf" type="application/x-shockwave-flash"><param name="movie" value="../modules/'.$this->name.'/img/banniere360x60.swf" />
-						<param name="quality" value="high" />
-						<param name="allowScriptAccess" value="sameDomain" /><embed type="application/x-shockwave-flash" width="360" height="60" src="../modules/'.$this->name.'/img/banniere360x60.swf"></object></div>
-			<div style="clear: right;"></div>
-		</div>
-		<div style="float:left;text-align:justify;margin-top:3px;width:500px;">
-		<b>'.$this->l('Ce module vous permet d\'accepter les paiements en espèces avec weXpay.').'</b><br /><br />
-		'.$this->l('Payer en espèces sur Internet, aujourd\'hui c\'est possible ! weXpay permet à votre boutique de capter une nouvelle clientèle en lui proposant la solution de paiement la plus simple : les espèces !').'<br /><br />
-		'.$this->l('Grâce à son réseau de distribution weXpay permet à l\'internaute de changer ses espèces contre un code qui a les mêmes propriétés qu\'un billet de banque : il est utilisable par tous autant de fois que nécessaire, divisible au centime d\'Euros et cumulable,').'<br /><br />
-		'.$this->l('L\'installation est facile, rapide et gratuite, les paiements sont sécurisés et 100% garantis !').'<br />
-		'.$this->l('Sans frais fixes ni frais cachés.').'<br /><br />
-		'.$this->l('weXpay est la solution alternative à la carte bancaire qui bénéficie d\'un agrément d\'Emetteur de Monnaie Electronique de la Banque de France.').'<br /><br />
-		'.$this->l('Avec des tarifs attractifs, weXpay vous permet de proposer un moyen de paiement en espèces quelle que soit votre activité marchande.').'<br /><br />
-		'.$this->l('Pour plus d\'infos :').'<br /><a href="https://www.wexpay.com/decouvrir-wexpay/" target="_blank" style="color:#7DA61F;">https://www.wexpay.com/decouvrir-wexpay/</a>
-		</div><div style="clear:both;">&nbsp;</div></fieldset>';
+		$this->_html .= '
+		<fieldset>
+			<legend><img src="../modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('weXpay').'</legend>
+			<div style="float: right; width: 340px; height: 200px; border: dashed 1px #666; padding: 8px; margin-left: 12px; margin-top:-15px;">
+				<h2 style="color:#7DA61F;">'.$this->l('Contactez l\'équipe weXpay').'</h2>
+				<div style="clear: both;"></div>
+				<p>'.$this->l('Contactez nous / ou faites vous appeler par un de nos chargés de clientèle :').'<br />'.$this->l('Mail : ').'<a href="mailto:marchand@wexpay.com" style="color:#7DA61F;">marchand@wexpay.com</a><br />'.$this->l('Tel : 01 46 08 68 94').'</p>
+				<p style="padding-top:40px;"><b>'.$this->l('Faites une demande d`information ou de contrat et nous vous rappelons : ').'</b><br /><a href="https://www.wexpay.com/sites-marchands" target="_blank" style="color:#7DA61F;">https://www.wexpay.com/sites-marchand</a></p>
+				<div style="margin-top:50px;margin-left:-10px;"><object width="360" height="60" data="../modules/'.$this->name.'/img/banniere360x60.swf" type="application/x-shockwave-flash"><param name="movie" value="../modules/'.$this->name.'/img/banniere360x60.swf" />
+							<param name="quality" value="high" />
+							<param name="allowScriptAccess" value="sameDomain" /><embed type="application/x-shockwave-flash" width="360" height="60" src="../modules/'.$this->name.'/img/banniere360x60.swf"></object></div>
+				<div style="clear: right;"></div>
+			</div>
+			<div style="float:left;text-align:justify;margin-top:3px;width:500px;">
+			<b>'.$this->l('Ce module vous permet d\'accepter les paiements en espèces avec weXpay.').'</b><br /><br />
+			'.$this->l('Payer en espèces sur Internet, aujourd\'hui c\'est possible ! weXpay permet à votre boutique de capter une nouvelle clientèle en lui proposant la solution de paiement la plus simple : les espèces !').'<br /><br />
+			'.$this->l('Grâce à son réseau de distribution weXpay permet à l\'internaute de changer ses espèces contre un code qui a les mêmes propriétés qu\'un billet de banque : il est utilisable par tous autant de fois que nécessaire, divisible au centime d\'Euros et cumulable,').'<br /><br />
+			'.$this->l('L\'installation est facile, rapide et gratuite, les paiements sont sécurisés et 100% garantis !').'<br />
+			'.$this->l('Sans frais fixes ni frais cachés.').'<br /><br />
+			'.$this->l('weXpay est la solution alternative à la carte bancaire qui bénéficie d\'un agrément d\'Emetteur de Monnaie Electronique de la Banque de France.').'<br /><br />
+			'.$this->l('Avec des tarifs attractifs, weXpay vous permet de proposer un moyen de paiement en espèces quelle que soit votre activité marchande.').'<br /><br />
+			'.$this->l('Pour plus d\'infos :').'<br /><a href="https://www.wexpay.com/decouvrir-wexpay/" target="_blank" style="color:#7DA61F;">https://www.wexpay.com/decouvrir-wexpay/</a>
+			</div><div style="clear:both;">&nbsp;</div>
+		</fieldset>';
 	}
 
 	private function _displayForm()
 	{
 		$this->_html .=
-		'<form action="'.htmlentities($_SERVER['REQUEST_URI']).'" method="post">
+		'<form action="'.htmlentities($_SERVER['REQUEST_URI'], ENT_QUOTES, 'UTF-8').'" method="post">
 			<fieldset>
 				<legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Configuration').'</legend>
 				<div style="float:left;"><img src="../modules/'.$this->name.'/img/config_1.png" /></div>
@@ -117,7 +113,7 @@ class Wexpay extends PaymentModule
 				<div style="float:left;"><img src="../modules/'.$this->name.'/img/config_2.png" /></div>
 				<div style="float:left; margin-left:10px;width:800px;"><h2 style="color:#7DA61F;">'.$this->l('Activer facilement et gratuitement weXpay').'</h2>'
 				.$this->l('Vous avez signé un contrat avec weXpay, et vous avez reçu vos codes d\'activation dans un mail de bienvenue weXpay - Procédure = entrez vos indentifiant weXpay dans Prestashop pour activer le module et réalisez 3 transactions de test avec les codes de tests fournis dans le mail de bienvenue.').'<br/><br/><label style="text-align:left;width:210px;">'.$this->l('weXpay merchant ID').'</label>
-				<div><input type="text" size="33" name="merchant_id" value="'.htmlentities(Tools::getValue('merchant_id', $this->merchant_id), ENT_COMPAT, 'UTF-8').'" /> <input type="submit" name="submitWexpay" value="'.$this->l('Update settings').'" class="button" /></div><br />'
+				<div><input type="text" size="33" name="merchant_id" value="'.htmlentities(Tools::getValue('merchant_id', $this->merchant_id), ENT_QUOTES, 'UTF-8').'" /> <input type="submit" name="submitWexpay" value="'.$this->l('Update settings').'" class="button" /></div><br />'
 				.$this->l('Une fois que les transactions sont validées avec succès, connectez-vous à votre espace partenaire weXpay ').'<a href="https://partenaires.wexpay.com" target="_blank" style="color:#7DA61F;">https://partenaires.wexpay.com</a>'
 				.$this->l(' : uploadez votre logo, et appuyer sur le bouton ').'<b>'.$this->l('"passage en production."').'</b><br /><br />'
 				.$this->l('Vous devez cocher dans votre espace partenaire « passage en production » pour activer weXpay, et 
@@ -132,15 +128,15 @@ pour permettre à vos clients de payer avec des weXpay sur votre site.').'<br />
 	public function getContent()
 	{
 		$this->_html .= ' <div style="float:left;margin-left:-30px; margin-top:-55px;">
-		<img src="../modules/'.$this->name.'/wexpay.png"/>
+		<img src="../modules/'.$this->name.'/wexpay.png" alt="" />
 		</div><h2 style="float:left;color:#7DA61F;">'.$this->displayName.' '.$this->l(': acceptez le paiement en espèces et augmentez votre chiffre d\'affaires !').'</h2><div style="clear: both;"></div>';
 		if (!empty($_POST))
 		{
 			$this->_postValidation();
-			if (!sizeof($this->_postErrors))
+			if (!count($this->_postErrors))
 				$this->_postProcess();
 			else
-				foreach ($this->_postErrors AS $err)
+				foreach ($this->_postErrors as $err)
 					$this->_html .= $this->displayError($err);
 		}
 		else
@@ -155,25 +151,22 @@ pour permettre à vos clients de payer avec des weXpay sur votre site.').'<br />
 
 	public function hookPayment($params)
 	{
-		global $smarty, $cookie;
+		$currency = new Currency((int)$params['cart']->id_currency);
+		$amount = number_format(Tools::convertPrice($params['cart']->getOrderTotal(true, 3), $currency), 2, '.', '');
 
-		$id_currency  = intval($params['cart']->id_currency);
-    $currency = new Currency(intval($id_currency));
-		$montant = number_format(Tools::convertPrice($params['cart']->getOrderTotal(true, 3),$currency),2,'.','');
-
-		if(strpos($montant,'.')) $montant=$montant*100;
-	    $montant = str_replace('.','',$montant);
-		$customer = new Customer(intval($cookie->id_customer));
+		if (strpos($amount, '.'))
+			$amount = $amount * 100;
+		$amount = str_replace('.', '', $amount);
+		$customer = new Customer((int)$this->context->cookie->id_customer);
 
 		$this->context->smarty->assign(array(
-		      'merchant_id' => $this->merchant_id,
-		      'amount' => $montant,
-		      'urlNotification' => 'http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/wexpay/validation.php',
-		      'urlError' => 'http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'order.php',
-		      'urlReturn' => 'http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'order-confirmation.php?id_cart='.$this->context->cookie->id_cart.'&id_module='.$this->id.'&key='.$customer->secure_key,
-		      'ref_order' => intval($this->context->cookie->id_cart)
-   		 ));
+		'merchant_id' => Tools::safeOutput($this->merchant_id),
+		'amount' => $amount,
+		'urlNotification' => 'http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/wexpay/validation.php',
+		'urlError' => 'http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'order.php',
+		'urlReturn' => 'http://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'order-confirmation.php?id_cart='.$this->context->cookie->id_cart.'&id_module='.$this->id.'&key='.$customer->secure_key,
+		'ref_order' => (int)$this->context->cookie->id_cart));
+
 		return $this->display(__FILE__, 'payment.tpl');
 	}
-
 }

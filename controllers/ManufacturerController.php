@@ -41,12 +41,12 @@ class ManufacturerControllerCore extends FrontController
 	{
 		if (Validate::isLoadedObject($this->manufacturer) && Configuration::get('PS_CANONICAL_REDIRECT') && strtoupper($_SERVER['REQUEST_METHOD']) == 'GET')
 		{
-			$canonicalURL = self::$link->getManufacturerLink($this->manufacturer);
+			$canonicalURL = preg_replace('/[?&].*$/', '', self::$link->getManufacturerLink($this->manufacturer));
 			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 			{
 				header('HTTP/1.0 301 Moved');
 				header('Cache-Control: no-cache');
-				if (defined('_PS_MODE_DEV_') AND _PS_MODE_DEV_)
+				if (defined('_PS_MODE_DEV_') && _PS_MODE_DEV_)
 					die('[Debug] This page has moved<br />Please use the following URL instead: <a href="'.$canonicalURL.'">'.$canonicalURL.'</a>');
 				Tools::redirectLink($canonicalURL);
 			}
@@ -59,7 +59,7 @@ class ManufacturerControllerCore extends FrontController
 		{
 			$this->manufacturer = new Manufacturer($id_manufacturer, self::$cookie->id_lang);
 
-			if (!Validate::isLoadedObject($this->manufacturer) OR !$this->manufacturer->active)
+			if (!Validate::isLoadedObject($this->manufacturer) || !$this->manufacturer->active)
 			{
 				header('HTTP/1.1 404 Not Found');
 				header('Status: 404 Not Found');
@@ -74,9 +74,9 @@ class ManufacturerControllerCore extends FrontController
 	
 	public function process()
 	{
-		if (Validate::isLoadedObject($this->manufacturer) AND $this->manufacturer->active)
+		if (Validate::isLoadedObject($this->manufacturer) && $this->manufacturer->active)
 		{
-			$nbProducts = $this->manufacturer->getProducts($this->manufacturer->id, NULL, NULL, NULL, $this->orderBy, $this->orderWay, true);
+			$nbProducts = $this->manufacturer->getProducts($this->manufacturer->id, null, null, null, $this->orderBy, $this->orderWay, true);
 			$this->pagination($nbProducts);
 			self::$smarty->assign(array(
 				'nb_products' => $nbProducts,

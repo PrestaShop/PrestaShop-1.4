@@ -411,20 +411,20 @@ class AdminCustomers extends AdminTab
 		}
 		echo '<div class="clear">&nbsp;</div>';
 		echo '<h2>'.$this->l('Orders').' ('.sizeof($orders).')</h2>';
-		if ($orders AND sizeof($orders))
+		if ($orders && count($orders))
 		{
 			$totalOK = 0;
 			$ordersOK = array();
 			$ordersKO = array();
 			$tokenOrders = Tools::getAdminToken('AdminOrders'.(int)Tab::getIdFromClassName('AdminOrders').(int)$cookie->id_employee);
-			foreach ($orders AS $order)
-			if ($order['valid'])
-			{
-				$ordersOK[] = $order;
-				$totalOK += $order['total_paid_real'];
-			}
-			else
-				$ordersKO[] = $order;
+			foreach ($orders as $order)
+				if ($order['valid'])
+				{
+					$ordersOK[] = $order;
+					$totalOK += $order['total_paid_real'];
+				}
+				else
+					$ordersKO[] = $order;
 			$orderHead = '
 			<table cellspacing="0" cellpadding="0" class="table float">
 				<tr>
@@ -455,7 +455,7 @@ class AdminCustomers extends AdminTab
 				if ($countKO = sizeof($ordersKO))
 				{
 					echo '<div style="float:left;margin-right:20px"><h3 style="color:red;font-weight:700">'.$this->l('Invalid orders:').' '.$countKO.'</h3>'.$orderHead;
-					foreach ($ordersKO AS $order)
+					foreach ($ordersKO as $order)
 						echo '
 						<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'\'">
 							<td class="center">'.$order['id_order'].'</td>

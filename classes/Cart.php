@@ -1756,18 +1756,4 @@ class CartCore extends ObjectModel
 
 		return false;
 	}
-	
-	public function getCartCategories()
-	{	
-		$product_list = '';
-		foreach ($this->getProducts() as $product)
-			$products_list .= $product['id_product'].',';
-		$product_list = rtrim($product_list, ',');
-		
-		$categories = Db::getInstance()->ExecuteS('
-		SELECT cp.id_category
-		FROM '._DB_PREFIX_.'category_product cp
-		WHERE cp.id_product IN ('.pSQL($product_list).')');
-	}
 }
-

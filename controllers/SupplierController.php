@@ -41,7 +41,7 @@ class SupplierControllerCore extends FrontController
 	{
 		if (Validate::isLoadedObject($this->supplier) && Configuration::get('PS_CANONICAL_REDIRECT') && strtoupper($_SERVER['REQUEST_METHOD']) == 'GET')
 		{
-			$canonicalURL = self::$link->getSupplierLink($this->supplier);
+			$canonicalURL = preg_replace('/[?&].*$/', '', self::$link->getSupplierLink($this->supplier));
 			if (!preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', Tools::getProtocol().$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 			{
 				header('HTTP/1.0 301 Moved');

@@ -29,7 +29,6 @@ include_once(_PS_MODULE_DIR_.'prestassurance/classes/psaRequest.php');
 include_once(_PS_MODULE_DIR_.'prestassurance/classes/psaTools.php');
 include_once(_PS_MODULE_DIR_.'prestassurance/classes/psaStats.php');
 
-
 class prestassurance extends ModuleGraph
 {
 	private $_updatePsaQty = false;
@@ -45,19 +44,19 @@ class prestassurance extends ModuleGraph
 
 	public function __construct()
 	{
-		global $cookie , $psa_cookie;
+		global $cookie, $psa_cookie;
 		$psa_cookie = new Cookie('psa_cookie');
 		if (!isset($psa_cookie->limited_country) || !strlen($psa_cookie->limited_country))
 			$psa_cookie->limited_country = true;
 
 		$this->name = 'prestassurance';
 		$this->tab = 'front_office_features';
-		$this->version = '1.3';
+		$this->version = '1.4';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 1;
 		
 		if (!Configuration::get('PSA_ORDER_STATUS'))
-			$this->warning = $this->l('Vous devez configurer l\'option \'statut de commande\' pour que le module fonctionne');
+			$this->warning = $this->l('You have to configure the "Order status" option to enable the module');
 		
 		parent::__construct ();
 
@@ -78,28 +77,27 @@ class prestassurance extends ModuleGraph
 		{
 			psaTools::createHiddenCategoryAndProduct();
 			if (!Configuration::updateValue('PSA_ID_MERCHANT', 0)
-				or !Configuration::updateValue('PSA_KEY', 0)
-				or !Configuration::updateValue('PSA_CGV_UPDATED', 0)
-				or !Configuration::updateValue('PSA_ADDED_PRICE', '#ffffff')
-				or !Configuration::updateValue('PSA_ADDED_BG', '#c2c2c2')
-				or !Configuration::updateValue('PSA_ADDED_TXT', '#636363')
-				or !Configuration::updateValue('PSA_NOT_ADDED_PRICE', '#ffffff')
-				or !Configuration::updateValue('PSA_NOT_ADDED_BG', '#636363')
-				or !Configuration::updateValue('PSA_NOT_ADDED_TXT', '#c2c2c2')
-				or !Configuration::updateValue('PSA_PROPOSE_DISCONECT', 1)
-				or !Configuration::updateValue('PSA_MINIMUM_THRESHOLD', 0)
-				or !$this->createTable()
-				or !$this->registerHook('header')
-				or !$this->registerHook('top')
-				or !$this->registerHook('cart')
-				or !$this->registerHook('newOrder')
-				or !$this->registerHook('adminOrder')
-				or !$this->registerHook('backOfficeHeader')
-				or !$this->registerHook('authentication')
-				or !$this->registerHook('updateOrderStatus')
-				or !$this->registerHook('customerAccount')
-				/* or !$this->registerHook('AdminStatsModules') */
-				or !$this->registerHook('myAccountBlock'))
+				|| !Configuration::updateValue('PSA_KEY', 0)
+				|| !Configuration::updateValue('PSA_CGV_UPDATED', 0)
+				|| !Configuration::updateValue('PSA_ADDED_PRICE', '#ffffff')
+				|| !Configuration::updateValue('PSA_ADDED_BG', '#c2c2c2')
+				|| !Configuration::updateValue('PSA_ADDED_TXT', '#636363')
+				|| !Configuration::updateValue('PSA_NOT_ADDED_PRICE', '#ffffff')
+				|| !Configuration::updateValue('PSA_NOT_ADDED_BG', '#636363')
+				|| !Configuration::updateValue('PSA_NOT_ADDED_TXT', '#c2c2c2')
+				|| !Configuration::updateValue('PSA_PROPOSE_DISCONECT', 1)
+				|| !Configuration::updateValue('PSA_MINIMUM_THRESHOLD', 0)
+				|| !$this->createTable()
+				|| !$this->registerHook('header')
+				|| !$this->registerHook('top')
+				|| !$this->registerHook('cart')
+				|| !$this->registerHook('newOrder')
+				|| !$this->registerHook('adminOrder')
+				|| !$this->registerHook('backOfficeHeader')
+				|| !$this->registerHook('authentication')
+				|| !$this->registerHook('updateOrderStatus')
+				|| !$this->registerHook('customerAccount')
+				|| !$this->registerHook('myAccountBlock'))
 				return false;
 		}
 		else
@@ -200,7 +198,7 @@ class prestassurance extends ModuleGraph
 
 	public function hookHeader($params)
 	{
-		if (!psaTools::checkEnvironement() or !psaTools:: checkLimitedCountry())
+		if (!psaTools::checkEnvironement() || !psaTools:: checkLimitedCountry())
 		{
 			$this->cleanAllInsurance();
 			return;
@@ -215,15 +213,13 @@ class prestassurance extends ModuleGraph
 			$id_customer = (int)$params['cookie']->id_customer;
 			$psa_product_id = (int)Configuration::get('PSA_ID_PRODUCT');
 			$products = Db::getInstance()->ExecuteS('
-												SELECT * FROM `'._DB_PREFIX_.'order_detail`
-												WHERE `id_order` IN (SELECT id_order FROM `'._DB_PREFIX_.'orders` WHERE `id_customer` = '.(int)$id_customer.')');
+			SELECT * FROM `'._DB_PREFIX_.'order_detail`
+			WHERE `id_order` IN (SELECT id_order FROM `'._DB_PREFIX_.'orders` WHERE `id_customer` = '.(int)$id_customer.')');
 			$html .= '<script type="text/javascript">
 					$(document).ready(function(){';
-			foreach($products as $product)
-			{
+			foreach ($products as $product)
 				if ($product['product_id'] == $psa_product_id)
 					$html .= '$(\'input[name="ids_order_detail['.(int)$psa_product_id.']"]\').remove();';
-			}
 			$html .= '});</script>';
 		}
 
@@ -250,13 +246,13 @@ class prestassurance extends ModuleGraph
 
 	public function hookbackOfficeHeader($params)
 	{
-		if (Tools::getValue('tab') == 'AdminCatalog' and Tools::getValue('id_product') == (int)Configuration::get('PSA_ID_PRODUCT'))
+		if (Tools::getValue('tab') == 'AdminCatalog' && Tools::getValue('id_product') == (int)Configuration::get('PSA_ID_PRODUCT'))
 			Tools::redirectAdmin('?tab=AdminCatalog&token='.Tools::getAdminTokenLite('AdminCatalog'));
 		$html = '';
 		if (Tools::getValue('tab') == 'AdminAttributesGroups')
 			$html .= '<script type="text/javascript">$(document).ready(function(){ $(\'.table td:contains(PrestaShop Assurance[Do not delete])\').each( function() { $(this).parent().remove(); });});</script>;';
 
-		if (Tools::getValue('tab') == 'AdminModules' and Tools::getValue('configure') == $this->name)
+		if (Tools::getValue('tab') == 'AdminModules' && Tools::getValue('configure') == $this->name)
 			$html .= '
 			<script type="text/javascript" src="../modules/'.$this->name.'/easyui/jquery.easyui.min.js"></script>
 			<script type="text/javascript" src="../modules/'.$this->name.'/js/treegrid.js"></script>
@@ -292,19 +288,17 @@ class prestassurance extends ModuleGraph
 
 	public function hookbackOfficeFooter($params)
 	{
-		if (Tools::getValue('tab') == 'AdminOrders' and $id_order = Tools::getValue('id_order') and Configuration::get('PS_ORDER_RETURN'))
+		if (Tools::getValue('tab') == 'AdminOrders' && $id_order = Tools::getValue('id_order') && Configuration::get('PS_ORDER_RETURN'))
 		{
 			$psa_product_id = (int)Configuration::get('PSA_ID_PRODUCT');
 			$products = Db::getInstance()->ExecuteS('
-												SELECT * FROM `'._DB_PREFIX_.'order_detail`
-												WHERE `id_order` = '.(int)$id_order);
+			SELECT * FROM `'._DB_PREFIX_.'order_detail`
+			WHERE `id_order` = '.(int)$id_order);
 			$html = '<script type="text/javascript">
 					$(document).ready(function(){';
-			foreach($products as $product)
-			{
+			foreach ($products as $product)
 				if ($product['product_id'] == $psa_product_id)
 					$html .= '$(\'input[name="id_order_detail['.(int)$psa_product_id.']"]\').parent().parent(\'tr\').children(\'.cancelCheck, .cancelQuantity\').html(\'\');';
-			}
 			$html .= '});</script>';
 		}
 		return $html;
@@ -313,15 +307,15 @@ class prestassurance extends ModuleGraph
 	public function hookadminOrder($params)
 	{
 		$result = Db::getInstance()->ExecuteS('SELECT *
-				FROM '._DB_PREFIX_.'psa_insurance_detail
-				WHERE id_order = '.(int)$params['id_order']);
+		FROM '._DB_PREFIX_.'psa_insurance_detail
+		WHERE id_order = '.(int)$params['id_order']);
 
 		$messages = Db::getInstance()->ExecuteS('SELECT *
-				FROM '._DB_PREFIX_.'psa_insurance_detail_message
-				WHERE id_order = '.(int)$params['id_order'].'
-				ORDER BY date_add DESC');
+		FROM '._DB_PREFIX_.'psa_insurance_detail_message
+		WHERE id_order = '.(int)$params['id_order'].'
+		ORDER BY date_add DESC');
 
-		if (!sizeof($result))
+		if (!count($result))
 			return;
 		$html =
 			'<div id="reSubmitSouscriptionContent">
@@ -348,7 +342,7 @@ class prestassurance extends ModuleGraph
 		}
 		$html .= '<p>'.$this->l('Souscription details').' :</p>
 						<ul style="max-height:100px;overflow:auto">';
-		foreach($messages as $message)
+		foreach ($messages as $message)
 			$html .= '<li style="margin-bottom:10px"><b>'.$message['date_add'].'</b> - '.$message['message'].'</li>';
 		$html .= '</ul></fieldset></div>';
 
@@ -376,7 +370,7 @@ class prestassurance extends ModuleGraph
 
 		$products = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'cart_product` WHERE `id_cart` = '.(int)$cookie->id_cart);
 		//check if there is some product in cart directly in db
-		if (!sizeof($products))
+		if (!count($products))
 		{
 			$this->_cleanPsaCartProducts($cartObj->id);
 			return;
@@ -384,7 +378,7 @@ class prestassurance extends ModuleGraph
 		else
 		{
 			$onlyPsaProduct = true;
-			foreach($products as $product)
+			foreach ($products as $product)
 				if ($product['id_product'] != $psa_product_id)
 					$onlyPsaProduct &= false;
 
@@ -397,37 +391,37 @@ class prestassurance extends ModuleGraph
 
 		$qtyByCategory = $this->_getQtyByCategory($cartProducts);
 		$result = '';
-		if (sizeof($qtyByCategory))
+		if (count($qtyByCategory))
 			$result = Db::getInstance()->ExecuteS('
-												SELECT * FROM `'._DB_PREFIX_.'psa_category_attribute`
-												WHERE `id_category` IN ('.implode(', ', array_keys($qtyByCategory)).')');
+			SELECT * FROM `'._DB_PREFIX_.'psa_category_attribute`
+			WHERE `id_category` IN ('.implode(', ', array_keys($qtyByCategory)).')');
 		
 		if (!is_array($result))
 			return;
 		
 		//format id attributes tab
 		$ids_psa_attributes = array();
-		foreach($result as $key => $val)
+		foreach ($result as $key => $val)
 			if (!isset($ids_psa_attributes[$val['id_category']]))
 				$ids_psa_attributes[$val['id_category']] = $val['id_product_attribute'];
 
-		if (!sizeof($ids_psa_attributes))
+		if (!count($ids_psa_attributes))
 			return;
 		//get psa cart
 		$this->_getPsaCartProducts($cartObj->id);
 				
 		$to_remove = array_diff_assoc($this->_psa_cart_products, $cartProducts);
-		foreach($to_remove as $key => $val)
+		foreach ($to_remove as $key => $val)
 		{
 			unset($this->_psa_cart_products[$key]);
 			Db::getInstance()->Execute('
-										DELETE FROM `'._DB_PREFIX_.'psa_cart`
-										WHERE `id_cart` = '.(int)$val['id_cart'].' 
-										AND `id_product` = '.(int)$val['id_product'].' 
-										AND `id_product_attribute` = '.(int)$val['id_product_attribute']);
+			DELETE FROM `'._DB_PREFIX_.'psa_cart`
+			WHERE `id_cart` = '.(int)$val['id_cart'].' 
+			AND `id_product` = '.(int)$val['id_product'].' 
+			AND `id_product_attribute` = '.(int)$val['id_product_attribute']);
 		}
 		
-		foreach($cartProducts as $identifier => $product)
+		foreach ($cartProducts as $identifier => $product)
 		{
 			if (!(int)$product['id_category_default'])
 				continue;
@@ -441,7 +435,7 @@ class prestassurance extends ModuleGraph
 				$maximum_product_price = $this->categoriesMatch[$id_category_default]['maximum_product_price'];
 	
 				//check if the product price is between min and max price of insurance
-				if ($product['price_wt'] < $minimum_product_price or $product['price_wt'] > $maximum_product_price)
+				if ($product['price_wt'] < $minimum_product_price || $product['price_wt'] > $maximum_product_price)
 					continue;
 				if (!psaTools::checkMinimumThreshold($product['price_wt'], $this->categoriesMatch[$id_category_default]['selling_price'] , Configuration::get('PSA_MINIMUM_THRESHOLD')))
 					continue;
@@ -516,25 +510,25 @@ class prestassurance extends ModuleGraph
 		$product = new Product((int)$psa_product_id);
 		$combinaisons = $product->getAttributeCombinaisons($params['cookie']->id_lang);
 		$combinaisonsTmp = array();
-		foreach($combinaisons as $comb)
+		foreach ($combinaisons as $comb)
 			$combinaisonsTmp[$comb['id_product_attribute']] = $comb;
 
 		$combinaisons = $combinaisonsTmp;
 
 		$cartQty = 0;//count number of product in cart without psa products
 		$cartProducts = $this->_formatPsCartProducts($cartObj->getProducts());
-		foreach($cartProducts as $identifier => $product)
+		foreach ($cartProducts as $identifier => $product)
 			if ($product['id_product'] != $psa_product_id)
 				$cartQty += $product['qty'];
 		
 		$to_remove = array_diff_assoc($this->_psa_cart_products, $cartProducts);
 
-		foreach($to_remove as $key => $val)
+		foreach ($to_remove as $key => $val)
 			unset($this->_psa_cart_products[$key]);
 
 		$psa_products = array();
 
-		foreach($this->_psa_cart_products as $product)
+		foreach ($this->_psa_cart_products as $product)
 		{
 			if ($combinaisons[$product['id_psa_product_attribute']]['price'] == 0)//check if price has been set
 				continue;
@@ -574,8 +568,8 @@ class prestassurance extends ModuleGraph
 		$inssurance_orders = $this->getCustomerOrderValidWithInsurance((int)$cookie->id_customer);
 		if (!$inssurance_orders || !is_array($inssurance_orders))
 			$orders = array();
-		elseif(sizeof($inssurance_orders))
-			foreach($inssurance_orders as $order)
+		elseif (count($inssurance_orders))
+			foreach ($inssurance_orders as $order)
 				$orders[] = array(
 					'id_order' => (int)$order['id_order'],
 					'date' => $order['order_date_add']
@@ -594,8 +588,8 @@ class prestassurance extends ModuleGraph
 	{
 		global $cookie;
 		$insurance = Db::getInstance()->ExecuteS('
-			SELECT *  FROM `'._DB_PREFIX_.'psa_insurance_detail` pid
-			WHERE pid.`id_order` = '.(int)$id_order);
+		SELECT *  FROM `'._DB_PREFIX_.'psa_insurance_detail` pid
+		WHERE pid.`id_order` = '.(int)$id_order);
 
 		if (!is_array($insurance) || !$insurance)
 			return array('hasError' => true, 'errors' => array($this->l('no detail for this order')));
@@ -609,25 +603,25 @@ class prestassurance extends ModuleGraph
 			$details['product'] = $tmp_order->getProducts();
 			$products_psa_cart_ids_tmp = Db::getInstance()->ExecuteS('SELECT id_product FROM `'._DB_PREFIX_.'psa_cart` WHERE id_cart = '.(int)$tmp_order->id_cart.' AND deleted !=1');
 			
-			foreach($products_psa_cart_ids_tmp as $id)
+			foreach ($products_psa_cart_ids_tmp as $id)
 				$products_psa_cart_ids[] = $id['id_product'];
 			
-			foreach($details['product'] as $key => $product)
+			foreach ($details['product'] as $key => $product)
 				if (!in_array($product['product_id'], $products_psa_cart_ids))
 					unset($details['product'][$key]);
 			
 			$details['disaster'] = Db::getInstance()->ExecuteS('SELECT *
-						FROM `'._DB_PREFIX_.'psa_disaster` pdi
-						LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pdi.`id_product` = pl.`id_product`)
-						WHERE pl.`id_lang` = '.(int)$cookie->id_lang.' AND pdi.`id_order` = '.(int)$insurance['id_order'].'
-						ORDER BY pdi.`date_add` ');
-			if(is_array($details['disaster']) || $details['disaster'])
+			FROM `'._DB_PREFIX_.'psa_disaster` pdi
+			LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pdi.`id_product` = pl.`id_product`)
+			WHERE pl.`id_lang` = '.(int)$cookie->id_lang.' AND pdi.`id_order` = '.(int)$insurance['id_order'].'
+			ORDER BY pdi.`date_add` ');
+			if (is_array($details['disaster']) || $details['disaster'])
 			{
-				foreach($details['disaster'] as $key => $val)
+				foreach ($details['disaster'] as $key => $val)
 					$details['disaster'][$key]['comments'] = Db::getInstance()->ExecuteS('
-							SELECT * FROM `'._DB_PREFIX_.'psa_disaster_comments` pdc
-							WHERE pdc.`id_disaster` = '.(int)$val['id_disaster'].'
-							ORDER BY pdc.`date_add` ');
+					SELECT * FROM `'._DB_PREFIX_.'psa_disaster_comments` pdc
+					WHERE pdc.`id_disaster` = '.(int)$val['id_disaster'].'
+					ORDER BY pdc.`date_add` ');
 			}
 		}
 		return array('hasError' => false, 'details' => $details);
@@ -649,7 +643,7 @@ class prestassurance extends ModuleGraph
 	public function hookmyAccountBlock($params)
 	{
 		global $cookie;
-		if (!psaTools::checkEnvironement() or !psaTools:: checkLimitedCountry())
+		if (!psaTools::checkEnvironement() || !psaTools:: checkLimitedCountry())
 		{
 			$this->cleanAllInsurance();
 			return;
@@ -670,14 +664,14 @@ class prestassurance extends ModuleGraph
 
 		$id_order = $params['id_order'];
 		//check if there is insurance in this order
-		if (!sizeof(Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'order_detail` WHERE `id_order` = '.(int)$params['id_order'].' AND `product_id` = '.(int)$psa_product_id)))
+		if (!count(Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'order_detail` WHERE `id_order` = '.(int)$params['id_order'].' AND `product_id` = '.(int)$psa_product_id)))
 			return;
 		//check if the new order stat match with the configuration
 		if ($params['newOrderStatus']->id != $psa_order_status)
 			return;
 
 		//check if insurance has already send to the platforme.
-		if (sizeof(Db::getInstance()->executeS('SELECT `id_order` FROM `'._DB_PREFIX_.'psa_insurance_detail` WHERE `id_order` = '.(int)$id_order)))
+		if (count(Db::getInstance()->executeS('SELECT `id_order` FROM `'._DB_PREFIX_.'psa_insurance_detail` WHERE `id_order` = '.(int)$id_order)))
 			return;
 
 		$id_cart = Db::getInstance()->getValue('SELECT `id_cart` FROM `'._DB_PREFIX_.'orders` WHERE `id_order` = '.(int)$params['id_order']);
@@ -717,7 +711,7 @@ class prestassurance extends ModuleGraph
 
 		$nbr_insurance = 0;
 
-		foreach($psa_products as $product)
+		foreach ($psa_products as $product)
 			if (!$product['deleted'])
 				$nbr_insurance +=1;
 				
@@ -733,13 +727,13 @@ class prestassurance extends ModuleGraph
 		$smarty->assign(array(
 				'psa_products' => $psa_products,
 				'add_to_cart_url' => __PS_BASE_URI__.'modules/'.$this->name.'/psaCart.php',
-				'psa_added_price' => Configuration::get('PSA_ADDED_PRICE'),
-				'psa_not_added_price' => Configuration::get('PSA_NOT_ADDED_PRICE'),
-				'psa_added_bg' => Configuration::get('PSA_ADDED_BG'),
-				'psa_added_txt' => Configuration::get('PSA_ADDED_TXT'),
-				'psa_not_added_bg' => Configuration::get('PSA_NOT_ADDED_BG'),
-				'psa_not_added_txt' => Configuration::get('PSA_NOT_ADDED_TXT'),
-				'id_product_psa' => Configuration::get('PSA_ID_PRODUCT'),
+				'psa_added_price' => Tools::safeOutput(Configuration::get('PSA_ADDED_PRICE')),
+				'psa_not_added_price' => Tools::safeOutput(Configuration::get('PSA_NOT_ADDED_PRICE')),
+				'psa_added_bg' => Tools::safeOutput(Configuration::get('PSA_ADDED_BG')),
+				'psa_added_txt' => Tools::safeOutput(Configuration::get('PSA_ADDED_TXT')),
+				'psa_not_added_bg' => Tools::safeOutput(Configuration::get('PSA_NOT_ADDED_BG')),
+				'psa_not_added_txt' => Tools::safeOutput(Configuration::get('PSA_NOT_ADDED_TXT')),
+				'id_product_psa' => (int)Configuration::get('PSA_ID_PRODUCT'),
 				'link_conditions' => $link_conditions,
 				'psa_customer_alert' => $psa_customer_alert,
 				'psa_token' => sha1(_COOKIE_KEY_.'prestassurance_fo'.(int)$cookie->id_customer),
@@ -758,7 +752,7 @@ class prestassurance extends ModuleGraph
 
 		if ($this->_cartHasInssurance())
 		{
-			if (!psaTools::checkEnvironement() or !psaTools:: checkLimitedCountry())
+			if (!psaTools::checkEnvironement() || !psaTools::checkLimitedCountry())
 			{
 				$this->cleanAllInsurance();
 				return;
@@ -818,8 +812,7 @@ if (psaTools::checkLocalUse())
 
 		if (Tools::isSubmit('submitPreselected') || Tools::isSubmit('submitMinimum') || Tools::isSubmit('reactive'))
 		{
-			$this->_postValidation();
-			if (!sizeof($this->_postErrors))
+			if (!count($this->_postErrors))
 				$this->_postProcess();
 			else
 				foreach ($this->_postErrors as $err)
@@ -830,15 +823,10 @@ if (psaTools::checkLocalUse())
 
 	private function _displayContent()
 	{
-		if (!Configuration::get('PSA_ID_MERCHANT') or !Configuration::get('PSA_KEY'))
+		/*if (!Configuration::get('PSA_ID_MERCHANT') || !Configuration::get('PSA_KEY'))
 			return $this->_displaySignInForm();
-		else
+		else*/
 			return $this->_displayConfiguration();
-	}
-
-	private function _postValidation()
-	{
-		//$this->_postErrors;
 	}
 
 	private function _postProcess()
@@ -1031,7 +1019,7 @@ if (psaTools::checkLocalUse())
 		$config['shop_url'] = Tools::getShopDomain(true);
 		$config['signin_url_return'] = $this->getSignInUrlReturn();
 		$out = '';
-		foreach($config as $key => $val)
+		foreach ($config as $key => $val)
 			$out .= '<input type="hidden" name="'.(isset($inputName[$key]) ? $inputName[$key] : $key).'" value="'.Tools::htmlentitiesUTF8($val).'" />';
 		return $out;
 	}
@@ -1062,7 +1050,7 @@ if (psaTools::checkLocalUse())
 	{
 		global $cookie;
 		$this->getCategoriesMatch(1);
-		$ps_order_states = OrderState::getOrderStates($cookie->id_lang);
+		$ps_order_states = OrderState::getOrderStates((int)$cookie->id_lang);
 		$cms_pages = CMS::getCMSPages((int)$cookie->id_lang);
 		$html = '
 			<fieldset style="width: 903px;">
@@ -1083,7 +1071,7 @@ if (psaTools::checkLocalUse())
 						<div id="preprod_ip">
 							<label>'.$this->l('IP address of pre-prod').' : </label>
 							<div class="margin-form">
-								<input type="text" size="50" name="PSA_IP_ADDRESS" value="'.Tools::getValue('PSA_IP_ADDRESS', Configuration::get('PSA_IP_ADDRESS')).'">
+								<input type="text" size="50" name="PSA_IP_ADDRESS" value="'.Tools::safeOutput(Tools::getValue('PSA_IP_ADDRESS', Configuration::get('PSA_IP_ADDRESS'))).'">
 								<a href="#" class="button" onclick="addRemoteAddr(); return false;">'.$this->l('Click here to add your ip').'</a>
 								<p style="clear:both">'.
 				$this->l('Set address of Pre-prod. All other addresses will not show the module in pre-prod mode. Use a comma to separate them (e.g., 42.24.4.2,127.0.0.1,99.98.97.96)').'.</p>
@@ -1092,7 +1080,7 @@ if (psaTools::checkLocalUse())
 						<label>'.$this->l('Ajout automatique').' : </label>
 						<div class="margin-form">
 							<label class="t" for="PSA_PRESELECTED_ON">
-								<img src="'._PS_ADMIN_IMG_.'enabled.gif" alt="Oui" title="Oui"></label>
+								<img src="'._PS_ADMIN_IMG_.'enabled.gif" alt="Oui" title="Oui" /></label>
 							<input type="radio" name="PSA_PRESELECTED" id="PSA_PRESELECTED_ON" value="1" '.(Configuration::get('PSA_PRESELECTED') ? 'checked="checked"' : '').'>
 							<label class="t" for="PSA_PRESELECTED_ON">'.$this->l('Yes').'</label>
 							<label class="t" for="PSA_PRESELECTED_OFF">
@@ -1117,7 +1105,7 @@ if (psaTools::checkLocalUse())
 						<div class="margin-form">
 							<select name="PSA_ORDER_STATUS">
 								<option value="0">'.$this->l('Select an order status').'</option>';
-		foreach($ps_order_states as $status)
+		foreach ($ps_order_states as $status)
 			$html .= '<option '.(Tools::getValue('PSA_ORDER_STATUS', Configuration::get('PSA_ORDER_STATUS')) == (int)$status['id_order_state'] ? 'selected="selected"' : '').' value="'.(int)$status['id_order_state'].'">
 								'.$status['name'].'
 								</option>';
@@ -1128,7 +1116,7 @@ if (psaTools::checkLocalUse())
 						<div class="margin-form">
 							<select name="PSA_CMS_PAGE">
 								<option value="0">'.$this->l('Select a cms page').'</option>';
-		foreach($cms_pages as $page)
+		foreach ($cms_pages as $page)
 			$html .= '<option '.(Tools::getValue('PSA_CMS_PAGE', Configuration::get('PSA_CMS_PAGE')) == (int)$page['id_cms'] ? 'selected="selected"' : '').' value="'.(int)$page['id_cms'].'">
 								'.$page['meta_title'].'
 								</option>';
@@ -1139,7 +1127,7 @@ if (psaTools::checkLocalUse())
 						<div class="margin-form">
 							<select name="PSA_CMS_PAGE_ALERT">
 								<option value="0">'.$this->l('Select a cms page').'</option>';
-		foreach($cms_pages as $page)
+		foreach ($cms_pages as $page)
 			$html .= '<option '.(Tools::getValue('PSA_CMS_PAGE_ALERT', Configuration::get('PSA_CMS_PAGE_ALERT')) == (int)$page['id_cms'] ? 'selected="selected"' : '').' value="'.(int)$page['id_cms'].'">
 								'.$page['meta_title'].'
 								</option>';
@@ -1155,23 +1143,23 @@ if (psaTools::checkLocalUse())
 									<td>'.$this->l('Background color').' :</td>
 									<td>
 										<div class="color-picker">
-						        			<div style="background-color: #'.Tools::getValue('PSA_ADDED_BG', Configuration::get('PSA_ADDED_BG')).'"></div>
+						        			<div style="background-color: #'.Tools::safeOutput(Tools::getValue('PSA_ADDED_BG', Configuration::get('PSA_ADDED_BG'))).'"></div>
 						   				</div>
-						   				<input value="'.Tools::getValue('PSA_ADDED_BG', Configuration::get('PSA_ADDED_BG')).'" id="PSA_ADDED_BG" name="PSA_ADDED_BG" type="hidden" data-hex="true" />
+						   				<input value="'.Tools::safeOutput(Tools::getValue('PSA_ADDED_BG', Configuration::get('PSA_ADDED_BG'))).'" id="PSA_ADDED_BG" name="PSA_ADDED_BG" type="hidden" data-hex="true" />
 						   			 </td>
 									<td>'.$this->l('Text color').' :</td>
 									<td>
 										<div class="color-picker">
-						        			<div style="background-color: #'.Tools::getValue('PSA_ADDED_TXT', Configuration::get('PSA_ADDED_TXT')).'"></div>
+						        			<div style="background-color: #'.Tools::safeOutput(Tools::getValue('PSA_ADDED_TXT', Configuration::get('PSA_ADDED_TXT'))).'"></div>
 						   				</div>
-						   				<input value="'.Tools::getValue('PSA_ADDED_TXT', Configuration::get('PSA_ADDED_TXT')).'" id="PSA_ADDED_TXT" name="PSA_ADDED_TXT" type="hidden" data-hex="true" />
+						   				<input value="'.Tools::safeOutput(Tools::getValue('PSA_ADDED_TXT', Configuration::get('PSA_ADDED_TXT'))).'" id="PSA_ADDED_TXT" name="PSA_ADDED_TXT" type="hidden" data-hex="true" />
 									</td>
 									<td>'.$this->l('Price color').' :</td>
 									<td>
 										<div class="color-picker">
-						        			<div style="background-color: #'.Tools::getValue('PSA_ADDED_TXT', Configuration::get('PSA_ADDED_TXT')).'"></div>
+						        			<div style="background-color: #'.Tools::safeOutput(Tools::getValue('PSA_ADDED_TXT', Configuration::get('PSA_ADDED_TXT'))).'"></div>
 						   				</div>
-						   				<input value="'.Tools::getValue('PSA_ADDED_PRICE', Configuration::get('PSA_ADDED_PRICE')).'" id="PSA_ADDED_PRICE" name="PSA_ADDED_PRICE" type="hidden" data-hex="true" />
+						   				<input value="'.Tools::safeOutput(Tools::getValue('PSA_ADDED_PRICE', Configuration::get('PSA_ADDED_PRICE'))).'" id="PSA_ADDED_PRICE" name="PSA_ADDED_PRICE" type="hidden" data-hex="true" />
 									</td>
 								</tr>
 							</table>
@@ -1184,23 +1172,23 @@ if (psaTools::checkLocalUse())
 									<td>'.$this->l('Background color').' :</td>
 									<td>
 										<div class="color-picker">
-						        			<div style="background-color: #'.Tools::getValue('PSA_NOT_ADDED_BG', Configuration::get('PSA_NOT_ADDED_BG')).'"></div>
+						        			<div style="background-color: #'.Tools::safeOutput(Tools::getValue('PSA_NOT_ADDED_BG', Configuration::get('PSA_NOT_ADDED_BG'))).'"></div>
 						   				</div>
-						   				<input value="'.Tools::getValue('PSA_NOT_ADDED_BG', Configuration::get('PSA_NOT_ADDED_BG')).'" id="PSA_NOT_ADDED_BG" name="PSA_NOT_ADDED_BG" type="hidden" data-hex="true" />
+						   				<input value="'.Tools::safeOutput(Tools::getValue('PSA_NOT_ADDED_BG', Configuration::get('PSA_NOT_ADDED_BG'))).'" id="PSA_NOT_ADDED_BG" name="PSA_NOT_ADDED_BG" type="hidden" data-hex="true" />
 						   			 </td>
 									<td>'.$this->l('Text color').' :</td>
 									<td>
 										<div class="color-picker">
-						        			<div style="background-color: #'.Tools::getValue('PSA_NOT_ADDED_TXT', Configuration::get('PSA_NOT_ADDED_TXT')).'"></div>
+						        			<div style="background-color: #'.Tools::safeOutput(Tools::getValue('PSA_NOT_ADDED_TXT', Configuration::get('PSA_NOT_ADDED_TXT'))).'"></div>
 						   				</div>
-						   				<input value="'.Tools::getValue('PSA_NOT_ADDED_TXT', Configuration::get('PSA_NOT_ADDED_TXT')).'" id="PSA_NOT_ADDED_TXT" name="PSA_NOT_ADDED_TXT" type="hidden" data-hex="true" />
+						   				<input value="'.Tools::safeOutput(Tools::getValue('PSA_NOT_ADDED_TXT', Configuration::get('PSA_NOT_ADDED_TXT'))).'" id="PSA_NOT_ADDED_TXT" name="PSA_NOT_ADDED_TXT" type="hidden" data-hex="true" />
 									</td>
 									<td>'.$this->l('Price color').' :</td>
 									<td>
 										<div class="color-picker">
-						        			<div style="background-color: #'.Tools::getValue('PSA_NOT_ADDED_PRICE', Configuration::get('PSA_NOT_ADDED_PRICE')).'"></div>
+						        			<div style="background-color: #'.Tools::safeOutput(Tools::getValue('PSA_NOT_ADDED_PRICE', Configuration::get('PSA_NOT_ADDED_PRICE'))).'"></div>
 						   				</div>
-						   				<input value="'.Tools::getValue('PSA_NOT_ADDED_PRICE', Configuration::get('PSA_NOT_ADDED_PRICE')).'" id="PSA_NOT_ADDED_PRICE" name="PSA_NOT_ADDED_PRICE" type="hidden" data-hex="true" />
+						   				<input value="'.Tools::safeOutput(Tools::getValue('PSA_NOT_ADDED_PRICE', Configuration::get('PSA_NOT_ADDED_PRICE'))).'" id="PSA_NOT_ADDED_PRICE" name="PSA_NOT_ADDED_PRICE" type="hidden" data-hex="true" />
 									</td>
 								</tr>
 							</table>
@@ -1442,12 +1430,12 @@ if (psaTools::checkLocalUse())
 		$home_category = Category::getHomeCategories((int)($cookie->id_lang));
 		
 		$tmp = array();
-		foreach($home_category as $cat)
+		foreach ($home_category as $cat)
 			$tmp[] = $cat['id_category'];
 
 		$this->getCategoriesMatch($tmp);
 		
-		foreach($home_category as $key => $val)
+		foreach ($home_category as $key => $val)
 		{
 			 $has_children = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 				SELECT COUNT(*)
@@ -1487,12 +1475,12 @@ if (psaTools::checkLocalUse())
 		ORDER BY `position` ASC');
 		
 		$tmp = array();
-		foreach($children_categories as $cat)
+		foreach ($children_categories as $cat)
 			$tmp[] = $cat['id_category'];
 
 		$this->getCategoriesMatch($tmp);
 		
-		foreach($children_categories as $key => $cat)
+		foreach ($children_categories as $key => $cat)
 		{
 			$children_categories[$key]['category'] = $cat['id_category'];
 			$children_categories[$key]['psa_cat'] = $this->displayPsaCategoryWidget((int)$cat['id_category']);
@@ -1521,15 +1509,17 @@ if (psaTools::checkLocalUse())
 	public function getCategoriesMatch($category_ids)
 	{
 		if (!is_array($category_ids))
-			$category_ids = array($category_ids);
+			$category_ids = array((int)$category_ids);
+		$category_ids = array_map('intval', $category_ids);
+			
 		$results = Db::getInstance()->ExecuteS('
-											SELECT c.*, a.`name` FROM `'._DB_PREFIX_.'psa_category_match` c
-											LEFT JOIN `'._DB_PREFIX_.'psa_category_attribute` ca ON (ca.`id_category` = c.`id_category`)
-											LEFT JOIN `'._DB_PREFIX_.'attribute_lang` a ON (a.`id_attribute` = ca.`id_attribute`)
-											WHERE c.`id_category` IN ('.implode(',', $category_ids) .')');
+		SELECT c.*, a.`name` FROM `'._DB_PREFIX_.'psa_category_match` c
+		LEFT JOIN `'._DB_PREFIX_.'psa_category_attribute` ca ON (ca.`id_category` = c.`id_category`)
+		LEFT JOIN `'._DB_PREFIX_.'attribute_lang` a ON (a.`id_attribute` = ca.`id_attribute`)
+		WHERE c.`id_category` IN ('.implode(',', $category_ids) .')');
+
 		if (is_array($results))
-		{
-			foreach($results as &$cat)
+			foreach ($results as &$cat)
 			{
 				if (is_null($cat['selling_price']))
 				{
@@ -1543,24 +1533,23 @@ if (psaTools::checkLocalUse())
 				}
 				$this->categoriesMatch[(int)$cat['id_category']] = $cat;
 			}
-		}
 	}
 	
 	public function getProductPriceAverage($id_category)
 	{
 		return Db::getInstance()->getValue('
-			SELECT AVG(`price`) FROM  `'._DB_PREFIX_.'ps_product` 
-			WHERE  `id_category_default` = '.(int)$d_category);
+		SELECT AVG(`price`) FROM  `'._DB_PREFIX_.'ps_product` 
+		WHERE `id_category_default` = '.(int)$d_category);
 	}
 
 	private function _formatPsCartProducts($cartProducts, $psa_product = false)
 	{
 		$psa_product_id = (int)Configuration::get('PSA_ID_PRODUCT');
 		$return = array();
-		foreach($cartProducts as $product)
+		foreach ($cartProducts as $product)
 		{
 			//if id_product == psa_id_product => skip it
-			if ($product['id_product'] == $psa_product_id and !$psa_product)
+			if ($product['id_product'] == $psa_product_id && !$psa_product)
 				continue;
 			$tmp['id_product'] = $product['id_product'];
 			$tmp['id_product_attribute'] = $product['id_product_attribute'];
@@ -1576,7 +1565,7 @@ if (psaTools::checkLocalUse())
 	private function _getQtyByCategory(&$cartProducts)
 	{
 		$qtyByCategory = array();
-		foreach($cartProducts as $product)
+		foreach ($cartProducts as $product)
 		{
 			if (!isset($qtyByCategory[$product['id_category_default']]))
 				$qtyByCategory[$product['id_category_default']] = $product['qty'];
@@ -1590,7 +1579,7 @@ if (psaTools::checkLocalUse())
 	{
 		$results = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'psa_cart` WHERE `id_cart` = '.(int)$id_cart);
 		$this->_psa_cart_products = array();
-		foreach($results as $product)
+		foreach ($results as $product)
 			$this->_psa_cart_products[$product['id_product'].'_'.(int)$product['id_product_attribute']] = $product;
 	}
 
@@ -1602,7 +1591,7 @@ if (psaTools::checkLocalUse())
 		$psa_product_id = (int)Configuration::get('PSA_ID_PRODUCT');
 		$return = true;
 		
-		foreach($this->_psa_cart_products as $key => $product)
+		foreach ($this->_psa_cart_products as $key => $product)
 		{
 			if (array_key_exists($product['id_product'].'_'.$product['id_product_attribute'], $cartProducts))
 			{
@@ -1621,7 +1610,7 @@ if (psaTools::checkLocalUse())
 					$insert &= false;
 
 				//check if the product price is between min and max price of insurance
-				if ($price < $minimum_product_price or $price > $maximum_product_price)
+				if ($price < $minimum_product_price || $price > $maximum_product_price)
 					$insert &= false;
 				
 				if (Configuration::get('PSA_MINIMUM_THRESHOLD'))
@@ -1637,19 +1626,19 @@ if (psaTools::checkLocalUse())
 				if ($insert)
 				{
 					$return &= Db::getInstance()->Execute('
-												INSERT INTO `'._DB_PREFIX_.'psa_cart` (`id_cart`, `id_product`, `id_product_attribute`, `id_psa_product_attribute`, `qty`, `deleted`)
-												VALUES ('.(int)$product['id_cart'].', '.(int)$product['id_product'].', '.(int)$product['id_product_attribute'].', '.(int)$product['id_psa_product_attribute'].',
-												'.(int)$product['qty'].', '.(int)$product['deleted'].')
-												ON DUPLICATE KEY UPDATE `qty` = '.(int)$product['qty'].' , `deleted` ='.(int)$product['deleted']);
+					INSERT INTO `'._DB_PREFIX_.'psa_cart` (`id_cart`, `id_product`, `id_product_attribute`, `id_psa_product_attribute`, `qty`, `deleted`)
+					VALUES ('.(int)$product['id_cart'].', '.(int)$product['id_product'].', '.(int)$product['id_product_attribute'].', '.(int)$product['id_psa_product_attribute'].',
+					'.(int)$product['qty'].', '.(int)$product['deleted'].')
+					ON DUPLICATE KEY UPDATE `qty` = '.(int)$product['qty'].' , `deleted` ='.(int)$product['deleted']);
 				}
 				else
 				{
 					unset($this->_psa_cart_products[$key]);
 					$return &= Db::getInstance()->Execute('
-													DELETE FROM `'._DB_PREFIX_.'psa_cart`
-													WHERE `id_cart` = '.(int)$product['id_cart'].' 
-													AND `id_product` = '.(int)$product['id_product'].' 
-													AND `id_product_attribute` = '.(int)$product['id_product_attribute']);
+					DELETE FROM `'._DB_PREFIX_.'psa_cart`
+					WHERE `id_cart` = '.(int)$product['id_cart'].' 
+					AND `id_product` = '.(int)$product['id_product'].' 
+					AND `id_product_attribute` = '.(int)$product['id_product_attribute']);
 				}
 			}
 		}
@@ -1661,7 +1650,7 @@ if (psaTools::checkLocalUse())
 		global $cookie, $cart;
 		$currency = new Currency((int)$cookie->id_currency);
 		
-		if (!sizeof($this->_psa_cart_products))
+		if (!count($this->_psa_cart_products))
 		{
 			$this->_cleanPsCartProducts((int)$cookie->id_cart, true);
 			return;
@@ -1670,7 +1659,7 @@ if (psaTools::checkLocalUse())
 		$cartProducts = $this->_formatPsCartProducts($cartObj->getProducts(), true);
 		$qtyByCategory = array();
 		
-		foreach($cartProducts as $product)
+		foreach ($cartProducts as $product)
 		{
 			if ($product['id_product'] == $psa_product_id || !array_key_exists((int)$product['id_product'].'_'.(int)$product['id_product_attribute'], $this->_psa_cart_products))
 				continue;
@@ -1684,14 +1673,14 @@ if (psaTools::checkLocalUse())
 				$qtyByCategory[$product['id_category_default']] += $product['qty'];
 		}
 		$qtyByProductAttribute = array();
-		foreach($qtyByCategory as $key => $val)
+		foreach ($qtyByCategory as $key => $val)
 			$qtyByProductAttribute[$ids_psa_attributes[$key]] = $val;
 
-		foreach($qtyByProductAttribute as $id_psa_attribute => $qty)
+		foreach ($qtyByProductAttribute as $id_psa_attribute => $qty)
 		{
 			$id_category_default = Db::getInstance()->getValue('
-												SELECT id_category FROM `'._DB_PREFIX_.'psa_category_attribute`
-												WHERE `id_product_attribute` = '.(int)$id_psa_attribute);
+			SELECT id_category FROM `'._DB_PREFIX_.'psa_category_attribute`
+			WHERE `id_product_attribute` = '.(int)$id_psa_attribute);
 			if (!$id_category_default) //check if matching has been set between shop category and Inssurance category
 				continue;
 			$this->getCategoriesMatch(array($id_category_default));
@@ -1731,7 +1720,7 @@ if (psaTools::checkLocalUse())
 				$cartObj->updateQty((int)$qty, (int)$psa_product_id, (int)$id_psa_attribute, false, 'up');
 			}
 		}
-		foreach($cartProducts as $product)
+		foreach ($cartProducts as $product)
 		{
 			if ($product['id_product'] != $psa_product_id)
 				continue;
@@ -1752,7 +1741,7 @@ if (psaTools::checkLocalUse())
 		$request->setPassword(Configuration::get('PSA_KEY'));
 		$request->execute();
 		$response = (array)Tools::jsonDecode($request->getResponseBody());
-		if (!sizeof($response))
+		if (!count($response))
 			return false;
 		$this->_cacheCheckAdd[$id_psa_category.'_'.$price.'_'.$currency] = $response['return'];
 		return $response['return'];
@@ -1775,39 +1764,36 @@ if (psaTools::checkLocalUse())
 		$i = 0;
 		$psa_product_id = (int)Configuration::get('PSA_ID_PRODUCT');
 		$category_ids = array();
-		foreach($cartProducts as $product)
+		foreach ($cartProducts as $product)
 			$category_ids[$product['id_category_default']][] = array(
 				'id_product' => $product['id_product'],
 				'id_product_attribute' => $product['id_product_attribute'],
 				'id_category_default' => $product['id_category_default']
 			);
-		foreach($category_ids as $cat)
+		foreach ($category_ids as $cat)
 		{
-			foreach($cat as $product)
+			foreach ($cat as $product)
 			{
 				Db::getInstance()->Execute('
-											UPDATE `'._DB_PREFIX_.'cart_product` SET `date_add`= ADDTIME( NOW(), \'00:00:'.(int)$i.'\')
-											WHERE `id_cart` = '.(int)$id_cart.' AND `id_product` = '.(int)$product['id_product'].'
-											AND `id_product_attribute` = '.(int)$product['id_product_attribute']
-				);
+				UPDATE `'._DB_PREFIX_.'cart_product` SET `date_add`= ADDTIME( NOW(), \'00:00:'.(int)$i.'\')
+				WHERE `id_cart` = '.(int)$id_cart.' AND `id_product` = '.(int)$product['id_product'].'
+				AND `id_product_attribute` = '.(int)$product['id_product_attribute']);
 				$i++;
 			}
 			if (array_key_exists((int)$product['id_category_default'], $ids_psa_attributes))
 				Db::getInstance()->Execute('
-											UPDATE `'._DB_PREFIX_.'cart_product` SET `date_add`= ADDTIME( NOW(), \'00:00:'.(int)$i.'\')
-											WHERE `id_cart` = '.(int)$id_cart.' AND `id_product` = '.(int)$psa_product_id.'
-											AND `id_product_attribute` = '.(int)$ids_psa_attributes[(int)$product['id_category_default']]
-			);
+				UPDATE `'._DB_PREFIX_.'cart_product` SET `date_add`= ADDTIME( NOW(), \'00:00:'.(int)$i.'\')
+				WHERE `id_cart` = '.(int)$id_cart.' AND `id_product` = '.(int)$psa_product_id.'
+				AND `id_product_attribute` = '.(int)$ids_psa_attributes[(int)$product['id_category_default']]);
 			$i++;
 		}
 	}
 
 	public function saveSignInInfos($id_merchant, $key)
 	{
-		if (Configuration::updateValue('PSA_ID_MERCHANT', $id_merchant) and Configuration::updateValue('PSA_KEY',$key ))
+		if (Configuration::updateValue('PSA_ID_MERCHANT', $id_merchant) && Configuration::updateValue('PSA_KEY',$key ))
 			return true;
-		else
-			return false;
+		return false;
 	}
 
 	public function saveMatchCategory($ps_cat, $psa_cat, $minimum_price, $name, $maximum_price, $minimum_product_price, $maximum_product_price)
@@ -1816,18 +1802,15 @@ if (psaTools::checkLocalUse())
 		$this->createAttributAndCombinaison($ps_cat, $name);
 
 		$return = Db::getInstance()->Execute('
-									INSERT INTO `'._DB_PREFIX_.'psa_category_match` (`id_category`, `id_psa_category`, `minimum_price`, `maximum_price`, `minimum_product_price`, `maximum_product_price`)
-									VALUES ('.(int)$ps_cat.', '.(int)$psa_cat.', '.(float)$minimum_price.',  '.(float)$maximum_price.', '.(float)$minimum_product_price.',  '.(float)$maximum_product_price.')
-									ON DUPLICATE KEY UPDATE `id_psa_category` = '.(int)$psa_cat.'').',
-									`minimum_price` = '.(float)$minimum_price.',
-									`maximum_price`= '.(float)$maximum_price.',
-									`minimum_product_price`= '.(float)$minimum_product_price.',
-									`maximum_product_price`= '.(float)$maximum_product_price;
+		INSERT INTO `'._DB_PREFIX_.'psa_category_match` (`id_category`, `id_psa_category`, `minimum_price`, `maximum_price`, `minimum_product_price`, `maximum_product_price`)
+		VALUES ('.(int)$ps_cat.', '.(int)$psa_cat.', '.(float)$minimum_price.',  '.(float)$maximum_price.', '.(float)$minimum_product_price.',  '.(float)$maximum_product_price.')
+		ON DUPLICATE KEY UPDATE `id_psa_category` = '.(int)$psa_cat.'').',
+		`minimum_price` = '.(float)$minimum_price.',
+		`maximum_price`= '.(float)$maximum_price.',
+		`minimum_product_price`= '.(float)$minimum_product_price.',
+		`maximum_product_price`= '.(float)$maximum_product_price;
 		if ($return)
-			return array(
-				'hasError' => false,
-				'html' => $this->renderTreeRow($ps_cat)
-				);
+			return array('hasError' => false, 'html' => $this->renderTreeRow($ps_cat));
 		else
 			return array('hasError' => true);
 	}
@@ -1840,10 +1823,7 @@ if (psaTools::checkLocalUse())
 		$return &= Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'psa_category_match` WHERE `id_category` = '.(int)$id_category);
 				
 		if ($return)
-			return array(
-				'hasError' => false,
-				'html' => $this->renderTreeRow($id_category)
-				);
+			return array('hasError' => false, 'html' => $this->renderTreeRow($id_category));
 		else
 			return array('hasError' => true);
 	}
@@ -1855,8 +1835,7 @@ if (psaTools::checkLocalUse())
 		$html = array(
 			'psa_cat' => $this->displayPsaCategoryWidget((int)$ps_cat),
 			'price' => $this->displayPriceWidget((int)$ps_cat),
-			'action' => $this->displayMenuAction((int)$ps_cat)
-			);
+			'action' => $this->displayMenuAction((int)$ps_cat));
 		return $html;
 	}
 
@@ -1907,29 +1886,26 @@ if (psaTools::checkLocalUse())
 	{
 		$return = true;
 		$return &= Db::getInstance()->Execute('
-									UPDATE `'._DB_PREFIX_.'psa_category_match`
-									SET `impact_type`= \''.pSQL($impact_type).'\',
-										`impact_value`= '.(float)$impact_value.',
-										`selling_price`= '.(float)$selling_price.',
-										`benefit`= '.(float)$benefit.'
-									WHERE `id_category` = '.(int)$ps_cat);
+		UPDATE `'._DB_PREFIX_.'psa_category_match`
+		SET `impact_type`= \''.pSQL($impact_type).'\',
+			`impact_value`= '.(float)$impact_value.',
+			`selling_price`= '.(float)$selling_price.',
+			`benefit`= '.(float)$benefit.'
+		WHERE `id_category` = '.(int)$ps_cat);
 
 		$id_product_attribute = Db::getInstance()->getValue('
-									SELECT pac.`id_product_attribute`
-									FROM `'._DB_PREFIX_.'product_attribute_combination` pac
-									LEFT JOIN `'._DB_PREFIX_.'psa_category_attribute` ca ON (ca.`id_attribute` = pac.`id_attribute`)
-									WHERE ca.`id_category` = '.(int)$ps_cat);
+		SELECT pac.`id_product_attribute`
+		FROM `'._DB_PREFIX_.'product_attribute_combination` pac
+		LEFT JOIN `'._DB_PREFIX_.'psa_category_attribute` ca ON (ca.`id_attribute` = pac.`id_attribute`)
+		WHERE ca.`id_category` = '.(int)$ps_cat);
 
 		//update combinaison price
 		$return &= Db::getInstance()->Execute('
-											UPDATE `'._DB_PREFIX_.'product_attribute`
-											SET `price` = '.(float)Tools::ps_round($selling_price, 2).'
-											WHERE `id_product_attribute` = '.(int)$id_product_attribute);
+		UPDATE `'._DB_PREFIX_.'product_attribute`
+		SET `price` = '.(float)Tools::ps_round($selling_price, 2).'
+		WHERE `id_product_attribute` = '.(int)$id_product_attribute);
 		if ($return)
-			return array(
-				'hasError' => false,
-				'html' => $this->renderTreeRow($ps_cat)
-				);
+			return array('hasError' => false, 'html' => $this->renderTreeRow($ps_cat));
 		else
 			return array('hasError' => true);
 	}
@@ -1939,27 +1915,26 @@ if (psaTools::checkLocalUse())
 		$return = array();
 		$tax = self::PSA_TAX_RATE;
 
-		$selling_price = Tools::ps_round($impact_value * (($tax/100) +1), 2);
+		$selling_price = Tools::ps_round($impact_value * (($tax / 100) + 1), 2);
 		//check if final price isn't lower than minimum
-		if ($selling_price < ($minimum_price * ($tax/100) + $minimum_price))
-			$selling_price = ($minimum_price * ($tax/100) + $minimum_price);
+		if ($selling_price < ($minimum_price * ($tax / 100) + $minimum_price))
+			$selling_price = ($minimum_price * ($tax / 100) + $minimum_price);
 
 		if ($selling_price > $maximum_price)
-			$selling_price = ($maximum_price * ($tax/100) + $maximum_price);
+			$selling_price = ($maximum_price * ($tax / 100) + $maximum_price);
 
 		return $selling_price;
 	}
 
 	public function calcBenefit($selling_price)
 	{
-		$tax = self::PSA_TAX_RATE;
-		return Tools::ps_round($selling_price, 2) / ($tax/100 + 1) / 4;
+		return Tools::ps_round($selling_price, 2) / (self::PSA_TAX_RATE / 100 + 1) / 4;
 	}
 
 	private function _cartHasInssurance()
 	{
 		$has_inssurance = true;
-		if (!sizeof($this->_psa_cart_products))
+		if (!count($this->_psa_cart_products))
 			$has_inssurance &= false;
 
 		foreach ($this->_psa_cart_products as $psa_product)
@@ -1976,7 +1951,7 @@ if (psaTools::checkLocalUse())
 		$product = new Product((int)Configuration::get('PSA_ID_PRODUCT'));
 		$combinaisons = $product->getAttributeCombinaisons($id_lang);
 		$combinaisonsTmp = array();
-		foreach($combinaisons as $comb)
+		foreach ($combinaisons as $comb)
 			$combinaisonsTmp[$comb['id_product_attribute']] = $comb;
 		$combinaisons = $combinaisonsTmp;
 		return $combinaisons;
@@ -2016,7 +1991,7 @@ if (psaTools::checkLocalUse())
 		$products = array();
 		$psCartProducts = $orderObj->getProducts();
 
-		foreach($psCartProducts as &$product)
+		foreach ($psCartProducts as &$product)
 			if ($product['product_id'] != $id_psa_product)
 			{
 				$product['id_category_default'] = Db::getInstance()->getValue('SELECT id_category_default FROM `'._DB_PREFIX_.'product` WHERE `id_product` = '.(int)$product['product_id']);
@@ -2027,17 +2002,17 @@ if (psaTools::checkLocalUse())
 											WHERE `id_category` IN ('.implode(', ', $productsCategories).')');
 		$this->getCategoriesMatch($productsCategories);
 		$ids_psa_categories = array();
-		foreach($this->categoriesMatch as $cat)
+		foreach ($this->categoriesMatch as $cat)
 			$ids_psa_categories[$cat['id_category']] = $cat['id_psa_category'];
 		//format id attributes tab
 		$ids_psa_attributes = array();
-		foreach($result as $key => $val)
+		foreach ($result as $key => $val)
 			if (!isset($ids_psa_attributes[$val['id_category']]))
 				$ids_psa_attributes[$val['id_category']] = $val['id_product_attribute'];
 
 			$total_inssurance = 0;
 
-		foreach($psCartProducts as $psPproduct)
+		foreach ($psCartProducts as $psPproduct)
 		{
 			if ($psPproduct['product_id'] == $id_psa_product || !array_key_exists($psPproduct['product_id'].'_'.$psPproduct['product_attribute_id'], $this->_psa_cart_products))
 				continue;
@@ -2095,17 +2070,17 @@ if (psaTools::checkLocalUse())
 	private function _saveSubscriptionDetails($response, $orderObj)
 	{
 		$result = Db::getInstance()->ExecuteS('SELECT *
-				FROM '._DB_PREFIX_.'psa_insurance_detail
-				WHERE id_order = '.(int)$response['id_order']);
+		FROM '._DB_PREFIX_.'psa_insurance_detail
+		WHERE id_order = '.(int)$response['id_order']);
 
-		foreach($response['message'] as $message)
+		foreach ($response['message'] as $message)
 		{
-			$message = array('message' => $message, 'id_order' => (int)$response['id_order'], 'date_add' => date("Y-m-d h:m:s"));
+			$message = array('message' => $message, 'id_order' => (int)$response['id_order'], 'date_add' => date('Y-m-d h:m:s'));
 			Db::getInstance()->autoExecute(_DB_PREFIX_.'psa_insurance_detail_message', $message, 'INSERT');
 		}
 		unset($response['message']);
 
-		if (sizeof($result))
+		if (count($result))
 			Db::getInstance()->autoExecute(_DB_PREFIX_.'psa_insurance_detail', $response, 'UPDATE', 'id_order='.(int)$response['id_order']);
 		else
 		{
@@ -2132,7 +2107,7 @@ if (psaTools::checkLocalUse())
 		//get all psa product not deleted
 		$this->_getPsaCartProducts((int)$cartObj->id);
 		//add psa products and ps products in order detail
-		foreach($products as $product)
+		foreach ($products as $product)
 		{
 			unset($product['id_order_detail']);
 			$product['product_name'] = pSQL($product['product_name']);
@@ -2170,21 +2145,20 @@ if (psaTools::checkLocalUse())
 	public function saveDisaster($id_order, $id_product, $reason, $comment, $phone)
 	{
 		$orderObj = new Order((int)$id_order);
-		$carrier = new Carrier((int)($orderObj->id_carrier));
+		$carrier = new Carrier((int)$orderObj->id_carrier);
 		
 		$id_agreement = Db::getInstance()->getValue('SELECT `id_agreement` 
-			FROM `'._DB_PREFIX_.'psa_insurance_detail` 
-			WHERE `id_order` ='.(int)$id_order);
+		FROM `'._DB_PREFIX_.'psa_insurance_detail` 
+		WHERE `id_order` = '.(int)$id_order);
 		
 		$data = array(
-			'id_agreement' => $id_agreement,
-			'id_product' => $id_product,
-			'reason' => $reason,
-			'comment' => $comment,
-			'phone' => $phone,
-			'carrier_name' => $carrier->name,
-			'followup_link' => str_replace('@', $orderObj->shipping_number, $carrier->url)
-		);
+		'id_agreement' => $id_agreement,
+		'id_product' => $id_product,
+		'reason' => $reason,
+		'comment' => $comment,
+		'phone' => $phone,
+		'carrier_name' => $carrier->name,
+		'followup_link' => str_replace('@', $orderObj->shipping_number, $carrier->url));
 
 		$request = new psaRequest('disaster/add', 'POST', $data);
 		$request->setUsername(Configuration::get('PSA_ID_MERCHANT'));
@@ -2208,17 +2182,14 @@ if (psaTools::checkLocalUse())
 	{
 		if ($comment != '')
 			return Db::getInstance()->execute('INSERT INTO '._DB_PREFIX_.'psa_disaster_comments (`id_disaster`, `way`, `comment`, `date_add`)
-													VALUES ('.(int)$id_disaster.', '.(int)$way.', \''.pSQL($comment).'\', NOW())');
+			VALUES ('.(int)$id_disaster.', '.(int)$way.', \''.pSQL($comment).'\', NOW())');
 		else
 			return true;
 	}
 
 	public function sendDisasterComment($id_disaster, $way = 1, $comment, $id_psa_disaster)
 	{
-		$data = array(
-			'comment' => $comment,
-			'id_psa_disaster' => $id_psa_disaster
-		);
+		$data = array('comment' => $comment, 'id_psa_disaster' => $id_psa_disaster);
 
 		$request = new psaRequest('disaster/add/comment', 'POST', $data);
 		$request->setUsername(Configuration::get('PSA_ID_MERCHANT'));
@@ -2238,55 +2209,40 @@ if (psaTools::checkLocalUse())
 
 	public function exportConfig()
 	{
-		$tables = array(
-			'psa_category_match',
-			'psa_category_attribute'
-		);
+		$tables = array('psa_category_match', 'psa_category_attribute');
 
-		$confs = array(
-			'PSA_ID_MERCHANT',
-			'PSA_KEY',
-			'PSA_CGV_UPDATED',
-			'PSA_ADDED_PRICE',
-			'PSA_ADDED_BG',
-			'PSA_ADDED_TXT',
-			'PSA_NOT_ADDED_PRICE',
-			'PSA_NOT_ADDED_BG',
-			'PSA_NOT_ADDED_TXT',
-			'PSA_PROPOSE_DISCONECT'
-		);
+		$confs = array('PSA_ID_MERCHANT', 'PSA_KEY', 'PSA_CGV_UPDATED', 'PSA_ADDED_PRICE',
+		'PSA_ADDED_BG', 'PSA_ADDED_TXT', 'PSA_NOT_ADDED_PRICE', 'PSA_NOT_ADDED_BG',
+		'PSA_NOT_ADDED_TXT', 'PSA_PROPOSE_DISCONECT');
 
 		$datas = array();
 
-		foreach($tables as $table)
+		foreach ($tables as $table)
 		{
 			$secure_table = (function_exists('bqSQL') ? bqSQL($table) : pSQL(($table)));
 			$datas['tables'][$table] = Db::getInstance()->executeS('SELECT * FROM '._DB_PREFIX_.$secure_table);
 		}
 
-		foreach($confs as $conf)
+		foreach ($confs as $conf)
 			$datas['conf'][$conf] = Configuration::get($conf);
 
 		//export psa product attrubits and combinations
-		$result = Db::getInstance()->executeS('
-			SELECT * FROM '._DB_PREFIX_.'attribute
-			WHERE `id_attribute_group` = '.(int)Configuration::get('PSA_ATTR_GROUP_ID')
-		);
+		$result = Db::getInstance()->ExecuteS('
+		SELECT * FROM '._DB_PREFIX_.'attribute
+		WHERE `id_attribute_group` = '.(int)Configuration::get('PSA_ATTR_GROUP_ID'));
 		$attributes = array();
 		$combination = array();
-		foreach($result as $attribute)
+		foreach ($result as $attribute)
 		{
-			$tmp_attr = Db::getInstance()->executeS('
-				SELECT * FROM '._DB_PREFIX_.'attribute_lang
-				WHERE `id_attribute` = '.(int)$attribute['id_attribute']
-			);
+			$tmp_attr = Db::getInstance()->ExecuteS('
+			SELECT * FROM '._DB_PREFIX_.'attribute_lang
+			WHERE `id_attribute` = '.(int)$attribute['id_attribute']);
 
-			$tmp_comb = Db::getInstance()->executeS('
-				SELECT * FROM `'._DB_PREFIX_.'product_attribute` pa
-				LEFT JOIN `'._DB_PREFIX_.'product_attribute_combination` pac
-				ON (pa.`id_product_attribute` = pac.`id_product_attribute`)
-				WHERE `id_attribute` = '.(int)$attribute['id_attribute']
-			);
+			$tmp_comb = Db::getInstance()->ExecuteS('
+			SELECT * FROM `'._DB_PREFIX_.'product_attribute` pa
+			LEFT JOIN `'._DB_PREFIX_.'product_attribute_combination` pac
+			ON (pa.`id_product_attribute` = pac.`id_product_attribute`)
+			WHERE `id_attribute` = '.(int)$attribute['id_attribute']);
 			$tmp_comb = $tmp_comb[0];
 
 			$attributes[(int)$attribute['id_attribute']] = $tmp_attr;
@@ -2306,29 +2262,26 @@ if (psaTools::checkLocalUse())
 		$languages = Language::getLanguages(true);
 		$id_attr_group = (int)Configuration::get('PSA_ATTR_GROUP_ID');
 
-
-		foreach($config['attributes'] as $key => $attribut)
-		{
-			foreach($attribut as $val)
+		foreach ($config['attributes'] as $key => $attribut)
+			foreach ($attribut as $val)
 			{
 				Db::getInstance()->execute('INSERT INTO `'._DB_PREFIX_.'attribute` (`id_attribute_group`, `color`) VALUES ('.(int)$id_attr_group.', 0)');
 				$new_id_attribut = Db::getInstance()->Insert_ID();
-				foreach($languages as $lang)
+				foreach ($languages as $lang)
 					Db::getInstance()->execute('INSERT INTO `'._DB_PREFIX_.'attribute_lang` (`id_attribute` ,`id_lang` ,`name`) VALUES ('.(int)$new_id_attribut.', '.(int)$lang.', \''.pSQL($val['name']).'\')');
 
 				//modify id_attribute in other table
-				foreach($config['tables']['psa_category_attribute'] as &$category_match)
+				foreach ($config['tables']['psa_category_attribute'] as &$category_match)
 					if ($category_match['id_attribute'] == $val['id_attribute'])
 						$category_match['id_attribute'] = $new_id_attribut;
 
-					foreach($config['combination'] as &$comb)
+					foreach ($config['combination'] as &$comb)
 						if ($comb['id_attribute'] == $val['id_attribute'])
 							$comb['id_attribute'] = $new_id_attribut;
 			}
-		}
 
 		$config['product_attribute_combination'] = array();
-		foreach($config['combination'] as $key => $val)
+		foreach ($config['combination'] as $key => $val)
 		{
 			$tmp_id_attribute = $val['id_attribute'];
 			unset($val['id_attribute'], $val['id_product_attribute']);
@@ -2341,21 +2294,21 @@ if (psaTools::checkLocalUse())
 			$config['product_attribute_combination'][$tmp_id_attribute] = $new_id_product_attribute;
 		}
 
-		foreach($config['product_attribute_combination'] as $id_attribute => $id_product_attribute)
+		foreach ($config['product_attribute_combination'] as $id_attribute => $id_product_attribute)
 			Db::getInstance()->execute('INSERT INTO `'._DB_PREFIX_.'product_attribute_combination` (`id_attribute`, `id_product_attribute`) VALUES ('.(int)$id_attribute.', '.(int)$id_product_attribute.')');
 
-		foreach($config['tables'] as $table_name => $table)
+		foreach ($config['tables'] as $table_name => $table)
 		{
 			$secure_table_name = (function_exists('bqSQL') ? bqSQL($table_name) : pSQL(($table_name)));
 			$return =& Db::getInstance()->Execute('TRUNCATE TABLE '._DB_PREFIX_.$secure_table_name);
-			foreach($table as $values)
+			foreach ($table as $values)
 			{
 				$secure_table = (function_exists('bqSQL') ? bqSQL($table_name) : pSQL(($table_name)));
 				$return =& Db::getInstance()->autoExecute(_DB_PREFIX_.$secure_table, $values, 'INSERT');
 			}
 		}
 
-		foreach($config['conf'] as $key => $val)
+		foreach ($config['conf'] as $key => $val)
 			$return =& Configuration::updateValue($key, $val);
 
 
@@ -2373,8 +2326,6 @@ if (psaTools::checkLocalUse())
 	}
 	
 	/************* STATS **************/
-	
-	
 	public function hookAdminStatsModules($params)
 	{
 		return '';
@@ -2606,9 +2557,9 @@ Vous pouvez créer cette page CMS à vocation marketing en allant dans le menu
 			'local_use' => 'Afin de pouvoir fonctionner normalement le module PrestaShop Assurance doit obligatoirement être installé sur un serveur web et non en local.');
 		
 		if (array_key_exists($key, $help))
-			return '<span class="help_psa"><img alt="'.$help[$key].'" src="../modules/'.$this->name.'/img/help.png"></span>';
+			return '<span class="help_psa"><img alt="'.$help[$key].'" src="../modules/'.$this->name.'/img/help.png" /></span>';
 		else
-			return '<span class="help_psa"><img alt="'.$this->l('No help').'" src="../modules/'.$this->name.'/img/help.png"></span>';
+			return '<span class="help_psa"><img alt="'.$this->l('No help').'" src="../modules/'.$this->name.'/img/help.png" /></span>';
 	}
 	
 	public function displayExcludedProductList()
@@ -2656,14 +2607,13 @@ Vous pouvez créer cette page CMS à vocation marketing en allant dans le menu
 	public function getStep3Details($step_2)
 	{
 		$step3_detail = array(
-			'product_purchased_broken' => array('1_1' => $this->l('à la livraison'), '1_2' => $this->l('accidentelle')),
-			'product_purchased_stolen' => array('2_1' => $this->l('au domicile'), '2_2' => $this->l('avec agression'), '2_3' => $this->l('dans un véhicule')),
-			'product_purchased_not_delivered' => array('3_1' => $this->l('retard de livraison'), '3_2' => $this->l('absence de livraison')),
-			'breakdown' => false,
-			'internal_damage' => false,
-			'manufacturing_default' => false,
-			'internet' => array('7_1' => $this->l('Décés'), '7_2' => $this->l('Maladie ou accident -  cas standard'), '7_3' => $this->l('Maladie ou accident -  Etudiants en CDI ou CDD'))
-			);
+		'product_purchased_broken' => array('1_1' => $this->l('à la livraison'), '1_2' => $this->l('accidentelle')),
+		'product_purchased_stolen' => array('2_1' => $this->l('au domicile'), '2_2' => $this->l('avec agression'), '2_3' => $this->l('dans un véhicule')),
+		'product_purchased_not_delivered' => array('3_1' => $this->l('retard de livraison'), '3_2' => $this->l('absence de livraison')),
+		'breakdown' => false,
+		'internal_damage' => false,
+		'manufacturing_default' => false,
+		'internet' => array('7_1' => $this->l('Décés'), '7_2' => $this->l('Maladie ou accident -  cas standard'), '7_3' => $this->l('Maladie ou accident -  Etudiants en CDI ou CDD')));
 		
 		if (array_key_exists($step_2, $step3_detail))
 			return $step3_detail[$step_2];
@@ -2691,8 +2641,7 @@ Vous pouvez créer cette page CMS à vocation marketing en allant dans le menu
 			14 => $this->l('Photocopies des bulletins de salaires'),
 			15 => $this->l('Déclarations de revenus de l\'année précédente et avis d\'imposition'),
 			16 => $this->l('Copie du contrat de travail de CDD ou CDI'),
-			17 => $this->l('Attestation de l\'établissement justifiant l\'absence (son motif et sa durée)'),
-			);
+			17 => $this->l('Attestation de l\'établissement justifiant l\'absence (son motif et sa durée)'));
 		
 		$disaster_documents = array(
 			'1_1' => array(1, 3, 4), '1_2' => array(4, 7, 8), '2_1' => array(),
@@ -2705,7 +2654,7 @@ Vous pouvez créer cette page CMS à vocation marketing en allant dans le menu
 		if (array_key_exists($disaster_key, $disaster_documents))
 		{
 			$document_ids = $disaster_documents[$disaster_key];
-			foreach($document_ids as $id)
+			foreach ($document_ids as $id)
 				$return_doc[] = $document_list[$id];
 		
 			if (count($return_doc))
@@ -2719,17 +2668,13 @@ Vous pouvez créer cette page CMS à vocation marketing en allant dans le menu
 	
 	public function reactive($id_marchant, $email)
 	{
-		$data = array(
-			'id_marchant' => $id_marchant,
-			'email' => $email,
-			'signin_url_return' => $this->getSignInUrlReturn()
-		);
+		$data = array('id_marchant' => $id_marchant, 'email' => $email, 'signin_url_return' => $this->getSignInUrlReturn());
 		$request = new psaRequest('module/reactive', 'POST', $data);
 		$request->setUsername(Configuration::get('PSA_ID_MERCHANT'));
 		$request->setPassword(Configuration::get('PSA_KEY'));
 		$request->execute();
 		$response = (array)Tools::jsonDecode($request->getResponseBody());
-		if (isset($response['hasErrors']) &&  !$response['hasErrors'])
+		if (isset($response['hasErrors']) && !$response['hasErrors'])
 		{
 			Configuration::updateValue('PSA_ID_MERCHANT', $response['merchant_id']);
 			Configuration::updateValue('PSA_KEY', $response['secure_key']);
@@ -2739,5 +2684,4 @@ Vous pouvez créer cette page CMS à vocation marketing en allant dans le menu
 		else
 			return false;
 	}
-	
 }

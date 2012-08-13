@@ -697,10 +697,10 @@ class OrderCore extends ObjectModel
 		if (!$res)
 			return array();
 
-		foreach ($res AS $key => $val)
+		foreach ($res as $key => $val)
 		{
 			$res2 = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-			SELECT os.`id_order_state`, osl.`name` AS order_state, os.`invoice`
+			SELECT os.`id_order_state`, osl.`name` order_state, os.`invoice`
 			FROM `'._DB_PREFIX_.'order_history` oh
 			LEFT JOIN `'._DB_PREFIX_.'order_state` os ON (os.`id_order_state` = oh.`id_order_state`)
 			INNER JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.(int)($cookie->id_lang).')

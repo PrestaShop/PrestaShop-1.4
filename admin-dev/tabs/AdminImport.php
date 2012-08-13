@@ -594,6 +594,19 @@ class AdminImport extends AdminTab
 			if (Tools::getValue('convert'))
 				$line = $this->utf8_encode_array($line);
 			$info = self::getMaskedRow($line);
+			
+			/* If "Use product reference as key" has been selected, get the related product id */
+			if (Tools::getValue('match_ref') == 1 && $info['reference'])
+			{
+				$id_product = Db::getInstance()->getValue('
+				SELECT `id_product`
+				FROM `'._DB_PREFIX_.'product`
+				WHERE `reference` = \''.pSQL($info['reference']).'\'');
+				
+				if ($id_product)
+					$info['id'] = (int)$id_product;
+			}
+			
 			if (array_key_exists('id', $info) && (int)$info['id'] && Product::existsInDatabase((int)$info['id'], 'product'))
 			{
 				$product = new Product((int)$info['id']);
@@ -741,26 +754,19 @@ class AdminImport extends AdminTab
 			$res = false;
 			$fieldError = $product->validateFields(UNFRIENDLY_ERROR, true);
 			$langFieldError = $product->validateFieldsLang(UNFRIENDLY_ERROR, true);
-			if ($fieldError === true AND $langFieldError === true)
+			if ($fieldError === true && $langFieldError === true)
 			{
 				// check quantity
 				if ($product->quantity == null)
 					$product->quantity = 0;
 
 				/* If match ref is specified AND ref product AND ref product already in base, trying to update */
-				if (Tools::getValue('match_ref') == 1 && $product->reference &&
-				$datas = Db::getInstance()->getRow('SELECT `date_add`, `id_product` FROM `'._DB_PREFIX_.'product` WHERE `reference` = \''.pSQL($product->reference).'\''))
-				{
-					$product->id = pSQL($datas['id_product']);
-					$product->date_add = pSQL($datas['date_add']);
-					$res = $product->update();
-				}
-
 				/* Else If id product AND id product already in base, trying to update */
-				elseif ($product->id &&
-				$datas = Db::getInstance()->getRow('SELECT `date_add` FROM `'._DB_PREFIX_.'product` WHERE `id_product` = '.(int)$product->id))
+				if ((Tools::getValue('match_ref') == 1 && $product->reference) || ($product->id &&
+				$datas = Db::getInstance()->getRow('SELECT `date_add` FROM `'._DB_PREFIX_.'product` WHERE `id_product` = '.(int)$product->id)))
 				{
-					$product->date_add = pSQL($datas['date_add']);
+					if (isset($datas['date_add']))
+						$product->date_add = pSQL($datas['date_add']);
 					$res = $product->update();
 				}
 

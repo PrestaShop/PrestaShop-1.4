@@ -461,9 +461,6 @@ class CategoryCore extends ObjectModel
 	  */
 	public function getSubCategories($id_lang, $active = true)
 	{
-	 	if (!Validate::isBool($active))
-	 		die(Tools::displayError());
-
 		$groups = FrontController::getCurrentCustomerGroups();
 		$sqlGroups = (count($groups) ? 'IN ('.implode(',', $groups).')' : '= 1');
 
@@ -477,12 +474,13 @@ class CategoryCore extends ObjectModel
 		AND cg.`id_group` '.$sqlGroups.'
 		GROUP BY c.`id_category`
 		ORDER BY `level_depth` ASC, c.`position` ASC');
-
-		foreach ($result AS &$row)
+		
+		foreach ($result as &$row)
 		{
-			$row['id_image'] = (file_exists(_PS_CAT_IMG_DIR_.$row['id_category'].'.jpg')) ? (int)($row['id_category']) : Language::getIsoById($id_lang).'-default';
+			$row['id_image'] = (file_exists(_PS_CAT_IMG_DIR_.$row['id_category'].'.jpg')) ? (int)$row['id_category'] : Language::getIsoById($id_lang).'-default';
 			$row['legend'] = 'no picture';
 		}
+
 		return $result;
 	}
 

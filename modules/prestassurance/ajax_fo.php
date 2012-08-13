@@ -39,34 +39,22 @@ if (Tools::getValue('token') != sha1(_COOKIE_KEY_.'prestassurance_fo'.(int)$cook
 $psa = new prestassurance();
 
 if (Tools::isSubmit('updatePopIn'))
-{
 	$cookie->psa_pop_in = 1;
-}
 
 if (Tools::isSubmit('displayDisasterForm'))
-{
 	die($psa->displayDisasterForm());
-}
 
-if (Tools::isSubmit('getOrderDisasterDetails') AND $id_order =  Tools::getValue('id_order'))
-{
+if (Tools::isSubmit('getOrderDisasterDetails') AND $id_order = Tools::getValue('id_order'))
 	die(Tools::jsonEncode($psa->getOrderDisasterDetails((int)$id_order)));
-}
 
-if (Tools::isSubmit('getStep3Details') AND $step_2 =  Tools::getValue('step_2'))
-{
+if (Tools::isSubmit('getStep3Details') AND $step_2 = Tools::getValue('step_2'))
 	die(Tools::jsonEncode($psa->getStep3Details($step_2)));
-}
 
-if (Tools::isSubmit('getFinalStepDetail') AND $key =  Tools::getValue('key'))
-{
+if (Tools::isSubmit('getFinalStepDetail') AND $key = Tools::getValue('key'))
 	die(Tools::jsonEncode($psa->getDocumentsForDisaster($key)));
-}
 
-if (Tools::isSubmit('submitDisaster') 
-AND $id_order =  Tools::getValue('id_order') 
-AND $id_product = Tools::getValue('id_product') 
-AND $reason = Tools::getValue('disaster_reason'))
+if (Tools::isSubmit('submitDisaster') AND $id_order = Tools::getValue('id_order') 
+AND $id_product = Tools::getValue('id_product') AND $reason = Tools::getValue('disaster_reason'))
 {
 	if (Tools::getValue('email') && Validate::isEmail(Tools::getValue('email')))
 		$comment = Tools::getValue('email');
@@ -77,11 +65,11 @@ AND $reason = Tools::getValue('disaster_reason'))
 	$phone = Tools::getValue('phone');
 
 	$order = new Order((int)$id_order);
-	if (Validate::isLoadedObject($order) AND $order->id_customer == $cookie->id_customer)
+	if (Validate::isLoadedObject($order) && $order->id_customer == $cookie->id_customer)
 	{
 		$exist = Db::getInstance()->getValue('SELECT `id_product`
-							FROM `'._DB_PREFIX_.'psa_disaster` pdi
-							WHERE pdi.`id_order` = '.(int)$id_order.' AND pdi.`id_product` = '.(int)$id_product);
+		FROM `'._DB_PREFIX_.'psa_disaster` pdi
+		WHERE pdi.`id_order` = '.(int)$id_order.' AND pdi.`id_product` = '.(int)$id_product);
 		if ($exist)
 			die(Tools::jsonEncode(
 					array(
@@ -91,7 +79,7 @@ AND $reason = Tools::getValue('disaster_reason'))
 				)
 			);
 		$orderObj = new Order((int)$id_order);
-		$carrier = new Carrier((int)($orderObj->id_carrier));
+		$carrier = new Carrier((int)$orderObj->id_carrier);
 		
 		$disaster = new psaDisaster();
 		$disaster->id_order = (int)$id_order;
@@ -100,8 +88,8 @@ AND $reason = Tools::getValue('disaster_reason'))
 		$disaster->reason = $reason;
 
 		$id_agreement = Db::getInstance()->getValue('SELECT `id_agreement`
-			FROM `'._DB_PREFIX_.'psa_insurance_detail`
-			WHERE `id_order` ='.(int)$id_order);
+		FROM `'._DB_PREFIX_.'psa_insurance_detail`
+		WHERE `id_order` ='.(int)$id_order);
 		$data = array(
 			'id_agreement' => $id_agreement,
 			'id_product' => $id_product,
@@ -146,10 +134,8 @@ AND $reason = Tools::getValue('disaster_reason'))
 		);
 }
 
-if (Tools::isSubmit('addDisasterComment') 
-AND $id_disaster =  Tools::getValue('id_disaster') 
-AND $id_psa_disaster =  Tools::getValue('id_psa_disaster') 
-AND $comment = Tools::getValue('comment'))
+if (Tools::isSubmit('addDisasterComment') AND $id_disaster =  Tools::getValue('id_disaster') 
+AND $id_psa_disaster = Tools::getValue('id_psa_disaster') AND $comment = Tools::getValue('comment'))
 {
 	if ($comment != '')
 	{

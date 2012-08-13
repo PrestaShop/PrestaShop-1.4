@@ -2,7 +2,7 @@
 <module>
 	<name>wexpay</name>
 	<displayName><![CDATA[weXpay e-money]]></displayName>
-	<version><![CDATA[2.1]]></version>
+	<version><![CDATA[2.2]]></version>
 	<description><![CDATA[Accept payments by weXpay e-money]]></description>
 	<author><![CDATA[]]></author>
 	<tab><![CDATA[payments_gateways]]></tab>

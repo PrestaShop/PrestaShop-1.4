@@ -25,11 +25,11 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-include_once('../../config/config.inc.php');
-include_once('../../init.php');
-include_once('prestassurance.php');
-include_once('classes/psaRequest.php');
-include_once('classes/psaDisaster.php');
+include_once(dirname(__FILE__).'/../../config/config.inc.php');
+include_once(_PS_ROOT_DIR_.'/init.php');
+include_once(_PS_MODULE_DIR_.'prestassurance/prestassurance.php');
+include_once(_PS_MODULE_DIR_.'prestassurance/classes/psaRequest.php');
+include_once(_PS_MODULE_DIR_.'prestassurance/classes/psaDisaster.php');
 
 if (Tools::getValue('token') != sha1(_COOKIE_KEY_.'prestassurance'))
 	die('INVALID TOKEN');
@@ -47,7 +47,7 @@ if (Tools::isSubmit('getCgvPsa'))
 	$request->execute();
 	$response = Tools::jsonDecode($request->getResponseBody());
 
-	if (isset($response->updated_at) AND (strtotime($response->updated_at)) > strtotime(Configuration::get('PSA_CGV_UPDATED')))
+	if (isset($response->updated_at) && (strtotime($response->updated_at)) > strtotime(Configuration::get('PSA_CGV_UPDATED')))
 		$response->upToDate = true;
 	else
 		$response->upToDate = false;
@@ -108,12 +108,6 @@ if (Tools::isSubmit('saveImpact')
 	AND $benefit = Tools::getValue('benefit'))
 {
 	die(Tools::jsonEncode($psa->saveImpact((int)$id_category, $impact_type, (float)$impact_value, (float)$selling_price, (float)$benefit)));
-}
-
-if (Tools::isSubmit('displaySelectCategoryWidget') AND $id_category = Tools::getValue('id_category'))
-{
-	$psa->getCategoriesMatch($id_category);
-	die($psa->displaySelectCategoryWidget($id_category));
 }
 
 if (Tools::isSubmit('setCategory') AND $id_category = Tools::getValue('id_category'))
@@ -313,4 +307,3 @@ if (Tools::isSubmit('changeDisasterStatus') AND $id_psa_disaster =  Tools::getVa
 	$disaster->status = $status;
 	$disaster->save();
 }
-

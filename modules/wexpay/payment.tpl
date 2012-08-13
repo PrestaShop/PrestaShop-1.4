@@ -32,7 +32,7 @@
 	<div style="clear:both;height:0;line-height:0">&nbsp;</div>
 </p>
 <form name="wexpay_form" action="https://paiements.wexpay.fr" method="post">
-	<input type="hidden" name="merchant_id" value="{$merchant_id}" />
+	<input type="hidden" name="merchant_id" value="{$merchant_id|escape:'htmlall':'UTF-8'}" />
 	<input type="hidden" name="ref_order" value="{$ref_order}" />
 	<input type="hidden" name="amount" value="{$amount}" />
 	<input type="hidden" name="urlNotification" value="{$urlNotification}" />

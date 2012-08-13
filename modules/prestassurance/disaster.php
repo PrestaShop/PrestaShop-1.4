@@ -33,11 +33,6 @@ include(dirname(__FILE__).'/../../header.php');
 include_once(dirname(__FILE__).'/prestassurance.php');
 
 $psa = new prestassurance();
-
-
-
 echo $psa->displayDisasterForm();
-
-
 
 include(dirname(__FILE__).'/../../footer.php');
