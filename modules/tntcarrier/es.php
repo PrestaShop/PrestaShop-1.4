@@ -38,7 +38,7 @@ $_MODULE['<{tntcarrier}prestashop>tntcarrier_c60d17239c011f35a9676ff44ae01111'] 
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_bf0e6239fc4516cff7baf75b93326725'] = 'Falta dirección';
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_955c00725d761c9a588fc28ebe27f0e2'] = 'Dirección línea 2 debe ser menor de 32 caracteres';
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_4a91c15e73f1a22615882f7abf71be7c'] = 'Falta código postal';
-$_MODULE['<{tntcarrier}prestashop>tntcarrier_e7cac4ccbcb0f12c54b145b5900ef8ac'] = 'No se encuentra  dirección de correo electrónico de contacto\n';
+$_MODULE['<{tntcarrier}prestashop>tntcarrier_e7cac4ccbcb0f12c54b145b5900ef8ac'] = 'No se encuentra  dirección de correo electrónico de contacto';
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_57a6a3f27119fc2f8af8e923b9be3de1'] = 'No se cuenentra teléfono de contacto';
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_83b5db62e8c7e3f85da58cdf158a484d'] = 'No se encuentra hora de cierre de la empresa';
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_9bb8de9eec753fcbf4d14b7ecc7043da'] = 'La ciudad no es compatible con el dódigo postal';
@@ -78,10 +78,6 @@ $_MODULE['<{tntcarrier}prestashop>follow_16328b440b4698eae30df60adc198623'] = 'S
 $_MODULE['<{tntcarrier}prestashop>follow_ff0aa49d3eeadb46b41cf22eeaf41fb5'] = 'presentador del conductor';
 $_MODULE['<{tntcarrier}prestashop>follow_e2560f1841797910acf77fee40e3715d'] = 'prueba de la firma';
 $_MODULE['<{tntcarrier}prestashop>formerror_c3f15ecc6da0827a8da712cb43a0b596'] = 'Información de envío';
-$_MODULE['<{tntcarrier}prestashop>formerror_0314f8535c9735ed5dbd2caf2def5a4d'] = 'El peso del paquete debe estar entre 0,1 y';
-$_MODULE['<{tntcarrier}prestashop>formerror_fd0cf817352277aaa7fba5e8f4e6e053'] = 'kg o llame a su comercial de TNT';
-$_MODULE['<{tntcarrier}prestashop>formerror_8c489d0946f66d17d73f26366a4bf620'] = 'Peso';
-$_MODULE['<{tntcarrier}prestashop>formerror_7423cbf15a98a1e3eb9cd4d3f8333776'] = 'Debe cambiar la fecha de expedición';
 $_MODULE['<{tntcarrier}prestashop>formerror_44749712dbec183e983dcd78a7736c41'] = 'Fecha';
 $_MODULE['<{tntcarrier}prestashop>formerror_7f090bbab1cc7f9c08bf4e54d932d3c0'] = 'Modificar';
 $_MODULE['<{tntcarrier}prestashop>getshippingnumber_c3f15ecc6da0827a8da712cb43a0b596'] = 'Información de envío';
@@ -182,3 +178,5 @@ $_MODULE['<{tntcarrier}prestashop>shippingnumber_d5aad80114d8aa47f31a6f5050ef683
 $_MODULE['<{tntcarrier}prestashop>shippingnumber_0c458988127eb2150776881e2ef3f0c4'] = 'Dirección de envío';
 $_MODULE['<{tntcarrier}prestashop>shippingnumber_e19726b466603bc3e444dd26fbcde074'] = 'Dirección del cliente';
 $_MODULE['<{tntcarrier}prestashop>shippingnumber_25364beb50b7a39331177a65760e18f7'] = 'Dirección del paquete';
+$_MODULE['<{tntcarrier}prestashop>weightform_c3f15ecc6da0827a8da712cb43a0b596'] = 'Información de envío';
+$_MODULE['<{tntcarrier}prestashop>weightform_7f090bbab1cc7f9c08bf4e54d932d3c0'] = 'Modificar';

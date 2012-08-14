@@ -4,7 +4,7 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_124ab8cb7dc504e6848f1b7e5c98636f'] = 'Anche salvare le immagini';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_a8d6c6734da0083021561b23f2fa88cc'] = 'È possibile escludere la directory delle immagini dal backup se avete già salvato con un altro metodo (non raccomandato)';
-$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_991e3cf882eba55bce609538e1819fab'] = 'Tenere tema \\prestashop\\\"\"';
+$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_991e3cf882eba55bce609538e1819fab'] = 'Tenere tema \\prestashop"\"';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_4ea56ca1a757e426911ff20889c0e93c'] = 'Se avete personalizzato tema predefinito PrestaShop, è possibile proteggere da aggiornamento (non raccomandato)';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_8413c63a6ef3717a974094785fd0b588'] = 'Mantenere le traduzioni';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_54361be9514a5aa1a878ed425d35f3a5'] = 'Se impostato su yes, si può mantenere tutte le vostre traduzioni';
@@ -184,7 +184,7 @@ $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_2fc4ab825ce2ce9476e8a1c2211a
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_b1c1d84a65180d5912b2dee38a48d6b5'] = 'Versione modulo';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_854fa533180cbfad319ea315a642daaf'] = 'La tua versione è aggiornata ( %s)';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_fe9965d1cf45197b4b536e43e6794386'] = 'Versione modulo vecchia ( %1$s ). Per favore installa la versione ( %2$s )';
-$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_fe88a8422f436800ec0cdaa9d173d96f'] = 'Installa l\'ultima versione cliccando \\Add from my computer\\\"\"';
+$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_fe88a8422f436800ec0cdaa9d173d96f'] = 'Installa l\'ultima versione cliccando "Add from my computer"';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_8786f48d9cf9618cd2f5c37312ab7e50'] = 'Directory radice di stato';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_d16d80ca66261afba43f5736f6cec7e6'] = 'completamente scrivibile';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_039552aa1d74b68f01a73821f3078158'] = 'non scrivibile ricorsivamente';

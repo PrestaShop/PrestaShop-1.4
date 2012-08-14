@@ -23,7 +23,7 @@ $_MODULE['<{avalaratax}prestashop>avalaratax_a035358b6b8c497a70d2c5a838c27e6a'] 
 $_MODULE['<{avalaratax}prestashop>avalaratax_343618e9fcce53224cc7a47c2145c5e5'] = '¿Qué modificaciones tiene el módulo de hacer en mi tienda?';
 $_MODULE['<{avalaratax}prestashop>avalaratax_227c1f6f0609c433fc3530aced1dd1a9'] = 'Tax.php y AddressController.php y AuthController.php serán sobreescritos. ';
 $_MODULE['<{avalaratax}prestashop>avalaratax_ed844b12d383390f1e8ac7796312390d'] = '[Ficha de pago -> Impuestos] y [Tab Pago -> Impuestos] Estas configuraciones serán anuladas para los EE.UU.. ';
-$_MODULE['<{avalaratax}prestashop>avalaratax_3a2eb2cc29ccc9fc619e47fe4df5b148'] = 'En los detalles del producto (producto en modo de edición) una opción \"Código Tributario\" campo se agregará lo que le permite especificar un código de impuestos válida para cada uno de sus productos. ';
+$_MODULE['<{avalaratax}prestashop>avalaratax_3a2eb2cc29ccc9fc619e47fe4df5b148'] = 'En los detalles del producto (producto en modo de edición) una opción "Código Tributario" campo se agregará lo que le permite especificar un código de impuestos válida para cada uno de sus productos. ';
 $_MODULE['<{avalaratax}prestashop>avalaratax_254f642527b45bc260048e30704edb39'] = 'Configuración';
 $_MODULE['<{avalaratax}prestashop>avalaratax_6910f753ce21ab6b256a2440296185df'] = 'Credenciales AvaTax';
 $_MODULE['<{avalaratax}prestashop>avalaratax_2fcecaf04456ae2ceac826fd0ccaaf1c'] = 'Número de cuenta';

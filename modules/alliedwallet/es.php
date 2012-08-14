@@ -4,6 +4,7 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_ee1e9cbe2a66a3a7ecc434049bd67339'] = 'Allied Wallet';
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_0e8331ca0283467f5c129fbc4ff873b2'] = 'Acepta tarjetas debito y crédito  con Allied Wallet,  tu  podrás aceptar pagos en 164 diferentes monedas alrededor del mundo,  con la seguridad de nuestro PCI  Compliance Nivel 1 y nuestro propio sistema antifraude.';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = '¿Está seguro de querer borrar los detalles?';
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_449602445d0a5f0612e7ccac073f6c9e'] = 'Acepta Pagos ahora mismo con Allied Wallet.';
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_18071bcaa1bfb301a06e742589b0e671'] = 'Estas listo para comenzar a recibir pagos en 164 diferentes monedas y en casi todas los diferentes tarjetas disponibles, debito directo Y ACH?';
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_4bc8c0475362544165beb73c959ff0d5'] = 'Estas listo para proteger tu negocio con el mejor sistema  antifraude?';

@@ -3,7 +3,6 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{statsforecast}prestashop>statsforecast_240c994d8b61c7bd68ac1c5182bbdb2e'] = 'Tabla de mando de estadísticas';
-$_MODULE['<{statsforecast}prestashop>statsforecast_b53bb8c5ac3b77a4667498709efba55d'] = 'Todos los importes se indican sin IVA';
 $_MODULE['<{statsforecast}prestashop>statsforecast_1ee1c44c2dc81681f961235604247b81'] = 'Modo';
 $_MODULE['<{statsforecast}prestashop>statsforecast_03727ac48595a24daed975559c944a44'] = 'Día';
 $_MODULE['<{statsforecast}prestashop>statsforecast_d2ce009594dcc60befa6a4e6cbeb71fc'] = 'Semana';
@@ -17,6 +16,7 @@ $_MODULE['<{statsforecast}prestashop>statsforecast_e46b5c15331f34b9ff653fdf1ea0a
 $_MODULE['<{statsforecast}prestashop>statsforecast_1d34a18a13e480b0aa6a799bb8a49c1b'] = '% pedidos';
 $_MODULE['<{statsforecast}prestashop>statsforecast_cc4616c718d99e1face99b5e46a5755c'] = 'Descuentos';
 $_MODULE['<{statsforecast}prestashop>statsforecast_899433c0e135bcfe0d93e9397630f86a'] = 'Volumne de ventas de los productos';
+$_MODULE['<{statsforecast}prestashop>statsforecast_ea9cf7e47ff33b2be14e6dd07cbcefc6'] = 'Envío';
 $_MODULE['<{statsforecast}prestashop>statsforecast_96b0141273eabab320119c467cdcaf17'] = 'Total';
 $_MODULE['<{statsforecast}prestashop>statsforecast_b1897515d548a960afe49ecf66a29021'] = 'Media';
 $_MODULE['<{statsforecast}prestashop>statsforecast_89c1265be62d3ba835a3d963db5956b0'] = 'Previsiones';

@@ -51,7 +51,7 @@ $_MODULE['<{shopimporter}prestashop>shopimporter_472f0b8c78cc382302e094c94856c95
 $_MODULE['<{shopimporter}prestashop>shopimporter_3596c777cbc8b72d678f34daabc9148b'] = 'Mostrar los errores';
 $_MODULE['<{shopimporter}prestashop>shopimporter_89a399eee52b2a6daaea92eba3e14cad'] = 'Lanzar el test de import';
 $_MODULE['<{shopimporter}prestashop>shopimporter_bf79359f8edda6f7df97ef57a4ee09b6'] = 'Ejecutar importación';
-$_MODULE['<{shopimporter}prestashop>shopimporter_0b5a6ead644b8ae4edb8a036334c9ed6'] = 'Se han producido errores durante la importación. Para más detalles haga clic en \"Mostrar errores\"';
+$_MODULE['<{shopimporter}prestashop>shopimporter_0b5a6ead644b8ae4edb8a036334c9ed6'] = 'Se han producido errores durante la importación. Para más detalles haga clic en "Mostrar errores"';
 $_MODULE['<{shopimporter}prestashop>shopimporter_e905d0eb5204b761d8c0e3eebed4a0e0'] = 'El import ha terminado';
 $_MODULE['<{shopimporter}prestashop>shopimporter_596403b61367ca30d6de75812275f9cd'] = 'Supresión de los datos';
 $_MODULE['<{shopimporter}prestashop>shopimporter_abc68851fb3146446592e68ee7a308bd'] = 'Por favor seleccione algún elemento para importar';

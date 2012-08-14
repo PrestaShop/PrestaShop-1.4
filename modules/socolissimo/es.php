@@ -2,18 +2,19 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{socolissimo}prestashop>ajax_607e1d854783c8229998ac2b5b6923d3'] = 'ficha no válida';
 $_MODULE['<{socolissimo}prestashop>socolissimo_42ab10dea7d96b9c353e0f5bae43ec20'] = 'La Poste';
 $_MODULE['<{socolissimo}prestashop>socolissimo_9e13e80360ceb625672531275f01ec1f'] = 'Proponga a sus clientes cinco modos de entraga a través de la Poste.';
 $_MODULE['<{socolissimo}prestashop>socolissimo_f8e355b97fa1be7a8d8c206aa66f0077'] = 'Zona(s) transportista';
 $_MODULE['<{socolissimo}prestashop>socolissimo_690c1c6abf905b88281a7cd324af9942'] = 'Grupo del transportista';
 $_MODULE['<{socolissimo}prestashop>socolissimo_a18ef2e8b3730915798057a50ecbf2cd'] = 'Franja del transportista';
 $_MODULE['<{socolissimo}prestashop>socolissimo_59f26c70c0230e4ec5e4acdfed0e270c'] = 'Precio de franja';
-$_MODULE['<{socolissimo}prestashop>socolissimo_798547c41ec3e64e2322df678e939344'] = 'Identificante FO\'';
-$_MODULE['<{socolissimo}prestashop>socolissimo_ac08649aa09ff3b879525627bf086dd1'] = 'Clave de encriptación\'';
-$_MODULE['<{socolissimo}prestashop>socolissimo_a3a53f075adf77334cc34d0f7497ff44'] = 'URL de la administración de SoColissimo\'';
+$_MODULE['<{socolissimo}prestashop>socolissimo_798547c41ec3e64e2322df678e939344'] = 'Identificante FO';
+$_MODULE['<{socolissimo}prestashop>socolissimo_ac08649aa09ff3b879525627bf086dd1'] = 'Clave de encriptación';
+$_MODULE['<{socolissimo}prestashop>socolissimo_a3a53f075adf77334cc34d0f7497ff44'] = 'URL de la administración de SoColissimo';
 $_MODULE['<{socolissimo}prestashop>socolissimo_4d470fde8487e755a50e9235e3dc13ab'] = 'deben indicarse para funcionar correctamente';
 $_MODULE['<{socolissimo}prestashop>socolissimo_94c614a9df45ea1fcd27b15b7d6f3e67'] = 'Clave no válida';
-$_MODULE['<{socolissimo}prestashop>socolissimo_90a5cb3d07bb39bbd4b76f7f9a0d7947'] = 'Se ha producido un error en la etapa \'transportista\'';
+$_MODULE['<{socolissimo}prestashop>socolissimo_90a5cb3d07bb39bbd4b76f7f9a0d7947'] = 'Se ha producido un error en la etapa "transportista"';
 $_MODULE['<{socolissimo}prestashop>socolissimo_70b2e65f0f2aabf3e2c58d70cf1e1e9a'] = 'Identificante FO inexistente';
 $_MODULE['<{socolissimo}prestashop>socolissimo_2b639b851983a24bc12358523861c7ff'] = 'Identificante FO incorrecto';
 $_MODULE['<{socolissimo}prestashop>socolissimo_7ca12228b5ad636c637425a086fe0092'] = 'Cliente no autorizado';
@@ -37,7 +38,7 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_9fbff0971c06ee404f638e9abcbd9446'
 $_MODULE['<{socolissimo}prestashop>socolissimo_5b6cf869265c13af8566f192b4ab3d2a'] = 'Documentación';
 $_MODULE['<{socolissimo}prestashop>socolissimo_f4f70727dc34561dfde1a3c529b6205c'] = 'Configuración';
 $_MODULE['<{socolissimo}prestashop>socolissimo_0ab984d91ab0a037bdf692bf0e73c349'] = 'Importante';
-$_MODULE['<{socolissimo}prestashop>socolissimo_58f73ae759adc826a9e15e26280cdaa4'] = 'Para abrir una cuenta SoColissimo, póngase en contacto con \"La Poste\" a través de 3634';
+$_MODULE['<{socolissimo}prestashop>socolissimo_58f73ae759adc826a9e15e26280cdaa4'] = 'Para abrir una cuenta SoColissimo, póngase en contacto con "La Poste" a través de 3634';
 $_MODULE['<{socolissimo}prestashop>socolissimo_9c85d4c2bae6ab548fe23e57bd89ddc4'] = 'Identificante FO';
 $_MODULE['<{socolissimo}prestashop>socolissimo_7b95472e0575adc1e3d90a2d7b51e496'] = 'Usuario So Colissimo';
 $_MODULE['<{socolissimo}prestashop>socolissimo_897356954c2cd3d41b221e3f24f99bba'] = 'Clave de encriptación';
