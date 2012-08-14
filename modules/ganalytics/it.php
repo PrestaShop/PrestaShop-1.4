@@ -42,7 +42,7 @@ $_MODULE['<{ganalytics}prestashop>ganalytics_68db264effa9364901183d9d12fac500'] 
 $_MODULE['<{ganalytics}prestashop>ganalytics_9b8bc3519c65da8fac122f91ac5b7673'] = 'Attiva l\'obiettivo';
 $_MODULE['<{ganalytics}prestashop>ganalytics_86a358dd6df1ba0cb3565b88380ba7a6'] = 'Aggiungi \'Product.php\' come prima pagina della tua conversione';
 $_MODULE['<{ganalytics}prestashop>ganalytics_b7f896191caad09b5fc34e79f1cefa76'] = 'Dagli un nome (ad esempio, \'pagina del prodotto\')';
-$_MODULE['<{ganalytics}prestashop>ganalytics_ef7060dd05e779dcfbf82f236df43823'] = 'Non segnare la casella \'richiesta\' perché il cliente potrebbe essere visitato direttamente da un tasto \\aggiungi al carrello\', come nel blocco homefeatured sulla homepage\"';
+$_MODULE['<{ganalytics}prestashop>ganalytics_ef7060dd05e779dcfbf82f236df43823'] = 'Non segnare la casella \'richiesta\' perché il cliente potrebbe essere visitato direttamente da un tasto "aggiungi al carrello", come nel blocco homefeatured sulla homepage';
 $_MODULE['<{ganalytics}prestashop>ganalytics_3bab28a0105361c49ca261ca08a19bf7'] = 'Proseguire inserendo i seguenti URL come fasi:';
 $_MODULE['<{ganalytics}prestashop>ganalytics_9bfb6e6af6e6793bfa9387e728187c87'] = '(Obbligatorio)';
 $_MODULE['<{ganalytics}prestashop>ganalytics_6a47891ae07f45802bc948d2618e36f5'] = 'Spuntare l\'opIone \'case sensitive\'';

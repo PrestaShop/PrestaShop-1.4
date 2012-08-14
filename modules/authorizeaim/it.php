@@ -17,7 +17,7 @@ $_MODULE['<{authorizeaim}prestashop>authorizeaim_1ee1c44c2dc81681f961235604247b8
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_756d97bb256b8580d4d71ee0c547804e'] = 'Produzione';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_0cbc6611f5540bd0809a388dc95a615b'] = 'Test';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_291cdb0a8abb42484f5d44dc20540ce6'] = 'Carte di credito:';
-$_MODULE['<{authorizeaim}prestashop>authorizeaim_bd80f7c7727e488952c160cf6b3ca59a'] = '\"Hold for Review\"  stato ordine';
+$_MODULE['<{authorizeaim}prestashop>authorizeaim_bd80f7c7727e488952c160cf6b3ca59a'] = '"Hold for Review"  stato ordine';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_b17f3f4dcf653a5776792498a9b44d6a'] = 'Aggiorna le impostazioni';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_f745351b1387473d3d2de5bfe18d3562'] = 'Errore, vi preghiamo di verificare le informazioni della carta';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_f4ddb8bc0f6457fe6cbe0a7255e7b542'] = 'Paga con authorizeaim';

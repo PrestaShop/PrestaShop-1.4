@@ -21,4 +21,4 @@ $_MODULE['<{producttooltip}prestashop>producttooltip_975f3743bcce9c5a2e30001aab5
 $_MODULE['<{producttooltip}prestashop>producttooltip_e1a1dc1574c9f178c14e2952351aa47d'] = 'persone stanno guardando';
 $_MODULE['<{producttooltip}prestashop>producttooltip_d296e0c3a7dffc0f4d02574bd502653f'] = 'questo prodotto';
 $_MODULE['<{producttooltip}prestashop>producttooltip_71736c614b237f4368128077411f1699'] = 'Questo prodotto è stato comprato';
-$_MODULE['<{producttooltip}prestashop>producttooltip_4dda321f0231c2d50fcee5c20075dbbd'] = 'Questo prodotto è stato aggiunto al carrello';
+$_MODULE['<{producttooltip}prestashop>producttooltip_4dda321f0231c2d50fcee5c20075dbbd'] = 'Questo prodotto è stato aggiunto al carrello ';

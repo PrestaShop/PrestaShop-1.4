@@ -2,11 +2,11 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{blockrss}prestashop>blockrss_2516c13a12d3dbaf4efa88d9fce2e7da'] = 'Blocco RSS feed';
-$_MODULE['<{blockrss}prestashop>blockrss_04396664ce529aa4204b0f7ad753fad1'] = 'Aggiunge un blocco che visualizza un RSS feed';
+$_MODULE['<{blockrss}prestashop>blockrss_2516c13a12d3dbaf4efa88d9fce2e7da'] = 'Blocco RSS feed ';
+$_MODULE['<{blockrss}prestashop>blockrss_04396664ce529aa4204b0f7ad753fad1'] = 'Aggiunge un blocco che visualizza un RSS feed ';
 $_MODULE['<{blockrss}prestashop>blockrss_9680162225162baf2a085dfdc2814deb'] = 'RSS feed';
 $_MODULE['<{blockrss}prestashop>blockrss_6706b6d8ba45cc4f0eda0506ba1dc3c8'] = 'URL del feed non valido';
-$_MODULE['<{blockrss}prestashop>blockrss_36ed65ce17306e812fd68d9f634c0c57'] = 'Titolo non valido';
+$_MODULE['<{blockrss}prestashop>blockrss_36ed65ce17306e812fd68d9f634c0c57'] = 'Titolo non valido ';
 $_MODULE['<{blockrss}prestashop>blockrss_1b3d34e25aef32a3c8daddfff856577f'] = 'Numero non valido di feed';
 $_MODULE['<{blockrss}prestashop>blockrss_e423bd72f5aa1be13216c5abbd3deb45'] = 'È stata selezionata una URL del feed sul proprio sito web. Si prega di scegliere un altro URL';
 $_MODULE['<{blockrss}prestashop>blockrss_bef637cd0e222a8b56676cb64ce75258'] = 'Feed non raggiungibile, verifica il tuo url';

@@ -14,7 +14,7 @@ $_MODULE['<{mailalerts}prestashop>mailalerts_86e8d61297942b00e9937299735df971'] 
 $_MODULE['<{mailalerts}prestashop>mailalerts_38fb7d24e0d60a048f540ecb18e13376'] = 'Salva';
 $_MODULE['<{mailalerts}prestashop>mailalerts_d9b64868bb5b490c5c0627abe835acf6'] = 'Notifica commerciante';
 $_MODULE['<{mailalerts}prestashop>mailalerts_9204d21640382a89a95ec42f44f9051c'] = 'Nuovo ordine:';
-$_MODULE['<{mailalerts}prestashop>mailalerts_fd5dc19a70d21e130f2e4ab5eb205e66'] = 'Ricevere una notifica se viene fatto un nuovo ordine';
+$_MODULE['<{mailalerts}prestashop>mailalerts_fd5dc19a70d21e130f2e4ab5eb205e66'] = 'Ricevere una notifica se viene fatto un nuovo ordine ';
 $_MODULE['<{mailalerts}prestashop>mailalerts_ebc3ccf8441dba3c1615afa6acb3282a'] = 'Esaurito:';
 $_MODULE['<{mailalerts}prestashop>mailalerts_c009546071b59092716ba006f307c6af'] = 'Ricevere una notifica se la quantità di un prodotto è al di sotto della soglia di allarme';
 $_MODULE['<{mailalerts}prestashop>mailalerts_af097c4096dc45754451f6f656dd1ee0'] = 'Soglia di allarme:';

@@ -37,7 +37,7 @@ $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_58f748703db13e81b6ca6c366d1
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_4dab36ac83853282fc0d7bae20c19e90'] = 'Altre opzioni';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_0008e84621e5c9f21f8a55387a28692f'] = 'Tempo supplementare quando un prodotto è esaurito';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_521d02cf307201053a46e0b9c5b5170c'] = 'Tempo supplementare per la preparazione dell\'ordine';
-$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_cec31ec82e3bdee482baaa9f5b11eeed'] = 'Opzione di preparazione';
+$_MODULE['<{dateofdelivery}prestashop>dateofdelivery_cec31ec82e3bdee482baaa9f5b11eeed'] = 'Opzione di preparazione ';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_15b4020fafe2bcadf41fbdb2e7fa137a'] = 'Preparazione sabato';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_9685cbc6ac9090137fb087d4f48d0561'] = 'Preparazione domenica';
 $_MODULE['<{dateofdelivery}prestashop>dateofdelivery_104f1a7d59077b514d4105fcee0e42ff'] = 'Formato della data:';

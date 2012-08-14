@@ -46,7 +46,8 @@ $_LANGPDF['PDF_invoiceebaee01719541f61281c16ba22ebbfde'] = 'Totale prodotti tass
 $_LANGPDF['PDF_invoicea0eb2cd0b3deb5444102e9a82edae11e'] = 'Totale prodotti';
 $_LANGPDF['PDF_invoicef3e545fccad720e197b9ca3b8b658440'] = 'Totale sconti tasse incl.';
 $_LANGPDF['PDF_invoice9cc000efe3e783af5bf114f2e6573156'] = 'Totale pacco regalo';
-$_LANGPDF['PDF_invoicef4e8b53a114e5a17d051ab84d326cae5'] = 'Totale consegna';
+$_LANGPDF['PDF_invoicef246a17c095de09e043cc1cb917481da'] = 'Totale spedizione (tax escl.)';
+$_LANGPDF['PDF_invoicee93f43fa527c3534aeca987091d6c049'] = 'Totale spedizione (tax incl.)';
 $_LANGPDF['PDF_invoice96b0141273eabab320119c467cdcaf17'] = 'Totale';
 $_LANGPDF['PDF_invoice54732c5d0a3f0d597312b0ee55d71fca'] = 'Tasse incl.';
 $_LANGPDF['PDF_invoiceac5831c7ec2fed92c7bb73e9962003a4'] = 'Tasse escl.';
@@ -65,5 +66,3 @@ $_LANGPDF['PDF_invoice068f80c7519d0528fb08e82137a72131'] = 'Prodotti';
 $_LANGPDF['PDF_invoice914419aa32f04011357d3b604a86d7eb'] = 'Mezzo di spedizione';
 $_LANGPDF['PDF_invoice41c1d61bfff3fc9b1fd8f195061b8caa'] = 'Pacco regalo';
 $_LANGPDF['PDF_invoice6f3455d187a23443796efdcbe044096b'] = 'Nessuna tassa';
-
-?>

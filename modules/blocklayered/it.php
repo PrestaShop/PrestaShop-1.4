@@ -10,7 +10,7 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_6252c0f2c2ed83b7b06dfca86d4650b
 $_MODULE['<{blocklayered}prestashop>blocklayered_f39f64ad2722b269d9b6cb2ec97ba4ad'] = 'Formato specifico nella generazione di url blocco stratificato';
 $_MODULE['<{blocklayered}prestashop>blocklayered_7b250cb374c12c42a75227ba75df7779'] = 'Meta titolo:';
 $_MODULE['<{blocklayered}prestashop>blocklayered_a4020753b3e63fd8a1d0c0b2b33fc999'] = 'Formato specifico per il titolo meta';
-$_MODULE['<{blocklayered}prestashop>blocklayered_b3786b970611c1a3809dd51b630812a7'] = '\"%s\" non è un URL valido';
+$_MODULE['<{blocklayered}prestashop>blocklayered_b3786b970611c1a3809dd51b630812a7'] = '"%s" non è un URL valido';
 $_MODULE['<{blocklayered}prestashop>blocklayered_c3ef60194d18cf4026d22051b3a19428'] = 'Indicizzabili:';
 $_MODULE['<{blocklayered}prestashop>blocklayered_a075d40d1a15460220cbf564b7b9b591'] = 'Utilizzare questo attributo in url generata dal blocco del modulo a più livelli di navigazione';
 $_MODULE['<{blocklayered}prestashop>blocklayered_ccc12c5568381293a27db0232877937b'] = 'Nome del modello del filtro necessario (non può essere vuoto)';
@@ -24,7 +24,7 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_09da2b6f1217055bb22caa6ea08d9b8
 $_MODULE['<{blocklayered}prestashop>blocklayered_df2bbc994d10995dcffdf96dbb7acbb1'] = 'Indici e cache';
 $_MODULE['<{blocklayered}prestashop>blocklayered_ad3e7eb269d8ba0ac388267627f45b5a'] = 'Indicizzazione sono in corso. Si prega di non lasciare questa pagina';
 $_MODULE['<{blocklayered}prestashop>blocklayered_5e2420d2318025812dc3e231ddb66b0b'] = 'Indice tutti i prezzi mancanti';
-$_MODULE['<{blocklayered}prestashop>blocklayered_9612e005e96ad32b8830be4d0377e7e6'] = 'Ricostruire l\'intero indice dei prezzi';
+$_MODULE['<{blocklayered}prestashop>blocklayered_9612e005e96ad32b8830be4d0377e7e6'] = 'Ricostruire l\\\'intero indice dei prezzi';
 $_MODULE['<{blocklayered}prestashop>blocklayered_d47f700b6db025d98cae0b340ed847e9'] = 'Costruire indice attributo';
 $_MODULE['<{blocklayered}prestashop>blocklayered_341ce134fbec9978d185ff533931b1b3'] = 'Costruire indice url';
 $_MODULE['<{blocklayered}prestashop>blocklayered_53795c3624ae2361363780589aa2aa42'] = 'È possibile impostare un job di cron che si ri-costruire indice dei prezzi utilizzando il seguente URL:';
@@ -37,7 +37,7 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_8bf466a25752f2552df8dc8b04fc10b
 $_MODULE['<{blocklayered}prestashop>blocklayered_b5ca9d41e254963a90417fe12bafba5a'] = 'Indicizzazione URL fallito';
 $_MODULE['<{blocklayered}prestashop>blocklayered_399e951fec4faaeab09333f40bf6d80c'] = 'Indicizzazione attributi fallita';
 $_MODULE['<{blocklayered}prestashop>blocklayered_e2dd8f544131eaf47a4f722ace7f876b'] = 'Indicizzazione prezzo finito';
-$_MODULE['<{blocklayered}prestashop>blocklayered_7cf7d150dd287df0a8e17eeb4cf2161d'] = '(Nel prezzo dei prodotti corso,%s all\'indice)';
+$_MODULE['<{blocklayered}prestashop>blocklayered_7cf7d150dd287df0a8e17eeb4cf2161d'] = '(Nel prezzo dei prodotti corso, %s all\'indice)';
 $_MODULE['<{blocklayered}prestashop>blocklayered_ceda32b8540dee4f1222cd482a513db8'] = 'Indicizzazione dei prezzi non';
 $_MODULE['<{blocklayered}prestashop>blocklayered_a2654ab6d514d63a3be2a4d6ea6b39df'] = 'Filtri esistenti modelli';
 $_MODULE['<{blocklayered}prestashop>blocklayered_d4041fbb1580b68012b82fee850014a2'] = 'modelli filtri sono configurati:';
@@ -57,10 +57,10 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_62f5d708d6ad1fa1ddd9429a65cccbe
 $_MODULE['<{blocklayered}prestashop>blocklayered_4071a0db922638ac9648539ea2ddaa8b'] = 'Categorie specifiche';
 $_MODULE['<{blocklayered}prestashop>blocklayered_ef7de3f485174ff47f061ad27d83d0ee'] = 'selezionati';
 $_MODULE['<{blocklayered}prestashop>blocklayered_c2d0bf5ad42279c519cdcb4a94eb46b6'] = 'Scegli associazione negozio:';
-$_MODULE['<{blocklayered}prestashop>blocklayered_f72c75bdf80dc88b2529162f4947edc8'] = 'Seleziona almeno una categoria specifica o selezionare \"Tutte le categorie\".';
+$_MODULE['<{blocklayered}prestashop>blocklayered_f72c75bdf80dc88b2529162f4947edc8'] = 'Seleziona almeno una categoria specifica o selezionare "Tutte le categorie".';
 $_MODULE['<{blocklayered}prestashop>blocklayered_64646db703ca003a37bd1e73977a3a4d'] = 'Categorie con questo modello';
 $_MODULE['<{blocklayered}prestashop>blocklayered_d758a9754eb9f36db05c22ad0c77e38e'] = 'Seleziona la categoria uno o più utilizzando questo modello di filtro';
-$_MODULE['<{blocklayered}prestashop>blocklayered_5965d2ce192837f00d743d8a674382c1'] = 'Premere il tasto \"Salva selezione\" o chiudere la finestra per salvare';
+$_MODULE['<{blocklayered}prestashop>blocklayered_5965d2ce192837f00d743d8a674382c1'] = 'Premere il tasto "Salva selezione" o chiudere la finestra per salvare';
 $_MODULE['<{blocklayered}prestashop>blocklayered_fa03eb688ad8aa1db593d33dabd89bad'] = 'Root';
 $_MODULE['<{blocklayered}prestashop>blocklayered_8cf04a9734132302f96da8e113e80ce5'] = 'Home';
 $_MODULE['<{blocklayered}prestashop>blocklayered_b56c3bda503a8dc4be356edb0cc31793'] = 'Chiudi tutto';
@@ -89,7 +89,7 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_93cba07454f06a4a960172bbd6e2a43
 $_MODULE['<{blocklayered}prestashop>blocklayered_bafd7322c6e97d25b6299b5d6fe8920b'] = 'No';
 $_MODULE['<{blocklayered}prestashop>blocklayered_8531c73de81b9ed94322dda7cf947daa'] = 'Mostra il numero di prodotti corrispondenti';
 $_MODULE['<{blocklayered}prestashop>blocklayered_ee61c015043c79c1370fc14980dd27b9'] = 'Mostra i prodotti dalle sottocategorie';
-$_MODULE['<{blocklayered}prestashop>blocklayered_a19399fa42f1ab059401a14b9f13eba1'] = 'Profondità filtro categorie (0 nessun limite, 1 default)';
+$_MODULE['<{blocklayered}prestashop>blocklayered_a19399fa42f1ab059401a14b9f13eba1'] = 'Profondità filtro categoria (0 per nessun limite, 1 di default)';
 $_MODULE['<{blocklayered}prestashop>blocklayered_3e652bd299bb3ee3d458c0dcc7fd706e'] = 'Usare le tasse per filtrare i prodotti';
 $_MODULE['<{blocklayered}prestashop>blocklayered_cc787af9edec8ce947ada8ab5bbff6e5'] = 'Permetti ai robots (google, yahoo, bing, ...) di usare i filtri di condizione';
 $_MODULE['<{blocklayered}prestashop>blocklayered_ab28e5086d1dcb1474a4bd4951b148b9'] = 'Permetti ai robots (google, yahoo, bing, ...) di usare i filtri di disponibilità';
@@ -121,7 +121,7 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_010359888c6e811caee8e540221f0a2
 $_MODULE['<{blocklayered}prestashop>blocklayered_0649bb392812f99ff6b0e2ba160675fa'] = 'Filtra per prezzo dei prodotti (a scorrimento)';
 $_MODULE['<{blocklayered}prestashop>blocklayered_88abab51d4f2e6732b518911bfca58a4'] = 'Gruppo attributi: %1$s (%2$d attributi)';
 $_MODULE['<{blocklayered}prestashop>blocklayered_e38ebd31243143bf3f3bd3810b5fc156'] = 'Gruppo attributo: %1$s (%2$d attributo)';
-$_MODULE['<{blocklayered}prestashop>blocklayered_ee59f74265cd7f85d0ad30206a1a89b0'] = 'Questo gruppo consente all\'utente di selezionare un colore';
+$_MODULE['<{blocklayered}prestashop>blocklayered_ee59f74265cd7f85d0ad30206a1a89b0'] = 'Questo gruppo consente all\\\'utente di selezionare un colore';
 $_MODULE['<{blocklayered}prestashop>blocklayered_7d06fc6f3166570e5d8995088066c0a2'] = 'Caratteristiche: %1$s (%2$d valori)';
 $_MODULE['<{blocklayered}prestashop>blocklayered_57d6fd5e5b9c215d6edac66b67e65773'] = 'Caratteristica: %1$s (%2$d valore)';
 $_MODULE['<{blocklayered}prestashop>blocklayered_c32516babc5b6c47eb8ce1bfc223253c'] = 'Catalogo';
@@ -129,7 +129,7 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_1262d1b9fbffb3a8e85ac9e4b449e98
 $_MODULE['<{blocklayered}prestashop>blocklayered_ea4788705e6873b424c65e91c2846b19'] = 'Annulla';
 $_MODULE['<{blocklayered}prestashop>blocklayered_853ae90f0351324bd73ea615e6487517'] = ':';
 $_MODULE['<{blocklayered}prestashop>blocklayered_b47b72ddf8a3fa1949a7fb6bb5dbc60c'] = 'Nessun filtro';
-$_MODULE['<{blocklayered}prestashop>blocklayered_75954a3c6f2ea54cb9dff249b6b5e8e6'] = 'Raggio d\'azione:';
+$_MODULE['<{blocklayered}prestashop>blocklayered_75954a3c6f2ea54cb9dff249b6b5e8e6'] = 'Raggio d\\\'azione:';
 $_MODULE['<{blocklayered}prestashop>blocklayered_5da618e8e4b89c66fe86e32cdafde142'] = 'Da';
 $_MODULE['<{blocklayered}prestashop>blocklayered_01b6e20344b68835c5ed1ddedf20d531'] = 'a';
 $_MODULE['<{blocklayered}prestashop>blocklayered_146ffe2fd9fa5bec3b63b52543793ec7'] = 'Mostra di più';

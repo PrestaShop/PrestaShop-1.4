@@ -17,7 +17,7 @@ $_MODULE['<{referralprogram}prestashop>referralprogram-program_dbc65cd60abde5127
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_83fc792f687bc45d75ac35c84c721a26'] = 'Almeno un indirizzo e-mail non è valido!';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_1019072b9e450c8652590cda2db45e49'] = 'Almeno un nome o cognome non è valido!';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_ff2d2e45b90b4426c3bb14bd56b95a2d'] = 'Qualcuno con questo indirizzo e-mail è già stato segnalato!';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_3f8a4c7f93945fea0d951fa402ee4272'] = 'Spunta almeno una casella';
+$_MODULE['<{referralprogram}prestashop>referralprogram-program_3f8a4c7f93945fea0d951fa402ee4272'] = 'Spunta almeno una casella ';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_dcc99d8715486f570db3ec5ee469a828'] = 'Impossibile aggiungere amici alla banca dati';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_f6cb78f0afcf7c3a06048a7a5855d6a1'] = 'E-mail sono state inviate ai tuoi amici!';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_79cd362fc64832faa0a2079f1142aa12'] = 'Una e-mail è stata inviata ad un amico!';

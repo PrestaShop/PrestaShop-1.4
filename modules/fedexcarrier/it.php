@@ -94,7 +94,7 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_ce135482b30deedcc0046df41c12de7
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_9a361a1f786db3dfe07aae42752d3446'] = 'Tipo di confezione di default';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_4664d1ae1832bed2246e8a6850365075'] = 'Seleziona un tipo di confezione di default ...';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_8d6bd50f3fe3ee2f4513066c25e5fb4a'] = 'Calcul modalità';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c5238c5f72dee585afdf4bddf6de518e'] = 'Utilizzando la modalità di calcul \"Tutti gli elementi in un unico pacchetto\"  utilizzerà automaticamente imballaggio dimensione predefinita, il tipo di confezionamento e di servizi di consegna. Configurazioni specifiche per le categorie o prodotto non sarà utilizzato.';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c5238c5f72dee585afdf4bddf6de518e'] = 'Utilizzando la modalità di calcul "Tutti gli elementi in un unico pacchetto"  utilizzerà automaticamente imballaggio dimensione predefinita, il tipo di confezionamento e di servizi di consegna. Configurazioni specifiche per le categorie o prodotto non sarà utilizzato.';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_5cdd307ba6e260beb4801c0c10e22a3a'] = 'Servizio di consegna';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_d63e135774e62574e2a1921267dad142'] = 'Scegli il servizio di consegna che sarà disponibile per i clienti.';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_f1206f9fadc5ce41694f69129aecac26'] = 'Configura';
@@ -111,7 +111,7 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_729d4f7143a3de7b0ed18de667fdf4d
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_9d1b485edd50e6fbd288b340b386b07d'] = 'Nessuna descrizione dell\'errore trovata';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c888438d14855d7d96a2724ee9c306bd'] = 'Impostazioni aggiornate';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_b9284bff13acffdd879ef4ac7fca5234'] = 'Impostazioni non riuscite';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_67e19ffdaa0a11e69349810403a9727e'] = 'È necessario configurare il tab \"Impostazioni generali\"  prima di utilizzare questo tab.';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_67e19ffdaa0a11e69349810403a9727e'] = 'È necessario configurare il tab "Impostazioni generali"  prima di utilizzare questo tab.';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_a37b48e8684078c0620a997b3baeee9f'] = 'In questo tab è possibile impostare una configurazione specifica per ogni categoria.';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_f421827ff72ef9a61fb27aa0de62f1e4'] = 'Config ID';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_3adbdb3ac060038aa0e6e6c138ef9873'] = 'Categoria';

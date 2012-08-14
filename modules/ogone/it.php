@@ -10,16 +10,6 @@ $_MODULE['<{ogone}prestashop>hookorderconfirmation_64430ad2835be8ad60c59e7d44e4b
 $_MODULE['<{ogone}prestashop>hookorderconfirmation_8de637e24570c1edb0357826a2ad5aea'] = 'Abbiamo notato un problema con il tuo ordine. Se pensi che sia un errore, contatta la nostra';
 $_MODULE['<{ogone}prestashop>ogone_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Configurazione aggiornata';
 $_MODULE['<{ogone}prestashop>ogone_6a26f548831e6a8c26bfbbd9f6ec61e0'] = 'Aiuto';
-$_MODULE['<{ogone}prestashop>ogone_c3aace2676937d5cb50e536abbe9113d'] = 'Prima di tutto, si potrebbe procedere come segue:';
-$_MODULE['<{ogone}prestashop>ogone_0ad87dec5bc422a24ca801c473d44213'] = 'Su PrestaShop ';
-$_MODULE['<{ogone}prestashop>ogone_1d1f6896858b1bc96cecf995b1800a82'] = 'Inserisci il tuo Ogone ID (PSPID)';
-$_MODULE['<{ogone}prestashop>ogone_c76d97611c239318461a32e3ce151b83'] = 'Compila le firme di tua scelta (dovrai poi copiarli nel back office Ogone)';
-$_MODULE['<{ogone}prestashop>ogone_8c2fc0d78cab9c2bd9cef54931cc0808'] = 'Scegli la modalità di test se hai appena creato l\'account di prova su Ogone (non funziona con l\'account demo)';
-$_MODULE['<{ogone}prestashop>ogone_39963c4d14081a701198768d7b9b00d9'] = 'Su Ogone';
-$_MODULE['<{ogone}prestashop>ogone_2ee3d80e1919fc84a184c727e3ccfa20'] = 'modalità di prova';
-$_MODULE['<{ogone}prestashop>ogone_20226890d13b230111fe30e1eb7a167b'] = 'modalità di produzione';
-$_MODULE['<{ogone}prestashop>ogone_38056880101f21752c2dbce4549b8423'] = 'Vedi la schermata per la fase';
-$_MODULE['<{ogone}prestashop>ogone_8da6d1ecd712792004829aa57eb4a9f7'] = 'Schede prova';
 $_MODULE['<{ogone}prestashop>ogone_f4f70727dc34561dfde1a3c529b6205c'] = 'Impostazioni';
 $_MODULE['<{ogone}prestashop>ogone_05d749acfbb6a79553aef6a644db881f'] = 'PSPID';
 $_MODULE['<{ogone}prestashop>ogone_ac3b5413fdb77e3726a94891c9844b44'] = 'Firma SHA-in ';

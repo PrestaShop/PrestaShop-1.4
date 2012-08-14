@@ -2,16 +2,16 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{blocklink}prestashop>blocklink_fc738410141e4ec0c0319a81255a1431'] = 'Blocco link';
+$_MODULE['<{blocklink}prestashop>blocklink_fc738410141e4ec0c0319a81255a1431'] = 'Blocco link ';
 $_MODULE['<{blocklink}prestashop>blocklink_baa2ae9622a47c3217d725d1537e5187'] = 'Aggiunge un blocco con ulteriori link';
 $_MODULE['<{blocklink}prestashop>blocklink_d98d5daaf408b77b05a2eeb6ae88d6df'] = 'Sei sicuro di voler eliminare tutti i link?';
 $_MODULE['<{blocklink}prestashop>blocklink_fe3f38c46c80813d94b6775299e59f13'] = 'Devi compilare tutti i campi';
-$_MODULE['<{blocklink}prestashop>blocklink_9394bb34611399534ffac4f0ece96b7f'] = 'Cattivo URL';
+$_MODULE['<{blocklink}prestashop>blocklink_9394bb34611399534ffac4f0ece96b7f'] = 'Cattivo URL ';
 $_MODULE['<{blocklink}prestashop>blocklink_3da9d5745155a430aac6d7de3b6de0c8'] = 'Il link è stato aggiunto con successo';
 $_MODULE['<{blocklink}prestashop>blocklink_898536ebd630aa3a9844e9cd9d1ebb9b'] = 'Si è verificato un errore durante la creazione del link';
 $_MODULE['<{blocklink}prestashop>blocklink_ce9beec1b47458523d46274adfd2acee'] = 'È verificato un errore durante l\'aggiornamento del link';
 $_MODULE['<{blocklink}prestashop>blocklink_7a7e3a8d8aefcb1d31b4fdfa1bdf9ee4'] = 'Il link è stato aggiornato con successo';
-$_MODULE['<{blocklink}prestashop>blocklink_b18032737875f7947443c98824103a1f'] = 'Il campo \"titolo\"  non può essere vuoto';
+$_MODULE['<{blocklink}prestashop>blocklink_b18032737875f7947443c98824103a1f'] = 'Il campo "titolo" non può essere vuoto';
 $_MODULE['<{blocklink}prestashop>blocklink_43b38b9a2fe65059bed320bd284047e3'] = 'Il campo \'titolo\' non è valido';
 $_MODULE['<{blocklink}prestashop>blocklink_eb74914f2759760be5c0a48f699f8541'] = 'Si è verificato un errore durante l\'aggiornamento del titolo';
 $_MODULE['<{blocklink}prestashop>blocklink_5c0f7e2db8843204f422a369f2030b37'] = 'Il titolo del blocco è stato aggiornato con successo';
