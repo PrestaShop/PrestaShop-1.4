@@ -68,7 +68,7 @@
 	<input type="hidden" name="paymentaction" value="sale" />
 	<input type="hidden" name="business" value="{$business_account}" />
 	<input type="hidden" name="template" value="templateD" />
-	<input type="hidden" name="cbt" value="{l s='Return back to the merchant\'s website' m='paypal'}" />
+	<input type="hidden" name="cbt" value="{l s='Return back to the merchant\'s website' mod='paypal'}" />
 	<input type="hidden" name="cancel_return" value="{$cancel_return}" />
 	<input type="hidden" name="return" value="{$return_url}" />
     <input type="hidden" name="bn" value="{$tracking_code}" />

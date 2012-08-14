@@ -268,13 +268,13 @@
 			{/if}
 			{if isset($PayPal_save_failure)}
 			<div class="box hide" id="paypal-save-failure">
-				<h3>{l s='Error !' m='paypal'}</h3>
+				<h3>{l s='Error !' mod='paypal'}</h3>
 				<p>{$PayPal_content.error_message}</p>
 			</div>
 			{/if}
 
 			<div class="box hide" id="js-paypal-save-failure">
-				<h3>{l s='Error !' m='paypal'}</h3>
+				<h3>{l s='Error !' mod='paypal'}</h3>
 				<p>{$PayPal_content.error_message}</p>
 			</div>
 
