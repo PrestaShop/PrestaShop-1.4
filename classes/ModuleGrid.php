@@ -71,7 +71,7 @@ abstract class ModuleGridCore extends Module
 	{
 		if (!Validate::isModuleName($render))
     		die(Tools::displayError());
-		if (!Tools::file_exists_cache($file = dirname(__FILE__).'/../modules/'.$render.'/'.$render.'.php'))
+		if (!file_exists($file = dirname(__FILE__).'/../modules/'.$render.'/'.$render.'.php'))
 			die(Tools::displayError());
 		require_once($file);
 		$this->_render = new $render($type);

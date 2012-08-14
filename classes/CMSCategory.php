@@ -143,9 +143,8 @@ class CMSCategoryCore extends ObjectModel
 	{
 		global $link;
 
-		$id_lang = is_null($id_lang) ? _USER_ID_LANG_ : (int)$id_lang;
+		$id_lang = !(int)$id_lang ? _USER_ID_LANG_ : (int)$id_lang;
 
-		//recursivity for subcategories
 		$children = array();
 		if (($max_depth == 0 || $current_depth < $max_depth) && $subcats = $this->getSubCategories((int)$id_lang, true))
 			if (count($subcats)) /* Keep this line out of the first if statement to avoid side effect due to the assignation */

@@ -53,7 +53,7 @@ class Editorial extends Module
 
 	public function install()
 	{
-		if (!parent::install() OR !$this->registerHook('home') OR !$this->registerHook('header'))
+		if (!parent::install() || !$this->registerHook('home') || !$this->registerHook('header'))
 			return false;
 		
 		if (!Db::getInstance()->Execute('
@@ -77,8 +77,7 @@ class Editorial extends Module
 			return false;
 		
 		if (!Db::getInstance()->Execute('
-		INSERT INTO `'._DB_PREFIX_.'editorial`(`id_editorial`, `body_home_logo_link`) 
-		VALUES(1, "http://www.prestashop.com")'))
+		INSERT INTO `'._DB_PREFIX_.'editorial`(`id_editorial`, `body_home_logo_link`) VALUES(1, "http://www.prestashop.com")'))
 			return false;
 		
 		if (!Db::getInstance()->Execute('
@@ -97,13 +96,12 @@ class Editorial extends Module
 	{
 		if (!parent::uninstall())
 			return false;
-		return (Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'editorial`') AND
-				Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'editorial_lang`'));
+		return (Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'editorial`') && Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'editorial_lang`'));
 	}
 
 	public function putContent($xml_data, $key, $field, $forbidden, $section)
 	{
-		foreach ($forbidden AS $line)
+		foreach ($forbidden as $line)
 			if ($key == $line)
 				return 0;
 		if (!preg_match('/^'.$section.'_/i', $key))
@@ -126,13 +124,13 @@ class Editorial extends Module
 		// Delete logo image
 		if (Tools::isSubmit('deleteImage'))
 		{
-			if (!file_exists(dirname(__FILE__).'/homepage_logo.jpg'))
+			if (!(bool)@filemtime(dirname(__FILE__).'/homepage_logo.jpg'))
 				$errors .= $this->displayError($this->l('This action cannot be taken.'));
 			else
 			{
 				unlink(dirname(__FILE__).'/homepage_logo.jpg');
 				Configuration::updateValue('EDITORIAL_IMAGE_DISABLE', 1);
-				Tools::redirectAdmin('index.php?tab=AdminModules&configure='.$this->name.'&token='.Tools::getAdminToken('AdminModules'.(int)(Tab::getIdFromClassName('AdminModules')).(int)($cookie->id_employee)));
+				Tools::redirectAdmin('index.php?tab=AdminModules&configure='.$this->name.'&token='.Tools::getAdminToken('AdminModules'.(int)(Tab::getIdFromClassName('AdminModules')).(int)$cookie->id_employee));
 			}
 			$this->_html .= $errors;
 		}
@@ -148,11 +146,11 @@ class Editorial extends Module
 			$editorial->update();
 
 			/* upload the image */
-			if (isset($_FILES['body_homepage_logo']) AND isset($_FILES['body_homepage_logo']['tmp_name']) AND !empty($_FILES['body_homepage_logo']['tmp_name']))
+			if (isset($_FILES['body_homepage_logo']) && isset($_FILES['body_homepage_logo']['tmp_name']) && !empty($_FILES['body_homepage_logo']['tmp_name']))
 			{
 				$ps_image_regeneration_method = (int)Configuration::get('PS_IMAGE_GENERATION_METHOD');
 				Configuration::updateValue('PS_IMAGE_GENERATION_METHOD', 1);
-				if (file_exists(dirname(__FILE__).'/homepage_logo.jpg'))
+				if ((bool)@filemtime(dirname(__FILE__).'/homepage_logo.jpg'))
 					unlink(dirname(__FILE__).'/homepage_logo.jpg');
 				if ($error = checkImage($_FILES['body_homepage_logo'], $this->maxImageSize))
 					$errors .= $error;
@@ -165,7 +163,7 @@ class Editorial extends Module
 				Configuration::updateValue('PS_IMAGE_GENERATION_METHOD', (int)$ps_image_regeneration_method);
 			}
 			$this->_html .= $errors == '' ? $this->displayConfirmation($this->l('Settings updated successfully')) : $errors;
-			if (file_exists(dirname(__FILE__).'/homepage_logo.jpg'))
+			if ((bool)@filemtime(dirname(__FILE__).'/homepage_logo.jpg'))
 			{
 				list($width, $height, $type, $attr) = getimagesize(dirname(__FILE__).'/homepage_logo.jpg');
 				Configuration::updateValue('EDITORIAL_IMAGE_WIDTH', (int)round($width));
@@ -193,7 +191,7 @@ class Editorial extends Module
 		// TinyMCE
 		global $cookie;
 		$iso = Language::getIsoById((int)($cookie->id_lang));
-		$isoTinyMCE = (file_exists(_PS_ROOT_DIR_.'/js/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en');
+		$isoTinyMCE = ((bool)@filemtime(_PS_ROOT_DIR_.'/js/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en');
 		$ad = dirname($_SERVER["PHP_SELF"]);
 		$this->_html .=  '
 			<script type="text/javascript">	
@@ -257,7 +255,7 @@ class Editorial extends Module
 				</div>
 				<label>'.$this->l('Homepage logo').' </label>
 				<div class="margin-form">';
-				if (file_exists(dirname(__FILE__).'/homepage_logo.jpg') && !Configuration::get('EDITORIAL_IMAGE_DISABLE'))
+				if ((bool)@filemtime(dirname(__FILE__).'/homepage_logo.jpg') && !Configuration::get('EDITORIAL_IMAGE_DISABLE'))
 						$this->_html .= '<div id="image" >
 							<img src="'.$this->_path.'homepage_logo.jpg?t='.time().'" />
 							<p align="center">'.$this->l('Filesize').' '.(filesize(dirname(__FILE__).'/homepage_logo.jpg') / 1000).'kb</p>
@@ -298,18 +296,17 @@ class Editorial extends Module
 
 	public function hookHome($params)
 	{
-		global $cookie, $smarty;
+		global $smarty;
 		
-		$editorial = new EditorialClass(1, (int)$cookie->id_lang);
 		$smarty->assign(array(
-			'editorial' => $editorial,
-			'default_lang' => (int)$cookie->id_lang,
-			'image_width' => Configuration::get('EDITORIAL_IMAGE_WIDTH'),
-			'image_height' => Configuration::get('EDITORIAL_IMAGE_HEIGHT'),
-			'id_lang' => $cookie->id_lang,
-			'homepage_logo' => !Configuration::get('EDITORIAL_IMAGE_DISABLE') && file_exists('modules/editorial/homepage_logo.jpg'),
-			'image_path' => $this->_path.'homepage_logo.jpg'
-		));
+		'editorial' => new EditorialClass(1, (int)$params['cookie']->id_lang),
+		'default_lang' => (int)$params['cookie']->id_lang,
+		'image_width' => (int)Configuration::get('EDITORIAL_IMAGE_WIDTH'),
+		'image_height' => (int)Configuration::get('EDITORIAL_IMAGE_HEIGHT'),
+		'id_lang' => (int)$params['cookie']->id_lang,
+		'homepage_logo' => !Configuration::get('EDITORIAL_IMAGE_DISABLE') && (bool)@filemtime('modules/editorial/homepage_logo.jpg'),
+		'image_path' => $this->_path.'homepage_logo.jpg'));
+
 		return $this->display(__FILE__, 'editorial.tpl');
 	}
 	

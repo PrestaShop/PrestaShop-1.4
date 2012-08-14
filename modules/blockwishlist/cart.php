@@ -78,9 +78,9 @@ if ($cookie->isLogged())
 	}
 	$smarty->assign('products', WishList::getProductByIdCustomer($cookie->id_wishlist, $cookie->id_customer, $cookie->id_lang, null, true));
 	
-	if (Tools::file_exists_cache(_PS_THEME_DIR_.'modules/blockwishlist/blockwishlist-ajax.tpl'))
+	if (file_exists(_PS_THEME_DIR_.'modules/blockwishlist/blockwishlist-ajax.tpl'))
 		$smarty->display(_PS_THEME_DIR_.'modules/blockwishlist/blockwishlist-ajax.tpl');
-	elseif (Tools::file_exists_cache(dirname(__FILE__).'/blockwishlist-ajax.tpl'))
+	elseif (file_exists(dirname(__FILE__).'/blockwishlist-ajax.tpl'))
 		$smarty->display(dirname(__FILE__).'/blockwishlist-ajax.tpl');
 	else
 		echo Tools::displayError('No template found');

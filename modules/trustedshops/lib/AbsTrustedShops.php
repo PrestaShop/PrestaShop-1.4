@@ -156,9 +156,9 @@ abstract class AbsTrustedShops
 	 */
 	protected static function _isTemplateOverloadedStatic($moduleName, $template)
 	{
-		if (Tools::file_exists_cache(_PS_THEME_DIR_.'modules/'.$moduleName.'/'.$template))
+		if (file_exists(_PS_THEME_DIR_.'modules/'.$moduleName.'/'.$template))
 			return true;
-		else if (Tools::file_exists_cache(_PS_MODULE_DIR_.$moduleName.'/'.$template))
+		elseif (file_exists(_PS_MODULE_DIR_.$moduleName.'/'.$template))
 			return false;
 
 		return null;

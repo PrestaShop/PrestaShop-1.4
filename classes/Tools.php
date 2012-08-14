@@ -27,7 +27,6 @@
 
 class ToolsCore
 {
-	protected static $file_exists_cache = array();
 	protected static $_forceCompile = null;
 	protected static $_caching = null;
 
@@ -671,7 +670,7 @@ class ToolsCore
 				$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT `name`, `meta_title`, `meta_description`, `meta_keywords`, `description`
 				FROM `'._DB_PREFIX_.'category_lang`
-				WHERE id_lang = '.(int)($id_lang).' AND id_category = '.(int)($id_category));
+				WHERE id_lang = '.(int)$id_lang.' AND id_category = '.(int)$id_category);
 				if ($row)
 				{
 					if (empty($row['meta_description']))
@@ -716,7 +715,7 @@ class ToolsCore
 				SELECT `name`, `meta_title`, `meta_description`, `meta_keywords`
 				FROM `'._DB_PREFIX_.'supplier_lang` sl
 				LEFT JOIN `'._DB_PREFIX_.'supplier` s ON (sl.`id_supplier` = s.`id_supplier`)
-				WHERE sl.id_lang = '.(int)($id_lang).' AND sl.id_supplier = '.(int)($id_supplier));
+				WHERE sl.id_lang = '.(int)$id_lang.' AND sl.id_supplier = '.(int)$id_supplier);
 
 				if ($row)
 				{
@@ -734,7 +733,7 @@ class ToolsCore
 				$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT `meta_title`, `meta_description`, `meta_keywords`
 				FROM `'._DB_PREFIX_.'cms_lang`
-				WHERE id_lang = '.(int)($id_lang).' AND id_cms = '.(int)($id_cms));
+				WHERE id_lang = '.(int)$id_lang.' AND id_cms = '.(int)$id_cms);
 				if ($row)
 				{
 					$row['meta_title'] = $row['meta_title'].' - '.Configuration::get('PS_SHOP_NAME');
@@ -748,7 +747,7 @@ class ToolsCore
 				$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 				SELECT `meta_title`, `meta_description`, `meta_keywords`
 				FROM `'._DB_PREFIX_.'cms_category_lang`
-				WHERE id_lang = '.(int)($id_lang).' AND id_cms_category = '.(int)($id_cms));
+				WHERE id_lang = '.(int)$id_lang.' AND id_cms_category = '.(int)$id_cms);
 				if ($row)
 				{
 					$row['meta_title'] = $row['meta_title'].' - '.Configuration::get('PS_SHOP_NAME');
@@ -927,7 +926,7 @@ class ToolsCore
 	 */
 	public static function getCategoriesTotal()
 	{
-		Tools::displayAsDeprecated();
+		self::displayAsDeprecated();
 		return (int)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT COUNT(*) total FROM `'._DB_PREFIX_.'category`');
 	}
 
@@ -1276,9 +1275,8 @@ class ToolsCore
 	 */
 	public static function file_exists_cache($filename)
 	{
-		if (!isset(self::$file_exists_cache[$filename]))
-			self::$file_exists_cache[$filename] = file_exists($filename);
-		return self::$file_exists_cache[$filename];
+		self::displayAsDeprecated(); /* file_exists already has its own cache */
+		return file_exists($filename);
 	}
 
 	public static function file_get_contents($url, $useIncludePath = false, $streamContext = NULL, $curlTimeOut = 5)
@@ -1472,13 +1470,13 @@ class ToolsCore
 					unset($js_uri[$key]);
 
 		//overriding of modules js files
-		foreach ($js_uri AS $key => &$file)
+		foreach ($js_uri as $key => &$file)
 		{
 			if (!preg_match('/^http(s?):\/\//i', $file))
 			{
 				$different = 0;
 				$override_path = str_replace(__PS_BASE_URI__.'modules/', _PS_ROOT_DIR_.'/themes/'._THEME_NAME_.'/js/modules/', $file, $different);
-				if ($different && file_exists($override_path))
+				if ($different && (bool)@filemtime($override_path))
 					$file = str_replace(__PS_BASE_URI__.'modules/', __PS_BASE_URI__.'themes/'._THEME_NAME_.'/js/modules/', $file, $different);
 				else
 				{
@@ -1486,7 +1484,7 @@ class ToolsCore
 					$url_data = parse_url($file);
 					$file_uri = _PS_ROOT_DIR_.self::str_replace_once(__PS_BASE_URI__, DIRECTORY_SEPARATOR, $url_data['path']);
 					// check if js files exists
-					if (!file_exists($file_uri))
+					if (!(bool)@filemtime($file_uri))
 						unset($js_uri[$key]);
 				}
 			}
@@ -1507,8 +1505,6 @@ class ToolsCore
 	 */
 	public static function addCSS($css_uri, $css_media_type = 'all')
 	{
-		global $css_files;
-
 		if (is_array($css_uri))
 		{
 			foreach ($css_uri as $file => $media_type)
@@ -1519,7 +1515,7 @@ class ToolsCore
 		//overriding of modules css files
 		$different = 0;
 		$override_path = str_replace(__PS_BASE_URI__.'modules/', _PS_ROOT_DIR_.'/themes/'._THEME_NAME_.'/css/modules/', $css_uri, $different);
-		if ($different && file_exists($override_path))
+		if ($different && (bool)@filemtime($override_path))
 			$css_uri = str_replace(__PS_BASE_URI__.'modules/', __PS_BASE_URI__.'themes/'._THEME_NAME_.'/css/modules/', $css_uri, $different);
 		else
 		{
@@ -1527,12 +1523,14 @@ class ToolsCore
 			$url_data = parse_url($css_uri);
 			$file_uri = _PS_ROOT_DIR_.self::str_replace_once(__PS_BASE_URI__, DIRECTORY_SEPARATOR, $url_data['path']);
 			// check if css files exists
-			if (!file_exists($file_uri))
+			if (!(bool)@filemtime($file_uri))
 				return true;
 		}
 
 		// detect mass add
 		$css_uri = array($css_uri => $css_media_type);
+
+		global $css_files;
 
 		// adding file to the big array...
 		if (is_array($css_files))
@@ -1710,7 +1708,7 @@ class ToolsCore
 				self::$_cache_nb_media_servers = 3;
 		}
 
-		if (self::$_cache_nb_media_servers AND ($id_media_server = (abs(crc32($filename)) % self::$_cache_nb_media_servers + 1)))
+		if (self::$_cache_nb_media_servers && ($id_media_server = (abs(crc32($filename)) % self::$_cache_nb_media_servers + 1)))
 			return constant('_MEDIA_SERVER_'.$id_media_server.'_');
 
 		return Configuration::get('PS_SSL_ENABLED') ? self::getShopDomainSsl(false) : self::getShopDomain(false);

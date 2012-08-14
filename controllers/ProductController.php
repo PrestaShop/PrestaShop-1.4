@@ -102,15 +102,15 @@ class ProductControllerCore extends FrontController
 
 	public function process()
 	{
-		global $cart, $currency;
+		global $cart;
 		parent::process();
 
 		if (!Validate::isLoadedObject($this->product))
 			$this->errors[] = Tools::displayError('Product not found');
 		else
 		{
-			if ((!$this->product->active && (Tools::getValue('adtoken') != Tools::encrypt('PreviewProduct'.$this->product->id))
-				|| !file_exists(dirname(__FILE__).'/../'.Tools::getValue('ad').'/ajax.php')))
+			if (!$this->product->active && (Tools::getValue('adtoken') != Tools::encrypt('PreviewProduct'.$this->product->id)
+				|| !(bool)@filemtime(dirname(__FILE__).'/../'.Tools::getValue('ad').'/ajax.php')))
 			{
 				header('HTTP/1.1 404 page not found');
 				$this->errors[] = Tools::displayError('Product is no longer available.');
@@ -348,6 +348,8 @@ class ProductControllerCore extends FrontController
 				self::$smarty->assign('packs', Pack::getPacksTable($this->product->id, (int)(self::$cookie->id_lang), true, 1));
 			}
 		}
+
+		global $currency;
 
 		self::$smarty->assign(array(
 			'ENT_NOQUOTES' => ENT_NOQUOTES,

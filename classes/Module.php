@@ -298,7 +298,7 @@ abstract class ModuleCore
 		<div id="languages_'.$id.'" class="language_flags">
 			'.$this->l('Choose language:').'<br /><br />';
 		foreach ($languages as $language)
-			if($use_vars_instead_of_ids)
+			if ($use_vars_instead_of_ids)
 				$output .= '<img src="../img/l/'.(int)($language['id_lang']).'.jpg" class="pointer" alt="'.$language['name'].'" title="'.$language['name'].'" onclick="changeLanguage(\''.$id.'\', '.$ids.', '.$language['id_lang'].', \''.$language['iso_code'].'\');" /> ';
 			else
 				$output .= '<img src="../img/l/'.(int)($language['id_lang']).'.jpg" class="pointer" alt="'.$language['name'].'" title="'.$language['name'].'" onclick="changeLanguage(\''.$id.'\', \''.$ids.'\', '.$language['id_lang'].', \''.$language['iso_code'].'\');" /> ';
@@ -405,7 +405,7 @@ abstract class ModuleCore
 
 				$id_lang = (!isset($cookie) || !is_object($cookie))?(int)Configuration::get('PS_LANG_DEFAULT'):(int)$cookie->id_lang;
 				$file = _PS_MODULE_DIR_.self::$classInModule[$currentClass].'/'.Language::getIsoById($id_lang).'.php';
-				if (Tools::file_exists_cache($file) AND include_once($file))
+				if (file_exists($file) && include_once($file))
 					$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
 			}
 			else
@@ -425,13 +425,9 @@ abstract class ModuleCore
 	{
 		if (!isset(self::$_INSTANCE[$moduleName]))
 		{
-			if (Tools::file_exists_cache(_PS_MODULE_DIR_.$moduleName.'/'.$moduleName.'.php'))
-			{
-				include_once(_PS_MODULE_DIR_.$moduleName.'/'.$moduleName.'.php');
-
-				if (class_exists($moduleName, false))
-					return self::$_INSTANCE[$moduleName] = new $moduleName;
-			}
+			@include_once(_PS_MODULE_DIR_.$moduleName.'/'.$moduleName.'.php');
+			if (class_exists($moduleName, false))
+				return self::$_INSTANCE[$moduleName] = new $moduleName;
 			return false;
 		}
 		return self::$_INSTANCE[$moduleName];
@@ -452,14 +448,14 @@ abstract class ModuleCore
 
 		if (is_array($ids))
 		{
-			foreach($ids as $id)
+			foreach ($ids as $id)
 				$preloadedModuleNameFromId[$id] = false;
 
 			$results = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('
 			SELECT `name`,`id_module`
 			FROM `'._DB_PREFIX_.'module`
 			WHERE `id_module` IN ('.join(',',$ids) .');');
-			foreach($results as $result)
+			foreach ($results as $result)
 				$preloadedModuleNameFromId[$result['id_module']] = $result['name'];
 		}
 		elseif (!isset($preloadedModuleNameFromId[$ids]))
@@ -517,10 +513,9 @@ abstract class ModuleCore
 		$modulesNameToCursor = array();
 		$errors = array();
 		$modules_dir = self::getModulesDirOnDisk();
-
 		$memory_limit = Tools::getMemoryLimit();
 
-		foreach ($modules_dir AS $module)
+		foreach ($modules_dir as $module)
 		{
 			// Memory usage checking
 			if (function_exists('memory_get_usage') && $memory_limit != '-1')
@@ -541,7 +536,7 @@ abstract class ModuleCore
 				$needNewConfigFile = (filemtime($configFile) < filemtime(_PS_MODULE_DIR_.$module.'/'.$module.'.php'));
 			else
 				$needNewConfigFile = true;
-			if ($useConfig AND $xml_exist)
+			if ($useConfig && $xml_exist)
 			{
 				libxml_use_internal_errors(true);
 				$xml_module = simplexml_load_file($configFile);
@@ -549,20 +544,20 @@ abstract class ModuleCore
 					$errors[] = '['.$module.'] '.Tools::displayError('Error found in config file:').' '.htmlentities($error->message);
 				libxml_clear_errors();
 
-				if (!count($errors) AND (int)$xml_module->need_instance == 0 AND !$needNewConfigFile)
+				if (!count($errors) && (int)$xml_module->need_instance == 0 && !$needNewConfigFile)
 				{
 
-					$file = _PS_MODULE_DIR_.$module.'/'.Language::getIsoById($cookie->id_lang).'.php';
-					if (Tools::file_exists_cache($file) AND include_once($file))
-						if (isset($_MODULE) AND is_array($_MODULE))
+					$file = _PS_MODULE_DIR_.$module.'/'.Language::getIsoById((int)$cookie->id_lang).'.php';
+					if (file_exists($file) && include_once($file))
+						if (isset($_MODULE) && is_array($_MODULE))
 							$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
 
-					$xml_module->displayName = Module::findTranslation($xml_module->name, self::configXmlStringFormat($xml_module->displayName), (string)$xml_module->name);
-					$xml_module->description = Module::findTranslation($xml_module->name, self::configXmlStringFormat($xml_module->description), (string)$xml_module->name);
-					$xml_module->author = Module::findTranslation($xml_module->name, self::configXmlStringFormat($xml_module->author), (string)$xml_module->name);
+					$xml_module->displayName = self::findTranslation($xml_module->name, self::configXmlStringFormat($xml_module->displayName), (string)$xml_module->name);
+					$xml_module->description = self::findTranslation($xml_module->name, self::configXmlStringFormat($xml_module->description), (string)$xml_module->name);
+					$xml_module->author = self::findTranslation($xml_module->name, self::configXmlStringFormat($xml_module->author), (string)$xml_module->name);
 
 					if (isset($xml_module->confirmUninstall))
-						$xml_module->confirmUninstall = Module::findTranslation($xml_module->name, self::configXmlStringFormat($xml_module->confirmUninstall), (string)$xml_module->name);
+						$xml_module->confirmUninstall = self::findTranslation($xml_module->name, self::configXmlStringFormat($xml_module->confirmUninstall), (string)$xml_module->name);
 
 
 					$moduleList[$moduleListCursor] = $xml_module;
@@ -571,7 +566,7 @@ abstract class ModuleCore
 					$moduleListCursor++;
 				}
 			}
-			if (!$useConfig OR !$xml_exist OR (isset($xml_module->need_instance) AND (int)$xml_module->need_instance == 1) OR $needNewConfigFile)
+			if (!$useConfig || !$xml_exist || (isset($xml_module->need_instance) && (int)$xml_module->need_instance == 1) || $needNewConfigFile)
 			{
 				// If class already exists, don't include the file
 				if (!class_exists($module, false))
@@ -609,21 +604,22 @@ abstract class ModuleCore
 		// Get modules information from database
 		if (!empty($moduleNameList))
 		{
-			$results = Db::getInstance()->executeS('SELECT `id_module`, `active`, `name` FROM `'._DB_PREFIX_.'module` WHERE `name` IN ('.join(',',$moduleNameList).')');
-			foreach($results as $result)
+			$db = Db::getInstance();
+			$results = $db->ExecuteS('SELECT `id_module`, `active`, `name` FROM `'._DB_PREFIX_.'module` WHERE `name` IN ('.join(',', $moduleNameList).')', false);
+			while ($result = $db->nextRow($results))
 			{
 				$moduleCursor = $modulesNameToCursor[$result['name']];
-				if (isset($result['active']) AND $result['active'])
+				if (isset($result['active']) && $result['active'])
 					$moduleList[$moduleCursor]->active = $result['active'];
-				if (isset($result['id_module']) AND $result['id_module'])
+				if (isset($result['id_module']) && $result['id_module'])
 					$moduleList[$moduleCursor]->id = $result['id_module'];
 			}
 		}
 
-		if (sizeof($errors))
+		if (count($errors))
 		{
 			echo '<div class="alert error"><h3>'.Tools::displayError('The following module(s) couldn\'t be loaded').':</h3><ol>';
-			foreach ($errors AS $error)
+			foreach ($errors as $error)
 				echo '<li>'.$error.'</li>';
 			echo '</ol></div>';
 		}
@@ -637,7 +633,7 @@ abstract class ModuleCore
 		$modules = scandir(_PS_MODULE_DIR_);
 		foreach ($modules AS $name)
 		{
-			if (is_dir(_PS_MODULE_DIR_.$name) && Tools::file_exists_cache(_PS_MODULE_DIR_.$name.'/'.$name.'.php'))
+			if (is_dir(_PS_MODULE_DIR_.$name) && file_exists(_PS_MODULE_DIR_.$name.'/'.$name.'.php'))
 			{
 				if (!Validate::isModuleName($name))
 					die(Tools::displayError().' (Module '.$name.')');
@@ -698,18 +694,22 @@ abstract class ModuleCore
 	 * @param array $hookArgs Parameters for the functions
 	 * @return string modules output
 	 */
-	public static function hookExec($hook_name, $hookArgs = array(), $id_module = NULL)
+	public static function hookExec($hook_name, $hookArgs = array(), $id_module = null)
 	{
-		global $cookie;
-		if ((!empty($id_module) AND !Validate::isUnsignedId($id_module)) OR !Validate::isHookName($hook_name))
+		if ((!empty($id_module) && !Validate::isUnsignedId($id_module)) || !Validate::isHookName($hook_name))
 			die(Tools::displayError());
 
-		global $cart, $cookie;
 		$live_edit = false;
-		if (!isset($hookArgs['cookie']) OR !$hookArgs['cookie'])
+		if (!isset($hookArgs['cookie']) || !$hookArgs['cookie'])
+		{
+			global $cookie;
 			$hookArgs['cookie'] = $cookie;
-		if (!isset($hookArgs['cart']) OR !$hookArgs['cart'])
+		}
+		if (!isset($hookArgs['cart']) || !$hookArgs['cart'])
+		{
+			global $cart;
 			$hookArgs['cart'] = $cart;
+		}
 		$hook_name = strtolower($hook_name);
 
 		if (!isset(self::$_hookModulesCache))
@@ -718,8 +718,8 @@ abstract class ModuleCore
 			$result = $db->ExecuteS('
 			SELECT h.`name` as hook, m.`id_module`, h.`id_hook`, m.`name` as module, h.`live_edit`
 			FROM `'._DB_PREFIX_.'module` m
-			LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON hm.`id_module` = m.`id_module`
-			LEFT JOIN `'._DB_PREFIX_.'hook` h ON hm.`id_hook` = h.`id_hook`
+			LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON (hm.`id_module` = m.`id_module`)
+			LEFT JOIN `'._DB_PREFIX_.'hook` h ON (hm.`id_hook` = h.`id_hook`)
 			AND m.`active` = 1
 			ORDER BY hm.`position`', false);
 			self::$_hookModulesCache = array();
@@ -739,30 +739,30 @@ abstract class ModuleCore
 
 		$altern = 0;
 		$output = '';
-		foreach (self::$_hookModulesCache[$hook_name] AS $array)
+		foreach (self::$_hookModulesCache[$hook_name] as $array)
 		{
-			if ($id_module AND $id_module != $array['id_module'])
+			if ($id_module && $id_module != $array['id_module'])
 				continue;
 			if (!($moduleInstance = Module::getInstanceByName($array['module'])))
 				continue;
 
 			$exceptions = $moduleInstance->getExceptions((int)$array['id_hook'], (int)$array['id_module']);
-			foreach ($exceptions AS $exception)
+			foreach ($exceptions as $exception)
 				if (strstr(basename($_SERVER['PHP_SELF']).'?'.$_SERVER['QUERY_STRING'], $exception['file_name']) && !strstr($_SERVER['QUERY_STRING'], $exception['file_name']))
 					continue 2;
 
-			if (is_callable(array($moduleInstance, 'hook'.$hook_name)))
+			if (method_exists($moduleInstance, 'hook'.$hook_name))
 			{
 				$hookArgs['altern'] = ++$altern;
+				$display = $moduleInstance->{'hook'.$hook_name}($hookArgs);
 
-				$display = call_user_func(array($moduleInstance, 'hook'.$hook_name), $hookArgs);
-				if ($array['live_edit'] && ((Tools::isSubmit('live_edit') AND Tools::getValue('ad') AND (Tools::getValue('liveToken') == sha1(Tools::getValue('ad')._COOKIE_KEY_)))))
+				if ($array['live_edit'] && ((Tools::isSubmit('live_edit') && Tools::getValue('ad') && (Tools::getValue('liveToken') == sha1(Tools::getValue('ad')._COOKIE_KEY_)))))
 				{
 					$live_edit = true;
 					$output .= '<script type="text/javascript"> modules_list.push(\''.$moduleInstance->name.'\');</script>
 								<div id="hook_'.$array['id_hook'].'_module_'.$moduleInstance->id.'_moduleName_'.$moduleInstance->name.'"
 								class="dndModule" style="border: 1px dotted red;'.(!strlen($display) ? 'height:50px;' : '').'">
-								<span><img src="'.$moduleInstance->_path.'/logo.gif">'
+								<span><img src="'.$moduleInstance->_path.'/logo.gif" alt="" />'
 							 	.$moduleInstance->displayName.'<span style="float:right">
 							 	<a href="#" id="'.$array['id_hook'].'_'.$moduleInstance->id.'" class="moveModule">
 							 		<img src="'._PS_ADMIN_IMG_.'arrow_out.png"></a>
@@ -836,7 +836,7 @@ abstract class ModuleCore
 	{
 		global $_MODULES;
 
-		$cache_key = $name . '|' . $string . '|' . $source;
+		$cache_key = $name.'|'.$string.'|'.$source;
 
 		if (!isset(self::$l_cache[$cache_key]))
 		{
@@ -849,12 +849,12 @@ abstract class ModuleCore
 
 			if (isset($_MODULES[$currentKey]))
 				$ret = stripslashes($_MODULES[$currentKey]);
-			elseif (isset($_MODULES[Tools::strtolower($currentKey)]))
-				$ret = stripslashes($_MODULES[Tools::strtolower($currentKey)]);
+			elseif (isset($_MODULES[$currentKey]))
+				$ret = stripslashes($_MODULES[$currentKey]);
 			elseif (isset($_MODULES[$defaultKey]))
 				$ret = stripslashes($_MODULES[$defaultKey]);
-			elseif (isset($_MODULES[Tools::strtolower($defaultKey)]))
-				$ret = stripslashes($_MODULES[Tools::strtolower($defaultKey)]);
+			elseif (isset($_MODULES[$defaultKey]))
+				$ret = stripslashes($_MODULES[$defaultKey]);
 			else
 				$ret = stripslashes($string);
 
@@ -878,18 +878,18 @@ abstract class ModuleCore
 		if (self::$_generateConfigXmlMode)
 			return $string;
 
-		global $_MODULES, $_MODULE, $cookie;
+		global $cookie;
 
 		if ($id_lang == null)
-			$id_lang = (!isset($cookie) OR !is_object($cookie)) ? (int)(Configuration::get('PS_LANG_DEFAULT')) : (int)($cookie->id_lang);
+			$id_lang = (!isset($cookie->id_lang) ? (int)Configuration::get('PS_LANG_DEFAULT') : (int)$cookie->id_lang);
 		$file = _PS_MODULE_DIR_.$this->name.'/'.Language::getIsoById($id_lang).'.php';
-		if (Tools::file_exists_cache($file) AND include_once($file))
+		if (@include_once($file))
+		{
+			global $_MODULES, $_MODULE;
 			$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
+		}
 
-		$source = $specific ? $specific : $this->name;
-		$string = str_replace('\'', '\\\'', $string);
-		$ret = $this->findTranslation($this->name, $string, $source);
-		return $ret;
+		return $this->findTranslation($this->name, str_replace('\'', '\\\'', $string), $specific ? $specific : $this->name);
 	}
 
 	/*
@@ -1049,11 +1049,11 @@ abstract class ModuleCore
 	*/
 	protected static function _isTemplateOverloadedStatic($moduleName, $template)
 	{
-		if (Tools::file_exists_cache(_PS_THEME_DIR_.'modules/'.$moduleName.'/'.$template))
+		if (!!@filemtime(_PS_THEME_DIR_.'modules/'.$moduleName.'/'.$template))
 			return true;
-		elseif (Tools::file_exists_cache(_PS_MODULE_DIR_.$moduleName.'/'.$template))
+		elseif (!!@filemtime(_PS_MODULE_DIR_.$moduleName.'/'.$template))
 			return false;
-		return NULL;
+		return null;
 	}
 
 	protected function _isTemplateOverloaded($template)
@@ -1061,7 +1061,7 @@ abstract class ModuleCore
 		return self::_isTemplateOverloadedStatic($this->name, $template);
 	}
 
-	public static function display($file, $template, $cacheId = NULL, $compileId = NULL)
+	public static function display($file, $template, $cacheId = null, $compileId = null)
 	{
 		global $smarty;
 

@@ -1674,7 +1674,7 @@ class AdminTranslations extends AdminTab
 	{
 		$subject_mail_content =  array();
 		
-		if (Tools::file_exists_cache($directory.'/lang.php'))
+		if (file_exists($directory.'/lang.php'))
 		{
 			// we need to include this even if already included
 			include($directory.'/lang.php');

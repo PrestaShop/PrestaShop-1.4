@@ -103,7 +103,6 @@ class MetaCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON m.`id_meta` = ml.`id_meta`
 		WHERE ml.`id_lang` = '.(int)($id_lang).' 
 		ORDER BY page ASC');
-		
 	}
 	
 	public static function getMetaByPage($page, $id_lang)
@@ -112,7 +111,7 @@ class MetaCore extends ObjectModel
 		SELECT *
 		FROM '._DB_PREFIX_.'meta m
 		LEFT JOIN '._DB_PREFIX_.'meta_lang ml on (m.id_meta = ml.id_meta)
-		WHERE m.page = \''.pSQL($page).'\' AND ml.id_lang = '.(int)($id_lang));
+		WHERE m.page = \''.pSQL($page).'\' AND ml.id_lang = '.(int)$id_lang);
 	}
 
 	public function update($nullValues = false)

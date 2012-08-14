@@ -60,13 +60,7 @@ else
 
 smartyRegisterFunction($smarty, 'modifier', 'truncate', 'smarty_modifier_truncate');
 smartyRegisterFunction($smarty, 'modifier', 'secureReferrer', array('Tools', 'secureReferrer'));
-
-smartyRegisterFunction($smarty, 'function', 't', 'smartyTruncate'); // unused
-smartyRegisterFunction($smarty, 'function', 'm', 'smartyMaxWords'); // unused
-smartyRegisterFunction($smarty, 'function', 'p', 'smartyShowObject'); // Debug only
-smartyRegisterFunction($smarty, 'function', 'd', 'smartyDieObject'); // Debug only
 smartyRegisterFunction($smarty, 'function', 'l', 'smartyTranslate');
-
 smartyRegisterFunction($smarty, 'function', 'dateFormat', array('Tools', 'dateFormat'));
 smartyRegisterFunction($smarty, 'function', 'productPrice', array('Product', 'productPrice')); // unused
 smartyRegisterFunction($smarty, 'function', 'convertPrice', array('Product', 'convertPrice'));
@@ -76,6 +70,12 @@ smartyRegisterFunction($smarty, 'function', 'displayWtPrice', array('Product', '
 smartyRegisterFunction($smarty, 'function', 'displayWtPriceWithCurrency', array('Product', 'displayWtPriceWithCurrency'));
 smartyRegisterFunction($smarty, 'function', 'displayPrice', array('Tools', 'displayPriceSmarty'));
 smartyRegisterFunction($smarty, 'modifier', 'convertAndFormatPrice', array('Product', 'convertAndFormatPrice')); // used twice
+
+if (_PS_MODE_DEV_) /* Similar to the p() and d() PrestaShop PHP functions */
+{
+	smartyRegisterFunction($smarty, 'function', 'p', 'smartyShowObject');
+	smartyRegisterFunction($smarty, 'function', 'd', 'smartyDieObject');
+}
 
 function smartyTranslate($params, &$smarty)
 {
@@ -87,7 +87,7 @@ function smartyTranslate($params, &$smarty)
 	 *
 	 * In Smarty-v3 : No modifications, using the existing var $smarty->template_resource instead
 	 */
-	global $_LANG, $_MODULES, $cookie, $_MODULE;
+	global $_LANG;
 	if (!isset($params['js'])) $params['js'] = 0;
 	if (!isset($params['mod'])) $params['mod'] = false;
 	
@@ -96,14 +96,17 @@ function smartyTranslate($params, &$smarty)
 	if (Configuration::get('PS_FORCE_SMARTY_2')) /* Keep a backward compatibility for Smarty v2 */
 		$key = $smarty->currentTemplate.'_'.md5($string);
 	else
-		$key = Tools::substr(basename($smarty->template_resource), 0, -4).'_'.md5($string);
+		$key = substr(basename($smarty->template_resource), 0, -4).'_'.md5($string);
 
 	$lang_array = $_LANG;
 	if ($params['mod'])
 	{
-		$iso = Language::getIsoById($cookie->id_lang);
+		global $_MODULES, $cookie, $_MODULE;
 
-		if (Tools::file_exists_cache(_PS_THEME_DIR_.'modules/'.$params['mod'].'/'.$iso.'.php'))
+		$iso = Language::getIsoById((int)$cookie->id_lang);
+
+		$file_mtime = @filemtime(_PS_THEME_DIR_.'modules/'.$params['mod'].'/'.$iso.'.php');
+		if (!!$file_mtime)
 		{
 			$translationsFile = _PS_THEME_DIR_.'modules/'.$params['mod'].'/'.$iso.'.php';
 			$key = '<{'.$params['mod'].'}'._THEME_NAME_.'>'.$key;
@@ -114,24 +117,23 @@ function smartyTranslate($params, &$smarty)
 			$key = '<{'.$params['mod'].'}prestashop>'.$key;
 		}
 		
-		if(!is_array($_MODULES))
+		if (!is_array($_MODULES))
 			$_MODULES = array();
-		if (@include_once($translationsFile))
-			if (is_array($_MODULE))
-				$_MODULES = array_merge($_MODULES, $_MODULE);
+		if (@include_once($translationsFile) && is_array($_MODULE))
+			$_MODULES = array_merge($_MODULES, $_MODULE);
 		$lang_array = $_MODULES;
 	}
 	
-	if (is_array($lang_array) && key_exists($key, $lang_array))
+	if (isset($lang_array[$key]))
 		$msg = $lang_array[$key];
-	elseif (is_array($lang_array) && key_exists(Tools::strtolower($key), $lang_array))
-		$msg = $lang_array[Tools::strtolower($key)];
+	elseif (($lower_key = strtolower($key)) && isset($lang_array[$lower_key]))
+		$msg = $lang_array[$lower_key];
 	else
 		$msg = $params['s'];
 	
 	if ($msg != $params['s'])
 		$msg = $params['js'] ? addslashes($msg) : stripslashes($msg);
-	return $params['js'] ? $msg : Tools::htmlentitiesUTF8($msg);
+	return $params['js'] ? $msg : htmlentities($msg, ENT_QUOTES, 'utf-8');
 }
 
 function smartyDieObject($params, &$smarty)
@@ -142,32 +144,6 @@ function smartyDieObject($params, &$smarty)
 function smartyShowObject($params, &$smarty)
 {
 	return Tools::p($params['var']);
-}
-
-function smartyMaxWords($params, &$smarty)
-{
-	Tools::displayAsDeprecated();
-	$params['s'] = str_replace('...', ' ...', html_entity_decode($params['s'], ENT_QUOTES, 'UTF-8'));
-	$words = explode(' ', $params['s']);
-	
-	foreach($words AS &$word)
-		if(Tools::strlen($word) > $params['n'])
-			$word = Tools::substr(trim(chunk_split($word, $params['n']-1, '- ')), 0, -1);
-
-	return implode(' ',  Tools::htmlentitiesUTF8($words));
-}
-
-function smartyTruncate($params, &$smarty)
-{
-	Tools::displayAsDeprecated();
-	$text = isset($params['strip']) ? strip_tags($params['text']) : $params['text'];
-	$length = $params['length'];
-	$sep = isset($params['sep']) ? $params['sep'] : '...';
-
-	if (Tools::strlen($text) > $length + Tools::strlen($sep))
-		$text = Tools::substr($text, 0, $length).$sep;
-
-	return (isset($params['encode']) ? Tools::htmlentitiesUTF8($text, ENT_NOQUOTES) : $text);
 }
 
 function smarty_modifier_truncate($string, $length = 80, $etc = '...', $break_words = false, $middle = false, $charset = 'UTF-8')
@@ -188,19 +164,17 @@ function smarty_modifier_truncate($string, $length = 80, $etc = '...', $break_wo
 
 function smartyMinifyHTML($tpl_output, &$smarty)
 {
-    $tpl_output = Tools::minifyHTML($tpl_output);
-    return $tpl_output;
+    return Tools::minifyHTML($tpl_output);
 }
 
 function smartyPackJSinHTML($tpl_output, &$smarty)
 {
-    $tpl_output = Tools::packJSinHTML($tpl_output);
-    return $tpl_output;
+    return Tools::packJSinHTML($tpl_output);
 }
 
 function smartyRegisterFunction($smarty, $type, $function, $params)
 {
-	if (!in_array($type, array('function', 'modifier')))
+	if ($type != 'function' && $type != 'modifier')
 		return false;
 	if (!Configuration::get('PS_FORCE_SMARTY_2'))
 		$smarty->registerPlugin($type, $function, $params); // Use Smarty 3 API calls, only if PHP version > 5.1.2

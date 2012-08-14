@@ -72,9 +72,7 @@ class SpecificPriceCore extends ObjectModel
 
 	public static function getIdsByProductId($id_product)
 	{
-		return Db::getInstance()->ExecuteS('
-			SELECT `id_specific_price` FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)$id_product.'
-		');
+		return Db::getInstance()->ExecuteS('SELECT `id_specific_price` FROM `'._DB_PREFIX_.'specific_price` WHERE `id_product` = '.(int)$id_product);
 	}
 
    // score generation for quantity discount

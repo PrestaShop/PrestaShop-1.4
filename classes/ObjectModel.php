@@ -31,19 +31,19 @@ abstract class ObjectModelCore
 	public $id;
 
 	/** @var integer lang id */
-	protected $id_lang = NULL;
+	protected $id_lang = null;
 
 	/** @var string SQL Table name */
-	protected $table = NULL;
+	protected $table = null;
 
 	/** @var string SQL Table identifier */
-	protected $identifier = NULL;
+	protected $identifier = null;
 
 	/** @var array Required fields for admin panel forms */
  	protected $fieldsRequired = array();
 
 	/** @var fieldsRequiredDatabase */
-	protected static $fieldsRequiredDatabase = NULL;
+	protected static $fieldsRequiredDatabase = null;
 
  	/** @var array Maximum fields size for admin panel forms */
  	protected $fieldsSize = array();
@@ -69,7 +69,7 @@ abstract class ObjectModelCore
 	protected static $_cache = array();
 
 	/** @var  string path to image directory. Used for image deletion. */
-	protected $image_dir = NULL;
+	protected $image_dir = null;
 
 	/** @var string file type of image files. Used for image deletion. */
 	protected $image_format = 'jpg';
@@ -110,35 +110,36 @@ abstract class ObjectModelCore
 	{
 		if ($id_lang != null)
 		{
-			$this->id_lang = Language::getLanguage((int)$id_lang) ? (int)$id_lang : (int)Configuration::get('PS_LANG_DEFAULT');
+			$this->id_lang = Language::getLanguage((int)$id_lang);
 			$id_lang = $this->id_lang;
 		}
 
 	 	/* Connect to database and check SQL table/identifier */
-	 	if (!Validate::isTableOrIdentifier($this->identifier) || !Validate::isTableOrIdentifier($this->table))
+	 	if (!Validate::isTableOrIdentifier($this->identifier.$this->table))
 			die(Tools::displayError());
-		$this->identifier = pSQL($this->identifier);
 
 		/* Load object from database if object id is present */
 		if ($id)
 		{
-			if (!isset(self::$_cache[$this->table][(int)($id)][(int)($id_lang)]))
-				self::$_cache[$this->table][(int)($id)][(int)($id_lang)] = Db::getInstance()->getRow('
+			$this->identifier = pSQL($this->identifier);
+
+			if (!isset(self::$_cache[$this->table][(int)$id][(int)$id_lang]))
+				self::$_cache[$this->table][(int)$id][(int)$id_lang] = Db::getInstance()->getRow('
 				SELECT *
 				FROM `'._DB_PREFIX_.$this->table.'` a '.
-				($id_lang ? ('LEFT JOIN `'.pSQL(_DB_PREFIX_.$this->table).'_lang` b ON (a.`'.$this->identifier.'` = b.`'.$this->identifier).'` AND `id_lang` = '.(int)($id_lang).')' : '')
-				.' WHERE a.`'.$this->identifier.'` = '.(int)($id));
+				($id_lang ? ('LEFT JOIN `'.pSQL(_DB_PREFIX_.$this->table).'_lang` b ON (a.`'.$this->identifier.'` = b.`'.$this->identifier).'` AND `id_lang` = '.(int)$id_lang.')' : '')
+				.' WHERE a.`'.$this->identifier.'` = '.(int)$id);
 
 			$result = self::$_cache[$this->table][(int)($id)][(int)($id_lang)];
 			if ($result)
 			{
 				$this->id = (int)$id;
 				foreach ($result as $key => $value)
-					if (key_exists($key, $this))
+					if (property_exists($this, $key))
 						$this->{$key} = $value;
 
 				/* Join multilingual tables */
-				if (!$id_lang AND method_exists($this, 'getTranslationsFieldsChild'))
+				if (!$id_lang && method_exists($this, 'getTranslationsFieldsChild'))
 				{
 					$result = Db::getInstance()->ExecuteS('
 					SELECT *
@@ -147,7 +148,7 @@ abstract class ObjectModelCore
 					if ($result)
 						foreach ($result as $row)
 							foreach ($row as $key => $value)
-								if (key_exists($key, $this) && $key != $this->identifier)
+								if (property_exists($this, $key) && $key != $this->identifier)
 								{
 									if (!is_array($this->{$key}))
 										$this->{$key} = array();
@@ -228,7 +229,7 @@ abstract class ObjectModelCore
 	 */
 	public function update($nullValues = false)
 	{
-	 	if (!Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
+	 	if (!Validate::isTableOrIdentifier($this->identifier) || !Validate::isTableOrIdentifier($this->table))
 			die(Tools::displayError());
 
 		$this->clearCache();

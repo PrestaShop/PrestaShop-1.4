@@ -29,9 +29,6 @@ class ManufacturerCore extends ObjectModel
 {
 	public 		$id;
 
-	/** @var integer manufacturer ID */
-	public		$id_manufacturer;//FIXME is it really usefull...?
-
 	/** @var string Name */
 	public 		$name;
 
@@ -143,9 +140,12 @@ class ManufacturerCore extends ObjectModel
 
 	public function delete()
 	{
-		$address = new Address($this->id_address);
-		if (!$address->delete())
-			return false;
+		if ($this->id_address)
+		{
+			$address = new Address((int)$this->id_address);
+			if (!Validate::isLoadedObject($address) || !$address->delete())
+				return false;
+		}
 		if (parent::delete())
 			return $this->deleteImage();
 	}

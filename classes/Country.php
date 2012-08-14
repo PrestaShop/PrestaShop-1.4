@@ -298,18 +298,17 @@ class CountryCore extends ObjectModel
 		if (Configuration::get('PS_GEOLOCATION_ENABLED') && 
 				$cookie && isset($cookie->iso_code_country) &&
 				Validate::isLanguageIsoCode($cookie->iso_code_country))
-			$id_country = (int)Country::getByIso($cookie->iso_code_country);
+			return (int)Country::getByIso($cookie->iso_code_country);
 		else
-			$id_country = (int)Configuration::get('PS_COUNTRY_DEFAULT');
-
-		return $id_country;
+			return (int)Configuration::get('PS_COUNTRY_DEFAULT');
 	}
 
 
     public static function getCountriesByZoneId($id_zone, $id_lang)
     {
-        if (empty($id_zone) OR empty($id_lang))
+        if (empty($id_zone) || empty($id_lang))
             die(Tools::displayError());
+
         return Db::getInstance()->ExecuteS('
         SELECT DISTINCT c.*, cl.*
         FROM `'._DB_PREFIX_.'country` c

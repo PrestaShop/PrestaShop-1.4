@@ -618,7 +618,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
     {
         // selfpointer needed by some other class methods
         $this->smarty = $this;
-        if (is_callable('mb_internal_encoding')) {
+        if (function_exists('mb_internal_encoding')) { /* PrestaShop */
             mb_internal_encoding(Smarty::$_CHARSET);
         }
         $this->start_time = microtime(true);

@@ -25,8 +25,8 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-if (file_exists(dirname(__FILE__).'/../config/settings.inc.php'))
-	include_once(dirname(__FILE__).'/../config/settings.inc.php');
+if (!defined('_PS_VERSION_'))
+	@include_once(dirname(__FILE__).'/../config/settings.inc.php');
 
 abstract class DbCore
 {
@@ -308,10 +308,9 @@ function pSQL($string, $htmlOK = false)
 {
 	if (_PS_MAGIC_QUOTES_GPC_)
 		$string = stripslashes($string);
-	if (!is_numeric($string))
+	if ((int)$string != 0)
 	{
-		$link = Db::getInstance()->getRessource();
-		$string = _PS_MYSQL_REAL_ESCAPE_STRING_ ? mysql_real_escape_string($string, $link) : addslashes($string);
+		$string = _PS_MYSQL_REAL_ESCAPE_STRING_ ? mysql_real_escape_string($string) : addslashes($string);
 		if (!$htmlOK)
 			$string = strip_tags(nl2br2($string));
 	}

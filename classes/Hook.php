@@ -123,7 +123,7 @@ class HookCore extends ObjectModel
 		SELECT *
 		FROM `'._DB_PREFIX_.'module` m
 		LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON (hm.id_module = m.id_module)
-		WHERE hm.id_hook = '.(int)($id_hook).' AND m.id_module = '.(int)($id_module));
+		WHERE hm.id_hook = '.(int)$id_hook.' AND m.id_module = '.(int)$id_module);
 	}
 	
 	public static function newOrder($cart, $order, $customer, $currency, $orderStatus)

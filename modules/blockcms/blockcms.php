@@ -54,7 +54,7 @@ class BlockCms extends Module
 	{
 		$languages = Language::getLanguages(false);
 		$queryLang = 'INSERT INTO `'._DB_PREFIX_.'cms_block_lang` (`id_cms_block`, `id_lang`) VALUES';
-		foreach ($languages AS $language)
+		foreach ($languages as $language)
 			$queryLang .= '(1, '.(int)($language['id_lang']).'),';
 	
 		if (!parent::install() || !$this->registerHook('leftColumn') 

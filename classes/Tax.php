@@ -308,30 +308,29 @@ class TaxCore extends ObjectModel
 		return Tax::getProductTaxRateViaRules((int)$id_product, (int)$id_country, (int)$id_state, (int)$id_county);
 	}
 
-	public static function getProductEcotaxRate($id_address = NULL)
+	public static function getProductEcotaxRate($id_address = null)
 	{
-  	      $id_country = (int)Country::getDefaultCountryId();
-         $id_state = 0;
-         $id_county = 0;
-         $rate = 0;
-         if (!empty($id_address))
-         {
-             $address_infos = Address::getCountryAndState($id_address);
-         	 if ($address_infos['id_country'])
-             {
-   	             $id_country = (int)($address_infos['id_country']);
-            	    $id_state = (int)$address_infos['id_state'];
-   	             $id_county = (int)County::getIdCountyByZipCode($address_infos['id_state'], $address_infos['postcode']);
-             }
+		$id_state = 0;
+		$id_county = 0;
 
-		    if (!empty($address_infos['vat_number']) AND $address_infos['id_country'] != Configuration::get('VATNUMBER_COUNTRY') AND Configuration::get('VATNUMBER_MANAGEMENT'))
-				    return 0;
-        }
+		if (!empty($id_address))
+		{
+			$address_infos = Address::getCountryAndState($id_address);
+			if ($address_infos['id_country'])
+			{
+				$id_country = (int)($address_infos['id_country']);
+				$id_state = (int)$address_infos['id_state'];
+				$id_county = (int)County::getIdCountyByZipCode($address_infos['id_state'], $address_infos['postcode']);
+			}
 
-       	if ($rate = TaxRulesGroup::getTaxesRate((int)Configuration::get('PS_ECOTAX_TAX_RULES_GROUP_ID'), (int)$id_country, (int)$id_state, (int)$id_county))
-	        return $rate;
+			if (!empty($address_infos['vat_number']) && $address_infos['id_country'] != Configuration::get('VATNUMBER_COUNTRY') && Configuration::get('VATNUMBER_MANAGEMENT'))
+				return 0;
+		}
+		
+		if (!isset($id_country))
+			$id_country = (int)Country::getDefaultCountryId();
 
-		return $rate;
+		return (float)TaxRulesGroup::getTaxesRate((int)Configuration::get('PS_ECOTAX_TAX_RULES_GROUP_ID'), (int)$id_country, (int)$id_state, (int)$id_county);
 	}
 
 	/**

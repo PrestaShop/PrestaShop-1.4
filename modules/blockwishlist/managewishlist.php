@@ -103,9 +103,9 @@ if ($cookie->isLogged())
 				'token_wish' => $wishlist->token
 			));
 			
-			if (Tools::file_exists_cache(_PS_THEME_DIR_.'modules/blockwishlist/managewishlist.tpl'))
+			if (file_exists(_PS_THEME_DIR_.'modules/blockwishlist/managewishlist.tpl'))
 				$smarty->display(_PS_THEME_DIR_.'modules/blockwishlist/managewishlist.tpl');
-			elseif (Tools::file_exists_cache(dirname(__FILE__).'/managewishlist.tpl'))
+			elseif (file_exists(dirname(__FILE__).'/managewishlist.tpl'))
 				$smarty->display(dirname(__FILE__).'/managewishlist.tpl');
 			else
 				echo Tools::displayError('No template found');

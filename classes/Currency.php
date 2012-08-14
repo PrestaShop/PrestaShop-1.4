@@ -171,20 +171,21 @@ class CurrencyCore extends ObjectModel
 	/**
 	 * Return available currencies
 	 *
+	 * @param boolean $object The method will return an array of object if set to true
+	 * @param boolean $active Only select active currencies
 	 * @return array Currencies
 	 */
-	public static function getCurrencies($object = false, $active = 1)
+	public static function getCurrencies($object = false, $active = true)
 	{
 		$tab = Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'currency`
-		WHERE `deleted` = 0
-		'.($active == 1 ? 'AND `active` = 1' : '').'
+		WHERE `deleted` = 0 '.($active ? ' AND `active` = 1' : '').'
 		ORDER BY `name` ASC');
 
 		if ($object)
 			foreach ($tab as $key => $currency)
-				$tab[$key] = Currency::getCurrencyInstance($currency['id_currency']);
+				$tab[$key] = Currency::getCurrencyInstance((int)$currency['id_currency']);
 
 		return $tab;
 	}

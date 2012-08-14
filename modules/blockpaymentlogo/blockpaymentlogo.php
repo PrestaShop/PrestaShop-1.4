@@ -110,16 +110,14 @@ class BlockPaymentLogo extends Module
 	*/
 	public function hookLeftColumn($params)
 	{
-		if (Configuration::get('PS_CATALOG_MODE'))
-			return ;
-		
-		global $smarty, $cookie;
-		
-		if (!Configuration::get('PS_PAYMENT_LOGO_CMS_ID'))
+		if (Configuration::get('PS_CATALOG_MODE') || !Configuration::get('PS_PAYMENT_LOGO_CMS_ID'))
 			return;
-		$cms = new CMS((int)(Configuration::get('PS_PAYMENT_LOGO_CMS_ID')), (int)($cookie->id_lang));
+
+		$cms = new CMS((int)Configuration::get('PS_PAYMENT_LOGO_CMS_ID'), (int)$params['cookie']->id_lang);
 		if (!Validate::isLoadedObject($cms))
 			return;
+		
+		global $smarty;
 		$smarty->assign('cms_payement_logo', $cms);
 		return $this->display(__FILE__, 'blockpaymentlogo.tpl');
 	}

@@ -305,6 +305,11 @@ class CartCore extends ObjectModel
 					$this->deleteDiscount((int)$row['id_discount']);
 			}
 		}
+		else
+		{
+			self::$_discountsLite[$this->id] = array();
+			self::$_discounts[$this->id] = array();
+		}
 
 		if ($lite && self::$_discountsLite[$this->id])
 			return self::$_discountsLite[$this->id];

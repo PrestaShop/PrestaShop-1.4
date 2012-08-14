@@ -142,12 +142,11 @@ class MySQLCore extends Db
 	{
 		$this->_result = false;
 		$this->_lastQuery = $query;
-		if ($use_cache AND _PS_CACHE_ENABLED_)
-			if ($array AND ($result = Cache::getInstance()->get(md5($query))))
-			{
-				$this->_lastCached = true;
-				return $result;
-			}
+		if ($use_cache && _PS_CACHE_ENABLED_ && $array && ($result = Cache::getInstance()->get(md5($query))))
+		{
+			$this->_lastCached = true;
+			return $result;
+		}
 		if ($this->_link && $this->_result = mysql_query($query, $this->_link))
 		{
 			$this->_lastCached = false;
@@ -160,7 +159,7 @@ class MySQLCore extends Db
 			if ($this->_result !== true)
 				while ($row = mysql_fetch_assoc($this->_result))
 					$resultArray[] = $row;
-			if ($use_cache AND _PS_CACHE_ENABLED_)	
+			if ($use_cache && _PS_CACHE_ENABLED_)	
 				Cache::getInstance()->setQuery($query, $resultArray);
 			return $resultArray;
 		}
@@ -179,9 +178,9 @@ class MySQLCore extends Db
 		$this->_result = false;
 		if ($this->_link)
 		{
-			$query  = 'DELETE FROM `'.bqSQL($table).'`'.($where ? ' WHERE '.$where : '').($limit ? ' LIMIT '.(int)($limit) : '');
+			$query  = 'DELETE FROM `'.bqSQL($table).'`'.($where ? ' WHERE '.$where : '').($limit ? ' LIMIT '.(int)$limit : '');
 			$res =  mysql_query($query, $this->_link);
-			if ($use_cache AND _PS_CACHE_ENABLED_)
+			if ($use_cache && _PS_CACHE_ENABLED_)
 				Cache::getInstance()->deleteQuery($query);
 			return $res;
 		}
@@ -191,7 +190,7 @@ class MySQLCore extends Db
 	
 	public function NumRows()
 	{
-		if (!$this->_lastCached AND $this->_link AND $this->_result)
+		if (!$this->_lastCached && $this->_link && $this->_result)
 		{
 			$nrows = mysql_num_rows($this->_result);
 			if (_PS_CACHE_ENABLED_)

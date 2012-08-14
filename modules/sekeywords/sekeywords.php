@@ -34,33 +34,34 @@ class SEKeywords extends ModuleGraph
 	private $_query = '';
 	private $_query2 = '';
 
-    function __construct()
-    {
-        $this->name = 'sekeywords';
-        $this->tab = 'analytics_stats';
-        $this->version = 1.0;
+	function __construct()
+	{
+		$this->name = 'sekeywords';
+		$this->tab = 'analytics_stats';
+		$this->version = 1.0;
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
-		
+			
 		$this->_query = '
 		SELECT sek.`keyword`, COUNT(TRIM(sek.`keyword`)) as occurences
 		FROM `'._DB_PREFIX_.'sekeyword` sek
 		WHERE '.(Configuration::get('SEK_FILTER_KW') == '' ? '1' : 'sek.`keyword` REGEXP \''.pSQL(Configuration::get('SEK_FILTER_KW')).'\'').'
 		AND sek.`date_add` BETWEEN ';
+
 		$this->_query2 = '
 		GROUP BY TRIM(sek.`keyword`)
 		HAVING occurences > '.(int)Configuration::get('SEK_MIN_OCCURENCES').'
 		ORDER BY occurences DESC';
 
-        parent::__construct();
-		
-        $this->displayName = $this->l('Search engine keywords');
-        $this->description = $this->l('Display which keywords have led visitors to your website.');
-    }
+		parent::__construct();
+			
+		$this->displayName = $this->l('Search engine keywords');
+		$this->description = $this->l('Display which keywords have led visitors to your website.');
+	}
 
 	function install()
 	{
-		if (!parent::install() OR !$this->registerHook('top') OR !$this->registerHook('AdminStatsModules'))
+		if (!parent::install() || !$this->registerHook('top') || !$this->registerHook('AdminStatsModules'))
 			return false;
 		Configuration::updateValue('SEK_MIN_OCCURENCES', 1);
 		Configuration::updateValue('SEK_FILTER_KW', '');
@@ -82,14 +83,13 @@ class SEKeywords extends ModuleGraph
 	
 	function hookTop($params)
 	{
-		if (!isset($_SERVER['HTTP_REFERER']) OR strstr($_SERVER['HTTP_REFERER'], Tools::getHttpHost(false, false)))
+		if (!isset($_SERVER['HTTP_REFERER']) || strstr($_SERVER['HTTP_REFERER'], Tools::getHttpHost(false, false)))
 			return;
-		if (!Validate::isAbsoluteUrl($_SERVER['HTTP_REFERER']))
-			return;
+
 		if ($keywords = $this->getKeywords($_SERVER['HTTP_REFERER']))
 			Db::getInstance()->Execute('
-			INSERT INTO `'._DB_PREFIX_.'sekeyword` (`keyword`,`date_add`)
-			VALUES (\''.pSQL(Tools::strtolower(trim($keywords))).'\',\''.pSQL(date('Y-m-d H:i:s')).'\')');
+			INSERT INTO `'._DB_PREFIX_.'sekeyword` (`keyword`, `date_add`)
+			VALUES (\''.pSQL(Tools::strtolower(trim($keywords))).'\', NOW())');
 	}
 	
 	function hookAdminStatsModules()
@@ -161,12 +161,12 @@ class SEKeywords extends ModuleGraph
 				if (!isset($parsedUrl['query']))
 					return false;
 				preg_match('/[^a-z]'.$varname.'=.+\&'.'/U', $parsedUrl['query'], $kArray);
-				if (!isset($kArray[0]) OR empty($kArray[0]))
+				if (!isset($kArray[0]) || empty($kArray[0]))
 					preg_match('/[^a-z]'.$varname.'=.+$'.'/', $parsedUrl['query'], $kArray);
-				if (!isset($kArray[0]) OR empty($kArray[0]))
+				if (!isset($kArray[0]) || empty($kArray[0]))
 					return false;
-				$kString = urldecode(str_replace('+', ' ', ltrim(substr(rtrim($kArray[0], '&'), strlen($varname) + 1), '=')));
-				return $kString;
+
+				return urldecode(str_replace('+', ' ', ltrim(substr(rtrim($kArray[0], '&'), strlen($varname) + 1), '=')));
 			}
 		}
 	}
@@ -193,5 +193,3 @@ class SEKeywords extends ModuleGraph
 		}
 	}
 }
-
-

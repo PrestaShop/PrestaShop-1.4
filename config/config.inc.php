@@ -46,16 +46,15 @@ ini_set('magic_quotes_runtime', 0);
 if (!headers_sent())
 	header('Content-Type: text/html; charset=utf-8');
 
-/* No settings file? goto installer...*/
-if (!file_exists(dirname(__FILE__).'/settings.inc.php'))
+@require_once(dirname(__FILE__).'/settings.inc.php');
+if (!defined('__PS_BASE_URI__')) /* No settings file? goto installer...*/
 {
 	$dir = ((is_dir($_SERVER['REQUEST_URI']) || substr($_SERVER['REQUEST_URI'], -1) == '/') ? $_SERVER['REQUEST_URI'] : dirname($_SERVER['REQUEST_URI']).'/');
-	if (!file_exists(dirname(__FILE__).'/../install'))
+	if (!(bool)filemtime(dirname(__FILE__).'/../install'))
 		die('Error: \'install\' directory is missing');
 	header('Location: install/');
 	exit;
 }
-require_once(dirname(__FILE__).'/settings.inc.php');
 
 /* Include all defines */
 require_once(dirname(__FILE__).'/defines.inc.php');
@@ -132,8 +131,3 @@ if (function_exists('date_default_timezone_set'))
 
 /* Smarty */
 require_once(dirname(__FILE__).'/smarty.config.inc.php');
-
-/* Possible value are true, false, 'URL'
- (for 'URL' append SMARTY_DEBUG as a parameter to the url)
- default is false for production environment */
-define('SMARTY_DEBUG_CONSOLE', false);

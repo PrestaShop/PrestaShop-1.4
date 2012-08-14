@@ -55,9 +55,9 @@ $smarty->assign(array(
 	'errors' => $errors
 ));
 
-if (Tools::file_exists_cache(_PS_THEME_DIR_.'modules/mailalerts/myalerts.tpl'))
+if (file_exists(_PS_THEME_DIR_.'modules/mailalerts/myalerts.tpl'))
 	$smarty->display(_PS_THEME_DIR_.'modules/mailalerts/myalerts.tpl');
-elseif (Tools::file_exists_cache(dirname(__FILE__).'/myalerts.tpl'))
+elseif (file_exists(dirname(__FILE__).'/myalerts.tpl'))
 	$smarty->display(dirname(__FILE__).'/myalerts.tpl');
 else
 	echo Tools::displayError('No template found');

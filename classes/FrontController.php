@@ -108,7 +108,7 @@ class FrontControllerCore
 			Tools::redirect('authentication.php'.($this->authRedirection ? '?back='.$this->authRedirection : ''));
 
 		/* Theme is missing or maintenance */
-		if (!is_dir(_PS_THEME_DIR_))
+		if (!(bool)@filemtime(_PS_THEME_DIR_))
 			die(Tools::displayError('Current theme unavailable. Please check your theme directory name and permissions.'));
 		elseif (basename($_SERVER['PHP_SELF']) != 'disabled.php' && !(int)Configuration::get('PS_SHOP_ENABLE'))
 			$this->maintenance = true;
@@ -223,10 +223,6 @@ class FrontControllerCore
 			$page_name = 'module-'.$m[1].'-'.str_replace(array('.php', '/'), array('', '-'), $m[2]);
 
 		$smarty->assign(Tools::getMetaTags($cookie->id_lang, $page_name));
-		$smarty->assign('request_uri', Tools::safeOutput(urldecode($_SERVER['REQUEST_URI'])));
-
-		/* Breadcrumb */
-		$smarty->assign('navigationPipe', (Configuration::get('PS_NAVIGATION_PIPE') ? Configuration::get('PS_NAVIGATION_PIPE') : '>'));
 
 		$protocol_link = (Configuration::get('PS_SSL_ENABLED') || Tools::usingSecureMode()) ? 'https://' : 'http://';
 
@@ -252,6 +248,8 @@ class FrontControllerCore
 		}
 
 		$smarty->assign(array(
+			'request_uri' => Tools::safeOutput(urldecode($_SERVER['REQUEST_URI'])),
+			'navigationPipe' => (Configuration::get('PS_NAVIGATION_PIPE') ? Configuration::get('PS_NAVIGATION_PIPE') : '>'), /* Breadcrumb */
 			'link' => $link,
 			'cart' => $cart,
 			'currency' => $currency,
@@ -277,10 +275,8 @@ class FrontControllerCore
 			'vat_management' => (int)Configuration::get('VATNUMBER_MANAGEMENT'),
 			'opc' => (bool)Configuration::get('PS_ORDER_PROCESS_TYPE'),
 			'PS_CATALOG_MODE' => (bool)Configuration::get('PS_CATALOG_MODE'),
-		));
-
-		// Deprecated
-		$smarty->assign(array(
+			
+			/* Deprecated */
 			'id_currency_cookie' => (int)$currency->id,
 			'logged' => $cookie->isLogged(),
 			'customerName' => ($cookie->logged ? $cookie->customer_firstname.' '.$cookie->customer_lastname : false)

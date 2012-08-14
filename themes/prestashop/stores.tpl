@@ -43,7 +43,7 @@
 				{if $store.address2}{$store.address2|escape:'htmlall':'UTF-8'}<br />{/if}
 				{$store.postcode} {$store.city|escape:'htmlall':'UTF-8'}{if $store.state}, {$store.state|escape:'htmlall':'UTF-8'}{/if}<br />
 				{$store.country|escape:'htmlall':'UTF-8'}<br />
-				{if $store.phone}{l s='Phone:' js=0} {$store.phone|escape:'htmlall':'UTF-8'}{/if}
+				{if $store.phone}{l s='Phone:'} {$store.phone|escape:'htmlall':'UTF-8'}{/if}
 			</p>
 		</div>
 	{/foreach}
