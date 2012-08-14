@@ -13,7 +13,7 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_c186217583219f4cd040d9e
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_0210b6456cdccad569cb56026bb0f689'] = 'Configuración de archivo errónea';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_5b6cf869265c13af8566f192b4ab3d2a'] = 'Documentación';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_6bdbe5a8a9f446d4d758ee4c22648771'] = 'Puede consultar la documentación';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_7348fd57bfb5c837fc57e54fcfeeed9e'] = 'Haga clic derecho en el nombre y elija "guardar el enlace bajo"';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_7348fd57bfb5c837fc57e54fcfeeed9e'] = 'Haga clic derecho en el nombre y elija \"guardar el enlace bajo\"';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_b857ef1f431c5f3290dc5b5e644826a6'] = 'Se han instalado los siguientes módulos';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_22c765d777eb4ca6b4292bcbb596872e'] = 'Se han desactivado los siguientes módulos';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_e501dc865768ac08d49c129a23c3ae09'] = 'Se han activado los siguientes módulos';
@@ -43,8 +43,8 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_d1baba351b02042982a133c
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_5092965125a28a17f49ee460fbc1f62c'] = 'Seleccionar un tema';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_0557cae4cf5b379e665910d701210f69'] = 'Exportar este tema';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_1031371f906a92891140f384d04b3421'] = 'Se ha producido un error al general el archivo';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_2c19b34eebed37ccc288c518006615b3'] = '¡Hay un error de sintaxis en el campo "email"!';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_129b7dae66f0029381da64578a351198'] = '¡Hay un error de sintaxis en el campo "url"!';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_2c19b34eebed37ccc288c518006615b3'] = '¡Hay un error de sintaxis en el campo \"email\"!';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_129b7dae66f0029381da64578a351198'] = '¡Hay un error de sintaxis en el campo \"url\"!';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_87e0eaf3f9614cb904fafb0d4f4c1f56'] = 'La extensión del archivo debe ser .txt o .pdf';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_550a06d4fd147c22a4c921036003abf6'] = 'Se ha producido un error al enviar la documentación';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_ecd8e7704f6f4f730f6a43bfb24a9546'] = 'Introduzca un nombre de documentación válido';

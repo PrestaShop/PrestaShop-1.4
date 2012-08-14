@@ -29,3 +29,4 @@ $_MODULE['<{alliedwallet}prestashop>alliedwallet_3ca7ca93df600ffff03ee0e7eac6950
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_158135b3055bf30a67347a09e85c6bce'] = 'Indiquez ici l\'URL de la page vers laquelle les clients doivent être redirigés après leurs commandes.';
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_b17f3f4dcf653a5776792498a9b44d6a'] = 'Mettre à jour les paramètres';
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_24fc650b2c2e8c2f119a577d67efe0c5'] = 'Payer avec Allied Wallet';
+$_MODULE['<{alliedwallet}prestashop>validation_f674cd246b3a1611c24a9f2b93d85ac0'] = 'Action interdite.';

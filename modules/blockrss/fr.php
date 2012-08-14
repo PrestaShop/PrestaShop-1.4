@@ -14,7 +14,7 @@ $_MODULE['<{blockrss}prestashop>blockrss_1844ef1bfaa030dc8423c4645a43525c'] = 'F
 $_MODULE['<{blockrss}prestashop>blockrss_c888438d14855d7d96a2724ee9c306bd'] = 'Paramètres mis à jour';
 $_MODULE['<{blockrss}prestashop>blockrss_f4f70727dc34561dfde1a3c529b6205c'] = 'Paramètres';
 $_MODULE['<{blockrss}prestashop>blockrss_b22c8f9ad7db023c548c3b8e846cb169'] = 'Titre du bloc';
-$_MODULE['<{blockrss}prestashop>blockrss_2343a40bdffd8c7a6317b6d98c2b1042'] = 'Créez un titre pour le block (par défaut : "Flux RSS")';
+$_MODULE['<{blockrss}prestashop>blockrss_2343a40bdffd8c7a6317b6d98c2b1042'] = 'Créez un titre pour le block (par défaut : \"Flux RSS\")';
 $_MODULE['<{blockrss}prestashop>blockrss_402d00ca8e4f0fff26fc24ee9ab8e82b'] = 'Ajouter une URL';
 $_MODULE['<{blockrss}prestashop>blockrss_695d0986205c1ce17d03b026feb78c97'] = 'Ajouter l\'URL du flux que vous voulez utiliser (exemple : http://news.google.com/?output=rss)';
 $_MODULE['<{blockrss}prestashop>blockrss_ff9aa540e20285875ac8b190a3cb7ccf'] = 'Nombre de messages affichés';

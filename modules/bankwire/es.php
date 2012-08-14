@@ -12,7 +12,7 @@ $_MODULE['<{bankwire}prestashop>bankwire_ccab155f173ac76f79eb192703f86b18'] = 'S
 $_MODULE['<{bankwire}prestashop>bankwire_444bcb3a3fcf8389296c49467f27e1d6'] = 'ok';
 $_MODULE['<{bankwire}prestashop>bankwire_c888438d14855d7d96a2724ee9c306bd'] = 'configuración actualizada';
 $_MODULE['<{bankwire}prestashop>bankwire_fcec4d73cccd149a2d18695fd8785f88'] = 'Este módulo permite aceptar pagos por trasferencia bancaria.';
-$_MODULE['<{bankwire}prestashop>bankwire_b6af2d31afe71aedcceca73cc27fec29'] = 'si el cliente elije este modo de pago, el pedido cambiará su estado a "pendiente de pago".';
+$_MODULE['<{bankwire}prestashop>bankwire_b6af2d31afe71aedcceca73cc27fec29'] = 'si el cliente elije este modo de pago, el pedido cambiará su estado a \"pendiente de pago\".';
 $_MODULE['<{bankwire}prestashop>bankwire_0daeb8f6c1874ec9442e821b524d37c1'] = 'Por lo tanto, deberá confirmar el pedido en cuanto reciba la trasferencia.';
 $_MODULE['<{bankwire}prestashop>bankwire_5dd532f0a63d89c5af0243b74732f63c'] = 'Detalles contacto';
 $_MODULE['<{bankwire}prestashop>bankwire_17e6954ea60d238857324fea1f10b8f3'] = 'Por favor, especifique los detalles de la cuenta para sus clientes';
@@ -35,7 +35,7 @@ $_MODULE['<{bankwire}prestashop>payment_execution_e2c147f82d998eeeb147ae172a31a8
 $_MODULE['<{bankwire}prestashop>payment_execution_a7a08622ee5c8019b57354b99b7693b2'] = 'elija una de las siguientes:';
 $_MODULE['<{bankwire}prestashop>payment_execution_2c1ce705702e11fd5e2188c2353c0c86'] = 'Aceptamos las siguientes monedas para las transferencias bancarias:';
 $_MODULE['<{bankwire}prestashop>payment_execution_3dd021316505c0204989f984246c6ff1'] = 'La información para realizar la trasferencia bancaria aparecerá en la página siguiente.';
-$_MODULE['<{bankwire}prestashop>payment_execution_0881a11f7af33bc1b43e437391129d66'] = 'Por favor, acepte su pedido haciendo clic en "confirmo mi pedido"';
+$_MODULE['<{bankwire}prestashop>payment_execution_0881a11f7af33bc1b43e437391129d66'] = 'Por favor, acepte su pedido haciendo clic en \"confirmo mi pedido\"';
 $_MODULE['<{bankwire}prestashop>payment_execution_569fd05bdafa1712c4f6be5b153b8418'] = 'Otros modos de pago';
 $_MODULE['<{bankwire}prestashop>payment_execution_46b9e3665f187c739c55983f757ccda0'] = 'Confirmo mi pedido';
 $_MODULE['<{bankwire}prestashop>payment_return_2e2117b7c81aa9ea6931641ea2c6499f'] = 'Su pedido';

@@ -10,7 +10,7 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_6252c0f2c2ed83b7b06dfca86d4650b
 $_MODULE['<{blocklayered}prestashop>blocklayered_f39f64ad2722b269d9b6cb2ec97ba4ad'] = 'Formato de dirección URL específica en la generación de bloque de capas';
 $_MODULE['<{blocklayered}prestashop>blocklayered_7b250cb374c12c42a75227ba75df7779'] = 'Meta título:';
 $_MODULE['<{blocklayered}prestashop>blocklayered_a4020753b3e63fd8a1d0c0b2b33fc999'] = 'Especificar formato del meta título';
-$_MODULE['<{blocklayered}prestashop>blocklayered_b3786b970611c1a3809dd51b630812a7'] = '"%" no es una url válida';
+$_MODULE['<{blocklayered}prestashop>blocklayered_b3786b970611c1a3809dd51b630812a7'] = '\"%\" no es una url válida';
 $_MODULE['<{blocklayered}prestashop>blocklayered_c3ef60194d18cf4026d22051b3a19428'] = 'Indexable:';
 $_MODULE['<{blocklayered}prestashop>blocklayered_a075d40d1a15460220cbf564b7b9b591'] = 'Utilice este atributo en la URL generada por el módulo de navegación por capas';
 $_MODULE['<{blocklayered}prestashop>blocklayered_ccc12c5568381293a27db0232877937b'] = 'Nombre del filtro de template requerido (no puede estar vacio)';
@@ -57,10 +57,10 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_62f5d708d6ad1fa1ddd9429a65cccbe
 $_MODULE['<{blocklayered}prestashop>blocklayered_4071a0db922638ac9648539ea2ddaa8b'] = 'Categorias *especificas*';
 $_MODULE['<{blocklayered}prestashop>blocklayered_ef7de3f485174ff47f061ad27d83d0ee'] = 'seleccionadas';
 $_MODULE['<{blocklayered}prestashop>blocklayered_c2d0bf5ad42279c519cdcb4a94eb46b6'] = 'Seleccionar una asociación de tienda:';
-$_MODULE['<{blocklayered}prestashop>blocklayered_f72c75bdf80dc88b2529162f4947edc8'] = 'Por favor, seleccione al menos una categoría específica o seleccione "Todas las categorías".';
+$_MODULE['<{blocklayered}prestashop>blocklayered_f72c75bdf80dc88b2529162f4947edc8'] = 'Por favor, seleccione al menos una categoría específica o seleccione \"Todas las categorías\".';
 $_MODULE['<{blocklayered}prestashop>blocklayered_64646db703ca003a37bd1e73977a3a4d'] = 'Categorías a partir de esta plantilla';
 $_MODULE['<{blocklayered}prestashop>blocklayered_d758a9754eb9f36db05c22ad0c77e38e'] = 'Seleccione al menos una categoría con esta plantilla de filtro';
-$_MODULE['<{blocklayered}prestashop>blocklayered_5965d2ce192837f00d743d8a674382c1'] = 'Pulse el botón "Guardar esta selección" o cerrar la ventana para guardar';
+$_MODULE['<{blocklayered}prestashop>blocklayered_5965d2ce192837f00d743d8a674382c1'] = 'Pulse el botón \"Guardar esta selección\" o cerrar la ventana para guardar';
 $_MODULE['<{blocklayered}prestashop>blocklayered_fa03eb688ad8aa1db593d33dabd89bad'] = 'Raiz';
 $_MODULE['<{blocklayered}prestashop>blocklayered_8cf04a9734132302f96da8e113e80ce5'] = 'Inicio';
 $_MODULE['<{blocklayered}prestashop>blocklayered_b56c3bda503a8dc4be356edb0cc31793'] = 'Colapsar todos';

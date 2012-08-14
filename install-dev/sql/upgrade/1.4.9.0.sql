@@ -5,9 +5,8 @@ ALTER TABLE `PREFIX_category_product` DROP INDEX `category_product_index`, ADD P
 ALTER TABLE `PREFIX_cms_category_lang` DROP INDEX `category_lang_index`, ADD PRIMARY KEY (`id_cms_category`, `id_lang`);
 ALTER TABLE `PREFIX_order_tax` ADD `id_order_tax` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
 ALTER TABLE `PREFIX_feature_lang` ADD INDEX feature_name (`id_lang`, `name`);
-ALTER TABLE `PREFIX_state` ADD INDEX (`name`);
-ALTER TABLE `PREFIX_feature_lang` ADD INDEX feature_name (`id_lang`, `name`);
-ALTER TABLE `PREFIX_state` ADD INDEX (`name`);
+ALTER TABLE `PREFIX_state` ADD INDEX statename (`name`);
+ALTER TABLE `PREFIX_category` ADD INDEX nleftrightactive (`nleft`, `nright`, `active`);
 
 UPDATE `PREFIX_country` SET `zip_code_format` = 'NNNNN' WHERE `iso_code` = 'MC' LIMIT 1;
 UPDATE `PREFIX_county_zip_code` SET `to_zip_code` = `from_zip_code` WHERE `to_zip_code` = 0;

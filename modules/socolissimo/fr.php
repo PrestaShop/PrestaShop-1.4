@@ -2,6 +2,8 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{socolissimo}prestashop>ajax_607e1d854783c8229998ac2b5b6923d3'] = 'token invalide';
+$_MODULE['<{socolissimo}prestashop>ajax_67933de20c945d1759ab891fb9dc1fd7'] = 'Aucune information de livraison sélectionnée';
 $_MODULE['<{socolissimo}prestashop>socolissimo_42ab10dea7d96b9c353e0f5bae43ec20'] = 'La Poste';
 $_MODULE['<{socolissimo}prestashop>socolissimo_9e13e80360ceb625672531275f01ec1f'] = '\'Proposez à vos clients 5 modes de livraison via La Poste.';
 $_MODULE['<{socolissimo}prestashop>socolissimo_f8e355b97fa1be7a8d8c206aa66f0077'] = '\'Zone(s) du transporteur\'';
@@ -89,7 +91,6 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_e937c6393ce858786bd31a279b50572d'
 $_MODULE['<{socolissimo}prestashop>socolissimo_f109a88feec5ad3aeb82580c7a20ec31'] = 'Point de retrait';
 $_MODULE['<{socolissimo}prestashop>socolissimo_021944549c2795a6e4db23b92f198a5e'] = 'Adresse du point de retrait';
 $_MODULE['<{socolissimo}prestashop>socolissimo_ce8ae9da5b7cd6c3df2929543a9af92d'] = 'Email';
-$_MODULE['<{socolissimo}prestashop>socolissimo_de0758bc1a7fd6773bec6dbe20bad5b5'] = 'Erreur Fatale : Veuillez vérifier  que le JavaScript est activé et recommencer l’opération.';
 $_MODULE['<{socolissimo}prestashop>socolissimo_097eeaacf22dc38c4853b8358bdee47c'] = 'Erreur Fatale : Veuillez vérifier  que le JavaScript est activé et ';
 $_MODULE['<{socolissimo}prestashop>socolissimo_165e6d21e0a2cc9ebb32ca05f90e0fa7'] = 'recommencer';
 $_MODULE['<{socolissimo}prestashop>socolissimo_de8143ff850c56087e0723440819eff6'] = ' l’opération.';

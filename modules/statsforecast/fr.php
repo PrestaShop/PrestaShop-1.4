@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{statsforecast}prestashop>statsforecast_240c994d8b61c7bd68ac1c5182bbdb2e'] = 'Tableau de bord statistiques';
-$_MODULE['<{statsforecast}prestashop>statsforecast_b53bb8c5ac3b77a4667498709efba55d'] = 'Tous les montants sont exprimés HT.';
+$_MODULE['<{statsforecast}prestashop>statsforecast_8cfe257ea14b80e50c5d36d62be3757f'] = 'Tous les montants sont hors taxes. Les dates correspondent aux dates de facturation.';
 $_MODULE['<{statsforecast}prestashop>statsforecast_1ee1c44c2dc81681f961235604247b81'] = 'Mode :';
 $_MODULE['<{statsforecast}prestashop>statsforecast_03727ac48595a24daed975559c944a44'] = 'Jour';
 $_MODULE['<{statsforecast}prestashop>statsforecast_d2ce009594dcc60befa6a4e6cbeb71fc'] = 'Semaine';
@@ -17,6 +17,7 @@ $_MODULE['<{statsforecast}prestashop>statsforecast_e46b5c15331f34b9ff653fdf1ea0a
 $_MODULE['<{statsforecast}prestashop>statsforecast_1d34a18a13e480b0aa6a799bb8a49c1b'] = '% Com.';
 $_MODULE['<{statsforecast}prestashop>statsforecast_cc4616c718d99e1face99b5e46a5755c'] = 'Réducs.';
 $_MODULE['<{statsforecast}prestashop>statsforecast_899433c0e135bcfe0d93e9397630f86a'] = 'CA Produits';
+$_MODULE['<{statsforecast}prestashop>statsforecast_ea9cf7e47ff33b2be14e6dd07cbcefc6'] = 'Frais de port';
 $_MODULE['<{statsforecast}prestashop>statsforecast_96b0141273eabab320119c467cdcaf17'] = 'Total';
 $_MODULE['<{statsforecast}prestashop>statsforecast_b1897515d548a960afe49ecf66a29021'] = 'Moyenne';
 $_MODULE['<{statsforecast}prestashop>statsforecast_89c1265be62d3ba835a3d963db5956b0'] = 'Prévisions';

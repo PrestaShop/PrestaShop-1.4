@@ -8,6 +8,7 @@ $_MODULE['<{avalaratax}prestashop>avalaratax_6e25586fe78488784e764b8c7e523099'] 
 $_MODULE['<{avalaratax}prestashop>avalaratax_53c2b2432a6d2b3e69298041223f2677'] = 'Les produits que vous avez choisis ont été annulés.';
 $_MODULE['<{avalaratax}prestashop>avalaratax_580bc7347384fe1e3e2fdaf3930fdb00'] = 'Les règles de taxes pour les USA ont été réécrites par le module Avalara Tax';
 $_MODULE['<{avalaratax}prestashop>avalaratax_2929b1675a0788e25b46dd923bf8d6f4'] = 'Tax Code (Avalara)';
+$_MODULE['<{avalaratax}prestashop>avalaratax_453d38d159f47c6a572efab4dd8efb41'] = 'Afficher les taxes';
 $_MODULE['<{avalaratax}prestashop>avalaratax_56bb4e1f91985e7319c1d5cbe47096fe'] = 'L\'adresse que vous avez soumise a été validé.';
 $_MODULE['<{avalaratax}prestashop>avalaratax_45d416b0d62f0e9579a08fac59a8fe48'] = 'L\'erreur suivante a été générée pendant la validation de l\'adresse';
 $_MODULE['<{avalaratax}prestashop>avalaratax_ffea2d321be109fc7243cfeb515fe257'] = 'Choississez votre état (si applicable)';
@@ -36,6 +37,7 @@ $_MODULE['<{avalaratax}prestashop>avalaratax_dae8ace18bdcbcc6ae5aece263e14fe8'] 
 $_MODULE['<{avalaratax}prestashop>avalaratax_075f49c9bb1da54fd022ddcfb6a9f09b'] = 'Activer la validation d\'adresse';
 $_MODULE['<{avalaratax}prestashop>avalaratax_355fc749cbbfcba999612f3a91cd2667'] = 'Activer le calcul des taxes';
 $_MODULE['<{avalaratax}prestashop>avalaratax_4b8dfce98a161ad3ad9a5eab52225d86'] = 'Activer la normalisation des adresses en majuscule';
+$_MODULE['<{avalaratax}prestashop>avalaratax_9d0c2658dfe76ba5daa9f2c9af16cbf8'] = 'Activer le calcul des taxes en dehors de votre Etat';
 $_MODULE['<{avalaratax}prestashop>avalaratax_db669c6377ab90eef78800a48fd4a453'] = 'Temps de requête dépassé';
 $_MODULE['<{avalaratax}prestashop>avalaratax_783e8e29e6a8c3e22baa58a19420eb4f'] = 'secondes';
 $_MODULE['<{avalaratax}prestashop>avalaratax_5b092e4c3fc280f8d23bc52c544498d8'] = 'Rafraichir le cache des taxes tous les jours :';

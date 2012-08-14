@@ -10,6 +10,7 @@ $_LANGPDF['PDF_invoiceba160acb58001c904c57507da3689265'] = 'Commande n°';
 $_LANGPDF['PDF_invoice808a04117534f9dfb63b9accd7efc609'] = 'Siège social';
 $_LANGPDF['PDF_invoicea54cedc1e053a70d4a6319feccf531ca'] = 'Téléphone :';
 $_LANGPDF['PDF_invoice2babe53026309ed1bc4d26626dbaf9b3'] = 'Détails :';
+$_LANGPDF['PDF_invoice5bbca5da334d07a677e71b113ca54677'] = 'P.';
 $_LANGPDF['PDF_invoice15b57bef332e7e0327d89fe93711a954'] = 'Une version électronique est conservée sur votre compte. Pour y accéder, identifiez-vous sur le site';
 $_LANGPDF['PDF_invoiceb1fb57b55075a4a51cf83e44d0440358'] = 'avec vos identifiants (créés lors de votre première commande).';
 $_LANGPDF['PDF_invoiced98a07f84921b24ee30f86fd8cd85c3c'] = 'du';

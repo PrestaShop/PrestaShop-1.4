@@ -36,7 +36,7 @@ $_MODULE['<{blockwishlist}prestashop>managewishlist_0de9d09a36e820f9da7e87ab3678
 $_MODULE['<{blockwishlist}prestashop>managewishlist_0bb3e067c0514f5ff2d5a8e45fc0f4be'] = 'Nascondi info prodotto acquistato';
 $_MODULE['<{blockwishlist}prestashop>managewishlist_6fe88f5681da397d46fefe19b3020a6a'] = 'Mostra info prodotto acquistato';
 $_MODULE['<{blockwishlist}prestashop>managewishlist_30820a1bf6a285e45cda2beda3d7738d'] = 'Invia questa lista dei desideri ';
-$_MODULE['<{blockwishlist}prestashop>managewishlist_65a26fd603de62416ed333c7a8928713'] = 'Chiudi "invia questa lista dei desideri"';
+$_MODULE['<{blockwishlist}prestashop>managewishlist_65a26fd603de62416ed333c7a8928713'] = 'Chiudi \"invia questa lista dei desideri\"';
 $_MODULE['<{blockwishlist}prestashop>managewishlist_4b7d496eedb665d0b5f589f2f874e7cb'] = 'Descrizione del prodotto';
 $_MODULE['<{blockwishlist}prestashop>managewishlist_694e8d1f2ee056f98ee488bdc4982d73'] = 'Quantità';
 $_MODULE['<{blockwishlist}prestashop>managewishlist_502996d9790340c5fd7b86a5b93b1c9f'] = 'Priorità';

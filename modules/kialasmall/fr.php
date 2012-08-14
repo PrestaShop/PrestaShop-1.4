@@ -37,10 +37,8 @@ $_MODULE['<{kialasmall}prestashop>kialasmall_d89658c392fc66e0e5f7e4d2e1f2cc5d'] 
 $_MODULE['<{kialasmall}prestashop>kialasmall_9d9111b77edd02d8c7a2b3b3c02bb1c2'] = 'Critère de suivi des paquets ?';
 $_MODULE['<{kialasmall}prestashop>kialasmall_ce26601dac0dea138b7295f02b7620a7'] = 'Client';
 $_MODULE['<{kialasmall}prestashop>kialasmall_a240fa27925a635b08dc28c9e4f9216d'] = 'Commande';
-$_MODULE['<{kialasmall}prestashop>kialasmall_51299e0a386a12b89b81403902a124ea'] = 'URL a utiliser pour le webservice';
 $_MODULE['<{kialasmall}prestashop>kialasmall_d4dccb8ca2dac4e53c01bd9954755332'] = 'Enregistrer les réglages';
 $_MODULE['<{kialasmall}prestashop>kialasmall_4d7400be7c3ed888ad93f5355c1f8e55'] = 'Aucun relais Kiala trouvé';
-$_MODULE['<{kialasmall}prestashop>kialasmall_4d66080bbdca301e8c8fdc7ab1facb5e'] = '- Relais Kiala';
 $_MODULE['<{kialasmall}prestashop>kialasmall_a34c9abff690c30540446f5b1e47cc6c'] = 'Le délai de préparation est invalide.';
 $_MODULE['<{kialasmall}prestashop>kialasmall_59b513fa6fab9c46783cde69dde67f1a'] = 'Pays invalide.';
 $_MODULE['<{kialasmall}prestashop>kialasmall_c888438d14855d7d96a2724ee9c306bd'] = 'Réglages mis à jour';

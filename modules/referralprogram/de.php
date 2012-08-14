@@ -47,7 +47,7 @@ $_MODULE['<{referralprogram}prestashop>referralprogram-program_a86073a0c3b0bebf1
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_7532696b81dfc0b94a37e876677152c5'] = 'die Ihrem (n) Freund (en) gesendet wird.';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_ad3d06d03d94223fa652babc913de686'] = 'Bestätigen';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_59352cd5314a67c0fb10c964831920f3'] = 'Um Sponsor zu werden, müssen Sie eine mindestens   ausfüllen';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_ec7342814444c667ab93181b30b28e38'] = 'Diese Freunde haben noch nichts auf dieser Website bestellt, seit Sie sie sponsern, aber Sie können es erneut versuchen! Dazu markieren Sie die Kontrollkästchen des (r) Freundes (e) an, die Sie erinnern möchten, dann klicken Sie auf die Schaltfläche \\\"Meine(n) Freund (e) erinnern\\\"';
+$_MODULE['<{referralprogram}prestashop>referralprogram-program_ec7342814444c667ab93181b30b28e38'] = 'Diese Freunde haben noch nichts auf dieser Website bestellt, seit Sie sie sponsern, aber Sie können es erneut versuchen! Dazu markieren Sie die Kontrollkästchen des (r) Freundes (e) an, die Sie erinnern möchten, dann klicken Sie auf die Schaltfläche \"Meine(n) Freund (e) erinnern\"';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_3e717a04ff77cd5fa068d8ad9d3facc8'] = 'Letzte Einladung';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_9c9d4ed270f02c72124702edb192ff19'] = 'Meine(n) Freund (e) erinnern';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_8b9f390369560635a2ba5ba271d953df'] = 'Sie haben keine Freunde gesponsert.';

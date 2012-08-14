@@ -138,7 +138,7 @@ $_MODULE['<{mondialrelay}prestashop>configuration_0309a6c666a7a803fdb9db95de71cf
 $_MODULE['<{mondialrelay}prestashop>configuration_6c1674d14bf5f95742f572cddb0641a7'] = 'Bélgica';
 $_MODULE['<{mondialrelay}prestashop>configuration_06630c890abadde9228ea818ce52b621'] = 'Luxemburgo';
 $_MODULE['<{mondialrelay}prestashop>configuration_907eba32d950bfab68227fd7ea22999b'] = 'España';
-$_MODULE['<{mondialrelay}prestashop>configuration_0c24ec05a02c710cedd400e3680d8b81'] = 'Lista de método de envío \\\\ \\\'s';
+$_MODULE['<{mondialrelay}prestashop>configuration_0c24ec05a02c710cedd400e3680d8b81'] = 'Lista de método de envío \\\\\\\\ \'s';
 $_MODULE['<{mondialrelay}prestashop>configuration_14039af96b01e718a9c9d9c1259b6472'] = 'No hay métodos de envío creados';
 $_MODULE['<{mondialrelay}prestashop>configuration_daf999e234b6f358dda641bf381b685a'] = 'Envío de configuración';
 $_MODULE['<{mondialrelay}prestashop>header_e0626222614bdee31951d84c64e5e9ff'] = 'Seleccionar';

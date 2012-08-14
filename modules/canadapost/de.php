@@ -12,7 +12,7 @@ $_MODULE['<{canadapost}prestashop>canadapost_bfc00de34bc04366e7fee516adf7dca5'] 
 $_MODULE['<{canadapost}prestashop>canadapost_386aad80d82f8245e9ef80352a2240e8'] = 'Alle Artikel in einem Paket';
 $_MODULE['<{canadapost}prestashop>canadapost_8aaac24ade446a004c434b58e29afe85'] = 'Split ein Stück pro Paket';
 $_MODULE['<{canadapost}prestashop>canadapost_9c536dc938b99309eab40c9a06fc1c00'] = 'Kanada Beitrag Modulstatus';
-$_MODULE['<{canadapost}prestashop>canadapost_3e203b9a16f360b88d90bba6eb61ce61'] = 'Füllen Sie die "Allgemeine Einstellungen" Form';
+$_MODULE['<{canadapost}prestashop>canadapost_3e203b9a16f360b88d90bba6eb61ce61'] = 'Füllen Sie die \"Allgemeine Einstellungen\" Form';
 $_MODULE['<{canadapost}prestashop>canadapost_8c0987b9315003df7dae7f130e3cf58e'] = 'Wählen Sie Ihre verfügbare Lieferservice';
 $_MODULE['<{canadapost}prestashop>canadapost_e20f6d6f13fe70e78f6e2ab488493ccf'] = 'Webservice-Test-Verbindung';
 $_MODULE['<{canadapost}prestashop>canadapost_52f4393e1b52ba63e27310ca92ba098c'] = 'General Settings';
@@ -41,7 +41,7 @@ $_MODULE['<{canadapost}prestashop>canadapost_cf1580798f7aba85d519afadf1ffd886'] 
 $_MODULE['<{canadapost}prestashop>canadapost_02546d525ab356bd43c91e6b07447496'] = 'Es gibt keinen Staat Konfiguration für dieses Land';
 $_MODULE['<{canadapost}prestashop>canadapost_0ddc2a5660f7d095fff34d6b93077c80'] = 'Service-Konfiguration';
 $_MODULE['<{canadapost}prestashop>canadapost_8d6bd50f3fe3ee2f4513066c25e5fb4a'] = 'Calcul Modus';
-$_MODULE['<{canadapost}prestashop>canadapost_96cf4eb97c979b15c96683bbe10fc84c'] = 'Mit dem calcul Modus "Alle Elemente in einem Paket" verwendet automatisch Standard-Packungsgröße und Lieferdienste. Besonderheiten Konfigurationen für Kategorien oder das Produkt nicht verwenden.';
+$_MODULE['<{canadapost}prestashop>canadapost_96cf4eb97c979b15c96683bbe10fc84c'] = 'Mit dem calcul Modus \"Alle Elemente in einem Paket\" verwendet automatisch Standard-Packungsgröße und Lieferdienste. Besonderheiten Konfigurationen für Kategorien oder das Produkt nicht verwenden.';
 $_MODULE['<{canadapost}prestashop>canadapost_5cdd307ba6e260beb4801c0c10e22a3a'] = 'Delivery Service';
 $_MODULE['<{canadapost}prestashop>canadapost_78945de8de090e90045d299651a68a9b'] = 'Verfügbar';
 $_MODULE['<{canadapost}prestashop>canadapost_2d25c72c1b18e562f6654fff8e11711e'] = 'Nicht verfügbar';
@@ -55,7 +55,7 @@ $_MODULE['<{canadapost}prestashop>canadapost_e7bb7d2ee4d79c9b48cfc443781f00b5'] 
 $_MODULE['<{canadapost}prestashop>canadapost_9d1b485edd50e6fbd288b340b386b07d'] = 'Kein Fehler Beschreibung gefunden';
 $_MODULE['<{canadapost}prestashop>canadapost_c888438d14855d7d96a2724ee9c306bd'] = 'Einstellungen aktualisiert';
 $_MODULE['<{canadapost}prestashop>canadapost_b9284bff13acffdd879ef4ac7fca5234'] = 'Einstellungen fehlgeschlagen';
-$_MODULE['<{canadapost}prestashop>canadapost_67e19ffdaa0a11e69349810403a9727e'] = 'Sie haben auf "Allgemeine Einstellungen" Registerkarte, bevor Sie diese Registerkarte konfigurieren.';
+$_MODULE['<{canadapost}prestashop>canadapost_67e19ffdaa0a11e69349810403a9727e'] = 'Sie haben auf \"Allgemeine Einstellungen\" Registerkarte, bevor Sie diese Registerkarte konfigurieren.';
 $_MODULE['<{canadapost}prestashop>canadapost_a37b48e8684078c0620a997b3baeee9f'] = 'In dieser Registerkarte können Sie eine spezielle Konfiguration für jede Kategorie.';
 $_MODULE['<{canadapost}prestashop>canadapost_f421827ff72ef9a61fb27aa0de62f1e4'] = 'ID Config';
 $_MODULE['<{canadapost}prestashop>canadapost_3adbdb3ac060038aa0e6e6c138ef9873'] = 'Kategorie';

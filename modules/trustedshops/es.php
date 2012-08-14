@@ -77,7 +77,7 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_a8fcbddffdaccc6daa529aa9c3
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_5abbd73fc5189212c57adfb43adac459'] = 'Certificado de test';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_109715467b74bd66639faa5673f707c1'] = 'Error desconocido';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_d4eb1e83b0ea3af3e2b8a6e7b7984d9c'] = 'el campo % es erróneo, compruebe que lo ha rellenado correctamente';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_c230eb5eefd15fa219ff97d42e461a7d'] = 'Algunos parámetros enviados al método "requestForProtectionV2" son falsos o inexistentes.';
+$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_c230eb5eefd15fa219ff97d42e461a7d'] = 'Algunos parámetros enviados al método \"requestForProtectionV2\" son falsos o inexistentes.';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_b656f5f53cf7ee9bbfe7452685f71e30'] = 'El API de Trusted Shops envía un error que concierne a la aplicación n°';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_fdf1d399a4b88e3c62ff925295a4bb0c'] = 'El número % 1$d de la aplicación Trusted Shops a funcionado con éxito. El número de garantía es: %2$d';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_fd511061055fcb2d10d31a51be3539d0'] = 'Link de registro';

@@ -15,7 +15,7 @@ $_MODULE['<{sekeywords}prestashop>sekeywords_03e0e9ef8b776b5f7bcc590e51bfa63b'] 
 $_MODULE['<{sekeywords}prestashop>sekeywords_7b48f6cc4a1dde7fca9597e717c2465f'] = 'Nessuna parola chiave';
 $_MODULE['<{sekeywords}prestashop>sekeywords_6602bbeb2956c035fb4cb5e844a4861b'] = 'Guida';
 $_MODULE['<{sekeywords}prestashop>sekeywords_edf217a2ec10f241acd60a8ef6535798'] = 'Identifica parole chiave motori di ricerca estenri';
-$_MODULE['<{sekeywords}prestashop>sekeywords_924457ce27cffc22fd7a54cd30783180'] = 'Ci sono molti modi per trovare un sito web, ma uno dei più comuni è quello di trovarlo con un motore di ricerca. Identificare la maggior parte delle parole chiave "visitatore-making"   inserite dai nuovi visitatori è molto importante, ti permette di vedere quale prodotto mettere in vista se vuoi più visitatori e clienti.';
+$_MODULE['<{sekeywords}prestashop>sekeywords_924457ce27cffc22fd7a54cd30783180'] = 'Ci sono molti modi per trovare un sito web, ma uno dei più comuni è quello di trovarlo con un motore di ricerca. Identificare la maggior parte delle parole chiave \"visitatore-making\"   inserite dai nuovi visitatori è molto importante, ti permette di vedere quale prodotto mettere in vista se vuoi più visitatori e clienti.';
 $_MODULE['<{sekeywords}prestashop>sekeywords_359f9e79e746fa9f684e5cda9e60ca2e'] = 'Come funziona?';
 $_MODULE['<{sekeywords}prestashop>sekeywords_ac8123ffbef766c92bed58647a3812ca'] = 'Quando un visitatore arriva al tuo sito web, il server conosce la sua posizione precedente. Questo modulo analizza l\'URL e trova le parole chiave in esso. Attualmente, gestisce i seguenti motori di ricerca:';
 $_MODULE['<{sekeywords}prestashop>sekeywords_be5d5d37542d75f93a87094459f76678'] = 'e';

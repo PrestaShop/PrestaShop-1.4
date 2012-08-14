@@ -54,7 +54,7 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_d999f792aee7c730cdc95f6aff4aa43
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_99e509958c21ac35438651547a7bb035'] = 'Módulo de estado Fedex ';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_d23a9177c3c7256ede85643a19335afb'] = '¡Transportista FEDEX  está bien configurado y en línea!';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_5bc95bc43c48a735773d4182dcf526fb'] = 'Transportista FEDEX no está configurado todavía, usted tiene que:';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_3e203b9a16f360b88d90bba6eb61ce61'] = 'Cumplimentar el impreso "Configuración general"';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_3e203b9a16f360b88d90bba6eb61ce61'] = 'Cumplimentar el impreso \"Configuración general\"';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_8c0987b9315003df7dae7f130e3cf58e'] = 'Seleccione el servicio de entrega disponible que desee';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_e20f6d6f13fe70e78f6e2ab488493ccf'] = 'Conexión de prueba al servicio web';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_807b063fceafae2c51dc6afb45612389'] = 'SOAP está habilitado';
@@ -94,7 +94,7 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_ce135482b30deedcc0046df41c12de7
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_9a361a1f786db3dfe07aae42752d3446'] = 'Tipo de embalaje por defecto';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_4664d1ae1832bed2246e8a6850365075'] = 'Seleccione un tipo de embalaje por defecto...';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_8d6bd50f3fe3ee2f4513066c25e5fb4a'] = 'Modode cálculo';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c5238c5f72dee585afdf4bddf6de518e'] = 'Utilizando el modo de cálculo "Todos los artículos en un solo paquete" utilizará automáticamente el tamaño por defecto de embalaje, tipo de embalaje y entrega. No se utilizarán las configuraciones específicas de las categorías y de los productos.';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c5238c5f72dee585afdf4bddf6de518e'] = 'Utilizando el modo de cálculo \"Todos los artículos en un solo paquete\" utilizará automáticamente el tamaño por defecto de embalaje, tipo de embalaje y entrega. No se utilizarán las configuraciones específicas de las categorías y de los productos.';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_5cdd307ba6e260beb4801c0c10e22a3a'] = 'Servicio de entrega';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_d63e135774e62574e2a1921267dad142'] = 'Elija el servicio de entrega que estará disponible para los clientes.';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_f1206f9fadc5ce41694f69129aecac26'] = 'Configurar';
@@ -111,7 +111,7 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_729d4f7143a3de7b0ed18de667fdf4d
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_9d1b485edd50e6fbd288b340b386b07d'] = 'No se encuentra descripción del error';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c888438d14855d7d96a2724ee9c306bd'] = 'Configuración actualizada';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_b9284bff13acffdd879ef4ac7fca5234'] = 'Configuración no actualizada';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_67e19ffdaa0a11e69349810403a9727e'] = 'Usted tiene que configurar "General Settings" antes de utilizar esta ficha.';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_67e19ffdaa0a11e69349810403a9727e'] = 'Usted tiene que configurar \"General Settings\" antes de utilizar esta ficha.';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_a37b48e8684078c0620a997b3baeee9f'] = 'En esta ficha, puede establecer una configuración específica para cada categoría.';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_f421827ff72ef9a61fb27aa0de62f1e4'] = 'Id. de configuración';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_3adbdb3ac060038aa0e6e6c138ef9873'] = 'Categoría';

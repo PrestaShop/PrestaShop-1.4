@@ -206,7 +206,8 @@ CREATE TABLE `PREFIX_category` (
   `position` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id_category`),
   KEY `category_parent` (`id_parent`),
-  KEY `nleftright` (`nleft`,`nright`)
+  KEY `nleftright` (`nleft`,`nright`),
+  KEY `nleftrightactive` (`nleft`,`nright`,`active`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_category_group` (

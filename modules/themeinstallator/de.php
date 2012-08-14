@@ -13,7 +13,7 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_c186217583219f4cd040d9e
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_0210b6456cdccad569cb56026bb0f689'] = 'Schlechte Konfigurationsdatei';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_5b6cf869265c13af8566f192b4ab3d2a'] = 'Dokumentation';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_6bdbe5a8a9f446d4d758ee4c22648771'] = 'Sie möchten eventuell die Dokumentation prüfen';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_7348fd57bfb5c837fc57e54fcfeeed9e'] = 'Rechtsklick auf den Namen  und "Link speichern unter" wählen';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_7348fd57bfb5c837fc57e54fcfeeed9e'] = 'Rechtsklick auf den Namen  und \"Link speichern unter\" wählen';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_b857ef1f431c5f3290dc5b5e644826a6'] = 'Folgende Module wurden installiert';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_22c765d777eb4ca6b4292bcbb596872e'] = 'Folgende Module wurden deaktiviert';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_e501dc865768ac08d49c129a23c3ae09'] = 'Folgende Module wurden aktiviert';

@@ -425,7 +425,7 @@ $_LANG['order-opc-new-account_0f68b904e33d9ac04605aecc958bcf52'] = 'Informations
 $_LANG['order-opc-new-account_fe66abce284ec8589e7d791185b5c442'] = 'Téléphone';
 $_LANG['order-opc-new-account_41c2fff4867cc204120f001e7af20f7a'] = 'Téléphone portable';
 $_LANG['order-opc-new-account_ae7bdef7fe2bbbbf02c11e92c5fceb40'] = 'Mon adresse';
-$_LANG['order-opc-new-account_aee0c5ed0554d46465080ed36d1d93ab'] = 'Je souhaite utiliser une autre adresse pour la facturation';
+$_LANG['order-opc-new-account_a28a0b27995dc44fe4dc857d2cbb2c6c'] = 'Utiliser une autre adresse pour la facturation';
 $_LANG['order-opc-new-account_601d8c4b9f72fc1862013c19b677a499'] = 'Adresse de facturation';
 $_LANG['order-opc-new-account_d30f507473129e70c4b962ceccf175cf'] = 'Code postal';
 $_LANG['order-opc-new-account_2eac22e71eedb5bdb8f94a1354964017'] = 'Mon adresse de facturation';
@@ -473,8 +473,7 @@ $_LANG['order-return_2b79d007c64009edf92d06f7cb280b25'] = 'Tous les produits doi
 $_LANG['order-return_f3ba7c2fb2c65ad6fa1b1efd30573a8d'] = 'Veuillez imprimer ce';
 $_LANG['order-return_28128d7dd99113d5978358aa2f4ab5f4'] = 'document PDF';
 $_LANG['order-return_3ae26d5af95a7494d0101d3e129d91af'] = 'et le glisser dans votre colis.';
-$_LANG['order-return_66ee99389edd5e92826b6b9556a7eab8'] = 'Voir le document PDF';
-$_LANG['order-return_b1dceda8ca0eeb9fd9a4457bb613b67b'] = 'le colis doit être livré à l\'adresse correcte';
+$_LANG['order-return_4e5d39d73da2c398df4e78ede1893dd2'] = 'Merci d\'envoyer votre colis à l\'adresse indiquée dans ce même document';
 $_LANG['order-return_ef72e93c63d4207d37a34c778cf13fc8'] = 'Dès réception de votre colis nous procéderons alors au remboursement du montant de votre commande et vous en informerons par mail.';
 $_LANG['order-return_2d0620950a4d96ae301ba7a98e528714'] = 'Merci de nous contacter pour toute question.';
 $_LANG['order-return_f637120d9f24c366b382ede6c21cddf0'] = 'Si les conditions de retour listées ci-dessus ne sont pas respectées, nous nous réservons le droit de refuser votre colis ou votre remboursement.';
@@ -733,3 +732,5 @@ $_LANG['live_edit_79030d996976f29a5e986a42d8f026e5'] = 'Impossible d\'enregistre
 $_LANG['live_edit_3c5b87f318f203adbfcc5d6a68959359'] = 'Impossible de charger la liste des modules';
 $_LANG['live_edit_c9cc8cce247e49bae79f15173ce97354'] = 'Enregistrer';
 $_LANG['live_edit_d8dcfab18b3a6eba56d617dd1dcb1ba7'] = 'Fermer Live Edit';
+
+?>

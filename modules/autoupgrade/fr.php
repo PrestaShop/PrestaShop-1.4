@@ -50,7 +50,7 @@ $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_b3884f9e8ed49a8d7165787d3ade
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_eb5f6603ebdf00a17f4100bfe5836041'] = 'Impossible de trouver le répertoire de mise à jour dans le dossier install';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_aca3b718a294e14a1c3e9901c803fde5'] = 'Impossible de trouver les scripts de mise à jour sql. Vérifiez que le dossier %s n\'est pas vide';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_580e4b216e324f675f0237cdb34b6c2d'] = 'Pas de mise à jour disponible';
-$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_0efc029bbb393369e39f0e86a787a373'] = 'Erreur lors du chargement du fichier « \\%s.sql »';
+$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_0efc029bbb393369e39f0e86a787a373'] = 'Erreur lors du chargement du fichier « %s.sql »';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_2024c314c01cab270e29326d7961f6ac'] = 'Une erreur s\'est produite pendant la mise à jour de la base de données';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_63395ea735a7c8a23e431404c93f58ea'] = 'Mise à jour de la base de données Ok';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_952347701fb62e45540774cadf68b652'] = '[IGNORE] le répertoire %s n\'existe pas et ne peut pas être vidé.';
@@ -74,7 +74,7 @@ $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_0438424c05d45646dc089ef15df7
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_222102295c3c6626ff141687b0f49b6b'] = 'Rien à restaurer';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_02bc4d641114da206341b670cdb417ce'] = '%s fichier(s) seront supprimés avant la restauration des fichiers';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_3fac24768152807570b7330bcd7a8d6c'] = 'L\'archive de sauvegarde %s n\'existe pas';
-$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_25f4996684554fd5dd5a487cd7d79288'] = 'Le fichier \\%s\" n\'existe pas\"';
+$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_25f4996684554fd5dd5a487cd7d79288'] = 'Le fichier %s\" n\'existe pas\"';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_2a2c187bdb804ba79fd4bf8972ba5073'] = 'Impossible de supprimer les fichiers mis à jour.';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_7575346d53af6b5bb70539f2cf9e87ea'] = 'Fichiers de mise à jour ont été supprimés.';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_bd268461738946d6d9e4ad51508b2816'] = 'fichiers de mise à jour ont été supprimés.';

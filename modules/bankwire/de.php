@@ -12,7 +12,7 @@ $_MODULE['<{bankwire}prestashop>bankwire_ccab155f173ac76f79eb192703f86b18'] = 'K
 $_MODULE['<{bankwire}prestashop>bankwire_444bcb3a3fcf8389296c49467f27e1d6'] = 'ok';
 $_MODULE['<{bankwire}prestashop>bankwire_c888438d14855d7d96a2724ee9c306bd'] = 'Einstellungen aktualisiert';
 $_MODULE['<{bankwire}prestashop>bankwire_fcec4d73cccd149a2d18695fd8785f88'] = 'Dieses Modul ermöglicht Ihnen Zahlungen per Banküberweisung.';
-$_MODULE['<{bankwire}prestashop>bankwire_b6af2d31afe71aedcceca73cc27fec29'] = 'Wenn der Kunde diese Zahlungsmethode wählt, wird der Bestellstatus auf "Wartet auf Zahlung" umgestellt. ';
+$_MODULE['<{bankwire}prestashop>bankwire_b6af2d31afe71aedcceca73cc27fec29'] = 'Wenn der Kunde diese Zahlungsmethode wählt, wird der Bestellstatus auf \"Wartet auf Zahlung\" umgestellt. ';
 $_MODULE['<{bankwire}prestashop>bankwire_0daeb8f6c1874ec9442e821b524d37c1'] = 'Aus diesem Grund müssen Sie die Bestellung manuell bestätigen, sobald Sie die Überweisung erhalten.';
 $_MODULE['<{bankwire}prestashop>bankwire_5dd532f0a63d89c5af0243b74732f63c'] = 'Kontaktdetails';
 $_MODULE['<{bankwire}prestashop>bankwire_17e6954ea60d238857324fea1f10b8f3'] = 'Bitte spezifizieren Sie die Bankverbindungsdetails für Kunden.';
@@ -35,7 +35,7 @@ $_MODULE['<{bankwire}prestashop>payment_execution_e2c147f82d998eeeb147ae172a31a8
 $_MODULE['<{bankwire}prestashop>payment_execution_a7a08622ee5c8019b57354b99b7693b2'] = 'Bitte wählen Sie eine aus:';
 $_MODULE['<{bankwire}prestashop>payment_execution_2c1ce705702e11fd5e2188c2353c0c86'] = 'Wir nehmen folgende Währung per Banküberweisung an:';
 $_MODULE['<{bankwire}prestashop>payment_execution_3dd021316505c0204989f984246c6ff1'] = 'Die Kontoinformationen zur Banküberweisung stehen auf der folgenden Seite.';
-$_MODULE['<{bankwire}prestashop>payment_execution_0881a11f7af33bc1b43e437391129d66'] = 'Bitte bestätigen Sie Ihre Bestellung, indem Sie auf "BESTELLEN" klicken';
+$_MODULE['<{bankwire}prestashop>payment_execution_0881a11f7af33bc1b43e437391129d66'] = 'Bitte bestätigen Sie Ihre Bestellung, indem Sie auf \"BESTELLEN\" klicken';
 $_MODULE['<{bankwire}prestashop>payment_execution_569fd05bdafa1712c4f6be5b153b8418'] = 'Andere Zahlungsmethoden';
 $_MODULE['<{bankwire}prestashop>payment_execution_46b9e3665f187c739c55983f757ccda0'] = 'BESTELLEN';
 $_MODULE['<{bankwire}prestashop>payment_return_2e2117b7c81aa9ea6931641ea2c6499f'] = 'Ihre Bestellung vom';

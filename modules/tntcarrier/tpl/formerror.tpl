@@ -25,7 +25,7 @@
 *}
 <br/>
 <fieldset style="width:400px">
-  <legend><img src="../img/admin/delivery.gif" />{l s='Shipping information'}</legend>
+  <legend><img src="../img/admin/delivery.gif" alt="" />{l s='Shipping information'}</legend>
   {$var.error}
   <br/>
   {if $var.errorFriendly != ''}

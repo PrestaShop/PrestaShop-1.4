@@ -10,7 +10,7 @@ $_MODULE['<{ogone}prestashop>hookorderconfirmation_64430ad2835be8ad60c59e7d44e4b
 $_MODULE['<{ogone}prestashop>hookorderconfirmation_8de637e24570c1edb0357826a2ad5aea'] = 'Nous avons constaté un problème avec votre commande. Si vous pensez que c\'est une erreur, merci de contacter notre';
 $_MODULE['<{ogone}prestashop>ogone_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Configuration enregistrée';
 $_MODULE['<{ogone}prestashop>ogone_6a26f548831e6a8c26bfbbd9f6ec61e0'] = 'Aide';
-$_MODULE['<{ogone}prestashop>ogone_879dd0a17cb07d91581b85fa6ade410b'] = ' ';
+$_MODULE['<{ogone}prestashop>ogone_879dd0a17cb07d91581b85fa6ade410b'] = 'Ogone Payment Services est le service de paiement leader en Europe, avec une couverture mondiale.';
 $_MODULE['<{ogone}prestashop>ogone_1e7bcd8050c5264ba8ea688bdb1d999b'] = 'Ogone est l’un des acteurs majeurs du paiement en ligne en Europe avec plus de %1$s35 000 clients%2$s, répartis dans %1$s45 pays%2$s.';
 $_MODULE['<{ogone}prestashop>ogone_96c968b4187bdfd7fdf213816aa20998'] = 'Grâce à ses partenariats avec plus de %1$s200 banques et acquéreurs répartis%2$s sur les cinq continents, Ogone propose aux e-commerçants une plateforme capable de consolider la gestion plus de %1$s80 moyens de paiement internationaux et locaux%2$s.';
 $_MODULE['<{ogone}prestashop>ogone_3936e6f93396b090fa269b25ebcffeac'] = 'Pour activer votre compte, il vous suffit de disposer d’un contrat de VAD (Vente à Distance) auprès d’une banque.';

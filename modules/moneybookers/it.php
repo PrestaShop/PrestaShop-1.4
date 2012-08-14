@@ -74,7 +74,7 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_7a038bedf7925ddfe9a628ed750bf9a
 $_MODULE['<{moneybookers}prestashop>moneybookers_e2571078c4c457621378b3ae187771c7'] = 'La parola segreta è utilizzata per rafforzare la sicurezza dei pagamenti.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_6c6df049c4f3fb886250d59a4f0cf3b6'] = 'La password viene utilizzata solo per collegare in modo sicuro al tuo conto Moneybookers. Se cambia la password, non influenzerà la tua parola segreta. Quindi si consiglia di avere la tua password diversa dalla tua parola segreta.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_4746f98d01ce62cd5805981a289d182c'] = 'Dove posso trovare la mia parola segreta?';
-$_MODULE['<{moneybookers}prestashop>moneybookers_72d809da732bc81a8a81fede00831836'] = 'Una volta che il tuo account è stato convalidato, vai al tuo account nel "Mercante Strumenti"  sezione. Lì, si sarà in grado di definire la tua parola segreta.';
+$_MODULE['<{moneybookers}prestashop>moneybookers_72d809da732bc81a8a81fede00831836'] = 'Una volta che il tuo account è stato convalidato, vai al tuo account nel \"Mercante Strumenti\"  sezione. Lì, si sarà in grado di definire la tua parola segreta.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_fd432cdfbae76a7ebde57e6fa44ad90b'] = 'Spunta i';
 $_MODULE['<{moneybookers}prestashop>moneybookers_cf189f988336fea71f05010d1525be9c'] = 'metodi di pagamento internazionali';
 $_MODULE['<{moneybookers}prestashop>moneybookers_8298231c293193e2ab9ac388106edac4'] = 'che si desidera attivare:';

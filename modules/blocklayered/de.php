@@ -10,7 +10,7 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_6252c0f2c2ed83b7b06dfca86d4650b
 $_MODULE['<{blocklayered}prestashop>blocklayered_f39f64ad2722b269d9b6cb2ec97ba4ad'] = 'Bestimmten Format in url Block geschichtet Generation';
 $_MODULE['<{blocklayered}prestashop>blocklayered_7b250cb374c12c42a75227ba75df7779'] = 'Meta Titel:';
 $_MODULE['<{blocklayered}prestashop>blocklayered_a4020753b3e63fd8a1d0c0b2b33fc999'] = 'Spezifische Format für Meta-Titel';
-$_MODULE['<{blocklayered}prestashop>blocklayered_b3786b970611c1a3809dd51b630812a7'] = '"%s" ist keine gültige URL';
+$_MODULE['<{blocklayered}prestashop>blocklayered_b3786b970611c1a3809dd51b630812a7'] = '\"%s\" ist keine gültige URL';
 $_MODULE['<{blocklayered}prestashop>blocklayered_c3ef60194d18cf4026d22051b3a19428'] = 'Wendeschneidplatten:';
 $_MODULE['<{blocklayered}prestashop>blocklayered_a075d40d1a15460220cbf564b7b9b591'] = 'Verwenden Sie dieses Attribut in url durch die Modul-Block Layered Navigation generiert';
 $_MODULE['<{blocklayered}prestashop>blocklayered_ccc12c5568381293a27db0232877937b'] = 'Filter Template-Namen erforderlich (darf nicht leer sein)';
@@ -55,10 +55,10 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_99cdd6365310333a594b16e5658eee5
 $_MODULE['<{blocklayered}prestashop>blocklayered_62f5d708d6ad1fa1ddd9429a65cccbea'] = 'Alle Kategorien';
 $_MODULE['<{blocklayered}prestashop>blocklayered_ef7de3f485174ff47f061ad27d83d0ee'] = 'ausgewählt';
 $_MODULE['<{blocklayered}prestashop>blocklayered_c2d0bf5ad42279c519cdcb4a94eb46b6'] = 'Wählen Sie die Shop-Zuordnung:';
-$_MODULE['<{blocklayered}prestashop>blocklayered_f72c75bdf80dc88b2529162f4947edc8'] = 'Bitte wählen Sie mindestens eine bestimmte Kategorie oder wählen Sie "Alle Kategorien".';
+$_MODULE['<{blocklayered}prestashop>blocklayered_f72c75bdf80dc88b2529162f4947edc8'] = 'Bitte wählen Sie mindestens eine bestimmte Kategorie oder wählen Sie \"Alle Kategorien\".';
 $_MODULE['<{blocklayered}prestashop>blocklayered_64646db703ca003a37bd1e73977a3a4d'] = 'Kategorien mit dieser Vorlage';
 $_MODULE['<{blocklayered}prestashop>blocklayered_d758a9754eb9f36db05c22ad0c77e38e'] = 'Wählen Sie eine oder mehrere Kategorien mit diesem Filter-Vorlage';
-$_MODULE['<{blocklayered}prestashop>blocklayered_5965d2ce192837f00d743d8a674382c1'] = 'Drücken Sie "Save this selection" oder das Fenster schließen, um zu sparen';
+$_MODULE['<{blocklayered}prestashop>blocklayered_5965d2ce192837f00d743d8a674382c1'] = 'Drücken Sie \"Save this selection\" oder das Fenster schließen, um zu sparen';
 $_MODULE['<{blocklayered}prestashop>blocklayered_fa03eb688ad8aa1db593d33dabd89bad'] = 'Standardpfad';
 $_MODULE['<{blocklayered}prestashop>blocklayered_8cf04a9734132302f96da8e113e80ce5'] = 'Startseite';
 $_MODULE['<{blocklayered}prestashop>blocklayered_b56c3bda503a8dc4be356edb0cc31793'] = 'Alle zuschlagen';

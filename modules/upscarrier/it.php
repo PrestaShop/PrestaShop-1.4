@@ -90,7 +90,7 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_da42caf26ef85de3d7e48e16ca60b891'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_8d2ee0603dfce09b57d60db628cde269'] = 'Seleziona un tipo di confezione';
 $_MODULE['<{upscarrier}prestashop>upscarrier_795de10b1bdcb843b3703c63ad577fc6'] = 'Seleziona un tipo di confezione dalla lista.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_8d6bd50f3fe3ee2f4513066c25e5fb4a'] = 'Calcul modalità';
-$_MODULE['<{upscarrier}prestashop>upscarrier_4c9ed5fa194fd103349298c2ab04950e'] = 'Utilizzando la modalità di calcul "Tutti gli elementi in un unico pacchetto"  utilizzerà automaticamente imballaggio dimensione predefinita, il tipo di confezionamento e di servizi di consegna. Configurazioni specifiche per le categorie o prodotto non sarà utilizzato.';
+$_MODULE['<{upscarrier}prestashop>upscarrier_4c9ed5fa194fd103349298c2ab04950e'] = 'Utilizzando la modalità di calcul \"Tutti gli elementi in un unico pacchetto\"  utilizzerà automaticamente imballaggio dimensione predefinita, il tipo di confezionamento e di servizi di consegna. Configurazioni specifiche per le categorie o prodotto non sarà utilizzato.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_5cdd307ba6e260beb4801c0c10e22a3a'] = 'Servizio di consegna';
 $_MODULE['<{upscarrier}prestashop>upscarrier_78945de8de090e90045d299651a68a9b'] = 'Disponibile';
 $_MODULE['<{upscarrier}prestashop>upscarrier_2d25c72c1b18e562f6654fff8e11711e'] = 'Non disponibile';
@@ -109,7 +109,7 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_47e299a1a983c22c0ac4c3a696e54e1b'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_9d1b485edd50e6fbd288b340b386b07d'] = 'Nessuna descrizione dell\'errore trovata';
 $_MODULE['<{upscarrier}prestashop>upscarrier_c888438d14855d7d96a2724ee9c306bd'] = 'Impostazioni aggiornate';
 $_MODULE['<{upscarrier}prestashop>upscarrier_b9284bff13acffdd879ef4ac7fca5234'] = 'Impostazioni non riuscite';
-$_MODULE['<{upscarrier}prestashop>upscarrier_67e19ffdaa0a11e69349810403a9727e'] = 'È necessario configurare il tab "Impostazioni generali"  prima di utilizzare questo tab';
+$_MODULE['<{upscarrier}prestashop>upscarrier_67e19ffdaa0a11e69349810403a9727e'] = 'È necessario configurare il tab \"Impostazioni generali\"  prima di utilizzare questo tab';
 $_MODULE['<{upscarrier}prestashop>upscarrier_a37b48e8684078c0620a997b3baeee9f'] = 'In questo tab è possibile impostare una configurazione specifica per ogni categoria.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_f421827ff72ef9a61fb27aa0de62f1e4'] = 'Config ID';
 $_MODULE['<{upscarrier}prestashop>upscarrier_3adbdb3ac060038aa0e6e6c138ef9873'] = 'Categoria';

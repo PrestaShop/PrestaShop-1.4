@@ -83,11 +83,6 @@ class CMSCategoryCore extends ObjectModel
 	protected $table = 'cms_category';
 	protected $identifier = 'id_cms_category';
 
-	public function __construct($id_cms_category = null, $id_lang = null)
-	{
-		parent::__construct($id_cms_category, $id_lang);
-	}
-
 	public function getFields()
 	{
 		parent::validateFields();
