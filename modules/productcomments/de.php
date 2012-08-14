@@ -46,7 +46,7 @@ $_MODULE['<{productcomments}prestashop>productcomments_068f80c7519d0528fb08e8213
 $_MODULE['<{productcomments}prestashop>productcomments_af1b98adf7f686b84cd0b443e022b7a0'] = 'Kategorien';
 $_MODULE['<{productcomments}prestashop>productcomments_b718adec73e04ce3ec720dd11a06a308'] = 'ID';
 $_MODULE['<{productcomments}prestashop>productcomments_b9aefa40a54680bb258f9f9569290fae'] = 'Name des Produkts';
-$_MODULE['<{productcomments}prestashop>productcomments_99121ab27aaa7472cfada9071c5ba434'] = 'Name der Kategorie';
+$_MODULE['<{productcomments}prestashop>productcomments_99121ab27aaa7472cfada9071c5ba434'] = 'Name der Kategorie ';
 $_MODULE['<{productcomments}prestashop>productcomments_fd4b5401d4d3c7d32d158bfc1e552f3b'] = 'Bitte tragen Sie Ihren Namen ein';
 $_MODULE['<{productcomments}prestashop>productcomments_7b2f2ea0f690ef3c2fc9bba0e4bfbc4c'] = 'Ungültiger Kommentartext gepostet.';
 $_MODULE['<{productcomments}prestashop>productcomments_f88dc17737f7fdd4464b2eb922a8f133'] = 'Ein Fehler bist eim Speichern Ihres Kommentars aufgetreten.';

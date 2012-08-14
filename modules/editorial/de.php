@@ -18,6 +18,6 @@ $_MODULE['<{editorial}prestashop>editorial_729a51874fe901b092899e9e8b31c97a'] = 
 $_MODULE['<{editorial}prestashop>editorial_f2a6c498fb90ee345d997f888fce3b18'] = 'Löschen';
 $_MODULE['<{editorial}prestashop>editorial_f85e125f2a9ebcd47f420c94b535f50a'] = 'Erscheint neben dem einleitenden Text oben';
 $_MODULE['<{editorial}prestashop>editorial_28d74ee805e3a162047d8f917b74dcb3'] = 'Startseitenlogo-Link';
-$_MODULE['<{editorial}prestashop>editorial_62f6077d6d15a35ff4929a225205892f'] = 'Auf dem 2. Logo verwendeter Link';
+$_MODULE['<{editorial}prestashop>editorial_62f6077d6d15a35ff4929a225205892f'] = 'Auf dem 2. Logo verwendeter Link ';
 $_MODULE['<{editorial}prestashop>editorial_98039e8f2a0d93fc0fff503f9166f59b'] = 'Startseitenlogo Untertitel';
 $_MODULE['<{editorial}prestashop>editorial_c260ede55f0be17068302e7f842802f3'] = 'Aktualisieren Sie den Editor';

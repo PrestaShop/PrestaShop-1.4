@@ -3,15 +3,15 @@
 global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{statslive}prestashop>statslive_fa55230e9791f2b71322869318a5f00f'] = 'Besucher online';
-$_MODULE['<{statslive}prestashop>statslive_b8a5ea9b6e7f2d0b56fbb18e5b6b9246'] = 'Zeigt eine Liste der Kunden und Besucher an, die zur Zeit online sind';
-$_MODULE['<{statslive}prestashop>statslive_279a974c9c9a0d109698bb069202ae90'] = 'Sie müssen die Option \"Seitenaufrufe für jeden Kunden\" im \"Statistik Datamining\"-Modul aktivieren, um die Seiten zu sehen, die derzeit von Ihren Kunden eingesehen werden.';
+$_MODULE['<{statslive}prestashop>statslive_b8a5ea9b6e7f2d0b56fbb18e5b6b9246'] = 'Zeigt eine Liste der Kunden und Besucher, die zur Zeit online sind';
+$_MODULE['<{statslive}prestashop>statslive_279a974c9c9a0d109698bb069202ae90'] = 'Sie müssen die Option "Seitenaufrufe für jeden Kunden" im "Statistik Datamining"-Modul aktivieren, um die Seiten zu sehen, die derzeit von Ihren Kunden eingesehen werden.';
 $_MODULE['<{statslive}prestashop>statslive_5c948349bdf1a7a77ba54497d019e4ca'] = 'Kunden online';
 $_MODULE['<{statslive}prestashop>statslive_66c4c5112f455a19afde47829df363fa'] = 'Gesamt:';
 $_MODULE['<{statslive}prestashop>statslive_b718adec73e04ce3ec720dd11a06a308'] = 'ID';
 $_MODULE['<{statslive}prestashop>statslive_49ee3087348e8d44e1feda1917443987'] = 'Name';
 $_MODULE['<{statslive}prestashop>statslive_f88589c3e803217e3f6fe9d8e740e6e8'] = 'Aktuelle Seite';
 $_MODULE['<{statslive}prestashop>statslive_4351cfebe4b61d8aa5efa1d020710005'] = 'Anzeigen';
-$_MODULE['<{statslive}prestashop>statslive_2fb60e2c82df1e84e827b2f50661403e'] = 'Keine Kunden online';
+$_MODULE['<{statslive}prestashop>statslive_2fb60e2c82df1e84e827b2f50661403e'] = 'Es gibt keine Kunden online.';
 $_MODULE['<{statslive}prestashop>statslive_adb831a7fdd83dd1e2a309ce7591dff8'] = 'Besucher';
 $_MODULE['<{statslive}prestashop>statslive_a12a3079e14ced46e69ba52b8a90b21a'] = 'IP';
 $_MODULE['<{statslive}prestashop>statslive_38c50b731f70abc42c8baa3e7399b413'] = 'Seit';

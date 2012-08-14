@@ -4,8 +4,8 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{upscarrier}prestashop>upscarrier_ada23a988e5bab7c573cc51ec8a62ba2'] = 'UPS Lieferung';
 $_MODULE['<{upscarrier}prestashop>upscarrier_2b0b9fe2cf477c3e8c78cc5fd59fb77e'] = 'Bieten Sie Ihren Kunden unterschiedliche Liefermethoden mit UPS an.';
-$_MODULE['<{upscarrier}prestashop>upscarrier_883fa0069f4b0454e2277dd567ab3991'] = '\'Gewichtseinheit (lb oder kg).\'';
-$_MODULE['<{upscarrier}prestashop>upscarrier_5a3ceec65d417f5d92c26dbf0dccc00d'] = '\'Maßeinheit (cm oder in).\'';
+$_MODULE['<{upscarrier}prestashop>upscarrier_883fa0069f4b0454e2277dd567ab3991'] = '"Gewichtseinheit (lb oder kg)."';
+$_MODULE['<{upscarrier}prestashop>upscarrier_5a3ceec65d417f5d92c26dbf0dccc00d'] = '"Maßeinheit (cm oder in)."';
 $_MODULE['<{upscarrier}prestashop>upscarrier_416900392875e9effb318da8648fbdcb'] = 'muss konfiguriert sein, um dieses Modul richtig zu nutzen';
 $_MODULE['<{upscarrier}prestashop>upscarrier_f795d6b3e974858bb6720cfc2b4d22d6'] = 'UPS Login';
 $_MODULE['<{upscarrier}prestashop>upscarrier_fe4ee8226f826b73619fc422ca5b7382'] = 'UPS Kennwort';
@@ -48,7 +48,7 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_f35eb2a913a3fd6fd8e661012cf0ebd8'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_ff00c491eedc4e610f8ec9d02a46cf1b'] = 'UPS Modulstatus';
 $_MODULE['<{upscarrier}prestashop>upscarrier_a6adb58e6abd44d96cec7996c0e38629'] = 'UPS Carrier ist richtig konfiguriert und online!';
 $_MODULE['<{upscarrier}prestashop>upscarrier_3184c79dd129c671b26afaefd7614488'] = 'UPS Carrier ist noch nicht konfiguriert, Sie müssen:';
-$_MODULE['<{upscarrier}prestashop>upscarrier_40840f8672ee1391fa005409a46475db'] = 'Füllen Sie das Formular \"Allgemeine Einstellungen\" aus und wählen Sie Ihre Bewertungsservice-Gruppe';
+$_MODULE['<{upscarrier}prestashop>upscarrier_40840f8672ee1391fa005409a46475db'] = 'Füllen Sie das Formular "Allgemeine Einstellungen" aus und wählen Sie Ihre Bewertungsservice-Gruppe';
 $_MODULE['<{upscarrier}prestashop>upscarrier_e20f6d6f13fe70e78f6e2ab488493ccf'] = 'Webservice Testverbindung';
 $_MODULE['<{upscarrier}prestashop>upscarrier_5bcac5de5a4e77f92b02f00b88cae456'] = 'Wählen Sie Ihren verfügbaren Zustelldienst (Sie müssen Sie Ihre Rate Service Gruppe zuerst bestätigen)';
 $_MODULE['<{upscarrier}prestashop>upscarrier_52f4393e1b52ba63e27310ca92ba098c'] = 'Allgemeine Einstellungen';
@@ -90,7 +90,7 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_da42caf26ef85de3d7e48e16ca60b891'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_8d2ee0603dfce09b57d60db628cde269'] = 'Wählen Sie eine Verpackungsart ...';
 $_MODULE['<{upscarrier}prestashop>upscarrier_795de10b1bdcb843b3703c63ad577fc6'] = 'Wählen Sie die Verpackungsart aus der Liste.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_8d6bd50f3fe3ee2f4513066c25e5fb4a'] = 'Gebühren Rechner';
-$_MODULE['<{upscarrier}prestashop>upscarrier_4c9ed5fa194fd103349298c2ab04950e'] = 'Wenn sie die Auswahl \\Alle Pakete in einem Versand! wählen, werden die Standardgrößen, Standardverpackungen und Versandgebühren automatisch verwendet. Spezielle Konfigurationen für Kategorien oder Produkte werden nicht verwendet.\"';
+$_MODULE['<{upscarrier}prestashop>upscarrier_4c9ed5fa194fd103349298c2ab04950e'] = 'Wenn sie die Auswahl Alle Pakete in einem Versand! wählen, werden die Standardgrößen, Standardverpackungen und Versandgebühren automatisch verwendet. Spezielle Konfigurationen für Kategorien oder Produkte werden nicht verwendet.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_5cdd307ba6e260beb4801c0c10e22a3a'] = 'Versandservice';
 $_MODULE['<{upscarrier}prestashop>upscarrier_78945de8de090e90045d299651a68a9b'] = 'Verfügbar';
 $_MODULE['<{upscarrier}prestashop>upscarrier_2d25c72c1b18e562f6654fff8e11711e'] = 'Nicht verfügbar';
@@ -109,7 +109,7 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_47e299a1a983c22c0ac4c3a696e54e1b'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_9d1b485edd50e6fbd288b340b386b07d'] = 'Kein Fehlerbeschreibung gefunden';
 $_MODULE['<{upscarrier}prestashop>upscarrier_c888438d14855d7d96a2724ee9c306bd'] = 'Einstellungen aktualisiert';
 $_MODULE['<{upscarrier}prestashop>upscarrier_b9284bff13acffdd879ef4ac7fca5234'] = 'Einstellungen fehlgeschlagen';
-$_MODULE['<{upscarrier}prestashop>upscarrier_67e19ffdaa0a11e69349810403a9727e'] = 'Sie müssen die Tabelle \"Allgemeine Einstellungen\" konfigurieren, bevor Sie diesen Tab benutzen.';
+$_MODULE['<{upscarrier}prestashop>upscarrier_67e19ffdaa0a11e69349810403a9727e'] = 'Sie müssen die Tabelle "Allgemeine Einstellungen" konfigurieren, bevor Sie diesen Tab benutzen.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_a37b48e8684078c0620a997b3baeee9f'] = 'In diesem Tab können Sie eine spezielle Konfiguration für jede Kategorie einstellen.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_f421827ff72ef9a61fb27aa0de62f1e4'] = 'ID Config';
 $_MODULE['<{upscarrier}prestashop>upscarrier_3adbdb3ac060038aa0e6e6c138ef9873'] = 'Kategorie';

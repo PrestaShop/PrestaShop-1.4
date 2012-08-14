@@ -75,8 +75,8 @@ $_MODULE['<{loyalty}prestashop>loyalty_ec53a8c4f07baed5d8825072c89799be'] = 'Sta
 $_MODULE['<{loyalty}prestashop>loyalty_3ec365dd533ddb7ef3d1c111186ce872'] = 'Details';
 $_MODULE['<{loyalty}prestashop>loyalty_29aa46cc3d2677c7e0f216910df600ff'] = 'Kostenloser Versand';
 $_MODULE['<{loyalty}prestashop>loyalty_cec73b5ce095a59305ad92a0d47495cb'] = 'So verwenden Sie';
-$_MODULE['<{loyalty}prestashop>loyalty_019d1ca7d50cc54b995f60d456435e87'] = 'offen';
-$_MODULE['<{loyalty}prestashop>loyalty_2af3bf4c82c5b33875d532820a959799'] = 'Erstellt aus folgenden Vorgängen';
+$_MODULE['<{loyalty}prestashop>loyalty_019d1ca7d50cc54b995f60d456435e87'] = 'Gebraucht';
+$_MODULE['<{loyalty}prestashop>loyalty_2af3bf4c82c5b33875d532820a959799'] = 'Durch diese Befehle erstellt';
 $_MODULE['<{loyalty}prestashop>loyalty_d1228f5476d15142b1358ae4b5fa2454'] = 'Bestellung Nr.';
 $_MODULE['<{loyalty}prestashop>loyalty_d5797f3bbadc278f756576dafc6ab4b8'] = 'Punkte.';
 $_MODULE['<{loyalty}prestashop>loyalty_1f67ea7a0b26e9eacc70523bde28df0c'] = 'mehr ...';
@@ -100,5 +100,5 @@ $_MODULE['<{loyalty}prestashop>shopping-cart_4cd8259257033282f11cc9bbe648dff7'] 
 $_MODULE['<{loyalty}prestashop>shopping-cart_2996152bb442bf98c80c515c6055de5f'] = 'Treuepunkte';
 $_MODULE['<{loyalty}prestashop>shopping-cart_b40d5c523ee75453134b1449dd9cd13a'] = 'Treuepunkte';
 $_MODULE['<{loyalty}prestashop>shopping-cart_443c3e03e194c2a4cdb107808b051615'] = 'die in einen Gutschein im Wert von umgerechnet werden können';
-$_MODULE['<{loyalty}prestashop>shopping-cart_2d354f4df80bbebf309f184c3953dc1d'] = 'Der ein Schritt-Bestellprozess wird nict unterstützt';
+$_MODULE['<{loyalty}prestashop>shopping-cart_2d354f4df80bbebf309f184c3953dc1d'] = 'Nicht verfügbar für Instant Kasse bestellen';
 $_MODULE['<{loyalty}prestashop>shopping-cart_8cec799df06a3f5a026b31fcd95e0172'] = 'Fügen Sie einige Produkte zu Ihrem Warenkorb, um einige Treuepunkte zu sammeln.';

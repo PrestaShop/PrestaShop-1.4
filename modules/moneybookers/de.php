@@ -74,7 +74,7 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_7a038bedf7925ddfe9a628ed750bf9a
 $_MODULE['<{moneybookers}prestashop>moneybookers_e2571078c4c457621378b3ae187771c7'] = 'Das Geheimwort wird verwendet, um die Sicherheit beim Bezahlen zu erhöhen.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_6c6df049c4f3fb886250d59a4f0cf3b6'] = 'Das Kennwort wird nur verwendet, damit Sie sich mit Ihrem Moneybookers-Konto verbinden. Wenn das Passwort geändert wird, hat es keinen Einfluss auf die geheime Frage. Deshalb empfehlen wird beide getrennt aufzubewahren, sowie anderslautend zu erfassen.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_4746f98d01ce62cd5805981a289d182c'] = 'Wo kann ich mein Kennwort finden?';
-$_MODULE['<{moneybookers}prestashop>moneybookers_72d809da732bc81a8a81fede00831836'] = 'Nachdem Ihr Konto überprüft ist, gehen Sie bitte in den Bereich \"Verkäufertools\". Dort können Sie Ihr Geheimwort setzen.';
+$_MODULE['<{moneybookers}prestashop>moneybookers_72d809da732bc81a8a81fede00831836'] = 'Nachdem Ihr Konto überprüft ist, gehen Sie bitte in den Bereich "Verkäufertools". Dort können Sie Ihr Geheimwort setzen.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_fd432cdfbae76a7ebde57e6fa44ad90b'] = 'Klicken Sie';
 $_MODULE['<{moneybookers}prestashop>moneybookers_cf189f988336fea71f05010d1525be9c'] = 'internationalen Zahlungsmethoden an,';
 $_MODULE['<{moneybookers}prestashop>moneybookers_8298231c293193e2ab9ac388106edac4'] = 'die Sie aktivieren möchten:';
