@@ -92,7 +92,7 @@ abstract class PaymentModuleCore extends Module
 	{
 		global $cart;
 
-		$cart = new Cart((int)($id_cart));
+		$cart = new Cart((int)$id_cart);
 		// Does order already exists ?
 		if (!$this->active)
 			die(Tools::displayError());

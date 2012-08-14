@@ -467,9 +467,9 @@ class CategoryCore extends ObjectModel
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.*, cl.id_lang, cl.name, cl.description, cl.link_rewrite, cl.meta_title, cl.meta_keywords, cl.meta_description
 		FROM `'._DB_PREFIX_.'category` c
-		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.(int)($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.(int)$id_lang.')
 		LEFT JOIN `'._DB_PREFIX_.'category_group` cg ON (cg.`id_category` = c.`id_category`)
-		WHERE `id_parent` = '.(int)($this->id).'
+		WHERE `id_parent` = '.(int)$this->id.'
 		'.($active ? 'AND `active` = 1' : '').'
 		AND cg.`id_group` '.$sqlGroups.'
 		GROUP BY c.`id_category`
@@ -477,7 +477,7 @@ class CategoryCore extends ObjectModel
 		
 		foreach ($result as &$row)
 		{
-			$row['id_image'] = (file_exists(_PS_CAT_IMG_DIR_.$row['id_category'].'.jpg')) ? (int)$row['id_category'] : Language::getIsoById($id_lang).'-default';
+			$row['id_image'] = (file_exists(_PS_CAT_IMG_DIR_.$row['id_category'].'.jpg')) ? (int)$row['id_category'] : Language::getIsoById((int)$id_lang).'-default';
 			$row['legend'] = 'no picture';
 		}
 

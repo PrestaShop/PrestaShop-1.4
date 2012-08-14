@@ -185,7 +185,7 @@ abstract class ModuleCore
 
 		return Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'module`
-		SET `active`= 1
+		SET `active` = 1
 		WHERE `name` IN ('.implode(',',$name).')');
 	}
 	/**
@@ -195,7 +195,7 @@ abstract class ModuleCore
 	{
 		return Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'module`
-		SET `active`= 1
+		SET `active` = 1
 		WHERE `name` = \''.pSQL($this->name).'\'');
 	}
 
@@ -217,7 +217,7 @@ abstract class ModuleCore
 
 		return Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'module`
-		SET `active`= 0
+		SET `active` = 0
 		WHERE `name` IN ('.implode(',',$name).')');
 	}
 
