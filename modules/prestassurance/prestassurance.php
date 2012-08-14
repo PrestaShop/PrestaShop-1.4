@@ -35,7 +35,6 @@ class prestassurance extends ModuleGraph
 	private $_html;
 	private $_postErrors;
 	private $_psaUrl = 'https://assurance.prestashop.com';
-	private $_categories = array();
 	private $_psa_cart_products = array();
 	private $_cacheCheckAdd = array();
 	public $categoriesMatch = array();
@@ -198,7 +197,7 @@ class prestassurance extends ModuleGraph
 
 	public function hookHeader($params)
 	{
-		if (!psaTools::checkEnvironement() || !psaTools:: checkLimitedCountry())
+		if (!psaTools::checkEnvironement() || !psaTools::checkLimitedCountry())
 		{
 			$this->cleanAllInsurance();
 			return;
@@ -244,7 +243,7 @@ class prestassurance extends ModuleGraph
 		return $html;
 	}
 
-	public function hookbackOfficeHeader($params)
+	public function hookBackOfficeHeader($params)
 	{
 		if (Tools::getValue('tab') == 'AdminCatalog' && Tools::getValue('id_product') == (int)Configuration::get('PSA_ID_PRODUCT'))
 			Tools::redirectAdmin('?tab=AdminCatalog&token='.Tools::getAdminTokenLite('AdminCatalog'));
@@ -286,7 +285,7 @@ class prestassurance extends ModuleGraph
 		return $html;
 	}
 
-	public function hookbackOfficeFooter($params)
+	public function hookBackOfficeFooter($params)
 	{
 		if (Tools::getValue('tab') == 'AdminOrders' && $id_order = Tools::getValue('id_order') && Configuration::get('PS_ORDER_RETURN'))
 		{
@@ -304,7 +303,7 @@ class prestassurance extends ModuleGraph
 		return $html;
 	}
 
-	public function hookadminOrder($params)
+	public function hookAdminOrder($params)
 	{
 		$result = Db::getInstance()->ExecuteS('SELECT *
 		FROM '._DB_PREFIX_.'psa_insurance_detail
@@ -349,7 +348,7 @@ class prestassurance extends ModuleGraph
 		return $html;
 	}
 
-	public function hookcart($params)
+	public function hookCart($params)
 	{
 		global $cookie;	
 		$cartObj = $params['cart'];
@@ -474,7 +473,7 @@ class prestassurance extends ModuleGraph
 		$this->_reorderProductInCart($cartProducts, $ids_psa_attributes, $cartObj->id);
 	}
 
-	public function hooktop($params)
+	public function hookTop($params)
 	{
 		global $cookie, $smarty, $psa_cookie;
 		
@@ -547,7 +546,7 @@ class prestassurance extends ModuleGraph
 		return $this->getPsaCartTpl($psa_products, $cartObj, $cartQty);
 	}
 	
-	public function hookauthentication($params)
+	public function hookAuthentication($params)
 	{
 		if (!psaTools::checkLimitedCountry())
 			$this->cleanAllInsurance();
@@ -786,13 +785,13 @@ class prestassurance extends ModuleGraph
 		}
 		
 		/*
-if (psaTools::checkLocalUse())
+		if (psaTools::checkLocalUse())
 		{
 			return '<div class="warn">'.
-				$this->l('Your PrestaShop appears to be installed locally').'<br/>'.
-				$this->l('To use this module you have to install the module remotely on your web server').$this->helpPsa('local_use').'</div>';
+					$this->l('Your PrestaShop appears to be installed locally').'<br/>'.
+					$this->l('To use this module you have to install the module remotely on your web server').$this->helpPsa('local_use').'</div>';
 		}
-*/
+		*/
 		
 
 		$currency = new Currency((int)Configuration::get('PS_CURRENCY_DEFAULT'));
@@ -812,21 +811,23 @@ if (psaTools::checkLocalUse())
 
 		if (Tools::isSubmit('submitPreselected') || Tools::isSubmit('submitMinimum') || Tools::isSubmit('reactive'))
 		{
-			if (!count($this->_postErrors))
+			// $this->_postErrors is always empty ?!
+
+			/* if (!count($this->_postErrors)) */
 				$this->_postProcess();
-			else
+			/* else
 				foreach ($this->_postErrors as $err)
 					$this->_html .= '<div class="warning">'.$err.'</div>';
+			*/
 		}
 		return $this->_displayContent().'</div>';
 	}
 
 	private function _displayContent()
 	{
-		/*if (!Configuration::get('PSA_ID_MERCHANT') || !Configuration::get('PSA_KEY'))
+		if (!Configuration::get('PSA_ID_MERCHANT') || !Configuration::get('PSA_KEY'))
 			return $this->_displaySignInForm();
-		else*/
-			return $this->_displayConfiguration();
+		return $this->_displayConfiguration();
 	}
 
 	private function _postProcess()
@@ -834,9 +835,9 @@ if (psaTools::checkLocalUse())
 		if (Tools::isSubmit('reactive'))
 		{
 			if ($this->reactive(Tools::getValue('merchant_id'), Tools::getValue('email')))
-				$this->_html .= '<div class="conf"><img src="'._PS_ADMIN_IMG_.'ok2.png">'.$this->l('Le module est actif').'</div>';
+				$this->_html .= '<div class="conf"><img src="'._PS_ADMIN_IMG_.'ok2.png">'.$this->l('The module is active').'</div>';
 			else
-				$this->_html .= '<div class="error"><img src="'._PS_ADMIN_IMG_.'error2.png">'.$this->l('Erreur lors de l\'activation du module. Merci de contacter notre service support').'</div>';
+				$this->_html .= '<div class="error"><img src="'._PS_ADMIN_IMG_.'error2.png">'.$this->l('An error occured during activation. Please contact our support team.').'</div>';
 		}
 		
 		if (Tools::isSubmit('submitMinimum'))
@@ -978,7 +979,7 @@ if (psaTools::checkLocalUse())
 				</div>
 				<div class="clear"><br></div>
 				<div class="error" id="error_return" style="display:none"></div>
-				<label style="width:110px">'.$this->l('Votre ID unique').' : </label>
+				<label style="width:110px">'.$this->l('Your unique ID').' : </label>
 				<div class="margin-form">
 					<input id="unique_id" type="text">
 					<p>'.$this->l('Indiquez le numéro d\'identification unique qui vous a été fourni lors de l\'export de votre configuration').'</p>
@@ -1319,10 +1320,10 @@ if (psaTools::checkLocalUse())
 	
 	public function displayMenuAction($category_id)
 	{
-		$cayetory_match = $set_children_price = false;
+		$category_match = $set_children_price = false;
 		if (isset($this->categoriesMatch[(int)$category_id]))
 		{
-			$cayetory_match = true;
+			$category_match = true;
 			$conf = $this->categoriesMatch[(int)$category_id];
 			if ($conf['impact_value'] > 0)
 				$set_children_price = true;
@@ -1331,10 +1332,10 @@ if (psaTools::checkLocalUse())
 		return '<a href="javascript:void(0)" class="menu_action" id="action_'.(int)$category_id.'">'.$this->l('Action').'</a>
 				<div id="menu_action_'.(int)$category_id.'" style="width:270px;">  
 				    <div iconCls="icon-edit-cat" onclick="openWindowCategoryMatch('.(int)$category_id.')">Choisir la catégorie d\'assurance</div>
-				    <div iconCls="icon-sub" '.(!$cayetory_match ? 'style="color:gray" onclick="return false;"' : 'onclick="applyMatchingChildren('.(int)$category_id.')"').'>Appliquer cette catégorie sur les enfants</div> 
-				    <div iconCls="icon-delete" '.(!$cayetory_match ? 'style="color:gray" onclick="return false;"' : 'onclick="deleteMatching('.(int)$category_id.')"').'>Supprimer la catégorie d\'assurance</div>
+				    <div iconCls="icon-sub" '.(!$category_match ? 'style="color:gray" onclick="return false;"' : 'onclick="applyMatchingChildren('.(int)$category_id.')"').'>Appliquer cette catégorie sur les enfants</div>
+				    <div iconCls="icon-delete" '.(!$category_match ? 'style="color:gray" onclick="return false;"' : 'onclick="deleteMatching('.(int)$category_id.')"').'>Supprimer la catégorie d\'assurance</div>
 				    <div class="menu-sep"></div> 
-				    <div iconCls="icon-edit-price" '.(!$cayetory_match ? 'style="color:gray" onclick="return false;"' : 'onclick="openWindowPrice('.(int)$category_id.')"').' >Choisir le prix de vente</div>
+				    <div iconCls="icon-edit-price" '.(!$category_match ? 'style="color:gray" onclick="return false;"' : 'onclick="openWindowPrice('.(int)$category_id.')"').' >Choisir le prix de vente</div>
 				    <div iconCls="icon-sub" '.(!$set_children_price ? 'style="color:gray" onclick="return false;"' : 'onclick="applyPriceChildren('.(int)$category_id.')"').'>Appliquer ce prix sur les enfants</div>  
 				</div>';
 	}
@@ -1539,7 +1540,7 @@ if (psaTools::checkLocalUse())
 	{
 		return Db::getInstance()->getValue('
 		SELECT AVG(`price`) FROM  `'._DB_PREFIX_.'ps_product` 
-		WHERE `id_category_default` = '.(int)$d_category);
+		WHERE `id_category_default` = '.(int)$id_category);
 	}
 
 	private function _formatPsCartProducts($cartProducts, $psa_product = false)
@@ -1588,7 +1589,6 @@ if (psaTools::checkLocalUse())
 		global $cookie;
 
 		$currency = new Currency((int)$cookie->id_currency);
-		$psa_product_id = (int)Configuration::get('PSA_ID_PRODUCT');
 		$return = true;
 		
 		foreach ($this->_psa_cart_products as $key => $product)
@@ -1647,7 +1647,7 @@ if (psaTools::checkLocalUse())
 
 	private function _updatePsCartProducts($ids_psa_attributes, $cartObj)
 	{
-		global $cookie, $cart;
+		global $cookie;
 		$currency = new Currency((int)$cookie->id_currency);
 		
 		if (!count($this->_psa_cart_products))
@@ -1811,8 +1811,7 @@ if (psaTools::checkLocalUse())
 		`maximum_product_price`= '.(float)$maximum_product_price;
 		if ($return)
 			return array('hasError' => false, 'html' => $this->renderTreeRow($ps_cat));
-		else
-			return array('hasError' => true);
+		return array('hasError' => true);
 	}
 
 	public function deleteMatching($id_category)
@@ -1824,8 +1823,7 @@ if (psaTools::checkLocalUse())
 				
 		if ($return)
 			return array('hasError' => false, 'html' => $this->renderTreeRow($id_category));
-		else
-			return array('hasError' => true);
+		return array('hasError' => true);
 	}
 	
 	public function renderTreeRow($ps_cat)
@@ -1912,16 +1910,14 @@ if (psaTools::checkLocalUse())
 
 	public function calcFinalPrice($minimum_price, $impact_value, $maximum_price)
 	{
-		$return = array();
-		$tax = self::PSA_TAX_RATE;
+		$selling_price = Tools::ps_round($impact_value * ((self::PSA_TAX_RATE / 100) + 1), 2);
 
-		$selling_price = Tools::ps_round($impact_value * (($tax / 100) + 1), 2);
 		//check if final price isn't lower than minimum
-		if ($selling_price < ($minimum_price * ($tax / 100) + $minimum_price))
-			$selling_price = ($minimum_price * ($tax / 100) + $minimum_price);
+		if ($selling_price < ($minimum_price * (self::PSA_TAX_RATE / 100) + $minimum_price))
+			$selling_price = ($minimum_price * (self::PSA_TAX_RATE / 100) + $minimum_price);
 
 		if ($selling_price > $maximum_price)
-			$selling_price = ($maximum_price * ($tax / 100) + $maximum_price);
+			$selling_price = ($maximum_price * (self::PSA_TAX_RATE / 100) + $maximum_price);
 
 		return $selling_price;
 	}
@@ -2169,8 +2165,7 @@ if (psaTools::checkLocalUse())
 			if (Db::getInstance()->execute('INSERT INTO `'._DB_PREFIX_.'psa_disaster` (`id_order`, `id_psa_disaster`, `id_product`, `status`, `reason`, `date_add`)
 											VALUES ('.(int)$id_order.', '.(int)$response['id_psa_disaster'].', '.(int)$id_product.', \'wait\', \''. pSQL($reason).'\', NOW())'))
 				return $this->addDisasterComment((int)Db::getInstance()->Insert_ID(), 1, $comment);
-			else
-				return false;
+		return false;
 	}
 
 	public function changeDisasterStatus($id_disaster, $new_status)
@@ -2183,8 +2178,7 @@ if (psaTools::checkLocalUse())
 		if ($comment != '')
 			return Db::getInstance()->execute('INSERT INTO '._DB_PREFIX_.'psa_disaster_comments (`id_disaster`, `way`, `comment`, `date_add`)
 			VALUES ('.(int)$id_disaster.', '.(int)$way.', \''.pSQL($comment).'\', NOW())');
-		else
-			return true;
+		return true;
 	}
 
 	public function sendDisasterComment($id_disaster, $way = 1, $comment, $id_psa_disaster)
@@ -2198,8 +2192,7 @@ if (psaTools::checkLocalUse())
 		$response = (array)Tools::jsonDecode($request->getResponseBody());
 		if (!$response['hasErrors'])
 			return $this->addDisasterComment((int)$id_disaster, (int)$way, $comment);
-		else
-			return true;
+		return true;
 	}
 
 	public function getSignInUrlReturn()
