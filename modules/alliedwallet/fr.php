@@ -4,6 +4,7 @@ global $_MODULE;
 $_MODULE = array();
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_ee1e9cbe2a66a3a7ecc434049bd67339'] = 'Allied Wallet';
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_0e8331ca0283467f5c129fbc4ff873b2'] = 'Acceptez dès maintenant les cartes de crédit et de débit en ligne avec Allied Wallet.  Vous serez en mesure d\'accepter 164 devises différentes autour du globe,  vous bénéficierez d’un support client 24/24 et de transactions traitées en toute sécurité au taux exceptionnel de 1.94%.';
+$_MODULE['<{alliedwallet}prestashop>alliedwallet_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = 'Êtes-vous certain de vouloir effacer vos données ?';
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_449602445d0a5f0612e7ccac073f6c9e'] = 'Acceptez les paiements avec Allied Wallet dès maintenant !';
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_18071bcaa1bfb301a06e742589b0e671'] = 'Etes-vous prêt à accepter 164 devises différentes à travers le monde, et via presque toutes les cartes bancaires ?';
 $_MODULE['<{alliedwallet}prestashop>alliedwallet_4bc8c0475362544165beb73c959ff0d5'] = 'Etes-vous prêt à protéger votre entreprise avec  le meilleur de la sécurité en ligne ?';
