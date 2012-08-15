@@ -57,17 +57,17 @@ abstract class DbCore
 	/** @var mixed Object instance for singleton */
 	protected static $_instance = array();
 
-	protected static $_servers = array(	
+	protected static $_servers = array(
 	array('server' => _DB_SERVER_, 'user' => _DB_USER_, 'password' => _DB_PASSWD_, 'database' => _DB_NAME_), /* MySQL Master server */
 	/* Add here your slave(s) server(s)*/
 	/*array('server' => '192.168.0.15', 'user' => 'rep', 'password' => '123456', 'database' => 'rep'),
 	array('server' => '192.168.0.3', 'user' => 'myuser', 'password' => 'mypassword', 'database' => 'mydatabase'),
 	*/
 	);
-	
+
 	protected $_lastQuery;
 	protected $_lastCached;
-	
+
 	protected static $_idServer;
 
 	/**
@@ -85,12 +85,12 @@ abstract class DbCore
 
 		if (!isset(self::$_instance[$idServer]))
 			self::$_instance[(int)($idServer)] = new MySQL(self::$_servers[(int)($idServer)]['server'], self::$_servers[(int)($idServer)]['user'], self::$_servers[(int)($idServer)]['password'], self::$_servers[(int)($idServer)]['database']);
-		
+
 		return self::$_instance[(int)($idServer)];
 	}
-	
+
 	public function getRessource() { return $this->_link;}
-	
+
 	public function __destruct()
 	{
 		$this->disconnect();
@@ -129,10 +129,10 @@ abstract class DbCore
 		if (strtoupper($type) == 'INSERT')
 		{
 			$query = 'INSERT INTO `'.$table.'` (';
-			foreach ($values AS $key => $value)
+			foreach ($values as $key => $value)
 				$query .= '`'.$key.'`,';
 			$query = rtrim($query, ',').') VALUES (';
-			foreach ($values AS $key => $value)
+			foreach ($values as $key => $value)
 				$query .= '\''.(is_bool($value) ? (int)$value : $value).'\',';
 			$query = rtrim($query, ',').')';
 			if ($limit)
@@ -142,8 +142,8 @@ abstract class DbCore
 		elseif (strtoupper($type) == 'UPDATE')
 		{
 			$query = 'UPDATE `'.$table.'` SET ';
-			foreach ($values AS $key => $value)
-				$query .= '`'.$key.'` = \''.(is_bool($value) ? (int)$value : $value).'\',';
+			foreach ($values as $key => $value)
+				$query .= '`'.$key.'` = \''.(is_bool($value) ? (int)$value : pSQL($value)).'\',';
 			$query = rtrim($query, ',');
 			if ($where)
 				$query .= ' WHERE '.$where;
@@ -151,7 +151,7 @@ abstract class DbCore
 				$query .= ' LIMIT '.(int)$limit;
 			return $this->q($query, $use_cache);
 		}
-		
+
 		return false;
 	}
 
@@ -173,10 +173,10 @@ abstract class DbCore
 		if (strtoupper($type) == 'INSERT')
 		{
 			$query = 'INSERT INTO `'.$table.'` (';
-			foreach ($values AS $key => $value)
+			foreach ($values as $key => $value)
 				$query .= '`'.$key.'`,';
 			$query = rtrim($query, ',').') VALUES (';
-			foreach ($values AS $key => $value)
+			foreach ($values as $key => $value)
 				$query .= (($value === '' || $value === null) ? 'NULL' : '\''.(is_bool($value) ? (int)$value : $value).'\'').',';
 			$query = rtrim($query, ',').')';
 			if ($limit)
@@ -186,7 +186,7 @@ abstract class DbCore
 		elseif (strtoupper($type) == 'UPDATE')
 		{
 			$query = 'UPDATE `'.$table.'` SET ';
-			foreach ($values AS $key => $value)
+			foreach ($values as $key => $value)
 				$query .= '`'.$key.'` = '.(($value === '' || $value === null) ? 'NULL' : '\''.(is_bool($value) ? (int)$value : $value).'\'').',';
 			$query = rtrim($query, ',');
 			if ($where)
@@ -195,14 +195,14 @@ abstract class DbCore
 				$query .= ' LIMIT '.(int)($limit);
 			return $this->q($query);
 		}
-		
+
 		return false;
 	}
 
 	/*********************************************************
 	 * ABSTRACT METHODS
 	 *********************************************************/
-	
+
 	/**
 	 * Open a connection
 	 */
@@ -236,12 +236,12 @@ abstract class DbCore
 	 * Fetches an array containing all of the rows from a result set
 	 */
 	abstract public function ExecuteS($query, $array = true, $use_cache = 1);
-	
+
 	/*
-	 * Get next row for a query which doesn't return an array 
+	 * Get next row for a query which doesn't return an array
 	 */
 	abstract public function nextRow($result = false);
-	
+
 	/*
 	 * return sql server version.
 	 * used in Order.php to allow or not subquery in update
@@ -258,14 +258,14 @@ abstract class DbCore
 	{
 		return Db::getInstance()->ExecuteS($query, true, $use_cache);
 	}
-	
+
 	public static function ps($query, $use_cache = 1)
 	{
 		$ret = Db::s($query, $use_cache);
 		p($ret);
 		return $ret;
 	}
-	
+
 	public static function ds($query, $use_cache = 1)
 	{
 		Db::s($query, $use_cache);
@@ -275,7 +275,7 @@ abstract class DbCore
 	/**
 	 * getRow return an associative array containing the first row of the query
 	 * This function automatically add "limit 1" to the query
-	 * 
+	 *
 	 * @param mixed $query the select query (without "LIMIT 1")
 	 * @param int $use_cache find it in cache first
 	 * @return array associative array of (field=>value)
@@ -284,9 +284,9 @@ abstract class DbCore
 
 	/**
 	 * getValue return the first item of a select query.
-	 * 
-	 * @param mixed $query 
-	 * @param int $use_cache 
+	 *
+	 * @param mixed $query
+	 * @param int $use_cache
 	 * @return void
 	 */
 	abstract public function getValue($query, $use_cache = 1);
@@ -308,13 +308,14 @@ function pSQL($string, $htmlOK = false)
 {
 	if (_PS_MAGIC_QUOTES_GPC_)
 		$string = stripslashes($string);
-	if ((int)$string != 0)
+
+	if (!is_numeric($string))
 	{
 		$string = _PS_MYSQL_REAL_ESCAPE_STRING_ ? mysql_real_escape_string($string) : addslashes($string);
 		if (!$htmlOK)
 			$string = strip_tags(nl2br2($string));
 	}
-		
+
 	return $string;
 }
 

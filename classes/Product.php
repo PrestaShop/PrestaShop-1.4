@@ -1652,10 +1652,10 @@ class ProductCore extends ObjectModel
 		Tools::displayAsDeprecated();
 
 		// Avoid an error with 1970-01-01
-		if (!Validate::isDate($date_from) OR !Validate::isDate($date_to))
+		if (!Validate::isDate($date_from) || !Validate::isDate($date_to))
 			return 0;
 		$currentDate = date('Y-m-d H:i:s');
-		if ($date_from != $date_to AND ($currentDate > $date_to OR $currentDate < $date_from))
+		if ($date_from != $date_to && ($currentDate > $date_to || $currentDate < $date_from))
 			return 0;
 
 		// reduction values
@@ -1663,14 +1663,14 @@ class ProductCore extends ObjectModel
 			$reduction_price /= (1 + ($taxrate / 100));
 
 		// make the reduction
-		if ($reduction_price AND $reduction_price > 0)
+		if ($reduction_price && $reduction_price > 0)
 		{
 			if ($reduction_price >= $product_price)
 				$ret = $product_price;
 			else
 				$ret = $reduction_price;
 		}
-		elseif ($reduction_percent AND $reduction_percent > 0)
+		elseif ($reduction_percent && $reduction_percent > 0)
 		{
 			if ($reduction_percent >= 100)
 				$ret = $product_price;

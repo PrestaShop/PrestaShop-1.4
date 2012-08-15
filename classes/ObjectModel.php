@@ -235,7 +235,7 @@ abstract class ObjectModelCore
 		$this->clearCache();
 
 		/* Automatically fill dates */
-		if (key_exists('date_upd', $this))
+		if (property_exists($this, 'date_upd'))
 			$this->date_upd = date('Y-m-d H:i:s');
 
 		/* Database update */
