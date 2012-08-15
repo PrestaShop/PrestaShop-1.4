@@ -123,7 +123,7 @@ class ManufacturerCore extends ObjectModel
 					die(Tools::displayError());
 
 				/* Check fields validity */
-				if (isset($this->{$field}[$language['id_lang']]) AND !empty($this->{$field}[$language['id_lang']]))
+				if (isset($this->{$field}[$language['id_lang']]) && !empty($this->{$field}[$language['id_lang']]))
 					$fields[$language['id_lang']][$field] = pSQL($this->{$field}[$language['id_lang']], true);
 				elseif (in_array($field, $this->fieldsRequiredLang))
 					$fields[$language['id_lang']][$field] = pSQL($this->{$field}[$defaultLanguage]);
@@ -131,7 +131,7 @@ class ManufacturerCore extends ObjectModel
 					$fields[$language['id_lang']][$field] = '';
 
 			}
-			
+
 			$fields[$language['id_lang']]['description'] = (isset($this->description[$language['id_lang']])) ? pSQL($this->description[$language['id_lang']], true) : '';
 			$fields[$language['id_lang']]['short_description'] = (isset($this->short_description[$language['id_lang']])) ? pSQL($this->short_description[$language['id_lang']], true) : '';
 		}
@@ -146,8 +146,11 @@ class ManufacturerCore extends ObjectModel
 			if (!Validate::isLoadedObject($address) || !$address->delete())
 				return false;
 		}
-		if (parent::delete())
+
+		if (Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product` SET `id_manufacturer` = 0 WHERE `id_manufacturer` = '.(int)$this->id) && parent::delete())
 			return $this->deleteImage();
+
+		return false;
 	}
 
 	/**
@@ -157,7 +160,7 @@ class ManufacturerCore extends ObjectModel
 	 */
 	public function deleteSelection($selection)
 	{
-		if (!is_array($selection) OR !Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
+		if (!is_array($selection) || !Validate::isTableOrIdentifier($this->identifier) || !Validate::isTableOrIdentifier($this->table))
 			die(Tools::displayError());
 		$result = true;
 		foreach ($selection AS $id)
@@ -281,7 +284,7 @@ class ManufacturerCore extends ObjectModel
 
 		if (!Validate::isOrderBy($orderBy) OR !Validate::isOrderWay($orderWay))
 			die (Tools::displayError());
-			
+
 		$groups = FrontController::getCurrentCustomerGroups();
 		$sqlGroups = (count($groups) ? 'IN ('.implode(',', $groups).')' : '= 1');
 
@@ -370,7 +373,7 @@ class ManufacturerCore extends ObjectModel
 		WHERE `id_manufacturer` = '.(int)($this->id).'
 		AND a.`deleted` = 0');
 	}
-	
+
 	public function getWsAddresses()
 	{
 			return Db::getInstance()->ExecuteS('
@@ -379,23 +382,23 @@ class ManufacturerCore extends ObjectModel
 		WHERE `id_manufacturer` = '.(int)($this->id).'
 		AND a.`deleted` = 0');
 	}
-	
+
 	public function setWsAddresses($id_addresses)
 	{
 		$ids = array();
 		foreach ($id_addresses as $id)
 			$ids[] = (int)$id['id'];
 		$result1 = (Db::getInstance()->Execute('
-			UPDATE `'._DB_PREFIX_.'address` 
-			SET id_manufacturer = 0 
-			WHERE id_manufacturer = '.(int)$this->id.' 
+			UPDATE `'._DB_PREFIX_.'address`
+			SET id_manufacturer = 0
+			WHERE id_manufacturer = '.(int)$this->id.'
 			AND deleted = 0') !== false);
 		$result2 = true;
 		if (count($ids))
 			$result2 = (Db::getInstance()->Execute('
-			UPDATE `'._DB_PREFIX_.'address` 
-			SET id_customer = 0, id_supplier = 0, id_manufacturer = '.(int)$this->id.' 
-			WHERE id_address IN('.implode(',', $ids).') 
+			UPDATE `'._DB_PREFIX_.'address`
+			SET id_customer = 0, id_supplier = 0, id_manufacturer = '.(int)$this->id.'
+			WHERE id_address IN('.implode(',', $ids).')
 			AND deleted = 0') !== false);
 		return ($result1 && $result2);
 	}
