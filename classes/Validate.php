@@ -574,7 +574,7 @@ class ValidateCore
 	*/
 	public static function isBool($bool)
 	{
-		return is_null($bool) OR is_bool($bool) OR preg_match('/^0|1$/', $bool);
+		return $bool === 1 || $bool === 0 || $bool === true || $bool === false || $bool === '1' || $bool === '0' || $bool === null;
 	}
 
 	/**
@@ -742,7 +742,7 @@ class ValidateCore
 	*/
 	public static function isLoadedObject($object)
 	{
-		return is_object($object) AND $object->id;
+		return isset($object->id) && $object->id;
 	}
 
 	/**

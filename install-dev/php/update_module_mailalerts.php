@@ -25,8 +25,6 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-include('../../config/config.inc.php');
-
 function update_module_mailalerts()
 {
 	if (Db::getInstance()->getValue('SELECT id_module FROM  `'._DB_PREFIX_.'module` WHERE name = \'mailalerts\''))

@@ -82,9 +82,9 @@ class ThemeInstallator extends Module
 		'blockcurrencies', 'blockinfos', 'blocklanguages', 'blocklink', 'blockmanufacturer', 'blockmyaccount', 'blocknewproducts',
 		'blocknewsletter', 'blockpaymentlogo', 'blockpermanentlinks', 'blockrss', 'blocksearch', 'blockspecials', 'blocksupplier',
 		'blocktags', 'blockuserinfo', 'blockvariouslinks', 'blockviewed', 'blockwishlist', 'canonicalurl', 'cashondelivery', 'cheque',
-		'crossselling', 'dejala', 'editorial', 'feeder', 'followup', 'gadsense', 'ganalytics', 'gcheckout', 'graphartichow', 'graphgooglechart',
+		'crossselling', 'editorial', 'feeder', 'followup', 'gadsense', 'ganalytics', 'gcheckout', 'graphartichow', 'graphgooglechart',
 		'graphvisifire', 'graphxmlswfcharts', 'gridhtml', 'gsitemap', 'hipay', 'homefeatured', 'loyalty', 'mailalerts', 'moneybookers',
-		'newsletter', 'pagesnotfound', 'paypal', 'paypalapi', 'productcomments', 'productscategory', 'producttooltip', 'referralprogram', 'reverso',
+		'newsletter', 'pagesnotfound', 'paypal', 'paypalapi', 'productcomments', 'productscategory', 'producttooltip', 'referralprogram',
 		'sekeywords', 'sendtoafriend', 'statsbestcategories', 'statsbestcustomers', 'statsbestproducts', 'statsbestsuppliers', 'statsbestvouchers',
 		'statscarrier', 'statscatalog', 'statscheckup', 'statsdata', 'statsequipment', 'statsgeolocation', 'statshome', 'statslive', 'statsnewsletter',
 		'statsorigin', 'statspersonalinfos', 'statsproduct', 'statsregistrations', 'statssales', 'statssearch', 'themeinstallator', 'statsvisits', 'tm4b',
@@ -96,7 +96,7 @@ class ThemeInstallator extends Module
     {
         $files = scandir($dirname);
         foreach ($files as $file)
-            if ($file != '.' AND $file != '..')
+            if ($file != '.' && $file != '..')
             {
                 if (is_dir($dirname.'/'.$file))
                     self::deleteDirectory($dirname.'/'.$file);
@@ -117,34 +117,28 @@ class ThemeInstallator extends Module
 			{
 				if (is_dir($src.'/'.$file))
 					self::recurseCopy($src.'/'.$file, $dst.'/'.$file);
-				elseif (is_readable($src.'/'.$file) AND $file != 'Thumbs.db' AND $file != '.DS_Store' AND substr($file, -1) != '~')
+				elseif (is_readable($src.'/'.$file) && $file != 'Thumbs.db' && $file != '.DS_Store' && substr($file, -1) != '~')
 					copy($src.'/'.$file, $dst.'/'.$file);
 			}
 		closedir($dir);
 	}
 	
 	/*
-	** Checks if module is installed
-	** Returns true if module is active
-	** Also returns false if it's a payment or stat module
+	** Check if a module is active and is not a stat/payment module
+	**
+	** @param string $name Module's name
+	** @return boolean False if module is not active or is a stat/payment module
 	*/
 	private function checkParentClass($name)
 	{
-		if (!$obj = Module::getInstanceByName($name))
+		$obj = Module::getInstanceByName($name);
+		
+		if (!$obj || !$obj->active || is_callable(array($obj, 'validateOrder')) ||
+		is_callable(array($obj, 'getDateBetween')) || is_callable(array($obj, 'getGridEngines')) ||
+		is_callable(array($obj, 'getGraphEngines')) || is_callable(array($obj, 'hookAdminStatsModules')))
 			return false;
-		if (is_callable(array($obj, 'validateOrder')))
-			return false;
-		if (is_callable(array($obj, 'getDateBetween')))
-			return false;
-		if (is_callable(array($obj, 'getGridEngines')))
-			return false;
-		if (is_callable(array($obj, 'getGraphEngines')))
-			return false;
-		if (is_callable(array($obj, 'hookAdminStatsModules')))
-			return false;
-		else
-			return true;
-		return false;
+		
+		return true;
 	}
 	
 	private function deleteTmpFiles()
@@ -199,8 +193,8 @@ class ThemeInstallator extends Module
 		$this->to_disable = false;
 		$this->to_install = false;
 		$this->errors = false;
-		if ($this->page == 'exportPage' AND Tools::isSubmit('exportTheme') AND ($theme = Tools::getValue('mainTheme')))
-			if (!(is_dir(_PS_ALL_THEMES_DIR_.$theme) AND file_exists(_PS_ALL_THEMES_DIR_.$theme.'/index.tpl') AND $theme != 'prestashop'))
+		if ($this->page == 'exportPage' && Tools::isSubmit('exportTheme') && ($theme = Tools::getValue('mainTheme')))
+			if (!(is_dir(_PS_ALL_THEMES_DIR_.$theme) && file_exists(_PS_ALL_THEMES_DIR_.$theme.'/index.tpl') && $theme != 'prestashop'))
 			{
 				$this->page = 1;
 				echo parent::displayError('<b>'.$theme.'</b> is not a valid theme to export');
@@ -299,7 +293,7 @@ class ThemeInstallator extends Module
 
 		self::getModuleState();
 		self::displayInformations();
-		if (Tools::isSubmit('submitExport') AND $this->error === false AND $this->checkPostedDatas() == true)
+		if (Tools::isSubmit('submitExport') && $this->error === false && $this->checkPostedDatas() == true)
 		{
 			self::getThemeVariations();
 			self::getDocumentation();
@@ -462,11 +456,11 @@ class ThemeInstallator extends Module
 			$exceptions[] = (isset($row['exceptions']) ? explode(',', strval($row['exceptions'])) : array());
 		}
 
-		if (file_exists(_IMPORT_FOLDER_.'doc') AND sizeof($xml->docs->doc) != 0)
+		if (file_exists(_IMPORT_FOLDER_.'doc') && sizeof($xml->docs->doc) != 0)
 			self::_loadDocForm();
 		// install selected modules
 		$flag = 0;
-		if (isset($this->to_export) AND $this->to_export)
+		if (isset($this->to_export) && $this->to_export)
 			foreach ($this->to_export as $row)
 			{
 				if (in_array($row, $this->native_modules))
@@ -504,7 +498,7 @@ class ThemeInstallator extends Module
 		{
 			$flag = 0;
 			// Disable native modules
-			if ($val == 2 AND $this->to_disable AND count($this->to_disable))
+			if ($val == 2 && $this->to_disable && count($this->to_disable))
 				foreach ($this->to_disable as $row)
 				{
 					$obj = Module::getInstanceByName($row);
@@ -520,7 +514,7 @@ class ThemeInstallator extends Module
 					}
 				}
 			$flag = 0;
-			if ($this->to_enable AND count($this->to_enable))
+			if ($this->to_enable && count($this->to_enable))
 				foreach ($this->to_enable as $row)
 				{
 					$obj = Module::getInstanceByName($row);
@@ -529,7 +523,7 @@ class ThemeInstallator extends Module
 							UPDATE `'._DB_PREFIX_.'module`
 							SET `active`= 1
 							WHERE `name` = \''.pSQL($row).'\'');
-					elseif (!is_object($obj) OR !$obj->install())
+					elseif (!is_object($obj) || !$obj->install())
 						continue ;
 					if ($flag++ == 0)
 						$msg .= '<b>'.$this->l('The following modules have been enabled').' :</b><br />';
@@ -569,7 +563,7 @@ class ThemeInstallator extends Module
 		$xml = simplexml_load_file(_IMPORT_FOLDER_.XMLFILENAME);
 		$this->xml = $xml;
 
-		if ($this->selectedVariations AND count($this->selectedVariations) > 0)
+		if ($this->selectedVariations && count($this->selectedVariations) > 0)
 		{
 			$ok = array();
 			foreach ($this->selectedVariations as $count => $theme)
@@ -590,10 +584,10 @@ class ThemeInstallator extends Module
 			}
 		}
 		self::getModules();
-		if (file_exists(_IMPORT_FOLDER_.'doc') AND sizeof($xml->docs->doc) != 0)
+		if (file_exists(_IMPORT_FOLDER_.'doc') && sizeof($xml->docs->doc) != 0)
 			self::_loadDocForm();
 
-		if ($this->to_install AND sizeof($this->to_install) > 0)
+		if ($this->to_install && sizeof($this->to_install) > 0)
 		{
 			$var = '';
 			foreach ($this->to_install as $row)
@@ -745,7 +739,7 @@ class ThemeInstallator extends Module
 		$tmp = scandir(_PS_ALL_THEMES_DIR_);
 		$themeList = array();
 		foreach ($tmp as $row)
-			if (is_dir(_PS_ALL_THEMES_DIR_.$row) AND file_exists(_PS_ALL_THEMES_DIR_.$row.'/index.tpl') AND $row != 'prestashop')
+			if (is_dir(_PS_ALL_THEMES_DIR_.$row) && file_exists(_PS_ALL_THEMES_DIR_.$row.'/index.tpl') && $row != 'prestashop')
 				$themeList[] = $row;
 		if (count($themeList) >  0)
 		{
@@ -962,7 +956,7 @@ class ThemeInstallator extends Module
 		foreach ($this->module_list as $array)
 		{
 			if (!self::checkParentClass($array['name']))
-				continue ;
+				continue;
 			if (in_array($array['name'], $this->native_modules))
 			{
 				if ($array['active'] == 1)
@@ -977,7 +971,7 @@ class ThemeInstallator extends Module
 		{
 			$flag = 0;
 			if (!self::checkParentClass($str))
-				continue ;
+				continue;
 			foreach ($this->module_list as $tmp)
 				if (in_array($str, $tmp))
 				{
@@ -1057,11 +1051,11 @@ class ThemeInstallator extends Module
 		$mail = Tools::getValue('email');
 		$website = Tools::getValue('website');
 		
-		if ($mail AND !preg_match('#^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,6}$#', $mail))
+		if ($mail && !preg_match('#^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,6}$#', $mail))
 			$this->_html .= parent::displayError($this->l('There is an error in your e-mail syntax!'));
-		elseif ($website AND (!Validate::isURL($website) OR !Validate::isAbsoluteUrl($website)))
+		elseif ($website && (!Validate::isURL($website) || !Validate::isAbsoluteUrl($website)))
 			$this->_html .= parent::displayError($this->l('There is an error in your URL syntax!'));
-		elseif (!$this->checkVersionsAndCompatibility() OR !$this->checkNames() OR !$this->checkDocumentation())
+		elseif (!$this->checkVersionsAndCompatibility() || !$this->checkNames() || !$this->checkDocumentation())
 			return false;
 		else
 			return true;
@@ -1084,9 +1078,9 @@ class ThemeInstallator extends Module
 
 			if (!in_array($extension, $extensions))
 				$this->_html .= parent::displayError($this->l('File extension must be .txt or .pdf'));
-			elseif ($_FILES['mydoc_'.$count]['error'] > 0 OR $_FILES['mydoc_'.$count]['size'] > 1048576)
+			elseif ($_FILES['mydoc_'.$count]['error'] > 0 || $_FILES['mydoc_'.$count]['size'] > 1048576)
 				$this->_html .= parent::displayError($this->l('An error occurred during documentation upload'));
-			elseif (!$name OR !Validate::isGenericName($name) OR strlen($name) > MAX_NAME_LENGTH)
+			elseif (!$name || !Validate::isGenericName($name) || strlen($name) > MAX_NAME_LENGTH)
 				$this->_html .= parent::displayError($this->l('Please enter a valid documentation name'));
 		}
 		if ($this->error == true)
@@ -1103,16 +1097,16 @@ class ThemeInstallator extends Module
 		$name = Tools::getValue('theme_name');
 		$count = 0;
 		
-		if (!$author OR !Validate::isGenericName($author) OR strlen($author) > MAX_NAME_LENGTH)
+		if (!$author || !Validate::isGenericName($author) || strlen($author) > MAX_NAME_LENGTH)
 			$this->_html .= parent::displayError($this->l('Please enter a valid author name'));
-		elseif (!$name OR !Validate::isGenericName($name) OR strlen($name) > MAX_NAME_LENGTH)
+		elseif (!$name || !Validate::isGenericName($name) || strlen($name) > MAX_NAME_LENGTH)
 			$this->_html .= parent::displayError($this->l('Please enter a valid theme name'));
 		while ($this->error === false AND Tools::isSubmit('myvar_'.++$count))
 		{
 			if ((int)(Tools::getValue('myvar_'.$count)) == -1)
 				continue ;
 			$name = Tools::getValue('themevariationname_'.$count);
-			if (!$name OR !Validate::isGenericName($name) OR strlen($name) > MAX_NAME_LENGTH)
+			if (!$name || !Validate::isGenericName($name) || strlen($name) > MAX_NAME_LENGTH)
 				$this->_html .= parent::displayError($this->l('Please enter a valid theme variation name'));
 		}
 		if ($this->error == true)
@@ -1145,7 +1139,7 @@ class ThemeInstallator extends Module
 	
 	private function ModulesInformationForm()
 	{
-		if ($this->to_install AND count($this->to_install))
+		if ($this->to_install && count($this->to_install))
 		{
 			$tmp = '';
 			foreach ($this->to_install as $key => $val)

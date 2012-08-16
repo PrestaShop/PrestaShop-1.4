@@ -846,39 +846,35 @@ class ToolsCore
 		if ($id_category == 1)
 			return '<span class="navigation_end">'.$path.'</span>';
 
-		$pipe = Configuration::get('PS_NAVIGATION_PIPE');
+		$pipe = htmlentities(Configuration::get('PS_NAVIGATION_PIPE'), ENT_QUOTES, 'UTF-8');
 		if (empty($pipe))
 			$pipe = '>';
 
 		$fullPath = '';
-
 		if ($categoryType == 'products')
 		{
 			$category = Db::getInstance()->getRow('
-			SELECT id_category, level_depth, nleft, nright
+			SELECT nleft, nright
 			FROM '._DB_PREFIX_.'category
 			WHERE id_category = '.(int)$id_category);
 
-			if (isset($category['id_category']))
+			if (isset($category['nleft']))
 			{
 				$categories = Db::getInstance()->ExecuteS('
 				SELECT c.id_category, cl.name, cl.link_rewrite
 				FROM '._DB_PREFIX_.'category c
 				LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = c.id_category)
-				WHERE c.nleft <= '.(int)$category['nleft'].' AND c.nright >= '.(int)$category['nright'].' AND cl.id_lang = '.(int)($cookie->id_lang).' AND c.id_category != 1
-				ORDER BY c.level_depth ASC
-				LIMIT '.(int)$category['level_depth']);
+				WHERE c.nleft <= '.(int)$category['nleft'].' AND c.nright >= '.(int)$category['nright'].' AND cl.id_lang = '.(int)$cookie->id_lang.' AND c.id_category != 1
+				ORDER BY c.nleft ASC');
 
 				$n = 1;
-				$nCategories = (int)sizeof($categories);
+				$nCategories = count($categories);
 				foreach ($categories as $category)
-				{
 					$fullPath .=
-						(($n < $nCategories || $linkOntheLastItem) ? '<a href="'.self::safeOutput($link->getCategoryLink((int)$category['id_category'], $category['link_rewrite'])).'" title="'.htmlentities($category['name'], ENT_NOQUOTES, 'UTF-8').'">' : '').
+						(($n < $nCategories || $linkOntheLastItem) ? '<a href="'.htmlentities($link->getCategoryLink((int)$category['id_category'], $category['link_rewrite']), ENT_QUOTES, 'UTF-8').'" title="'.htmlentities($category['name'], ENT_QUOTES, 'UTF-8').'">' : '').
 						htmlentities($category['name'], ENT_NOQUOTES, 'UTF-8').
 						(($n < $nCategories || $linkOntheLastItem) ? '</a>' : '').
 						(($n++ != $nCategories || !empty($path)) ? '<span class="navigation-pipe">'.$pipe.'</span>' : '');
-				}
 
 				return $fullPath.$path;
 			}
@@ -2190,7 +2186,7 @@ FileETag INode MTime Size
 	 */
 	public static function clearCache($smarty)
 	{
-		if (!Configuration::get('PS_FORCE_SMARTY_2'))
+		if (!_PS_FORCE_SMARTY_2_)
 			$smarty->clearAllCache();
 		else
 			$smarty->clear_all_cache();

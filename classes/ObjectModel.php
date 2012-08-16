@@ -229,7 +229,7 @@ abstract class ObjectModelCore
 	 */
 	public function update($nullValues = false)
 	{
-	 	if (!Validate::isTableOrIdentifier($this->identifier) || !Validate::isTableOrIdentifier($this->table))
+	 	if (!Validate::isTableOrIdentifier($this->identifier.$this->table))
 			die(Tools::displayError());
 
 		$this->clearCache();
@@ -240,9 +240,9 @@ abstract class ObjectModelCore
 
 		/* Database update */
 		if ($nullValues)
-			$result = Db::getInstance()->autoExecuteWithNullValues(_DB_PREFIX_.$this->table, $this->getFields(), 'UPDATE', '`'.pSQL($this->identifier).'` = '.(int)($this->id));
+			$result = Db::getInstance()->autoExecuteWithNullValues(_DB_PREFIX_.$this->table, $this->getFields(), 'UPDATE', '`'.pSQL($this->identifier).'` = '.(int)$this->id);
 		else
-			$result = Db::getInstance()->autoExecute(_DB_PREFIX_.$this->table, $this->getFields(), 'UPDATE', '`'.pSQL($this->identifier).'` = '.(int)($this->id));
+			$result = Db::getInstance()->autoExecute(_DB_PREFIX_.$this->table, $this->getFields(), 'UPDATE', '`'.pSQL($this->identifier).'` = '.(int)$this->id);
 		if (!$result)
 			return false;
 
@@ -258,7 +258,7 @@ abstract class ObjectModelCore
 							die(Tools::displayError());
 
 					// used to insert missing lang entries
-					$where_lang = '`'.pSQL($this->identifier).'` = '.(int)($this->id).' AND `id_lang` = '.(int)($field['id_lang']);
+					$where_lang = '`'.pSQL($this->identifier).'` = '.(int)$this->id.' AND `id_lang` = '.(int)$field['id_lang'];
 
 					$lang_found = Db::getInstance()->getValue('SELECT COUNT(*) FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang` WHERE '. $where_lang);
 

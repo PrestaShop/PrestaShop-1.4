@@ -382,12 +382,10 @@ class ProductCore extends ObjectModel
 
 		$fieldsArray = array('meta_description', 'meta_keywords', 'meta_title', 'link_rewrite', 'name', 'available_now', 'available_later');
 		$fields = array();
-		$languages = Language::getLanguages(false);
-		$defaultLanguage = Configuration::get('PS_LANG_DEFAULT');
-		foreach ($languages as $language)
+		foreach (Language::getLanguages(false) as $language)
 		{
 			$fields[$language['id_lang']]['id_lang'] = $language['id_lang'];
-			$fields[$language['id_lang']][$this->identifier] = (int)($this->id);
+			$fields[$language['id_lang']][$this->identifier] = (int)$this->id;
 			$fields[$language['id_lang']]['description'] = (isset($this->description[$language['id_lang']])) ? pSQL($this->description[$language['id_lang']], true) : '';
 			$fields[$language['id_lang']]['description_short'] = (isset($this->description_short[$language['id_lang']])) ? pSQL($this->description_short[$language['id_lang']], true) : '';
 			foreach ($fieldsArray as $field)
@@ -396,12 +394,12 @@ class ProductCore extends ObjectModel
 					die(Tools::displayError());
 
 				/* Check fields validity */
-				if (isset($this->{$field}[$language['id_lang']]) AND !empty($this->{$field}[$language['id_lang']]))
+				if (isset($this->{$field}[$language['id_lang']]) && !empty($this->{$field}[$language['id_lang']]))
 					$fields[$language['id_lang']][$field] = pSQL($this->{$field}[$language['id_lang']]);
 				elseif (in_array($field, $this->fieldsRequiredLang))
 				{
 					if ($this->{$field} != '')
-						$fields[$language['id_lang']][$field] = pSQL($this->{$field}[$defaultLanguage]);
+						$fields[$language['id_lang']][$field] = pSQL($this->{$field}[(int)Configuration::get('PS_LANG_DEFAULT')]);
 				}
 				else
 					$fields[$language['id_lang']][$field] = '';
@@ -1356,9 +1354,8 @@ class ProductCore extends ObjectModel
 		$sqlGroups = (count($groups) ? 'IN ('.implode(',', $groups).')' : '= 1');
 
 		if ($count)
-		{
-			$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-			SELECT COUNT(`id_product`) AS nb
+			return (int)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+			SELECT COUNT(*)
 			FROM `'._DB_PREFIX_.'product` p
 			WHERE `active` = 1
 			AND DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0
@@ -1366,24 +1363,19 @@ class ProductCore extends ObjectModel
 				SELECT cp.`id_product`
 				FROM `'._DB_PREFIX_.'category_group` cg
 				LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
-				WHERE cg.`id_group` '.$sqlGroups.'
-			)');
-			return (int)($result['nb']);
-		}
+				WHERE cg.`id_group` '.$sqlGroups.')');
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.*, pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, p.`ean13`, p.`upc`,
-			i.`id_image`, il.`legend`, t.`rate`, m.`name` AS manufacturer_name, DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new,
-			(p.`price` * ((100 + (t.`rate`))/100)) AS orderprice, pa.id_product_attribute
+		i.`id_image`, il.`legend`, t.`rate`, m.`name` manufacturer_name,
+		DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 new
 		FROM `'._DB_PREFIX_.'product` p
-		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)$id_lang.')
 		LEFT OUTER JOIN `'._DB_PREFIX_.'product_attribute` pa ON (p.`id_product` = pa.`id_product` AND `default_on` = 1)
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
-		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (p.`id_tax_rules_group` = tr.`id_tax_rules_group`
-		   AND tr.`id_country` = '.(int)Country::getDefaultCountryId().'
-		   AND tr.`id_state` = 0)
-	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
+		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)$id_lang.')
+		LEFT JOIN `'._DB_PREFIX_.'tax_rule` tr ON (p.`id_tax_rules_group` = tr.`id_tax_rules_group` AND tr.`id_country` = '.(int)Country::getDefaultCountryId().' AND tr.`id_state` = 0)
+		LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (m.`id_manufacturer` = p.`id_manufacturer`)
 		WHERE p.`active` = 1
 		AND DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0
@@ -1718,7 +1710,7 @@ class ProductCore extends ObjectModel
 		if (isset($divisor))
 			Tools::displayParameterAsDeprecated('divisor');
 
-		if (!Validate::isBool($usetax) || !Validate::isUnsignedId($id_product))
+		if ((int)$id_product <= 0)
 			die(Tools::displayError());
 
 		// Initializations

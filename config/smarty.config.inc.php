@@ -25,7 +25,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-define('_PS_SMARTY_DIR_', _PS_TOOL_DIR_.(Configuration::get('PS_FORCE_SMARTY_2') ? 'smarty_v2' : 'smarty').'/');
+define('_PS_SMARTY_DIR_', _PS_TOOL_DIR_.(_PS_FORCE_SMARTY_2_ ? 'smarty_v2' : 'smarty').'/');
 
 require_once(_PS_SMARTY_DIR_.'Smarty.class.php');
 
@@ -41,7 +41,7 @@ $smarty->compile_check = false;
 $smarty->debugging = false; 
 $smarty->debugging_ctrl = 'URL'; // 'NONE' on production
 
-if (Configuration::get('PS_FORCE_SMARTY_2')) 
+if (_PS_FORCE_SMARTY_2_) 
 {	
 	$smarty->debug_tpl = _PS_ALL_THEMES_DIR_.'debug.tpl';
 	
@@ -93,7 +93,7 @@ function smartyTranslate($params, &$smarty)
 	
 	$string = str_replace('\'', '\\\'', $params['s']);
 	$key = '';
-	if (Configuration::get('PS_FORCE_SMARTY_2')) /* Keep a backward compatibility for Smarty v2 */
+	if (_PS_FORCE_SMARTY_2_) /* Keep a backward compatibility for Smarty v2 */
 		$key = $smarty->currentTemplate.'_'.md5($string);
 	else
 		$key = substr(basename($smarty->template_resource), 0, -4).'_'.md5($string);
@@ -176,7 +176,7 @@ function smartyRegisterFunction($smarty, $type, $function, $params)
 {
 	if ($type != 'function' && $type != 'modifier')
 		return false;
-	if (!Configuration::get('PS_FORCE_SMARTY_2'))
+	if (!_PS_FORCE_SMARTY_2_)
 		$smarty->registerPlugin($type, $function, $params); // Use Smarty 3 API calls, only if PHP version > 5.1.2
 	else
 		$smarty->{'register_'.$type}($function, $params); // or keep a backward compatibility if PHP version < 5.1.2

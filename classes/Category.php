@@ -464,15 +464,13 @@ class CategoryCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'category` c
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.(int)$id_lang.')
 		LEFT JOIN `'._DB_PREFIX_.'category_group` cg ON (cg.`id_category` = c.`id_category`)
-		WHERE `id_parent` = '.(int)$this->id.'
-		'.($active ? 'AND `active` = 1' : '').'
-		AND cg.`id_group` '.$sqlGroups.'
+		WHERE `id_parent` = '.(int)$this->id.($active ? ' AND `active` = 1' : '').' AND cg.`id_group` '.$sqlGroups.'
 		GROUP BY c.`id_category`
 		ORDER BY `level_depth` ASC, c.`position` ASC');
 		
 		foreach ($result as &$row)
 		{
-			$row['id_image'] = (file_exists(_PS_CAT_IMG_DIR_.$row['id_category'].'.jpg')) ? (int)$row['id_category'] : Language::getIsoById((int)$id_lang).'-default';
+			$row['id_image'] = (bool)@filemtime(_PS_CAT_IMG_DIR_.$row['id_category'].'.jpg') ? (int)$row['id_category'] : Language::getIsoById((int)$id_lang).'-default';
 			$row['legend'] = 'no picture';
 		}
 
@@ -510,7 +508,7 @@ class CategoryCore extends ObjectModel
 
 		if (empty($orderWay))
 			$orderWay = 'ASC';
-		if ($orderBy == 'id_product' ||	$orderBy == 'date_add')
+		if ($orderBy == 'id_product' ||	$orderBy == 'date_add' || $orderBy == 'price')
 			$orderByPrefix = 'p';
 		elseif ($orderBy == 'name')
 			$orderByPrefix = 'pl';
@@ -522,9 +520,6 @@ class CategoryCore extends ObjectModel
 		elseif ($orderBy == 'position')
 			$orderByPrefix = 'cp';
 
-		if ($orderBy == 'price')
-			$orderBy = 'orderprice';
-
 		if (!Validate::isOrderBy($orderBy) || !Validate::isOrderWay($orderWay))
 			die(Tools::displayError());
 
@@ -533,7 +528,7 @@ class CategoryCore extends ObjectModel
 		/* Return only the number of products */
 		if ($getTotal)
 			return (int)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
-			SELECT COUNT(cp.`id_product`)
+			SELECT COUNT(*)
 			FROM `'._DB_PREFIX_.'product` p
 			LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (p.`id_product` = cp.`id_product`)
 			WHERE cp.`id_category` = '.(int)$this->id.($active ? ' AND p.`active` = 1' : '').'
@@ -543,8 +538,7 @@ class CategoryCore extends ObjectModel
 		SELECT p.*, pa.`id_product_attribute`, pl.`description`, pl.`description_short`, pl.`available_now`, pl.`available_later`, pl.`link_rewrite`,
 		pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, i.`id_image`, il.`legend`, m.`name` manufacturer_name,
 		tl.`name` tax_name, t.`rate`, cl.`name` category_default, DATEDIFF(p.`date_add`, DATE_SUB(NOW(),
-		INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 new,
-		(p.`price` * IF(t.`rate`,((100 + (t.`rate`))/100),1)) orderprice
+		INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 new
 		FROM `'._DB_PREFIX_.'category_product` cp
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.`id_product` = cp.`id_product`)
 		LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (p.`id_product` = pa.`id_product` AND default_on = 1)
@@ -566,7 +560,7 @@ class CategoryCore extends ObjectModel
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 
-		if ($orderBy == 'orderprice')
+		if ($orderBy == 'price')
 			Tools::orderbyPrice($result, $orderWay);
 
 		if (!$result)
@@ -703,23 +697,22 @@ class CategoryCore extends ObjectModel
 			$i = $result['id_parent'];
 		}
 	}
-
+	
 	public static function getLinkRewrite($id_category, $id_lang)
 	{
-		if (!Validate::isUnsignedId($id_category) OR !Validate::isUnsignedId($id_lang))
-			return false;
+		if (isset(self::$_links[(int)$id_category.'-'.(int)$id_lang]))
+			return self::$_links[(int)$id_category.'-'.(int)$id_lang];
 
-		if (isset(self::$_links[$id_category.'-'.$id_lang]))
-			return self::$_links[$id_category.'-'.$id_lang];
-
-		$result = Db::getInstance()->getRow('
+		$link_rewrite = Db::getInstance()->getValue('
 		SELECT cl.`link_rewrite`
 		FROM `'._DB_PREFIX_.'category` c
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON c.`id_category` = cl.`id_category`
-		WHERE `id_lang` = '.(int)($id_lang).'
-		AND c.`id_category` = '.(int)($id_category));
-		self::$_links[$id_category.'-'.$id_lang] = $result['link_rewrite'];
-		return $result['link_rewrite'];
+		WHERE `id_lang` = '.(int)$id_lang.'
+		AND c.`id_category` = '.(int)$id_category);
+		
+		self::$_links[(int)$id_category.'-'.(int)$id_lang] = $link_rewrite;
+		
+		return $link_rewrite;
 	}
 
 	public function getLink()

@@ -180,7 +180,7 @@ CREATE TABLE `PREFIX_cart` (
 CREATE TABLE `PREFIX_cart_discount` (
   `id_cart` int(10) unsigned NOT NULL,
   `id_discount` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id_cart`,`id_discount`),
+  PRIMARY KEY (`id_cart`, `id_discount`),
   KEY `id_discount` (`id_discount`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
@@ -206,8 +206,11 @@ CREATE TABLE `PREFIX_category` (
   `position` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id_category`),
   KEY `category_parent` (`id_parent`),
-  KEY `nleftright` (`nleft`,`nright`),
-  KEY `nleftrightactive` (`nleft`,`nright`,`active`)
+  KEY `nleftright` (`nleft`, `nright`),
+  KEY `nleftrightactive` (`nleft`, `nright`, `active`),
+  KEY `level_depth` (`level_depth`),
+  KEY `nright` (`nright`),
+  KEY `nleft` (`nleft`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_category_group` (
@@ -620,7 +623,8 @@ CREATE TABLE `PREFIX_feature_product` (
   `id_product` int(10) unsigned NOT NULL,
   `id_feature_value` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`id_feature`,`id_product`),
-  KEY `id_feature_value` (`id_feature_value`)
+  KEY `id_feature_value` (`id_feature_value`),
+  KEY `id_product` (`id_product`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_feature_value` (
@@ -1155,6 +1159,7 @@ CREATE TABLE `PREFIX_product` (
   KEY `product_manufacturer` (`id_manufacturer`),
   KEY `id_category_default` (`id_category_default`),
   KEY `id_color_default` (`id_color_default`),
+  KEY `indexed` (`indexed`),
   KEY `date_add` (`date_add`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
@@ -1384,7 +1389,8 @@ CREATE TABLE `PREFIX_specific_price` (
 	`from` DATETIME NOT NULL,
 	`to` DATETIME NOT NULL,
 	PRIMARY KEY  (`id_specific_price`),
-	KEY (`id_product`, `id_shop`, `id_currency`, `id_country`, `id_group`, `from_quantity`, `from`, `to`)
+	KEY (`id_product`, `id_shop`, `id_currency`, `id_country`, `id_group`, `from_quantity`, `from`, `to`),
+	KEY `from_quantity` (`from_quantity`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_state` (

@@ -1065,7 +1065,7 @@ abstract class ModuleCore
 	{
 		global $smarty;
 
-		if (Configuration::get('PS_FORCE_SMARTY_2')) /* Keep a backward compatibility for Smarty v2 */
+		if (_PS_FORCE_SMARTY_2_) /* Keep a backward compatibility for Smarty v2 */
 		{
 			$previousTemplate = $smarty->currentTemplate;
 			$smarty->currentTemplate = substr(basename($template), 0, -4);
@@ -1078,7 +1078,7 @@ abstract class ModuleCore
 			$smarty->assign('module_template_dir', ($overloaded ? _THEME_DIR_ : __PS_BASE_URI__).'modules/'.basename($file, '.php').'/');
 			$result = $smarty->fetch(($overloaded ? _PS_THEME_DIR_.'modules/'.basename($file, '.php') : _PS_MODULE_DIR_.basename($file, '.php')).'/'.$template, $cacheId, $compileId);
 		}
-		if (Configuration::get('PS_FORCE_SMARTY_2')) /* Keep a backward compatibility for Smarty v2 */
+		if (_PS_FORCE_SMARTY_2_) /* Keep a backward compatibility for Smarty v2 */
 			$smarty->currentTemplate = $previousTemplate;
 		return $result;
 	}
@@ -1093,7 +1093,7 @@ abstract class ModuleCore
 		global $smarty;
 
 		/* Use Smarty 3 API calls */
-		if (!Configuration::get('PS_FORCE_SMARTY_2')) /* PHP version > 5.1.2 */
+		if (!_PS_FORCE_SMARTY_2_) /* PHP version > 5.1.2 */
 			return $smarty->isCached($this->_getApplicableTemplateDir($template).$template, $cacheId, $compileId);
 		/* or keep a backward compatibility if PHP version < 5.1.2 */
 		else

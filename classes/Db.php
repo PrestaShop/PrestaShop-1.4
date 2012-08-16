@@ -143,7 +143,7 @@ abstract class DbCore
 		{
 			$query = 'UPDATE `'.$table.'` SET ';
 			foreach ($values as $key => $value)
-				$query .= '`'.$key.'` = \''.(is_bool($value) ? (int)$value : pSQL($value)).'\',';
+				$query .= '`'.$key.'` = \''.(is_bool($value) ? (int)$value : $value).'\',';
 			$query = rtrim($query, ',');
 			if ($where)
 				$query .= ' WHERE '.$where;

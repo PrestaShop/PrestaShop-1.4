@@ -50,7 +50,7 @@ if (!headers_sent())
 if (!defined('__PS_BASE_URI__')) /* No settings file? goto installer...*/
 {
 	$dir = ((is_dir($_SERVER['REQUEST_URI']) || substr($_SERVER['REQUEST_URI'], -1) == '/') ? $_SERVER['REQUEST_URI'] : dirname($_SERVER['REQUEST_URI']).'/');
-	if (!(bool)file_exists(dirname(__FILE__).'/../install'))
+	if (!(bool)@filemtime(dirname(__FILE__).'/../install'))
 		die('Error: \'install\' directory is missing');
 	header('Location: install/');
 	exit;
@@ -124,6 +124,9 @@ define('_PS_OS_OUTOFSTOCK_', Configuration::get('PS_OS_OUTOFSTOCK'));
 define('_PS_OS_BANKWIRE_', Configuration::get('PS_OS_BANKWIRE'));
 define('_PS_OS_PAYPAL_', Configuration::get('PS_OS_PAYPAL'));
 define('_PS_OS_WS_PAYMENT_', Configuration::get('PS_OS_WS_PAYMENT'));
+
+/* Keep a backward compatibility for Smarty v2 (will be removed in PrestaShop v1.5) */
+define('_PS_FORCE_SMARTY_2_', (int)Configuration::get('PS_FORCE_SMARTY_2'));
 
 /* It is not safe to rely on the system's timezone settings, and this would generate a PHP Strict Standards notice. */
 if (function_exists('date_default_timezone_set'))

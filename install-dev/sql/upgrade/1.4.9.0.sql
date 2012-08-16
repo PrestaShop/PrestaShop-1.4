@@ -7,6 +7,12 @@ ALTER TABLE `PREFIX_order_tax` ADD `id_order_tax` INT UNSIGNED NOT NULL AUTO_INC
 ALTER TABLE `PREFIX_feature_lang` ADD INDEX feature_name (`id_lang`, `name`);
 ALTER TABLE `PREFIX_state` ADD INDEX statename (`name`);
 ALTER TABLE `PREFIX_category` ADD INDEX nleftrightactive (`nleft`, `nright`, `active`);
+ALTER TABLE `PREFIX_feature_product` ADD INDEX id_product (`id_product`);
+ALTER TABLE `PREFIX_category` ADD INDEX level_depth (`level_depth`);
+ALTER TABLE `PREFIX_category` ADD INDEX nright (`nright`);
+ALTER TABLE `PREFIX_category` ADD INDEX nleft (`nleft`);
+ALTER TABLE `PREFIX_specific_price` ADD INDEX from_quantity (`from_quantity`);
+ALTER TABLE `PREFIX_product` ADD INDEX indexed (`indexed`);
 
 UPDATE `PREFIX_country` SET `zip_code_format` = 'NNNNN' WHERE `iso_code` = 'MC' LIMIT 1;
 UPDATE `PREFIX_county_zip_code` SET `to_zip_code` = `from_zip_code` WHERE `to_zip_code` = 0;
@@ -17,3 +23,4 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`)(SEL
 DELETE FROM `PREFIX_referrer_cache` WHERE id_referrer NOT IN (SELECT id_referrer FROM `PREFIX_referrer`);
 
 /* PHP:update_module_mailalert(); */;
+/* PHP:update_module_blocklayered(); */;
