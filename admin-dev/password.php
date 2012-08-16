@@ -63,16 +63,23 @@ else if (isset($_POST['Submit']))
 			else
 			{	
 				$pwd = Tools::passwdGen();
+				
+				$previous_password = $employee->passwd;
+				$previous_last_passwd_gen = $employee->last_passwd_gen;
+				
 				$employee->passwd = md5(pSQL(_COOKIE_KEY_.$pwd));
 				$employee->last_passwd_gen = date('Y-m-d H:i:s', time());
-				$result = $employee->update();
-				if (!$result)
+				if (!$employee->update())
 					$errors[] = Tools::displayError('An error occurred during your password change.');
-				else
+				elseif (!Mail::Send((int)$id_lang, 'password', Mail::l('Your new admin password', (int)$id_lang), array('{email}' => $employee->email, '{lastname}' => $employee->lastname, '{firstname}' => $employee->firstname, '{passwd}' => $pwd), $employee->email, $employee->firstname.' '.$employee->lastname))
 				{
-					if (Mail::Send((int)$id_lang, 'password', Mail::l('Your new admin password', (int)$id_lang), array('{email}' => $employee->email, '{lastname}' => $employee->lastname, '{firstname}' => $employee->firstname, '{passwd}' => $pwd), $employee->email, $employee->firstname.' '.$employee->lastname))
-						$confirmation = 'ok';
+					$errors[] = Tools::displayError('Impossible to send the e-mail with your new password.');
+					$employee->passwd = $previous_password;
+					$employee->last_passwd_gen = $previous_last_passwd_gen;
+					$employee->update();
 				}
+				else
+					$confirmation = 'ok';
 			}
 		}
 	}
