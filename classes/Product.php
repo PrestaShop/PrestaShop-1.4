@@ -1849,11 +1849,11 @@ class ProductCore extends ObjectModel
       $price = (float)$specific_price['price'];
 
 		// convert only if the specific price is in the default currency (id_currency = 0)
-		if (!$specific_price OR !($specific_price['price'] > 0 AND $specific_price['id_currency']))
+		if (!$specific_price || !($specific_price['price'] > 0 && $specific_price['id_currency']))
 			$price = Tools::convertPrice($price, $id_currency);
 
 		// Attribute price
-		$attribute_price = Tools::convertPrice(array_key_exists('attribute_price', $result) ? (float)($result['attribute_price']) : 0, $id_currency);
+		$attribute_price = Tools::convertPrice(isset($result['attribute_price']) ? (float)$result['attribute_price'] : 0, $id_currency);
 		if ($id_product_attribute !== false) // If you want the default combination, please use NULL value instead
 			$price += $attribute_price;
 
@@ -2761,9 +2761,9 @@ class ProductCore extends ObjectModel
 	*/
 	public static function getFrontFeaturesStatic($id_lang, $id_product)
 	{
-		if (!array_key_exists($id_product.'-'.$id_lang, self::$_frontFeaturesCache))
+		if (!isset(self::$_frontFeaturesCache[(int)$id_product.'-'.(int)$id_lang]))
 		{
-			self::$_frontFeaturesCache[$id_product.'-'.$id_lang] = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+			self::$_frontFeaturesCache[(int)$id_product.'-'.(int)$id_lang] = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 			SELECT name, value, pf.id_feature
 			FROM '._DB_PREFIX_.'feature_product pf
 			LEFT JOIN '._DB_PREFIX_.'feature_lang fl ON (fl.id_feature = pf.id_feature AND fl.id_lang = '.(int)$id_lang.')
@@ -2771,7 +2771,7 @@ class ProductCore extends ObjectModel
 			WHERE pf.id_product = '.(int)$id_product.'
 			ORDER BY fl.name ASC');
 		}
-		return self::$_frontFeaturesCache[$id_product.'-'.$id_lang];
+		return self::$_frontFeaturesCache[(int)$id_product.'-'.(int)$id_lang];
 	}
 
 	public function getFrontFeatures($id_lang)

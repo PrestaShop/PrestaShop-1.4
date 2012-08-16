@@ -68,7 +68,7 @@ class MySQLCore extends Db
 		$query .= ' LIMIT 1';
 		$this->_result = false;
 		$this->_lastQuery = $query;
-		if ($use_cache AND _PS_CACHE_ENABLED_)
+		if ($use_cache && _PS_CACHE_ENABLED_)
 			if ($result = Cache::getInstance()->get(md5($query)))
 			{
 				$this->_lastCached = true;
@@ -81,7 +81,7 @@ class MySQLCore extends Db
 				if (_PS_DEBUG_SQL_)
 					$this->displayMySQLError($query);
 				$result = mysql_fetch_assoc($this->_result);
-				if ($use_cache = 1 AND _PS_CACHE_ENABLED_)
+				if ($use_cache = 1 && _PS_CACHE_ENABLED_)
 					Cache::getInstance()->setQuery($query, $result);
 				return $result;
 			}
@@ -95,19 +95,21 @@ class MySQLCore extends Db
 		$query .= ' LIMIT 1';
 		$this->_result = false;
 		$this->_lastQuery = $query;
-		if ($use_cache AND _PS_CACHE_ENABLED_)
+		if ($use_cache && _PS_CACHE_ENABLED_)
 			if ($result = Cache::getInstance()->get(md5($query)))
 			{
 				$this->_lastCached = true;
 				return $result;
 			}
-		if ($this->_link AND $this->_result = mysql_query($query, $this->_link) AND is_array($tmpArray = mysql_fetch_assoc($this->_result)))
-		{ 
-			$this->_lastCached = false;
-			$result =  array_shift($tmpArray);
-			if ($use_cache AND _PS_CACHE_ENABLED_)
-				Cache::getInstance()->setQuery($query, $result);
-			return $result;
+		if ($this->_link && $this->_result = mysql_query($query, $this->_link))
+		{
+			if ($tmpArray = mysql_fetch_row($this->_result))
+			{
+				$this->_lastCached = false;
+				if ($use_cache && _PS_CACHE_ENABLED_)
+					Cache::getInstance()->setQuery($query, $tmpArray[0]);
+				return $tmpArray[0];
+			}
 		}
 		return false;
 	}
@@ -197,10 +199,8 @@ class MySQLCore extends Db
 				Cache::getInstance()->setNumRows(md5($this->_lastQuery), $nrows);
 			return $nrows;
 		}
-		elseif (_PS_CACHE_ENABLED_ AND $this->_lastCached)
-		{
+		elseif (_PS_CACHE_ENABLED_ && $this->_lastCached)
 			return Cache::getInstance()->getNumRows(md5($this->_lastQuery));
-		}
 	}
 	
 	public function Insert_ID()

@@ -96,25 +96,26 @@ abstract class ModuleCore
 	 */
 	public static $classInModule	= array();
 
-	public function __construct($name = NULL)
+	public function __construct($name = null)
 	{
-		if ($this->name == NULL)
+		if ($this->name == null)
 			$this->name = $this->id;
-		if ($this->name != NULL)
+		if ($this->name != null)
 		{
-			if (self::$modulesCache == NULL AND !is_array(self::$modulesCache))
+			if (self::$modulesCache === null)
 			{
 				self::$modulesCache = array();
-				$result = Db::getInstance()->ExecuteS('SELECT * FROM `'.pSQL(_DB_PREFIX_.$this->table).'`');
-				foreach ($result as $row)
+				$db = Db::getInstance();
+				$result = $db->ExecuteS('SELECT * FROM `'.bqSQL(_DB_PREFIX_.$this->table).'`', false);
+				while ($row = $db->nextRow($result))
 					self::$modulesCache[$row['name']] = $row;
 			}
 			if (isset(self::$modulesCache[$this->name]))
 			{
 				$this->active = true;
 				$this->id = self::$modulesCache[$this->name]['id_module'];
-				foreach (self::$modulesCache[$this->name] AS $key => $value)
-					if (key_exists($key, $this))
+				foreach (self::$modulesCache[$this->name] as $key => $value)
+					if (property_exists($this, $key))
 						$this->{$key} = $value;
 				$this->_path = __PS_BASE_URI__.'modules/'.$this->name.'/';
 			}
@@ -696,7 +697,7 @@ abstract class ModuleCore
 	 */
 	public static function hookExec($hook_name, $hookArgs = array(), $id_module = null)
 	{
-		if ((!empty($id_module) && !Validate::isUnsignedId($id_module)) || !Validate::isHookName($hook_name))
+		if (($id_module !== null && (int)$id_module <= 0) || !Validate::isHookName($hook_name))
 			die(Tools::displayError());
 
 		$live_edit = false;
@@ -716,7 +717,7 @@ abstract class ModuleCore
 		{
 			$db = Db::getInstance(_PS_USE_SQL_SLAVE_);
 			$result = $db->ExecuteS('
-			SELECT h.`name` as hook, m.`id_module`, h.`id_hook`, m.`name` as module, h.`live_edit`
+			SELECT h.`name` hook, m.`id_module`, h.`id_hook`, m.`name` module, h.`live_edit`
 			FROM `'._DB_PREFIX_.'module` m
 			LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON (hm.`id_module` = m.`id_module`)
 			LEFT JOIN `'._DB_PREFIX_.'hook` h ON (hm.`id_hook` = h.`id_hook`)
@@ -746,8 +747,7 @@ abstract class ModuleCore
 			if (!($moduleInstance = Module::getInstanceByName($array['module'])))
 				continue;
 
-			$exceptions = $moduleInstance->getExceptions((int)$array['id_hook'], (int)$array['id_module']);
-			foreach ($exceptions as $exception)
+			foreach ($moduleInstance->getExceptions((int)$array['id_hook'], (int)$array['id_module']) as $exception)
 				if (strstr(basename($_SERVER['PHP_SELF']).'?'.$_SERVER['QUERY_STRING'], $exception['file_name']) && !strstr($_SERVER['QUERY_STRING'], $exception['file_name']))
 					continue 2;
 
@@ -840,18 +840,20 @@ abstract class ModuleCore
 
 		if (!isset(self::$l_cache[$cache_key]))
 		{
-			if (!is_array($_MODULES))
+			if (!isset($_MODULES))
 				return str_replace('"', '&quot;', $string);
 			// set array key to lowercase for 1.3 compatibility
 			$_MODULES = array_change_key_case($_MODULES);
-			$currentKey = '<{'.strtolower($name).'}'.strtolower(_THEME_NAME_).'>'.strtolower($source).'_'.md5($string);
-			$defaultKey = '<{'.strtolower($name).'}prestashop>'.strtolower($source).'_'.md5($string);
+			$name = strtolower($name);
+			$source = strtolower($source);
+			$string_md5 = md5($string);
+			$currentKey = '<{'.$name.'}'.strtolower(_THEME_NAME_).'>'.$source.'_'.$string_md5;
 
 			if (isset($_MODULES[$currentKey]))
 				$ret = stripslashes($_MODULES[$currentKey]);
 			elseif (isset($_MODULES[$currentKey]))
 				$ret = stripslashes($_MODULES[$currentKey]);
-			elseif (isset($_MODULES[$defaultKey]))
+			elseif (($defaultKey = '<{'.$name.'}prestashop>'.$source.'_'.$string_md5) && isset($_MODULES[$defaultKey]))
 				$ret = stripslashes($_MODULES[$defaultKey]);
 			elseif (isset($_MODULES[$defaultKey]))
 				$ret = stripslashes($_MODULES[$defaultKey]);
@@ -878,12 +880,13 @@ abstract class ModuleCore
 		if (self::$_generateConfigXmlMode)
 			return $string;
 
-		global $cookie;
-
 		if ($id_lang == null)
+		{
+			global $cookie;
 			$id_lang = (!isset($cookie->id_lang) ? (int)Configuration::get('PS_LANG_DEFAULT') : (int)$cookie->id_lang);
-		$file = _PS_MODULE_DIR_.$this->name.'/'.Language::getIsoById($id_lang).'.php';
-		if (@include_once($file))
+		}
+
+		if (@include_once(_PS_MODULE_DIR_.$this->name.'/'.Language::getIsoById($id_lang).'.php'))
 		{
 			global $_MODULES, $_MODULE;
 			$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
@@ -1003,31 +1006,30 @@ abstract class ModuleCore
 	 * @param int $id_hook Hook ID
 	 * @return array Exceptions
 	 */
-	protected static $exceptionsCache = NULL;
+	protected static $exceptionsCache = null;
 	public function getExceptions($id_hook)
 	{
-		if (self::$exceptionsCache == NULL AND !is_array(self::$exceptionsCache))
+		if (self::$exceptionsCache === null)
 		{
 			self::$exceptionsCache = array();
 			$result = Db::getInstance()->ExecuteS('
-			SELECT CONCAT(id_hook, \'-\', id_module) as `key`, `file_name` as value
+			SELECT CONCAT(id_hook, \'-\', id_module) `key`, `file_name` value
 			FROM `'._DB_PREFIX_.'hook_module_exceptions`');
 			foreach ($result as $row)
 			{
 				if (empty($row['value']))
 					continue;
-				if (!array_key_exists($row['key'], self::$exceptionsCache))
+				if (!isset(self::$exceptionsCache[$row['key']]))
 					self::$exceptionsCache[$row['key']] = array();
 				self::$exceptionsCache[$row['key']][] = array('file_name' => $row['value']);
 			}
 		}
-		return (array_key_exists((int)($id_hook).'-'.(int)($this->id), self::$exceptionsCache) ? self::$exceptionsCache[(int)($id_hook).'-'.(int)($this->id)] : array());
+		return (isset(self::$exceptionsCache[(int)($id_hook).'-'.(int)($this->id)]) ? self::$exceptionsCache[(int)($id_hook).'-'.(int)($this->id)] : array());
 	}
 
 	public static function isInstalled($moduleName)
 	{
-		Db::getInstance()->ExecuteS('SELECT `id_module` FROM `'._DB_PREFIX_.'module` WHERE `name` = \''.pSQL($moduleName).'\'');
-		return (bool)Db::getInstance()->NumRows();
+		return (bool)Db::getInstance()->getValue('SELECT `id_module` FROM `'._DB_PREFIX_.'module` WHERE `name` = \''.pSQL($moduleName).'\'');
 	}
 
 	public function isRegisteredInHook($hook)

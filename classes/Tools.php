@@ -467,9 +467,17 @@ class ToolsCore
 			$currency = Currency::getCurrent();
 		elseif (is_numeric($currency))
 			$currency = Currency::getCurrencyInstance($currency);
-
-		$c_id = is_array($currency) ? $currency['id_currency'] : $currency->id;
-		$c_rate = is_array($currency) ? $currency['conversion_rate'] : $currency->conversion_rate;
+		
+		if (isset($currency->id))
+		{
+			$c_id = $currency->id;
+			$c_rate = $currency->conversion_rate;
+		}
+		else
+		{
+			$c_id = $currency['id_currency'];
+			$c_rate = $currency['conversion_rate'];
+		}
 
 		if ($c_id != (int)Configuration::get('PS_CURRENCY_DEFAULT'))
 			$price = $to_currency ? ($price * $c_rate) : ($price / $c_rate);

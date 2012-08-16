@@ -105,8 +105,7 @@ function smartyTranslate($params, &$smarty)
 
 		$iso = Language::getIsoById((int)$cookie->id_lang);
 
-		$file_mtime = @filemtime(_PS_THEME_DIR_.'modules/'.$params['mod'].'/'.$iso.'.php');
-		if (!!$file_mtime)
+		if ((bool)@filemtime(_PS_THEME_DIR_.'modules/'.$params['mod'].'/'.$iso.'.php'))
 		{
 			$translationsFile = _PS_THEME_DIR_.'modules/'.$params['mod'].'/'.$iso.'.php';
 			$key = '<{'.$params['mod'].'}'._THEME_NAME_.'>'.$key;
@@ -117,10 +116,11 @@ function smartyTranslate($params, &$smarty)
 			$key = '<{'.$params['mod'].'}prestashop>'.$key;
 		}
 		
-		if (!is_array($_MODULES))
+		if (!isset($_MODULES))
 			$_MODULES = array();
-		if (@include_once($translationsFile) && is_array($_MODULE))
-			$_MODULES = array_merge($_MODULES, $_MODULE);
+		if (@include_once($translationsFile))
+			if (isset($_MODULE))
+				$_MODULES = array_merge($_MODULES, $_MODULE);
 		$lang_array = $_MODULES;
 	}
 	

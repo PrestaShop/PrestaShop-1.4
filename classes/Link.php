@@ -249,13 +249,15 @@ class LinkCore
 			self::$cache['page'][$row['page'].'.php_'.$cookie->id_lang] = $this->getLangLink((int)$cookie->id_lang).$row['url_rewrite'];
 	}
 	
-	public function getPageLink($filename, $ssl = false, $id_lang = NULL)
+	public function getPageLink($filename, $ssl = false, $id_lang = null)
 	{
-		global $cookie;
-		if ($id_lang == NULL)
-			$id_lang = (int)($cookie->id_lang);
+		if ($id_lang == null)
+		{
+			global $cookie;
+			$id_lang = (int)$cookie->id_lang;
+		}
 
-		if (array_key_exists($filename.'_'.$id_lang, self::$cache['page']) && !empty(self::$cache['page'][$filename.'_'.$id_lang]))
+		if (isset(self::$cache['page'][$filename.'_'.$id_lang]) && !empty(self::$cache['page'][$filename.'_'.$id_lang]))
 			$uri_path = self::$cache['page'][$filename.'_'.$id_lang];
 		else
 		{
