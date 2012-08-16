@@ -236,7 +236,7 @@ abstract class DbCore
 
 		if (!defined('_PS_DEBUG_SQL_'))
 			define('_PS_DEBUG_SQL_', false);
-		
+
 		if (!defined('_PS_MAGIC_QUOTES_GPC_'))
 			define('_PS_MAGIC_QUOTES_GPC_', get_magic_quotes_gpc());
 
@@ -317,12 +317,13 @@ abstract class DbCore
 	 * @param array $data Data to insert as associative array. If $data is a list of arrays, multiple insert will be done
 	 * @param bool $null_values If we want to use NULL values instead of empty quotes
 	 * @param bool $use_cache
-	 * @param $type Must be Db::INSERT or Db::INSERT_IGNORE or Db::REPLACE
+	 * @param int $type Must be Db::INSERT or Db::INSERT_IGNORE or Db::REPLACE
+	 * @param bool $add_prefix Add or not _DB_PREFIX_ before table name
 	 * @return bool
 	 */
 	public function insert($table, $data, $null_values = false, $use_cache = true, $type = Db::INSERT, $add_prefix = true)
 	{
-		if (!$data)
+		if (!$data && !$null_values)
 			return true;
 
 		if ($add_prefix)
@@ -380,6 +381,7 @@ abstract class DbCore
 	 * @param int $limit
 	 * @param bool $null_values If we want to use NULL values instead of empty quotes
 	 * @param bool $use_cache
+	 * @param bool $add_prefix Add or not _DB_PREFIX_ before table name
 	 * @return bool
 	 */
 	public function update($table, $data, $where = '', $limit = 0, $null_values = false, $use_cache = true, $add_prefix = true)
@@ -416,10 +418,14 @@ abstract class DbCore
 	 * @param string $where WHERE clause on query
 	 * @param int $limit Number max of rows to delete
 	 * @param bool $use_cache Use cache or not
+	 * @param bool $add_prefix Add or not _DB_PREFIX_ before table name
 	 * @return bool
 	 */
-	public function delete($table, $where = '', $limit = 0, $use_cache = true)
+	public function delete($table, $where = '', $limit = 0, $use_cache = true, $add_prefix = true)
 	{
+		if (_DB_PREFIX_ && !preg_match('#^'._DB_PREFIX_.'#i', $table) && $add_prefix)
+			$table = _DB_PREFIX_.$table;
+
 		$this->result = false;
 		$sql = 'DELETE FROM `'.bqSQL($table).'`'.($where ? ' WHERE '.$where : '').($limit ? ' LIMIT '.(int)$limit : '');
 		$res = $this->query($sql);
@@ -460,7 +466,7 @@ abstract class DbCore
 			$sql = $sql->build();
 
 		// This method must be used only with queries which display results
-		if (!preg_match('#^\s*(select|show|explain|describe)\s#i', $sql))
+		if (!preg_match('#^\s*\(?\s*(select|show|explain|describe|desc)\s#i', $sql))
 		{
 			if (defined('_PS_MODE_DEV_') && _PS_MODE_DEV_)
 				throw new PrestaShopDatabaseException('Db->executeS() must be used only with select, show, explain or describe queries');
@@ -632,9 +638,9 @@ abstract class DbCore
 	 * @param bool $engine
 	 * @return int
 	 */
-	public static function checkConnection($server, $user, $pwd, $db, $new_db_link = true, $engine = null)
+	public static function checkConnection($server, $user, $pwd, $db, $new_db_link = true, $engine = null, $timeout = 5)
 	{
-		return call_user_func_array(array(Db::getClass(), 'tryToConnect'), array($server, $user, $pwd, $db, $new_db_link, $engine));
+		return call_user_func_array(array(Db::getClass(), 'tryToConnect'), array($server, $user, $pwd, $db, $new_db_link, $engine, $timeout));
 	}
 
 	/**

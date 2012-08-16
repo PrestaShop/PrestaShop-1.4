@@ -154,8 +154,9 @@ class MySQLCore extends Db
 	/**
 	 * @see Db::checkConnection()
 	 */
-	public static function tryToConnect($server, $user, $pwd, $db, $newDbLink = true, $engine = null)
+	public static function tryToConnect($server, $user, $pwd, $db, $newDbLink = true, $engine = null, $timeout = 5)
 	{
+		ini_set('mysql.connect_timeout', $timeout);
 		if (!$link = @mysql_connect($server, $user, $pwd, $newDbLink))
 			return 1;
 		if (!@mysql_select_db($db, $link))

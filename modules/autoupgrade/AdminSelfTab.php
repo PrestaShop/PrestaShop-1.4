@@ -195,6 +195,7 @@ abstract class AdminSelfTab
 
 	private function getConf($fields, $languages)
 	{
+		$tab = array();
 		foreach ($fields AS $key => $field)
 		{
 			if ($field['type'] == 'textLang')
@@ -208,7 +209,11 @@ abstract class AdminSelfTab
 		$tab['_MEDIA_SERVER_2_'] = defined('_MEDIA_SERVER_2_')?_MEDIA_SERVER_2_:'';
 		$tab['_MEDIA_SERVER_3_'] = defined('_MEDIA_SERVER_3_')?_MEDIA_SERVER_3_:'';
 		$tab['PS_THEME'] = _THEME_NAME_;
-		$tab['db_type'] = _DB_TYPE_;
+		if (defined('_DB_TYPE_'))
+			$tab['db_type'] = _DB_TYPE_;
+		else
+			$tab['db_type'] = 'mysql';
+
 		$tab['db_server'] = _DB_SERVER_;
 		$tab['db_name'] = _DB_NAME_;
 		$tab['db_prefix'] = _DB_PREFIX_;
@@ -396,7 +401,7 @@ abstract class AdminSelfTab
 		if (get_class($this) == 'Adminemails')
 			echo '<script type="text/javascript">if (getE(\'PS_MAIL_METHOD2_on\').checked) getE(\'smtp\').style.display = \'block\'; else getE(\'smtp\').style.display = \'none\';</script></div>';
 
-		if (!is_writable(PS_ADMIN_DIR.'/../config/settings.inc.php') AND $name == 'themes')
+		if (!is_writable(_PS_ADMIN_DIR_.'/../config/settings.inc.php') AND $name == 'themes')
 			echo '<p><img src="../img/admin/warning.gif" alt="" /> '.$this->l('if you change the theme, the settings.inc.php file must be writable (CHMOD 755 / 777)').'</p>';
 
 		echo '	<div align="center" style="margin-top: 20px;">
@@ -556,7 +561,7 @@ abstract class AdminSelfTab
 			$classname = 'Admin'.$subtab;
 			if ($module = Db::getInstance()->getValue('SELECT `module` FROM `'._DB_PREFIX_.'tab` WHERE `class_name` = \''.pSQL($classname).'\'') AND file_exists(_PS_MODULE_DIR_.'/'.$module.'/'.$classname.'.php'))
 				include_once(_PS_MODULE_DIR_.'/'.$module.'/'.$classname.'.php');
-			elseif (file_exists(PS_ADMIN_DIR.'/tabs/'.$classname.'.php'))
+			elseif (file_exists(_PS_ADMIN_DIR_.'/tabs/'.$classname.'.php'))
 				include_once('tabs/'.$classname.'.php');
 			if (!isset($this->_includeObj[$key]))
 				$this->_includeObj[$key] = new $classname;

@@ -39,11 +39,20 @@ class DbPDOCore extends Db
 	{
 		try
 		{
-			$this->link = new PDO('mysql:dbname='.$this->database.';host='.$this->server, $this->user, $this->password);
+			$dsn = 'mysql:dbname='.$this->database;
+			if (strpos($this->server, ':') !== false)
+			{
+				list($server, $port) = explode(':', $this->server);
+				$dsn .= ';host='.$server.';port='.$port;
+			}
+			else
+				$dsn .= ';host='.$this->server;
+
+			$this->link = new PDO($dsn, $this->user, $this->password);
 		}
 		catch (PDOException $e)
 		{
-			throw new PrestaShopDatabaseException(Tools::displayError('Link to database cannot be established. ('.$e->getMessage().')'));
+			throw new PrestaShopDatabaseException(sprintf(Tools::displayError('Link to database cannot be established: %s'), $e->getMessage()));
 		}
 
 		// UTF-8 support
@@ -170,11 +179,11 @@ class DbPDOCore extends Db
 	/**
 	 * @see Db::checkConnection()
 	 */
-	static public function tryToConnect($server, $user, $pwd, $db, $newDbLink = true, $engine = null)
+	 public static function tryToConnect($server, $user, $pwd, $db, $newDbLink = true, $engine = null, $timeout = 5)
 	{
 		try
 		{
-			$link = @new PDO('mysql:dbname='.$db.';host='.$server, $user, $pwd);
+			$link = @new PDO('mysql:dbname='.$db.';host='.$server, $user, $pwd, array(PDO::ATTR_TIMEOUT => $timeout));
 		}
 		catch (PDOException $e)
 		{
