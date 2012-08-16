@@ -423,16 +423,16 @@ class AdminSelfUpgrade extends AdminSelfTab
 		{
 			case 3:
 				foreach ($perf_array as $property => $values)
-					$this->{$property} = $values[2];
+					self::$$property = $values[2];
 				break;
 			case 2:
 				foreach ($perf_array as $property => $values)
-					$this->{$property} = $values[1];
+					self::$$property = $values[1];
 				break;
 			case 1:
 			default:
 				foreach ($perf_array as $property => $values)
-					$this->{$property} = $values[0];
+					self::$$property = $values[0];
 		}
 	}
 
