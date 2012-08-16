@@ -46,7 +46,7 @@ ini_set('magic_quotes_runtime', 0);
 if (!headers_sent())
 	header('Content-Type: text/html; charset=utf-8');
 
-@require_once(dirname(__FILE__).'/settings.inc.php');
+@include_once(dirname(__FILE__).'/settings.inc.php');
 if (!defined('__PS_BASE_URI__')) /* No settings file? goto installer...*/
 {
 	$dir = ((is_dir($_SERVER['REQUEST_URI']) || substr($_SERVER['REQUEST_URI'], -1) == '/') ? $_SERVER['REQUEST_URI'] : dirname($_SERVER['REQUEST_URI']).'/');
