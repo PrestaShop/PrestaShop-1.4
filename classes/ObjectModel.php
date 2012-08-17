@@ -419,7 +419,7 @@ abstract class ObjectModelCore
 		{
 			if (!is_array($this->{$fieldArray}))
 				continue ;
-			if (!$this->{$fieldArray} || !count($this->{$fieldArray}) || ($this->{$fieldArray}[$defaultLanguage] !== '0' || empty($this->{$fieldArray}[$defaultLanguage])))
+			if ((!$this->{$fieldArray}) || (!count($this->{$fieldArray})) || ($this->{$fieldArray}[$defaultLanguage] !== '0' && empty($this->{$fieldArray}[$defaultLanguage])))
 			{
 				if ($die)
 					die(Tools::displayError().' ('.Tools::safeOutput(get_class($this)).'->'.Tools::safeOutput($fieldArray).' '.Tools::displayError('is empty for default language.').')');
