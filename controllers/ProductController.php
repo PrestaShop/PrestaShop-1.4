@@ -367,7 +367,7 @@ class ProductControllerCore extends FrontController
 			'currencyBlank' => $currency->blank,
 			'jqZoomEnabled' => Configuration::get('PS_DISPLAY_JQZOOM'),
 			'ipa_customization' => Tools::getIsset('ipa_customization') ? Tools::getValue('ipa_customization'): '',
-			'ipa_default' => Product::getDefaultAttribute($this->product->id)
+			'ipa_default' => !count($this->errors) ? Product::getDefaultAttribute($this->product->id) : 0
 		));
 	}
 
