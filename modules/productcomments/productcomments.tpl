@@ -27,7 +27,7 @@
 <div id="idTab5">
 <script type="text/javascript" src="{$module_dir}js/jquery.rating.pack.js"></script>
 <script type="text/javascript">
-	$(function(){literal}{{/literal} $('input[@type=radio].star').rating(); {literal}}{/literal});
+	$(function(){literal}{{/literal} $('input[type=radio].star').rating(); {literal}}{/literal});
 	$(function(){literal}{{/literal}
 		$('.auto-submit-star').rating({literal}{{/literal}
 			callback: function(value, link){literal}{{/literal}
