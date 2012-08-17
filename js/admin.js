@@ -824,7 +824,6 @@ function showHelp(url, label, iso_lang, ps_version, doc_version, country)
     return false;
 }
 
-
 function trackClickOnHelp(label, doc_version)
 {
    	$.ajax({
@@ -833,3 +832,46 @@ function trackClickOnHelp(label, doc_version)
 	});
 }
 
+function managePermissionsCheckbox(name)
+{
+	if ($('#form_permissions .'+name+'[checked=checked]').length == $('.'+name).length)
+		$('#form_permissions #'+name+'all').attr('checked', 'checked');
+	
+	$('#form_permissions #'+name+'all').click(function() {
+		if ($('#form_permissions #'+name+'all').attr('checked'))
+		{
+			if (name == 'all')
+				$('#form_permissions input[type=checkbox]').attr('checked', 'checked');
+			else
+				$('#form_permissions .'+name).attr('checked', 'checked');
+		}
+		else
+		{
+			if (name == 'all')
+				$('#form_permissions input[type=checkbox]').removeAttr('checked');
+			else
+				$('#form_permissions .'+name).removeAttr('checked');
+		}
+	});
+}
+
+function managePermissions()
+{
+	managePermissionsCheckbox('view');
+	managePermissionsCheckbox('add');
+	managePermissionsCheckbox('edit');
+	managePermissionsCheckbox('delete');
+	managePermissionsCheckbox('all');
+
+	$('#form_permissions tr .all').each(function() {
+		if ($(this).parent().parent().find('input[checked=checked]').length == ($(this).parent().parent().find('input').length - 1))
+			$(this).attr('checked', 'checked');
+	});
+	
+	$('#form_permissions .all').click(function() {
+		if ($(this).attr('checked'))
+			$(this).parent().parent().find('input[type=checkbox]').attr('checked', 'checked');
+		else
+			$(this).parent().parent().find('input[type=checkbox]').removeAttr('checked');
+	});
+}

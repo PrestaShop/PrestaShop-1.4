@@ -974,30 +974,28 @@ abstract class ModuleCore
 				else
 					return 0;
 		$result = Db::getInstance()->getRow('
-			SELECT `position`
-			FROM `'._DB_PREFIX_.'hook_module`
-			WHERE `id_hook` = '.(int)($id_hook).'
-			AND `id_module` = '.(int)($this->id));
+		SELECT `position`
+		FROM `'._DB_PREFIX_.'hook_module`
+		WHERE `id_hook` = '.(int)$id_hook.' AND `id_module` = '.(int)$this->id);
+
 		return $result['position'];
 	}
 
 	public function displayError($error)
 	{
-	 	$output = '
+		$this->error = true;
+	 	return '
 		<div class="module_error alert error">
 			<img src="'._PS_IMG_.'admin/warning.gif" alt="" title="" /> '.$error.'
 		</div>';
-		$this->error = true;
-		return $output;
 	}
 
 	public function displayConfirmation($string)
 	{
-	 	$output = '
+	 	return '
 		<div class="module_confirmation conf confirm">
 			<img src="'._PS_IMG_.'admin/ok.gif" alt="" title="" /> '.$string.'
 		</div>';
-		return $output;
 	}
 
 	/*

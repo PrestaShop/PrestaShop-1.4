@@ -130,12 +130,12 @@ abstract class ObjectModelCore
 				($id_lang ? ('LEFT JOIN `'.pSQL(_DB_PREFIX_.$this->table).'_lang` b ON (a.`'.$this->identifier.'` = b.`'.$this->identifier).'` AND `id_lang` = '.(int)$id_lang.')' : '')
 				.' WHERE a.`'.$this->identifier.'` = '.(int)$id);
 
-			$result = self::$_cache[$this->table][(int)($id)][(int)($id_lang)];
+			$result = self::$_cache[$this->table][(int)$id][(int)$id_lang];
 			if ($result)
 			{
 				$this->id = (int)$id;
 				foreach ($result as $key => $value)
-					if (property_exists($this, $key))
+					if (key_exists($key, $this))
 						$this->{$key} = $value;
 
 				/* Join multilingual tables */
@@ -187,6 +187,8 @@ abstract class ObjectModelCore
 	{
 	 	if (!Validate::isTableOrIdentifier($this->table))
 			die(Tools::displayError('not table or identifier : ').$this->table);
+			
+		$this->clearCache();
 
 		/* Automatically fill dates */
 		if ($autodate && (isset($this->date_add) || property_exists($this, 'date_add')))

@@ -56,7 +56,6 @@ echo '
 		<script type="text/javascript" src="'._PS_JS_DIR_.'admin.js"></script>
 		<script type="text/javascript" src="'._PS_JS_DIR_.'toggle.js"></script>
 		<script type="text/javascript" src="'._PS_JS_DIR_.'tools.js"></script>
-		<script type="text/javascript" src="'._PS_JS_DIR_.'ajax.js"></script>
 		<link rel="shortcut icon" href="'._PS_IMG_.'favicon.ico" />
 		'.Module::hookExec('backOfficeHeader').'
 		<!--[if IE]>

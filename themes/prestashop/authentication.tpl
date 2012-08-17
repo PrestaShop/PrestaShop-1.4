@@ -152,13 +152,13 @@ $(function(){ldelim}
 					</p>
 					<p class="required text">
 						<label for="firstname">{l s='First name'}</label>
-						<input type="text" class="text" id="firstname" name="firstname" onblur="$('#customer_firstname').val($(this).val());" value="{if isset($smarty.post.firstname)}{$smarty.post.firstname}{/if}">
+						<input type="text" class="text" id="firstname" name="firstname" onchange="$('#customer_firstname').val($(this).val());" value="{if isset($smarty.post.firstname)}{$smarty.post.firstname}{/if}">
 						<input type="hidden" class="text" id="customer_firstname" name="customer_firstname" value="{if isset($smarty.post.firstname)}{$smarty.post.firstname}{/if}">
 						<sup>*</sup>
 					</p>
 					<p class="required text">
 						<label for="lastname">{l s='Last name'}</label>
-						<input type="text" class="text" id="lastname" name="lastname" onblur="$('#customer_lastname').val($(this).val());" value="{if isset($smarty.post.lastname)}{$smarty.post.lastname}{/if}">
+						<input type="text" class="text" id="lastname" name="lastname" onchange="$('#customer_lastname').val($(this).val());" value="{if isset($smarty.post.lastname)}{$smarty.post.lastname}{/if}">
 						<input type="hidden" class="text" id="customer_lastname" name="customer_lastname" value="{if isset($smarty.post.lastname)}{$smarty.post.lastname}{/if}">
 						<sup>*</sup>
 					</p>

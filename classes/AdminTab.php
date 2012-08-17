@@ -1791,17 +1791,17 @@ abstract class AdminTabCore
 
 		$allowEmployeeFormLang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') ? Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') : 0;
 		if ($allowEmployeeFormLang && !$cookie->employee_form_lang)
-			$cookie->employee_form_lang = (int)(_PS_LANG_DEFAULT_);
+			$cookie->employee_form_lang = (int)_PS_LANG_DEFAULT_;
 		$useLangFromCookie = false;
 		$this->_languages = Language::getLanguages(false);
 		if ($allowEmployeeFormLang)
-			foreach ($this->_languages AS $lang)
+			foreach ($this->_languages as $lang)
 				if ($cookie->employee_form_lang == $lang['id_lang'])
 					$useLangFromCookie = true;
 		if (!$useLangFromCookie)
-			$this->_defaultFormLanguage = (int)(_PS_LANG_DEFAULT_);
+			$this->_defaultFormLanguage = (int)_PS_LANG_DEFAULT_;
 		else
-			$this->_defaultFormLanguage = (int)($cookie->employee_form_lang);
+			$this->_defaultFormLanguage = (int)$cookie->employee_form_lang;
 
 		// Only if it is the first call to displayForm, otherwise it has already been defined
 		if ($firstCall)
@@ -1811,7 +1811,7 @@ abstract class AdminTabCore
 				$(document).ready(function() {
 					id_language = '.$this->_defaultFormLanguage.';
 					languages = new Array();';
-			foreach ($this->_languages AS $k => $language)
+			foreach ($this->_languages as $k => $language)
 				echo '
 					languages['.$k.'] = {
 						id_lang: '.(int)$language['id_lang'].',

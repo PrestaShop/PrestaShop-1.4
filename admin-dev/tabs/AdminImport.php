@@ -468,7 +468,7 @@ class AdminImport extends AdminTab
 		$defaultLanguageId = (int)_PS_LANG_DEFAULT_;
 		self::setLocale();
 		for ($current_line = 0, $lines_ok = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
-		{
+		{		
 			if (Tools::getValue('convert'))
 				$line = $this->utf8_encode_array($line);
 			$info = self::getMaskedRow($line);
@@ -480,8 +480,8 @@ class AdminImport extends AdminTab
 			}
 			elseif (empty($info['id']))
 				unset($info['id']);
-
-			if (!isset($info['parent']) || $info['parent'] < 1)
+			
+			if (!isset($info['parent']) || (is_numeric($info['parent']) && $info['parent'] < 1))
 				$info['parent'] = 1;
 
 			self::setDefaultValues($info);
@@ -491,20 +491,20 @@ class AdminImport extends AdminTab
 				$category = new Category();
 			self::array_walk($info, array('AdminImport', 'fillInfo'), $category);
 
-			if (isset($category->parent) AND is_numeric($category->parent))
+			if (isset($category->parent) && is_numeric($category->parent))
 			{
 				if (isset($catMoved[$category->parent]))
 					$category->parent = $catMoved[$category->parent];
 				$category->id_parent = $category->parent;
 			}
-			elseif (isset($category->parent) AND is_string($category->parent))
+			elseif (isset($category->parent) && is_string($category->parent))
 			{
 				$categoryParent = Category::searchByName($defaultLanguageId, $category->parent, true);
 				if ($categoryParent['id_category'])
-					$category->id_parent =	(int)($categoryParent['id_category']);
+					$category->id_parent = (int)$categoryParent['id_category'];
 				else
 				{
-					$categoryToCreate= new Category();
+					$categoryToCreate = new Category();
 					$categoryToCreate->name = self::createMultiLangField($category->parent);
 					$categoryToCreate->active = 1;
 					$categoryToCreate->id_parent = 1; // Default parent is home for unknown category to create
@@ -687,7 +687,6 @@ class AdminImport extends AdminTab
 			if (isset($product->category) && is_array($product->category) && count($product->category))
 			{
 				$product->id_category = array(); // Reset default values array
-
 				foreach ($product->category as $value)
 				{
 					if (is_numeric($value))
@@ -710,7 +709,7 @@ class AdminImport extends AdminTab
 							}
 						}
 					}
-					elseif (is_string($value) AND !empty($value))
+					elseif (is_string($value) && !empty($value))
 					{
 						$category = Category::searchByName($defaultLanguageId, $value, true);
 						if ($category['id_category'])
@@ -737,8 +736,12 @@ class AdminImport extends AdminTab
 
 			$product->id_category_default = isset($product->id_category[0]) ? (int)($product->id_category[0]) : '';
 			$link_rewrite = (is_array($product->link_rewrite) && count($product->link_rewrite)) ? $product->link_rewrite[$defaultLanguageId] : '';
-
+			if (!$link_rewrite)
+				$no_link_rewrite = true;
+			
 			$valid_link = Validate::isLinkRewrite($link_rewrite);
+			if (!$valid_link)
+				$link_rewrite_sav = $link_rewrite;
 
 			if ((isset($product->link_rewrite[$defaultLanguageId]) AND empty($product->link_rewrite[$defaultLanguageId])) OR !$valid_link)
 			{
@@ -746,8 +749,8 @@ class AdminImport extends AdminTab
 				if ($link_rewrite == '')
 					$link_rewrite = 'friendly-url-autogeneration-failed';
 			}
-			if (!$valid_link)
-				$this->_warnings[] = Tools::displayError('Rewrite link for'). ' '.$link_rewrite.(isset($info['id']) ? ' (ID '.$info['id'].') ' : '').' '.Tools::displayError('was re-written as').' '.$link_rewrite;
+			if (!$valid_link && $link_rewrite_sav)
+				$this->_warnings[] = Tools::displayError('Rewrite link for').' '.(isset($no_link_rewrite) ? $product->name[$defaultLanguageId] : $link_rewrite_sav).(isset($info['id']) ? ' (ID '.$info['id'].') ' : '').' '.Tools::displayError('was re-written as').' '.$link_rewrite;
 
 			$product->link_rewrite = self::createMultiLangField($link_rewrite);
 
@@ -975,7 +978,8 @@ class AdminImport extends AdminTab
 					if (($fieldError = $obj->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $obj->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true)
 					{
 						$obj->add();
-						$groups[$group] = $obj->id;
+				
+				$groups[$group] = $obj->id;
 					}
 					else
 						$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '');

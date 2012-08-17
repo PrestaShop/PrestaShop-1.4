@@ -119,13 +119,13 @@ class CategoryCore extends ObjectModel
 	{
 		parent::validateFields();
 		if (isset($this->id))
-			$fields['id_category'] = (int)($this->id);
-		$fields['active'] = (int)($this->active);
-		$fields['id_parent'] = (int)($this->id_parent);
-		$fields['position'] = (int)($this->position);
-		$fields['level_depth'] = (int)($this->level_depth);
-		$fields['nleft'] = (int)($this->nleft);
-		$fields['nright'] = (int)($this->nright);
+			$fields['id_category'] = (int)$this->id;
+		$fields['active'] = (int)$this->active;
+		$fields['id_parent'] = (int)$this->id_parent;
+		$fields['position'] = (int)$this->position;
+		$fields['level_depth'] = (int)$this->level_depth;
+		$fields['nleft'] = (int)$this->nleft;
+		$fields['nright'] = (int)$this->nright;
 		$fields['date_add'] = pSQL($this->date_add);
 		$fields['date_upd'] = pSQL($this->date_upd);
 		return $fields;
@@ -344,11 +344,16 @@ class CategoryCore extends ObjectModel
 		/* Root category */
 		if (!$this->id_parent)
 			return 0;
-
-		$parentCategory = new Category((int)($this->id_parent));
-		if (!Validate::isLoadedObject($parentCategory))
+			
+		$parent_level_depth = Db::getInstance()->getValue('
+		SELECT level_depth
+		FROM '._DB_PREFIX_.'category
+		WHERE id_category = '.(int)$this->id_parent);
+		
+		if ($parent_level_depth === false || $parent_level_depth === '')
 			die('parent category does not exist');
-		return $parentCategory->level_depth + 1;
+
+		return (int)($parent_level_depth + 1);
 	}
 
 	/**
@@ -358,7 +363,7 @@ class CategoryCore extends ObjectModel
 	{
 		$categories = Db::getInstance()->ExecuteS('SELECT id_category, id_parent FROM '._DB_PREFIX_.'category ORDER BY id_parent ASC, position ASC');
 		$categoriesArray = array();
-		foreach ($categories AS $category)
+		foreach ($categories as $category)
 			$categoriesArray[(int)$category['id_parent']]['subcategories'][(int)$category['id_category']] = 1;
 		$n = 1;
 		self::_subTree($categoriesArray, 1, $n);

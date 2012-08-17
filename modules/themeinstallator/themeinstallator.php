@@ -350,8 +350,9 @@ class ThemeInstallator extends Module
 				else
 					$confirmation_msg .= ' '.$this->l('but there was an error while trying to set it as your current theme');
 			}
-			$this->_msg = parent::displayConfirmation($confirmation_msg).$this->_msg;
-			
+
+			$this->_msg = parent::displayConfirmation($confirmation_msg).'<p class="warn bold">
+			<img src="../img/admin/warning.gif" alt="" class="middle" /> &nbsp;'.$this->l('You have to regenerate all your thumbnails in "Preferences > Images"').'</p>'.$this->_msg;			
 		}
 
 		return $this->errors.$this->_msg.$this->_html;
