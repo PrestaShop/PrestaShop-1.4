@@ -115,7 +115,7 @@ class SupplierCore extends ObjectModel
 	public static function getSuppliers($getNbProducts = false, $id_lang = 0, $active = true, $p = false, $n = false, $all_groups = false)
 	{
 		if (!$id_lang)
-			$id_lang = Configuration::get('PS_LANG_DEFAULT');
+			$id_lang = _PS_LANG_DEFAULT_;
 		$query = 'SELECT s.*, sl.`description`';
 		$query .= ' FROM `'._DB_PREFIX_.'supplier` as s
 		LEFT JOIN `'._DB_PREFIX_.'supplier_lang` sl ON (s.`id_supplier` = sl.`id_supplier` AND sl.`id_lang` = '.(int)($id_lang).')

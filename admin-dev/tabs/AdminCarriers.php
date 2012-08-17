@@ -53,7 +53,7 @@ class AdminCarriers extends AdminTab
 		
 		$this->optionTitle = $this->l('Carrier options');
 		$this->_fieldsOptions = array(
-			'PS_CARRIER_DEFAULT' => array('title' => $this->l('Default carrier:'), 'desc' => $this->l('The default carrier used in shop'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'id_carrier', 'list' => Carrier::getCarriers((int)(Configuration::get('PS_LANG_DEFAULT')), true , false,false, NULL, Carrier::ALL_CARRIERS)),
+			'PS_CARRIER_DEFAULT' => array('title' => $this->l('Default carrier:'), 'desc' => $this->l('The default carrier used in shop'), 'cast' => 'intval', 'type' => 'select', 'identifier' => 'id_carrier', 'list' => Carrier::getCarriers((int)_PS_LANG_DEFAULT_, true, false, false, null, Carrier::ALL_CARRIERS)),
 		);
 
 		parent::__construct();
@@ -194,9 +194,9 @@ class AdminCarriers extends AdminTab
 				<div id="shipping_costs_div">
 				<label>'.$this->l('Tax').'</label>
 				<div class="margin-form">
-					 <select name="id_tax_rules_group" id="id_tax_rules_group" '.(Tax::excludeTaxeOption() ? 'disabled="disabled"' : '' ).'>
+					 <select name="id_tax_rules_group" id="id_tax_rules_group" '.(!_PS_TAX_ ? 'disabled="disabled"' : '' ).'>
 					    <option value="0">'.$this->l('No Tax').'</option>';
-						foreach (TaxRulesGroup::getTaxRulesGroups(true) AS $tax_rules_group)
+						foreach (TaxRulesGroup::getTaxRulesGroups(true) as $tax_rules_group)
 							echo '<option value="'.$tax_rules_group['id_tax_rules_group'].'" '.(($this->getFieldValue($obj, 'id_tax_rules_group') == $tax_rules_group['id_tax_rules_group']) ? ' selected="selected"' : '').'>'.$tax_rules_group['name'].'</option>';
 				echo '</select>
 				</div>

@@ -129,7 +129,7 @@ class AuthControllerCore extends FrontController
 			elseif (!Country::isNeedDniByCountryId($address->id_country))
 				$address->dni = NULL;
 
-			if (!sizeof($this->errors))
+			if (!count($this->errors))
 			{
 				if (Customer::customerExists(Tools::getValue('email'), false, (Configuration::get('PS_GUEST_CHECKOUT_ENABLED') && Tools::getValue('is_new_customer') == 0)))
 					$this->errors[] = Tools::displayError('An account is already registered with this e-mail, please fill in the password or request a new one.');
@@ -139,11 +139,12 @@ class AuthControllerCore extends FrontController
 					$customer->newsletter_date_add = pSQL(date('Y-m-d H:i:s'));
 				}
 			
-				if (!sizeof($this->errors))
+				if (!count($this->errors))
 				{
-					if (!$country = new Country($address->id_country, Configuration::get('PS_LANG_DEFAULT')) OR !Validate::isLoadedObject($country))
+					$country = new Country((int)$address->id_country, _PS_LANG_DEFAULT_);
+					if (!$country || !Validate::isLoadedObject($country))
 						die(Tools::displayError());
-					if ((int)($country->contains_states) AND !(int)($address->id_state))
+					if ((int)$country->contains_states && !(int)$address->id_state)
 						$this->errors[] = Tools::displayError('This country requires a state selection.');
 					else
 					{
@@ -304,11 +305,11 @@ class AuthControllerCore extends FrontController
 				{
 					$selectedCountry = Country::getByIso($array[0]);
 					if (!$selectedCountry)
-						$selectedCountry = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
+						$selectedCountry = (int)(_PS_COUNTRY_DEFAULT_);
 				}
 			}*/
 			if (!isset($selectedCountry))
-				$selectedCountry = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
+				$selectedCountry = (int)(_PS_COUNTRY_DEFAULT_);
 			if (Configuration::get('PS_RESTRICT_DELIVERED_COUNTRIES'))
 				$countries = Carrier::getDeliveredCountries((int)self::$cookie->id_lang, true, true);
 			else
@@ -379,7 +380,7 @@ class AuthControllerCore extends FrontController
 				self::$smarty->assign(array(
 					'inOrderProcess' => true,
 					'PS_GUEST_CHECKOUT_ENABLED' => Configuration::get('PS_GUEST_CHECKOUT_ENABLED'),
-					'sl_country' => (int)Tools::getValue('id_country', Configuration::get('PS_COUNTRY_DEFAULT')),
+					'sl_country' => (int)Tools::getValue('id_country', _PS_COUNTRY_DEFAULT_),
 					'countries' => $countries
 				));
 			}
@@ -397,7 +398,7 @@ class AuthControllerCore extends FrontController
 	protected function processAddressFormat()
 	{
 		$addressItems = array();
-		$addressFormat = AddressFormat::getOrderedAddressFields(Configuration::get('PS_COUNTRY_DEFAULT'), false, true);
+		$addressFormat = AddressFormat::getOrderedAddressFields(_PS_COUNTRY_DEFAULT_, false, true);
 		$requireFormFieldsList = AddressFormat::$requireFormFieldsList;
 
 		foreach ($addressFormat as $addressline)

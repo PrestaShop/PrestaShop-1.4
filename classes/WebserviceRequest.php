@@ -311,9 +311,9 @@ class WebserviceRequestCore
 		$arr_return = array();
 		foreach($parameters as $name => $value)
 		{
-			$id_country = (isset($value['country']) ? $value['country'] : (int)(Configuration::get('PS_COUNTRY_DEFAULT')));
+			$id_country = (isset($value['country']) ? $value['country'] : (int)(_PS_COUNTRY_DEFAULT_));
 			$id_state = (isset($value['state']) ? $value['state'] : 0);
-			$id_currency = (isset($value['currency']) ? $value['currency'] : Configuration::get('PS_CURRENCY_DEFAULT'));
+			$id_currency = (isset($value['currency']) ? $value['currency'] : _PS_CURRENCY_DEFAULT_);
 			$id_group = (isset($value['group']) ? $value['group'] : Configuration::get('_PS_DEFAULT_CUSTOMER_GROUP_'));
 			$quantity = (isset($value['quantity']) ? $value['quantity'] : 1);
 			$use_tax = (isset($value['use_tax']) ? $value['use_tax'] : Configuration::get('PS_TAX'));

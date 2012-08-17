@@ -63,7 +63,7 @@ if ($id_tab = checkingTab($tab))
 				"helpAccess":"1",
 				"item":"'.$item['class_name'].'",
 				"isoUser":"'.$isoUser.'",
-				"country":"'.Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')).'",
+				"country":"'.Country::getIsoById(_PS_COUNTRY_DEFAULT_).'",
 				"version":"'._PS_VERSION_.'"
 			},
 			async : true,

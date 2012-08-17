@@ -37,6 +37,27 @@ if (substr($memory_limit,-1) != 'G'
 }
 require_once(dirname(__FILE__).'/../config/autoload.php');
 
+/* Keep a backward compatibility for Smarty v2 (will be removed in PrestaShop v1.5) */
+define('_PS_FORCE_SMARTY_2_', (int)Configuration::get('PS_FORCE_SMARTY_2'));
+
+Configuration::loadConfiguration();
+
+/* The main shop domains and SSL options */
+define('_PS_SHOP_DOMAIN_', Configuration::get('PS_SHOP_DOMAIN'));
+define('_PS_SHOP_DOMAIN_SSL_', Configuration::get('PS_SHOP_DOMAIN_SSL'));
+define('_PS_SSL_ENABLED_', (int)Configuration::get('PS_SSL_ENABLED'));
+
+/* Default currency and default country */
+define('_PS_CURRENCY_DEFAULT_', (int)Configuration::get('PS_CURRENCY_DEFAULT'));
+define('_PS_COUNTRY_DEFAULT_', (int)Configuration::get('PS_COUNTRY_DEFAULT'));
+define('_PS_LANG_DEFAULT_', (int)Configuration::get('PS_LANG_DEFAULT'));
+
+/* Geolocation options */
+define('_PS_GEOLOCATION_ENABLED_', (int)Configuration::get('PS_GEOLOCATION_ENABLED'));
+
+/* Tax options */
+define('_PS_TAX_', (int)Configuration::get('PS_TAX'));
+
 /* Redefine REQUEST_URI if empty (on some webservers...) */
 if (!isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '')
 	$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];

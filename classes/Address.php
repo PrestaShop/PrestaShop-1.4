@@ -138,7 +138,7 @@ class AddressCore extends ObjectModel
 			$result = Db::getInstance()->getRow('
 			SELECT `name` FROM `'._DB_PREFIX_.'country_lang`
 			WHERE `id_country` = '.(int)$this->id_country.'
-			AND `id_lang` = '.($id_lang ? (int)$id_lang : (int)Configuration::get('PS_LANG_DEFAULT')));
+			AND `id_lang` = '.($id_lang ? (int)$id_lang : (int)_PS_LANG_DEFAULT_));
 			$this->country = $result['name'];
 		}
 	}

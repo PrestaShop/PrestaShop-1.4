@@ -293,14 +293,22 @@ class CountryCore extends ObjectModel
 	 */
 	public static function getDefaultCountryId()
 	{
-		global $cookie;
+		static $id_country_default = null;
 
-		if (Configuration::get('PS_GEOLOCATION_ENABLED') && 
-				$cookie && isset($cookie->iso_code_country) &&
-				Validate::isLanguageIsoCode($cookie->iso_code_country))
-			return (int)Country::getByIso($cookie->iso_code_country);
+		if ($id_country_default)
+			return $id_country_default;
+		
+		if (_PS_GEOLOCATION_ENABLED_)
+		{
+			global $cookie;
+			
+			if ($cookie && isset($cookie->iso_code_country) && Validate::isLanguageIsoCode($cookie->iso_code_country))
+				$id_country_default = (int)Country::getByIso($cookie->iso_code_country);
+		}
 		else
-			return (int)Configuration::get('PS_COUNTRY_DEFAULT');
+			$id_country_default = _PS_COUNTRY_DEFAULT_;
+			
+		return (int)$id_country_default;
 	}
 
 

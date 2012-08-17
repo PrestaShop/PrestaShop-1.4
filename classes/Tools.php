@@ -133,7 +133,7 @@ class ToolsCore
 		if ($entities)
 			$host = htmlspecialchars($host, ENT_COMPAT, 'UTF-8');
 		if ($http)
-			$host = (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$host;
+			$host = (_PS_SSL_ENABLED_ ? 'https://' : 'http://').$host;
 		return $host;
 	}
 
@@ -146,7 +146,7 @@ class ToolsCore
 	 */
 	public static function getShopDomain($http = false, $entities = false)
 	{
-		if (!($domain = Configuration::get('PS_SHOP_DOMAIN')))
+		if (!($domain = _PS_SHOP_DOMAIN_))
 			$domain = self::getHttpHost();
 		if ($entities)
 			$domain = htmlspecialchars($domain, ENT_COMPAT, 'UTF-8');
@@ -164,12 +164,12 @@ class ToolsCore
 	 */
 	public static function getShopDomainSsl($http = false, $entities = false)
 	{
-		if (!($domain = Configuration::get('PS_SHOP_DOMAIN_SSL')))
+		if (!($domain = _PS_SHOP_DOMAIN_SSL_))
 			$domain = self::getHttpHost();
 		if ($entities)
 			$domain = htmlspecialchars($domain, ENT_COMPAT, 'UTF-8');
 		if ($http)
-			$domain = (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$domain;
+			$domain = (_PS_SSL_ENABLED_ ? 'https://' : 'http://').$domain;
 		return $domain;
 	}
 
@@ -329,7 +329,7 @@ class ToolsCore
 
 		/* If language file not present, you must use default language file */
 		if (!$cookie->id_lang || !Validate::isUnsignedId($cookie->id_lang))
-			$cookie->id_lang = (int)(Configuration::get('PS_LANG_DEFAULT'));
+			$cookie->id_lang = (int)(_PS_LANG_DEFAULT_);
 
 		$iso = Language::getIsoById((int)$cookie->id_lang);
 		@include_once(_PS_THEME_DIR_.'lang/'.$iso.'.php');
@@ -374,7 +374,7 @@ class ToolsCore
 			if ((int)$currency->id && !$currency->deleted && $currency->active)
 				return $currency;
 		}
-		$currency = Currency::getCurrencyInstance((int)Configuration::get('PS_CURRENCY_DEFAULT'));
+		$currency = Currency::getCurrencyInstance((int)_PS_CURRENCY_DEFAULT_);
 		if ($currency->id)
 			$cookie->id_currency = (int)$currency->id;
 		return $currency;
@@ -479,7 +479,7 @@ class ToolsCore
 			$c_rate = $currency['conversion_rate'];
 		}
 
-		if ($c_id != (int)Configuration::get('PS_CURRENCY_DEFAULT'))
+		if ($c_id != (int)_PS_CURRENCY_DEFAULT_)
 			$price = $to_currency ? ($price * $c_rate) : ($price / $c_rate);
 
 		return $price;
@@ -581,7 +581,7 @@ class ToolsCore
 	{
 		global $_ERRORS, $cookie;
 
-		$iso = strtolower(Language::getIsoById((is_object($cookie) && $cookie->id_lang) ? (int)$cookie->id_lang : (int)Configuration::get('PS_LANG_DEFAULT')));
+		$iso = strtolower(Language::getIsoById((is_object($cookie) && $cookie->id_lang) ? (int)$cookie->id_lang : (int)_PS_LANG_DEFAULT_));
 		@include_once(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
 
 		if (defined('_PS_MODE_DEV_') && _PS_MODE_DEV_ && $string == 'Fatal error')
@@ -1237,7 +1237,9 @@ class ToolsCore
 
 	public static function ps_round($value, $precision = 0)
 	{
-		$method = (int)Configuration::get('PS_PRICE_ROUND_MODE');
+		static $method = null;
+		if (!$method)
+			$method = (int)Configuration::get('PS_PRICE_ROUND_MODE');
 		if ($method == PS_ROUND_UP)
 			return self::ceilf($value, $precision);
 		elseif ($method == PS_ROUND_DOWN)
@@ -1715,7 +1717,7 @@ class ToolsCore
 		if (self::$_cache_nb_media_servers && ($id_media_server = (abs(crc32($filename)) % self::$_cache_nb_media_servers + 1)))
 			return constant('_MEDIA_SERVER_'.$id_media_server.'_');
 
-		return Configuration::get('PS_SSL_ENABLED') ? self::getShopDomainSsl(false) : self::getShopDomain(false);
+		return _PS_SSL_ENABLED_ ? self::getShopDomainSsl(false) : self::getShopDomain(false);
 	}
 
 	public static function generateHtaccess($path, $rewrite_settings, $cache_control, $specific = '', $disableMultiviews = false)
@@ -1793,7 +1795,7 @@ class ToolsCore
 		}
 
 		Language::loadLanguages();
-		$default_meta = Meta::getMetasByIdLang((int)Configuration::get('PS_LANG_DEFAULT'));
+		$default_meta = Meta::getMetasByIdLang((int)_PS_LANG_DEFAULT_);
 
 		if ($multilang)
 			foreach (Language::getLanguages() as $language)

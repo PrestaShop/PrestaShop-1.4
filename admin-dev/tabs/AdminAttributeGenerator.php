@@ -180,7 +180,7 @@ class AdminAttributeGenerator extends AdminTab
 	{
 		global $cookie;
 
-		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+		$currency = new Currency(_PS_CURRENCY_DEFAULT_);
 		$combinationsGroups = $this->product->getAttributesGroups((int)($cookie->id_lang));
 		$attributes = array();
 		$impacts = self::getAttributesImpacts($this->product->id);

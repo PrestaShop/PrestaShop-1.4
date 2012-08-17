@@ -438,7 +438,7 @@ class AdminReferrers extends AdminTab
 		global $currentIndex;
 
 		$irow = 0;
-		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+		$currency = new Currency(_PS_CURRENCY_DEFAULT_);
 		if ($this->_list)
 			foreach ($this->_list AS $tr)
 			{

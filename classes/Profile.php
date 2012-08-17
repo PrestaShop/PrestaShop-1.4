@@ -75,7 +75,7 @@ class ProfileCore extends ObjectModel
 	public static function getProfile($id_profile, $id_lang = NULL)
 	{
 		if ($id_lang == NULL)
-			$id_lang = Configuration::get('PS_LANG_DEFAULT');
+			$id_lang = _PS_LANG_DEFAULT_;
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT `name` 
 		FROM `'._DB_PREFIX_.'profile` p 

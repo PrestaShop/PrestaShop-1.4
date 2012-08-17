@@ -237,10 +237,10 @@ class AddressControllerCore extends FrontController
 		{
 			$array = preg_split('/,|-/', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
 			if (!Validate::isLanguageIsoCode($array[0]) OR !($selectedCountry = Country::getByIso($array[0])))
-				$selectedCountry = (int)Configuration::get('PS_COUNTRY_DEFAULT');
+				$selectedCountry = (int)_PS_COUNTRY_DEFAULT_;
 		}
 		else
-			$selectedCountry = (int)Configuration::get('PS_COUNTRY_DEFAULT');
+			$selectedCountry = (int)_PS_COUNTRY_DEFAULT_;
 
 		if (Configuration::get('PS_RESTRICT_DELIVERED_COUNTRIES'))
 			$countries = Carrier::getDeliveredCountries((int)self::$cookie->id_lang, true, true, true);
@@ -251,7 +251,7 @@ class AddressControllerCore extends FrontController
 		foreach ($countries AS $country)
 			$countriesList .= '<option value="'.(int)($country['id_country']).'" '.($country['id_country'] == $selectedCountry ? 'selected="selected"' : '').'>'.htmlentities($country['name'], ENT_COMPAT, 'UTF-8').'</option>';
 
-		if ((Configuration::get('VATNUMBER_MANAGEMENT') AND file_exists(_PS_MODULE_DIR_.'vatnumber/vatnumber.php')) && VatNumber::isApplicable(Configuration::get('PS_COUNTRY_DEFAULT')))
+		if ((Configuration::get('VATNUMBER_MANAGEMENT') && (bool)@filemtime(_PS_MODULE_DIR_.'vatnumber/vatnumber.php')) && VatNumber::isApplicable(_PS_COUNTRY_DEFAULT_))
 			self::$smarty->assign('vat_display', 2);
 		elseif (Configuration::get('VATNUMBER_MANAGEMENT'))
 			self::$smarty->assign('vat_display', 1);
@@ -260,7 +260,7 @@ class AddressControllerCore extends FrontController
 
 		self::$smarty->assign('ajaxurl', _MODULE_DIR_);
 		
-		self::$smarty->assign('vatnumber_ajax_call', (int)file_exists(_PS_MODULE_DIR_.'vatnumber/ajax.php'));
+		self::$smarty->assign('vatnumber_ajax_call', (int)@filemtime(_PS_MODULE_DIR_.'vatnumber/ajax.php'));
 		
 		self::$smarty->assign(array(
 			'countries_list' => $countriesList,

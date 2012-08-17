@@ -37,7 +37,7 @@ class BlockBestSellers extends Module
 	{
 		$this->name = 'blockbestsellers';
 		$this->tab = 'front_office_features';
-		$this->version = '1.2';
+		$this->version = '1.3';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
@@ -52,13 +52,7 @@ class BlockBestSellers extends Module
 	 */
 	public function install()
 	{
-		if (!parent::install() OR
-				!$this->registerHook('rightColumn') OR
-				!$this->registerHook('header') OR
-				!$this->registerHook('updateOrderStatus') OR
-				!ProductSale::fillProductSales())
-			return false;
-		return true;
+		return parent::install() && $this->registerHook('rightColumn') && $this->registerHook('header') && ProductSale::fillProductSales();
 	}
 
 	/**

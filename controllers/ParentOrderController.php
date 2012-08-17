@@ -219,7 +219,7 @@ class ParentOrderControllerCore extends FrontController
 				$this->errors[] = Tools::displayError('No zone match with your address');
 		}
 		else
-			$id_zone = Country::getIdZone((int)Configuration::get('PS_COUNTRY_DEFAULT'));
+			$id_zone = Country::getIdZone((int)_PS_COUNTRY_DEFAULT_);
 
 		if (Validate::isInt(Tools::getValue('id_carrier')) AND sizeof(Carrier::checkCarrierZone((int)(Tools::getValue('id_carrier')), (int)($id_zone))))
 			self::$cart->id_carrier = (int)(Tools::getValue('id_carrier'));

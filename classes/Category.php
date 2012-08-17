@@ -726,7 +726,7 @@ class CategoryCore extends ObjectModel
 		if (!$id_lang)
 		{
 			global $cookie;
-			$id_lang = isset($this->name[$cookie->id_lang]) ? (int)$cookie->id_lang : (int)Configuration::get('PS_LANG_DEFAULT');
+			$id_lang = isset($this->name[$cookie->id_lang]) ? (int)$cookie->id_lang : (int)_PS_LANG_DEFAULT_;
 		}
 		return isset($this->name[$id_lang]) ? $this->name[$id_lang] : '';
 	}

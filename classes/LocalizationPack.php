@@ -189,7 +189,7 @@ class LocalizationPackCore
 				if (Tax::getTaxIdByName($attributes['name']))
 					continue;
 				$tax = new Tax();
-				$tax->name[(int)(Configuration::get('PS_LANG_DEFAULT'))] = strval($attributes['name']);
+				$tax->name[(int)(_PS_LANG_DEFAULT_)] = strval($attributes['name']);
 				$tax->rate = (float)($attributes['rate']);
 				$tax->active = 1;
 

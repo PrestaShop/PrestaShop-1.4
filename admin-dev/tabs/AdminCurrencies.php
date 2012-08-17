@@ -73,7 +73,7 @@ class AdminCurrencies extends AdminTab
 		 	{
 				if (Validate::isLoadedObject($object = $this->loadObject()))
 				{
-					if ($object->id == Configuration::get('PS_CURRENCY_DEFAULT'))
+					if ($object->id == _PS_CURRENCY_DEFAULT_)
 						$this->_errors[] = $this->l('You cannot delete the default currency');
 					elseif ($object->delete())
 						Tools::redirectAdmin($currentIndex.'&conf=1'.'&token='.$this->token);
@@ -92,7 +92,7 @@ class AdminCurrencies extends AdminTab
 			{
 				if (Validate::isLoadedObject($object = $this->loadObject()))
 				{
-					if ($object->active AND $object->id == Configuration::get('PS_CURRENCY_DEFAULT'))
+					if ($object->active && $object->id == _PS_CURRENCY_DEFAULT_)
 						$this->_errors[] = $this->l('You cannot disable the default currency');
 					elseif ($object->toggleStatus())
 						Tools::redirectAdmin($currentIndex.'&conf=5'.((($id_category = (int)(Tools::getValue('id_category'))) AND Tools::getValue('id_product')) ? '&id_category='.$id_category : '').'&token='.$this->token);

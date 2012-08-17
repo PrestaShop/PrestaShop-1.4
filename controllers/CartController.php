@@ -53,9 +53,9 @@ class CartControllerCore extends FrontController
 						$groups = array(1);
 					if ((int)self::$cart->id_address_delivery)
 						$deliveryAddress = new Address((int)self::$cart->id_address_delivery);
-					$result['carriers'] = Carrier::getCarriersForOrder((int)Country::getIdZone((isset($deliveryAddress) AND (int)$deliveryAddress->id) ? (int)$deliveryAddress->id_country : (int)Configuration::get('PS_COUNTRY_DEFAULT')), $groups);
+					$result['carriers'] = Carrier::getCarriersForOrder((int)Country::getIdZone((isset($deliveryAddress) && (int)$deliveryAddress->id) ? (int)$deliveryAddress->id_country : (int)_PS_COUNTRY_DEFAULT_), $groups);
 					$result['checked'] = Carrier::getDefaultCarrierSelection($result['carriers'], (int)self::$cart->id_carrier);
-					$result['HOOK_EXTRACARRIER'] = Module::hookExec('extraCarrier', array('address' => (isset($deliveryAddress) AND (int)$deliveryAddress->id) ? $deliveryAddress : null));
+					$result['HOOK_EXTRACARRIER'] = Module::hookExec('extraCarrier', array('address' => (isset($deliveryAddress) && (int)$deliveryAddress->id) ? $deliveryAddress : null));
 				}
 				$result['summary'] = self::$cart->getSummaryDetails();
 				$result['customizedDatas'] = Product::getAllCustomizedDatas((int)(self::$cart->id));

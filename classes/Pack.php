@@ -56,7 +56,7 @@ class PackCore extends Product
 		$sum = 0;
 
 		$price_display_method = !self::$_taxCalculationMethod;
-		$items = self::getItems($id_product, Configuration::get('PS_LANG_DEFAULT'));
+		$items = self::getItems($id_product, _PS_LANG_DEFAULT_);
 		foreach ($items as $item)
 			$sum += $item->getPrice($price_display_method) * $item->pack_quantity;
 		return $sum;
@@ -80,7 +80,7 @@ class PackCore extends Product
 
 	public static function isInStock($id_product)
 	{
-		$items = self::getItems((int)($id_product), Configuration::get('PS_LANG_DEFAULT'));
+		$items = self::getItems((int)($id_product), _PS_LANG_DEFAULT_);
 		foreach ($items AS $item)
 			if ($item->quantity < $item->pack_quantity AND !$item->isAvailableWhenOutOfStock((int)($item->out_of_stock)))
 				return false;

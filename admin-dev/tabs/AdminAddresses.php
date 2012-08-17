@@ -25,7 +25,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
-if (Configuration::get('VATNUMBER_MANAGEMENT') AND file_exists(_PS_MODULE_DIR_.'vatnumber/vatnumber.php'))
+if (Configuration::get('VATNUMBER_MANAGEMENT') && (bool)@filemtime(_PS_MODULE_DIR_.'vatnumber/vatnumber.php'))
 	include_once(_PS_MODULE_DIR_.'vatnumber/vatnumber.php');
 
 class AdminAddresses extends AdminTab
@@ -111,7 +111,7 @@ class AdminAddresses extends AdminTab
 				$this->_errors[] = Tools::displayError('You have selected a state for a country that does not contain states.');
 
 			/* If the selected country contains states, then a state have to be selected */
-			if ((int)($country->contains_states) AND !$id_state)
+			if ((int)$country->contains_states && !$id_state)
 				$this->_errors[] = Tools::displayError('An address located in a country containing states must have a state selected.');
 
 			/* Check zip code */
@@ -305,7 +305,7 @@ class AdminAddresses extends AdminTab
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 						</div>';
 
-					if ((Configuration::get('VATNUMBER_MANAGEMENT') AND file_exists(_PS_MODULE_DIR_.'vatnumber/vatnumber.php')) && VatNumber::isApplicable(Configuration::get('PS_COUNTRY_DEFAULT')))
+					if ((Configuration::get('VATNUMBER_MANAGEMENT') && (bool)@filemtime(_PS_MODULE_DIR_.'vatnumber/vatnumber.php')) && VatNumber::isApplicable(_PS_COUNTRY_DEFAULT_))
 						echo '<div id="vat_area" style="display: visible">';
 					elseif (Configuration::get('VATNUMBER_MANAGEMENT'))
 						echo '<div id="vat_area" style="display: hidden">';
@@ -382,8 +382,8 @@ class AdminAddresses extends AdminTab
 					<div class="margin-form">
 					<select name="id_country" id="id_country" />';
 				$selectedCountry = $this->getFieldValue($obj, 'id_country');
-				foreach ($this->countriesArray AS $id_country => $name)
-					echo '		<option value="'.$id_country.'"'.((!$selectedCountry AND Configuration::get('PS_COUNTRY_DEFAULT') == $id_country) ? ' selected="selected"' : ($selectedCountry == $id_country ? ' selected="selected"' : '')).'>'.$name.'</option>';
+				foreach ($this->countriesArray as $id_country => $name)
+					echo '<option value="'.$id_country.'"'.((!$selectedCountry && _PS_COUNTRY_DEFAULT_ == $id_country) ? ' selected="selected"' : ($selectedCountry == $id_country ? ' selected="selected"' : '')).'>'.$name.'</option>';
 				echo '		</select> <sup>*</sup>
 					</div>';
 
@@ -471,7 +471,7 @@ class AdminAddresses extends AdminTab
 	{
 		$tmp_addr = new Address((int)Tools::getValue('id_address'));
 
-		$selectedCountry = ($tmp_addr && $tmp_addr->id_country) ? $tmp_addr->id_country : (int)Configuration::get('PS_COUNTRY_DEFAULT');
+		$selectedCountry = ($tmp_addr && $tmp_addr->id_country) ? $tmp_addr->id_country : (int)_PS_COUNTRY_DEFAULT_;
 
 		$inv_adr_fields = AddressFormat::getOrderedAddressFields($selectedCountry, false, true);
 		$dlv_adr_fields = AddressFormat::getOrderedAddressFields($selectedCountry, false, true);

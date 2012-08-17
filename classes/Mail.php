@@ -259,7 +259,7 @@ class MailCore
 		$key = str_replace('\'', '\\\'', $string);
 
 		if ($id_lang == null)
-			$id_lang = (!isset($cookie) || !is_object($cookie)) ? (int)Configuration::get('PS_LANG_DEFAULT') : (int)$cookie->id_lang;
+			$id_lang = (!isset($cookie) || !is_object($cookie)) ? (int)_PS_LANG_DEFAULT_ : (int)$cookie->id_lang;
 
 		$file_core = _PS_ROOT_DIR_.'/mails/'.Language::getIsoById((int)$id_lang).'/lang.php';
 		if (file_exists($file_core) && empty($_LANGMAIL))

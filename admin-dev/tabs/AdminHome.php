@@ -156,10 +156,10 @@ class AdminHome extends AdminTab
 
 		$tab = get_class();
 		$protocol = Tools::usingSecureMode()?'https':'http';
-		$isoDefault = Language::getIsoById(intval(Configuration::get('PS_LANG_DEFAULT')));
+		$isoDefault = Language::getIsoById(intval(_PS_LANG_DEFAULT_));
 		$isoUser = Language::getIsoById(intval($cookie->id_lang));
-		$isoCountry = Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'));
-		$currency = new Currency((int)(Configuration::get('PS_CURRENCY_DEFAULT')));
+		$isoCountry = Country::getIsoById(_PS_COUNTRY_DEFAULT_);
+		$currency = new Currency((int)(_PS_CURRENCY_DEFAULT_));
 		$employee = new Employee($cookie->id_employee);
 
 		echo '<div>

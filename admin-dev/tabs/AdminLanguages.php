@@ -139,7 +139,7 @@ class AdminLanguages extends AdminTab
 					// English is needed by the system (ex. translations)
 					if ($object->id == Language::getIdByIso('en'))
 						$this->_errors[] = $this->l('You cannot delete the English language as it is a system requirement, you can only deactivate it.');
-					if ($object->id == Configuration::get('PS_LANG_DEFAULT'))
+					if ($object->id == _PS_LANG_DEFAULT_)
 						$this->_errors[] = $this->l('you cannot delete the default language');
 					elseif ($object->id == $cookie->id_lang)
 						$this->_errors[] = $this->l('You cannot delete the language currently in use. Please change languages before deleting.');
@@ -156,7 +156,7 @@ class AdminLanguages extends AdminTab
 		{
 			if ($this->tabAccess['delete'] === '1')
 			{
-				if (in_array(Configuration::get('PS_LANG_DEFAULT'), $_POST[$this->table.'Box']))
+				if (in_array(_PS_LANG_DEFAULT_, $_POST[$this->table.'Box']))
 					$this->_errors[] = $this->l('you cannot delete the default language');
 				elseif (in_array($cookie->id_lang, $_POST[$this->table.'Box']))
 					$this->_errors[] = $this->l('you cannot delete the language currently in use, please change languages before deleting');
@@ -213,7 +213,7 @@ class AdminLanguages extends AdminTab
 
 					if (!Validate::isLoadedObject($object = $this->loadObject()))
 						die(Tools::displayError());
-					if ((int)($object->id) == (int)(Configuration::get('PS_LANG_DEFAULT')) AND (int)($_POST['active']) != (int)($object->active))
+					if ((int)$object->id == (int)_PS_LANG_DEFAULT_ && (int)$_POST['active'] != (int)$object->active)
 						$this->_errors[] = Tools::displayError('You cannot change the status of the default language.');
 					else
 						parent::postProcess();
@@ -224,13 +224,13 @@ class AdminLanguages extends AdminTab
 					$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 			}
 		}
-		elseif (isset($_GET['status']) AND isset($_GET['id_lang']))
+		elseif (isset($_GET['status']) && isset($_GET['id_lang']))
 		{
 			if ($this->tabAccess['edit'] === '1')
 			{
 				if (!Validate::isLoadedObject($object = $this->loadObject()))
 					die(Tools::displayError());
-				if ((int)($object->id) == (int)(Configuration::get('PS_LANG_DEFAULT')))
+				if ((int)($object->id) == (int)(_PS_LANG_DEFAULT_))
 					$this->_errors[] = Tools::displayError('You cannot change the status of the default language.');
 				else
 					return parent::postProcess();

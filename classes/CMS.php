@@ -66,7 +66,7 @@ class CMSCore extends ObjectModel
 		$fieldsArray = array('meta_title', 'meta_description', 'meta_keywords', 'link_rewrite');
 		$fields = array();
 		$languages = Language::getLanguages(false);
-		$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
+		$defaultLanguage = (int)(_PS_LANG_DEFAULT_);
 		foreach ($languages as $language)
 		{
 			$fields[$language['id_lang']]['id_lang'] = (int)($language['id_lang']);
@@ -131,7 +131,7 @@ class CMSCore extends ObjectModel
 	public static function listCms($id_lang = NULL, $id_block = false, $active = true)
 	{
 		if (empty($id_lang))
-			$id_lang = (int)Configuration::get('PS_LANG_DEFAULT');
+			$id_lang = (int)_PS_LANG_DEFAULT_;
 
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.id_cms, l.meta_title

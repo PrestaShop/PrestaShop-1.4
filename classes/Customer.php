@@ -172,7 +172,7 @@ class CustomerCore extends ObjectModel
 
 	public function delete()
 	{
-		$addresses = $this->getAddresses((int)(Configuration::get('PS_LANG_DEFAULT')));
+		$addresses = $this->getAddresses((int)(_PS_LANG_DEFAULT_));
 		foreach ($addresses AS $address)
 		{
 			$obj = new Address((int)($address['id_address']));
@@ -603,7 +603,7 @@ class CustomerCore extends ObjectModel
 		else
 			$id_address = $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
 		$ids = Address::getCountryAndState($id_address);
-		return (int)($ids['id_country'] ? $ids['id_country'] : Configuration::get('PS_COUNTRY_DEFAULT'));
+		return (int)($ids['id_country'] ? $ids['id_country'] : _PS_COUNTRY_DEFAULT_);
 	}
 
 	public function toggleStatus()

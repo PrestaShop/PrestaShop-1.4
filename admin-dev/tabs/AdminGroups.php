@@ -166,7 +166,7 @@ class AdminGroups extends AdminTab
 		$currentIndex = 'index.php?tab=AdminGroups';
 		if (!($obj = $this->loadObject(true)))
 			return;
-		$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
+		$defaultLanguage = (int)(_PS_LANG_DEFAULT_);
 		
 		echo '
 		<fieldset style="width: 400px">

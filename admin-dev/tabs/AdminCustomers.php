@@ -224,7 +224,7 @@ class AdminCustomers extends AdminTab
 					$this->_errors[] = Tools::displayError('This customer does not exist.');
 				if (Customer::customerExists($customer->email, false, true))
 					$this->_errors[] = Tools::displayError('This customer already exist as non-guest.');
-				elseif ($customer->transformToCustomer(Tools::getValue('id_lang', Configuration::get('PS_LANG_DEFAULT'))))
+				elseif ($customer->transformToCustomer(Tools::getValue('id_lang', _PS_LANG_DEFAULT_)))
 					Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$customer->id.'&conf=3&token='.$this->token);
 				else
 					$this->_errors[] = Tools::displayError('An error occurred while updating customer.');
@@ -313,7 +313,7 @@ class AdminCustomers extends AdminTab
 				{
 					echo '
 					<form method="POST" action="index.php?tab=AdminCustomers&id_customer='.(int)$customer->id.'&token='.Tools::getAdminTokenLite('AdminCustomers').'">
-						<input type="hidden" name="id_lang" value="'.(int)(sizeof($orders) ? $orders[0]['id_lang'] : Configuration::get('PS_LANG_DEFAULT')).'" />
+						<input type="hidden" name="id_lang" value="'.(int)(count($orders) ? $orders[0]['id_lang'] : _PS_LANG_DEFAULT_).'" />
 						<p class="center"><input class="button" type="submit" name="submitGuestToCustomer" value="'.$this->l('Transform to customer').'" /></p>
 						'.$this->l('This feature generates a random password and sends an e-mail to the customer').'</form>';
 				}

@@ -50,15 +50,15 @@ else
 		$currentIndex .= '&back='.urlencode($back);
 
 	/* Server Params */
-	$protocol_link = (Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://';
-	$protocol_content = (isset($useSSL) AND $useSSL AND Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://';
+	$protocol_link = (_PS_SSL_ENABLED_) ? 'https://' : 'http://';
+	$protocol_content = (isset($useSSL) AND $useSSL AND _PS_SSL_ENABLED_) ? 'https://' : 'http://';
 	define('_PS_BASE_URL_', Tools::getShopDomain(true));
 	define('_PS_BASE_URL_SSL_', Tools::getShopDomainSsl(true));
 
 	$employee = new Employee((int)$cookie->id_employee);
 	$cookie->profile = $employee->id_profile;
 	$cookie->id_lang = (int)$employee->id_lang;
-	$iso = strtolower(Language::getIsoById($cookie->id_lang ? $cookie->id_lang : Configuration::get('PS_LANG_DEFAULT')));
+	$iso = strtolower(Language::getIsoById($cookie->id_lang ? $cookie->id_lang : _PS_LANG_DEFAULT_));
 	include(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
 	include(_PS_TRANSLATIONS_DIR_.$iso.'/fields.php');
 	include(_PS_TRANSLATIONS_DIR_.$iso.'/admin.php');

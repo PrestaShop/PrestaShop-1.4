@@ -85,7 +85,7 @@ class StockMvtCore extends ObjectModel
 
 		if ($this->id_product_attribute)
 		{
-			$product = new Product((int)$this->id_product, false, Configuration::get('PS_LANG_DEFAULT'));
+			$product = new Product((int)$this->id_product, false, _PS_LANG_DEFAULT_);
 			return (Db::getInstance()->Execute('
 				UPDATE `'._DB_PREFIX_.'product_attribute` 
 				SET `quantity` = quantity+'.(int)$this->quantity.'

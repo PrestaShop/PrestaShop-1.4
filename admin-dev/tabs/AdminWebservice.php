@@ -37,7 +37,7 @@ class AdminWebservice extends AdminTab
 	 	$this->lang = false;
 	 	$this->edit = true;
 	 	$this->delete = true;
- 		$this->id_lang_default = Configuration::get('PS_LANG_DEFAULT');
+ 		$this->id_lang_default = _PS_LANG_DEFAULT_;
 		
 		$this->fieldsDisplay = array(
 		'key' => array('title' => $this->l('Key'), 'align' => 'center', 'width' => 32),
@@ -95,7 +95,7 @@ class AdminWebservice extends AdminTab
 		}
 		if (!extension_loaded('SimpleXML'))
 			$warnings[] = $this->l('Please activate the PHP extension \'SimpleXML\' to allow testing of PrestaShop webservice.');
-		if (!configuration::get('PS_SSL_ENABLED'))
+		if (!_PS_SSL_ENABLED_)
 			$warnings[] = $this->l('If possible, it is preferable to use SSL (https) for webservice calls, as it avoids the security issues of type "man in the middle".');
 		
 		$this->displayWarning($warnings);

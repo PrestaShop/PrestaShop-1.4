@@ -190,7 +190,7 @@ class TaxCore extends ObjectModel
 
 	public static function excludeTaxeOption()
 	{
-		return !Configuration::get('PS_TAX');
+		return !_PS_TAX_;
 	}
 
 	/*

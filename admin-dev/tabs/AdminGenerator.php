@@ -189,7 +189,7 @@ class AdminGenerator extends AdminTab
 					fwrite($writeFd, "# Sitemap\n");
 					if (file_exists($this->_smFile))
 						if (filesize($this->_smFile))
-							fwrite($writeFd, 'Sitemap: '.(Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$_SERVER['SERVER_NAME'].__PS_BASE_URI__.'sitemap.xml'."\n");
+							fwrite($writeFd, 'Sitemap: '.(_PS_SSL_ENABLED_ ? 'https://' : 'http://').$_SERVER['SERVER_NAME'].__PS_BASE_URI__.'sitemap.xml'."\n");
 					fwrite($writeFd, "\n");
 
 					fclose($writeFd);

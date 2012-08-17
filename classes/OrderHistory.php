@@ -125,7 +125,7 @@ class OrderHistoryCore extends ObjectModel
 		ORDER BY `date_add` DESC, `id_order_history` DESC');
 		if (!$id_order_state)
 			return false;
-		return new OrderState($id_order_state, Configuration::get('PS_LANG_DEFAULT'));
+		return new OrderState($id_order_state, _PS_LANG_DEFAULT_);
 	}
 
 	public function addWithemail($autodate = true, $templateVars = false)
@@ -155,7 +155,7 @@ class OrderHistoryCore extends ObjectModel
 			$data['{order_name}'] = sprintf("#%06d", (int)$order->id);
 
 			// An additional email is sent the first time a virtual item is validated
-			if ($virtualProducts = $order->getVirtualProducts() AND (!$lastOrderState OR !$lastOrderState->logable) AND $newOrderState = new OrderState($this->id_order_state, Configuration::get('PS_LANG_DEFAULT')) AND $newOrderState->logable)
+			if (($virtualProducts = $order->getVirtualProducts()) && (!$lastOrderState || !$lastOrderState->logable) && ($newOrderState = new OrderState($this->id_order_state, _PS_LANG_DEFAULT_)) && $newOrderState->logable)
 			{
 				global $smarty;
 				$assign = array();

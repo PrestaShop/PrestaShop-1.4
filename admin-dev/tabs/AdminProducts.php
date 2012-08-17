@@ -889,7 +889,7 @@ class AdminProducts extends AdminTab
 	private function checkFeatures($languages, $feature_id)
 	{
 		$rules = call_user_func(array('FeatureValue', 'getValidationRules'), 'FeatureValue');
-		$feature = Feature::getFeature(Configuration::get('PS_LANG_DEFAULT'), $feature_id);
+		$feature = Feature::getFeature(_PS_LANG_DEFAULT_, $feature_id);
 		$val = 0;
 		foreach ($languages AS $language)
 			if ($val = Tools::getValue('custom_'.$feature_id.'_'.$language['id_lang']))
@@ -902,7 +902,7 @@ class AdminProducts extends AdminTab
 				if (sizeof($this->_errors))
 					return (0);
 				// Getting default language
-				if ($language['id_lang'] == Configuration::get('PS_LANG_DEFAULT'))
+				if ($language['id_lang'] == _PS_LANG_DEFAULT_)
 					return ($val);
 			}
 		return (0);
@@ -937,13 +937,13 @@ class AdminProducts extends AdminTab
 		}
 
 		/* Adding a new product image */
-		elseif (isset($_FILES['image_product']['name']) && $_FILES['image_product']['name'] != NULL )
+		elseif (isset($_FILES['image_product']['name']) && $_FILES['image_product']['name'] != null)
 		{
 
 			if ($error = checkImageUploadError($_FILES['image_product']))
 				$this->_errors[] = $error;
 
-			if (!sizeof($this->_errors) AND isset($_FILES['image_product']['tmp_name']) AND $_FILES['image_product']['tmp_name'] != NULL)
+			if (!count($this->_errors) && isset($_FILES['image_product']['tmp_name']) && $_FILES['image_product']['tmp_name'] != null)
 			{
 				if (!Validate::isLoadedObject($product))
 					$this->_errors[] = Tools::displayError('Cannot add image because product add failed.');
@@ -952,15 +952,15 @@ class AdminProducts extends AdminTab
 				else
 				{
 					$image = new Image();
-					$image->id_product = (int)($product->id);
+					$image->id_product = (int)$product->id;
 					$_POST['id_product'] = $image->id_product;
 					$image->position = Image::getHighestPosition($product->id) + 1;
 					if (($cover = Tools::getValue('cover')) == 1)
 						Image::deleteCover($product->id);
-					$image->cover = !$cover ? !sizeof($product->getImages(Configuration::get('PS_LANG_DEFAULT'))) : true;
+					$image->cover = !$cover ? !count($product->getImages(_PS_LANG_DEFAULT_)) : true;
 					$this->validateRules('Image', 'image');
 					$this->copyFromPost($image, 'image');
-					if (!sizeof($this->_errors))
+					if (!count($this->_errors))
 					{
 						if (!$image->add())
 							$this->_errors[] = Tools::displayError('Error while creating additional image');
@@ -973,7 +973,7 @@ class AdminProducts extends AdminTab
 		}
 		if (isset($image) AND Validate::isLoadedObject($image) AND !file_exists(_PS_PROD_IMG_DIR_.$image->getExistingImgPath().'.'.$image->image_format))
 			$image->delete();
-		if (sizeof($this->_errors))
+		if (count($this->_errors))
 			return false;
 		@unlink(_PS_TMP_IMG_DIR_.'/product_'.$product->id.'.jpg');
 		@unlink(_PS_TMP_IMG_DIR_.'/product_mini_'.$product->id.'.jpg');
@@ -1113,7 +1113,7 @@ class AdminProducts extends AdminTab
 
 		$className = 'Product';
 		$rules = call_user_func(array($this->className, 'getValidationRules'), $this->className);
-		$defaultLanguage = new Language((int)(Configuration::get('PS_LANG_DEFAULT')));
+		$defaultLanguage = new Language((int)(_PS_LANG_DEFAULT_));
 		$languages = Language::getLanguages(false);
 
 		/* Check required fields */
@@ -1554,7 +1554,7 @@ class AdminProducts extends AdminTab
 
 		if (!($obj = $this->loadObject(true)))
 			return;
-		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+		$currency = new Currency(_PS_CURRENCY_DEFAULT_);
 
 		if ($obj->id)
 			$currentIndex .= '&id_product='.$obj->id;
@@ -1672,7 +1672,7 @@ class AdminProducts extends AdminTab
 			$currencies = Currency::getCurrencies();
 			$countries = Country::getCountries((int)$cookie->id_lang, true, false, false);
 			$groups = Group::getGroups((int)$cookie->id_lang);
-			$defaultCurrency = new Currency((int)Configuration::get('PS_CURRENCY_DEFAULT'));
+			$defaultCurrency = new Currency((int)_PS_CURRENCY_DEFAULT_);
 			$this->_displaySpecificPriceAdditionForm($defaultCurrency, $shops, $currencies, $countries, $groups);
 			$this->_displaySpecificPriceModificationForm($defaultCurrency, $shops, $currencies, $countries, $groups);
 		}
@@ -1696,9 +1696,9 @@ class AdminProducts extends AdminTab
 			return;
 		$specificPrices = SpecificPrice::getByProductId((int)($obj->id));
 		$specificPricePriorities = SpecificPrice::getPriority((int)($obj->id));
-		$default_country = new Country((int)Configuration::get('PS_COUNTRY_DEFAULT'));
+		$default_country = new Country((int)_PS_COUNTRY_DEFAULT_);
 
-		$taxRate = TaxRulesGroup::getTaxesRate($obj->id_tax_rules_group, Configuration::get('PS_COUNTRY_DEFAULT'), 0, 0);
+		$taxRate = TaxRulesGroup::getTaxesRate($obj->id_tax_rules_group, _PS_COUNTRY_DEFAULT_, 0, 0);
 
 		$tmp = array();
 		foreach ($shops as $shop)
@@ -1841,7 +1841,7 @@ class AdminProducts extends AdminTab
 		if (!($product = $this->loadObject()))
 			return;
 
-		$default_country = new Country((int)Configuration::get('PS_COUNTRY_DEFAULT'));
+		$default_country = new Country((int)_PS_COUNTRY_DEFAULT_);
 
 		echo '
 		<a href="#" onclick="$(\'#add_specific_price\').slideToggle();return false;"><img src="../img/admin/add.gif" alt="" /> '.$this->l('Add a new specific price').'</a>
@@ -2117,7 +2117,7 @@ class AdminProducts extends AdminTab
 		parent::displayForm(false);
 		global $currentIndex, $cookie, $link;
 
-		$default_country = new Country((int)Configuration::get('PS_COUNTRY_DEFAULT'));
+		$default_country = new Country((int)_PS_COUNTRY_DEFAULT_);
 		$iso = Language::getIsoById((int)($cookie->id_lang));
 		$has_attribute = false;
 		$qty_state = 'readonly';
@@ -2555,7 +2555,7 @@ class AdminProducts extends AdminTab
 					$taxesRatesByGroup = TaxRulesGroup::getAssociatedTaxRatesByIdCountry(Country::getDefaultCountryId());
 					$ecotaxTaxRate = Tax::getProductEcotaxRate();
 					echo '<script type="text/javascript">';
-					echo 'noTax = '.(Tax::excludeTaxeOption() ? 'true' : 'false'), ";\n";
+					echo 'noTax = '.(!_PS_TAX_ ? 'true' : 'false'), ";\n";
 					echo 'taxesArray = new Array ();'."\n";
 					echo 'taxesArray[0] = 0', ";\n";
 
@@ -2571,8 +2571,8 @@ class AdminProducts extends AdminTab
 					<tr>
 						<td class="col-left">'.$this->l('Tax rule:').'</td>
 						<td style="padding-bottom:5px;">
-					<span '.(Tax::excludeTaxeOption() ? 'style="display:none;"' : '' ).'>
-					 <select onChange="javascript:calcPriceTI(); unitPriceWithTax(\'unit\');" name="id_tax_rules_group" id="id_tax_rules_group" '.(Tax::excludeTaxeOption() ? 'disabled="disabled"' : '' ).'>
+					<span '.(!_PS_TAX_ ? 'style="display:none;"' : '' ).'>
+					 <select onChange="javascript:calcPriceTI(); unitPriceWithTax(\'unit\');" name="id_tax_rules_group" id="id_tax_rules_group" '.(!_PS_TAX_ ? 'disabled="disabled"' : '' ).'>
 						 <option value="0">'.$this->l('No Tax').'</option>';
 
 						foreach ($tax_rules_groups AS $tax_rules_group)
@@ -2582,7 +2582,7 @@ class AdminProducts extends AdminTab
 
 				<a href="?tab=AdminTaxRulesGroup&addtax_rules_group&token='.Tools::getAdminToken('AdminTaxRulesGroup'.(int)(Tab::getIdFromClassName('AdminTaxRulesGroup')).(int)($cookie->id_employee)).'&id_product='.(int)$obj->id.'" onclick="return confirm(\''.$this->l('Are you sure you want to delete entered product information?', __CLASS__, true, false).'\');"><img src="../img/admin/add.gif" alt="'.$this->l('Create').'" title="'.$this->l('Create').'" /> <b>'.$this->l('Create').'</b></a></span>
 				';
-				if (Tax::excludeTaxeOption())
+				if (!_PS_TAX_)
 				{
 					echo '<span style="margin-left:10px; color:red;">'.$this->l('Taxes are currently disabled').'</span> (<b><a href="index.php?tab=AdminTaxes&token='.Tools::getAdminToken('AdminTaxes'.(int)(Tab::getIdFromClassName('AdminTaxes')).(int)($cookie->id_employee)).'">'.$this->l('Tax options').'</a></b>)';
 					echo '<input type="hidden" value="'.(int)($this->getFieldValue($obj, 'id_tax_rules_group')).'" name="id_tax_rules_group" />';
@@ -2605,7 +2605,7 @@ class AdminProducts extends AdminTab
 				if ($default_country->display_tax_label)
 				{
 					echo '
-						<tr '.(Tax::excludeTaxeOption() ? 'style="display:none"' : '' ).'>
+						<tr '.(!_PS_TAX_ ? 'style="display:none"' : '' ).'>
 							<td class="col-left">'.$this->l('Retail price with tax:').'</td>
 							<td style="padding-bottom:5px;">
 								'.($currency->format % 2 != 0 ? ' '.$currency->sign : '').' <input size="11" maxlength="14" id="priceTI" type="text" value="" onchange="noComma(\'priceTI\');" onkeyup="if (isArrowKey(event)) return;  calcPriceTE();" />'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').'
@@ -2875,7 +2875,7 @@ class AdminProducts extends AdminTab
 										</div>';
 		}
 		echo '						<p class="clear" style="padding:10px 0 0 0">'.'<a style="cursor:pointer" class="button" onmousedown="updateFriendlyURLByName();">'.$this->l('Generate').'</a>&nbsp;'.$this->l('Friendly-url from product\'s name.').'<br /><br />';
-		echo '						'.$this->l('Product link will look like this:').' '.(Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$_SERVER['SERVER_NAME'].'/<b>id_product</b>-<span id="friendly-url"></span>.html</p>
+		echo '						'.$this->l('Product link will look like this:').' '.(_PS_SSL_ENABLED_ ? 'https://' : 'http://').$_SERVER['SERVER_NAME'].'/<b>id_product</b>-<span id="friendly-url"></span>.html</p>
 									</td>
 								</tr>';
 		echo '</td></tr></table>
@@ -3208,9 +3208,9 @@ class AdminProducts extends AdminTab
 		$attributes = Attribute::getAttributes((int)($cookie->id_lang), true);
 		foreach ($attributes AS $k => $attribute)
 			$attributeJs[$attribute['id_attribute_group']][$attribute['id_attribute']] = $attribute['name'];
-		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+		$currency = new Currency(_PS_CURRENCY_DEFAULT_);
 		$attributes_groups = AttributeGroup::getAttributesGroups((int)($cookie->id_lang));
-		$default_country = new Country((int)Configuration::get('PS_COUNTRY_DEFAULT'));
+		$default_country = new Country((int)_PS_COUNTRY_DEFAULT_);
 
 		$images = Image::getImages((int)($cookie->id_lang), $obj->id);
 		if ($obj->id)
@@ -3296,7 +3296,7 @@ class AdminProducts extends AdminTab
 					<input type="text" size="6" name="attribute_price" id="attribute_price" value="0.00" onKeyUp="if (isArrowKey(event)) return ;this.value = this.value.replace(/,/g, \'.\'); calcImpactPriceTI();"/>'.($currency->format % 2 == 0 ? ' '.$currency->sign : '');
 					if ($default_country->display_tax_label)
 					{
-						echo ' '.$this->l('(tax excl.)').'<span '.(Tax::excludeTaxeOption() ? 'style="display:none"' : '' ).'> '.$this->l('or').' '.($currency->format % 2 != 0 ? $currency->sign.' ' : '').'
+						echo ' '.$this->l('(tax excl.)').'<span '.(!_PS_TAX_ ? 'style="display:none"' : '' ).'> '.$this->l('or').' '.($currency->format % 2 != 0 ? $currency->sign.' ' : '').'
 							<input type="text" size="6" name="attribute_priceTI" id="attribute_priceTI" value="0.00" onKeyUp="if (isArrowKey(event)) return ;this.value = this.value.replace(/,/g, \'.\'); calcImpactPriceTE();"/>'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').' '.$this->l('(tax incl.)').'</span> '.$this->l('final product price will be set to').' '.($currency->format % 2 != 0 ? $currency->sign.' ' : '').'<span id="attribute_new_total_price">0.00</span>'.($currency->format % 2 == 0 ? $currency->sign.' ' : '');
 					}
 			echo '

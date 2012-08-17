@@ -111,7 +111,7 @@ class ManufacturerCore extends ObjectModel
 		$fieldsArray = array('description', 'short_description', 'meta_title', 'meta_keywords', 'meta_description');
 		$fields = array();
 		$languages = Language::getLanguages(false);
-		$defaultLanguage = Configuration::get('PS_LANG_DEFAULT');
+		$defaultLanguage = _PS_LANG_DEFAULT_;
 		foreach ($languages as $language)
 		{
 			$fields[$language['id_lang']]['id_lang'] = $language['id_lang'];
@@ -191,7 +191,7 @@ class ManufacturerCore extends ObjectModel
 	public static function getManufacturers($getNbProducts = false, $id_lang = 0, $active = true, $p = false, $n = false, $all_group = false)
 	{
 		if (!$id_lang)
-			$id_lang = (int)Configuration::get('PS_LANG_DEFAULT');
+			$id_lang = (int)_PS_LANG_DEFAULT_;
 		$sql = 'SELECT m.*, ml.`description`';
 		$sql.= ' FROM `'._DB_PREFIX_.'manufacturer` m
 		LEFT JOIN `'._DB_PREFIX_.'manufacturer_lang` ml ON (m.`id_manufacturer` = ml.`id_manufacturer` AND ml.`id_lang` = '.(int)($id_lang).')

@@ -333,7 +333,7 @@ class DiscountCore extends ObjectModel
 				}
 				
 				if (!isset($id_currency))
-					$id_currency = (int)Configuration::get('PS_CURRENCY_DEFAULT');
+					$id_currency = (int)_PS_CURRENCY_DEFAULT_;
 
 				if ($this->id_currency != $id_currency)
 					return 0;

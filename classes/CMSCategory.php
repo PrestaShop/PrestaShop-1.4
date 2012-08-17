@@ -470,7 +470,7 @@ class CMSCategoryCore extends ObjectModel
 			if (isset($this->name[$cookie->id_lang]))
 				$id_lang = $cookie->id_lang;
 			else
-				$id_lang = (int)Configuration::get('PS_LANG_DEFAULT');
+				$id_lang = (int)_PS_LANG_DEFAULT_;
 		}
 		return isset($this->name[$id_lang]) ? $this->name[$id_lang] : '';
 	}

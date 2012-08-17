@@ -228,7 +228,7 @@ class OrderOpcControllerCore extends ParentOrderController
 		// WRAPPING AND TOS
 		$this->_assignWrappingAndTOS();
 
-		$selectedCountry = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
+		$selectedCountry = (int)(_PS_COUNTRY_DEFAULT_);
 		if (Configuration::get('PS_RESTRICT_DELIVERED_COUNTRIES'))
 			$countries = Carrier::getDeliveredCountries((int)self::$cookie->id_lang, true, true);
 		else
@@ -336,7 +336,7 @@ class OrderOpcControllerCore extends ParentOrderController
 	{
 		if (!$this->isLogged)
 		{
-			$carriers = Carrier::getCarriersForOrder(Country::getIdZone((int)Configuration::get('PS_COUNTRY_DEFAULT')));
+			$carriers = Carrier::getCarriersForOrder(Country::getIdZone((int)_PS_COUNTRY_DEFAULT_));
 			self::$smarty->assign(array(
 				'checked' => $this->_setDefaultCarrierSelection($carriers),
 				'carriers' => $carriers,
@@ -438,7 +438,7 @@ class OrderOpcControllerCore extends ParentOrderController
 
 	protected function _processAddressFormat()
 	{
-		$selectedCountry = (int)(Configuration::get('PS_COUNTRY_DEFAULT'));
+		$selectedCountry = (int)(_PS_COUNTRY_DEFAULT_);
 
 		$address_delivery = new Address((int)self::$cart->id_address_delivery);
 		$address_invoice = new Address((int)self::$cart->id_address_invoice);

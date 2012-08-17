@@ -399,7 +399,7 @@ class ProductCore extends ObjectModel
 				elseif (in_array($field, $this->fieldsRequiredLang))
 				{
 					if ($this->{$field} != '')
-						$fields[$language['id_lang']][$field] = pSQL($this->{$field}[(int)Configuration::get('PS_LANG_DEFAULT')]);
+						$fields[$language['id_lang']][$field] = pSQL($this->{$field}[(int)_PS_LANG_DEFAULT_]);
 				}
 				else
 					$fields[$language['id_lang']][$field] = '';
@@ -1160,7 +1160,7 @@ class ProductCore extends ObjectModel
 	*/
 	public function deleteProductSale()
 	{
-		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_sale` WHERE `id_product` = '.(int)($this->id));
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_sale` WHERE `id_product` = '.(int)$this->id);
 	}
 
 	/**
@@ -1409,7 +1409,7 @@ class ProductCore extends ObjectModel
 		$id_group = $cookie->id_customer ? (int)(Customer::getDefaultGroupId((int)($cookie->id_customer))) : _PS_DEFAULT_CUSTOMER_GROUP_;
 		$id_address = $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')};
 		$ids = Address::getCountryAndState($id_address);
-		$id_country = (int)($ids['id_country'] ? $ids['id_country'] : Configuration::get('PS_COUNTRY_DEFAULT'));
+		$id_country = (int)($ids['id_country'] ? $ids['id_country'] : _PS_COUNTRY_DEFAULT_);
 		return SpecificPrice::getProductIdByDate((int)(Shop::getCurrentShop()), (int)($cookie->id_currency), $id_country, $id_group, $beginning, $ending);
 	}
 
@@ -1750,7 +1750,7 @@ class ProductCore extends ObjectModel
 		}
 		$quantity = ($id_cart && $cart_quantity) ? $cart_quantity : $quantity;
 
-		$id_currency = (int)(Validate::isLoadedObject($cur_cart) ? $cur_cart->id_currency : ((isset($cookie->id_currency) AND (int)($cookie->id_currency)) ? $cookie->id_currency : Configuration::get('PS_CURRENCY_DEFAULT')));
+		$id_currency = (int)(Validate::isLoadedObject($cur_cart) ? $cur_cart->id_currency : ((isset($cookie->id_currency) && (int)($cookie->id_currency)) ? $cookie->id_currency : _PS_CURRENCY_DEFAULT_));
 
 		// retrieve address informations
 		$id_state = 0;
@@ -1784,7 +1784,7 @@ class ProductCore extends ObjectModel
 		if (!isset($id_country))
 			$id_country = (int)Country::getDefaultCountryId();
 
-		if (Tax::excludeTaxeOption())
+		if (!_PS_TAX_)
 			$usetax = false;
 
 		if ($usetax != false && !empty($address_infos['vat_number']) && $address_infos['id_country'] != Configuration::get('VATNUMBER_COUNTRY') && Configuration::get('VATNUMBER_MANAGEMENT'))
@@ -1942,9 +1942,9 @@ class ProductCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'cart_product`
 		WHERE `id_product` = '.(int)$id_product.' AND `id_cart` = '.(int)$cart->id);
 		$quantity = $cart_quantity ? $cart_quantity : $quantity;
-		$id_currency = (int)(Validate::isLoadedObject($cart) ? $cart->id_currency : ((isset($cookie->id_currency) AND (int)($cookie->id_currency)) ? $cookie->id_currency : Configuration::get('PS_CURRENCY_DEFAULT')));
+		$id_currency = (int)(Validate::isLoadedObject($cart) ? $cart->id_currency : ((isset($cookie->id_currency) && (int)($cookie->id_currency)) ? $cookie->id_currency : _PS_CURRENCY_DEFAULT_));
 		$ids = Address::getCountryAndState((int)($cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')}));
-		$id_country = (int)($ids['id_country'] ? $ids['id_country'] : Configuration::get('PS_COUNTRY_DEFAULT'));
+		$id_country = (int)($ids['id_country'] ? $ids['id_country'] : _PS_COUNTRY_DEFAULT_);
 
 		return (bool)SpecificPrice::getSpecificPrice((int)$id_product, 0, $id_currency, $id_country, $id_group, $quantity);
 	}
@@ -2093,7 +2093,7 @@ class ProductCore extends ObjectModel
 
 		if (Pack::isPack((int)($product['id_product'])))
 		{
-			$products_pack = Pack::getItems((int)($product['id_product']), (int)(Configuration::get('PS_LANG_DEFAULT')));
+			$products_pack = Pack::getItems((int)($product['id_product']), (int)(_PS_LANG_DEFAULT_));
 			foreach($products_pack AS $product_pack)
 			{
 				$tab_product_pack['id_product'] = (int)($product_pack->id);
@@ -2103,7 +2103,7 @@ class ProductCore extends ObjectModel
 			}
 		}
 
-		$productObj = new Product((int)$product['id_product'], false, (int)Configuration::get('PS_LANG_DEFAULT'));
+		$productObj = new Product((int)$product['id_product'], false, (int)_PS_LANG_DEFAULT_);
 		return $productObj->addStockMvt(-(int)$product['cart_quantity'], (int)_STOCK_MOVEMENT_ORDER_REASON_, (int)$product['id_product_attribute'], (int)$id_order, NULL);
 	}
 
@@ -2115,7 +2115,7 @@ class ProductCore extends ObjectModel
 
 		if (Pack::isPack((int)($orderDetail->product_id)))
 		{
-			$products_pack = Pack::getItems((int)($orderDetail->product_id), (int)(Configuration::get('PS_LANG_DEFAULT')));
+			$products_pack = Pack::getItems((int)($orderDetail->product_id), (int)(_PS_LANG_DEFAULT_));
 			foreach ($products_pack as $product_pack)
 				if (!$product_pack->addStockMvt((int)($product_pack->pack_quantity * $quantity), _STOCK_MOVEMENT_ORDER_REASON_, (int)$product_pack->id_product_attribute, (int)$orderDetail->id_order, (int)$cookie->id_employee))
 					return false;
@@ -2685,10 +2685,7 @@ class ProductCore extends ObjectModel
 		if (!isset($row['id_product_attribute']))
 			$row['id_product_attribute'] = 0;
 
-		// Tax
-		$usetax = Tax::excludeTaxeOption();
-
-		$cacheKey = $row['id_product'].'-'.$row['id_product_attribute'].'-'.$id_lang.'-'.(int)($usetax);
+		$cacheKey = $row['id_product'].'-'.$row['id_product_attribute'].'-'.$id_lang.'-'.(int)(!_PS_TAX_);
 		if (array_key_exists($cacheKey, self::$producPropertiesCache))
 		{
 			// If product is in a pack, we want to add pack_quantity to the cached data returned
@@ -2719,13 +2716,13 @@ class ProductCore extends ObjectModel
 			$row['price_without_reduction'] = Product::getPriceStatic((int)$row['id_product'], true, ((isset($row['id_product_attribute']) AND !empty($row['id_product_attribute'])) ? (int)($row['id_product_attribute']) : NULL), 6, NULL, false, false);
 		}
 
-		$row['reduction'] = Product::getPriceStatic((int)($row['id_product']), (bool)$usetax, (int)($row['id_product_attribute']), 6, NULL, true, true, 1, true, NULL, NULL, NULL, $specific_prices);
+		$row['reduction'] = Product::getPriceStatic((int)($row['id_product']), (bool)(!_PS_TAX_), (int)$row['id_product_attribute'], 6, null, true, true, 1, true, null, null, null, $specific_prices);
 		$row['specific_prices'] = $specific_prices;
 
 		if ($row['id_product_attribute'])
 		{
 			$row['quantity_all_versions'] = $row['quantity'];
-			$row['quantity'] = Product::getQuantity((int)$row['id_product'], $row['id_product_attribute'], isset($row['cache_is_pack']) ? $row['cache_is_pack'] : NULL);
+			$row['quantity'] = Product::getQuantity((int)$row['id_product'], $row['id_product_attribute'], isset($row['cache_is_pack']) ? $row['cache_is_pack'] : null);
 		}
 		$row['id_image'] = Product::defineProductImage($row, $id_lang);
 		$row['features'] = Product::getFrontFeaturesStatic((int)$id_lang, $row['id_product']);
@@ -2854,7 +2851,7 @@ class ProductCore extends ObjectModel
 		Tools::displayAsDeprecated();
 		if (Pack::isPack((int)($product['id_product'])))
 		{
-			$products_pack = Pack::getItems((int)($product['id_product']), (int)(Configuration::get('PS_LANG_DEFAULT')));
+			$products_pack = Pack::getItems((int)($product['id_product']), (int)(_PS_LANG_DEFAULT_));
 			foreach ($products_pack as $product_pack)
 			{
 				$tab_product_pack['id_product'] = (int)($product_pack->id);

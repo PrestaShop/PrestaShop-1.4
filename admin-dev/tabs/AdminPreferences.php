@@ -116,7 +116,7 @@ class AdminPreferences extends AdminTab
 				$this->_fieldsGeneral['PS_TIMEZONE'] = array('title' => $this->l('Time Zone:'), 'validation' => 'isAnything', 'type' => 'select', 'list' => $timezones, 'identifier' => 'name');
 
 			// No HTTPS activation if you haven't already.
-			if (!Tools::usingSecureMode() && !Configuration::get('PS_SSL_ENABLED'))
+			if (!Tools::usingSecureMode() && !_PS_SSL_ENABLED_)
 			{
 				$this->_fieldsGeneral['PS_SSL_ENABLED']['type'] = 'disabled';
 				$this->_fieldsGeneral['PS_SSL_ENABLED']['disabled'] = '<a href="https://'.Tools::getShopDomainSsl().Tools::safeOutput($_SERVER['REQUEST_URI']).'">'.$this->l('Please click here to use HTTPS protocol before enabling SSL.').'</a>';
@@ -377,7 +377,7 @@ class AdminPreferences extends AdminTab
 	{
 		global $currentIndex;
 
-		$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
+		$defaultLanguage = (int)(_PS_LANG_DEFAULT_);
 		$languages = Language::getLanguages(false);
 		$confValues = $this->getConf($fields, $languages);
 		$divLangName = $this->getDivLang($fields);

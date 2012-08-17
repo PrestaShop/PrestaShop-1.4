@@ -176,7 +176,7 @@ if ($step = (int)(Tools::getValue('ajaxProductTab')))
 	$admin = new AdminProducts();
 
 	$languages = Language::getLanguages(false);
-	$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
+	$defaultLanguage = (int)(_PS_LANG_DEFAULT_);
 	$product = new Product((int)(Tools::getValue('id_product')));
 	if (!Validate::isLoadedObject($product))
 		die (Tools::displayError('Product cannot be loaded'));
@@ -195,7 +195,7 @@ if (isset($_GET['getAvailableFields']) and isset($_GET['entity']))
 	$import = new AdminImport();
 
 	$languages = Language::getLanguages(false);
-	$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
+	$defaultLanguage = (int)(_PS_LANG_DEFAULT_);
 	$fields = $import->getAvailableFields(true);
 	foreach ($fields AS $field)
 		$jsonArray[] = '{"field":"'.addslashes($field).'"}';
@@ -645,7 +645,7 @@ if (Tools::isSubmit('getAdminHomeElement'))
 
 	$protocol = Tools::usingSecureMode() ? 'https' : 'http';
 	$isoUser = Language::getIsoById(intval($cookie->id_lang));
-	$isoCountry = Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'));
+	$isoCountry = Country::getIsoById(_PS_COUNTRY_DEFAULT_);
 	$stream_context = @stream_context_create(array('http' => array('method'=> 'GET', 'timeout' => 5)));
 
 	// SCREENCAST
@@ -681,7 +681,7 @@ if (Tools::isSubmit('getAdminHomeElement'))
 	}
 
 	// PREACTIVATION PAYPAL WARNING
-	$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/preactivation-warnings.php?version=1.0&partner=paypal&iso_country='.Tools::strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'))).'&iso_lang='.Tools::strtolower(Language::getIsoById(intval($cookie->id_lang))).'&id_lang='.(int)$cookie->id_lang.'&email='.urlencode(Configuration::get('PS_SHOP_EMAIL')).'&security='.md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_), false, $stream_context);
+	$content = @file_get_contents('https://www.prestashop.com/partner/preactivation/preactivation-warnings.php?version=1.0&partner=paypal&iso_country='.Tools::strtolower(Country::getIsoById(_PS_COUNTRY_DEFAULT_)).'&iso_lang='.Tools::strtolower(Language::getIsoById(intval($cookie->id_lang))).'&id_lang='.(int)$cookie->id_lang.'&email='.urlencode(Configuration::get('PS_SHOP_EMAIL')).'&security='.md5(Configuration::get('PS_SHOP_EMAIL')._COOKIE_IV_), false, $stream_context);
 	$content = explode('|', $content);
 	if ($content[0] == 'OK' && Validate::isCleanHtml($content[1]))
 		Configuration::updateValue('PS_PREACTIVATION_PAYPAL_WARNING', $content[1]);

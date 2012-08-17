@@ -190,8 +190,8 @@ class AdminImport extends AdminTab
 				'quantity' => 0,
 				'price' => 0,
 				'id_tax_rules_group' => 0,
-				'description_short' => array((int)(Configuration::get('PS_LANG_DEFAULT')) => ''),
-				'link_rewrite' => array((int)(Configuration::get('PS_LANG_DEFAULT')) => ''),
+				'description_short' => array((int)(_PS_LANG_DEFAULT_) => ''),
+				'link_rewrite' => array((int)(_PS_LANG_DEFAULT_) => ''),
 				'online_only' => 0,
 				'date_add' => date('Y-m-d H:i:s'),
 				'condition' => 'new');
@@ -465,7 +465,7 @@ class AdminImport extends AdminTab
 
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
-		$defaultLanguageId = (int)Configuration::get('PS_LANG_DEFAULT');
+		$defaultLanguageId = (int)_PS_LANG_DEFAULT_;
 		self::setLocale();
 		for ($current_line = 0, $lines_ok = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
@@ -587,7 +587,7 @@ class AdminImport extends AdminTab
 
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
-		$defaultLanguageId = (int)(Configuration::get('PS_LANG_DEFAULT'));
+		$defaultLanguageId = (int)(_PS_LANG_DEFAULT_);
 		self::setLocale();
 		for ($current_line = 0, $lines_ok = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
@@ -623,7 +623,7 @@ class AdminImport extends AdminTab
 			if ((int)$product->id_tax_rules_group != 0)
 			{
 				if (Validate::isLoadedObject(new TaxRulesGroup($product->id_tax_rules_group)))
-				    $product->tax_rate = TaxRulesGroup::getTaxesRate((int)$product->id_tax_rules_group, Configuration::get('PS_COUNTRY_DEFAULT'), 0, 0);
+				    $product->tax_rate = TaxRulesGroup::getTaxesRate((int)$product->id_tax_rules_group, _PS_COUNTRY_DEFAULT_, 0, 0);
 				else
 					$this->_addProductWarning('id_tax_rules_group', $product->id_tax_rules_group, Tools::displayError('Invalid tax rule group ID, you first need a group with this ID.'));
 			}
@@ -896,7 +896,7 @@ class AdminImport extends AdminTab
 	public function attributeImport()
 	{
 		global $cookie;
-		$defaultLanguage = Configuration::get('PS_LANG_DEFAULT');
+		$defaultLanguage = _PS_LANG_DEFAULT_;
 		$groups = array();
 		foreach (AttributeGroup::getAttributesGroups($defaultLanguage) as $group)
 			$groups[$group['name']] = (int)($group['id_attribute_group']);
@@ -1046,7 +1046,7 @@ class AdminImport extends AdminTab
 	public function addressImport()
 	{
 		$this->receiveTab();
-		$defaultLanguageId = (int)Configuration::get('PS_LANG_DEFAULT');
+		$defaultLanguageId = (int)_PS_LANG_DEFAULT_;
 		$handle = $this->openCsvFile();
 		self::setLocale();
 		for ($current_line = 0, $lines_ok = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
@@ -1061,7 +1061,7 @@ class AdminImport extends AdminTab
 
 			if (isset($address->country) AND is_numeric($address->country))
 			{
-				if (Country::getNameById(Configuration::get('PS_LANG_DEFAULT'), (int)($address->country)))
+				if (Country::getNameById(_PS_LANG_DEFAULT_, (int)($address->country)))
 					$address->id_country = (int)($address->country);
 			}
 			elseif (isset($address->country) AND is_string($address->country) AND !empty($address->country))

@@ -166,7 +166,7 @@ class AdminMeta extends AdminTab
 		if (Tools::isSubmit('submitAddmeta'))
 		{
 			$langs = Language::getLanguages(true);
-			$default_language = Configuration::get('PS_LANG_DEFAULT');
+			$default_language = _PS_LANG_DEFAULT_;
 			if (Tools::getValue('page') != 'index')
 			{
 				$defaultLangIsValidated = Validate::isLinkRewrite(Tools::getValue('url_rewrite_'.$default_language));

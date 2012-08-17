@@ -789,7 +789,7 @@ class CarrierCore extends ObjectModel
 		$suffix = Configuration::get('PS_WEIGHT_UNIT');
 		if ($this->getShippingMethod() == Carrier::SHIPPING_METHOD_PRICE)
 		{
-			$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+			$currency = new Currency(_PS_CURRENCY_DEFAULT_);
 			$suffix = $currency->sign;
 		}
 		return $suffix;

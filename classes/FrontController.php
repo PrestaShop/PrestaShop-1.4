@@ -82,14 +82,14 @@ class FrontControllerCore
 		$css_files = array();
 		$js_files = array();
 
-		if ($this->ssl && !Tools::usingSecureMode() && Configuration::get('PS_SSL_ENABLED'))
+		if ($this->ssl && !Tools::usingSecureMode() && _PS_SSL_ENABLED_)
 		{
 			header('HTTP/1.1 301 Moved Permanently');
 			header('Cache-Control: no-cache');
 			header('Location: '.Tools::getShopDomainSsl(true).$_SERVER['REQUEST_URI']);
 			exit;
 		}
-		elseif (Configuration::get('PS_SSL_ENABLED') && Tools::usingSecureMode() && !($this->ssl))
+		elseif (_PS_SSL_ENABLED_ && Tools::usingSecureMode() && !($this->ssl))
 		{
 			header('HTTP/1.1 301 Moved Permanently');
 			header('Cache-Control: no-cache');
@@ -100,7 +100,7 @@ class FrontControllerCore
 		ob_start();
 
 		/* Loading default country */
-		$defaultCountry = new Country((int)Configuration::get('PS_COUNTRY_DEFAULT'), (int)Configuration::get('PS_LANG_DEFAULT'));
+		$defaultCountry = new Country((int)_PS_COUNTRY_DEFAULT_, (int)_PS_LANG_DEFAULT_);
 		$cookie = new Cookie('ps', '', time() + (((int)Configuration::get('PS_COOKIE_LIFETIME_FO') > 0 ? (int)Configuration::get('PS_COOKIE_LIFETIME_FO') : 1) * 3600));
 		$link = new Link();
 
@@ -112,7 +112,7 @@ class FrontControllerCore
 			die(Tools::displayError('Current theme unavailable. Please check your theme directory name and permissions.'));
 		elseif (basename($_SERVER['PHP_SELF']) != 'disabled.php' && !(int)Configuration::get('PS_SHOP_ENABLE'))
 			$this->maintenance = true;
-		elseif (Configuration::get('PS_GEOLOCATION_ENABLED'))
+		elseif (_PS_GEOLOCATION_ENABLED_)
 			$this->geolocationManagement();
 
 		// Switch language if needed and init cookie language
@@ -152,7 +152,7 @@ class FrontControllerCore
 			if ($cart->OrderExists())
 				unset($cookie->id_cart, $cart, $cookie->checkedTOS);
 			/* Delete product of cart, if user can't make an order from his country */
-			elseif ((int)Configuration::get('PS_GEOLOCATION_ENABLED') &&
+			elseif (_PS_GEOLOCATION_ENABLED_ &&
 					!in_array(strtoupper($cookie->iso_code_country), explode(';', Configuration::get('PS_ALLOWED_COUNTRIES'))) &&
 				$cart->nbProducts() && (int)Configuration::get('PS_GEOLOCATION_NA_BEHAVIOR') != -1 &&
 					!self::isInWhitelistForGeolocation())
@@ -224,9 +224,9 @@ class FrontControllerCore
 
 		$smarty->assign(Tools::getMetaTags($cookie->id_lang, $page_name));
 
-		$protocol_link = (Configuration::get('PS_SSL_ENABLED') || Tools::usingSecureMode()) ? 'https://' : 'http://';
+		$protocol_link = (_PS_SSL_ENABLED_ || Tools::usingSecureMode()) ? 'https://' : 'http://';
 
-		$useSSL = (isset($this->ssl) && $this->ssl && Configuration::get('PS_SSL_ENABLED')) || Tools::usingSecureMode();
+		$useSSL = (isset($this->ssl) && $this->ssl && _PS_SSL_ENABLED_) || Tools::usingSecureMode();
 		$protocol_content = ($useSSL) ? 'https://' : 'http://';
 		if (!defined('_PS_BASE_URL_'))
 			define('_PS_BASE_URL_', Tools::getShopDomain(true));
@@ -358,7 +358,7 @@ class FrontControllerCore
 			{
 				// $_SERVER['HTTP_HOST'] must be replaced by the real canonical domain
 				$canonicalURL = $link->getPageLink($this->php_self, $this->ssl, $cookie->id_lang);
-				if (!Tools::getValue('ajax') && !preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', (($this->ssl && Configuration::get('PS_SSL_ENABLED')) ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
+				if (!Tools::getValue('ajax') && !preg_match('/^'.Tools::pRegexp($canonicalURL, '/').'([&?].*)?$/', (($this->ssl && _PS_SSL_ENABLED_) ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']))
 				{
 					if ($_SERVER['REQUEST_URI'] == __PS_BASE_URI__)
 					{
@@ -422,9 +422,9 @@ class FrontControllerCore
 				if (isset($cookie->iso_code_country) && $id_country = (int)Country::getByIso(strtoupper($cookie->iso_code_country)))
 				{
 					/* Update defaultCountry */
-					$defaultCountry = new Country($id_country, Configuration::get('PS_LANG_DEFAULT'));
+					$defaultCountry = new Country($id_country, _PS_LANG_DEFAULT_);
 					if (isset($has_been_set) && $has_been_set)
-						$cookie->id_currency = (int)Currency::getCurrencyInstance($defaultCountry->id_currency ? (int)$defaultCountry->id_currency : (int)Configuration::get('PS_CURRENCY_DEFAULT'))->id;
+						$cookie->id_currency = (int)Currency::getCurrencyInstance($defaultCountry->id_currency ? (int)$defaultCountry->id_currency : (int)_PS_CURRENCY_DEFAULT_)->id;
 				}
 				elseif (Configuration::get('PS_GEOLOCATION_NA_BEHAVIOR') == _PS_GEOLOCATION_NO_CATALOG_)
 					$this->restrictedCountry = true;

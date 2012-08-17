@@ -519,8 +519,8 @@ class AdminModules extends AdminTab
 		$showEnabledModules = Configuration::get('PS_SHOW_ENABLED_MODULES_'.(int)($cookie->id_employee));
 		$showCountryModules = Configuration::get('PS_SHOW_COUNTRY_MODULES_'.(int)($cookie->id_employee));
 
-		$nameCountryDefault = Country::getNameById($cookie->id_lang, Configuration::get('PS_COUNTRY_DEFAULT'));
-		$isoCountryDefault = Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'));
+		$nameCountryDefault = Country::getNameById($cookie->id_lang, _PS_COUNTRY_DEFAULT_);
+		$isoCountryDefault = Country::getIsoById(_PS_COUNTRY_DEFAULT_);
 		
 		$serialModules = '';
 		$modules = Module::getModulesOnDisk(true);

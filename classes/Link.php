@@ -138,7 +138,7 @@ class LinkCore
 
 	public function getCMSLink($cms, $alias = null, $ssl = false, $id_lang = NULL)
 	{
-		$base = (($ssl && Configuration::get('PS_SSL_ENABLED')) ? Tools::getShopDomainSsl(true) : Tools::getShopDomain(true));
+		$base = (($ssl && _PS_SSL_ENABLED_) ? Tools::getShopDomainSsl(true) : Tools::getShopDomain(true));
 	
 		if (is_object($cms))
 		{
@@ -203,7 +203,7 @@ class LinkCore
 		global $protocol_content;
 		
 		if (empty($protocol_content))
-			$protocol_content = Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://';
+			$protocol_content = _PS_SSL_ENABLED_ ? 'https://' : 'http://';
 
 		// legacy mode or default image
 		if ((Configuration::get('PS_LEGACY_IMAGES') 
@@ -285,7 +285,7 @@ class LinkCore
 			}
 			self::$cache['page'][$filename.'_'.$id_lang] = $uri_path;
 		}
-		return (($ssl && Configuration::get('PS_SSL_ENABLED')) ? Tools::getShopDomainSsl(true) : Tools::getShopDomain(true)).__PS_BASE_URI__.ltrim($uri_path, '/');
+		return (($ssl && _PS_SSL_ENABLED_) ? Tools::getShopDomainSsl(true) : Tools::getShopDomain(true)).__PS_BASE_URI__.ltrim($uri_path, '/');
 	}
 
 	public function getCatImageLink($name, $id_category, $type = null)

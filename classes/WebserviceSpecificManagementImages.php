@@ -311,7 +311,7 @@ class WebserviceSpecificManagementImagesCore implements WebserviceSpecificManage
 		// Get the language iso code list
 		$langList = Language::getIsoIds(true);
 		$langs = array();
-		$defaultLang = Configuration::get('PS_LANG_DEFAULT');
+		$defaultLang = _PS_LANG_DEFAULT_;
 		foreach ($langList as $lang)
 		{
 			if ($lang['id_lang'] == $defaultLang)

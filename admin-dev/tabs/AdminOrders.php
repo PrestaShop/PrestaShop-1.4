@@ -359,7 +359,7 @@ class AdminOrders extends AdminTab
 							$this->_errors[] = Tools::displayError('Cannot generate voucher');
 						else
 						{
-							$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+							$currency = new Currency(_PS_CURRENCY_DEFAULT_);
 							$params['{voucher_amount}'] = Tools::displayPrice($voucher->value, $currency, false);
 							$params['{voucher_num}'] = $voucher->name;
 							@Mail::Send((int)$order->id_lang, 'voucher', Mail::l('New voucher regarding your order', (int)$order->id_lang),
@@ -948,7 +948,7 @@ class AdminOrders extends AdminTab
 		else
 		{
 			$this->getList((int)$cookie->id_lang, !Tools::getValue($this->table.'Orderby') ? 'date_add' : null, !Tools::getValue($this->table.'Orderway') ? 'DESC' : null);
-			$currency = new Currency((int)Configuration::get('PS_CURRENCY_DEFAULT'));
+			$currency = new Currency((int)_PS_CURRENCY_DEFAULT_);
 			$this->displayList();
 			echo '<h2 class="space" style="text-align:right; margin-right:44px;">'.$this->l('Total:').' '.Tools::displayPrice($this->getTotal(), $currency).'</h2>';
 		}
@@ -958,7 +958,7 @@ class AdminOrders extends AdminTab
 	{
 		$total = 0;
 		foreach ($this->_list as $item)
-			if ($item['id_currency'] == Configuration::get('PS_CURRENCY_DEFAULT'))
+			if ($item['id_currency'] == _PS_CURRENCY_DEFAULT_)
 				$total += (float)$item['total_paid'];
 			else
 			{

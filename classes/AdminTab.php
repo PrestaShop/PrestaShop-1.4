@@ -423,7 +423,7 @@ abstract class AdminTabCore
 		if ((sizeof($rules['requiredLang']) OR sizeof($rules['sizeLang']) OR sizeof($rules['validateLang'])))
 		{
 			/* Language() instance determined by default language */
-			$defaultLanguage = new Language((int)(Configuration::get('PS_LANG_DEFAULT')));
+			$defaultLanguage = new Language((int)(_PS_LANG_DEFAULT_));
 
 			/* All availables languages */
 			$languages = Language::getLanguages(false);
@@ -1447,7 +1447,7 @@ abstract class AdminTabCore
 		 */
 
 		global $currentIndex, $cookie;
-		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+		$currency = new Currency(_PS_CURRENCY_DEFAULT_);
 
 		$id_category = 1; // default categ
 
@@ -1646,7 +1646,7 @@ abstract class AdminTabCore
 		if (!isset($this->_fieldsOptions) OR !sizeof($this->_fieldsOptions))
 			return false;
 
-		$defaultLanguage = (int)Configuration::get('PS_LANG_DEFAULT');
+		$defaultLanguage = (int)_PS_LANG_DEFAULT_;
 		$this->_languages = Language::getLanguages(false);
 		$tab = Tab::getTab((int)$cookie->id_lang, Tab::getIdFromClassName($tab));
 		echo '<br /><br />';
@@ -1791,7 +1791,7 @@ abstract class AdminTabCore
 
 		$allowEmployeeFormLang = Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') ? Configuration::get('PS_BO_ALLOW_EMPLOYEE_FORM_LANG') : 0;
 		if ($allowEmployeeFormLang && !$cookie->employee_form_lang)
-			$cookie->employee_form_lang = (int)(Configuration::get('PS_LANG_DEFAULT'));
+			$cookie->employee_form_lang = (int)(_PS_LANG_DEFAULT_);
 		$useLangFromCookie = false;
 		$this->_languages = Language::getLanguages(false);
 		if ($allowEmployeeFormLang)
@@ -1799,7 +1799,7 @@ abstract class AdminTabCore
 				if ($cookie->employee_form_lang == $lang['id_lang'])
 					$useLangFromCookie = true;
 		if (!$useLangFromCookie)
-			$this->_defaultFormLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
+			$this->_defaultFormLanguage = (int)(_PS_LANG_DEFAULT_);
 		else
 			$this->_defaultFormLanguage = (int)($cookie->employee_form_lang);
 
@@ -1925,8 +1925,8 @@ abstract class AdminTabCore
 
 	protected function filterToField($key, $filter)
 	{
-		foreach ($this->fieldsDisplay AS $field)
-			if (array_key_exists('filter_key', $field) AND $field['filter_key'] == $key)
+		foreach ($this->fieldsDisplay as $field)
+			if (array_key_exists('filter_key', $field) && $field['filter_key'] == $key)
 				return $field;
 		if (array_key_exists($filter, $this->fieldsDisplay))
 			return $this->fieldsDisplay[$filter];
@@ -1935,11 +1935,10 @@ abstract class AdminTabCore
 
 	protected function warnDomainName()
 	{
-		if ($_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN') AND $_SERVER['HTTP_HOST'] != Configuration::get('PS_SHOP_DOMAIN_SSL'))
+		if ($_SERVER['HTTP_HOST'] != _PS_SHOP_DOMAIN_ && $_SERVER['HTTP_HOST'] != _PS_SHOP_DOMAIN_SSL_)
 			$this->displayWarning($this->l('Your are currently connected with the following domain name:').' <span style="color: #CC0000;">'.$_SERVER['HTTP_HOST'].'</span><br />'.
-			$this->l('This is different from the main shop domain name set in "Preferences > SEO & URLs":').' <span style="color: #CC0000;">'.Configuration::get('PS_SHOP_DOMAIN').'</span><br />
+			$this->l('This is different from the main shop domain name set in "Preferences > SEO & URLs":').' <span style="color: #CC0000;">'._PS_SHOP_DOMAIN_.'</span><br />
 			<a href="index.php?tab=AdminMeta&token='.Tools::getAdminTokenLite('AdminMeta').'#SEO%20%26%20URLs">'.
 			$this->l('Click here if you want to modify the main shop domain name').'</a>');
 	}
 }
-

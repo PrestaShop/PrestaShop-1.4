@@ -145,10 +145,11 @@ abstract class ObjectModelCore
 					SELECT *
 					FROM `'.pSQL(_DB_PREFIX_.$this->table).'_lang`
 					WHERE `'.$this->identifier.'` = '.(int)$id);
+
 					if ($result)
 						foreach ($result as $row)
 							foreach ($row as $key => $value)
-								if (property_exists($this, $key) && $key != $this->identifier)
+								if (key_exists($key, $this) && $key != $this->identifier)
 								{
 									if (!is_array($this->{$key}))
 										$this->{$key} = array();
@@ -348,7 +349,7 @@ abstract class ObjectModelCore
 
 		$fields = array();
 
-		if ($this->id_lang == NULL)
+		if ($this->id_lang == null)
 			foreach (Language::getLanguages(false) as $language)
 				$this->makeTranslationFields($fields, $fieldsArray, $language['id_lang']);
 		else
@@ -372,7 +373,7 @@ abstract class ObjectModelCore
 				|| ($this->id_lang && isset($this->$field) && !empty($this->$field)))
 				$fields[$id_language][$field] = $this->id_lang ? pSQL($this->$field) : pSQL($this->{$field}[$id_language]);
 			elseif (in_array($field, $this->fieldsRequiredLang))
-				$fields[$id_language][$field] = $this->id_lang ? pSQL($this->$field) : pSQL($this->{$field}[Configuration::get('PS_LANG_DEFAULT')]);
+				$fields[$id_language][$field] = $this->id_lang ? pSQL($this->$field) : pSQL($this->{$field}[_PS_LANG_DEFAULT_]);
 			else
 				$fields[$id_language][$field] = '';
 		}
@@ -413,14 +414,15 @@ abstract class ObjectModelCore
 	 */
 	public function validateFieldsLang($die = true, $errorReturn = false)
 	{
-		$defaultLanguage = (int)(Configuration::get('PS_LANG_DEFAULT'));
+		$defaultLanguage = (int)Configuration::get('PS_LANG_DEFAULT');
 		foreach ($this->fieldsRequiredLang as $fieldArray)
 		{
 			if (!is_array($this->{$fieldArray}))
 				continue ;
-			if (!$this->{$fieldArray} OR !sizeof($this->{$fieldArray}) OR ($this->{$fieldArray}[$defaultLanguage] !== '0' AND empty($this->{$fieldArray}[$defaultLanguage])))
+			if (!$this->{$fieldArray} || !count($this->{$fieldArray}) || ($this->{$fieldArray}[$defaultLanguage] !== '0' || empty($this->{$fieldArray}[$defaultLanguage])))
 			{
-				if ($die) die (Tools::displayError().' ('.Tools::safeOutput(get_class($this)).'->'.Tools::safeOutput($fieldArray).' '.Tools::displayError('is empty for default language.').')');
+				if ($die)
+					die(Tools::displayError().' ('.Tools::safeOutput(get_class($this)).'->'.Tools::safeOutput($fieldArray).' '.Tools::displayError('is empty for default language.').')');
 				return $errorReturn ? get_class($this).'->'.$fieldArray.' '.Tools::displayError('is empty for default language.') : false;
 			}
 		}
@@ -455,7 +457,7 @@ abstract class ObjectModelCore
 	public static function displayFieldName($field, $className = __CLASS__, $htmlentities = true)
 	{
 		global $_FIELDS, $cookie;
-		$iso = strtolower(Language::getIsoById($cookie->id_lang ? (int)$cookie->id_lang : Configuration::get('PS_LANG_DEFAULT')));
+		$iso = strtolower(Language::getIsoById($cookie->id_lang ? (int)$cookie->id_lang : _PS_LANG_DEFAULT_));
 		@include(_PS_TRANSLATIONS_DIR_.$iso.'/fields.php');
 
 		$key = $className.'_'.md5($field);

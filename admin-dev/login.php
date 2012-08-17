@@ -37,7 +37,7 @@ $clientIsMaintenanceOrLocal = in_array(Tools::getRemoteAddr(), array_merge(array
 $errors = array();
 
 if ((empty($_SERVER['HTTPS']) OR strtolower($_SERVER['HTTPS']) == 'off')
-	 AND Configuration::get('PS_SSL_ENABLED'))
+	 AND _PS_SSL_ENABLED_)
 {
 	// You can uncomment theses lines if you want to force https even from localhost and automatically redirect
 	// header('HTTP/1.1 301 Moved Permanently');
@@ -54,7 +54,7 @@ if ((empty($_SERVER['HTTPS']) OR strtolower($_SERVER['HTTPS']) == 'off')
 
 $cookie = new Cookie('psAdmin', substr($_SERVER['PHP_SELF'], strlen(__PS_BASE_URI__), -10));
 if (!isset($cookie->id_lang))
-	$cookie->id_lang = Configuration::get('PS_LANG_DEFAULT');
+	$cookie->id_lang = _PS_LANG_DEFAULT_;
 $iso = strtolower(Language::getIsoById((int)($cookie->id_lang)));
 include(_PS_TRANSLATIONS_DIR_.$iso.'/admin.php');
 include(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
@@ -156,7 +156,7 @@ else
 {
 	// If https enabled, we force it except if you try to log in from maintenance or local ip
 	if ( (empty($_SERVER['HTTPS']) OR strtolower($_SERVER['HTTPS']) == 'off')
-		AND (	Configuration::get('PS_SSL_ENABLED') AND !$clientIsMaintenanceOrLocal)
+		AND (	_PS_SSL_ENABLED_ AND !$clientIsMaintenanceOrLocal)
 	 	)
 		echo '<div class="error">'.$warningSslMessage.'</div>';
 	else

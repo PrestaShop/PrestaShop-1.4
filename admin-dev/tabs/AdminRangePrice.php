@@ -48,7 +48,7 @@ class AdminRangePrice extends AdminTab
 		parent::__construct();
 	}
 	
-	public function displayListContent($token = NULL)
+	public function displayListContent($token = null)
 	{
 		foreach ($this->_list as $key => $list)
 			if ($list['carrier_name'] == '0')
@@ -71,12 +71,12 @@ class AdminRangePrice extends AdminTab
 
 		if (!($obj = $this->loadObject(true)))
 			return;
-		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+		$currency = new Currency(_PS_CURRENCY_DEFAULT_);
 
 		$carrierArray = array();
-		$carriers = Carrier::getCarriers((int)(Configuration::get('PS_LANG_DEFAULT')), true , false,false, NULL, Carrier::PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
+		$carriers = Carrier::getCarriers((int)(_PS_LANG_DEFAULT_), true, false, false, null, Carrier::PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
 		$id_carrier = Tools::getValue('id_carrier', $obj->id_carrier);
-		foreach ($carriers AS $carrier)
+		foreach ($carriers as $carrier)
 			if (!$carrier['is_free'])
 				$carrierArray[] = '<option value="'.(int)($carrier['id_carrier']).'"'.(($carrier['id_carrier'] == $id_carrier) ? ' selected="selected"' : '').'>'.$carrier['name'].'</option><sup>*</sup>';
 
@@ -89,7 +89,7 @@ class AdminRangePrice extends AdminTab
 			if (count($carrierArray))
 			{
 				echo '<select name="id_carrier">';
-				foreach ($carrierArray AS $carrierOption)
+				foreach ($carrierArray as $carrierOption)
 					echo $carrierOption;
 				echo '</select>
 				<p class="clear">'.$this->l('Carrier to which this range will be applied').'</p>';

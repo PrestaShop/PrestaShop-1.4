@@ -192,7 +192,7 @@ class ProductControllerCore extends FrontController
 
 				$id_customer = (isset(self::$cookie->id_customer) && self::$cookie->id_customer) ? (int)(self::$cookie->id_customer) : 0;
 				$id_group = $id_customer ? (int)(Customer::getDefaultGroupId($id_customer)) : _PS_DEFAULT_CUSTOMER_GROUP_;
-				$id_country = (int)($id_customer ? Customer::getCurrentCountry($id_customer) : Configuration::get('PS_COUNTRY_DEFAULT'));
+				$id_country = (int)($id_customer ? Customer::getCurrentCountry($id_customer) : _PS_COUNTRY_DEFAULT_);
 
 				$group_reduction = GroupReduction::getValueForProduct($this->product->id, $id_group);
 				if ($group_reduction == 0)
@@ -339,7 +339,7 @@ class ProductControllerCore extends FrontController
 				}
 
 				self::$smarty->assign(array(
-					'no_tax' => Tax::excludeTaxeOption() || !Tax::getProductTaxRate((int)$this->product->id, $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')}),
+					'no_tax' => !_PS_TAX_ || !Tax::getProductTaxRate((int)$this->product->id, $cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')}),
 					'customizationFields' => ($this->product->customizable ? $this->product->getCustomizationFields((int)self::$cookie->id_lang) : false)
 				));
 
@@ -359,7 +359,7 @@ class ProductControllerCore extends FrontController
 			'have_image' => (isset($cover) ? (int)$cover['id_image'] : false),
 			'tax_enabled' => Configuration::get('PS_TAX'),
 			'display_qties' => (int)Configuration::get('PS_DISPLAY_QTIES'),
-			'display_ht' => !Tax::excludeTaxeOption(),
+			'display_ht' => _PS_TAX_,
 			'ecotax' => ((!count($this->errors) && $this->product->ecotax > 0) ? Tools::convertPrice((float)$this->product->ecotax) : 0),
 			'currencySign' => $currency->sign,
 			'currencyRate' => $currency->conversion_rate,

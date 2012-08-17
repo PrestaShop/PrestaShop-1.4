@@ -210,7 +210,7 @@ class AdminSearch extends AdminTab
 	{
 		global $cookie;
 		$currentIndex = 'index.php';
-		$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+		$currency = new Currency(_PS_CURRENCY_DEFAULT_);
 		$query = trim(Tools::getValue('bo_query'));
 		$nbCategories = $nbProducts = $nbCustomers = 0;
 

@@ -250,7 +250,7 @@ abstract class PaymentModuleCore extends Module
 					}
 
 					// Exclude VAT
-					if (Tax::excludeTaxeOption())
+					if (!_PS_TAX_)
 					{
 						$product['tax'] = 0;
 						$product['rate'] = 0;
@@ -607,7 +607,7 @@ abstract class PaymentModuleCore extends Module
 					$id_currency = (int)($cookie->id_currency);
 			}
 			elseif ($currency == -2)
-				$id_currency = (int)(Configuration::get('PS_CURRENCY_DEFAULT'));
+				$id_currency = (int)(_PS_CURRENCY_DEFAULT_);
 			else
 				$id_currency = $currency;
 		}

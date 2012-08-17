@@ -91,7 +91,7 @@ class AdminFeatures extends AdminTab
 							<th width="100%">'.$this->l('Value').'</th>
 							<th>'.$this->l('Actions').'</th>
 						</tr>';
-			$features = FeatureValue::getFeatureValuesWithLang((int)(Configuration::get('PS_LANG_DEFAULT')), $id);
+			$features = FeatureValue::getFeatureValuesWithLang((int)(_PS_LANG_DEFAULT_), $id);
 			foreach ($features AS $feature)
 			{
 				echo '

@@ -155,7 +155,7 @@ class AdminTracking extends AdminTab
 					'status' => array('title' => $this->l('Status')),
 					'action' => array('title' => $this->l('Actions'))
 				));
-			$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+			$currency = new Currency(_PS_CURRENCY_DEFAULT_);
 			echo '
 			<table class="table" cellpadding="0" cellspacing="0">
 				<tr>';
@@ -215,7 +215,7 @@ class AdminTracking extends AdminTab
 					'action' => array('title' => $this->l('Actions'))
 				));
 
-			$currency = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+			$currency = new Currency(_PS_CURRENCY_DEFAULT_);
 			echo '
 			<table class="table" cellpadding="0" cellspacing="0">
 				<tr>';

@@ -81,7 +81,7 @@ class	LoggerCore extends ObjectModel
 	{
 		/* Send e-mail to the shop owner only if the minimal severity level has been reached */
 		if (intval(Configuration::get('PS_LOGS_BY_EMAIL')) <= intval($log->severity))
-			Mail::Send((int)Configuration::get('PS_LANG_DEFAULT'), 'log_alert', Mail::l('Log: You have a new alert from your shop', (int)Configuration::get('PS_LANG_DEFAULT')), array(), Configuration::get('PS_SHOP_EMAIL'));
+			Mail::Send((int)_PS_LANG_DEFAULT_, 'log_alert', Mail::l('Log: You have a new alert from your shop', (int)_PS_LANG_DEFAULT_), array(), Configuration::get('PS_SHOP_EMAIL'));
 	}
 
 	/**

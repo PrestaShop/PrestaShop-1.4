@@ -919,7 +919,7 @@ class CartCore extends ObjectModel
 		}
 		
 		$order_total = 0;
-		if (Tax::excludeTaxeOption())
+		if (!_PS_TAX_)
 			$withTaxes = false;
 		foreach ($products as $product)
 		{
@@ -972,7 +972,7 @@ class CartCore extends ObjectModel
 			{
 				foreach ($discountIds as $id_discount)
 				{
-					$discount = new Discount((int)$id_discount['id_discount'], (int)Configuration::get('PS_LANG_DEFAULT'));
+					$discount = new Discount((int)$id_discount['id_discount'], (int)_PS_LANG_DEFAULT_);
 					if (Validate::isLoadedObject($discount))
 					{
 						$discounts[] = $discount;
@@ -1074,7 +1074,7 @@ class CartCore extends ObjectModel
 		{
 			// This method can be called from the backend, and $defaultCountry won't be defined
 			if (!Validate::isLoadedObject($defaultCountry))
-				$defaultCountry = new Country(Configuration::get('PS_COUNTRY_DEFAULT'), Configuration::get('PS_LANG_DEFAULT'));
+				$defaultCountry = new Country(_PS_COUNTRY_DEFAULT_, _PS_LANG_DEFAULT_);
 			$id_zone = (int)$defaultCountry->id_zone;
 		}
 
@@ -1093,11 +1093,11 @@ class CartCore extends ObjectModel
 			if ((int)($this->id_customer))
 			{
 				$customer = new Customer((int)($this->id_customer));
-				$result = Carrier::getCarriers((int)(Configuration::get('PS_LANG_DEFAULT')), true, false, (int)($id_zone), $customer->getGroups());
+				$result = Carrier::getCarriers((int)(_PS_LANG_DEFAULT_), true, false, (int)($id_zone), $customer->getGroups());
 				unset($customer);
 			}
 			else
-				$result = Carrier::getCarriers((int)(Configuration::get('PS_LANG_DEFAULT')), true, false, (int)($id_zone));
+				$result = Carrier::getCarriers((int)(_PS_LANG_DEFAULT_), true, false, (int)($id_zone));
 
 			foreach ($result AS $k => $row)
 			{
@@ -1149,7 +1149,7 @@ class CartCore extends ObjectModel
 			$id_carrier = Configuration::get('PS_CARRIER_DEFAULT');
 
 		if (!isset(self::$_carriers[$id_carrier]))
-			self::$_carriers[$id_carrier] = new Carrier((int)($id_carrier), Configuration::get('PS_LANG_DEFAULT'));
+			self::$_carriers[$id_carrier] = new Carrier((int)($id_carrier), _PS_LANG_DEFAULT_);
 		$carrier = self::$_carriers[$id_carrier];
 		if (!Validate::isLoadedObject($carrier))
 			die(Tools::displayError('Fatal error: "no default carrier"'));
@@ -1161,7 +1161,7 @@ class CartCore extends ObjectModel
 			return 0;
 
 		// Select carrier tax
-		if ($useTax AND !Tax::excludeTaxeOption())
+		if ($useTax && _PS_TAX_)
 			 $carrierTax = Tax::getCarrierTaxRate((int)$carrier->id, (int)$this->{Configuration::get('PS_TAX_ADDRESS_TYPE')});
 
 		$configuration = Configuration::getMultiple(array('PS_SHIPPING_FREE_PRICE', 'PS_SHIPPING_HANDLING', 'PS_SHIPPING_METHOD', 'PS_SHIPPING_FREE_WEIGHT'));
@@ -1745,7 +1745,7 @@ class CartCore extends ObjectModel
 	 */
 	public function isCarrierInRange($id_carrier, $id_zone)
 	{
-		$carrier = new Carrier((int)$id_carrier, Configuration::get('PS_LANG_DEFAULT'));
+		$carrier = new Carrier((int)$id_carrier, _PS_LANG_DEFAULT_);
 		$shippingMethod = $carrier->getShippingMethod();
 		if (!$carrier->range_behavior)
 			return true;

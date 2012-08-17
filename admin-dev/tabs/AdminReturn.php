@@ -103,7 +103,7 @@ class AdminReturn extends AdminTab
 						'{lastname}' => $customer->lastname,
 						'{firstname}' => $customer->firstname,
 						'{id_order_return}' => $id_order_return,
-						'{state_order_return}' => (isset($orderReturnState->name[(int)$order->id_lang]) ? $orderReturnState->name[(int)$order->id_lang] : $orderReturnState->name[(int)Configuration::get('PS_LANG_DEFAULT')]));
+						'{state_order_return}' => (isset($orderReturnState->name[(int)$order->id_lang]) ? $orderReturnState->name[(int)$order->id_lang] : $orderReturnState->name[(int)_PS_LANG_DEFAULT_]));
 						Mail::Send((int)$order->id_lang, 'order_return_state', Mail::l('Your order return state has changed', (int)$order->id_lang),
 							$vars, $customer->email, $customer->firstname.' '.$customer->lastname, NULL, NULL, NULL,
 							NULL, _PS_MAIL_DIR_, true);

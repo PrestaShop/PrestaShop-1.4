@@ -107,7 +107,7 @@ class PDFCore extends PDF_PageGroupCore
 		global $cookie;
 
 		if (!isset($cookie) OR !is_object($cookie))
-			$cookie->id_lang = (int)(Configuration::get('PS_LANG_DEFAULT'));
+			$cookie->id_lang = (int)(_PS_LANG_DEFAULT_);
 		self::$_iso = strtoupper(Language::getIsoById($cookie->id_lang));
 		FPDF::FPDF($orientation, $unit, $format);
 		$this->_initPDFFonts();
@@ -235,7 +235,7 @@ class PDFCore extends PDF_PageGroupCore
 		$footerText;
 
 		// If the country is USA
-		if (Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')) == 'US')
+		if (Country::getIsoById(_PS_COUNTRY_DEFAULT_) == 'US')
 		{
 			$completeAddressShop = $this->_getCompleteUSAddressFormat($conf);
 
@@ -316,9 +316,9 @@ class PDFCore extends PDF_PageGroupCore
 				$textFooter = self::l('An electronic version of this invoice is available in your account. To access it, log in to the');
 			else
 				$textFooter = self::l('An electronic version of this invoice is available in your account. To access it, log in to the');
-			$this->Cell(0, 10, $textFooter, 0, 0, 'C', 0, (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$_SERVER['SERVER_NAME'].__PS_BASE_URI__.'history.php');
+			$this->Cell(0, 10, $textFooter, 0, 0, 'C', 0, (_PS_SSL_ENABLED_ ? 'https://' : 'http://').$_SERVER['SERVER_NAME'].__PS_BASE_URI__.'history.php');
 			$this->Ln(4);
-			$this->Cell(0, 10, Tools::iconv('utf-8', self::encoding(), Configuration::get('PS_SHOP_NAME')).' '.self::l('website using your e-mail address and password (which you created when placing your first order).'), 0, 0, 'C', 0, (Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').$_SERVER['SERVER_NAME'].__PS_BASE_URI__.'history.php');
+			$this->Cell(0, 10, Tools::iconv('utf-8', self::encoding(), Configuration::get('PS_SHOP_NAME')).' '.self::l('website using your e-mail address and password (which you created when placing your first order).'), 0, 0, 'C', 0, (_PS_SSL_ENABLED_ ? 'https://' : 'http://').$_SERVER['SERVER_NAME'].__PS_BASE_URI__.'history.php');
 		}
 		else
 			$this->Ln(4);
@@ -507,7 +507,7 @@ class PDFCore extends PDF_PageGroupCore
 						if (!in_array($pattern, $patternRules['avoid']))
 						{
 							if ($pattern == 'State:name' &&
-								Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT')) == 'US')
+								Country::getIsoById(_PS_COUNTRY_DEFAULT_) == 'US')
 							{
 								$state_name = &$addressType[$type]['addressFormatedValues'][$pattern];
 								$state = new State((int)State::getIdByName($state_name));
@@ -555,7 +555,7 @@ class PDFCore extends PDF_PageGroupCore
 		self::$delivery = $delivery;
 		self::$_iso = strtoupper(Language::getIsoById((int)(self::$order->id_lang)));
 		if (!isset(self::$_pdfparams[self::$_iso]))
-			self::$_iso = strtoupper(Language::getIsoById((int)Configuration::get('PS_LANG_DEFAULT')));
+			self::$_iso = strtoupper(Language::getIsoById((int)_PS_LANG_DEFAULT_));
 		
 		if ((self::$_priceDisplayMethod = $order->getTaxCalculationMethod()) === false)
 			die(self::l('No price display method defined for the customer group'));
@@ -1280,7 +1280,7 @@ class PDFCore extends PDF_PageGroupCore
 	static protected function l($string)
 	{
 		global $cookie;
-		$iso = Language::getIsoById((isset($cookie->id_lang) AND Validate::isUnsignedId($cookie->id_lang)) ? $cookie->id_lang : Configuration::get('PS_LANG_DEFAULT'));
+		$iso = Language::getIsoById((isset($cookie->id_lang) && Validate::isUnsignedId($cookie->id_lang)) ? $cookie->id_lang : _PS_LANG_DEFAULT_);
 
 		if (@!include(_PS_TRANSLATIONS_DIR_.$iso.'/pdf.php'))
 			die('Cannot include PDF translation language file : '._PS_TRANSLATIONS_DIR_.$iso.'/pdf.php');

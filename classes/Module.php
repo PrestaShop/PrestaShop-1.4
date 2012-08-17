@@ -404,7 +404,7 @@ abstract class ModuleCore
 				else
 					self::$classInModule[$currentClass] = $module_name;
 
-				$id_lang = (!isset($cookie) || !is_object($cookie))?(int)Configuration::get('PS_LANG_DEFAULT'):(int)$cookie->id_lang;
+				$id_lang = (!isset($cookie) || !is_object($cookie))?(int)_PS_LANG_DEFAULT_:(int)$cookie->id_lang;
 				$file = _PS_MODULE_DIR_.self::$classInModule[$currentClass].'/'.Language::getIsoById($id_lang).'.php';
 				if (file_exists($file) && include_once($file))
 					$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
@@ -883,7 +883,7 @@ abstract class ModuleCore
 		if ($id_lang == null)
 		{
 			global $cookie;
-			$id_lang = (!isset($cookie->id_lang) ? (int)Configuration::get('PS_LANG_DEFAULT') : (int)$cookie->id_lang);
+			$id_lang = (!isset($cookie->id_lang) ? (int)_PS_LANG_DEFAULT_ : (int)$cookie->id_lang);
 		}
 
 		if (@include_once(_PS_MODULE_DIR_.$this->name.'/'.Language::getIsoById($id_lang).'.php'))
