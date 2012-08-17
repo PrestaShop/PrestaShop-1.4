@@ -120,6 +120,15 @@ class FrontController extends FrontControllerCore
 			return '<span style="color:orange">'.round($n * 1000).'ms</span>'.($kikoo ? '<br />I hope it is a shared hosting' : '');
 		return '<span style="color:green">'.round($n * 1000).'ms</span>'.($kikoo ? '<br />Good boy! That\'s what I call a webserver!' : '');
 	}
+
+	private function displayRowsBrowsed($n)
+	{
+		if ($n > 200)
+			return '<span style="color:red">'.$n.' rows browsed</span>';
+		if ($n > 50)
+			return '<span style="color:orange">'.$n.'  rows browsed</span>';
+		return '<span style="color:green">'.$n.' row'.($n == 1 ? '' : 's').' browsed</span>';
+	}
 	
 	private function getTimeColor($n)
 	{
@@ -341,7 +350,16 @@ class FrontController extends FrontControllerCore
 		$queries = Db::getInstance()->queriesTime;
 		arsort($queries);
 		foreach ($queries as $q => $time)
-			echo $hr.'<b '.$this->getTimeColor($time * 1000).'>'.round($time * 1000, 3).' ms</b> '.$q;
+		{
+			echo $hr.'<b '.$this->getTimeColor($time * 1000).'>'.round($time * 1000, 3).' ms</b> '.$q.'<br />';
+			$explain = Db::getInstance()->executeS('explain '.$q);
+			if (stristr($explain[0]['Extra'], 'filesort'))
+				echo '<b '.$this->getTimeColor($time * 1000).'>USING FILESORT</b> - ';
+			$browsed_rows = 1;
+			foreach ($explain as $row)
+				$browsed_rows *= $row['rows'];
+			echo $this->displayRowsBrowsed($browsed_rows);
+		}
 		echo '</div>
 		<div class="rte" style="text-align:left;padding:8px">
 		<h3><a name="doubles">Doubles (IDs replaced by "XX")</a></h3>';
