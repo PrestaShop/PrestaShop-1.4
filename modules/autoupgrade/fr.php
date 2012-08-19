@@ -14,6 +14,11 @@ $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_04d01a3dbf117b8f6f2a299df9e6
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_1f3f7ef1fbb24f9880e304bca5183fb6'] = 'Si vous ne désactivez pas vos modules, vous pouvez avoir quelques problèmes de compatibilité et de la page modules pourrait ne pas se charger correctement.';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_8c8194a465f0163a6724907755ac1b82'] = 'Mode manuel';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_dd9dbd4916653d683244119a067ca467'] = 'Choisissez \"oui\" si vous voulez vous ';
+$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_5243e62512552a2cd6369e446bbf10f4'] = 'Performances du serveur';
+$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_5bafd6bdd0bdf40137efa43655908320'] = 'Conserver cette valeur sur \"Faibles\" si il s\'agit d\'un hébergement mutualisé : la mise à jour sera plus lente mais évitera un plantage serveur.';
+$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_28d0edd045e05cf5af64e35ae0c4c6ef'] = 'Faibles';
+$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_87f8a6ab85c9ced3702b4ea641ad4bb5'] = 'Moyennes';
+$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_655d20c1ca69519ca647684edbb2db35'] = 'Elevées';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_36be1130454bc8c4e0a41d36fa062a8b'] = 'Impossible de créer le répertoire %s';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_56195ded2802813800f43e3be1babe1c'] = 'Erreur à la suppression des sauvegardes %s';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_8460d89c10fd941687e5d2dc3ee83dc5'] = 'Mise à jour terminée. Félicitation ! Vous pouvez maintenant réactiver votre boutique.';
@@ -51,7 +56,7 @@ $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_078a325fbcc1dbd50bd9f969ce95
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_2b09982a2f826fd822f0cc4a923c5b94'] = 'Tous les fichiers ont été mis à jour. La mise à jour de la base de données va commencer. Cette opération peut prendre quelques minutes, selon la taille de votre base et la puissance de votre serveur.';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_0530243ad5b9bd205a04b975d3ef8aaf'] = '%s module(s) seront mis à jour.';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_0f786a53b1674815c24679ed64770223'] = 'l\'étape upgradeModule n\'a pas terminé correctement.';
-$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_1baa2ea6cee198c6b7f19011431dcc73'] = 'La variable \\\"listModules\\\" n\\\'est pas un array. Aucun module n\\\'a été mis à jour.';
+$_MODULE['<{autoupgrade}prestashop>adminselfupgrade_1baa2ea6cee198c6b7f19011431dcc73'] = 'La variable \\\"listModules\\\" n\'est pas un array. Aucun module n\'a été mis à jour.';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_82e0edc45d496b00ac4f162a62524d83'] = '%s module(s) restant à mettre à jour.';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_b9d4a3feb521559e34a575b7d7321692'] = 'Les modules addons ont bien été mis à jour.';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_096d3c79a1e8b8401a51df777fe73a6b'] = 'les fichier du module %s ont bien été mis à jour';
@@ -325,4 +330,12 @@ $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_1df17d9bcf452bebeb4c9c98a754
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_0f9f19a4f5e93b3d5a94405e3af32a28'] = 'Impossible d\'ouvrir le fichier zip %s';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_d5c2da59d52ac435d85b4b47e9ce4ab1'] = 'Utilisation de la classe pclZip.lib.php';
 $_MODULE['<{autoupgrade}prestashop>adminselfupgrade_57acd32f94fad88ba248969926e3d94b'] = '%s conservé';
+$_MODULE['<{autoupgrade}prestashop>autoupgrade_e79aed52aa295a8d68ff3ecf777cd42d'] = 'Cette version de PrestaShop ne peut être mise à jour car la constante PS_ADMIN_DIR n\'est pas définie';
 $_MODULE['<{autoupgrade}prestashop>autoupgrade_96f1fa7f23402c1307c8e2c57c6bccfa'] = 'Mise à jour en 1 clic';
+$_MODULE['<{autoupgrade}prestashop>autoupgrade_b81849904f3054691c6128b96d0092a8'] = 'Permet de mettre à jour de façon automatisée votre boutique dans la dernière version de PrestaShop. Attention : ce module requiert les permissions d\'écriture sur le dossier principal de votre boutique. Si vous utilisez un thème autre que celui par défaut (\"prestashop\"), celui-ci ne sera pas mis à jour.';
+$_MODULE['<{autoupgrade}prestashop>autoupgrade_fd5c6abcc7c68d76d19ffbc57008fd58'] = 'Impossible de supprimer l\'ancien onglet AdminUpgrade %s';
+$_MODULE['<{autoupgrade}prestashop>autoupgrade_73750b5c5ad577d88ff693c1e45f9113'] = 'Le nouvel onglet \"AdminSelfUpgrade\" ne peut être créé';
+$_MODULE['<{autoupgrade}prestashop>autoupgrade_b1b31d86c8370af1269f609d2334d712'] = 'impossible de créer %s';
+$_MODULE['<{autoupgrade}prestashop>autoupgrade_c53c81dfb7a8a100a6bc877c0bd31d3e'] = 'Impossible d\'écrire dans %s';
+$_MODULE['<{autoupgrade}prestashop>autoupgrade_10c008d228c9f35d12ce0437aa3eade9'] = 'Impossible de copier ajax-upgradetab.php dans %s';
+$_MODULE['<{autoupgrade}prestashop>autoupgrade_12de3725023e3c02c25c7898f524b25d'] = 'Impossible de copier logo.gif dans %s';

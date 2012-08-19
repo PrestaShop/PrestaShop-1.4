@@ -14,6 +14,7 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_0210b6456cdccad569cb560
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_2edd1583409247dfbd2db6b29791ffbb'] = 'Félicitations, votre thème a été installée avec succès';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_587003e9e901daa90ab71a986325a3e0'] = 'et a été défini en tant que le thème utilisé';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_5de8e94e19ca75380eccd46779e18c48'] = 'mais une erreur est survenue en tentant de le définir en tant que thème utilisé';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_ce7074ab0ff587c6adf4498ca9575d9f'] = 'Vous devez regénérer vos miniatures dans \"Préférences > Images\"';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_5b6cf869265c13af8566f192b4ab3d2a'] = 'Documentation';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_6bdbe5a8a9f446d4d758ee4c22648771'] = 'Vous pouvez consulter la documentation';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_7348fd57bfb5c837fc57e54fcfeeed9e'] = 'Faites un clic droit sur le nom et choisissez \"enregistrer le lien sous\"';

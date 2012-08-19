@@ -39,7 +39,7 @@ class BlockLayered extends Module
 	{
 		$this->name = 'blocklayered';
 		$this->tab = 'front_office_features';
-		$this->version = '1.8.9';
+		$this->version = '1.9.0';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
@@ -2118,7 +2118,7 @@ class BlockLayered extends Module
 				{ $(\'#error-filter-name\').hide(); } else { $(\'#error-filter-name\').show(); }" name="layered_tpl_name" maxlength="64" value="'.sprintf($this->l('My template %s'), date('Y-m-d')).'"
 				style="width: 200px; font-size: 11px;" /> <span style="font-size: 10px; font-style: italic;">('.$this->l('only as a reminder').')</span></p>
 				<hr size="1" noshade />
-				<p class="alert">'.$this->l('No filters selected, the blocklayered will be disable for the categories seleted.').'</p>
+				<p class="alert">'.$this->l('No filters selected, the blocklayered will be disable for the categories selected.').'</p>
 				<br />
 				<center><input type="submit" class="button" name="SubmitFilter" value="'.$this->l('Save this filter template').'" /></center>
 			</div>

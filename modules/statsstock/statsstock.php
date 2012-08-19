@@ -34,7 +34,7 @@ class StatsStock extends Module
 	{
 		$this->name = 'statsstock';
 		$this->tab = 'analytics_stats';
-		$this->version = 1.0;
+		$this->version = '1.0.1';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
@@ -96,7 +96,7 @@ class StatsStock extends Module
 		else
 		{
 			$rollup = array('quantity' => 0, 'wholesale_price' => 0, 'stockvalue' => 0);
-			echo '<table class="table" cellspacing="0" cellpadding="0">
+			echo '<table class="table" cellspacing="0" cellpadding="0" style="width: 679px;">
 			<tr>
 				<th>'.$this->l('ID').'</th>
 				<th>'.$this->l('Ref.').'</th>
@@ -111,10 +111,10 @@ class StatsStock extends Module
 				$rollup['wholesale_price'] += $product['wholesale_price'];
 				$rollup['stockvalue'] += $product['stockvalue'];
 				echo '<tr>
-					<td>'.$product['id_product'].'</td>
-					<td>'.$product['reference'].'</td>
-					<td>'.$product['name'].'</td>
-					<td>'.$product['quantity'].'</td>
+					<td>'.(int)$product['id_product'].'</td>
+					<td>'.Tools::safeOutput($product['reference']).'</td>
+					<td>'.(Tools::strlen($product['name']) > 60 ? '<span title="'.Tools::safeOutput($product['name']).'">'.Tools::substr(Tools::safeOutput($product['name']), 0, 60).'...</span>' : Tools::safeOutput($product['name'])).'</td>
+					<td>'.(int)$product['quantity'].'</td>
 					<td>'.Tools::displayPrice($product['wholesale_price'], $currency).'</td>
 					<td>'.Tools::displayPrice($product['stockvalue'], $currency).'</td>
 				</tr>';
@@ -128,7 +128,7 @@ class StatsStock extends Module
 				</tr>
 				<tr>
 					<td colspan="3"></td>
-					<td>'.$rollup['quantity'].'</td>
+					<td>'.(int)$rollup['quantity'].'</td>
 					<td>'.Tools::displayPrice($rollup['wholesale_price'] / count($products), $currency).'</td>
 					<td>'.Tools::displayPrice($rollup['stockvalue'], $currency).'</td>
 				</tr>
