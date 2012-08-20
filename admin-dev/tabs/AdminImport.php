@@ -1355,7 +1355,7 @@ class AdminImport extends AdminTab
 		}
 		echo '				</select>
 						</div>';
-		if (sizeof($filesToImport))
+		if (count($filesToImport))
 		{
 			echo '
 						<label class="clear">'.$this->l('Select your .CSV file:').' </label>
@@ -1363,7 +1363,7 @@ class AdminImport extends AdminTab
 							<select name="csv">';
 			foreach ($filesToImport as $filename)
 				echo '<option value="'.$filename.'">'.$filename.'</option>';
-			echo '				</select> ('.sizeof($filesToImport).' '.(sizeof($filesToImport) > 1 ? $this->l('files available') : $this->l('file available')).')
+			echo '				</select> ('.count($filesToImport).' '.(count($filesToImport) > 1 ? $this->l('files available') : $this->l('file available')).')
 						</div>
 						<label class="clear">'.$this->l('Select language of the file (the locale must be installed):').' </label>
 						<div class="margin-form">

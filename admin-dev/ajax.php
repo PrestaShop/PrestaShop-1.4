@@ -235,13 +235,13 @@ if (array_key_exists('ajaxCategoriesPositions', $_POST))
 				break;
 			}
 		}
-	$category = new Category($id_category_to_move);
+	$category = new Category((int)$id_category_to_move);
 	if (Validate::isLoadedObject($category))
 	{
 		if (isset($position) && $category->updatePosition($way, $position))
 		{
 			Category::regenerateEntireNtree();
-			Module::hookExec('categoryUpdate');
+			Module::hookExec('categoryUpdate', array('category' => $category));
 			die(true);
 		}
 		else

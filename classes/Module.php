@@ -28,7 +28,7 @@
 abstract class ModuleCore
 {
 	/** @var integer Module ID */
-	public $id = NULL;
+	public $id = null;
 
 	/** @var float Version */
 	public $version;
@@ -49,7 +49,7 @@ abstract class ModuleCore
 	public $need_instance = 1;
 
 	/** @var string Admin tab correponding to the module */
-	public $tab = NULL;
+	public $tab = null;
 
 	/** @var boolean Status */
 	public $active = false;
@@ -58,13 +58,13 @@ abstract class ModuleCore
 	protected $_lang = array();
 
 	/** @var string Module web path (eg. '/shop/modules/modulename/')  */
-	protected $_path = NULL;
+	protected $_path = null;
 
 	/** @var string Fill it if the module is installed but not yet set up */
 	public $warning;
 
 	/** @var string Message display before uninstall a module */
-	public $beforeUninstall = NULL;
+	public $beforeUninstall = null;
 
 	protected $_errors = false;
 
@@ -1040,8 +1040,7 @@ abstract class ModuleCore
 		FROM `'._DB_PREFIX_.'hook_module` hm
 		LEFT JOIN `'._DB_PREFIX_.'hook` h ON (h.`id_hook` = hm.`id_hook`)
 		WHERE h.`name` = \''.pSQL($hook).'\'
-		AND hm.`id_module` = '.(int)($this->id)
-		);
+		AND hm.`id_module` = '.(int)$this->id);
 	}
 
 	/*
@@ -1049,9 +1048,9 @@ abstract class ModuleCore
 	*/
 	protected static function _isTemplateOverloadedStatic($moduleName, $template)
 	{
-		if (!!@filemtime(_PS_THEME_DIR_.'modules/'.$moduleName.'/'.$template))
+		if ((bool)@filemtime(_PS_THEME_DIR_.'modules/'.$moduleName.'/'.$template))
 			return true;
-		elseif (!!@filemtime(_PS_MODULE_DIR_.$moduleName.'/'.$template))
+		elseif ((bool)@filemtime(_PS_MODULE_DIR_.$moduleName.'/'.$template))
 			return false;
 		return null;
 	}
@@ -1132,4 +1131,3 @@ abstract class ModuleCore
 		return is_callable(array($this, 'hook'.ucfirst($hook_name)));
 	}
 }
-

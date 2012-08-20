@@ -186,7 +186,7 @@ class CategoryCore extends ObjectModel
 	public function toggleStatus()
 	{
 		$result = parent::toggleStatus();
-		Module::hookExec('categoryUpdate');
+		Module::hookExec('categoryUpdate', array('category' => $this));
 		return $result;
 	}
 
@@ -932,7 +932,7 @@ class CategoryCore extends ObjectModel
 			SET `position` = '.(int)($position).'
 			WHERE `id_parent` = '.(int)($movedCategory['id_parent']).'
 			AND `id_category`='.(int)($movedCategory['id_category'])));
-		Module::hookExec('categoryUpdate');
+		Module::hookExec('categoryUpdate', array('category' => $this));
 		return $result;
 	}
 

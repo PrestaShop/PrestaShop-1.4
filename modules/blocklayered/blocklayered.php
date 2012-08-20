@@ -39,7 +39,7 @@ class BlockLayered extends Module
 	{
 		$this->name = 'blocklayered';
 		$this->tab = 'front_office_features';
-		$this->version = '1.9.0';
+		$this->version = '1.9.1';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
@@ -1374,7 +1374,7 @@ class BlockLayered extends Module
 	public function hookCategoryUpdate($params)
 	{
 		/* The category status might (active, inactive) have changed, we have to update the layered cache table structure */
-		if (!$params['category']->active)
+		if (isset($params['category']->active) && !$params['category']->active)
 			$this->hookCategoryDeletion($params);
 	}
 

@@ -38,7 +38,7 @@ class AdminCustomerThreads extends AdminTab
 	 	$this->view = true; 
 	 	$this->delete = true;
 		
- 		$this->_select = 'CONCAT(c.firstname," ",c.lastname) as customer, cl.name as contact, l.name as language, group_concat(message) as messages, (
+ 		$this->_select = 'CONCAT(c.firstname," ",c.lastname) as customer, cl.name as contact, l.name as language, COUNT(cm.`id_customer_message`) messages, (
 			SELECT IFNULL(CONCAT(LEFT(e.firstname, 1),". ",e.lastname), "--")
 			FROM '._DB_PREFIX_.'customer_message cm2 INNER JOIN '._DB_PREFIX_.'employee e ON e.id_employee = cm2.id_employee
 			WHERE cm2.id_employee > 0 AND cm2.`id_customer_thread` = a.`id_customer_thread`
@@ -52,12 +52,12 @@ class AdminCustomerThreads extends AdminTab
 		
 		$contactArray = array();
 		$contacts = Contact::getContacts($cookie->id_lang);
-		foreach ($contacts AS $contact)
+		foreach ($contacts as $contact)
 			$contactArray[$contact['id_contact']] = $contact['name'];
 			
 		$languageArray = array();
 		$languages = Language::getLanguages();
-		foreach ($languages AS $language)
+		foreach ($languages as $language)
 			$languageArray[$language['id_lang']] = $language['name'];
 			
 		$statusArray = array(
@@ -82,7 +82,7 @@ class AdminCustomerThreads extends AdminTab
 			'language' => array('title' => $this->l('Language'), 'width' => 60, 'type' => 'select', 'select' => $languageArray, 'filter_key' => 'l!id_lang', 'filter_type' => 'int'),
 			'status' => array('title' => $this->l('Status'), 'width' => 50, 'type' => 'select', 'select' => $statusArray, 'icon' => $imagesArray, 'align' => 'center', 'filter_key' => 'a!status', 'filter_type' => 'string'),
 			'employee' => array('title' => $this->l('Employee'), 'width' => 100, 'filter_key' => 'employee', 'tmpTableFilter' => true),
-			'messages' => array('title' => $this->l('Messages'), 'width' => 50, 'filter_key' => 'messages', 'tmpTableFilter' => true, 'maxlength' => 0),
+			'messages' => array('title' => $this->l('Messages'), 'width' => 50, 'filter_key' => 'messages', 'tmpTableFilter' => true),
 			'date_upd' => array('title' => $this->l('Last message'), 'width' => 90, 'havingFilter' => true)
 		);
 
