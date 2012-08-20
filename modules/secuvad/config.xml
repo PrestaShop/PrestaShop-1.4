@@ -2,8 +2,8 @@
 <module>
 	<name>secuvad</name>
 	<displayName><![CDATA[Secuvad module]]></displayName>
-	<version><![CDATA[2.0.1]]></version>
-	<description><![CDATA[Solution fighting against online fraud]]></description>
+	<version><![CDATA[2.1.0]]></version>
+	<description><![CDATA[Avec SECUVAD pour moins d&rsquo;1% de votre CA, garantissez 100% de son encaissement en France et &agrave; l&rsquo;International et d&eacute;veloppez votre activit&eacute; commerciale en toute s&eacute;r&eacute;nit&eacute;. ]]></description>
 	<author><![CDATA[PrestaShop]]></author>
 	<tab><![CDATA[payment_security]]></tab>
 	<confirmUninstall>Are you sure you want to delete this module?</confirmUninstall>

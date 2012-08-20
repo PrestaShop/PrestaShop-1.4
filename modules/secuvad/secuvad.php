@@ -43,7 +43,7 @@ class Secuvad extends Module
 	{
   		$this->name = 'secuvad';
   		$this->tab = 'payment_security';
-  		$this->version = '2.0.1';
+  		$this->version = '2.1.0';
   		$this->currencies = NULL;
   		$this->currencies_mode = NULL;
 		$this->need_instance = 0;
@@ -51,7 +51,7 @@ class Secuvad extends Module
 		parent::__construct();
 		$this->author = 'PrestaShop';
   		$this->displayName = $this->l('Secuvad module');
-  		$this->description = $this->l('Solution fighting against online fraud');
+  		$this->description = $this->l('Avec SECUVAD pour moins d’1% de votre CA, garantissez 100% de son encaissement en France et à l’International et développez votre activité commerciale en toute sérénité. ');
   		$this->confirmUninstall = $this->l('Are you sure you want to delete this module?');
 	}
 	
@@ -358,7 +358,29 @@ class Secuvad extends Module
 		global $cookie;
 		
 		$this->_html = '<h2>'.$this->l('Secuvad configuration').'</h2>';
-		
+		$this->_html .= '<form>
+							<fieldset>
+								<legend>Que fait le module SECUVAD</legend>
+								<img src="../modules/'.$this->name.'/secuvad.png" width="12%" alt="logo"/>
+									<p>'.$this->l('Le module ').'<strong>'.$this->l('SECUVAD').'</strong>'.$this->l(' c\'est simultanément :').'</p>
+									<ul>
+										<li>'.$this->l('L\'').'<strong>'.$this->l('Analyse informatique').'</strong>'.$this->l(' automatisée grâce à notre module PRESTASHOP <u>à partir de 0.12€/Trans</u>.').'</li>
+										<li>'.$this->l('L\'').'<strong>'.$this->l('Expertise').'</strong>'.$this->l(', si nécessaire, par nos juristes spécialisés  <u>à partir de 2.10€/Trans</u>.').'</li>
+										<li>'.$this->l('Le ').'<strong>'.$this->l('Recouvrement ').'</strong>'.$this->l('de vos créances.').'</li>
+										<li>'.$this->l('Des ').'<strong>'.$this->l('Conseils d\'ordre juridique.').'</strong></li>
+										<li>'.$this->l('La ').'<strong>'.$this->l('Garantie Financière à 100%').'</strong>'.$this->l(', sans franchise, ni plafond, ni limite de montant <u>à partir de 0.10% du montant total soumis</u>.').'</li>
+									</ul>
+									<p>'.$this->l('Le module ').'<strong>'.$this->l('SECUVAD').'</strong>'.$this->l(' c\'est aussi :').'</p>
+									<ul>
+										<li>'.$this->l('Une totale sécurité pour lutter contre la fraude.').'</li>
+										<li>'.$this->l('Une parfaite intégration dans PRESTASHOP, il identifie ').'<strong>'.$this->l('immédiatement ').'</strong>'.$this->l('les commandes frauduleuses, il vous accompagne dans les phases de recouvrement de créances (impayés…).').'</li>
+										<li>'.$this->l('Il ').'<strong>'.$this->l('limite les abandons de commandes ').'</strong>'.$this->l('liés aux procédures de contrôle.').'</li>
+										<li>'.$this->l('Il ').'<strong>'.$this->l('assure votre Chiffre d’Affaires ').'</strong>'.$this->l('en garantissant 100% de vos ventes sans franchise, ni plafond, ni limite de montant <u>y compris pour les paiements chèques et paiements fractionnés en 3, 5 ou encore 10 fois</u> ! ').'</li>
+									</ul>
+									<p><strong>Bénéficiez de notre expérience acquise auprès de nombreux e-commerçants</strong> tels que par exemple HOME BOULEVARD, DARTY, CESARO ou encore ETAM !</br>Pour plus d’informations rendez-vous sur notre site <a href="http://www.secuvad.com">http://www.secuvad.com</a> </p>
+									<p><u>SECUVAD</u> est membre de <img src="../modules/'.$this->name.'/acsel.jpg" width="7%" alt="acsel"/></p>
+								</fieldset>
+						</form>';
 		if (!$this->_isPaymentCCFilePresent())
 			$this->_html .= $this->displayError($this->l('Payment CC file isn\'t present, please copy this file into classes directory of your Prestashop'));
 		$lock = $this->_postProcess();
@@ -804,7 +826,7 @@ class Secuvad extends Module
 	private function _setFormRegister($lock = false)
 	{
 		$this->_html .= '
-		<h3>'.$this->l('In order to use the Secuvad module, please fill in this form, then click "Register".').'</h3>
+		<h3>'.$this->l('Pour souscrire aux garanties SECUVAD et activer votre module, merci de remplir le formulaire et de cliquer sur enregistrer.').'</h3>
 		<form method="POST" action="'.($lock ? $this->_getSecuvadRegisterURL() : Tools::safeOutput($_SERVER['REQUEST_URI'])).'">';
 		if ($lock)
 		{
@@ -1289,7 +1311,7 @@ class Secuvad extends Module
 		if ($is_fraud == 0)
 			return '<img src="../img/admin/blank.gif" alt="'.$this->l('Is not a fraud').'" /> '.$this->l('No');
 		elseif ($is_fraud == 1)
-			return '<img src="../img/admin/disabled.gif" alt="'.$this->l('Is fraud').'" /> '.$this->l('Yes');
+			return '<img src="../img/admin/disabled.gif" alt="'.$this->l('Is a fraud').'" /> '.$this->l('Yes');
 	}
 	
 	public function _getSecuvadStatusHtml($secuvad_status)
