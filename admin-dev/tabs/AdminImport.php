@@ -468,7 +468,7 @@ class AdminImport extends AdminTab
 		$defaultLanguageId = (int)_PS_LANG_DEFAULT_;
 		self::setLocale();
 		for ($current_line = 0, $lines_ok = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
-		{		
+		{
 			if (Tools::getValue('convert'))
 				$line = $this->utf8_encode_array($line);
 			$info = self::getMaskedRow($line);
@@ -480,7 +480,7 @@ class AdminImport extends AdminTab
 			}
 			elseif (empty($info['id']))
 				unset($info['id']);
-			
+
 			if (!isset($info['parent']) || (is_numeric($info['parent']) && $info['parent'] < 1))
 				$info['parent'] = 1;
 
@@ -547,7 +547,7 @@ class AdminImport extends AdminTab
 					$catMoved[$category->id] = (int)$categoryAlreadyCreated['id_category'];
 					$category->id =	(int)$categoryAlreadyCreated['id_category'];
 				}
-				
+
 				/* Prevent from having the same Parent Category ID and Category ID */
 				if ($category->id == $category->id_parent)
 				{
@@ -601,7 +601,7 @@ class AdminImport extends AdminTab
 			if (Tools::getValue('convert'))
 				$line = $this->utf8_encode_array($line);
 			$info = self::getMaskedRow($line);
-			
+
 			/* If "Use product reference as key" has been selected, get the related product id */
 			if (Tools::getValue('match_ref') == 1 && $info['reference'])
 			{
@@ -609,11 +609,11 @@ class AdminImport extends AdminTab
 				SELECT `id_product`
 				FROM `'._DB_PREFIX_.'product`
 				WHERE `reference` = \''.pSQL($info['reference']).'\'');
-				
+
 				if ($id_product)
 					$info['id'] = (int)$id_product;
 			}
-			
+
 			if (array_key_exists('id', $info) && (int)$info['id'] && Product::existsInDatabase((int)$info['id'], 'product'))
 			{
 				$product = new Product((int)$info['id']);
@@ -743,12 +743,12 @@ class AdminImport extends AdminTab
 			$link_rewrite = (is_array($product->link_rewrite) && count($product->link_rewrite)) ? $product->link_rewrite[$defaultLanguageId] : '';
 			if (!$link_rewrite)
 				$no_link_rewrite = true;
-			
+
 			$valid_link = Validate::isLinkRewrite($link_rewrite);
 			if (!$valid_link)
 				$link_rewrite_sav = $link_rewrite;
 
-			if ((isset($product->link_rewrite[$defaultLanguageId]) AND empty($product->link_rewrite[$defaultLanguageId])) OR !$valid_link)
+			if ((isset($product->link_rewrite[$defaultLanguageId]) && empty($product->link_rewrite[$defaultLanguageId])) || !$valid_link)
 			{
 				$link_rewrite = Tools::link_rewrite($product->name[$defaultLanguageId]);
 				if ($link_rewrite == '')
@@ -782,7 +782,11 @@ class AdminImport extends AdminTab
 				if (!$res)
 				{
 					if (isset($product->date_add) && $product->date_add != '')
+					{
+						// As we create the product, date_upd is the same as date_add
+						$product->date_upd = $product->date_add;
 						$res = $product->add(false);
+					}
 					else
 						$res = $product->add();
 				}
@@ -983,7 +987,7 @@ class AdminImport extends AdminTab
 					if (($fieldError = $obj->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $obj->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true)
 					{
 						$obj->add();
-				
+
 				$groups[$group] = $obj->id;
 					}
 					else

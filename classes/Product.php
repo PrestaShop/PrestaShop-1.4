@@ -31,159 +31,159 @@ define('_CUSTOMIZE_TEXTFIELD_', 1);
 class ProductCore extends ObjectModel
 {
 	/** @var string Tax name */
-	public		$tax_name;
+	public $tax_name;
 
 	/** @var string Tax rate */
-	public		$tax_rate;
+	public $tax_rate;
 
 	/** @var string Tax rules group */
-	public 		$id_tax_rules_group;
+	public $id_tax_rules_group;
 
 	/** @var integer Manufacturer id */
-	public		$id_manufacturer;
+	public $id_manufacturer;
 
 	/** @var integer Supplier id */
-	public		$id_supplier;
+	public $id_supplier;
 
 	/** @var integer default Category id */
-	public 		$id_category_default;
+	public $id_category_default;
 
 	/** @var integer default Attribute id if color picker is enabled */
-	public 		$id_color_default;
+	public $id_color_default;
 
 	/** @var string Manufacturer name */
-	public		$manufacturer_name;
+	public $manufacturer_name;
 
 	/** @var string Supplier name */
-	public		$supplier_name;
+	public $supplier_name;
 
 	/** @var mixed Name */
-	public 		$name;
+	public $name;
 
 	/** @var string Long description */
-	public 		$description;
+	public $description;
 
 	/** @var string Short description */
-	public 		$description_short;
+	public $description_short;
 
 	/** @var integer Quantity available */
-	public 		$quantity = 0;
+	public $quantity = 0;
 
 	/** @var integer Minimal quantity for add to cart */
-	public	$minimal_quantity = 1;
+	public $minimal_quantity = 1;
 
 	/** @var mixed available_now */
-	public 		$available_now;
+	public $available_now;
 
 	/** @var mixed available_later */
-	public 		$available_later;
+	public $available_later;
 
 	/** @var float Price in euros */
-	public 		$price = 0;
+	public $price = 0;
 
 	/** @var float Additional shipping cost */
-	public 		$additional_shipping_cost = 0;
+	public $additional_shipping_cost = 0;
 
 	/** @var float Wholesale Price in euros */
-	public 		$wholesale_price = 0;
+	public $wholesale_price = 0;
 
 	/** @var boolean on_sale */
-	public 		$on_sale = false;
+	public $on_sale = false;
 
 	/** @var boolean online_only */
-	public 		$online_only = false;
+	public $online_only = false;
 
 	/** @var string unity */
 	public $unity = null;
 
     /** @var float price for product's unity */
-	public		$unit_price;
+	public $unit_price;
 
     /** @var float price for product's unity ratio */
-	public		$unit_price_ratio = 0;
+	public $unit_price_ratio = 0;
 
 	/** @var float Ecotax */
-	public		$ecotax = 0;
+	public $ecotax = 0;
 
 	/** @var string Reference */
-	public 		$reference;
+	public $reference;
 
 	/** @var string Supplier Reference */
-	public 		$supplier_reference;
+	public $supplier_reference;
 
 	/** @var string Location */
-	public 		$location;
+	public $location;
 
 	/** @var string Width in default width unit */
-	public 		$width = 0;
+	public $width = 0;
 
 	/** @var string Height in default height unit */
-	public 		$height = 0;
+	public $height = 0;
 
 	/** @var string Depth in default depth unit */
-	public 		$depth = 0;
+	public $depth = 0;
 
 	/** @var string Weight in default weight unit */
-	public 		$weight = 0;
+	public $weight = 0;
 
 	/** @var string Ean-13 barcode */
-	public 		$ean13;
+	public $ean13;
 
 	/** @var string Upc barcode */
-	public 		$upc;
+	public $upc;
 
 	/** @var mixed Friendly URL */
-	public 		$link_rewrite;
+	public $link_rewrite;
 
 	/** @var mixed Meta tag description */
-	public 		$meta_description;
+	public $meta_description;
 
 	/** @var mixed Meta tag keywords */
-	public 		$meta_keywords;
+	public $meta_keywords;
 
 	/** @var mixed Meta tag title */
-	public 		$meta_title;
+	public $meta_title;
 
 	/** @var integer Out of stock behavior */
-	public		$out_of_stock = 2;
+	public $out_of_stock = 2;
 
 	/** @var boolean Product statuts */
-	public		$quantity_discount = 0;
+	public $quantity_discount = 0;
 
 	/** @var boolean Product customization */
-	public		$customizable;
+	public $customizable;
 
 	/** @var boolean Product is new */
-	public		$new = NULL;
+	public $new = null;
 
 	/** @var integer Number of uploadable files (concerning customizable products) */
-	public		$uploadable_files;
+	public $uploadable_files;
 
 	/** @var interger Number of text fields */
-	public		$text_fields;
+	public $text_fields;
 
 	/** @var boolean Product statuts */
-	public		$active = 1;
+	public $active = 1;
 
 	/** @var boolean Product available for order */
-	public		$available_for_order = 1;
+	public $available_for_order = 1;
 
 	/** @var enum Product condition (new, used, refurbished) */
-	public		$condition;
+	public $condition;
 
 	/** @var boolean Show price of Product */
-	public		$show_price = 1;
+	public $show_price = 1;
 
-	public		$indexed = 0;
+	public $indexed = 0;
 
 	/** @var string Object creation date */
-	public 		$date_add;
+	public $date_add;
 
 	/** @var string Object last modification date */
-	public 		$date_upd;
+	public $date_upd;
 
 	/*** @var array Tags */
-	public		$tags;
+	public $tags;
 
 	public $cache_is_pack;
 	public $cache_has_attachments;
