@@ -25,23 +25,47 @@
 *  International Registred Trademark & Property of PrestaShop SA
 */
 
-require_once ('../../config/config.inc.php');
+require_once('../../config/config.inc.php');
+require_once(_PS_ROOT_DIR_.'/init.php');
+require_once(dirname(__FILE__).'/classes/SCFields.php');
+
+$so = new SCfields('API');
+
+$fields = $so->getFields();
+
+// Build back the fields list for SoColissimo, gift infos are send using the JS
+$inputs = array();
+foreach($_GET as $key => $value)
+	if (in_array($key, $fields))
+		$inputs[$key] = Tools::getValue($key);
+
+$param_plus = array(
+	// Get the data set before
+	Tools::getValue('trParamPlus'),
+	Tools::getValue('gift'),
+	Tools::getValue('gift_message')
+);
+
+$inputs['trParamPlus'] = implode('|', $param_plus);
+
+// Add signature to get the gift and gift message in the trParamPlus
+$inputs['signature'] = $so->generateKey($inputs);
 
 $onload_script = 'parent.$.fancybox.close();';
-if (Tools::isSubmit('firstcall'))	
+if (Tools::isSubmit('first_call'))
 	$onload_script = 'document.getElementById(\'socoForm\').submit();';
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd"> 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr"> 
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
 	<head>
 	</head>
 	<body onload="<?php echo $onload_script; ?>">
-		<?php
-		echo '<form id="socoForm" name="form" action="'.Configuration::get('SOCOLISSIMO_URL').'" method="POST">';
-		foreach($_GET as $key => $val)
-			if (Validate::isCleanHtml($key) && Validate::isCleanHtml($val))
-				echo '<input type="hidden" name="'.Tools::safeOutput($key).'" value="'.Tools::safeOutput($val).'"/>';
-		?>
+		<form id="socoForm" name="form" action="<?php echo Configuration::get('SOCOLISSIMO_URL'); ?>" method="POST">
+			<?php
+				foreach($inputs as $key => $val)
+					echo '<input type="hidden" name="'.$key.'" value="'.$val.'"/>';
+			?>
+		</form>
 	</body>
 </html>
-</form>

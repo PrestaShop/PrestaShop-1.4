@@ -60,19 +60,19 @@ var soToken = "{$token}";
 
 {literal}
 	$('#soLink').fancybox({
-			'width'				: 1000,
-			'height'			: 700,
-		    'autoScale'     	: false,
-		    'centerOnScroll'	: true,
-		    'autoDimensions'	: false,
-		    'transitionIn'		: 'none',
-			'transitionOut'		: 'none',
-			'hideOnOverlayClick' : false,
-			'hideOnContentClick' : false,
-			'showCloseButton'	: true,
-			'showIframeLoading' : true,
-			'enableEscapeButton' : true,
-			'type'				: 'iframe',
+			'width'					: 572,
+			'height'				: 710,
+		    'autoScale'     		: false,
+		    'centerOnScroll'		: true,
+		    'autoDimensions'		: false,
+		    'transitionIn'			: 'none',
+			'transitionOut'			: 'none',
+			'hideOnOverlayClick'	: false,
+			'hideOnContentClick'	: false,
+			'showCloseButton'		: true,
+			'showIframeLoading' 	: true,
+			'enableEscapeButton'	: true,
+			'type'					: 'iframe',
 			onStart: function () {
 				$('#soLink').attr('href', 'modules/socolissimo/redirect.php' + serialiseInput(soInputs));
 			},
@@ -198,19 +198,10 @@ function redirect()
 
 function serialiseInput(inputs)
 {
-	updateGiftData();
-	soInputs.TRPARAMPLUS = soInputs.carrier_id + '|' + soInputs.gift + '|' + soInputs.gift_message;
-	var str = '?firstcall=1&';
+	var str = '?first_call=1&';
 	for ( var cle in inputs )
    		str += cle + '=' + inputs[cle] + '&';
-   	
-	return str;
-}
-
-function updateGiftData()
-{
-	soInputs.gift = ($('#gift').attr('checked') ? '1' : '0' );
-	soInputs.gift_message = $('#gift_message').attr('value');
+	return (str + 'gift=' + $('#gift').attr('checked') + '&gift_message='+ $('#gift_message').attr('value'));
 }
 
 {/literal}

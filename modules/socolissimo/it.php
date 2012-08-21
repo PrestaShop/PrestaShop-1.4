@@ -2,17 +2,15 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{socolissimo}prestashop>ajax_607e1d854783c8229998ac2b5b6923d3'] = 'Token non valido';
-$_MODULE['<{socolissimo}prestashop>ajax_67933de20c945d1759ab891fb9dc1fd7'] = 'Nessuna informazione di spedizione selezionata';
 $_MODULE['<{socolissimo}prestashop>socolissimo_42ab10dea7d96b9c353e0f5bae43ec20'] = 'So Colissimo';
 $_MODULE['<{socolissimo}prestashop>socolissimo_9e13e80360ceb625672531275f01ec1f'] = 'Offri ai tuoi clienti diverse modalità di consegna LaPoste.';
-$_MODULE['<{socolissimo}prestashop>socolissimo_f8e355b97fa1be7a8d8c206aa66f0077'] = '\"Zona/e del corriere\"';
-$_MODULE['<{socolissimo}prestashop>socolissimo_690c1c6abf905b88281a7cd324af9942'] = '\"Gruppo Corriere\"';
-$_MODULE['<{socolissimo}prestashop>socolissimo_a18ef2e8b3730915798057a50ecbf2cd'] = '\"Fascia/e del corriere\"';
-$_MODULE['<{socolissimo}prestashop>socolissimo_59f26c70c0230e4ec5e4acdfed0e270c'] = '\"Prezzo consegna corriere\"';
-$_MODULE['<{socolissimo}prestashop>socolissimo_798547c41ec3e64e2322df678e939344'] = '\"ID FO\"';
-$_MODULE['<{socolissimo}prestashop>socolissimo_ac08649aa09ff3b879525627bf086dd1'] = '\"Chiave\"';
-$_MODULE['<{socolissimo}prestashop>socolissimo_a3a53f075adf77334cc34d0f7497ff44'] = '\"Url So\"';
+$_MODULE['<{socolissimo}prestashop>socolissimo_f8e355b97fa1be7a8d8c206aa66f0077'] = '\'Zona/e del corriere\'';
+$_MODULE['<{socolissimo}prestashop>socolissimo_690c1c6abf905b88281a7cd324af9942'] = '\'Gruppo Corriere\'';
+$_MODULE['<{socolissimo}prestashop>socolissimo_a18ef2e8b3730915798057a50ecbf2cd'] = '\'Fascia/e del corriere\'';
+$_MODULE['<{socolissimo}prestashop>socolissimo_59f26c70c0230e4ec5e4acdfed0e270c'] = '\'Prezzo consegna corriere\'';
+$_MODULE['<{socolissimo}prestashop>socolissimo_798547c41ec3e64e2322df678e939344'] = '\'ID FO\'';
+$_MODULE['<{socolissimo}prestashop>socolissimo_ac08649aa09ff3b879525627bf086dd1'] = '\'Chiave\'';
+$_MODULE['<{socolissimo}prestashop>socolissimo_a3a53f075adf77334cc34d0f7497ff44'] = '\'Url So\'';
 $_MODULE['<{socolissimo}prestashop>socolissimo_4d470fde8487e755a50e9235e3dc13ab'] = 'deve essere configurato per utilizzare questo modulo correttamente';
 $_MODULE['<{socolissimo}prestashop>socolissimo_94c614a9df45ea1fcd27b15b7d6f3e67'] = 'Chiave non valida';
 $_MODULE['<{socolissimo}prestashop>socolissimo_90a5cb3d07bb39bbd4b76f7f9a0d7947'] = 'Errore durante la fase di spedizione';
@@ -91,6 +89,3 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_e937c6393ce858786bd31a279b50572d'
 $_MODULE['<{socolissimo}prestashop>socolissimo_f109a88feec5ad3aeb82580c7a20ec31'] = 'Punto di ritiro';
 $_MODULE['<{socolissimo}prestashop>socolissimo_021944549c2795a6e4db23b92f198a5e'] = 'Indirizzo punto di ritiro';
 $_MODULE['<{socolissimo}prestashop>socolissimo_ce8ae9da5b7cd6c3df2929543a9af92d'] = 'E-mail';
-$_MODULE['<{socolissimo}prestashop>socolissimo_097eeaacf22dc38c4853b8358bdee47c'] = 'Fatal Error: Prego, controllare che Javascript di attivato e';
-$_MODULE['<{socolissimo}prestashop>socolissimo_165e6d21e0a2cc9ebb32ca05f90e0fa7'] = 'Riprova';
-$_MODULE['<{socolissimo}prestashop>socolissimo_de8143ff850c56087e0723440819eff6'] = 'l\'operazione';

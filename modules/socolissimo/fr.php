@@ -2,8 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{socolissimo}prestashop>ajax_607e1d854783c8229998ac2b5b6923d3'] = 'token invalide';
-$_MODULE['<{socolissimo}prestashop>ajax_67933de20c945d1759ab891fb9dc1fd7'] = 'Aucune information de livraison sélectionnée';
 $_MODULE['<{socolissimo}prestashop>socolissimo_42ab10dea7d96b9c353e0f5bae43ec20'] = 'La Poste';
 $_MODULE['<{socolissimo}prestashop>socolissimo_9e13e80360ceb625672531275f01ec1f'] = '\'Proposez à vos clients 5 modes de livraison via La Poste.';
 $_MODULE['<{socolissimo}prestashop>socolissimo_f8e355b97fa1be7a8d8c206aa66f0077'] = '\'Zone(s) du transporteur\'';
@@ -14,20 +12,6 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_798547c41ec3e64e2322df678e939344'
 $_MODULE['<{socolissimo}prestashop>socolissimo_ac08649aa09ff3b879525627bf086dd1'] = '\'Clé de cryptage\'';
 $_MODULE['<{socolissimo}prestashop>socolissimo_a3a53f075adf77334cc34d0f7497ff44'] = '\'Url de l\'administration de SoColissimo\'';
 $_MODULE['<{socolissimo}prestashop>socolissimo_4d470fde8487e755a50e9235e3dc13ab'] = 'doivent être renseignés pour fonctionner correctement';
-$_MODULE['<{socolissimo}prestashop>socolissimo_94c614a9df45ea1fcd27b15b7d6f3e67'] = 'Clé invalide';
-$_MODULE['<{socolissimo}prestashop>socolissimo_90a5cb3d07bb39bbd4b76f7f9a0d7947'] = 'une erreur s\'est produite lors de l\'étape transporteur';
-$_MODULE['<{socolissimo}prestashop>socolissimo_70b2e65f0f2aabf3e2c58d70cf1e1e9a'] = 'Identifiant FO manquant';
-$_MODULE['<{socolissimo}prestashop>socolissimo_2b639b851983a24bc12358523861c7ff'] = 'Identifiant FO incorrect';
-$_MODULE['<{socolissimo}prestashop>socolissimo_7ca12228b5ad636c637425a086fe0092'] = 'Client non autorise';
-$_MODULE['<{socolissimo}prestashop>socolissimo_0b1d0c0a00cc2727fcd77902867e3641'] = 'Champs obligatoire manquant';
-$_MODULE['<{socolissimo}prestashop>socolissimo_fa419073252af9d022afe65dccbb34a2'] = 'Signature manquante';
-$_MODULE['<{socolissimo}prestashop>socolissimo_fca3fbced675f75182786525bf4706dc'] = 'Signature invalide';
-$_MODULE['<{socolissimo}prestashop>socolissimo_d14afc3f67d2457d29f0aa0db98e2c9d'] = 'Code postal invalide';
-$_MODULE['<{socolissimo}prestashop>socolissimo_f9733e52e8841f1e45d015d5af5e8655'] = 'Format url retour Validation incorrect';
-$_MODULE['<{socolissimo}prestashop>socolissimo_417434a4e55adbc67c9c391902cea7f3'] = 'Format url retour Echec incorrect';
-$_MODULE['<{socolissimo}prestashop>socolissimo_140c34f0b21b932e34d11575509d093b'] = 'ID de la transaction invalide';
-$_MODULE['<{socolissimo}prestashop>socolissimo_28ee1015b475a3a70613ea9c98d712b6'] = 'Format des frais dexpédition incorrect';
-$_MODULE['<{socolissimo}prestashop>socolissimo_afa50e8b2fc14bf578331b2b8e98179d'] = 'Serveur Socolissimo non disponible';
 $_MODULE['<{socolissimo}prestashop>socolissimo_b5a7adde1af5c87d7fd797b6245c2a39'] = 'Description';
 $_MODULE['<{socolissimo}prestashop>socolissimo_d0b34d3e1cb0cc1150ae6bf650e9b569'] = 'So Colissimo est un service proposé par La Poste, qui vous permet d\'offrir à vos acheteurs 5 modes de livraison :';
 $_MODULE['<{socolissimo}prestashop>socolissimo_6cefaa978ccec960693d10cefeb2c2bf'] = 'Livraison à Domicile';
