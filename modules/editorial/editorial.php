@@ -124,7 +124,7 @@ class Editorial extends Module
 		// Delete logo image
 		if (Tools::isSubmit('deleteImage'))
 		{
-			if (!(bool)@filemtime(dirname(__FILE__).'/homepage_logo.jpg'))
+			if (!file_exists(dirname(__FILE__).'/homepage_logo.jpg'))
 				$errors .= $this->displayError($this->l('This action cannot be taken.'));
 			else
 			{
@@ -150,7 +150,7 @@ class Editorial extends Module
 			{
 				$ps_image_regeneration_method = (int)Configuration::get('PS_IMAGE_GENERATION_METHOD');
 				Configuration::updateValue('PS_IMAGE_GENERATION_METHOD', 1);
-				if ((bool)@filemtime(dirname(__FILE__).'/homepage_logo.jpg'))
+				if ((bool)file_exists(dirname(__FILE__).'/homepage_logo.jpg'))
 					unlink(dirname(__FILE__).'/homepage_logo.jpg');
 				if ($error = checkImage($_FILES['body_homepage_logo'], $this->maxImageSize))
 					$errors .= $error;
@@ -163,7 +163,7 @@ class Editorial extends Module
 				Configuration::updateValue('PS_IMAGE_GENERATION_METHOD', (int)$ps_image_regeneration_method);
 			}
 			$this->_html .= $errors == '' ? $this->displayConfirmation($this->l('Settings updated successfully')) : $errors;
-			if ((bool)@filemtime(dirname(__FILE__).'/homepage_logo.jpg'))
+			if ((bool)file_exists(dirname(__FILE__).'/homepage_logo.jpg'))
 			{
 				list($width, $height, $type, $attr) = getimagesize(dirname(__FILE__).'/homepage_logo.jpg');
 				Configuration::updateValue('EDITORIAL_IMAGE_WIDTH', (int)round($width));
@@ -191,7 +191,7 @@ class Editorial extends Module
 		// TinyMCE
 		global $cookie;
 		$iso = Language::getIsoById((int)($cookie->id_lang));
-		$isoTinyMCE = ((bool)@filemtime(_PS_ROOT_DIR_.'/js/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en');
+		$isoTinyMCE = ((bool)file_exists(_PS_ROOT_DIR_.'/js/tiny_mce/langs/'.$iso.'.js') ? $iso : 'en');
 		$ad = dirname($_SERVER["PHP_SELF"]);
 		$this->_html .=  '
 			<script type="text/javascript">	
@@ -255,7 +255,7 @@ class Editorial extends Module
 				</div>
 				<label>'.$this->l('Homepage logo').' </label>
 				<div class="margin-form">';
-				if ((bool)@filemtime(dirname(__FILE__).'/homepage_logo.jpg') && !Configuration::get('EDITORIAL_IMAGE_DISABLE'))
+				if ((bool)file_exists(dirname(__FILE__).'/homepage_logo.jpg') && !Configuration::get('EDITORIAL_IMAGE_DISABLE'))
 						$this->_html .= '<div id="image" >
 							<img src="'.$this->_path.'homepage_logo.jpg?t='.time().'" />
 							<p align="center">'.$this->l('Filesize').' '.(filesize(dirname(__FILE__).'/homepage_logo.jpg') / 1000).'kb</p>
@@ -304,7 +304,7 @@ class Editorial extends Module
 		'image_width' => (int)Configuration::get('EDITORIAL_IMAGE_WIDTH'),
 		'image_height' => (int)Configuration::get('EDITORIAL_IMAGE_HEIGHT'),
 		'id_lang' => (int)$params['cookie']->id_lang,
-		'homepage_logo' => !Configuration::get('EDITORIAL_IMAGE_DISABLE') && (bool)@filemtime('modules/editorial/homepage_logo.jpg'),
+		'homepage_logo' => !Configuration::get('EDITORIAL_IMAGE_DISABLE') && (bool)file_exists('modules/editorial/homepage_logo.jpg'),
 		'image_path' => $this->_path.'homepage_logo.jpg'));
 
 		return $this->display(__FILE__, 'editorial.tpl');

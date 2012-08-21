@@ -427,10 +427,8 @@ class CustomerCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.*
 		FROM `'._DB_PREFIX_.'customer` c
-		WHERE c.`email` LIKE \'%'.pSQL($query).'%\'
-		OR c.`id_customer` LIKE \'%'.pSQL($query).'%\'
-		OR c.`lastname` LIKE \'%'.pSQL($query).'%\'
-		OR c.`firstname` LIKE \'%'.pSQL($query).'%\'');
+		WHERE c.`email` LIKE \'%'.pSQL($query).'%\' OR c.`id_customer` LIKE \'%'.pSQL($query).'%\'
+		OR c.`lastname` LIKE \'%'.pSQL($query).'%\' OR c.`firstname` LIKE \'%'.pSQL($query).'%\'');
 	}
 
 	/**

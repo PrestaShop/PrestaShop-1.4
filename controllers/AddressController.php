@@ -251,7 +251,7 @@ class AddressControllerCore extends FrontController
 		foreach ($countries AS $country)
 			$countriesList .= '<option value="'.(int)($country['id_country']).'" '.($country['id_country'] == $selectedCountry ? 'selected="selected"' : '').'>'.htmlentities($country['name'], ENT_COMPAT, 'UTF-8').'</option>';
 
-		if ((Configuration::get('VATNUMBER_MANAGEMENT') && (bool)@filemtime(_PS_MODULE_DIR_.'vatnumber/vatnumber.php')) && VatNumber::isApplicable(_PS_COUNTRY_DEFAULT_))
+		if ((Configuration::get('VATNUMBER_MANAGEMENT') && file_exists(_PS_MODULE_DIR_.'vatnumber/vatnumber.php')) && VatNumber::isApplicable(_PS_COUNTRY_DEFAULT_))
 			self::$smarty->assign('vat_display', 2);
 		elseif (Configuration::get('VATNUMBER_MANAGEMENT'))
 			self::$smarty->assign('vat_display', 1);
@@ -260,7 +260,7 @@ class AddressControllerCore extends FrontController
 
 		self::$smarty->assign('ajaxurl', _MODULE_DIR_);
 		
-		self::$smarty->assign('vatnumber_ajax_call', (int)@filemtime(_PS_MODULE_DIR_.'vatnumber/ajax.php'));
+		self::$smarty->assign('vatnumber_ajax_call', (int)file_exists(_PS_MODULE_DIR_.'vatnumber/ajax.php'));
 		
 		self::$smarty->assign(array(
 			'countries_list' => $countriesList,

@@ -53,14 +53,9 @@ abstract class ModuleGridCore extends Module
 	/** @var ModuleGridEngine grid engine */
 	protected $_render;
 	
-	public function install()
-	{
-		return (parent::install());
-	}
-	
 	public function setEmployee($id_employee)
 	{
-		$this->_employee = new Employee((int)($id_employee));
+		$this->_employee = new Employee((int)$id_employee);
 	}
 	public function setLang($id_lang)
 	{
@@ -71,7 +66,7 @@ abstract class ModuleGridCore extends Module
 	{
 		if (!Validate::isModuleName($render))
     		die(Tools::displayError());
-		if (!file_exists($file = dirname(__FILE__).'/../modules/'.$render.'/'.$render.'.php'))
+		if (!file_exists($file = _PS_ROOT_DIR_.'/modules/'.$render.'/'.$render.'.php'))
 			die(Tools::displayError());
 		require_once($file);
 		$this->_render = new $render($type);
@@ -101,7 +96,7 @@ abstract class ModuleGridCore extends Module
 			return Tools::displayError('No grid engine selected');
 		if (!Validate::isModuleName($render))
     		die(Tools::displayError());
-		if (!file_exists(dirname(__FILE__).'/../modules/'.$render.'/'.$render.'.php'))
+		if (!file_exists(_PS_ROOT_DIR_.'/modules/'.$render.'/'.$render.'.php'))
 			return Tools::displayError('Grid engine selected is unavailable.');
 			
 		$grider = 'grider.php?render='.$render.'&module='.Tools::safeOutput(Tools::getValue('module'));
@@ -134,7 +129,7 @@ abstract class ModuleGridCore extends Module
 		if (isset($params['dir']) AND Validate::IsSortDirection($params['dir']))
 			$grider .= '&dir='.$params['dir'];
 			
-		require_once(dirname(__FILE__).'/../modules/'.$render.'/'.$render.'.php');
+		require_once(_PS_ROOT_DIR_.'/modules/'.$render.'/'.$render.'.php');
 		return call_user_func(array($render, 'hookGridEngine'), $params, $grider);
 	}
 	
@@ -186,4 +181,3 @@ abstract class ModuleGridCore extends Module
 		return $this->_id_lang;
 	}
 }
-

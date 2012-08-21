@@ -499,7 +499,7 @@ class AdminImport extends AdminTab
 			}
 			elseif (isset($category->parent) && is_string($category->parent))
 			{
-				$categoryParent = Category::searchByName($defaultLanguageId, $category->parent, true);
+				$categoryParent = Category::searchByName($defaultLanguageId, trim($category->parent), true);
 				if ($categoryParent['id_category'])
 					$category->id_parent = (int)$categoryParent['id_category'];
 				else
@@ -539,7 +539,7 @@ class AdminImport extends AdminTab
 			$res = false;
 			if (($fieldError = $category->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $category->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true)
 			{
-				$categoryAlreadyCreated = Category::searchByNameAndParentCategoryId($defaultLanguageId, $category->name[$defaultLanguageId], $category->id_parent);
+				$categoryAlreadyCreated = Category::searchByNameAndParentCategoryId((int)Language::getIdByIso(trim(Tools::getValue('iso_lang'))), trim($category->name[$defaultLanguageId]), $category->id_parent);
 
 				// If category already in base, get id category back
 				if ($categoryAlreadyCreated['id_category'])
@@ -594,7 +594,7 @@ class AdminImport extends AdminTab
 
 		$this->receiveTab();
 		$handle = $this->openCsvFile();
-		$defaultLanguageId = (int)(_PS_LANG_DEFAULT_);
+		$defaultLanguageId = (int)_PS_LANG_DEFAULT_;
 		self::setLocale();
 		for ($current_line = 0, $lines_ok = 0; $line = fgetcsv($handle, MAX_LINE_SIZE, Tools::getValue('separator')); $current_line++)
 		{
@@ -624,6 +624,7 @@ class AdminImport extends AdminTab
 			}
 			else
 				$product = new Product();
+
 			self::setEntityDefaultValues($product);
 			self::array_walk($info, array('AdminImport', 'fillInfo'), $product);
 
@@ -698,12 +699,12 @@ class AdminImport extends AdminTab
 				{
 					if (is_numeric($value))
 					{
-						if (Category::categoryExists((int)($value)))
-							$product->id_category[] = (int)($value);
+						if (Category::categoryExists((int)$value))
+							$product->id_category[] = (int)$value;
 						else
 						{
 							$categoryToCreate= new Category();
-							$categoryToCreate->id = (int)($value);
+							$categoryToCreate->id = (int)$value;
 							$categoryToCreate->name = self::createMultiLangField($value);
 							$categoryToCreate->active = 1;
 							$categoryToCreate->id_parent = 1; // Default parent is home for unknown category to create
@@ -718,7 +719,7 @@ class AdminImport extends AdminTab
 					}
 					elseif (is_string($value) && !empty($value))
 					{
-						$category = Category::searchByName($defaultLanguageId, $value, true);
+						$category = Category::searchByName($defaultLanguageId, trim($value), true);
 						if ($category['id_category'])
 							$product->id_category[] = (int)($category['id_category']);
 						else

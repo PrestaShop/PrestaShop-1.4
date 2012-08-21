@@ -50,12 +50,12 @@ class AdminSearch extends AdminTab
 	{
 		global $cookie;
 
-		$this->_list['products'] = Product::searchByName((int)$cookie->id_lang, $query);
+		$this->_list['products'] = Product::searchByName((int)$cookie->id_lang, trim($query));
 		if (!empty($this->_list['products']))
 			for ($i = 0; $i < count($this->_list['products']); $i++)
 				$this->_list['products'][$i]['nameh'] = str_ireplace($query, '<span class="highlight">'.Tools::htmlentitiesUTF8($query).'</span>', $this->_list['products'][$i]['name']);
 
-		$this->_list['categories'] = Category::searchByName((int)$cookie->id_lang, $query);
+		$this->_list['categories'] = Category::searchByName((int)$cookie->id_lang, trim($query));
 	}
 
 	/**
@@ -65,7 +65,7 @@ class AdminSearch extends AdminTab
 	*/
 	public function searchCustomer($query)
 	{
-		$this->_list['customers'] = Customer::searchByName($query);
+		$this->_list['customers'] = Customer::searchByName(trim($query));
 	}
 
 	function postProcess()

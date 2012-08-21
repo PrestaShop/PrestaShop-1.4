@@ -108,7 +108,7 @@ class FrontControllerCore
 			Tools::redirect('authentication.php'.($this->authRedirection ? '?back='.$this->authRedirection : ''));
 
 		/* Theme is missing or maintenance */
-		if (!(bool)@filemtime(_PS_THEME_DIR_))
+		if (!file_exists(_PS_THEME_DIR_))
 			die(Tools::displayError('Current theme unavailable. Please check your theme directory name and permissions.'));
 		elseif (basename($_SERVER['PHP_SELF']) != 'disabled.php' && !(int)Configuration::get('PS_SHOP_ENABLE'))
 			$this->maintenance = true;

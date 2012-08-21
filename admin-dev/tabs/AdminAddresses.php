@@ -25,7 +25,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
-if (Configuration::get('VATNUMBER_MANAGEMENT') && (bool)@filemtime(_PS_MODULE_DIR_.'vatnumber/vatnumber.php'))
+if (Configuration::get('VATNUMBER_MANAGEMENT') && file_exists(_PS_MODULE_DIR_.'vatnumber/vatnumber.php'))
 	include_once(_PS_MODULE_DIR_.'vatnumber/vatnumber.php');
 
 class AdminAddresses extends AdminTab
@@ -305,7 +305,7 @@ class AdminAddresses extends AdminTab
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 						</div>';
 
-					if ((Configuration::get('VATNUMBER_MANAGEMENT') && (bool)@filemtime(_PS_MODULE_DIR_.'vatnumber/vatnumber.php')) && VatNumber::isApplicable(_PS_COUNTRY_DEFAULT_))
+					if ((Configuration::get('VATNUMBER_MANAGEMENT') && (bool)file_exists(_PS_MODULE_DIR_.'vatnumber/vatnumber.php')) && VatNumber::isApplicable(_PS_COUNTRY_DEFAULT_))
 						echo '<div id="vat_area" style="display: visible">';
 					elseif (Configuration::get('VATNUMBER_MANAGEMENT'))
 						echo '<div id="vat_area" style="display: hidden">';

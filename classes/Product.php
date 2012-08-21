@@ -562,7 +562,7 @@ class ProductCore extends ObjectModel
 		Hook::deleteProduct($this);
 		if (!parent::delete() || !$this->deleteCategories(true) || !$this->deleteProductAttributes() ||
 			!$this->deleteProductFeatures() || !$this->deleteTags() || !$this->deleteCartProducts() ||
-			!$this->deleteAttributesImpacts() || !$this->deleteAttachments() ||	!$this->deleteCustomization() ||
+			!$this->deleteAttributesImpacts() || !$this->deleteAttachments() || !$this->deleteCustomization() ||
 			!SpecificPrice::deleteByProductId((int)($this->id)) || !$this->deletePack() || !$this->deleteProductSale() ||
 			!$this->deleteSceneProducts() || !$this->deleteSearchIndexes() || !$this->deleteAccessories() || !$this->deleteFromAccessories())
 			return false;

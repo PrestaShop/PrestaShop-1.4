@@ -59,14 +59,13 @@ class StatsLive extends Module
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT u.id_customer, u.firstname, u.lastname, pt.name as page
 		FROM `'._DB_PREFIX_.'connections` c
-		LEFT JOIN `'._DB_PREFIX_.'connections_page` cp ON c.id_connections = cp.id_connections
-		LEFT JOIN `'._DB_PREFIX_.'page` p ON p.id_page = cp.id_page
-		LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON p.id_page_type = pt.id_page_type
-		INNER JOIN `'._DB_PREFIX_.'guest` g ON c.id_guest = g.id_guest
-		INNER JOIN `'._DB_PREFIX_.'customer` u ON u.id_customer = g.id_customer
-		WHERE cp.`time_end` IS NULL
-		AND TIME_TO_SEC(TIMEDIFF(NOW(), cp.`time_start`)) < 900
-		GROUP BY c.id_connections
+		LEFT JOIN `'._DB_PREFIX_.'connections_page` cp ON (c.id_connections = cp.id_connections)
+		LEFT JOIN `'._DB_PREFIX_.'page` p ON (p.id_page = cp.id_page)
+		LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON (p.id_page_type = pt.id_page_type)
+		INNER JOIN `'._DB_PREFIX_.'guest` g ON (c.id_guest = g.id_guest)
+		INNER JOIN `'._DB_PREFIX_.'customer` u ON (u.id_customer = g.id_customer)
+		WHERE cp.`time_end` IS NULL AND TIME_TO_SEC(TIMEDIFF(NOW(), cp.`time_start`)) < 900
+		GROUP BY u.id_customer
 		ORDER BY u.firstname, u.lastname');
 		
 		return array($result, Db::getInstance()->NumRows());
@@ -122,7 +121,7 @@ class StatsLive extends Module
 		if (!Configuration::get('PS_STATSDATA_CUSTOMER_PAGESVIEWS'))
 			echo '<div class="warn width3">'.$this->l('You must activate the option "page views for each customer" in the "Stats datamining" module in order to see the pages currently viewed by your customers.').'</div>';
 		echo '
-		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Customers online').'</legend>';
+		<fieldset class="width3"><legend><img src="../modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Customers online (last 15mins)').'</legend>';
 		if ($totalCustomers)
 		{
 			echo $this->l('Total:').' '.(int)($totalCustomers).'

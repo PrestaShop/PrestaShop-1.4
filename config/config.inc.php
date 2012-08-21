@@ -50,7 +50,7 @@ if (!headers_sent())
 if (!defined('__PS_BASE_URI__')) /* No settings file? goto installer...*/
 {
 	$dir = ((is_dir($_SERVER['REQUEST_URI']) || substr($_SERVER['REQUEST_URI'], -1) == '/') ? $_SERVER['REQUEST_URI'] : dirname($_SERVER['REQUEST_URI']).'/');
-	if (!(bool)@filemtime(dirname(__FILE__).'/../install'))
+	if (!file_exists(dirname(__FILE__).'/../install'))
 		die('Error: \'install\' directory is missing');
 	header('Location: install/');
 	exit;

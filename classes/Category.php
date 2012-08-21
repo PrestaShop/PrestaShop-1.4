@@ -111,7 +111,7 @@ class CategoryCore extends ObjectModel
 	public function __construct($id_category = null, $id_lang = null)
 	{
 		parent::__construct($id_category, $id_lang);
-		$this->id_image = ($this->id && (bool)@filemtime(_PS_CAT_IMG_DIR_.(int)$this->id.'.jpg')) ? (int)$this->id : false;
+		$this->id_image = ($this->id && file_exists(_PS_CAT_IMG_DIR_.(int)$this->id.'.jpg')) ? (int)$this->id : false;
 		$this->image_dir = _PS_CAT_IMG_DIR_;
 	}
 
@@ -248,7 +248,8 @@ class CategoryCore extends ObjectModel
 		$result = Db::getInstance()->ExecuteS('
 		SELECT `id_category`
 		FROM `'._DB_PREFIX_.'category`
-		WHERE `id_parent` = '.(int)($id_category).' AND `id_parent` != `id_category`');
+		WHERE `id_parent` = '.(int)$id_category.' AND `id_parent` != `id_category`');
+
 		foreach ($result as $row)
 		{
 			$toDelete[] = (int)$row['id_category'];
@@ -475,7 +476,7 @@ class CategoryCore extends ObjectModel
 		
 		foreach ($result as &$row)
 		{
-			$row['id_image'] = (bool)@filemtime(_PS_CAT_IMG_DIR_.$row['id_category'].'.jpg') ? (int)$row['id_category'] : Language::getIsoById((int)$id_lang).'-default';
+			$row['id_image'] = (bool)file_exists(_PS_CAT_IMG_DIR_.$row['id_category'].'.jpg') ? (int)$row['id_category'] : Language::getIsoById((int)$id_lang).'-default';
 			$row['legend'] = 'no picture';
 		}
 
@@ -751,7 +752,7 @@ class CategoryCore extends ObjectModel
 			SELECT c.*, cl.*
 			FROM `'._DB_PREFIX_.'category` c
 			LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category`)
-			WHERE `name` LIKE \''.pSQL($query).'\'');
+			WHERE `name` = \''.pSQL($query).'\'');
 		else
 			return Db::getInstance()->ExecuteS('
 			SELECT c.*, cl.*
@@ -772,11 +773,9 @@ class CategoryCore extends ObjectModel
 	{
 		return Db::getInstance()->getRow('
 		SELECT c.*, cl.*
-	    FROM `'._DB_PREFIX_.'category` c
-	    LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.(int)($id_lang).')
-	    WHERE `name`  LIKE \''.pSQL($category_name).'\'
-		AND c.`id_category` != 1
-		AND c.`id_parent` = '.(int)($id_parent_category));
+		FROM `'._DB_PREFIX_.'category` c
+		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.(int)$id_lang.')
+		WHERE `name` = \''.pSQL($category_name).'\' AND c.`id_category` != 1 AND c.`id_parent` = '.(int)$id_parent_category);
 	}
 
 	/**

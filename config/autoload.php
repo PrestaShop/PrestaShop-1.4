@@ -39,8 +39,8 @@ function __autoload($className)
 		require_once($classDir.substr($className, 0, -4).'.php');
 	else
 	{
-		$file_in_override = (bool)@filemtime($overrideDir.$className.'.php');
-		$file_in_classes = (bool)@filemtime($classDir.$className.'.php');
+		$file_in_override = file_exists($overrideDir.$className.'.php');
+		$file_in_classes = file_exists($classDir.$className.'.php');
 	
 		if ($file_in_override && $file_in_classes)
 		{

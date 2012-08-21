@@ -227,7 +227,7 @@ class CMSCategoryCore extends ObjectModel
 		$result = Db::getInstance()->ExecuteS('
 		SELECT `id_cms_category`
 		FROM `'._DB_PREFIX_.'cms_category`
-		WHERE `id_parent` = '.(int)$id_cms_category);
+		WHERE `id_parent` = '.(int)$id_cms_category.' AND `id_parent` != `id_category`');
 
 		foreach ($result as $row)
 		{

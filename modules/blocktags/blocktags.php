@@ -48,12 +48,7 @@ class BlockTags extends Module
 
 	function install()
 	{
-		if (parent::install() == false 
-				OR $this->registerHook('leftColumn') == false
-				OR $this->registerHook('header') == false
-				OR Configuration::updateValue('BLOCKTAGS_NBR', 10) == false)
-			return false;
-		return true;
+		return parent::install() && $this->registerHook('leftColumn') && $this->registerHook('header') && Configuration::updateValue('BLOCKTAGS_NBR', 10);
 	}
 
 	public function getContent()
@@ -102,10 +97,10 @@ class BlockTags extends Module
 	{
 		global $smarty;
 
-		$tags = Tag::getMainTags((int)($params['cookie']->id_lang), (int)(Configuration::get('BLOCKTAGS_NBR')));
-		if (!sizeof($tags))
+		$tags = Tag::getMainTags((int)$params['cookie']->id_lang, (int)Configuration::get('BLOCKTAGS_NBR'));
+		if (!count($tags))
 			return false;
-		foreach ($tags AS &$tag)
+		foreach ($tags as &$tag)
 			$tag['class'] = 'tag_level'.($tag['times'] > BLOCKTAGS_MAX_LEVEL ? BLOCKTAGS_MAX_LEVEL : $tag['times']);
 		$smarty->assign('tags', $tags);
 		

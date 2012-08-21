@@ -30,13 +30,13 @@ abstract class ModuleGraphCore extends Module
 	protected $_employee;
 	
 	/** @var integer array graph data */
-	protected	$_values = array();
+	protected $_values = array();
 	
 	/** @var string array graph legends (X axis) */
-	protected	$_legend = array();
+	protected $_legend = array();
 	
 	/**@var string graph titles */
-	protected	$_titles = array('main' => NULL, 'x' => NULL, 'y' => NULL);
+	protected $_titles = array('main' => null, 'x' => null, 'y' => null);
 		
 	/** @var ModuleGraphEngine graph engine */
 	protected $_render;
@@ -45,7 +45,7 @@ abstract class ModuleGraphCore extends Module
 	
 	public function setEmployee($id_employee)
 	{
-		$this->_employee = new Employee((int)($id_employee));
+		$this->_employee = new Employee((int)$id_employee);
 	}
 	public function setLang($id_lang)
 	{
@@ -231,7 +231,7 @@ abstract class ModuleGraphCore extends Module
 		if (!Validate::isModuleName($render))
     		die(Tools::displayError());
     		
-		if (!file_exists($file = dirname(__FILE__).'/../modules/'.$render.'/'.$render.'.php'))
+		if (!file_exists($file = _PS_ROOT_DIR_.'/modules/'.$render.'/'.$render.'.php'))
 			die(Tools::displayError());
 			
 		require_once($file);
@@ -257,7 +257,7 @@ abstract class ModuleGraphCore extends Module
 		if (!Validate::isModuleName($render))
     		die(Tools::displayError());
     		
-		if (!file_exists(dirname(__FILE__).'/../modules/'.$render.'/'.$render.'.php'))
+		if (!file_exists(_PS_ROOT_DIR_.'/modules/'.$render.'/'.$render.'.php'))
 			return Tools::displayError('Graph engine selected is unavailable.');
 			
 		global $cookie;
@@ -279,7 +279,7 @@ abstract class ModuleGraphCore extends Module
 		if (isset($params['option']))
 			$drawer .= '&option='.$params['option'];
 			
-		require_once(dirname(__FILE__).'/../modules/'.$render.'/'.$render.'.php');
+		require_once(_PS_ROOT_DIR_.'/modules/'.$render.'/'.$render.'.php');
 		return call_user_func(array($render, 'hookGraphEngine'), $params, $drawer);
 	}
 	
@@ -318,5 +318,3 @@ abstract class ModuleGraphCore extends Module
 		return $this->_id_lang;
 	}
 }
-
-

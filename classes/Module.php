@@ -886,8 +886,10 @@ abstract class ModuleCore
 			$id_lang = (!isset($cookie->id_lang) ? (int)_PS_LANG_DEFAULT_ : (int)$cookie->id_lang);
 		}
 
-		if (@include_once(_PS_MODULE_DIR_.$this->name.'/'.Language::getIsoById($id_lang).'.php'))
+		$iso = Language::getIsoById((int)$id_lang);
+		if (file_exists(_PS_MODULE_DIR_.$this->name.'/'.$iso.'.php'))
 		{
+			include_once(_PS_MODULE_DIR_.$this->name.'/'.$iso.'.php');
 			global $_MODULES, $_MODULE;
 			$_MODULES = !empty($_MODULES) ? array_merge($_MODULES, $_MODULE) : $_MODULE;
 		}
@@ -1048,9 +1050,9 @@ abstract class ModuleCore
 	*/
 	protected static function _isTemplateOverloadedStatic($moduleName, $template)
 	{
-		if ((bool)@filemtime(_PS_THEME_DIR_.'modules/'.$moduleName.'/'.$template))
+		if ((bool)file_exists(_PS_THEME_DIR_.'modules/'.$moduleName.'/'.$template))
 			return true;
-		elseif ((bool)@filemtime(_PS_MODULE_DIR_.$moduleName.'/'.$template))
+		elseif ((bool)file_exists(_PS_MODULE_DIR_.$moduleName.'/'.$template))
 			return false;
 		return null;
 	}

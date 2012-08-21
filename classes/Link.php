@@ -207,7 +207,7 @@ class LinkCore
 
 		// legacy mode or default image
 		if ((Configuration::get('PS_LEGACY_IMAGES') 
-			&& ((bool)@filemtime(_PS_PROD_IMG_DIR_.$ids.($type ? '-'.$type : '').'.jpg')))
+			&& (file_exists(_PS_PROD_IMG_DIR_.$ids.($type ? '-'.$type : '').'.jpg')))
 			|| strpos($ids, 'default') !== false)
 		{
 			if ($this->allow == 1)

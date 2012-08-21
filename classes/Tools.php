@@ -1482,7 +1482,7 @@ class ToolsCore
 			{
 				$different = 0;
 				$override_path = str_replace(__PS_BASE_URI__.'modules/', _PS_ROOT_DIR_.'/themes/'._THEME_NAME_.'/js/modules/', $file, $different);
-				if ($different && (bool)@filemtime($override_path))
+				if ($different && file_exists($override_path))
 					$file = str_replace(__PS_BASE_URI__.'modules/', __PS_BASE_URI__.'themes/'._THEME_NAME_.'/js/modules/', $file, $different);
 				else
 				{
@@ -1490,7 +1490,7 @@ class ToolsCore
 					$url_data = parse_url($file);
 					$file_uri = _PS_ROOT_DIR_.self::str_replace_once(__PS_BASE_URI__, DIRECTORY_SEPARATOR, $url_data['path']);
 					// check if js files exists
-					if (!(bool)@filemtime($file_uri))
+					if (!file_exists($file_uri))
 						unset($js_uri[$key]);
 				}
 			}
@@ -1521,7 +1521,7 @@ class ToolsCore
 		//overriding of modules css files
 		$different = 0;
 		$override_path = str_replace(__PS_BASE_URI__.'modules/', _PS_ROOT_DIR_.'/themes/'._THEME_NAME_.'/css/modules/', $css_uri, $different);
-		if ($different && (bool)@filemtime($override_path))
+		if ($different && file_exists($override_path))
 			$css_uri = str_replace(__PS_BASE_URI__.'modules/', __PS_BASE_URI__.'themes/'._THEME_NAME_.'/css/modules/', $css_uri, $different);
 		else
 		{
@@ -1529,7 +1529,7 @@ class ToolsCore
 			$url_data = parse_url($css_uri);
 			$file_uri = _PS_ROOT_DIR_.self::str_replace_once(__PS_BASE_URI__, DIRECTORY_SEPARATOR, $url_data['path']);
 			// check if css files exists
-			if (!(bool)@filemtime($file_uri))
+			if (!file_exists($file_uri))
 				return true;
 		}
 

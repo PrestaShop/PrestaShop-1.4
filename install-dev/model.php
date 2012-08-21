@@ -54,7 +54,7 @@ define('INSTALLER__PS_BASE_URI', substr($_SERVER['REQUEST_URI'], 0, -1 * (strlen
 define('INSTALLER__PS_BASE_URI_ABSOLUTE', 'http://'.ToolsInstall::getHttpHost(false, true).INSTALLER__PS_BASE_URI);
 
 /* Emulate configuration defines, only if we are in the last step of installation */
-if ((bool)@filemtime(SETTINGS_FILE))
+if (file_exists(SETTINGS_FILE))
 {
 	/* Keep a backward compatibility for Smarty v2 (will be removed in PrestaShop v1.5) */
 	define('_PS_FORCE_SMARTY_2_', (int)Configuration::get('PS_FORCE_SMARTY_2'));
