@@ -242,17 +242,17 @@ class CategoryCore extends ObjectModel
 	  */
 	protected function recursiveDelete(&$toDelete, $id_category)
 	{
-	 	if (!is_array($toDelete) OR !$id_category)
+	 	if (!is_array($toDelete) || !$id_category)
 	 		die(Tools::displayError());
 
 		$result = Db::getInstance()->ExecuteS('
 		SELECT `id_category`
 		FROM `'._DB_PREFIX_.'category`
-		WHERE `id_parent` = '.(int)($id_category));
-		foreach ($result AS $row)
+		WHERE `id_parent` = '.(int)($id_category).' AND `id_parent` != `id_category`');
+		foreach ($result as $row)
 		{
-			$toDelete[] = (int)($row['id_category']);
-			$this->recursiveDelete($toDelete, (int)($row['id_category']));
+			$toDelete[] = (int)$row['id_category'];
+			$this->recursiveDelete($toDelete, (int)$row['id_category']);
 		}
 	}
 

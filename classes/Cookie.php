@@ -255,7 +255,7 @@ class	CookieCore
 
 			/* Unserialize cookie content */
 			$tmpTab = explode('¤', $content);
-			foreach ($tmpTab AS $keyAndValue)
+			foreach ($tmpTab as $keyAndValue)
 			{
 				$tmpTab2 = explode('|', $keyAndValue);
 				if (sizeof($tmpTab2) == 2)
@@ -278,7 +278,6 @@ class	CookieCore
 		//checks if the language exists, if not choose the default language
 		if (!Language::getLanguage((int)$this->id_lang))
 			$this->id_lang = _PS_LANG_DEFAULT_;
-		
 	}
 
 	/**
@@ -296,6 +295,7 @@ class	CookieCore
 			$content = 0;
 			$time = time() - 1;
 		}
+
 		if (PHP_VERSION_ID <= 50200) /* PHP version > 5.2.0 */
 			return setcookie($this->_name, $content, $time, $this->_path, $this->_domain, 0);
 		else

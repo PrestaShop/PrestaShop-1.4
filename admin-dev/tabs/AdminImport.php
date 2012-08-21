@@ -544,8 +544,15 @@ class AdminImport extends AdminTab
 				// If category already in base, get id category back
 				if ($categoryAlreadyCreated['id_category'])
 				{
-					$catMoved[$category->id] = (int)($categoryAlreadyCreated['id_category']);
-					$category->id =	(int)($categoryAlreadyCreated['id_category']);
+					$catMoved[$category->id] = (int)$categoryAlreadyCreated['id_category'];
+					$category->id =	(int)$categoryAlreadyCreated['id_category'];
+				}
+				
+				/* Prevent from having the same Parent Category ID and Category ID */
+				if ($category->id == $category->id_parent)
+				{
+					$category->id_parent = 1;
+					$this->_warnings[] = Tools::displayError('Line').' '.(int)($current_line + 1).' '.Tools::displayError('Category and Parent Category cannot be the same, Parent was automatically changed for "Home"');
 				}
 
 				/* No automatic nTree regeneration for import */
@@ -713,9 +720,7 @@ class AdminImport extends AdminTab
 					{
 						$category = Category::searchByName($defaultLanguageId, $value, true);
 						if ($category['id_category'])
-						{
-							$product->id_category[] =	(int)($category['id_category']);
-						}
+							$product->id_category[] = (int)($category['id_category']);
 						else
 						{
 							$categoryToCreate= new Category();

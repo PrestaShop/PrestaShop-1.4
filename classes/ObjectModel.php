@@ -108,11 +108,10 @@ abstract class ObjectModelCore
 	 */
 	public function __construct($id = null, $id_lang = null)
 	{
-		if ($id_lang != null)
-		{
-			$this->id_lang = Language::getLanguage((int)$id_lang);
-			$id_lang = $this->id_lang;
-		}
+		if ($id_lang != null && Language::getLanguage((int)$id_lang))
+			$this->id_lang = (int)$id_lang;
+		elseif ($id_lang != null)
+			$this->id_lang = _PS_LANG_DEFAULT_;
 
 	 	/* Connect to database and check SQL table/identifier */
 	 	if (!Validate::isTableOrIdentifier($this->identifier.$this->table))

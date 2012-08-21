@@ -11,7 +11,7 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_5fd13c2b89a6eaaa4614bfe
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_0dea6caeb83e5c11d3678284e64ebed8'] = 'Une erreur est survenue durant l\'envoi du fichier';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_c186217583219f4cd040d9ee8d388ffb'] = 'Une erreur est survenue durant l\'extraction du fichier zip';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_0210b6456cdccad569cb56026bb0f689'] = 'Mauvais fichier de configuration';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_2edd1583409247dfbd2db6b29791ffbb'] = 'Félicitations, votre thème a été installée avec succès';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_2edd1583409247dfbd2db6b29791ffbb'] = 'Félicitations, votre thème a été installé avec succès';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_587003e9e901daa90ab71a986325a3e0'] = 'et a été défini en tant que le thème utilisé';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_5de8e94e19ca75380eccd46779e18c48'] = 'mais une erreur est survenue en tentant de le définir en tant que thème utilisé';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_ce7074ab0ff587c6adf4498ca9575d9f'] = 'Vous devez regénérer vos miniatures dans \"Préférences > Images\"';
