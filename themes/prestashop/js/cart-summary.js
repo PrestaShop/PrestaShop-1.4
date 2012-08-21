@@ -118,9 +118,9 @@ function deletProductFromSummary(id)
 						});
 				}
 				updateCartSummary(jsonData.summary);
+				updateCustomizedDatas(jsonData.customizedDatas);
 				updateHookShoppingCart(jsonData.HOOK_SHOPPING_CART);
 				updateHookShoppingCartExtra(jsonData.HOOK_SHOPPING_CART_EXTRA);
-				updateCustomizedDatas(jsonData.customizedDatas);
 				if (jsonData.carriers != null)
 					updateCarrierList(jsonData);
 
@@ -165,8 +165,8 @@ function upQuantity(id, qty)
        		}
     		else
     		{
-    			updateCustomizedDatas(jsonData.customizedDatas);
     			updateCartSummary(jsonData.summary);
+    			updateCustomizedDatas(jsonData.customizedDatas);
     			updateHookShoppingCart(jsonData.HOOK_SHOPPING_CART);
 				updateHookShoppingCartExtra(jsonData.HOOK_SHOPPING_CART_EXTRA);
 				// if we are in one page checkout
@@ -226,8 +226,8 @@ function downQuantity(id, qty)
 	    		}
 	    		else
 	    		{
-	    			updateCustomizedDatas(jsonData.customizedDatas);
 	    			updateCartSummary(jsonData.summary);
+	    			updateCustomizedDatas(jsonData.customizedDatas);
 	    			updateHookShoppingCart(jsonData.HOOK_SHOPPING_CART);
 					updateHookShoppingCartExtra(jsonData.HOOK_SHOPPING_CART_EXTRA);
 					// if we are in one page checkout
