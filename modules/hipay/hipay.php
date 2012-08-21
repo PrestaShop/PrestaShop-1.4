@@ -33,8 +33,8 @@ class Hipay extends PaymentModule
 	private $arrayCategories;
 	private $prod;
 
-	const WS_SERVER = 'http://api.dev.prestashop.com/';
-	const WS_URL = 'http://api.dev.prestashop.com/partner/hipay/hipay.php';
+	const WS_SERVER = 'http://api.prestashop.com/';
+	const WS_URL = 'http://api.prestashop.com/partner/hipay/hipay.php';
 
 	public function __construct()
 	{
