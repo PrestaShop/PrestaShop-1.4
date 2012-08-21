@@ -32,13 +32,13 @@ class HIPAY_MAPI_SEND_XML {
         curl_setopt($curl, CURLOPT_URL, $turl['scheme'].'://'.$turl['host'].$turl['path']);
         curl_setopt($curl, CURLOPT_POSTFIELDS, 'xml='.urlencode($xml));
 
-        if (HIPAY_MAPI_CURL_PROXY_ON === true)
+        if(HIPAY_MAPI_CURL_PROXY_ON === true)
         {
             curl_setopt($curl, CURLOPT_PROXY, HIPAY_MAPI_CURL_PROXY);
             curl_setopt($curl, CURLOPT_PROXYPORT, HIPAY_MAPI_CURL_PROXYPORT);
         }
 
-        if (HIPAY_MAPI_CURL_LOG_ON === true)
+        if(HIPAY_MAPI_CURL_LOG_ON === true)
         {
             $errorFileLog = fopen(HIPAY_MAPI_CURL_LOGFILE, "a+");
             curl_setopt($curl, CURLOPT_VERBOSE, true);
@@ -59,7 +59,7 @@ class HIPAY_MAPI_SEND_XML {
         ob_end_clean();
         curl_close($curl);
 		
-        if (HIPAY_MAPI_CURL_LOG_ON === true)
+        if(HIPAY_MAPI_CURL_LOG_ON === true)
         {
             fclose($errorFileLog);
         }

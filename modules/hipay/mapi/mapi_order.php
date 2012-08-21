@@ -91,7 +91,7 @@ class HIPAY_MAPI_Order extends HIPAY_MAPI_lockable {
 			return false;
 		}
 		
-		if (empty($shippingTax))	{
+		if(empty($shippingTax))	{
 			return false;
 		}
 		if (!HIPAY_MAPI_UTILS::is_an_array_of($shippingTax, 'HIPAY_MAPI_Tax')) {
@@ -139,7 +139,7 @@ class HIPAY_MAPI_Order extends HIPAY_MAPI_lockable {
 		if ($insuranceAmount < 0)
 			return false;
 			
-		if (empty($insuranceTax)) {
+		if(empty($insuranceTax)) {
 			return false;
 		}	
 		if (!HIPAY_MAPI_UTILS::is_an_array_of($insuranceTax, 'HIPAY_MAPI_Tax'))
@@ -186,7 +186,7 @@ class HIPAY_MAPI_Order extends HIPAY_MAPI_lockable {
 		if ($fixedCostAmount<0)
 			return false;
 		
-		if (empty($fixedCostTax)) {
+		if(empty($fixedCostTax)) {
 			return false;
 		}
 		if (!HIPAY_MAPI_UTILS::is_an_array_of($fixedCostTax, 'HIPAY_MAPI_Tax'))
@@ -226,7 +226,7 @@ class HIPAY_MAPI_Order extends HIPAY_MAPI_lockable {
 		if ($this->_locked)
 			return false;
 
-		if (empty($affiliate)) {
+		if(empty($affiliate)) {
 			return false;
 		}
 		if (!HIPAY_MAPI_UTILS::is_an_array_of($affiliate, 'HIPAY_MAPI_Affiliate'))
