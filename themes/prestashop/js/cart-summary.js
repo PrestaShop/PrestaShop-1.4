@@ -420,6 +420,9 @@ function updateHookShoppingCartExtra(html)
 
 function updateCartMinQuantity()
 {
+	/* Display errors only if necessary */
+	$('.error').hide();
+
 	$.ajax({
        type: 'POST',
        url: baseDir + 'order.php',

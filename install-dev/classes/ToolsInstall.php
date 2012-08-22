@@ -143,11 +143,15 @@ class ToolsInstall
 
 			$swift->disconnect();
 		}
-		catch (Swift_Connection_Exception $e)
+		catch (Swift_ConnectionException $e)
 		{
 			$result = $e->getCode();
 		}
 		catch (Swift_Message_MimeException $e)
+		{
+			$result = $e->getCode();
+		}
+		catch (Swift_Exception $e)
 		{
 			$result = $e->getCode();
 		}

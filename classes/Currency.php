@@ -310,7 +310,7 @@ class CurrencyCore extends ObjectModel
 
 	public static function getDefaultCurrency()
 	{
-		$id_currency = (int)_PS_CURRENCY_DEFAULT_;
+		$id_currency = (int)Configuration::get('PS_CURRENCY_DEFAULT');
 
 		if ($id_currency == 0)
 			return false;

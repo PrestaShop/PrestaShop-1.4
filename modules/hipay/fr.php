@@ -17,6 +17,7 @@ $_MODULE['<{hipay}prestashop>hipay_f8b94463fa8b5591e5edbbb8021e8038'] = 'OpenSSL
 $_MODULE['<{hipay}prestashop>hipay_54457f20f1d9f9d7cf14d8e928cad1aa'] = 'Impossible d\'accéder au service de paiement';
 $_MODULE['<{hipay}prestashop>hipay_527557971b02f68ead6a278fb96ac396'] = 'vérifiez le firewall de votre serveur pour le port 443';
 $_MODULE['<{hipay}prestashop>hipay_1c5f361b20c116ab2324e28b1ac54e12'] = 'Votre boutique n\'est pas en ligne';
+$_MODULE['<{hipay}prestashop>hipay_c094be5f0a58c5b5cd89d575853f1753'] = 'Les catégories Hipay ne sont pas définies pour chaque ID de site';
 $_MODULE['<{hipay}prestashop>hipay_1a1a01512e42b64541ed9b1f43a56036'] = 'Impossible de récupérer les catégories Hipay. Merci de vous référer à votre journal des erreurs pour plus de détails.';
 $_MODULE['<{hipay}prestashop>hipay_67446b8dbb67e3bc5d7dffc93eb54d47'] = 'La solution multi-mode de paiement rapide, simple, pour tous, en France et en Europe !';
 $_MODULE['<{hipay}prestashop>hipay_f6f26dd813e62c21df052803bfe54e5e'] = 'La souplesse et la performance d\'Hipay ont déjà convaincu 12 000 marchands et 1 million d\'utilisateurs. Une sélection de 15 méthodes de paiement parmi les plus pertinentes d’Europe, assure à vos clients sécurité, confort et simplicité dans leurs transactions en ligne.';

@@ -2,10 +2,7 @@
 
 global $_LANGADM;
 $_LANGADM = array();
-$_LANGADM['AdminAccess9d3aff6bea8ffbe99b0dd0538fe143ff'] = 'Profil mis à jour';
-$_LANGADM['AdminAccess8cd14e237b4f34d4e669885f9e1da00f'] = 'Requête impossible !';
-$_LANGADM['AdminAccess1c70a41f285848d38656b2d7be9fdc62'] = 'Changements en cours. Merci de patienter.';
-$_LANGADM['AdminAccess8ec05f1a46ab017d49d635faea17f235'] = 'Impossible de se connecter au serveur !';
+$_LANGADM['AdminAccesscce99c598cfdb9773ab041d54c3d973a'] = 'Profil';
 $_LANGADM['AdminAccess4351cfebe4b61d8aa5efa1d020710005'] = 'Voir';
 $_LANGADM['AdminAccessec211f7c20af43e742bf2570c3cb84f9'] = 'Ajouter';
 $_LANGADM['AdminAccess7dce122004969d56ae2e0245cb754d35'] = 'Editer';
@@ -13,6 +10,7 @@ $_LANGADM['AdminAccessf2a6c498fb90ee345d997f888fce3b18'] = 'Supprimer';
 $_LANGADM['AdminAccessb1c94ca2fbc3e78fc30069c8d0f01680'] = 'Tout';
 $_LANGADM['AdminAccess7fcca2f879aa88fea302c675f56428cc'] = 'Aucun onglet';
 $_LANGADM['AdminAccessb04c5e39cb3460a062bba48d85567cdb'] = 'Les permissions de l\'administrateur ne peuvent être modifiées';
+$_LANGADM['AdminAccess38fb7d24e0d60a048f540ecb18e13376'] = 'Enregistrer';
 $_LANGADM['AdminAddressesb718adec73e04ce3ec720dd11a06a308'] = 'ID';
 $_LANGADM['AdminAddresses20db0bfeecd8fe60533206a2b5e9891a'] = 'Prénom';
 $_LANGADM['AdminAddresses8d3f5eff9c40ee315d452392bed5309b'] = 'Nom';

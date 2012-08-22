@@ -64,7 +64,7 @@
 				stopInstantSearchQueries();
 				instantSearchQuery = $.ajax({
 				url: '{/literal}{if $search_ssl == 1}{$link->getPageLink('search.php', true)}{else}{$link->getPageLink('search.php')}{/if}{literal}',
-				data: 'instantSearch=1&id_lang={/literal}{$cookie->id_lang}{literal}&q='+$(this).val(),
+				data: 'instantSearch=1&id_lang={/literal}{$cookie->id_lang}{literal}&q='+encodeURIComponent($(this).val()),
 				dataType: 'html',
 				success: function(data){
 					if($("#search_query_block").val().length > 0)
