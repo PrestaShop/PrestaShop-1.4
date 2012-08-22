@@ -191,7 +191,6 @@ class ProductCore extends ObjectModel
 
 	public static $_taxCalculationMethod = PS_TAX_EXC;
 	protected static $_prices = array();
-	protected static $_prices_static = array();
 	protected static $_pricesLevel2 = array();
 	protected static $_incat = array();
 	protected static $_cart_quantity = array();
@@ -1695,17 +1694,8 @@ class ProductCore extends ObjectModel
 	$usereduc = true, $quantity = 1, $forceAssociatedTax = false, $id_customer = null, $id_cart = null, $id_address = null, &$specificPriceOutput = null, $with_ecotax = true, $use_groupReduction = true)
 	{
 		global $cookie, $cart;
+
 		$cur_cart = $cart;
-
-		$cache_key = (int)$id_product.'_'.(int)$usetax.'_'.(int)$id_product_attribute.'_'.(int)$decimals.'_'.(int)$divisor.'_'.(int)$only_reduc.'_'.(int)$usereduc.'_'.(int)$quantity.'_'.
-		(int)$forceAssociatedTax.'_'.(int)$id_customer.'_'.(int)$id_cart.'_'.(int)$id_address.'_'.(int)$specificPriceOutput.'_'.(int)$with_ecotax.'_'.(int)$use_groupReduction.'_'.
-		(isset($cookie->id_customer) ? (int)$cookie->id_customer : 0).'_'.(isset($cookie->id_cart) ? (int)$cookie->id_cart : 0).'_'.
-		(isset($cookie->id_country) ? (int)$cookie->id_country : 0).'_'.(isset($cookie->id_state) ? (int)$cookie->id_state : 0).'_'.
-		(isset($cookie->postcode) ? (int)$cookie->postcode : 0).'_'.(isset($cookie->id_currency) ? (int)$cookie->id_currency : 0).'_'.
-		(isset($cur_cart->id_currency) ? (int)$cur_cart->id_currency : 0);
-
-		if (isset(self::$_prices_static[$cache_key]))
-			return self::$_prices_static[$cache_key];
 
 		if (isset($divisor))
 			Tools::displayParameterAsDeprecated('divisor');
@@ -1768,7 +1758,7 @@ class ProductCore extends ObjectModel
 				$id_state = (int)($address_infos['id_state']);
 				$postcode = (int)$address_infos['postcode'];
 
-				$id_county = (int)County::getIdCountyByZipCode($id_state, $postcode);
+				$id_county = (int)County::getIdCountyByZipCode((int)$id_state, $postcode);
 			}
 		}
 		elseif (isset($cookie->id_country))
@@ -1778,22 +1768,17 @@ class ProductCore extends ObjectModel
 			$id_state = (int)$cookie->id_state;
 			$postcode = (int)$cookie->postcode;
 
-			$id_county = (int)County::getIdCountyByZipCode($id_state, $postcode);
+			$id_county = (int)County::getIdCountyByZipCode((int)$id_state, $postcode);
 		}
 
 		if (!isset($id_country))
 			$id_country = (int)Country::getDefaultCountryId();
 
-		if (!_PS_TAX_)
+		if (!_PS_TAX_ || $usetax != false && !empty($address_infos['vat_number']) && $address_infos['id_country'] != Configuration::get('VATNUMBER_COUNTRY') && Configuration::get('VATNUMBER_MANAGEMENT'))
 			$usetax = false;
 
-		if ($usetax != false && !empty($address_infos['vat_number']) && $address_infos['id_country'] != Configuration::get('VATNUMBER_COUNTRY') && Configuration::get('VATNUMBER_MANAGEMENT'))
-			$usetax = false;
-
-		self::$_prices_static[$cache_key] = Product::priceCalculation(0, $id_product, $id_product_attribute, $id_country, $id_state, $id_county, $id_currency, $id_group, $quantity, $usetax, $decimals, $only_reduc,
+		return Product::priceCalculation(0, $id_product, $id_product_attribute, $id_country, $id_state, $id_county, $id_currency, $id_group, $quantity, $usetax, $decimals, $only_reduc,
 		$usereduc, $with_ecotax, $specificPriceOutput, $use_groupReduction);
-
-		return self::$_prices_static[$cache_key];
 	}
 
 	/**
