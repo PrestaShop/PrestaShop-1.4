@@ -58,20 +58,20 @@ class PaypalLib extends PayPal
 		$result			= $this->makeSimpleCall($host, $script, $request, true);
 		$response		= explode('&', $result);
 
-		foreach ($response as $key => $value)
+		foreach ($response as $value)
 		{
 			$tmp = explode('=', $value);
 
 			if (!isset($tmp[1]))
 			{
-				$response[$tmp[0]] = urldecode($tmp[0]);
+				$return[$tmp[0]] = urldecode($tmp[0]);
 			}
 			else
 			{
-				$response[$tmp[0]] = urldecode($tmp[1]);
-				unset($response[$key]);
+				$return[$tmp[0]] = urldecode($tmp[1]);
 			}
 		}
+
 		if (!Configuration::get('PAYPAL_DEBUG_MODE'))
 		{
 			$this->_logs = array();
@@ -80,7 +80,7 @@ class PaypalLib extends PayPal
 		$toExclude		= array('TOKEN', 'SUCCESSPAGEREDIRECTREQUESTED', 'VERSION', 'BUILD', 'ACK', 'CORRELATIONID');
 		$this->_logs[]	= '<b>'.$this->l('PayPal response:').'</b>';
 
-		foreach ($response as $key => $value)
+		foreach ($return as $key => $value)
 		{
 			if (!Configuration::get('PAYPAL_DEBUG_MODE') && in_array($key, $toExclude))
 			{
@@ -89,7 +89,7 @@ class PaypalLib extends PayPal
 			$this->_logs[] = $key.' -> '.$value;
 		}
 
-		return $response;
+		return $return;
 	}
 
 	public function makeSimpleCall($host, $script, $request, $simple_mode = false)

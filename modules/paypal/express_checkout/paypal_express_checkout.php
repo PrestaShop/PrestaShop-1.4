@@ -228,6 +228,8 @@ class PaypalExpressCheckout extends Paypal
 		// Set payment detail (reference)
 		$this->_setPaymentDetails($fields);
 		$this->callAPI($fields);
+
+		$this->result += $fields;
 	}
 
 	private function callAPI($fields)

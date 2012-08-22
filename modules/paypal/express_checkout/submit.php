@@ -230,6 +230,7 @@ else
 
 			// When all information are checked before, we can validate the payment to paypal
 			// and create the prestashop order
+
 			$ppec->doExpressCheckout();
 
 			/// Check payment (real paid))
@@ -240,7 +241,7 @@ else
 				                   	'id_invoice'     => null,
 				                   	'currency'       => pSQL($ppec->result['PAYMENTINFO_0_CURRENCYCODE']),
 				                   	'total_paid'     => (float)$ppec->result['PAYMENTINFO_0_AMT'],
-				                   	'shipping'       => (float)$ppec->result['PAYMENTINFO_0_FEEAMT'],
+				                   	'shipping'       => (float)$ppec->result['PAYMENTREQUEST_0_SHIPPINGAMT'],
 				                   	'payment_date'   => pSQL($ppec->result['PAYMENTINFO_0_ORDERTIME'])
 				);
 
@@ -259,11 +260,11 @@ else
 				$shop									= $ppec->getContext()->shop;
 				$ppec->getContext()->cookie->id_cart	= $cart->id;
 
-				$ppec->validateOrder($cart->id, $payment_type, floatval($cart->getOrderTotal(true, 3)), 'PayPal', $message, $transaction, (int)$cart->id_currency, false, $customer->secure_key, $shop);
+				$ppec->validateOrder($cart->id, $payment_type, $cart->getOrderTotal(true, Cart::BOTH), 'PayPal', $message, $transaction, (int)$cart->id_currency, false, $customer->secure_key, $shop);
 			}
 			else
 			{
-				$ppec->validateOrder($cart->id, Configuration::get('PS_OS_PAYMENT'), floatval($cart->getOrderTotal(true, 3)), 'PayPal', $message, $transaction, (int)$cart->id_currency, false, $customer->secure_key);
+				$ppec->validateOrder($cart->id, $payment_type, $cart->getOrderTotal(true, Cart::BOTH), 'PayPal', $message, $transaction, (int)$cart->id_currency, false, $customer->secure_key);
 			}
 
 			if (!$ppec->currentOrder)
