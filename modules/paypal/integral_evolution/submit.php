@@ -78,11 +78,6 @@ if (Tools::getValue('id_module') && Tools::getValue('key') && Tools::getValue('i
 }
 else if ($id_cart = Tools::getValue('id_cart'))
 {
-//	$context	= ;
-//	$id_order	= ;
-//	$module		= ;
-	//$customer = new Customer((int)$context->customer->id);
-
 	// Redirection
 	$array = array(//$customer->secure_key,
 		'id_cart' 	=> (int)($id_cart),
