@@ -430,11 +430,11 @@ class PaypalExpressCheckout extends Paypal
 
 		if (_PS_VERSION_ < '1.5')
 		{
-			return $this->context->cart->getOrderShippingCost() + $total;
+			return Tools::ps_round($this->context->cart->getOrderShippingCost(), $this->decimals) + $total;
 		}
 		else
 		{
-			return $this->context->cart->getTotalShippingCost() + $total;
+			return Tools::ps_round($this->context->cart->getTotalShippingCost(), $this->decimals) + $total;
 		}
 	}
 
