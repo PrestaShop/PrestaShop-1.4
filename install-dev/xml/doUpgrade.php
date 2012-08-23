@@ -294,9 +294,8 @@ if (!$fail_result)
 					// Call a simple function
 					// note : method call from class is no longer supported
 					$func_name = str_replace($pattern[0], '', $php[0]);
-					if (!function_exists($func_name) 
-						&& !file_exists(_PS_INSTALLER_PHP_UPGRADE_DIR_.$func_name.'.php')
-					)
+					$phpRes = false;
+					if (!function_exists($func_name) && !file_exists(_PS_INSTALLER_PHP_UPGRADE_DIR_.$func_name.'.php'))
 					{
 						$warningExist = true;
 						$logger->logError('PHP error: '.$func_name.' does not exists and '.$func_name.'.php is missing '."\r\n");

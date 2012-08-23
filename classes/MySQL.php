@@ -279,18 +279,16 @@ class MySQLCore extends Db
 			return 1;
 		if (!@mysql_select_db($db, $link))
 			return 2;
-		@mysql_close($link);
 		return 0;
 	}
 
-	public static function tryUTF8($server, $user, $pwd)
+	public static function tryUTF8($server, $user, $pwd, $newDbLink = true)
 	{
-		$link = @mysql_connect($server, $user, $pwd);
+		$link = @mysql_connect($server, $user, $pwd, $newDbLink);
 		if (!mysql_query('SET NAMES \'utf8\'', $link))
 			$ret = false;
 		else
 			$ret = true;
-		@mysql_close($link);
 		return $ret;
 	}
 }
