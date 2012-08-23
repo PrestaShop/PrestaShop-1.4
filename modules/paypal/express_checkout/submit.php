@@ -280,8 +280,6 @@ else
 
 			unset(Context::getContext()->cookie->{PaypalExpressCheckout::$COOKIE_NAME});
 
-			$ppec->_addNewPrivateMessage((int)$id_order, $message);
-
 			// Update for the Paypal shipping cost
 			if ($order)
 			{
