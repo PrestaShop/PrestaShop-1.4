@@ -22,5 +22,5 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`)(SEL
 
 DELETE FROM `PREFIX_referrer_cache` WHERE id_referrer NOT IN (SELECT id_referrer FROM `PREFIX_referrer`);
 
-/* PHP:update_module_mailalert(); */;
+/* PHP:update_module_mailalerts(); */;
 /* PHP:update_module_blocklayered(); */;
