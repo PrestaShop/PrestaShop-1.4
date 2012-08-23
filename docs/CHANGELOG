@@ -24,6 +24,375 @@ International Registred Trademark & Property of PrestaShop SA
 Release Notes for PrestaShop 1.4
 --------------------------------
 ####################################
+#   v1.4.9.0 - 16986 (2012-08-23)  #
+####################################
+
+	Added Features:
+
+	[+] BO : Added a new column to the statistics dashboard (Shipping)
+	[+] BO : Added the ability to decide if an order status will create a delivery slip
+
+	[+] CORE : Added a missing index to improve the blocklayered module performances
+	[+] CORE : Added missing file for jQuery v1.7.2
+
+	[+] MO : Added a new module "Allied Wallet"
+	[+] MO : Added a new module "Kiala light"
+	[+] MO : Added a new module "Wexpay"
+	[+] MO : Added a new module "PrestaShop Assurance"
+	[+] MO : Add addons module key to ekomi module
+	[+] MO : Add disable interstate tax feature to Avalara
+	[+] MO : Added the ability to show taxes in the blockcart module even if the customer's group has not enabled taxes
+
+	[*] TR : Updated English Translations
+	[*] TR : Updated French Translations
+	[*] TR : Updated German Translations
+	[*] TR : Updated Spanish Translations
+	[*] TR : Updated Italian translations
+
+	Fixed bugs:
+
+	[-] PROJECT : Fix on Search Class (reported from 1.5 - rev 16103)
+
+	[-] INSTALLER : Add key on the image table
+	[-] INSTALLER : Add missing semicolumn on 1.0.0.7.sql
+	[-] INSTALLER : Changed 1.4.9 to 1.4.9.0 #PSCFI-5797
+	[-] INSTALLER : Changed Guam zone #PSCFV-3134
+	[-] INSTALLER : Changed the include of the settings file in config.inc.php because of the installer
+	[-] INSTALLER : Change next version number
+	[-] INSTALLER : Fixed and issue related to the currencies conversion rate (in getDefaultCurrency())
+	[-] INSTALLER : Fixed a warning (Undefined variable $phpRes)
+	[-] INSTALLER : Fixed issue #PSCFI-5157 - Added missing primary keys
+	[-] INSTALLER : Fixed issue #PSCFI-5287 - Adult category is now displayed in the last position
+	[-] INSTALLER : Fixed issue #PSCFI-5517 - Default currency was wrong if your hosting provider turned off allow_url_fopen - Added a missing file
+	[-] INSTALLER : Fixed issue #PSCFI-5848 - PrestaShop Installation was impossible if you specified "Hong-Kong" as your country
+	[-] INSTALLER : Fixed issue #PSCFI-6189 - SVN Install was broken (Use of undefined constant PS_MB_STRING)
+	[-] INSTALLER : Fixed issue #PSCFI-6345 - Infinite loop at install
+	[-] INSTALLER : Fixed issue #PSCFI-6394 - Installer was crashing in case of wrong SMTP credentials (typo on Swift_Connection_Exception instead of Swift_ConnectionException)
+	[-] INSTALLER : Fixed issue #PSCFI-6400 - Typo in 1.4.9.0.sql
+	[-] INSTALLER : Fixed issue #PSCFI-6404 - Removed a duplicate index in 1.4.9.0.sql
+	[-] INSTALLER : Fixed Norway zone
+	[-] INSTALLER : Fixed issue #PSCFI-6258 - Fix translations link in installer
+	[-] INSTALLER : Fixed issue #PSCFI-6293 - Translate -- select your country -- in french
+	[-] INSTALLER : "Pick-up in store" is now available on the 8 geographical zones
+	[-] INSTALLER : Update Installer version
+
+	[-] FO : Ajax add to cart was not working properly because of deprecated function used in smarty
+	[-] FO : Fixed issue #PSCFI-5971 - Impossible to unsubscribe from optin/newsletter
+	[-] FO : Fixed issue #PSCFI-4947 - Wrong pictures path in the maintenance page
+	[-] FO : Fixed issue #PSCFI-5609 - Disabled country's states were displayed in the address edition page
+	[-] FO : Fixed issue #PSCFI-5615 - Wrong HTML Body ID for 404 page
+	[-] FO : Fixed issue #PSCFI-6207
+	[-] FO : Fixed issue #PSCFI-5772 - Default search order
+	[-] FO : Fixed issue #PSCFI-4401 - Order return message could not be validated because it was containing HTML
+	[-] FO : Fixed issue #PSCFI-5420 - Some CSS improvements for the default template (product page)
+	[-] FO : Fixed issue #PSCFI-5501 - Product features are now always sorted alphabetically on Front-office
+	[-] FO : Fixed issue #PSCFI-5685 - W3C compatibility was broken due to "productsSortForm"
+	[-] FO : Fixed issue #PSCFI-5698 #PSCFI-4906 - Cannot search product with Æ, Ø, Å (+ other accents)
+	[-] FO : Fixed issue #PSCFI-5710 - Tags selection was not excluding products assigned to an "inactive" categories
+	[-] FO : Fixed issue #PSCFI-5813 - Small CSS fix on the product page
+	[-] FO : Fixed issue #PSCFI-5906 - It was impossible to update its profile information
+	[-] FO : Fixed issue #PSCFI-5966 - Duplicate Categories in footer blockcategories module
+	[-] FO : Fixed issue #PSCFI-6228 - Product descriptions overlap with product images in shopping cart
+	[-] FO : Fixed issue #PSCFI-6232 - Bad CSS formatting on the <h*> tag of the CMS pages
+	[-] FO : Fixed issue #PSCFI-6235 - Phone number displayed twice in the store locator results table
+	[-] FO : Fixed issue #PSCFI-6311 - Number of Product per Page was not working properly for manufacturers and suppliers
+	[-] FO : Fixed issue #PSCFI-6374 - Product quantity added to cart was limited to 999 on the default template
+	[-] FO : Fixed issue #PSCFI-6388 - Multiple message error in cart page with minimum order
+	[-] FO : Fixed issue #PSCFI-5849 - User cant attached file to contact form if the option is OFF in the BO
+	[-] FO : Fixed issue #PSCFI-6154 - Issue with Manufacturer meta title
+	[-] FO : Fixed issue #PSCFI-5887 - Free order
+	[-] FO : Fixed issue #PSCFI-5606 - "Id_state required"
+	[-] FO : Fixed issue #PSCFI-5698 - Foreign characters (Æ,Ø,Å) were not working properly with the search
+	[-] FO : Fixed issue #PSCFI-5795 - One Page Checkout freeze when an Order is to 0
+	[-] FO : Fixed the layout of the blocknewproducts module
+	[-] FO : Fixed the product quantity update on the cart summary for the customized products #PSCFV-3676
+	[-] FO : Fixed price calculation issue with Discounts
+	[-] FO : Fixed getDiscounts() cache
+	[-] FO : Make sure nothing is loaded when product not found
+	[-] FO : Path issue on delete.gif icon on the Product Compare page
+	[-] FO : Price precision is now taken into account on the product page
+	[-] FO : Replaced onblur by onchange in the authentication page to comply with Autofillforms extension (Chrome)
+	[-] FO : Fixed a PHP Warning on a undefined variable related to address formats
+
+	[-] BO : Add lithuanian caracters in the str2url JS function
+	[-] BO : Deleted useless ajax.js file and rewrote "Permissions" tab without Ajax
+	[-] BO : Fixed issue #PSCFI-5506 - Incorrect price in BO
+	[-] BO : Fixed issue #PSCFI-5183 - Remove space between product meta keywords
+	[-] BO : Fixed issue #PSCFI-6112 - Conversion issue on the order page.
+	[-] BO : Fixed issue #PSCFI-5354 - Carrier Groups - Replaced several inserts by only one
+	[-] BO : Fixed issue #PSCFI-5445 - Back-office "Products solds" statistics were not taking into account reductions
+	[-] BO : Fixed issue #PSCFI-5461 - ps_discount_category was not emptied on category deletion
+	[-] BO : Fixed issue #PSCFI-5515 - Several fixes related to the CSV Import feature
+	[-] BO : Fixed issue #PSCFI-5656 - Duplicate HTML IDs on the Back-office homepage
+	[-] BO : Fixed issue #PSCFI-5923 - Imported products were not available in the search results
+	[-] BO : Fixed issue #PSCFI-5988 - #PSCFI-5716 - #PSCFI-5909 - #PSCFI-5725 - CSV Category import was not working if you forgot Category IDs (these are now optional like in <= v1.4.7)
+	[-] BO : Fixed issue #PSCFI-5995 - PHP Warning on $this->table
+	[-] BO : Fixed issue #PSCFI-5997 - Typo
+	[-] BO : Fixed issue #PSCFI-4773 - Added $cookie->id_category in the statsproduct module
+	[-] BO : Fixed issue #PSCFI-5231 - Error while duplicating a product with custom features
+	[-] BO : Fixed issue #PSCFI-5336 - Can't refund if there are customized attributes of a product
+	[-] BO : Fixed issue #PSCFI-5482 - It was impossible to view/delete an existing carrier logo
+	[-] BO : Fixed issue #PSCFI-5629 - Added a missing picture to Delete a reduction in AdminGroups
+	[-] BO : Fixed issue #PSCFI-5658 - Modified the error message layout when url_fopen is Off in AdminHome
+	[-] BO : Fixed issue #PSCFI-5726 - Broken layout on AdminOrders when the customer's name was too long
+	[-] BO : Fixed issue #PSCFI-5744 - Inactive CMS pages could not be pre-viewed (404 error)
+	[-] BO : Fixed issue #PSCFI-5826 - Improved .htaccess rules, Apache was crashing if mod_filters not enabled and gzip compression enabled in "Tools > Generators"
+	[-] BO : Fixed issue #PSCFI-5912 - Could not update country information for Monaco
+	[-] BO : Fixed issue #PSCFI-5914 - It was impossible to load product pictures in a zip file if the file extension was uppercased
+	[-] BO : Fixed issue #PSCFI-5933 - Delivery slips bulk print is now based on the delivery date
+	[-] BO : Fixed issue #PSCFI-5936 - If product picture was too large, the layout of AdminCatalog was broken
+	[-] BO : Fixed issue #PSCFI-5947 - Add quantity in default sort settings
+	[-] BO : Fixed issue #PSCFI-5979 - CSV Import - Products pictures were deleted even if the related option was de-selected
+	[-] BO : Fixed issue #PSCFI-6056 - Added an explanation text
+	[-] BO : Fixed issue #PSCFI-6060 - Stats bug were not displayed in chronological date order
+	[-] BO : Fixed issue #PSCFI-6061 - Updated the text related to the cart re-call option. This option is now enabled by default at install
+	[-] BO : Fixed issue #PSCFI-6134 - CSV Import - Errors when importing a product list with references
+	[-] BO : Fixed issue #PSCFI-6170 - "tax incl" field in the generator was confusing
+	[-] BO : Fixed issue #PSCFI-6221 - Clean ps_referrer_cache table when a referrer is deleted
+	[-] BO : Fixed issue #PSCFI-6310 - CSV Product Import was not working properly if "Product Reference" option was selected
+	[-] BO : Fixed issue #PSCFI-6321 - It was not possible to delete a Manufacturer
+	[-] BO : Fixed issue #PSCFI-6346 - "Permissions" tab was not working properly
+	[-] BO : Fixed issue #PSCFI-6348 - CSV Category Import was not working with parent/child categories because ObjectModel cache was not cleared properly
+	[-] BO : Fixed issue #PSCFI-6348 - CSV Import: ID Category must now be different than Parent Category ID
+	[-] BO : Fixed issue #PSCFI-6349 - CSV Import was displaying warnings about Products URLs
+	[-] BO : Fixed issue #PSCFI-6358 - 'Stock Stats' table wraps with long product names
+	[-] BO : Fixed issue #PSCFI-6366 - Wrong message count in the "Customer Service" tab
+	[-] BO : Fixed issue #PSCFI-6381 - Products CSV Import was not working properly if categories were containing spaces before or after their names
+	[-] BO : Fixed issue #PSCFI-6383 - Path in ModuleGrid.php and ModuleGraph.php
+	[-] BO : Fixed issues #PSCFI-5184 #PSCFI-3687 #PSCFI-5831 #PSCFI-5748 - Various statistics issues (for example: dates without orders placed were not displayed)
+	[-] BO : Fixed issues #PSCFI-6334, #PSCFI-6331 - Incorrect addresses
+	[-] BO : Fixed issue #PSCFI-5096 - Update Category through CSV import breaks the position
+	[-] BO : Fixed issue #PSCFI-5295 - Remove HTML compression
+	[-] BO : Fixed issue #PSCFI-6223 - Issue with quantity in Back Office search
+	[-] BO : Fixed issue #PSCFI-6271 - Fix issue with search in French
+	[-] BO : Fixed issue #PSCFI-6275 - Change copyright text
+	[-] BO : Fixed Issue #PSCFI-6277 - Issue when removing certain products prior to import
+	[-] BO : Fixed issue #PSCFI-6278 - Issue when removing categories before import
+	[-] BO : Fixed issue #PSCFI-6299 - add bold class to missing field when errors
+	[-] BO : Fixed issue #PSCFI-6305 - Issue with date_upd on product import
+	[-] BO : Fixed issue #PSCFI-5461 -  Allowed to deleted discounts which are linked to categories
+	[-] BO : Fixed issue #PSCFV-2626 - fix bug in localization pack for the currency format
+	[-] BO : Fixed issue #PSCFV-2947 - isArrowKey doesn't always return a value
+	[-] BO : Fixed issue #PSCFI-5877
+	[-] BO : Revert, the fix cause issue when changing default currency...
+	[-] BO : Sometimes percentage could be > 100%
+	[-] BO : you are not stuck anymore when reseting your admin password and the mail fail to be sent
+	[-] BO : Zip code is now specified as required in the "Stores" tab form
+
+	[-] CLASSES : Fixed Code Standards
+	[-] CLASSES : Fixed issue #PSCFI-5470 - Order confirmation email + Group tax excl
+	[-] CLASSES : Fixed issue #PSCFI-5396 - Comment on Order::total_products_wt
+	[-] CLASSES : Fixed issue #PSCFI-6122 - Die when Validate email failed
+	[-] CLASSES : Fixed issue #PSCFI-5684 - Search was not working with the new version of PCRE
+	[-] CLASSES : Fixed issue #PSCFI-5174 - Saving a product was setting the unit_price_ratio to 0
+	[-] CLASSES : Fixed issue #PSCFI-5224 - Address are now updated in the ps_cart table if updated/deleted
+	[-] CLASSES : Fixed issue #PSCFI-5350 - Wrong variable type in the documentation
+	[-] CLASSES : Fixed issue #PSCFI-5659 - Wrong error message if an e-mail template was missing
+	[-] CLASSES : Fixed issue #PSCFI-5675 - date_upd was not properly handled during Configuration update
+	[-] CLASSES : Fixed issue #PSCFI-5749 - Calling setCustomBackupPath Backup function had no effect
+	[-] CLASSES : Fixed issue #PSCFI-5749 - customBackupDir was not taken into account during Backups
+	[-] CLASSES : Fixed issue #PSCFI-5765 - Wrong line break in Invoice's footer
+	[-] CLASSES : Fixed issue #PSCFI-5821 - getImageLink() could not be called with PHP-CLI
+	[-] CLASSES : Fixed issue #PSCFI-6035 - County tax was not applied
+	[-] CLASSES : Fixed issue #PSCFI-6064 - Wrong regular expression in Validate::isTabName()
+	[-] CLASSES : Fixed issue #PSCFI-6217 - Cart Discounts cache was not reseted properly
+	[-] CLASSES : Fixed issue #PSCFI-6315 - Deleted an isBool() statement
+	[-] CLASSES : Fixed issue #PSCFI-6316 - Added a missing cast (float) in ProductController
+	[-] CLASSES : Fixed issue #PSCFI-6322 - Code standards for Category::recurseLiteCategTree()
+	[-] CLASSES : Fixed issue #PSCFI-5389 - It is now possible to apply 0% group category discount
+	[-] CLASSES : Fixed Issue #PSCFI-6324 - Keep integrity of product when removing supplier or manufacturer
+	[-] CLASSES : Fixed issue #PSCFI-6399 - Warning when removing an unkown configuration key
+	[-] CLASSES : Fixed several issues with getDiscounts() and usage of $cart
+	[-] CLASSES : Fixed issue causing pSQL to fail
+	[-] CLASSES : Fixed issue with new configuration keys
+	[-] CLASSES : Removed unused getCartCategories()
+	[-] CLASSES : When a language was deleted, it was not using _DB_PREFIX_ to scan the SQL tables and could potentially delete records from other PS installations using the same database
+
+	[-] CORE : Fixed Code Standards
+	[-] CORE : Counties taxes were not calculated properly (using zip codes)
+	[-] CORE : Deleted img/login-bg.jpg (not in use anymore)
+	[-] CORE : Fixed a bug on $_LANGUAGES
+	[-] CORE : Fixed an issue in ObjectModel, __construct was not loading the proper translations if $id_lang provided
+	[-] CORE : Fixed issue #PSCFI-5485 - Fixed a bad W3C DTD in 246 files (E-mails and others)
+	[-] CORE : Fixed issue #PSCFI-5192 - Wrong HTTP Error message for maintenance mode
+	[-] CORE : Fixed issue #PSCFI-5642 - Error on checking existing e-mail addresses
+	[-] CORE : Fixed issue #PSCFI-5746 - CCC for CSS was not working properly on => url(/something)
+	[-] CORE : Fixed issue #PSCFI-5821 - Issue with Tools::getHttpHost and Link::getImageLink
+	[-] CORE : Fixed issue #PSCFI-5825 - Added a missing .htaccess rule for Link->getCatImageLink()
+	[-] CORE : Fixed issue #PSCFI-5840 - Contacts now need "email" to be filled when created/updated
+	[-] CORE : Fixed issue #PSCFI-6092 - CMS::getLinks() is now taking into account Language and SSL
+	[-] CORE : Fixed issue #PSCFI-6233 - Bad usage of _PS_USE_SQL_SLAVE_ in several files
+	[-] CORE : Fixed issue #PSCFI-6314 - "Fatal Error" could appear with Group::getReduction() during the order validation
+	[-] CORE : Fixed issue #PSCFI-6156 - PHP error when the php module geoip is active
+	[-] CORE : Fixed issue #PSCFI-6121 - Order validation was broken sometimes, due to Swift exception(s) not handled properly
+	[-] CORE : Fixed issues #PSCFI-6329, #PSCFI-6330 - Impossible to edit multilingual objects
+	[-] CORE : Fixed issue related to AutoExecute (pSQL was causing issue w/ HTML values)
+	[-] CORE : Fixed ObjectModel cache, which was not emptied during add()
+	[-] CORE : Put back "unused" smarty function for themes
+	[-] CORE : Removed mysql_close() from tryToConnect() and tryUTF8()
+	[-] CORE : Reverted I/O optimizations done with filemtime (Causing issues sometimes for instance w/ Artichow catching Warnings)
+
+	[-] MO : Added discounts to PayPal module
+	[-] MO : Add JQuery 1.8 compatibility for productcomment
+	[-] MO : AuhorizeAIM, merge 1.4/1.5
+	[-] MO : AuthorizeAIM, display error message from authorize
+	[-] MO : Avalara add missing index
+	[-] MO : Avalratax 1.5 compatiblity
+	[-] MO : Correct french typos in CloudCache module
+	[-] MO : Correct the retry link in SoColissimo
+	[-] MO : Deleted old jQuery files from all modules and removed noConflict
+	[-] MO : Fixed issue #PSCFI-5774 - Wishlist still in cookie after logout.
+	[-] MO : Fixed issue #PSCFI-5559 - Bad usage of $cookie in the Loyalty Module
+	[-] MO : Fixed issue #PSCFI-6099 - Tax were not displayed anymore in the blockcart module
+	[-] MO : Fixed issue #PSCFI-6248 - Module mailalerts was not using the customer's language to send e-mails
+	[-] MO : Fixed issue #PSCFI-6338 - Removed an unused hook from blockbestsellers module
+	[-] MO : Fixed issue #PSCFI-6352 - Themeinstallator module is now asking to regenerate thumbnails
+	[-] MO : Fixed issue #PSCFI-6356 - Typo in blocklayered.php
+	[-] MO : Fixed issue #PSCFI-6367 - Undefined Index: category - blocklayered.php
+	[-] MO : Fixed issue #PSCFI-6375 - Typo in themeinstallator
+	[-] MO : Fixed issue #PSCFI-6393 - Module blocksearch - Ajax search not working with diacritic on Internet Explorer
+	[-] MO : Fixed issue #PSCFI-6160 - Issue with tax excluded price display in the bloc bestseller
+	[-] MO : Fixed issue #PSCFI-4242 - Statsproducts now take account of specific prices
+	[-] MO : Fixed issue #PSCFI-6049 - Fix typo from previous commit
+	[-] MO : Fixed issue #PSCFI-6049 - Impossible to post product comment without statsdata module
+	[-] MO : Fixed issue #PSCFI-6199 - Fix product count on statsforcast module
+	[-] MO : Fixed issue #PSCFI-6227 - Authorize.net make sure the customer is using USD
+	[-] MO : Fixed issue #PSCFI-6263 - Add a check on the category object
+	[-] MO : Fixed issue #PSCFI-6264 - Add multi language to sitemap for products
+	[-] MO : Fixed issue #PSCFI-5700 - Appended _once to include and require
+	[-] MO : Fixed issue #PSCFI-5722 - USPS Carrier license updated (2007-2012), module version changed
+	[-] MO : Fixed issue #PSCFI-5815 - Fix bug on the blocklayered with Chrome
+	[-] MO : Fixed issue #PSCFI-5957 - Blocklayered - Fix bug with price ordering
+	[-] MO : Fixed issue #PSCFI-6027 - PayPal validation bug fix
+	[-] MO : Fixed issue #PSCFI-6072 - Bug fix, previous commit was replacing file with PS1.5 version
+	[-] MO : Fixed issue #PSCFI-6086 - itinerary is open in an other window
+	[-] MO : Fixed issue #PSCFV-2922 - Blocklayered, make sure url ordering parameters is each time the same
+	[-] MO : Fixed issue #PSCFI-6149
+	[-] MO : Fixed issue #PNM-240 - Fix bug with blocklayered price filter on IE
+	[-] MO : Fixed issue #PNM-293 - Block CMS bug fix (contact url)
+	[-] MO : Fixed issue #PNM-312 - PayPal Express Checkout redirection bug fix
+	[-] MO : Fixed issue #PNM-318 - PayPal css bug fix
+	[-] MO : Fixed issue when updating account number due to the delete of the TEST data.
+	[-] MO : Fixed layout of the homefeatured module for the Italian language
+	[-] MO : Fixed PayPal module translations (using mod='paypal' instead of module='paypal')
+	[-] MO : Fixed several XSS (Kiala, Ogone, Prestassurance, Wexpay)
+	[-] MO : Fixed typo on module followup french mail
+	[-] MO : Fix the animation target on the wishlist module
+	[-] MO : Hipay bug fix : customer logged
+	[-] MO : JQuery 1.8 compatibility + Optimization blockcart
+	[-] MO : Minor changes in PrestaShop Assurance
+	[-] MO : Module carriercompare - Zip code default value was "undefined" if blockcart Ajax option was disabled
+	[-] MO : Module mailalerts was not displayed on products without combinations
+	[-] MO : Mondialrelay, Add back var for 1.5
+	[-] MO : Mondialrelay, Add closure protection
+	[-] MO : Mondialrelay, Fix AdminContact link controller for 1.5 (called AdminStores)
+	[-] MO : Mondialrelay, Fix back office cookie to use translate.
+	[-] MO : Mondialrelay, Fix for 1.5 and refacto
+	[-] MO : Mondialrelay, Fix jsonEncode call for 1.3
+	[-] MO : Mondialrelay, Fix PS 1.3 issue due to PS 1.5 change.
+	[-] MO : Mondialrelay, Fix returned onclick value on closure call
+	[-] MO : Mondialrelay, Fix upgrade process
+	[-] MO : Mondialrelay, Fix url for uninstall with closure.
+	[-] MO : orderconfirmation were not tracked by ganalytics when only one language were set.
+	[-] MO : PayPal address_override bug fix
+	[-] MO : PayPal config file updated
+	[-] MO : PayPal Integral Evolution debugged
+	[-] MO : PayPal JS fix (due to CCC bug)
+	[-] MO : PayPal module bug fix - Taxes & discounts
+	[-] MO : PayPal module - removed duplicated confirmation message
+	[-] MO : PayPal module v3.0.3 : Smarty V2 compatibility & bug fix
+	[-] MO : PayPal order confirmation minor bug fix
+	[-] MO : PayPal total order amount bug fix
+	[-] MO : Paysafecard, Fixed bug #PSCFI-5617. Translate is applied for each languages.
+	[-] MO : Paysafecard, Fix the display of the template (merge from 1.5)
+	[-] MO : Removed unused and non-existent displaySelectCategoryWidget() function in Prestassurance
+	[-] MO : Remove empty en.php from wexpay
+	[-] MO : Remove type on the productscategory module
+	[-] MO : Remove useless newlines/whitespaces on UPS
+	[-] MO : Shipping Estimation (carrier compare), Fixed bug #PNM-172 #PNM-170 #PNM-102 #PNM-86 on shipping price calculation
+	[-] MO : Shipwire visibily issue on $context
+	[-] MO : Small modifications on the PayPal module
+	[-] MO : Socolissimo, merge 1.5
+	[-] MO : Subscribe Kwixo link has been repaired - Bug #PSCFI-5666
+	[-] MO : tntcarrier, removed spaces in phone number #PSCFI-6284
+	[-] MO : TrustedShops, add backward files
+	[-] MO : TrustedShops, Fix displayed price when adding TS product.
+	[-] MO : TrustedShops, increment version
+	[-] MO : Twenga module 1.4.8.2 - Fix on export memory limit issue
+	[-] MO : Update description and translations of Allied Wallet
+	[-] MO : update version on config.xml for CloudCache
+	[-] MO : Updtade translations AlliedWallet
+	[-] MO : Fixed a PHP Warning on mondialrelay
+
+	[-] WS : Cleaned code "switch"
+	[-] WS : Fix duplicate image id
+	[-] WS : Fixed issue #PSCFI-5696 - Price as empty if equal to 0
+	[-] WS : Fixed issue #PSCFI-5081 - Adding a category image via the WS was not generating all image formats
+	[-] WS : Fixed issue #PSCFI-5879 - Using search from Web-service was limiting results to 10
+	[-] WS : Fixed issue #PSCFI-5897 - Optimized the Web-service if the "synopsis" feature is used
+	[-] WS : Fixed issue #PSCFI-6123 - Added the ability to active a Supplier using the webservice
+	[-] WS : Fixed issue #PSCFI-6123 - Added the ability to set active/inactive a supplier
+	[-] WS : Fixed issue #PSCFI-6136 - Added a missing Web-service entity /api/tax_rule_groups/
+	[-] WS : Fixed issue #PSCFV-2888
+
+	[-] PDF : Fixed issue #PSCFI-5620 - Canadian Taxes are not updated in credit slip
+	[-] PDF : Fixed issue #PSCFI-5637 - Canadian taxes not accurate with a reduction
+	[-] PDF : Fixed issue #PSCFI-6216 - Layout issue in the PDF Invoice if using the "Free text" option
+
+	[-] TR : Fixed issue #PSCFI-5994 - The shipping cost comparison module was not working properly
+
+	Improved/changed features:
+
+	[*] INSTALLER : By default "localhost" is now replaced by 127.0.0.1 to avoid a DNS resolution (very slow on several hosts)
+	[*] INSTALLER : Fixed issue #PSCFI-4992 - Clarify the "Full mode" description
+	[*] INSTALLER : Increased the maximum picture size from 131kb to 2,048kb by default
+	[*] INSTALLER : Updated local localization packs (HK, IN)
+	[*] INSTALLER : Update installer translations
+	[*] INSTALLER : Update translations
+
+	[*] BO : add the character '"' and '%' in a static method pRegexp() of the class Tools
+	[*] BO : add the character '`' in a static method pRegexp() of the class Tools
+	[*] BO : In the AdminCountries tab, you can now set a call prefix of 4 chars
+	[*] BO : On several tabs, only display active countries instead of all countries
+	[*] BO : sending a mail is a little less strict with wrong parameters - it tries to send the e-mail, not to die!
+	[*] BO : Several improvements to the CSV Import tool - Now displays a confirmation message upon import *** Still a few bugs to resolve such as the object deletion ***
+
+	[*] CLASSES : Now taking more currencies into account in Tools::displayPrice
+	[*] CLASSES : Optimized Category->calcLevelDepth()
+	[*] CLASSES : Optimized Country::getCountries() - Do not load States when not necessary
+	[*] CLASSES : Rewrote updateValue() in Configuration (Faster and lighter)
+
+	[*] CORE : Compressed jQuery Fancybox JS file
+	[*] CORE : Optimizations (PHP, SQL)
+	[*] CORE : Optimizations (reduced calls to Configuration::get(), using defines instead)
+	[*] CORE : Optimized memory consumption at loading
+	[*] CORE : Optimized multilingual objects instantiation
+	[*] CORE : Optimized the Core + Front-office (Disk I/O, SQL queries)
+	[*] CORE : Significantly improved overall performances (Memory, SQL, PHP, Disk I/O)
+	[*] CORE : Smarty has been upgraded to v3.1.11
+	[*] CORE : Upgraded jQuery from v1.4.4 to v1.7.2
+	[*] CORE : Various small optimizations
+
+	[*] MO : Add SSL support to CloudCache + smartyv2
+	[*] MO : Autoupgrade (1-click upgrade) module updated
+	[*] MO : avalaratax, when a customers is outside of the merchant state and if the merchand disable the calculation of taxes outside his state, taxes are not sent anymore to avalara
+	[*] MO : Hipay updated (v1.4)
+	[*] MO : Improved mailalerts module
+	[*] MO : Improved the Theme installer module
+	[*] MO : Merge Gadsense with addons
+	[*] MO : Module Twenga 1.8.1
+	[*] MO : Optimization - Deleted all empty en.php files (= 102 files!)
+	[*] MO : Optimized the blocklayered module (Layered Navigation)
+	[*] MO : PayPal module v3.0 (optimized)
+	[*] MO : Secuvad module updated (v2.1.0)
+	[*] MO : ShoppingFlux updated
+	[*] MO : SoColissimo updated (v2.4)
+	[*] MO : Tntcarrier if errors appears when creating a new ticket, the error is displayed
+	[*] MO : Tntcarrier new version
+	[*] MO : Twenga module updated (v1.8.3)
+	[*] MO : Avalara module updated (v2.0)
+
+####################################
 #   v1.4.8.3 - N/A (2012-08-01)    #
 ####################################
 
