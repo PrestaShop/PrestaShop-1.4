@@ -579,7 +579,7 @@ class MondialRelay extends Module
 	 */
 	public static function getAccountDetail()
 	{
-		return unserialize(Configuration::get('MR_ACCOUNT_DETAIL'));
+		return unserialize((string)Configuration::get('MR_ACCOUNT_DETAIL'));
 	}
 
 	/**

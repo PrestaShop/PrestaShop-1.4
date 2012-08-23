@@ -248,6 +248,7 @@ class AddressFormatCore extends ObjectModel
 					foreach($currentKeyList as $key)
 					{
 						// Check if we need to use an older modified pattern if a key has already be matched before
+						$count = 0;
 						$replacedValue = empty($mainFormattedKey) ? $pattern : $formattedValueList[$mainFormattedKey];
 						if (($formattedValue = preg_replace('/'.$key.'/', $formattedValueList[$key], $replacedValue, -1, $count)))
 							if ($count)
