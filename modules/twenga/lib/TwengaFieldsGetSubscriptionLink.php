@@ -49,6 +49,8 @@ class TwengaFieldsGetSubscriptionLink extends TwengaFields
 			$this->fields['address'] = array(100, array('is_string', 'isCleanHtml'));
 			$this->fields['postal_code'] = array(10, array('is_string', 'isCleanHtml'));
 			$this->fields['city'] = array(30, array('is_string', 'isCityName'));
+			$this->fields['module_version'] = array(10, array('is_string', 'isCleanHtml'));
+			$this->fields['platform_version'] = array(12, array('is_string', 'isCleanHtml'));
 		}
 		parent::__construct();
 	}   

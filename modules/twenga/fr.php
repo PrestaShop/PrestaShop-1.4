@@ -49,6 +49,7 @@ $_MODULE['<{twenga}prestashop>twenga_a165aa77eb6fac9aa4aeda09f0267e4c'] = 'CAS 2
 $_MODULE['<{twenga}prestashop>twenga_2ee3993c568a8905ab65bf1c8100c04c'] = 'Récupérez votre clé Twenga directement depuis votre compte Twenga Ready to Sell (dans la section Outils > tracking > cliquez sur ‘Afficher ma clé / HashKey’). ';
 $_MODULE['<{twenga}prestashop>twenga_ef18b94b44e104c166d696f6ff1ca159'] = 'Revenez sur cette page et collez cette clé dans le champ ‘Hashkey’ ci-dessous. Cliquez sur ‘Sauvegarder’ pour activer votre flux produits.';
 $_MODULE['<{twenga}prestashop>twenga_4941d9830aa65d6eb0e06fbd4554dd38'] = 'B – Finalisez l’installation de votre module';
+$_MODULE['<{twenga}prestashop>twenga_bcd1817917806050ddde88d6715c2f54'] = 'B – Configuration';
 $_MODULE['<{twenga}prestashop>twenga_1b8d7e57253e5bdb39a7f8a8e4604a87'] = 'Renseignez ici la clé/hashkey Twenga et votre login/pass Twenga Ready to Sell';
 $_MODULE['<{twenga}prestashop>twenga_a66daa775d445ee7da1bb20667b7c8e6'] = 'Flux Rss';
 $_MODULE['<{twenga}prestashop>twenga_21baf392bfae2dadba6813e9fb843141'] = 'Hashkey';

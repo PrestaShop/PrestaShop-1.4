@@ -122,7 +122,7 @@ class Twenga extends PaymentModule
 		$this->token = Tools::getValue('token');
 	 	$this->name = 'twenga';
 	 	$this->tab = 'smart_shopping';
-	 	$this->version = '1.8.2';
+	 	$this->version = '1.8.3';
 		$this->author = 'PrestaShop';
 		
 	 	parent::__construct();
@@ -637,7 +637,7 @@ class Twenga extends PaymentModule
 		
 		$errors = array();
 		try {
-			$return = self::$obj_twenga->getSubscriptionLink(array('site_url' => $this->site_url, 'feed_url' => $this->feed_url, 'country' => $isoUser));
+			$return = self::$obj_twenga->getSubscriptionLink(array('site_url' => $this->site_url, 'feed_url' => $this->feed_url, 'country' => $isoUser, 'module_version' => (string)$this->version, 'platform_version' => (string)_PS_VERSION_));
 			$this->inscription_url= $return['message'];
 			
 		} catch (TwengaFieldsException $e) {
@@ -709,7 +709,7 @@ class Twenga extends PaymentModule
 </li>	
 				</ol>
 					
-				<p align=center><input type="submit" value="'.$this->l('List my website on Twenga').'" class="button"><a href="'.$this->inscription_url.'"/></input></p>
+				<p align=center><a href="'.$this->inscription_url.'" target="_blank"><input type="submit" value="'.$this->l('List my website on Twenga').'" class="button"/></a></p>
 				
 				</fieldset>
 				
@@ -735,10 +735,18 @@ class Twenga extends PaymentModule
 		else
 			$tarifs_link = 'https://rts.twenga.com/media/prices_'.$isoUser.'.jpg';
 
-		return '
-		<form name="form_set_hashkey" action="" method="post">	
+		$output =
+		'<form name="form_set_hashkey" action="" method="post">
 			<fieldset>
-				<legend><img src="../modules/'.$this->name.'/logo.gif" class="middle" /> '.$this->l('B - Installation of Sales Tracking').'</legend>'
+				<legend>
+						<img src="../modules/'.$this->name.'/logo.gif" class="middle" /> ';
+						if (((self::$obj_twenga->getHashKey() === NULL || self::$obj_twenga->getHashKey() === '')) &&
+							((self::$obj_twenga->getUserName() === NULL || self::$obj_twenga->getUserName() === '')) &&
+							((self::$obj_twenga->getPassword() === NULL || self::$obj_twenga->getPassword() === '')))
+							$output .=  $this->l('B - Installation of Sales Tracking');
+						else
+							$output .=  $this->l('B - Configuration');
+		$output .= '</legend>'
 				.((self::$obj_twenga->getHashKey() === NULL || self::$obj_twenga->getHashKey() === '') ?
 					'<p>'.$this->l('Enter here your Twenga Ready to Sell hashkey and Login / Pass').'</p>' :
 					'<label>'.$this->l('Feed\'s url').' : </label><div class="margin-form">'.$this->feed_url.'</div><!-- .margin-form -->')
@@ -765,6 +773,8 @@ class Twenga extends PaymentModule
 			<div align=center><img src="../modules/'.$this->name.'/recompense.png" alt="" /></div>
 			</fieldset>
 			</form><br />';
+
+		return $output;
 	}
 	
 	/**

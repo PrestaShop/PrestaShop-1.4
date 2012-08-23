@@ -123,10 +123,13 @@ class TwengaObj
 	}
 	public static function deleteMerchantLogin()
 	{
-		Configuration::deleteByName('TWENGA_USER_NAME');
+		if (Configuration::get('TWENGA_USER_NAME'))
+			Configuration::deleteByName('TWENGA_USER_NAME');
 		self::$user_name = null;
-		Configuration::deleteByName('TWENGA_PASSWORD');
+		if (Configuration::get('TWENGA_PASSWORD'))
+			Configuration::deleteByName('TWENGA_PASSWORD');
 		self::$password = null;
+		if (Configuration::get('TWENGA_HASHKEY'))
 		Configuration::deleteByName('TWENGA_HASHKEY');
 		self::$hashkey = null;
 		return true;
