@@ -7,7 +7,6 @@ ALTER TABLE `PREFIX_order_tax` ADD `id_order_tax` INT UNSIGNED NOT NULL AUTO_INC
 ALTER TABLE `PREFIX_feature_lang` ADD INDEX feature_name (`id_lang`, `name`);
 ALTER TABLE `PREFIX_state` ADD INDEX statename (`name`);
 ALTER TABLE `PREFIX_category` ADD INDEX nleftrightactive (`nleft`, `nright`, `active`);
-ALTER TABLE `PREFIX_feature_product` ADD INDEX id_product (`id_product`);
 ALTER TABLE `PREFIX_category` ADD INDEX level_depth (`level_depth`);
 ALTER TABLE `PREFIX_category` ADD INDEX nright (`nright`);
 ALTER TABLE `PREFIX_category` ADD INDEX nleft (`nleft`);
