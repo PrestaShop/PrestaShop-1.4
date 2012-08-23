@@ -27,7 +27,7 @@ class TntCarrier extends CarrierModule
 	{
 		$this->name = 'tntcarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.7.3';
+		$this->version = '1.7.4';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 		$this->module_key = 'd4dcfde9937b67002235598ac35cbdf8';
@@ -893,7 +893,7 @@ class TntCarrier extends CarrierModule
 			$redirect = $link->getPageLink('order.php?step=2');
 			$smarty->assign('redirect' , $redirect);
 			if (!sizeof($cities))
-				$cities[] = 'Aucune ville disponible';
+				$smarty->assign('cityError', $this->l('your shipping address zipcode is not correct.'));
 			$smarty->assign('cities', $cities);
 		}
 		$services = Db::getInstance()->ExecuteS('SELECT `id_carrier`, `option` FROM `'._DB_PREFIX_.'tnt_carrier_option`');

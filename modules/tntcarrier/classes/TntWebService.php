@@ -136,6 +136,19 @@ class TntWebService
 			'faxNumber' => '' //may be later
 		);
 
+		$phone = (isset($info[0]['phone_mobile']) && $info[0]['phone_mobile'] != '' ? str_replace(' ', '', $info[0]['phone_mobile']) : str_replace(' ', '', $info[0]['phone']));
+
+		if (substr($phone, 0, 3) == '+33')
+			$phone = str_replace('+33', '0', $phone);
+		else if (substr($phone, 0, 4) == '0033')
+		{
+			$number = substr($phone, 4);
+			$phone = '0'.$number;
+		}
+
+		if (strlen($phone) > 10)
+			$phone = substr($phone, 0, 10);
+
 		if ($info[4] == null)
 			$receiver = array(
 				'type' => ($info[0]['company'] != '' && (strlen($info[3]['option']) == 1 || substr($info[3]['option'], 1, 1) == 'S') ? "ENTERPRISE" : 'INDIVIDUAL'), // ENTREPRISE DEPOT DROPOFFPOINT INDIVIDUAL
@@ -149,7 +162,7 @@ class TntWebService
 				'contactLastName' => (strlen($info[0]['lastname']) > 19 ? substr($info[0]['lastname'], 0, 19) : $info[0]['lastname']),
 				'contactFirstName' => (strlen($info[0]['firstname']) > 12 ? substr($info[0]['firstname'], 0, 12) : $info[0]['firstname']),
 				'emailAddress' => $info[0]['email'],
-				'phoneNumber' => (isset($info[0]['phone_mobile']) && $info[0]['phone_mobile'] != '' ? str_replace(' ', '', $info[0]['phone_mobile']) : str_replace(' ', '', $info[0]['phone'])),
+				'phoneNumber' => $phone,
 				'accessCode' => '',
 				'floorNumber' => '',
 				'buildingId' => '',
@@ -168,7 +181,7 @@ class TntWebService
 				'contactLastName' => (strlen($info[0]['lastname']) > 19 ? substr($info[0]['lastname'], 0, 19) : $info[0]['lastname']),
 				'contactFirstName' => (strlen($info[0]['firstname']) > 12 ? substr($info[0]['firstname'], 0, 12) : $info[0]['firstname']),
 				'emailAddress' => $info[0]['email'],
-				'phoneNumber' => (isset($info[0]['phone_mobile']) && $info[0]['phone_mobile'] != '' ? str_replace(' ', '', $info[0]['phone_mobile']) : str_replace(' ', '', $info[0]['phone'])),
+				'phoneNumber' => $phone,
 				'accessCode' => '',
 				'floorNumber' => '',
 				'buildingId' => '',

@@ -187,6 +187,9 @@ $().ready(function()
 <input type="hidden" id="cartRelaisColis" value="{$id_cart}" name="cartRelaisColis" />
 
 {if isset($error)}
+{if isset($cityError)}
+<div style="background-color: #FAE2E3;border: 1px solid #EC9B9B;line-height: 20px;margin: 0 0 10px;padding: 10px 15px;">{$cityError}</div>
+{else}
 	<h3>{$error}</h3>
 	{l s='Postal Code' mod='tntcarrier'} : {$postalCode}
 	<select id="citiesGuide" style="width:130px" onchange="selectCities('{$tnt_token}')">
@@ -198,4 +201,5 @@ $().ready(function()
 	{if isset($link)}
 	<input type="hidden" value="{$redirect}" id="reload_link" name="reload_link"/>
 	{/if}
+{/if}
 {/if}
