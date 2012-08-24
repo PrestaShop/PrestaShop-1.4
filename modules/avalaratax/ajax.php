@@ -31,114 +31,66 @@
 */
 
 include(dirname(__FILE__).'/../../config/config.inc.php');
-ini_set('max_execution_time', 0);
+include(_PS_ROOT_DIR_.'/init.php');
+include(_PS_MODULE_DIR_.'avalaratax/avalaratax.php');
+
+$avalaraModule = new AvalaraTax();
+if (!Validate::isLoadedObject($avalaraModule) || !$avalaraModule->active)
+	die('{"hasError" : true, "errors" : ["Error while loading Avalara module"]}');
+
+$timeout = Configuration::get('AVALARATAX_TIMEOUT');
+ini_set('max_execution_time', (int)$timeout > 0 ? (int)$timeout : 120);
 
 // Check if the AJAX call is valid
-if (!(isset($_POST['ajax'])
-&& $_POST['ajax'] == 'getProductTaxRate'
-&& isset($_POST['token'])
-&& md5(_COOKIE_KEY_.Configuration::get('PS_SHOP_NAME')) == $_POST['token']))
-	die('error');
-
-// Get variables...
-$id_cart = (int)$_POST['id_cart'];
-$id_lang = (int)$_POST['id_lang'];
-$id_address = (int)$_POST['id_address'];
+if (!isset($_POST['id_cart']) || !isset($_POST['id_address']) || !isset($_POST['ajax']) || !isset($_POST['token']) ||
+	!(int)$_POST['id_cart'] || !(int)$_POST['id_address'] || $_POST['ajax'] != 'getProductTaxRate' ||
+	md5(_COOKIE_KEY_.Configuration::get('PS_SHOP_NAME')) != $_POST['token'])
+	die('{"hasError":true, "errors":["Invalid ajax call"]}');
 
 // Make the products list
-$cart = new Cart($id_cart);
+$cart = new Cart((int)$_POST['id_cart']);
+if (!Validate::isLoadedObject($cart))
+	die('{"hasError":true, "errors":["Error while loading Cart"]}');
+
 $ids_product = array();
 foreach ($cart->getProducts() as $product)
 	$ids_product[] = (int)$product['id_product'];
-$ids_product = implode(', ', $ids_product);
 
 // Stop if cart is empty
-if (empty($ids_product))
+if (!count($ids_product))
+	die('{"hasError":true, "errors":["Cart is empty"]}');
+
+$ids_product = implode(', ', $ids_product);
+
+$address = new Address((int)$_POST['id_address']);
+if (!Validate::isLoadedObject($address))
+	die('{"hasError":true, "errors":["Error while loading Address"]}');
+
+$region = null;
+if ((int)$address->id_state)
 {
-	echo 'ok';
-	exit;
+	$state = new State((int)$address->id_state);
+	if (!Validate::isLoadedObject($state))
+		die('{"hasError":true, "errors":["Error while loading State"]}');
+
+	$region = $state->iso_code;
 }
+
+$taxable = true;
+//check if it is outside the state and if we are in united state and if conf AVALARATAX_TAX_OUTSIDE IS ENABLE
+if ($region && !Configuration::get('AVALARATAX_TAX_OUTSIDE') && $region != Configuration::get('AVALARATAX_STATE'))
+	$taxable = false;
 
 // Check cache before asking Avalara webservice
-if ($id_address)
-	$region = Db::getInstance()->getValue('SELECT s.`iso_code`
-									FROM '._DB_PREFIX_.'address a
-									LEFT JOIN '._DB_PREFIX_.'state s ON (s.`id_state` = a.`id_state`)
-									WHERE a.`id_address` = '.(int)$id_address);
+$pc = CacheTools::checkProductCache($ids_product, $region, $cart);
+$cc = CacheTools::checkCarrierCache($cart);
 
-if (empty($region))
-{
-	//$region = Configuration::get('AVALARATAX_STATE');
-	echo 'ok';
-	exit;
-}
+if (!$pc && !$cc)
+	die('{"hasError":false, "cached_tax":true}');
 
-//check if it is outside the state and if we are in united state and if conf AVALARATAX_TAX_OUTSIDE IS ENABLE
-if ($region != Configuration::get('AVALARATAX_STATE') && !Configuration::get('AVALARATAX_TAX_OUTSIDE'))
-{
-	echo "ok";
-	exit;
-}
+if ($pc)
+	CacheTools::updateProductsTax($avalaraModule, $cart, (int)$_POST['id_address'], $region, $taxable);
+if ($cc)
+	CacheTools::updateCarrierTax($avalaraModule, $cart, (int)$_POST['id_address'], $taxable);
 
-$result = Db::getInstance()->ExecuteS('SELECT ac.`tax_rate`, ac.`update_date` FROM '._DB_PREFIX_.'avalara_product_cache ac
-									WHERE ac.`id_product` IN ('.pSQL($ids_product).')
-									AND ac.`region` = \''.pSQL($region).'\'');
-
-if (count($result) && count($result) == count($cart->getProducts()) && (float)$result[0]['tax_rate'] > 0)
-{
-	$result = $result[0];
-	// Compare date/time
-	date_default_timezone_set(@date_default_timezone_get());
-	$date1 = new DateTime($result['update_date']);
-	$date2 = new DateTime(date('Y-m-d H:i:s'));
-	$dateTimeComparison = $date1->diff($date2);
-	// Check if the cached tax is not expired
-	if ($dateTimeComparison->y == 0 
-	&& $dateTimeComparison->m == 0 
-	&& $dateTimeComparison->d == 0 
-	&& (int)$dateTimeComparison->h == 0 
-		//&& (int)$dateTimeComparison->i < (int)Configuration::get('AVALARA_CACHE_MAX_LIMIT') 
-	&& (float)$result['tax_rate'] > 0)
-	{
-		echo 'ok_c'; //$result['tax_rate'];
-		return;
-	}
-}
-
-// The tax rate for the requested product was not found in cache, 
-// or cache expired, or tax_rate is 0. 
-// Then cache it again using getTax()
-
-if (!class_exists('AvalaraTax'))
-	include(dirname(__FILE__).'/avalaratax.php');
-$avalaraModule = new AvalaraTax();
-if ($avalaraModule->active)
-{
-	foreach ($cart->getProducts() as $product)
-	{
-		$avalaraProducts[] = array('id_product' => (int)$product['id_product'],
-					'name' => $product['name'],
-					'description_short' => $product['description_short'],
-					'quantity' => 1, // This is a per product, so qty is 1
-					'total' => $product['price'],
-					'tax_code' => $avalaraModule->getProductTaxCode($product['id_product']));
-		// Call Avalara
-		$getTaxResult = $avalaraModule->getTax($avalaraProducts, array('type' => 'SalesOrder', 'DocCode' => 1), $id_address);
-		// Store the taxrate in cache
-		// If taxrate exists (but it's outdated), then update, else insert (REPLACE INTO)
-		if (isset($getTaxResult['TotalTax'])
-			&& (float) $getTaxResult['TotalTax'] >= 0
-		&& isset($getTaxResult['TotalAmount'])
-		&& $getTaxResult['TotalAmount'])
-		{
-			Db::getInstance()->Execute('REPLACE INTO '._DB_PREFIX_.'avalara_product_cache (`id_product`, `tax_rate`, `region`, `update_date`)
-									VALUES ('.(int)$product['id_product'].'
-									,'.(float)($getTaxResult['TotalTax'] * 100 / $getTaxResult['TotalAmount']).'
-									,\''.pSQL($region).'\'
-									,"'.date('Y-m-d H:i:s').'")');
-		}
-	}
-	echo 'ok_d';
-	return;
-}
-echo 'ok';
+die('{"hasError":false, "cached_tax":false, "total_tax":"'.Tools::displayPrice($cart->getOrderTotal() - $cart->getOrderTotal(false)).'"}');

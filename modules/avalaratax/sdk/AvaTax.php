@@ -4,38 +4,34 @@
  *
  * @package Base
  */
- 
+
 /**
  * Defines class loading search path.
  */
- 
-/*function __autoload($class_name) 
-{ 	
-	
+
+/*function __autoload($class_name)
+{
+
 	$path=dirname(__FILE__).'/classes/'.$class_name . '.class.php';
-	
+
 	if(!file_exists($path))
 	{
 		$path=dirname(__FILE__).'/classes/BatchSvc/'.$class_name . '.class.php';
-		
+
 	}
-	
+
 	require_once $path;
-    
-     
+
+
 }*/
 
-function EnsureIsArray( $obj ) 
+function EnsureIsArray( $obj )
 {
-    if( is_object($obj)) 
-	{
-        $item[0] = $obj;
-    } 
-	else 
-	{
-        $item = (array)$obj;
-    }
-    return $item;
+	if (is_object($obj))
+		$item[0] = $obj;
+	else
+		$item = (array)$obj;
+	return $item;
 }
 
 /**
@@ -51,7 +47,7 @@ function xml_pretty_printer($xml, $html_output=FALSE)
     $xml_obj = new SimpleXMLElement($xml);
     $xml_lines = explode("n", $xml_obj->asXML());
     $indent_level = 0;
-    
+
     $new_xml_lines = array();
     foreach ($xml_lines as $xml_line) {
         if (preg_match('#(<[a-z0-9:-]+((s+[a-z0-9:-]+="[^"]+")*)?>.*<s*/s*[^>]+>)|(<[a-z0-9:-]+((s+[a-z0-9:-]+="[^"]+")*)?s*/s*>)#i', $xml_line)) {
@@ -74,7 +70,7 @@ function xml_pretty_printer($xml, $html_output=FALSE)
             $new_xml_lines[] = $new_line;
         }
     }
-    
+
     $xml = join("n", $new_xml_lines);
     return ($html_output) ? '<pre>' . htmlentities($xml) . '</pre>' : $xml;
 }
@@ -83,15 +79,12 @@ function getDefaultDate()
 {
 	$dateTime=new DateTime();
     $dateTime->setDate(1900,01,01);
-    
+
     return $dateTime->format("Y-m-d");
-} 	
+}
 
 function getCurrentDate()
 {
 	$dateTime=new DateTime();
 	return $dateTime->format("Y-m-d");
-} 
-
-
-
+}

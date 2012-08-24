@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2011 PrestaShop
+* 2007-2012 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,22 +19,28 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2011 PrestaShop SA
-*  @version  Release: $Revision: 7809 $
+*  @copyright  2007-2012 PrestaShop SA
+*  @version  Release: $Revision: 7723 $
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-class AddressController extends AddressControllerCore
-{
-	public function preProcess()
-	{
-		if (Tools::isSubmit('submitAddress') || Tools::isSubmit('submitAccount'))
-		{
-			include_once(dirname(__FILE__).'/../../modules/avalaratax/avalaratax.php');
-			$avalaraModule = new AvalaraTax();
-			$avalaraModule->fixPOST();
-		}
-		parent::preProcess();
-	}
-}
+/**
+ * Backward function compatibility
+ * Need to be called for each module in 1.4
+ */
+
+// Get out if the context is already defined
+if (!in_array('Context', get_declared_classes()))
+	require_once(dirname(__FILE__).'/Context.php');
+
+// Get out if the Display (BWDisplay to avoid any conflict)) is already defined
+if (!in_array('BWDisplay', get_declared_classes()))
+	require_once(dirname(__FILE__).'/Display.php');
+
+// If not under an object we don't have to set the context
+if (!isset($this))
+	return;
+
+$this->context = Context::getContext();
+$this->smarty = $this->context->smarty;
