@@ -1543,7 +1543,7 @@ class AdminImport extends AdminTab
 			echo '<tr id="table_'.$current_table.'_line_'.$current_line.'" style="padding: 4px">';
 			foreach ($line as $nb_c => $column)
 				if ((MAX_COLUMNS * (int)($current_table) <= $nb_c) AND ((int)($nb_c) < MAX_COLUMNS * ((int)($current_table) + 1)))
-					echo '<td>'.htmlentities(substr($column, 0, 200), ENT_QUOTES, 'UTF-8').'</td>';
+					echo '<td>'.htmlentities(Tools::substr($column, 0, 200), ENT_QUOTES, 'UTF-8').'</td>';
 			echo '</tr>';
 		}
 		echo '</table>';
