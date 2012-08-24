@@ -24,6 +24,18 @@ International Registred Trademark & Property of PrestaShop SA
 Release Notes for PrestaShop 1.4
 --------------------------------
 ####################################
+#   v1.4.9.0 - 16999 (2012-08-24)  #
+####################################
+
+	Fixed bugs:
+
+	[-] FO : fixed bugs on customer messages #PSCFV-3733 #PSCFV-3712
+	[-] FO : fixed undeletable products in cart (when price < 1¤) #PSCFV-3707
+
+	[-] BO : super admins are now added to all shops #PSCFV-3561
+
+
+####################################
 #   v1.4.9.0 - 16986 (2012-08-23)  #
 ####################################
 
