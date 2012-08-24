@@ -581,7 +581,7 @@ class ToolsCore
 	{
 		global $_ERRORS, $cookie;
 
-		$iso = strtolower(Language::getIsoById((is_object($cookie) && $cookie->id_lang) ? (int)$cookie->id_lang : (int)_PS_LANG_DEFAULT_));
+		$iso = strtolower(Language::getIsoById((is_object($cookie) && $cookie->id_lang) ? (int)$cookie->id_lang : (int)Configuration::get('PS_LANG_DEFAULT')));
 		@include_once(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
 
 		if (defined('_PS_MODE_DEV_') && _PS_MODE_DEV_ && $string == 'Fatal error')

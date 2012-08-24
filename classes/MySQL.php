@@ -34,10 +34,10 @@ class MySQLCore extends Db
 		if ($this->_link = mysql_connect($this->_server, $this->_user, $this->_password))
 		{
 			if (!$this->set_db($this->_database))
-				die(Tools::displayError('The database selection cannot be made.'));
+				die('The database selection cannot be made.');
 		}
 		else
-			die(Tools::displayError('Link to database cannot be established.'));
+			die('Link to database cannot be established.');
 		/* UTF-8 support */
 		if (!mysql_query('SET NAMES \'utf8\'', $this->_link))
 			die(Tools::displayError('PrestaShop Fatal error: no utf-8 support. Please check your server configuration.'));
