@@ -654,15 +654,14 @@ class AdminProducts extends AdminTab
 		{
 			if ($this->tabAccess['edit'] === '1')
 			{
-				if (Validate::isLoadedObject($product = new Product((int)(Tools::getValue('id_product')))))
+				if (Validate::isLoadedObject($product = new Product((int)Tools::getValue('id_product'))))
 				{
 					// delete all objects
 					$product->deleteFeatures();
 
 					// add new objects
 					$languages = Language::getLanguages(false);
-					foreach ($_POST AS $key => $val)
-					{
+					foreach ($_POST as $key => $val)
 						if (preg_match('/^feature_([0-9]+)_value/i', $key, $match))
 						{
 							if ($val)
@@ -671,8 +670,8 @@ class AdminProducts extends AdminTab
 							{
 								if ($default_value = $this->checkFeatures($languages, $match[1]))
 								{
-									$id_value = $product->addFeaturesToDB($match[1], 0, 1, (int)$language['id_lang']);
-									foreach ($languages AS $language)
+									$id_value = $product->addFeaturesToDB($match[1], 0, 1);
+									foreach ($languages as $language)
 									{
 										if ($cust = Tools::getValue('custom_'.$match[1].'_'.(int)$language['id_lang']))
 											$product->addFeaturesCustomToDB($id_value, (int)$language['id_lang'], $cust);
@@ -681,7 +680,6 @@ class AdminProducts extends AdminTab
 									}
 								}
 							}
-						}
 					}
 					if (!sizeof($this->_errors))
 						Tools::redirectAdmin($currentIndex.'&id_product='.(int)$product->id.'&id_category='.(!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1').'&add'.$this->table.'&tabs=4&conf=4&token='.($token ? $token : $this->token));
