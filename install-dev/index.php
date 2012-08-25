@@ -502,7 +502,7 @@ if ($lm->getIncludeTradFilename())
 				<form id="formCheckSQL" class="aligned" action="<?php $_SERVER['REQUEST_URI']; ?>" onsubmit="verifyDbAccess(); return false;" method="post">
 					<p class="first" style="margin-top: 15px;">
 						<label for="dbServer"><?php echo lang('Server:')?> </label>
-						<input size="25" class="text" type="text" id="dbServer" value="127.0.0.1"/>
+						<input size="25" class="text" type="text" id="dbServer" value="localhost"/>
 					</p>
 					<p>
 						<label for="dbName"><?php echo lang('Database name:')?> </label>
