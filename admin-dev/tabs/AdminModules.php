@@ -335,8 +335,11 @@ class AdminModules extends AdminTab
 					$this->_errors[] = sprintf(Tools::displayError('The following module(s) were not installed successfully: %s'), $htmlError);
 				}
 			}
+			$modules_list = '';
+			if ($modules_list = Tools::getValue('install'))
+				$modules_list = '&modules_list='.$modules_list;
 			if ($return)
-				Tools::redirectAdmin($currentIndex.'&conf='.$return.'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.$module->name);
+				Tools::redirectAdmin($currentIndex.'&conf='.$return.'&token='.$this->token.'&tab_module='.$module->tab.'&module_name='.$module->name.$modules_list);
 		}
 	}
 
@@ -848,7 +851,7 @@ class AdminModules extends AdminTab
 						</td>
 						<td style="padding:2px 4px 2px 10px;width:500px"><img src="../modules/'.$module->name.'/logo.gif" alt="" /> <b>'.stripslashes($module->displayName).'</b>'.($module->version ? ' v'.$module->version.(strpos($module->version, '.') !== false ? '' : '.0') : '').$disp_author.'<br />'.stripslashes($module->description).'</td>
 						<td rowspan="2">';
-						if (Tools::getValue('module_name') == $module->name)
+						if (Tools::getValue('module_name') == $module->name || in_array($module->name, explode('|', Tools::getValue('modules_list'))) && (int)Tools::getValue('conf') > 0)
 							$this->displayConf();
 						echo '</td>
 						<td class="center" style="width:60px" rowspan="2">';
