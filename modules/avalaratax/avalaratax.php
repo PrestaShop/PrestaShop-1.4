@@ -40,7 +40,7 @@ class AvalaraTax extends Module
 	{
 		$this->name = 'avalaratax';
 		$this->tab = 'billing_invoicing';
-		$this->version = '3.0.4';
+		$this->version = '3.0.5';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('us', 'ca');
 		parent::__construct();
@@ -1225,9 +1225,8 @@ class AvalaraTax extends Module
 													LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.id_product = od.product_id)
 													LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.id_product = p.id_product)
 													LEFT JOIN `'._DB_PREFIX_.'avalara_taxcodes` atc ON (atc.id_product = p.id_product)
-													WHERE pl.`id_lang` = 1 AND od.`id_order` = '.(isset($_POST['id_order']) ? (int)$_POST['id_order'] :
-																							 (int)$params['id_order']));
-		p($allProducts);
+													WHERE pl.`id_lang` = 1 AND od.`id_order` = '.(isset($_POST['id_order']) ? (int)$_POST['id_order'] : (int)$params['id_order']));
+
 		$products = array();
 		foreach ($allProducts as $v)
 			$products[] = array('id_product' => $v['id_product'],
@@ -1238,8 +1237,6 @@ class AvalaraTax extends Module
 										'tax_code' => $v['tax_code'],
 										'taxable' => (bool)$this->getProductTaxable((int)$v['id_product']));
 
-
-		d($products);
 		$taxable = true;
     //check if it is outside the state and if we are in united state and if conf AVALARATAX_TAX_OUTSIDE IS ENABLE
 		if (isset($params['state']) && !Configuration::get('AVALARATAX_TAX_OUTSIDE') && $params['state']->iso_code != Configuration::get('AVALARATAX_STATE'))
