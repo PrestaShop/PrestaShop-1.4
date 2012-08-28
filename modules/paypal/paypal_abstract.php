@@ -32,9 +32,8 @@ if (!defined('_PS_VERSION_'))
 
 abstract class PayPalAbstract extends PaymentModule
 {
-	protected $_html = '';
-
-	public $_errors = array();
+	protected $_html	= '';
+	public $_errors		= array();
 
 	public $default_country;
 	public $iso_code;
@@ -800,7 +799,7 @@ abstract class PayPalAbstract extends PaymentModule
 			}
 		}
 
-		return false;
+		return $this->getCountryDependency(self::DEFAULT_COUNTRY_ISO);
 	}
 
 	public function getPaymentMethods()

@@ -33,9 +33,9 @@ class PayPalLogos
 
 	private $iso_code = null;
 
-	const LOCAL = 'Local';
-	const HORIZONTAL = 'Horizontal';
-	const VERTICAL = 'Vertical';
+	const LOCAL			= 'Local';
+	const HORIZONTAL	= 'Horizontal';
+	const VERTICAL		= 'Vertical';
 
 	public function __construct($iso_code)
 	{
@@ -61,7 +61,6 @@ class PayPalLogos
 				$logos[$tmp_iso_code] = (array)$item;
 			}
 
-			$this->iso_code = isset($logos[$this->iso_code]) ? $this->iso_code : self::DEFAULT_COUNTRY_ISO;
 			$result = $this->getLocalLogos($logos[$this->iso_code], $this->iso_code);
 			$result['default'] = $this->getLocalLogos($logos['default'], 'default');
 
