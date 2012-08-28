@@ -17,6 +17,8 @@ class SCFields extends SCError
 	const RELAY_POINT = 1;
 	const API_REQUEST = 2;
 
+	public $context;
+
 	// List of the available restriction type
 	public $restriction_list = array(
 		SCFields::REQUIRED,
@@ -180,6 +182,9 @@ class SCFields extends SCError
 	public function __construct($delivery = 'DOM')
 	{
 		parent::__construct();
+
+		include(dirname(__FILE__).'/../backward_compatibility/backward.php');
+
 		$this->setDeliveryMode($delivery);
 	}
 

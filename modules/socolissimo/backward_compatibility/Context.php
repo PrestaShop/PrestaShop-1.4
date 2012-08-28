@@ -35,7 +35,6 @@ if (version_compare(_PS_VERSION_, '1.4', '<'))
 		{
 		}
 
-
 		public static function getShops()
 		{
 			return array(
@@ -45,7 +44,7 @@ if (version_compare(_PS_VERSION_, '1.4', '<'))
 
 		public static function getCurrentShop()
 		{
-				return 1;
+			return 1;
 		}
 	}
 }

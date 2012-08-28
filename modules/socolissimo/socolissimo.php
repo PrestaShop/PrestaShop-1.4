@@ -64,6 +64,7 @@ class Socolissimo extends CarrierModule
 		$this->version = '2.4';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
+		$this->module_key = 'faa857ecf7579947c8eee2d9b3d1fb04';
 
 		parent::__construct ();
 
@@ -397,7 +398,7 @@ class Socolissimo extends CarrierModule
 			'dyWeight' => (float)($params['cart']->getTotalWeight()) * 1000,
 			'trParamPlus' => $carrierSo->id,
 			'trReturnUrlKo' => htmlentities($this->url, ENT_NOQUOTES, 'UTF-8'),
-			'trReturnUrlok' => htmlentities($this->url ,ENT_NOQUOTES, 'UTF-8')
+			'trReturnUrlOk' => htmlentities($this->url ,ENT_NOQUOTES, 'UTF-8')
 		));
 
 		$this->context->smarty->assign(array(
@@ -519,17 +520,7 @@ class Socolissimo extends CarrierModule
 	public function hookPaymentTop($params)
 	{
 		if ($params['cart']->id_carrier == Configuration::get('SOCOLISSIMO_CARRIER_ID') AND !$this->getDeliveryInfos((int)$params['cookie']->id_cart, (int)$params['cookie']->id_customer))
-		{
-			if (!Db::getInstance()->getValue('SELECT count(*) FROM '._DB_PREFIX_.'socolissimo_delivery_info WHERE id_cart =\''.(int)($params['cart']->id).'\' AND id_customer =\''.(int)($params['cart']->id_customer).'\''))
-			{
-				echo '<div class="error">
-						<p>'.$this->l('Fatal Error: Please check JavaScript is activated and').'<a href=".'.$_SERVER['REQUEST_URI'].'?step=2">'.$this->l('retry').'</a>'.$this->l(' the operation.').'</p>
-					</div>';
-				// A proper way would be to go back to the previous page
-				// We cannot did it, because the hook is called before starting the render of the page
-				//die(); // Die, to ensure the payment method are not showed
-			}
-		
+		{		
 			$params['cart']->id_carrier = 0;
 			if (method_exists($params['cart'], 'setDeliveryOption'))
 			{

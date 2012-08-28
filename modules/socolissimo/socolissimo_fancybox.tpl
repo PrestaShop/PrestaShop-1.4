@@ -29,7 +29,7 @@
 	.soBackward_compat_tab a {literal}{ margin: 10px; }{/literal}
 </style>
 
-<a href="#" class="iframe" style="display:none" id="soLink"></a>
+<a href="#" style="display:none" id="soLink"></a>
 {if isset($opc) && $opc}
 <script type="text/javascript">
 	var opc = true;
@@ -60,9 +60,9 @@ var soToken = "{$token}";
 
 {literal}
 	$('#soLink').fancybox({
-			'width'					: 572,
-			'height'				: 710,
-		    'autoScale'     		: false,
+			'width'					: 590,
+			'height'				: 810,
+		    'autoScale'     		: true,
 		    'centerOnScroll'		: true,
 		    'autoDimensions'		: false,
 		    'transitionIn'			: 'none',
@@ -73,8 +73,8 @@ var soToken = "{$token}";
 			'showIframeLoading' 	: true,
 			'enableEscapeButton'	: true,
 			'type'					: 'iframe',
-			onStart: function () {
-				$('#soLink').attr('href', 'modules/socolissimo/redirect.php' + serialiseInput(soInputs));
+			onStart		:	function() {
+				$('#soLink').attr('href', 'modules/socolissimo/redirect.php' + serialiseInput(soInputs))
 			},
 			onClosed    :   function() {
          	   $.ajax({
@@ -100,16 +100,17 @@ var soToken = "{$token}";
 				   }
 			   });
         	}
-				});
-		$(document).ready(function() 
-		{	
-			var interval;	
+		});
+
+		$(document).ready(function()
+		{
+			var interval;
 
 			// 1.4 way
 			if (!soBwdCompat)
 			{
 				$('input[name=id_carrier]').change(function() {
-					so_click();	
+					so_click();
 				});
 				so_click();
 			}
@@ -117,23 +118,17 @@ var soToken = "{$token}";
 			else if (soCarrierId)
 				so_click();
 		});
-		
-	
-	function so_click() 
+
+
+	function so_click()
 	{
 		if (opc)
 		{
-			if (!already_select_delivery)
+			if (!already_select_delivery || !$('#edit_socolissimo').length)
 				interval = setInterval(function()
 					{
-						modifyCarrierLine(false);
-					},10);
-					
-			else if (!$('#edit_socolissimo').length)
-				interval = setInterval(function()
-					{
-						modifyCarrierLine(true);
-					},10);
+						modifyCarrierLine();
+					},100);
 		}
 		else if ((!soBwdCompat && $('#id_carrier' + soCarrierId).is(':not(:checked)')) ||
 			(soBwdCompat && soCarrierId == 0))
@@ -145,22 +140,23 @@ var soToken = "{$token}";
 		else
 		{
 			$('[name=processCarrier]').unbind('click').click(function () {
-				if (acceptCGV())				
+				if (acceptCGV())
 					$("#soLink").trigger("click");
 				return false;
 			})
 		}
 	}
 
-function modifyCarrierLine(edit)
+function modifyCarrierLine()
 {
+	var carrier = $('input.delivery_option_radio:checked');
 	var container = '#id_carrier' + soCarrierId;
 
 	if (soBwdCompat && soCarrierId > 0)
 	{
-		var carrier_block = $('input[class=delivery_option_radio]:checked').parent('div.delivery_option');
-	
-			// Simulate 1.4 table to store the fetched relay point 
+		var carrier_block = carrier.parent('div.delivery_option');
+
+			// Simulate 1.4 table to store the fetched relay point
 			$(carrier_block).append(
 				'<div><table width="' + $(carrier_block).width() + '"><tr>'
 					+	  '<td class="soBackward_compat_tab"><input type="hidden" id="id_carrier' + soCarrierId + '" value="' + soCarrierId + '" /></td>'
@@ -173,13 +169,12 @@ function modifyCarrierLine(edit)
 		// delete interval value
 		interval = null;
 	}
-	
+
 	$('#button_socolissimo').remove();
 
-	if (edit && $('input[name=id_carrier]:checked').attr('value') == soCarrierId)
-		$(container).parent().prepend('<a style="margin-left:5px;" class="button" id="button_socolissimo" href="#" onclick="redirect();return;" >{/literal}{$edit_label}{literal}</a>');
-	else
+	if ((carrier.val() == soCarrierId) || (carrier.val() == soCarrierId+',')) {
 		$(container).parent().prepend('<a style="margin-left:5px;" class="exclusive" id="button_socolissimo" href="#" onclick="redirect();return;" >{/literal}{$select_label}{literal}</a>');
+	}
 
 	if (already_select_delivery)
 	{
@@ -193,7 +188,9 @@ function modifyCarrierLine(edit)
 
 function redirect()
 {
-	document.location.href = '{/literal}{$urlSo}{literal}'+serialiseInput(soInputs);
+	$('#soLink').attr('href', 'modules/socolissimo/redirect.php' + serialiseInput(soInputs));
+	$("#soLink").trigger("click");
+	return false;
 }
 
 function serialiseInput(inputs)

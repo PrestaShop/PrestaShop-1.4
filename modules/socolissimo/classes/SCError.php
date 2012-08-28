@@ -24,7 +24,7 @@ class SCError extends Socolissimo
 				'002' => $this->l('Wrong FO id'),
 				'003' => $this->l('Client access denied'),
 				'004' => $this->l('Required fields missing'),
-				'006' => $this->l('Missing sign'),
+				'006' => $this->l('Missing signature'),
 				'007' => $this->l('Wrong sign or number version'),
 				'008' => $this->l('Wrong zip code'),
 				'009' => $this->l('Wrong format of the Validation back url'),
