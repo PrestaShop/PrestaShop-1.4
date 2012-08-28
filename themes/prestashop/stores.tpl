@@ -44,6 +44,7 @@
 				{$store.postcode} {$store.city|escape:'htmlall':'UTF-8'}{if $store.state}, {$store.state|escape:'htmlall':'UTF-8'}{/if}<br />
 				{$store.country|escape:'htmlall':'UTF-8'}<br />
 				{if $store.phone}{l s='Phone:'} {$store.phone|escape:'htmlall':'UTF-8'}{/if}
+				{if isset($store.working_hours)}{$store.working_hours}{/if}
 			</p>
 		</div>
 	{/foreach}
