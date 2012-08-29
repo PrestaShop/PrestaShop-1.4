@@ -588,7 +588,7 @@ class AdminTranslations extends AdminTab
 				foreach ($array_lang_src as $language)
 					$this->all_iso_lang[] = $language['iso_code'];
 				
-				$lang = Tools::strtolower($_POST['lang']);
+				$lang = Tools::strtolower(Tools::getValue('lang'));
 				if (!Validate::isLanguageIsoCode($lang))
 					die(Tools::displayError());
 				if (!$modules = scandir(_PS_MODULE_DIR_))
