@@ -2,6 +2,13 @@
 
 global $_MODULE;
 $_MODULE = array();
+$_MODULE['<{paypal}prestashop>ipn_436284843fd9c59fcb17836d8b78bf52'] = 'Aucun ID de transaction';
+$_MODULE['<{paypal}prestashop>ipn_e4c7591894a427342bce31080cd8719d'] = 'Pas de commande';
+$_MODULE['<{paypal}prestashop>ipn_996a45aa702d041706f6388d54c53b12'] = 'Commande invalide';
+$_MODULE['<{paypal}prestashop>ipn_e1a47cb47ee37c007af42c9a6f34066b'] = 'Montant incorrect';
+$_MODULE['<{paypal}prestashop>ipn_c958cfbd70b13925943fb63666637838'] = 'Status de commande incorrect';
+$_MODULE['<{paypal}prestashop>ipn_3769f91ca2a263145fbb53feae8464b9'] = 'Impossible de vérifier la commande auprès de PayPal';
+$_MODULE['<{paypal}prestashop>ipn_be2aa70b11a61e4a280dcdf97786efb5'] = 'Status identique';
 $_MODULE['<{paypal}prestashop>paypal_abstract_ad69e733ebae8d264bccaa38d68830e8'] = 'PayPal';
 $_MODULE['<{paypal}prestashop>paypal_abstract_6e7012516038a096b9f6bb71ba2cc5a3'] = 'Accepter les paiements par cartes de paiement (CB, Visa, MasterCard, American Express, Aurore, Cofinoga, 4 étoiles) avec Paypal';
 $_MODULE['<{paypal}prestashop>paypal_abstract_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = 'Etes vous sur de vouloir supprimer les données ?';
@@ -52,6 +59,7 @@ $_MODULE['<{paypal}prestashop>paypal_connect_842a183be225d415b2b4375ba1dd1c94'] 
 $_MODULE['<{paypal}prestashop>paypal_lib_7c2d00d8c94d1ce0f515db8b0481db40'] = 'Réponse PayPal :';
 $_MODULE['<{paypal}prestashop>paypal_express_checkout_ee9dc1e678d54c517f481583c3fb2db8'] = 'La devise est incorrecte';
 $_MODULE['<{paypal}prestashop>paypal_express_checkout_484f5a79672cebe198ebdde45a1d672f'] = 'Paquet cadeau :';
+$_MODULE['<{paypal}prestashop>submit_1e97d97a923eaddd810e056c828e99ea'] = 'Erreur de paiement';
 $_MODULE['<{paypal}prestashop>submit_d141a42a5e72c871a3116414bb5c64c1'] = 'Impossible de créer un nouveau panier';
 $_MODULE['<{paypal}prestashop>submit_58f53d0306ffc9cc9820eab866e90efe'] = 'Erreur lors de la préparation du paiement \"Express Checkout\"';
 $_MODULE['<{paypal}prestashop>submit_51da74120dd5e11817ef21e27d2599bc'] = 'Impossible de créer le client';

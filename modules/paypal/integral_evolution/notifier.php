@@ -151,7 +151,7 @@ class PayPalNotifier extends PayPal {
 		$buff = ob_get_contents();
 		ob_end_clean();
 	
-		$file = $file ? : 'log.txt';
+		$file = $file ? $file : 'log.txt';
 		$handle = @fopen($file, 'w+');
 		fwrite($handle, $buff);
 		fclose($handle);

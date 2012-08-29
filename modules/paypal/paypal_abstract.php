@@ -47,7 +47,7 @@ abstract class PayPalAbstract extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'payments_gateways';
-		$this->version = '3.0.9';
+		$this->version = '3.0.10';
 
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
@@ -467,7 +467,7 @@ abstract class PayPalAbstract extends PaymentModule
 				'shipping'          => $shipping,
 				'subtotal'			=> $cart_details['total_price_without_tax'] - $shipping,
 				'time'				=> time(),
-				'cancel_return'     => $shop_url . '/order.php',
+				'cancel_return'     => $this->context->link->getPageLink('order.php'),
 				'notify_url'        => $shop_url . _MODULE_DIR_ . $this->name . '/integral_evolution/notifier.php',
 				'return_url'        => $shop_url . _MODULE_DIR_ . $this->name . '/integral_evolution/submit.php?id_cart=' . $this->context->cart->id,
 				'tracking_code'     => TRACKING_CODE)

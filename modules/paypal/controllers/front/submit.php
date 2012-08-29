@@ -41,7 +41,8 @@ class PayPalSubmitModuleFrontController extends ModuleFrontController
 		$this->context		= Context::getContext();
 
 		$this->id_module	= (int)Tools::getValue('id_module');
-		$this->order		= PayPalOrder::getOrderById((int)$this->order->id_order);
+		$this->id_order		= (int)Tools::getValue('id_order');
+		$this->order		= PayPalOrder::getOrderById($this->id_order);
 
 		$this->context->smarty->assign(
 			array(
@@ -71,9 +72,9 @@ class PayPalSubmitModuleFrontController extends ModuleFrontController
 
 	private function displayHook()
 	{
-		if (Validate::isUnsignedId($this->order->id_order) && Validate::isUnsignedId($this->id_module))
+		if (Validate::isUnsignedId($this->id_order) && Validate::isUnsignedId($this->id_module))
 		{
-			$order		= new Order($this->order->id_order);
+			$order		= new Order($this->id_order);
 			$currency	= new Currency($order->id_currency);
 
 			if (Validate::isLoadedObject($order))

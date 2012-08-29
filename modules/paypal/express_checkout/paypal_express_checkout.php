@@ -260,7 +260,11 @@ class PaypalExpressCheckout extends Paypal
 		$index	= -1;
 
 		$id_address = (int)$this->context->cart->id_address_invoice;
-		$this->setShippingAddress($fields, $id_address);
+
+		if ($id_address && method_exists($this->context->cart, 'isVirtualCart') && !$this->context->cart->isVirtualCart())
+		{
+			$this->setShippingAddress($fields, $id_address);
+		}
 
 		// Set cart products list
 		$this->setProductsList($fields, $index, $total, $taxes);
@@ -281,9 +285,6 @@ class PaypalExpressCheckout extends Paypal
 
 	private function setShippingAddress(&$fields, $id_address)
 	{
-		if (! $id_address)
-			return;
-
 		$address	= new Address($id_address);
 
 		$fields['ADDROVERRIDE']							= '1';
@@ -294,7 +295,7 @@ class PaypalExpressCheckout extends Paypal
 		if ($address->id_state)
 		{
 			$state	= new State((int)$address->id_state);
-			$fields['PAYMENTREQUEST_0_SHIPTOSTATE'] 	= $state->name;
+			$fields['PAYMENTREQUEST_0_SHIPTOSTATE'] 	= $state->iso_code;
 		}
 
 		$country	= new Country((int)$address->id_country);

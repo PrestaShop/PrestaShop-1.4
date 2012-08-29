@@ -51,7 +51,7 @@ class PayPalExpressCheckoutSubmit extends OrderConfirmationControllerCore
 
 	public function displayContent()
 	{
-		$order = PayPalOrder::getOrderById((int)(Tools::getValue('id_order')));
+		$order = PayPalOrder::getOrderById((int)Tools::getValue('id_order'));
 
 		$this->context->smarty->assign(
 			array(
@@ -59,6 +59,9 @@ class PayPalExpressCheckoutSubmit extends OrderConfirmationControllerCore
 				'currency' => $this->context->currency
 			)
 		);
+
+		if (!$order)
+			$this->context->smarty->assign('errors', array($this->paypal->l('Payment error')));
 
 		echo $this->paypal->fetchTemplate('/views/templates/front/', 'order-confirmation');
 	}
@@ -179,6 +182,11 @@ else
 			}
 
 			// Create address
+			if (is_array($address) && isset($address['id_address']))
+			{
+				$address = new Address($address['id_address']);
+			}
+
 			if ((!$address || !$address->id) && $customer->id)
 			{
 				$address				= new Address();
@@ -234,7 +242,7 @@ else
 			$ppec->doExpressCheckout();
 
 			/// Check payment (real paid))
-			if ($ppec->hasSucceedRequest() && !empty($ppec->token) && $ppec->rightPaymentProcess())
+			if ($ppec->hasSucceedRequest() && !empty($ppec->token) && ($amount_match = $ppec->rightPaymentProcess()))
 			{
 				$transaction	= array(
 									'id_transaction' => pSQL($ppec->result['PAYMENTINFO_0_TRANSACTIONID']),
@@ -252,7 +260,11 @@ else
 			{
 				$transaction 	= array();
 				$payment_type	= (int)Configuration::get('PS_OS_ERROR');
-				$message		= $ppec->l('Price payed on paypal is not the same that on PrestaShop.').'<br />';
+
+				if (!isset($amount_match) || ($amount_match == true))
+					$message		= implode('<br />', $ppec->logs).'<br />';
+				else
+					$message		= $ppec->l('Price payed on paypal is not the same that on PrestaShop.').'<br />';
 			}
 
 			if (_PS_VERSION_ >= '1.5')
