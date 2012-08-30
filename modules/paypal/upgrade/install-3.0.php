@@ -56,7 +56,6 @@ function upgrade_module_3_0($object, $install = false)
 		Configuration::updateValue('PAYPAL_BUSINESS', 0);
 	}
 
-
 	if (count(Db::getInstance()->ExecuteS('SHOW TABLES FROM `'._DB_NAME_.'` LIKE \''._DB_PREFIX_.'paypal_order\'')) > 0)
 	{
 		$columns = array(array('name' => 'id_invoice', 'type' => 'varchar(255) DEFAULT NULL'),
