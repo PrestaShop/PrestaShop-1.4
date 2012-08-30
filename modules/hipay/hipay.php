@@ -28,10 +28,13 @@
 if (!defined('_PS_VERSION_'))
 	exit;
 
+define('DEV', 0);
+define('PROD', 1);
+
 class Hipay extends PaymentModule
 {
 	private $arrayCategories;
-	private $prod;
+	private $env = PROD;
 
 	const WS_SERVER = 'http://api.prestashop.com/';
 	const WS_URL = 'http://api.prestashop.com/partner/hipay/hipay.php';
@@ -64,12 +67,11 @@ class Hipay extends PaymentModule
 		foreach ($result as $num => $iso)
 			$this->limited_countries[] = $iso['iso_code'];
 
-		$this->prod = 0;
 		if ($this->id)
 		{
 			// Define extracted from mapi/mapi_defs.php
 			if (!defined('HIPAY_GATEWAY_URL')) 
-				define('HIPAY_GATEWAY_URL','https://'.($this->prod ? '' : 'test.').'payment.hipay.com/order/');
+				define('HIPAY_GATEWAY_URL','https://'.($this->env ? '' : 'test.').'payment.hipay.com/order/');
 		}
 
 		/** Backward compatibility */
@@ -148,7 +150,7 @@ class Hipay extends PaymentModule
 
 		if ($hipayAccount && $hipayPassword && $hipaySiteId && $hipayCategory && Configuration::get('HIPAY_RATING'))
 		{
-			$smarty->assign('hipay_prod', $this->prod);
+			$smarty->assign('hipay_prod', $this->env);
 			$smarty->assign('logo_suffix', $logo_suffix);
 			$smarty->assign(array('this_path' => $this->_path, 'this_path_ssl' => self::getHttpHost(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/'));
 			return $this->display(__FILE__, 'payment.tpl');
@@ -396,12 +398,12 @@ class Hipay extends PaymentModule
 				Configuration::updateValue('HIPAY_CATEGORY_'.$currency['iso_code'], Tools::getValue('HIPAY_CATEGORY_'.$currency['iso_code']));
 				Configuration::updateValue('HIPAY_ACCOUNT_'.$currency['iso_code'], Tools::getValue('HIPAY_ACCOUNT_'.$currency['iso_code']));
 
-				if ($this->prod AND Tools::getValue('HIPAY_ACCOUNT_'.$currency['iso_code']))
+				if ($this->env AND Tools::getValue('HIPAY_ACCOUNT_'.$currency['iso_code']))
 					$accounts[Tools::getValue('HIPAY_ACCOUNT_'.$currency['iso_code'])] = 1;
 			}
 			
 			$i = 1;
-			$dataSync = 'http://www.prestashop.com/modules/hipay.png?mode='.($this->prod ? 'prod' : 'test');
+			$dataSync = 'http://www.prestashop.com/modules/hipay.png?mode='.($this->env ? 'prod' : 'test');
 			foreach ($accounts as $account => $null)
 				$dataSync .= '&account'.($i++).'='.urlencode($account);
 			
@@ -777,7 +779,7 @@ class Hipay extends PaymentModule
 					$(".hipay_test_span").css("font-weight", "700");
 				}
 			}
-			switchHipayAccount('.(int)$this->prod.');';
+			switchHipayAccount('.(int)$this->env.');';
 		
 		if (class_exists('SoapClient'))
 		{
