@@ -72,7 +72,7 @@ class AttachmentCore extends ObjectModel
 	public function deleteSelection($attachments)
 	{
 		$return = 1;
-		foreach ($attachments AS $id_attachment)
+		foreach ($attachments as $id_attachment)
 		{
 			$attachment = new Attachment((int)($id_attachment));
 			$return &= $attachment->delete();
@@ -108,13 +108,13 @@ class AttachmentCore extends ObjectModel
 		$ids_attachements = array();
 		if (is_array($list))
 		{
-			foreach($list as $attachement)
+			foreach ($list as $attachement)
 				$ids_attachements[] = $attachement['id_attachment'];
 			$tmp = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'product_attachment` pa
 												LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pa.`id_product` = pl.`id_product`)
 												WHERE `id_attachment` IN ('.implode(',', array_map('intval', $ids_attachements)).') AND pl.`id_lang` = '.(int)$id_lang.';');
 			$productAttachements = array();
-			foreach($tmp as $t)
+			foreach ($tmp as $t)
 				$productAttachements[$t['id_attachment']][] =  $t['name'];
 			return $productAttachements;
 		}
@@ -122,4 +122,3 @@ class AttachmentCore extends ObjectModel
 			return false;
 	}
 }
-

@@ -120,7 +120,7 @@ class StoreCore extends ObjectModel
 		return $fields;
 	}
 	
-	public function __construct($id_store = NULL, $id_lang = NULL)
+	public function __construct($id_store = null, $id_lang = null)
 	{
 		parent::__construct($id_store, $id_lang);
 		$this->id_image = ($this->id AND file_exists(_PS_STORE_IMG_DIR_.(int)$this->id.'.jpg')) ? (int)$this->id : false;

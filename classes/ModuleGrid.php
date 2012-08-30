@@ -145,15 +145,15 @@ abstract class ModuleGridCore extends Module
 		if (isset($datas['option']))
 			$this->setOption($datas['option'], $layers);
 					
-		if (sizeof($datas['columns']))
+		if (count($datas['columns']))
 		{
-			foreach ($datas['columns'] AS $column)
+			foreach ($datas['columns'] as $column)
 				$this->_csv .= $column['header'].';';
 			$this->_csv = rtrim($this->_csv, ';')."\n";
 			
-			foreach ($this->_values AS $value)
+			foreach ($this->_values as $value)
 			{
-				foreach ($datas['columns'] AS $column)
+				foreach ($datas['columns'] as $column)
 					$this->_csv .= $value[$column['dataIndex']].';';
 				$this->_csv = rtrim($this->_csv, ';')."\n";
 			}

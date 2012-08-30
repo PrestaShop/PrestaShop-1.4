@@ -85,7 +85,7 @@ class ProductDownloadCore extends ObjectModel
 	 *
 	 * @param integer $id_product_download Existing productDownload id in order to load object (optional)
 	 */
-	public function __construct($id_product_download = NULL)
+	public function __construct($id_product_download = null)
 	{
 		parent::__construct($id_product_download);
 		// @TODO check if the file is present on hard drive
@@ -108,7 +108,7 @@ class ProductDownloadCore extends ObjectModel
 	public function getFields()
 	{
 		static $fieldValidated = false;
-		if(!$fieldValidated)
+		if (!$fieldValidated)
 			parent::validateFields();
 		$fieldValidated = true;
 		

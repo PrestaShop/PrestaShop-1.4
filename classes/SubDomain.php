@@ -48,9 +48,8 @@ class SubDomainCore extends ObjectModel
 		if (!$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT `name` FROM `'._DB_PREFIX_.'subdomain`'))
 			return false;
 		$subDomains = array();
-		foreach ($result AS $row)
+		foreach ($result as $row)
 			$subDomains[] = $row['name'];
 		return $subDomains;
 	}
 }
-

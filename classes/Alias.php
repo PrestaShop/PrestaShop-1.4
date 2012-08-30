@@ -38,7 +38,7 @@ class AliasCore extends ObjectModel
 	protected 	$table = 'alias';
 	protected 	$identifier = 'id_alias';
 
-	function __construct($id = NULL, $alias = NULL, $search = NULL, $id_lang = NULL)
+	public function __construct($id = null, $alias = null, $search = null, $id_lang = null)
 	{
 		if ($id)
 			parent::__construct($id);

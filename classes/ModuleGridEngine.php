@@ -51,7 +51,7 @@ abstract class ModuleGridEngineCore extends Module
     	WHERE h.`name` = \'GridEngine\'');
 		
 		$arrayEngines = array();
-		foreach ($result AS $module)
+		foreach ($result as $module)
     	{
 			$instance = Module::getInstanceByName($module['name']);
 			if (!$instance)
@@ -68,4 +68,3 @@ abstract class ModuleGridEngineCore extends Module
 	abstract public function setLimit($start, $limit);
 	abstract public function render();
 }
-

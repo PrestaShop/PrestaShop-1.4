@@ -306,7 +306,7 @@ class Crypt_Blowfish
 		)
 	);
 	
-    var $_iv = NULL;
+    var $_iv = null;
 	
 	protected $_unpackMode = PS_UNPACK_NATIVE;
 

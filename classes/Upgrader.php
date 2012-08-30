@@ -86,6 +86,7 @@ class UpgraderCore
 		else
 			return false;
 	}
+
 	public function isLastVersion()
 	{
 		if (empty($this->link))
@@ -136,11 +137,10 @@ class UpgraderCore
 					'desc' => $this->desc
 				);
 				if (class_exists('Configuration'))
-				{
 					Configuration::updateValue('PS_LAST_VERSION', serialize($config_last_version));
-					Configuration::updateValue('PS_LAST_VERSION_CHECK', time());
-				}
 			}
+			if (class_exists('Configuration'))
+				Configuration::updateValue('PS_LAST_VERSION_CHECK', time());
 		}
 		else
 			$this->loadFromConfig();
@@ -164,7 +164,7 @@ class UpgraderCore
 	public function loadFromConfig()
 	{
 		$last_version_check = @unserialize(Configuration::get('PS_LAST_VERSION'));
-		if($last_version_check)
+		if ($last_version_check)
 		{
 			if (isset($last_version_check['name']))
 				$this->version_name = $last_version_check['name'];
@@ -287,7 +287,6 @@ class UpgraderCore
 		$this->version_is_modified = true;
 		$this->missing_files[] = $path;
 	}
-
 	
 	public function md5FileAsArray($node, $dir = '/')
 	{
@@ -376,7 +375,6 @@ class UpgraderCore
 		}
 		return array('deleted' => $deletedFiles, 'modified' => $modifiedFiles);
 	}
-
 	
 	/**
 	 * Compare the md5sum of the current files with the md5sum of the original 
@@ -431,5 +429,4 @@ class UpgraderCore
 		$this->getChangedFilesList();
 		return !$this->version_is_modified;
 	}
-
 }

@@ -68,7 +68,7 @@ class PackCore extends Product
 			return self::$cachePackItems[$id_product];
 		$result = Db::getInstance()->ExecuteS('SELECT id_product_item, quantity FROM '._DB_PREFIX_.'pack where id_product_pack = '.(int)$id_product);
 		$arrayResult = array();
-		foreach ($result AS $row)
+		foreach ($result as $row)
 		{
 			$p = new Product($row['id_product_item'], false, (int)($id_lang));
 			$p->pack_quantity = $row['quantity'];
@@ -81,7 +81,7 @@ class PackCore extends Product
 	public static function isInStock($id_product)
 	{
 		$items = self::getItems((int)($id_product), _PS_LANG_DEFAULT_);
-		foreach ($items AS $item)
+		foreach ($items as $item)
 			if ($item->quantity < $item->pack_quantity AND !$item->isAvailableWhenOutOfStock((int)($item->out_of_stock)))
 				return false;
 		return true;
@@ -90,9 +90,9 @@ class PackCore extends Product
 	public static function getItemTable($id_product, $id_lang, $full = false)
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT p.*, pl.*, i.`id_image`, il.`legend`, t.`rate`, cl.`name` AS category_default, a.quantity AS pack_quantity
+		SELECT p.*, pl.*, i.`id_image`, il.`legend`, t.`rate`, cl.`name` category_default, a.quantity pack_quantity
 		FROM `'._DB_PREFIX_.'pack` a
-		LEFT JOIN `'._DB_PREFIX_.'product` p ON p.id_product = a.id_product_item
+		LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.id_product = a.id_product_item)
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.id_product = pl.id_product AND pl.`id_lang` = '.(int)($id_lang).')
 		LEFT JOIN `'._DB_PREFIX_.'image` i ON (i.`id_product` = p.`id_product` AND i.`cover` = 1)
 		LEFT JOIN `'._DB_PREFIX_.'image_lang` il ON (i.`id_image` = il.`id_image` AND il.`id_lang` = '.(int)($id_lang).')
@@ -102,8 +102,7 @@ class PackCore extends Product
 	                                           	   AND tr.`id_state` = 0)
 	    LEFT JOIN `'._DB_PREFIX_.'tax` t ON (t.`id_tax` = tr.`id_tax`)
 		LEFT JOIN `'._DB_PREFIX_.'tax_lang` tl ON (t.`id_tax` = tl.`id_tax` AND tl.`id_lang` = '.(int)($id_lang).')
-		WHERE a.`id_product_pack` = '.(int)($id_product)
-		);
+		WHERE a.`id_product_pack` = '.(int)$id_product);
 		if (!$full)
 			return $result;
 
@@ -114,7 +113,7 @@ class PackCore extends Product
 		return $arrayResult;
 	}
 
-	public static function getPacksTable($id_product, $id_lang, $full = false, $limit = NULL)
+	public static function getPacksTable($id_product, $id_lang, $full = false, $limit = null)
 	{
 		$packs = Db::getInstance()->getValue('
 		SELECT GROUP_CONCAT(a.`id_product_pack`)
@@ -196,4 +195,3 @@ class PackCore extends Product
 		return true;
 	}
 }
-

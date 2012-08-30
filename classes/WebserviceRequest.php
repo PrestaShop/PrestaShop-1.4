@@ -299,17 +299,16 @@ class WebserviceRequestCore
 	 */
 	public function specificPriceForProduct($entity_object, $parameters)
 	{
-		foreach(array_keys($parameters) as $name)
-		{
+		foreach (array_keys($parameters) as $name)
 			$parameters[$name]['object_id'] = $entity_object->id;
-		}
-		$arr_return = $this->specificPriceCalculation($parameters);
-		return $arr_return;
+
+		return $this->specificPriceCalculation($parameters);
 	}
+
 	public function specificPriceCalculation($parameters)
 	{
 		$arr_return = array();
-		foreach($parameters as $name => $value)
+		foreach ($parameters as $name => $value)
 		{
 			$id_country = (isset($value['country']) ? $value['country'] : (int)(_PS_COUNTRY_DEFAULT_));
 			$id_state = (isset($value['state']) ? $value['state'] : 0);
@@ -342,13 +341,13 @@ class WebserviceRequestCore
 	 */
 	public function specificPriceForCombination($entity_object, $parameters)
 	{
-		foreach(array_keys($parameters) as $name)
+		foreach (array_keys($parameters) as $name)
 		{
 			$parameters[$name]['object_id'] = $entity_object->id_product;
 			$parameters[$name]['product_attribute'] = $entity_object->id;
 		}
-		$arr_return = $this->specificPriceCalculation($parameters);
-		return $arr_return;
+
+		return $this->specificPriceCalculation($parameters);
 	}
 	
 	/**
@@ -368,7 +367,7 @@ class WebserviceRequestCore
 	 *
 	 * @return array Returns an array of results (headers, content, type of resource...)
 	 */
-	public function fetch($key, $method, $url, $params, $bad_class_name, $inputXml = NULL)
+	public function fetch($key, $method, $url, $params, $bad_class_name, $inputXml = null)
 	{
 		// Time logger
 		$this->_startTime = microtime(true);
@@ -489,7 +488,7 @@ class WebserviceRequestCore
 				else
 				{
 					$specificObjectName = 'WebserviceSpecificManagement'.ucfirst(Tools::toCamelCase($this->urlSegment[0]));
-					if(!class_exists($specificObjectName))
+					if (!class_exists($specificObjectName))
 						$this->setError(501, sprintf('The specific management class is not implemented for the "%s" entity.', $this->urlSegment[0]), 124);
 					else
 					{
@@ -1005,7 +1004,7 @@ class WebserviceRequestCore
 								{
 									if (!is_array($url_param))
 										$url_param = array($url_param);
-									$sql_join .= 'LEFT JOIN `'._DB_PREFIX_.pSQL($this->resourceConfiguration['retrieveData']['table']).'_lang` AS main_i18n ON (main.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'` = main_i18n.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'`)'."\n";
+									$sql_join .= 'LEFT JOIN `'._DB_PREFIX_.pSQL($this->resourceConfiguration['retrieveData']['table']).'_lang` main_i18n ON (main.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'` = main_i18n.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'`)'."\n";
 									foreach ($url_param as $field2 => $value)
 									{
 										$linked_field = $this->resourceConfiguration['fields'][$field];
@@ -1090,7 +1089,7 @@ class WebserviceRequestCore
 				elseif (in_array($fieldName, $i18n_available_filters))
 				{
 					if (!preg_match('#main_i18n#', $sql_join))
-						$sql_join .= 'LEFT JOIN `'._DB_PREFIX_.pSQL($this->resourceConfiguration['retrieveData']['table']).'_lang` AS main_i18n ON (main.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'` = main_i18n.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'`)'."\n";
+						$sql_join .= 'LEFT JOIN `'._DB_PREFIX_.pSQL($this->resourceConfiguration['retrieveData']['table']).'_lang` main_i18n ON (main.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'` = main_i18n.`'.pSQL($this->resourceConfiguration['fields']['id']['sqlId']).'`)'."\n";
 					$sql_sort .= 'main_i18n.`'.pSQL($this->resourceConfiguration['fields'][$fieldName]['sqlId']).'` '.$direction.', ';// ORDER BY main_i18n.`field` ASC|DESC
 				}
 				else
@@ -1126,11 +1125,11 @@ class WebserviceRequestCore
 	{
 		$objects = array();
 		$filters = $this->manageFilters();
-		
+
 		/* If we only need to display the synopsis, analyzing the first row is sufficient */
-		if ($this->urlFragments['schema'] == 'synopsis')
+		if (isset($this->urlFragments['schema']) && $this->urlFragments['schema'] == 'synopsis')
 			$filters = array('sql_join' => '', 'sql_filter' => '', 'sql_sort' => '', 'sql_limit' => ' LIMIT 1');
-		
+
 		$this->resourceConfiguration['retrieveData']['params'][] = $filters['sql_join'];
 		$this->resourceConfiguration['retrieveData']['params'][] = $filters['sql_filter'];
 		$this->resourceConfiguration['retrieveData']['params'][] = $filters['sql_sort'];

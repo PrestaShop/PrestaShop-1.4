@@ -95,7 +95,7 @@ class WebserviceSpecificManagementSearchCore implements WebserviceSpecificManage
 		$results = Search::find($this->wsObject->urlFragments['language'], $this->wsObject->urlFragments['query'], 1, 
 		isset($this->wsObject->urlFragments['limit']) ? (int)$this->wsObject->urlFragments['limit'] : 1, 'position', 'desc', true, false);
 		$categories = array();
-		foreach ($results AS $result)
+		foreach ($results as $result)
 		{
 			$current = new Product((int)$result['id_product']);
 			$objects_products[] = $current;

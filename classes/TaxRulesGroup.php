@@ -101,7 +101,7 @@ class TaxRulesGroupCore extends ObjectModel
 	    ORDER BY `id_county` '.$order.', `id_state` '.$order);
 
 	    $taxes = array();
-	    foreach ($rows AS $row)
+	    foreach ($rows as $row)
 	    {
           if ($row['id_county'] != 0)
           {
@@ -154,7 +154,7 @@ class TaxRulesGroupCore extends ObjectModel
 	    WHERE tr.`id_country` = '.(int)$id_country.' AND tr.`id_state` = 0 AND tr.`id_county` = 0');
 
 	    $res = array();
-	    foreach ($rows AS $row)
+	    foreach ($rows as $row)
 	        $res[$row['id_tax_rules_group']] = $row['rate'];
 
 	    return $res;
@@ -168,7 +168,7 @@ class TaxRulesGroupCore extends ObjectModel
 		if (Country::getIsoById((int)$id_country) == self::$canada_iso && in_array($state->iso_code, self::$canada_states_iso))
 		{
 			 $rate = 1;
-			 foreach (TaxRulesGroup::getTaxes($id_tax_rules_group, $id_country, $id_state, $id_county) AS $tax)
+			 foreach (TaxRulesGroup::getTaxes($id_tax_rules_group, $id_country, $id_state, $id_county) as $tax)
 			     $rate *= (1 + ((float)$tax->rate * 0.01));
 
 			$rate *= 100;
@@ -179,7 +179,7 @@ class TaxRulesGroupCore extends ObjectModel
 		else
 		{
 		    $rate = 0;
-		    foreach (TaxRulesGroup::getTaxes($id_tax_rules_group, $id_country, $id_state, $id_county) AS $tax)
+		    foreach (TaxRulesGroup::getTaxes($id_tax_rules_group, $id_country, $id_state, $id_county) as $tax)
 				$rate += (float)$tax->rate;
 		}
 

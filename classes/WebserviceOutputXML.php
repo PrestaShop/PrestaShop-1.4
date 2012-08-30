@@ -142,17 +142,10 @@ class WebserviceOutputXMLCore implements WebserviceOutputInterface
 	{
 		$string_attr = '';
 		if (is_array($more_attr))
-		{
-			foreach($more_attr as $key=>$attr)
-			{
-				if ($key === 'xlink_resource')
-					$string_attr .= ' xlink:href="'.$attr.'"';
-				else
-					$string_attr .= ' '.$key.'="'.$attr.'"';
-			}
-		}
-		$end_tag = (!$has_child) ? '/>' : '>';
-		return '<'.$node_name.$string_attr.$end_tag."\n";
+			foreach ($more_attr as $key => $attr)
+				$string_attr .= ($key == 'xlink_resource') ? ' xlink:href="'.$attr.'"' : ' '.$key.'="'.$attr.'"';
+
+		return '<'.$node_name.$string_attr.((!$has_child) ? '/>' : '>')."\n";
 	}
 	public function getNodeName($params)
 	{

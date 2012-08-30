@@ -77,7 +77,7 @@ class TaxRuleCore extends ObjectModel
         WHERE `id_tax_rules_group` = '.(int)$id_group);
 
         $res = array();
-        foreach ($results AS $row)
+        foreach ($results as $row)
             $res[$row['id_country']][$row['id_state']][$row['id_county']] = array('id_tax' => $row['id_tax'], 'state_behavior' => $row['state_behavior'], 'county_behavior' => $row['county_behavior']);
 
         return $res;

@@ -46,7 +46,7 @@ class MCachedCore extends Cache
 		$servers = self::getMemcachedServers();
 		if (!$servers)
 			return false;
-		foreach ($servers AS $server)
+		foreach ($servers as $server)
 			$this->_memcacheObj->addServer($server['ip'], $server['port'], $server['weight']);
 
 		$this->_isConnected = true;
@@ -103,7 +103,7 @@ class MCachedCore extends Cache
 			return true;
 		$key = $this->set($md5_query, $result);
 		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/i', $query, $res))
-			foreach($res[1] AS $table)
+			foreach ($res[1] as $table)
 				if (!isset($this->_tablesCached[$table][$key]))
 					$this->_tablesCached[$table][$key] = true;
 		$this->_writeKeys();
@@ -123,10 +123,10 @@ class MCachedCore extends Cache
 			return false;
 		$this->_setKeys();
 		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/i', $query, $res))
-			foreach ($res[1] AS $table)
+			foreach ($res[1] as $table)
 				if (isset($this->_tablesCached[$table]))
 				{
-					foreach ($this->_tablesCached[$table] AS $memcachedKey => $foo)
+					foreach ($this->_tablesCached[$table] as $memcachedKey => $foo)
 					{
 						$this->delete($memcachedKey);
 						$this->delete($memcachedKey.'_nrows');

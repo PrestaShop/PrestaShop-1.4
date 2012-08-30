@@ -37,7 +37,7 @@ class TranslatedConfigurationCore extends Configuration
 		),
 	);
 	
-	public function __construct($id = NULL, $id_lang = NULL)
+	public function __construct($id = null, $id_lang = null)
 	{
 		// Check if the id configuration is set in the configuration_lang table.
 		// Otherwise configuration is not set as translated configuration.
@@ -69,7 +69,7 @@ class TranslatedConfigurationCore extends Configuration
 		Configuration::updateValue($this->name, $this->value, $ishtml);
 		
 		$last_insert = Db::getInstance()->getRow('
-			SELECT `id_configuration` AS id
+			SELECT `id_configuration` id
 			FROM `'._DB_PREFIX_.'configuration`
 			WHERE `name` = \''.pSQL($this->name).'\'');
 		if ($last_insert)

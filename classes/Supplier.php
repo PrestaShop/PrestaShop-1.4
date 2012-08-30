@@ -76,7 +76,7 @@ class SupplierCore extends ObjectModel
 		),
 	);
 
-	public function __construct($id = NULL, $id_lang = NULL)
+	public function __construct($id = null, $id_lang = null)
 	{
 		parent::__construct($id, $id_lang);
 
@@ -148,11 +148,12 @@ class SupplierCore extends ObjectModel
 						WHERE cg.`id_group` '.$sqlGroups.'
 					)');
 				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
-				$suppliers[$key]['nb_products'] = sizeof($result);
+				$suppliers[$key]['nb_products'] = count($result);
 			}
 		}
-		for ($i = 0; $i < sizeof($suppliers); $i++)
-			if ((int)(Configuration::get('PS_REWRITING_SETTINGS')))
+		$count_suppliers = count($suppliers);
+		for ($i = 0; $i < $count_suppliers; $i++)
+			if ((int)Configuration::get('PS_REWRITING_SETTINGS'))
 				$suppliers[$i]['link_rewrite'] = Tools::link_rewrite($suppliers[$i]['name'], false);
 			else
 				$suppliers[$i]['link_rewrite'] = 0;
@@ -184,7 +185,7 @@ class SupplierCore extends ObjectModel
 		return false;
  	}
 
-	public static function getProducts($id_supplier, $id_lang, $p, $n, $orderBy = NULL, $orderWay = NULL, $getTotal = false, $active = true, $active_category = true)
+	public static function getProducts($id_supplier, $id_lang, $p, $n, $orderBy = null, $orderWay = null, $getTotal = false, $active = true, $active_category = true)
 	{
 		if ($p < 1)
 			$p = 1;

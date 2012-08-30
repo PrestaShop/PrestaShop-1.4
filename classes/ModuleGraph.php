@@ -169,27 +169,34 @@ abstract class ModuleGraphCore extends Module
 		
 		// Generate first line (column titles)
 		if (is_array($this->_titles['main']))
-			for ($i = 0; $i <= sizeof($this->_titles['main']); $i++)
+		{
+			$count_main = count($this->_titles['main']);
+			for ($i = 0; $i <= $count_main; $i++)
 			{
 				if ($i > 0)
 					$this->_csv .= ';';
 				if (isset($this->_titles['main'][$i]))
 					$this->_csv .= $this->_titles['main'][$i];
 			}
+		}
 		else // If there is only one column title, there is in fast two column (the first without title)
 			$this->_csv .= ';'.$this->_titles['main'];
 		$this->_csv .= "\n";
-		if (sizeof($this->_legend))
+		if (count($this->_legend))
 		{
 			$total = 0;
 			if ($datas['type'] == 'pie')
-				foreach ($this->_legend AS $key => $legend)
-					for ($i = 0; $i < (is_array($this->_titles['main']) ? sizeof($this->_values) : 1); ++$i)
+				foreach ($this->_legend as $key => $legend)
+				{
+					$count_values = count($this->_values);
+					for ($i = 0; $i < (is_array($this->_titles['main']) ? $count_values : 1); ++$i)
 						$total += (is_array($this->_values[$i])  ? $this->_values[$i][$key] : $this->_values[$key]);
-			foreach ($this->_legend AS $key => $legend)
+				}
+			foreach ($this->_legend as $key => $legend)
 			{
-				$this->_csv .= $legend.';';		
-				for ($i = 0; $i < (is_array($this->_titles['main']) ? sizeof($this->_values) : 1); ++$i)
+				$this->_csv .= $legend.';';
+				$count_values2 = count($this->_values);
+				for ($i = 0; $i < (is_array($this->_titles['main']) ? $count_values2 : 1); ++$i)
 				{
 					if (!isset($this->_values[$i]) || !is_array($this->_values[$i]))
 						if (isset($this->_values[$key]))

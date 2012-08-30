@@ -65,7 +65,7 @@ class BackupCore
 	public function setCustomBackupPath($dir)
 	{
 		$customDir = DIRECTORY_SEPARATOR.trim($dir,'/').DIRECTORY_SEPARATOR;
-		if(is_dir(_PS_ADMIN_DIR_.DIRECTORY_SEPARATOR.$customDir.DIRECTORY_SEPARATOR))
+		if (is_dir(_PS_ADMIN_DIR_.DIRECTORY_SEPARATOR.$customDir.DIRECTORY_SEPARATOR))
 			$this->customBackupDir = $customDir;
 		else
 			return false;
@@ -98,7 +98,7 @@ class BackupCore
 			die(Tools::displayError('Backups directory does not exist.'));
 
 		// Check the realpath so we can validate the backup file is under the backup directory
-		if(!empty($filename))
+		if (!empty($filename))
 			$backupfile = realpath($backupdir.'/'.$filename);
 		else
 			$backupfile = $backupdir.DIRECTORY_SEPARATOR;
@@ -207,7 +207,7 @@ class BackupCore
 		// Find all tables
 		$tables = Db::getInstance()->ExecuteS('SHOW TABLES');
 		$found = 0;
-		foreach ($tables AS $table)
+		foreach ($tables as $table)
 		{
 			$table = current($table);
 
@@ -239,7 +239,7 @@ class BackupCore
 				$sizeof = DB::getInstance()->NumRows();
 				$lines = explode("\n", $schema[0]['Create Table']);
 
-				if ($data AND $sizeof > 0)
+				if ($data && $sizeof > 0)
 				{
 					// Export the table data
 					fwrite($fp, 'INSERT INTO `' . $schema[0]['Table'] . "` VALUES\n");
@@ -248,14 +248,14 @@ class BackupCore
 					{
 						$s = '(';
 						
-						foreach ($row AS $field => $value)
+						foreach ($row as $field => $value)
 						{
 							$tmp = "'" . mysql_real_escape_string($value) . "',";
 							if ($tmp != "'',")
 								$s .= $tmp;
 							else
 							{
-								foreach($lines AS $line)
+								foreach ($lines as $line)
 									if (strpos($line, '`'.$field.'`') !== false)
 									{	
 										if (preg_match('/(.*NOT NULL.*)/Ui', $line))

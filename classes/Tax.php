@@ -222,7 +222,7 @@ class TaxCore extends ObjectModel
 	 *
 	 * @return float taxe_rate
 	 */
-	public static function getApplicableTax($id_tax, $productTax, $id_address = NULL)
+	public static function getApplicableTax($id_tax, $productTax, $id_address = null)
 	{
 		Tools::displayAsDeprecated();
 		return Tax::getApplicableTaxRate($id_tax, $productTax, $id_address);
@@ -237,7 +237,7 @@ class TaxCore extends ObjectModel
 	 *
 	 * @return float taxe_rate
 	 */
-	public static function getApplicableTaxRate($id_tax, $productTax, $id_address = NULL)
+	public static function getApplicableTaxRate($id_tax, $productTax, $id_address = null)
 	{
 	    Tools::displayAsDeprecated();
 		return $productTax;
@@ -349,7 +349,7 @@ class TaxCore extends ObjectModel
 	}
 
 
-	public static function getCarrierTaxRate($id_carrier, $id_address = NULL)
+	public static function getCarrierTaxRate($id_carrier, $id_address = null)
 	{
         $id_country = (int)Country::getDefaultCountryId();
         $id_state = 0;

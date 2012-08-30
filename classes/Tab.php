@@ -110,8 +110,8 @@ class TabCore extends ObjectModel
 	 	$query = 'INSERT IGNORE INTO `'._DB_PREFIX_.'access` (`id_profile`, `id_tab`, `view`, `add`, `edit`, `delete`) VALUES ';
 		// default admin
 		$query .= '(1, '.(int)$id_tab.', 1, 1, 1, 1),';
-	 	if (sizeof($profiles))
-			foreach ($profiles AS $profile)
+	 	if (count($profiles))
+			foreach ($profiles as $profile)
 		 	{
 				// no cast needed for profile[id_profile], which cames from db
 				// And we disable all profile but current one
@@ -172,7 +172,7 @@ class TabCore extends ObjectModel
 	 * @return array tabs
 	 */
 	static $_cache_tabs = array();
-	public static function getTabs($id_lang, $id_parent = NULL)
+	public static function getTabs($id_lang, $id_parent = null)
 	{
 		if (!isset(self::$_cache_tabs[$id_lang]))
 		{
@@ -227,12 +227,12 @@ class TabCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT class_name FROM `'._DB_PREFIX_.'tab` t WHERE t.`id_tab` = \''.(int)$id_tab.'\'');
 	}
 
-	public static function getNbTabs($id_parent = NULL)
+	public static function getNbTabs($id_parent = null)
 	{
 		return (int)Db::getInstance()->getValue('
 		SELECT COUNT(*)
 		FROM `'._DB_PREFIX_.'tab` t
-		'.($id_parent !== NULL ? 'WHERE t.`id_parent` = '.(int)$id_parent : ''));
+		'.($id_parent !== null ? 'WHERE t.`id_parent` = '.(int)$id_parent : ''));
 	}
 
 	/**
@@ -276,7 +276,7 @@ class TabCore extends ObjectModel
 			Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'tab`
 			SET `position` = '.($i + 1).'
-			WHERE `id_tab` = '.(int)($result[$i]['id_tab']));
+			WHERE `id_tab` = '.(int)$result[$i]['id_tab']);
 		return true;
 	}
 }

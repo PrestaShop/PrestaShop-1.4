@@ -95,7 +95,7 @@ class	LoggerCore extends ObjectModel
 	 * @param boolean $allowDuplicate if set to true, can log several time the same information (not recommended)
 	 * @return boolean true if succeed
 	 */
-	public static function addLog($message, $severity = 1, $errorCode = NULL, $objectType = NULL, $objectId = NULL, $allowDuplicate = false)
+	public static function addLog($message, $severity = 1, $errorCode = null, $objectType = null, $objectId = null, $allowDuplicate = false)
 	{
 		$log = new Logger();
 		$log->severity = intval($severity);

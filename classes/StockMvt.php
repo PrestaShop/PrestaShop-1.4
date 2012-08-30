@@ -27,29 +27,29 @@
 
 class StockMvtCore extends ObjectModel
 {
-	public		$id;
+	public $id;
 
-	public		$id_product;
-	public		$id_product_attribute = NULL;
-	public 		$id_order = NULL;
-	public 		$id_employee = NULL;
-	public 		$quantity;
-	public 		$id_stock_mvt_reason;
+	public $id_product;
+	public $id_product_attribute = null;
+	public $id_order = null;
+	public $id_employee = null;
+	public $quantity;
+	public $id_stock_mvt_reason;
 	
-	public		$date_add;
-	public		$date_upd;
+	public $date_add;
+	public $date_upd;
 	
-	protected	$table = 'stock_mvt';
-	protected 	$identifier = 'id_stock_mvt';
+	protected $table = 'stock_mvt';
+	protected $identifier = 'id_stock_mvt';
 	
- 	protected 	$fieldsRequired = array('id_product', 'id_stock_mvt_reason', 'quantity');
- 	protected 	$fieldsValidate = array(
+ 	protected $fieldsRequired = array('id_product', 'id_stock_mvt_reason', 'quantity');
+ 	protected $fieldsValidate = array(
 		'id_product' => 'isUnsignedId', 'id_product_attribute' => 'isUnsignedId', 
 		'id_order' => 'isUnsignedId','id_employee' => 'isUnsignedId',
  		'quantity' => 'isInt', 'id_stock_mvt_reason' => 'isUnsignedId'
 	);
 
-	protected	$webserviceParameters = array(
+	protected $webserviceParameters = array(
 		'objectsNodeName' => 'stock_movements',
 		'objectNodeName' => 'stock_movement',
 		'fields' => array(
@@ -122,12 +122,12 @@ class StockMvtCore extends ObjectModel
 
 		$products = array_merge($products_without_attributes, $products_with_attributes);
 		if ($products)
-			foreach ($products AS $product)
+			foreach ($products as $product)
 			{
 				if (!$product['quantity'])
 					continue;
 				$mvt = new StockMvt();
-				foreach ($product AS $k => $row)
+				foreach ($product as $k => $row)
 					$mvt->{$k} = $row;
 				$mvt->id_employee = (int)$id_employee;
 				$mvt->id_stock_mvt_reason = _STOCK_MOVEMENT_MISSING_REASON_;

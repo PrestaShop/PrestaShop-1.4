@@ -305,7 +305,7 @@ class ToolsCore
 		{
 			$lang = new Language((int)$cookie->id_lang);
 			if (!Validate::isLoadedObject($lang) || !$lang->active)
-				$cookie->id_lang = NULL;
+				$cookie->id_lang = null;
 		}
 
 		/* Automatically detect language if not already defined */
@@ -1285,14 +1285,14 @@ class ToolsCore
 		return file_exists($filename);
 	}
 
-	public static function file_get_contents($url, $useIncludePath = false, $streamContext = NULL, $curlTimeOut = 5)
+	public static function file_get_contents($url, $useIncludePath = false, $streamContext = null, $curlTimeOut = 5)
 	{
-		if ($streamContext == NULL)
+		if ($streamContext == null)
 			$streamContext = @stream_context_create(array('http' => array('timeout' => 5)));
 
 		if (in_array(ini_get('allow_url_fopen'), array('On', 'on', '1')))
 			return @file_get_contents($url, $useIncludePath, $streamContext);
-		elseif (function_exists('curl_init') && in_array(ini_get('allow_url_fopen'), array('On', 'on', '1')))
+		elseif (function_exists('curl_init'))
 		{
 			$curl = curl_init();
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -1366,16 +1366,13 @@ class ToolsCore
 		if (strlen($html_content) > 0)
 		{
 			$htmlContentCopy = $html_content;
-			$html_content = preg_replace_callback(
-				'/\\s*(<script\\b[^>]*?>)([\\s\\S]*?)(<\\/script>)\\s*/i'
-				,array('Tools', 'packJSinHTMLpregCallback')
-				,$html_content);
-
-			// If the string is too big preg_replace return null: http://php.net/manual/en/function.preg-replace-callback.php
+			$html_content = preg_replace_callback('/\\s*(<script\\b[^>]*?>)([\\s\\S]*?)(<\\/script>)\\s*/i', array('Tools', 'packJSinHTMLpregCallback'), $html_content);
+			
+			// If the string is too big preg_replace return an error
 			// In this case, we don't compress the content
-			if ($html_content === null)
+			if (preg_last_error() == PREG_BACKTRACK_LIMIT_ERROR)
 			{
-				error_log('Error occured in function packJSinHTML');
+				error_log('ERROR: PREG_BACKTRACK_LIMIT_ERROR in function packJSinHTML');
 				return $htmlContentCopy;
 			}
 			return $html_content;
@@ -1385,13 +1382,13 @@ class ToolsCore
 
 	public static function packJSinHTMLpregCallback($preg_matches)
 	{
-		$preg_matches[1] = $preg_matches[1].'/* <![CDATA[ */';
+		$preg_matches[1] .= '/* <![CDATA[ */';
 		$preg_matches[2] = self::packJS($preg_matches[2]);
-		$preg_matches[count($preg_matches)-1] = '/* ]]> */'.$preg_matches[count($preg_matches)-1];
+		$preg_matches[count($preg_matches) - 1] = '/* ]]> */'.$preg_matches[count($preg_matches) - 1];
 		unset($preg_matches[0]);
+
 		return implode('', $preg_matches);
 	}
-
 
 	public static function packJS($js_content)
 	{
@@ -2247,7 +2244,7 @@ FileETag INode MTime Size
 				$apacheModuleList = apache_get_modules();
 
 			// we need strpos (example, evasive can be evasive20)
-			foreach($apacheModuleList as $module)
+			foreach ($apacheModuleList as $module)
 				if (strpos($module, $name) !== false)
 					return true;
 		}

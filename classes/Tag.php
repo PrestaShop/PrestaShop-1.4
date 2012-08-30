@@ -45,7 +45,7 @@ class TagCore extends ObjectModel
 	),
 	);
 	
-	public function __construct($id = NULL, $name = NULL, $id_lang = NULL)
+	public function __construct($id = null, $name = null, $id_lang = null)
 	{
 		if ($id)
 			parent::__construct($id);
@@ -96,13 +96,13 @@ class TagCore extends ObjectModel
 	 	if (!Validate::isUnsignedId($id_lang) OR !Validate::isTagsList($string))
 			return false;
 	 	
-	 	$tmpTab = array_unique(array_map('trim', preg_split('/,/', $string, NULL, PREG_SPLIT_NO_EMPTY)));
+	 	$tmpTab = array_unique(array_map('trim', preg_split('/,/', $string, null, PREG_SPLIT_NO_EMPTY)));
 	 	$list = array();
-	 	foreach ($tmpTab AS $tag)
+	 	foreach ($tmpTab as $tag)
 	 	{
 	 	 	if (!Validate::isGenericName($tag))
 	 	 		return false;
-			$tagObj = new Tag(NULL, trim($tag), (int)($id_lang));
+			$tagObj = new Tag(null, trim($tag), (int)($id_lang));
 			
 			/* Tag does not exist in database */
 			if (!Validate::isLoadedObject($tagObj))
@@ -115,7 +115,7 @@ class TagCore extends ObjectModel
 				$list[] = $tagObj->id;
 		}
 		$data = '';
-		foreach ($list AS $tag)
+		foreach ($list as $tag)
 			$data .= '('.(int)($tag).','.(int)($id_product).'),';
 		$data = rtrim($data, ',');
 
@@ -155,7 +155,7 @@ class TagCore extends ObjectModel
 		WHERE pt.`id_product`='.(int)$id_product))
 	 		return false;
 	 	$result = array();
-	 	foreach ($tmp AS $tag)
+	 	foreach ($tmp as $tag)
 	 		$result[$tag['id_lang']][] = $tag['name'];
 	 	return $result;
 	}
@@ -165,7 +165,7 @@ class TagCore extends ObjectModel
 		global $cookie;
 		$id_lang = $this->id_lang ? $this->id_lang : $cookie->id_lang;
 		
-		if (!$this->id AND $associated)
+		if (!$this->id && $associated)
 			return array();
 		
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('

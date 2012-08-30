@@ -51,7 +51,7 @@ abstract class ModuleGraphEngineCore extends Module
     	WHERE h.`name` = \'GraphEngine\'');
 		
 		$arrayEngines = array();
-		foreach ($result AS $module)
+		foreach ($result as $module)
     	{
 			$instance = Module::getInstanceByName($module['name']);
 			if (!$instance)

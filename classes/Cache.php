@@ -60,7 +60,7 @@ abstract class CacheCore
 		
 	protected function isBlacklist($query)
 	{
-		foreach ($this->_blackList AS $find)
+		foreach ($this->_blackList as $find)
 			if (strpos($query, $find))
 				return true;
 		return false;
@@ -72,5 +72,4 @@ abstract class CacheCore
 	abstract public function flush();
 	abstract public function setQuery($query, $result);
 	abstract public function deleteQuery($query);
-
 }

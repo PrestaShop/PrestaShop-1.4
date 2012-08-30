@@ -110,7 +110,7 @@ class CacheFSCore extends Cache {
 			return true;
 		$key = $this->set($md5_query, $result);
 		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/i', $query, $res))
-			foreach($res[1] AS $table)
+			foreach ($res[1] as $table)
 				if (!isset($this->_tablesCached[$table][$key]))
 					$this->_tablesCached[$table][$key] = true;
 		$this->_writeKeys();
@@ -135,10 +135,10 @@ class CacheFSCore extends Cache {
 	{
 		$this->_setKeys();
 		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/i', $query, $res))
-			foreach ($res[1] AS $table)
+			foreach ($res[1] as $table)
 				if (isset($this->_tablesCached[$table]))
 				{
-					foreach (array_keys($this->_tablesCached[$table]) AS $fsKey)
+					foreach (array_keys($this->_tablesCached[$table]) as $fsKey)
 					{
 						$this->delete($fsKey);
 						$this->delete($fsKey.'_nrows');

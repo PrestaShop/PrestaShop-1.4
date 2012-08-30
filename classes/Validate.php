@@ -1111,8 +1111,8 @@ class ValidateCore
 	 */
 	public static function isArrayWithIds($ids)
 	{
-		if (sizeof($ids))
-			foreach($ids as $id)
+		if (count($ids))
+			foreach ($ids as $id)
 				if ($id == 0 || !self::isUnsignedInt($id))
 					return false;
 		return true;
@@ -1125,7 +1125,7 @@ class ValidateCore
 	 */
 	public static function isSceneZones($zones)
 	{
-		foreach($zones as $zone)
+		foreach ($zones as $zone)
 		{
 			if (!isset($zone['x1']) || !self::isUnsignedInt($zone['x1']))
 				return false;

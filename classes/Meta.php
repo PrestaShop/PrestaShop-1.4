@@ -65,8 +65,7 @@ class MetaCore extends ObjectModel
 			die(Tools::displayError('Cannot scan root directory'));
 		
 		// Exclude pages forbidden
-		$exludePages = array('category', 'changecurrency', 'cms', 'footer', 'header', 'images.inc', 'init',
-		'pagination', 'product', 'product-sort', 'statistics');
+		$exludePages = array('category', 'changecurrency', 'cms', 'footer', 'header', 'images.inc', 'init', 'pagination', 'product', 'product-sort', 'statistics');
 		foreach ($files as $file)
 			if (preg_match('/^[a-z0-9_.-]*\.php$/i', $file) AND !in_array(str_replace('.php', '', $file), $exludePages))
 				$selectedPages[] = str_replace('.php', '', $file);
@@ -157,10 +156,10 @@ class MetaCore extends ObjectModel
 		if (!is_array($selection) OR !Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
 			die(Tools::displayError());
 		$result = true;
-		foreach ($selection AS $id)
+		foreach ($selection as $id)
 		{
-			$this->id = (int)($id);
-			$result = $result AND $this->delete();
+			$this->id = (int)$id;
+			$result &= $this->delete();
 		}
 		
 		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',

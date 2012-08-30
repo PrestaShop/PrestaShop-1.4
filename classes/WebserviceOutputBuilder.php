@@ -360,7 +360,7 @@ class WebserviceOutputBuilderCore
 		}
 		
 		$ws_params = $objects['empty']->getWebserviceParameters();
-		foreach ($this->wsParamOverrides AS $p)
+		foreach ($this->wsParamOverrides as $p)
 		{
 			$object = $p['object'];
 			$ws_params = $object->{$p['method']}($ws_params);
