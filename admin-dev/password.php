@@ -95,12 +95,12 @@ echo '
 </head>
 <body><div id="container">';
 
-if (sizeof($errors))
+if (count($errors))
 {
 	echo '<div id="error">
 	<h3>'.translate('There is 1 error').'</h3>
 	<ol>';
-	foreach ($errors AS $error)
+	foreach ($errors as $error)
 		echo '<li>'.$error.'</li>';
 	echo '</ol>
 	</div>';

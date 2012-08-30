@@ -110,7 +110,8 @@ class AdminImport extends AdminTab
 					'ecotax' => 0,
 					'quantity' => 0,
 					'weight' => 0,
-					'default_on' => 0
+					'default_on' => 0,
+					'minimal_quantity' => 1
 				);
 
 				break;
@@ -1683,12 +1684,13 @@ class AdminImport extends AdminTab
 					$a->delete();
 				}
 				break;
-			case $this->entities[$this->l('Combinations')]:
-				$combinations = Db::getInstance()->ExecuteS('SELECT `id_product_attribute` FROM `'._DB_PREFIX_.'product_attribute`');
-				foreach ($combinations as $combination)
+			case $this->entities[$this->l('Combinations')]:			
+				$products = Db::getInstance()->ExecuteS('SELECT `id_product` FROM `'._DB_PREFIX_.'product`');
+				foreach ($products as $product)
 				{
-					$c = new ProductAttribute((int)$combination['id_product_attribute']);
-					$c->delete();
+					$p = new Product((int)$product['id_product']);
+					$p->deleteAttributesImpacts();
+					$p->deleteProductAttributes();
 				}
 				break;
 			case $this->entities[$this->l('Manufacturers')]:

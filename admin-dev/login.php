@@ -32,7 +32,7 @@ define('PS_ADMIN_DIR', _PS_ADMIN_DIR_); // Retro-compatibility
 include(PS_ADMIN_DIR.'/../config/config.inc.php');
 include(PS_ADMIN_DIR.'/functions.php');
 
-$clientIsMaintenanceOrLocal = in_array(Tools::getRemoteAddr(), array_merge(array('127.0.0.1'),explode(',', Configuration::get('PS_MAINTENANCE_IP'))));
+$clientIsMaintenanceOrLocal = in_array(Tools::getRemoteAddr(), array_merge(array('127.0.0.1'), explode(',', Configuration::get('PS_MAINTENANCE_IP'))));
 
 $errors = array();
 
@@ -125,13 +125,13 @@ echo '
 	<body>
 		<div id="container">';
 
-if ($nbErrors = sizeof($errors))
+if ($nbErrors = count($errors))
 {
 	echo '
 	<div id="error">
 		<h3>'.($nbErrors > 1 ? translate('There are') : translate('There is')).' '.$nbErrors.' '.($nbErrors > 1 ? translate('errors') : translate('error')).'</h3>
 		<ol style="margin: 0 0 0 20px;">';
-		foreach ($errors AS $error)
+		foreach ($errors as $error)
 			echo '<li>'.$error.'</li>';
 		echo '
 		</ol>
@@ -144,20 +144,18 @@ echo '
 				<h1>'.Tools::htmlentitiesUTF8(Configuration::get('PS_SHOP_NAME')).'</h1>
 				<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">';
 
-$randomNb = rand(100, 999);
-if (file_exists(PS_ADMIN_DIR.'/../install') OR file_exists(PS_ADMIN_DIR.'/../admin'))
+if (file_exists(PS_ADMIN_DIR.'/../install') || file_exists(PS_ADMIN_DIR.'/../admin'))
 {
-	echo '				<span>'.translate('For security reasons, you cannot connect to the Back Office until after you have:').'<br /><br />
+	$randomNb = rand(100, 999);
+	echo '<span>'.translate('For security reasons, you cannot connect to the Back Office until after you have:').'<br /><br />
 		- '.translate('delete the /install folder').'<br />
-		- '.translate('renamed the /admin folder (eg. ').'/admin'.$randomNb.')<br />
-		<br />'.translate('Please then access this page by the new url (eg. http://www.domain.tld/admin').$randomNb.')</span>';
+		- '.translate('renamed the /admin folder (eg. ').'/admin'.(int)$randomNb.')<br />
+		<br />'.translate('Please then access this page by the new url (eg. http://www.domain.tld/admin').(int)$randomNb.')</span>';
 }
 else
 {
 	// If https enabled, we force it except if you try to log in from maintenance or local ip
-	if ( (empty($_SERVER['HTTPS']) OR strtolower($_SERVER['HTTPS']) == 'off')
-		AND (	_PS_SSL_ENABLED_ AND !$clientIsMaintenanceOrLocal)
-	 	)
+	if ((empty($_SERVER['HTTPS']) || strtolower($_SERVER['HTTPS']) == 'off') && (_PS_SSL_ENABLED_ && !$clientIsMaintenanceOrLocal))
 		echo '<div class="error">'.$warningSslMessage.'</div>';
 	else
 		echo '<label for="email">'.translate('E-mail address:').'</label><br />
@@ -169,20 +167,17 @@ else
 					<div>
 						<div id="submit"><input type="submit" name="Submit" value="'.translate('Log in').'" class="button" /></div>
 						<div id="lost"><a href="password.php">'.translate('Lost password?').'</a></div>
-					</div>
-	';
+					</div>';
 }
 ?>
-<script type="text/javascript">
-//<![CDATA[
-if (document.getElementById('email')) document.getElementById('email').focus();
-//]]>
-</script>
-<?php
-echo '
+					<script type="text/javascript">
+					//<![CDATA[
+					if (document.getElementById('email')) document.getElementById('email').focus();
+					//]]>
+					</script>
 				</form>
 			</div>
 			<h2><a href="http://www.prestashop.com">Copyright &copy; 2012 PrestaShop. all rights reserved.</a></h2>
 		</div>
 	</body>
-</html>';
+</html>

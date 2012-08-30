@@ -69,7 +69,7 @@ function generateOrderSlipPDF()
 	if (!Validate::isLoadedObject($order))
 		die(Tools::displayError('Cannot find order in database'));
 	$order->products = OrderSlip::getOrdersSlipProducts($orderSlip->id, $order);
-	$tmp = NULL;
+	$tmp = null;
 	PDF::invoice($order, 'D', false, $tmp, $orderSlip);
 }
 
@@ -78,13 +78,13 @@ function generateDeliverySlipPDF()
 	$order = Order::getByDelivery((int)($_GET['id_delivery']));
 	if (!Validate::isLoadedObject($order))
 		die(Tools::displayError('Cannot find order in database'));
-	$tmp = NULL;
+	$tmp = null;
 	PDF::invoice($order, 'D', false, $tmp, false, $order->delivery_number);
 }
 
 function generateInvoicesPDF()
 {
-	$orders = Order::getOrdersIdInvoiceByDate($_GET['date_from'], $_GET['date_to'], NULL, 'invoice');
+	$orders = Order::getOrdersIdInvoiceByDate($_GET['date_from'], $_GET['date_to'], null, 'invoice');
 	if (!is_array($orders))
 		die (Tools::displayError('No invoices found'));
 	PDF::multipleInvoices($orders);

@@ -75,7 +75,7 @@ if (isset($_GET['ajaxProductManufacturers']))
 	if ($manufacturers)
 	{
 		$jsonArray = array();
-		foreach ($manufacturers AS $manufacturer)
+		foreach ($manufacturers as $manufacturer)
 			$jsonArray[] = '{"optionValue": "'.$manufacturer['id_manufacturer'].'", "optionDisplay": "'.htmlspecialchars(trim($manufacturer['name'])).'"}';
 		die('['.implode(',', $jsonArray).']');
 	}
@@ -92,7 +92,7 @@ if (isset($_GET['ajaxProductSuppliers']))
 	if ($suppliers)
 	{
 		$jsonArray = array();
-		foreach ($suppliers AS $supplier)
+		foreach ($suppliers as $supplier)
 			$jsonArray[] = '{"optionValue": "'.$supplier['id_supplier'].'", "optionDisplay": "'.htmlspecialchars(trim($supplier['name'])).'"}';
 		die('['.implode(',', $jsonArray).']');
 	}
@@ -115,7 +115,7 @@ if (isset($_GET['ajaxProductAccessories']))
 		WHERE a.`id_product_1` = '.(int)(Tools::getValue('id_product')).')
 	ORDER BY pl.`name`');
 
-	foreach ($products AS $accessory)
+	foreach ($products as $accessory)
 		$jsonArray[] = '{"value: "'.(int)($accessory['id_product']).'-'.addslashes($accessory['name']).'", "text":"'.(int)($accessory['id_product']).' - '.addslashes($accessory['name']).'"}';
 	die('['.implode(',', $jsonArray).']');
 }
@@ -153,12 +153,12 @@ if (isset($_GET['ajaxDiscountCustomers']))
 	LIMIT 50');
 
 	$json = '{"customers" : ';
-	foreach ($customers AS $customer)
+	foreach ($customers as $customer)
 		$jsonArray[] = '{"value":"0_'.(int)($customer['id_customer']).'", "text":"'.addcslashes($customer['name'], '"\\/').' ('.addcslashes($customer['email'], '"\\/').')"}';
 	$json .= '['.implode(',', $jsonArray).'],
 		"groups" : ';
 	$jsonArray = array();
-	foreach ($groups AS $group)
+	foreach ($groups as $group)
 		$jsonArray[] = '{"value":"1_'.(int)($group['id_group']).'", "text":"'.addcslashes($group['name'], '"\\/').'"}';
 	$json .= '['.implode(',', $jsonArray).']}';
 	die($json);
@@ -197,7 +197,7 @@ if (isset($_GET['getAvailableFields']) and isset($_GET['entity']))
 	$languages = Language::getLanguages(false);
 	$defaultLanguage = (int)(_PS_LANG_DEFAULT_);
 	$fields = $import->getAvailableFields(true);
-	foreach ($fields AS $field)
+	foreach ($fields as $field)
 		$jsonArray[] = '{"field":"'.addslashes($field).'"}';
 	die('['.implode(',', $jsonArray).']');
 }
@@ -226,7 +226,7 @@ if (array_key_exists('ajaxCategoriesPositions', $_POST))
 	$way = (int)(Tools::getValue('way'));
 	$positions = Tools::getValue('category');
 	if (is_array($positions))
-		foreach ($positions AS $key => $value)
+		foreach ($positions as $key => $value)
 		{
 			$pos = explode('_', $value);
 			if ((isset($pos[1]) AND isset($pos[2])) AND ($pos[1] == $id_category_parent AND $pos[2] == $id_category_to_move))
@@ -258,7 +258,7 @@ if (array_key_exists('ajaxCMSCategoriesPositions', $_POST))
 	$way = (int)(Tools::getValue('way'));
 	$positions = Tools::getValue('cms_category');
 	if (is_array($positions))
-		foreach ($positions AS $key => $value)
+		foreach ($positions as $key => $value)
 		{
 			$pos = explode('_', $value);
 			if ((isset($pos[1]) AND isset($pos[2])) AND ($pos[1] == $id_cms_category_parent AND $pos[2] == $id_cms_category_to_move))
@@ -286,7 +286,7 @@ if (array_key_exists('ajaxCMSPositions', $_POST))
 	$way = (int)(Tools::getValue('way'));
 	$positions = Tools::getValue('cms');
 	if (is_array($positions))
-		foreach ($positions AS $key => $value)
+		foreach ($positions as $key => $value)
 		{
 			$pos = explode('_', $value);
 			if ((isset($pos[1]) AND isset($pos[2])) AND ($pos[1] == $id_category AND $pos[2] == $id_cms))
@@ -316,7 +316,7 @@ if (array_key_exists('ajaxProductsPositions', $_POST))
 	$positions = Tools::getValue('product');
 
 	if (is_array($positions))
-		foreach ($positions AS $position => $value)
+		foreach ($positions as $position => $value)
 		{
 			// pos[1] = id_categ, pos[2] = id_product, pos[3]=old position
 			$pos = explode('_', $value);
@@ -347,7 +347,7 @@ if (isset($_GET['ajaxProductPackItems']))
 	AND p.`id_product` NOT IN (SELECT DISTINCT id_product_pack FROM `'._DB_PREFIX_.'pack`)
 	AND p.`id_product` != '.(int)(Tools::getValue('id_product')));
 
-	foreach ($products AS $packItem)
+	foreach ($products as $packItem)
 		$jsonArray[] = '{"value": "'.(int)($packItem['id_product']).'-'.addslashes($packItem['name']).'", "text":"'.(int)($packItem['id_product']).' - '.addslashes($packItem['name']).'"}';
 	die('['.implode(',', $jsonArray).']');
 }
@@ -367,7 +367,7 @@ if (isset($_GET['ajaxStates']) AND isset($_GET['id_country']))
 		if (Tools::getValue('no_empty') != true)
 			$list = '<option value="0">-----------</option>'."\n";
 
-		foreach ($states AS $state)
+		foreach ($states as $state)
 			$list .= '<option value="'.(int)($state['id_state']).'"'.((isset($_GET['id_state']) AND $_GET['id_state'] == $state['id_state']) ? ' selected="selected"' : '').'>'.$state['name'].'</option>'."\n";
 	}
 	else
@@ -476,27 +476,15 @@ if (Tools::isSubmit('submitTrackClickOnHelp'))
 
 if (Tools::isSubmit('saveImportMatchs'))
 {
-   $match = implode('|', Tools::getValue('type_value'));
-   Db::getInstance()->Execute('INSERT INTO  `'._DB_PREFIX_.'import_match` (
-								`id_import_match` ,
-								`name` ,
-								`match`,
-								`skip`
-								)
-								VALUES (
-								NULL ,
-								\''.pSQL(Tools::getValue('newImportMatchs')).'\',
-								\''.pSQL($match).'\',
-								\''.pSQL(Tools::getValue('skip')).'\'
-								)');
+	$match = implode('|', Tools::getValue('type_value'));
+	Db::getInstance()->Execute('INSERT INTO  `'._DB_PREFIX_.'import_match` (`id_import_match`, `name`, `match`, `skip`) VALUES (NULL,
+	\''.pSQL(Tools::getValue('newImportMatchs')).'\', \''.pSQL($match).'\', \''.pSQL(Tools::getValue('skip')).'\')');
 
 	die('{"id" : "'.Db::getInstance()->Insert_ID().'"}');
 }
 
 if (Tools::isSubmit('deleteImportMatchs'))
-{
    Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'import_match` WHERE `id_import_match` = '.(int)Tools::getValue('idImportMatchs'));
-}
 
 if (Tools::isSubmit('loadImportMatchs'))
 {
@@ -547,7 +535,7 @@ if (Tools::isSubmit('helpAccess'))
 	$country = Tools::getValue('country');
 	$version = Tools::getValue('version');
 
-	if (isset($item) AND isset($isoUser) AND isset($country))
+	if (isset($item) && isset($isoUser) && isset($country))
 		die(HelpAccess::displayHelp($item, $isoUser,  $country, $version));
 	die();
 }
@@ -565,8 +553,7 @@ if (Tools::isSubmit('getHookableList'))
 	$modules_list = explode(',', Tools::getValue('modules_list'));
 	$hooks_list = explode(',', Tools::getValue('hooks_list'));
 	$hookableList = array();
-	
-	
+
 	foreach ($modules_list as $module)
 	{
 		$moduleInstance = Module::getInstanceByName($module);
@@ -717,4 +704,3 @@ if (Tools::isSubmit('getChildrenCategories') && Tools::getValue('id_category_par
 	$children_categories = Category::getChildrenWithNbSelectedSubCat(Tools::getValue('id_category_parent'), Tools::getValue('selectedCat'), $cookie->id_lang);
 	die(Tools::jsonEncode($children_categories));
 }
-

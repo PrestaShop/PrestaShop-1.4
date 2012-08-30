@@ -379,7 +379,7 @@ class AdminOrders extends AdminTab
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
 		}
 		elseif (isset($_GET['messageReaded']))
-			Message::markAsReaded((int)($_GET['messageReaded']), (int)($cookie->id_employee));
+			Message::markAsRead((int)$_GET['messageReaded'], (int)$cookie->id_employee);
 
 		parent::postProcess();
 	}

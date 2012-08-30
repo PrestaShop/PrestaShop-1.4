@@ -73,7 +73,7 @@ function includeDatepicker($id, $time = false)
   * @param string $theme Theme name (eg. default)
   * @param array $arrayDB Parameters in order to connect to database
   */
-function rewriteSettingsFile($baseUrls = NULL, $theme = NULL, $arrayDB = NULL)
+function rewriteSettingsFile($baseUrls = null, $theme = null, $arrayDB = null)
 {
  	$defines = array();
 	$defines['__PS_BASE_URI__'] = ($baseUrls AND $baseUrls['__PS_BASE_URI__']) ? $baseUrls['__PS_BASE_URI__'] : __PS_BASE_URI__;
@@ -149,14 +149,14 @@ function getPath($urlBase, $id_category, $path = '', $highlight = '', $categoryT
 			SELECT c.id_category, cl.name, cl.link_rewrite
 			FROM '._DB_PREFIX_.'category c
 			LEFT JOIN '._DB_PREFIX_.'category_lang cl ON (cl.id_category = c.id_category)
-			WHERE c.nleft <= '.(int)$category['nleft'].' AND c.nright >= '.(int)$category['nright'].' AND cl.id_lang = '.(int)($cookie->id_lang).'
+			WHERE c.nleft <= '.(int)$category['nleft'].' AND c.nright >= '.(int)$category['nright'].' AND cl.id_lang = '.(int)$cookie->id_lang.'
 			ORDER BY c.level_depth ASC
 			LIMIT '.(int)($category['level_depth'] + 1));
 			
 			$fullPath = '';
 			$n = 1;
-			$nCategories = (int)sizeof($categories);
-			foreach ($categories AS $category)
+			$nCategories = (int)count($categories);
+			foreach ($categories as $category)
 			{
 				$edit = '<a href="'.$urlBase.'&id_category='.(int)$category['id_category'].'&'.($category['id_category'] == 1 ? 'viewcategory' : 'addcategory').'&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'" title="'.($category['id_category'] == 1 ? 'Home' : 'Modify').'"><img src="../img/admin/'.($category['id_category'] == 1 ? 'home' : 'edit').'.gif" alt="" /></a> ';
 				$fullPath .= $edit.
@@ -171,11 +171,11 @@ function getPath($urlBase, $id_category, $path = '', $highlight = '', $categoryT
 	}
 	elseif ($categoryType == 'cms')
 	{
-		$category = new CMSCategory($id_category, (int)($cookie->id_lang));
+		$category = new CMSCategory((int)$id_category, (int)$cookie->id_lang);
 		if (!$category->id)
 			return $path;
 
-		$name = ($highlight != NULL) ? str_ireplace($highlight, '<span class="highlight">'.$highlight.'</span>', CMSCategory::hideCMSCategoryPosition($category->name)) : CMSCategory::hideCMSCategoryPosition($category->name);
+		$name = ($highlight != null) ? str_ireplace($highlight, '<span class="highlight">'.$highlight.'</span>', CMSCategory::hideCMSCategoryPosition($category->name)) : CMSCategory::hideCMSCategoryPosition($category->name);
 		$edit = '<a href="'.$urlBase.'&id_cms_category='.$category->id.'&addcategory&token=' . Tools::getAdminToken('AdminCMSContent'.(int)(Tab::getIdFromClassName('AdminCMSContent')).(int)($cookie->id_employee)).'">
 				<img src="../img/admin/edit.gif" alt="Modify" /></a> ';
 		if ($category->id == 1)
@@ -276,16 +276,15 @@ function checkingTab($tab)
 function checkTabRights($id_tab)
 {
 	global $cookie;
-	static $tabAccesses = NULL;
+	static $tabAccesses = null;
 	
-	if ($tabAccesses === NULL)
+	if ($tabAccesses === null)
 		$tabAccesses =  Profile::getProfileAccesses($cookie->profile);
 
 	if (isset($tabAccesses[(int)($id_tab)]['view']))
 		return ($tabAccesses[(int)($id_tab)]['view'] === '1');
 	return false;
 }
-
 
 /**
      * Converts a simpleXML element into an array. Preserves attributes and everything.

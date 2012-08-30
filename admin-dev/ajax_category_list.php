@@ -75,7 +75,7 @@ echo '			<tr>
 		if ($categoryBox != '')
 		{
 			$categoryBox = @unserialize($categoryBox);
-			foreach ($categoryBox AS $k => $row)
+			foreach ($categoryBox as $k => $row)
 				$index[] = $row;
 		}
 		elseif ((int)Tools::getValue('id_product'))

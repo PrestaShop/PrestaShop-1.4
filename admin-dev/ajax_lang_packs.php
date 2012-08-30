@@ -32,19 +32,17 @@ include(PS_ADMIN_DIR.'/../config/config.inc.php');
 /* Getting cookie or logout */
 require_once(dirname(__FILE__).'/init.php');
 	
-if (!isset($_GET['iso_lang']) OR empty($_GET['iso_lang']))
+if (!isset($_GET['iso_lang']) || empty($_GET['iso_lang']))
 	die('fail:0');
-if (!isset($_GET['ps_version']) OR empty($_GET['ps_version']))
+if (!isset($_GET['ps_version']) || empty($_GET['ps_version']))
 	die('fail:0');
 if (@fsockopen('www.prestashop.com', 80))
 {
 	// Get all iso code available
 	$lang_packs = Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/get_language_pack.php?version='.(string)$_GET['ps_version'].'&iso_lang='.(string)$_GET['iso_lang']);
 	
-	if ($lang_packs !== '' && Tools::jsonDecode($lang_packs) !== NULL)
-	{
+	if ($lang_packs !== '' && Tools::jsonDecode($lang_packs) !== null)
 		echo $lang_packs;
-	}
 	else
 		die('fail:2');
 }

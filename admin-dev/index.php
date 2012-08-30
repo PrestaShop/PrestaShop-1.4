@@ -31,7 +31,7 @@ define('PS_ADMIN_DIR', _PS_ADMIN_DIR_); // Retro-compatibility
 include(PS_ADMIN_DIR.'/../config/config.inc.php');
 include(PS_ADMIN_DIR.'/functions.php');
 include(PS_ADMIN_DIR.'/header.inc.php');
-if (empty($tab) and !sizeof($_POST))
+if (empty($tab) and !count($_POST))
 {
 	$tab = 'AdminHome';
 	$_POST['tab'] = 'AdminHome';
@@ -46,12 +46,12 @@ if ($id_tab = checkingTab($tab))
 	$tabs = array_reverse($tabs);
 	$bread = '';
 
-	foreach ($tabs AS $key => $item)
+	foreach ($tabs as $key => $item)
 		$bread .= ' <img src="../img/admin/separator_breadcrum.png" style="margin-right:5px" alt="&gt;" />
-		'.((sizeof($tabs) - 1 > $key)
+		'.((count($tabs) - 1 > $key)
 			? '<a href="?tab='.$item['class_name'].'&token='.Tools::getAdminToken($item['class_name'].intval($item['id_tab']).intval($cookie->id_employee)).'">'
 			: '').'
-		'.$item['name'].((sizeof($tabs) - 1 > $key) ? '</a>' : '');
+		'.$item['name'].((count($tabs) - 1 > $key) ? '</a>' : '');
 	// @TODO : a way to desactivate this feature
 	echo'<script type="text/javascript">
 
@@ -87,10 +87,10 @@ if ($id_tab = checkingTab($tab))
 		{
 			/* Filter memorization */
 			if (isset($_POST) AND !empty($_POST) AND isset($adminObj->table))
-				foreach ($_POST AS $key => $value)
+				foreach ($_POST as $key => $value)
 					if (is_array($adminObj->table))
 					{
-						foreach ($adminObj->table AS $table)
+						foreach ($adminObj->table as $table)
 							if (strncmp($key, $table.'Filter_', 7) === 0 OR strncmp($key, 'submitFilter', 12) === 0)
 								$cookie->$key = !is_array($value) ? $value : serialize($value);
 					}
@@ -98,10 +98,10 @@ if ($id_tab = checkingTab($tab))
 						$cookie->$key = !is_array($value) ? $value : serialize($value);
 
 			if (isset($_GET) AND !empty($_GET) AND isset($adminObj->table))
-				foreach ($_GET AS $key => $value)
+				foreach ($_GET as $key => $value)
 					if (is_array($adminObj->table))
 					{
-						foreach ($adminObj->table AS $table)
+						foreach ($adminObj->table as $table)
 							if (strncmp($key, $table.'OrderBy', 7) === 0 OR strncmp($key, $table.'Orderway', 8) === 0)
 								$cookie->$key = $value;
 					}
@@ -126,7 +126,7 @@ if ($id_tab = checkingTab($tab))
 			$message = translate('Invalid security token');
 			echo '<html><head><title>'.$message.'</title></head><body style="font-family:Arial,Verdana,Helvetica,sans-serif;background-color:#EC8686">
 				<div style="background-color:#FAE2E3;border:1px solid #000000;color:#383838;font-weight:700;line-height:20px;margin:0 0 10px;padding:10px 15px;width:500px">
-					<img src="../img/admin/error2.png" style="margin:-4px 5px 0 0;vertical-align:middle">
+					<img src="../img/admin/error2.png" style="margin: -4px 5px 0 0; vertical-align: middle;" alt="" />
 					'.$message.'
 				</div>';
 			echo '<a href="'.htmlentities($url).'" method="get" style="float:left;background: #E3E3E3;border-color: #CCCCCC #BBBBBB #A0A0A0;border-left: 1px solid #BBBBBB;border-radius: 3px 3px 3px 3px;border-right: 1px solid #BBBBBB;border-style: solid;border-width: 1px;color: #000000;margin: 20px 10px;padding:10px;text-align:center;vertical-align:middle;">

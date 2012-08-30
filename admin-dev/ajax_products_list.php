@@ -33,7 +33,7 @@ include(PS_ADMIN_DIR.'/../config/config.inc.php');
 require_once(dirname(__FILE__).'/init.php');
 
 $query = Tools::getValue('q', false);
-if (!$query OR $query == '' OR strlen($query) < 1)
+if (!$query || $query == '' || strlen($query) < 1)
 	die();
 
 /*
@@ -59,11 +59,10 @@ $items = Db::getInstance()->ExecuteS('
 SELECT p.`id_product`, `reference`, pl.name
 FROM `'._DB_PREFIX_.'product` p
 LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.id_product = p.id_product)
-WHERE (pl.name LIKE \'%'.pSQL($query).'%\' OR p.reference LIKE \'%'.pSQL($query).'%\') AND pl.id_lang = '.(int)($cookie->id_lang).
+WHERE (pl.name LIKE \'%'.pSQL($query).'%\' OR p.reference LIKE \'%'.pSQL($query).'%\') AND pl.id_lang = '.(int)$cookie->id_lang.
 (!empty($excludeIds) ? ' AND p.id_product NOT IN ('.$excludeIds.') ' : ' ').
 ($excludeVirtuals ? 'AND p.id_product NOT IN (SELECT pd.id_product FROM `'._DB_PREFIX_.'product_download` pd WHERE (pd.id_product = p.id_product))' : ''));
 
 if ($items)
-	foreach ($items AS $item)
-		echo trim($item['name']).(!empty($item['reference']) ? ' (ref: '.$item['reference'].')' : '').'|'.(int)($item['id_product'])."\n";
-
+	foreach ($items as $item)
+		echo trim($item['name']).(!empty($item['reference']) ? ' (ref: '.$item['reference'].')' : '').'|'.(int)$item['id_product']."\n";
