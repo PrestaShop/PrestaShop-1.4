@@ -30,21 +30,14 @@ include_once(dirname(__FILE__).'/../../../init.php');
 
 if ($id_cart = Tools::getValue('id_cart'))
 {
-	$id_order = (int)Order::getOrderByCartId($id_cart);
-
-	$sql = 'SELECT * FROM `'._DB_PREFIX_.'paypal_order`
-			WHERE `id_order` = '.(int)$id_order;
-
-	$row = Db::getInstance()->getRow($sql);
-
-	if ($row != false)
-	{
-		echo $row['id_order'];
-	}
-
-	die();
+	$id_order = Db::getInstance()->getValue('
+	SELECT id_order
+	FROM `'._DB_PREFIX_.'paypal_order`
+	WHERE `id_order` = '.(int)Order::getOrderByCartId((int)$id_cart));
+	
+	if ($id_order !== false)
+		echo (int)$id_order;
+	die;
 }
-else
-{
-	die(0);
-}
+
+die(0);

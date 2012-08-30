@@ -29,19 +29,16 @@ include_once(dirname(__FILE__).'/../../../config/config.inc.php');
 include_once(dirname(__FILE__).'/../../../init.php');
 
 if (_PS_VERSION_ < '1.5')
-{
-	require_once(_PS_ROOT_DIR_ . '/controllers/OrderConfirmationController.php');
-}
+	require_once(_PS_ROOT_DIR_.'/controllers/OrderConfirmationController.php');
 
 class PayPalIntegralEvolutionSubmit extends OrderConfirmationControllerCore
 {
-	var $context;
+	public $context;
 
 	public function __construct()
 	{
-
 		/** Backward compatibility */
-		require(_PS_MODULE_DIR_ . '/paypal/backward_compatibility/backward.php');
+		require(_PS_MODULE_DIR_.'/paypal/backward_compatibility/backward.php');
 		
 		$this->context = Context::getContext();
 
@@ -53,19 +50,11 @@ class PayPalIntegralEvolutionSubmit extends OrderConfirmationControllerCore
 	 */
 	public function displayContent()
 	{
-		$id_order	= (int)Tools::getValue('id_order');
-		$order		= PayPalOrder::getOrderById((INT)$id_order);
-
-		$this->context->smarty->assign(
-			array(
-				'order'		=> $order,
-				'currency'	=> $this->context->currency
-			)
-		);
+		$this->context->smarty->assign(array('order' => PayPalOrder::getOrderById((int)Tools::getValue('id_order')),
+		'currency' => $this->context->currency));
 
 		echo $this->context->smarty->fetch(_PS_MODULE_DIR_.'/paypal/views/templates/front/order-confirmation.tpl');
 	}
-
 }
 
 if (Tools::getValue('id_module') && Tools::getValue('key') && Tools::getValue('id_cart') && Tools::getValue('id_order'))
@@ -76,33 +65,25 @@ if (Tools::getValue('id_module') && Tools::getValue('key') && Tools::getValue('i
 		$integral_evolution_submit->run();
 	}
 }
-else if ($id_cart = Tools::getValue('id_cart'))
+elseif ($id_cart = Tools::getValue('id_cart'))
 {
 	// Redirection
-	$array = array(//$customer->secure_key,
-		'id_cart' 	=> (int)($id_cart),
-		'id_module' => (int)(Module::getInstanceByName('paypal')->id),
-		'id_order' 	=> (int)(Order::getOrderByCartId((int)$id_cart)),
-		'key' 		=> Context::getContext()->customer->secure_key
+	$array = array(
+		'id_cart' => (int)$id_cart,
+		'id_module' => (int)Module::getInstanceByName('paypal')->id,
+		'id_order' => (int)Order::getOrderByCartId((int)$id_cart),
+		'key' => Context::getContext()->customer->secure_key
 	);
 
-	$query = http_build_query($array, '', '&');
-
 	if (_PS_VERSION_ < '1.5')
-	{
-		Tools::redirectLink(__PS_BASE_URI__ . '/modules/paypal/integral_evolution/submit.php?' . $query);
-	}
+		Tools::redirectLink(__PS_BASE_URI__ . '/modules/paypal/integral_evolution/submit.php?'.http_build_query($array, '', '&'));
 	else
 	{
 		$controller = new FrontController();
 		$controller->init();
-
 		Tools::redirect(Context::getContext()->link->getModuleLink('paypal', 'submit', $values));
 	}
 }
 else
-{
 	Tools::redirectLink(__PS_BASE_URI__);
-}
-
-die();
+exit;

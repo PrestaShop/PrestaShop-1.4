@@ -49,39 +49,26 @@ function upgrade_module_3_0($object, $install = false)
 		Configuration::updateValue('PAYPAL_VERSION', $object->version);
 
 		$payment_method = (int)Configuration::get('PAYPAL_PAYMENT_METHOD');
-		$payment_methods = array(
-			0 => WPS,
-			2 => HSS,
-			1 => ECS
-		);
+		$payment_methods = array(0 => WPS, 2 => HSS, 1 => ECS);
 
 		Configuration::updateValue('PAYPAL_PAYMENT_METHOD', (int)$payment_methods[$payment_method]);
 		Configuration::updateValue('PAYPAL_BUSINESS_ACCOUNT', Configuration::get('PAYPAL_BUSINESS'));
 		Configuration::updateValue('PAYPAL_BUSINESS', 0);
 	}
 
-	$sql = 'SHOW TABLES FROM `' . _DB_NAME_ . '`
-			LIKE \'' . _DB_PREFIX_ . 'paypal_order\'';
 
-	$need_upgrade = Db::getInstance()->executeS($sql);
-
-	if (sizeof($need_upgrade) > 0)
+	if (count(Db::getInstance()->ExecuteS('SHOW TABLES FROM `'._DB_NAME_.'` LIKE \''._DB_PREFIX_.'paypal_order\'')) > 0)
 	{
-		$columns = array(array('name' => 'id_invoice', 'type' => 'varchar(255) DEFAULT NULL'), array('name' => 'currency', 'type' => 'varchar(10) NOT NULL'), array('name' => 'total_paid', 'type' => 'varchar(50) NOT NULL'), array('name' => 'shipping', 'type' => 'varchar(50) NOT NULL'), array('name' => 'payment_date', 'type' => 'varchar(50) NOT NULL'), array('name' => 'capture', 'type' => 'int(2) NOT NULL'));
+		$columns = array(array('name' => 'id_invoice', 'type' => 'varchar(255) DEFAULT NULL'),
+			array('name' => 'currency', 'type' => 'varchar(10) NOT NULL'),
+			array('name' => 'total_paid', 'type' => 'varchar(50) NOT NULL'),
+			array('name' => 'shipping', 'type' => 'varchar(50) NOT NULL'),
+			array('name' => 'payment_date', 'type' => 'varchar(50) NOT NULL'),
+			array('name' => 'capture', 'type' => 'int(2) NOT NULL'));
 
 		foreach ($columns as $column)
-		{
-			$sql = 'SHOW COLUMNS FROM `' . _DB_PREFIX_ . 'paypal_order`
-					LIKE \'' . pSQL($column['name']) . '\'';
-
-			if (!Db::getInstance()->executeS($sql))
-			{
-				$sql = 'ALTER TABLE `' . _DB_PREFIX_ . 'paypal_order`
-						ADD `' . pSQL($column['name']) . '` ' . $column['type'];
-
-				Db::getInstance()->execute($sql);
-			}
-		}
+			if (!Db::getInstance()->ExecuteS('SHOW COLUMNS FROM `'._DB_PREFIX_.'paypal_order` LIKE \''.pSQL($column['name']).'\''))
+				Db::getInstance()->Execute('ALTER TABLE `'._DB_PREFIX_.'paypal_order` ADD `'.pSQL($column['name']).'` '.$column['type']);
 	}
 
 	return true;

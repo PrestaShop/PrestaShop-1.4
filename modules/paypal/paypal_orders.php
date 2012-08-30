@@ -30,7 +30,6 @@ if (!defined('_PS_VERSION_'))
 
 class PayPalOrder
 {
-
 	/*
 	 * Get PayPal order data
 	 * - ID Order
@@ -46,44 +45,31 @@ class PayPalOrder
 	 */
 	public static function getOrderById($id_order)
 	{
-		$sql = 'SELECT * FROM `'._DB_PREFIX_.'paypal_order`
-				WHERE `id_order` = '.(int)$id_order;
-
-		return Db::getInstance()->getRow($sql);
+		return Db::getInstance()->getRow('SELECT * FROM `'._DB_PREFIX_.'paypal_order` WHERE `id_order` = '.(int)$id_order);
 	}
 
 	public static function getIdOrderByTransactionId($id_transaction)
 	{
-		$sql = 'SELECT `id_order` FROM `'._DB_PREFIX_.'paypal_order`
-				WHERE `id_transaction` = \''.pSQL($id_transaction) . '\'';
-
-		return Db::getInstance()->getRow($sql);
+		return Db::getInstance()->getRow('
+		SELECT `id_order`
+		FROM `'._DB_PREFIX_.'paypal_order`
+		WHERE `id_transaction` = \''.pSQL($id_transaction).'\'');
 	}
 
 	public static function saveOrder($id_order, $transaction)
 	{
-		$id_order		= (int)$id_order;
-		$id_transaction	= pSQL($transaction['id_transaction']);
-		$id_invoice		= pSQL($transaction['id_invoice']);
-		$currency		= pSQL($transaction['currency']);
-		$payment_date	= pSQL($transaction['payment_date']);
-		$shipping		= (float)$transaction['shipping'];
-		$capture		= (int)Configuration::get('PAYPAL_CAPTURE');
-		$payment_method	= (int)Configuration::get('PAYPAL_PAYMENT_METHOD');
-
-		$order			= new Order($id_order);
-		$total_paid		= (float)$transaction['total_paid'];
+		$order = new Order((int)$id_order);
+		$total_paid = (float)$transaction['total_paid'];
 
 		if ($order->gift)
-		{
 			$total_paid += (float)Configuration::get('PS_GIFT_WRAPPING_PRICE');
-		}
 
-		$sql = 'INSERT INTO `' . _DB_PREFIX_ . 'paypal_order`
-				(`id_order`, `id_transaction`, `id_invoice`, `currency`, `total_paid`, `shipping`, `payment_date`, `payment_method`, `capture`)
-				VALUES (' . $id_order . ', \'' . $id_transaction . '\', \'' . $id_invoice . '\', \'' . $currency . '\', \'' . $total_paid . '\', \'' . $shipping . '\', \'' . $payment_date . '\', ' . $payment_method . ', ' . $capture . ')';
-
-		Db::getInstance()->Execute($sql);
+		Db::getInstance()->Execute('
+		INSERT INTO `'._DB_PREFIX_.'paypal_order`
+		(`id_order`, `id_transaction`, `id_invoice`, `currency`, `total_paid`, `shipping`, `payment_date`, `payment_method`, `capture`)
+		VALUES ('.(int)$id_order.', \''.pSQL($transaction['id_transaction']).'\', \''.pSQL($transaction['id_invoice']).'\',
+			\''.pSQL($transaction['currency']).'\', \''.$total_paid.'\', \''.(float)$transaction['shipping'].'\',
+			\''.pSQL($transaction['payment_date']).'\', '.(int)Configuration::get('PAYPAL_PAYMENT_METHOD').',
+			'.(int)Configuration::get('PAYPAL_CAPTURE').')');
 	}
-
 }

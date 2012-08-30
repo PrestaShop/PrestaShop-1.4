@@ -97,25 +97,19 @@ class PaypalExpressCheckout extends Paypal
 			$paypal = unserialize($this->context->cookie->{PaypalExpressCheckout::$COOKIE_NAME});
 
 			foreach ($this->cookie_key as $key)
-			{
 				$this->{$key} = $paypal[$key];
-			}
 		}
 
 		$this->currency = new Currency((int)$this->context->cart->id_currency);
 
 		if (!Validate::isLoadedObject($this->currency))
-		{
 			$this->_errors[] = $this->l('Not a valid currency');
-		}
 
-		if (sizeof($this->_errors))
-		{
+		if (count($this->_errors))
 			return false;
-		}
 
-		$currency_decimals	= is_array($this->currency) ? (int)$this->currency['decimals'] : (int)$this->currency->decimals;
-		$this->decimals		= $currency_decimals * _PS_PRICE_DISPLAY_PRECISION_;
+		$currency_decimals = is_array($this->currency) ? (int)$this->currency['decimals'] : (int)$this->currency->decimals;
+		$this->decimals = $currency_decimals * _PS_PRICE_DISPLAY_PRECISION_;
 	}
 
 	// Will build the product_list depending of the type
@@ -124,7 +118,6 @@ class PaypalExpressCheckout extends Paypal
 		switch($this->type)
 		{
 			case 'product':
-
 				if ($need_init)
 				{
 					$this->id_product = (int)Tools::getValue('id_product');
@@ -134,68 +127,51 @@ class PaypalExpressCheckout extends Paypal
 
 				$product = new Product((int)$this->id_product);
 				if (!$product || !$this->quantity)
-				{
 					return false;
-				}
 
 				// Build a product array with needed values
 				$this->product_list[] = array(
-					'id_product'			=> $product->id,
-					'id_product_attribute'	=> $this->id_p_attr,
-					'quantity'				=> $this->quantity,
-					'name'					=> $product->name[$this->context->language->id],
-					'description_short'		=> $product->description[$this->context->language->id],
-					'price'					=> $product->getPrice(false, $this->id_p_attr, 2),
-					'price_wt'				=> $product->getPrice(true, $this->id_p_attr, 2),
-				);
+				'id_product' => $product->id,
+				'id_product_attribute' => $this->id_p_attr,
+				'quantity' => $this->quantity,
+				'name' => $product->name[$this->context->language->id],
+				'description_short' => $product->description[$this->context->language->id],
+				'price' => $product->getPrice(false, $this->id_p_attr, 2),
+				'price_wt' => $product->getPrice(true, $this->id_p_attr, 2));
 
-				$this->product_list[0]['total']		= Tools::ps_round($this->product_list[0]['price'] * (int)$this->quantity, 2);
-				$this->product_list[0]['total_wt']	= $this->product_list[0]['price_wt'] * (int)($this->quantity);
+				$this->product_list[0]['total'] = Tools::ps_round($this->product_list[0]['price'] * (int)$this->quantity, 2);
+				$this->product_list[0]['total_wt'] = $this->product_list[0]['price_wt'] * (int)$this->quantity;
 
 				break;
 
 			case ('cart' || 'payment_cart') :
-
 				if (!$this->context->cart || !$this->context->cart->id)
-				{
 					return false;
-				}
-
 				$this->product_list = $this->context->cart->getProducts();
-
 				break;
 		}
 
-		if (!count($this->product_list))
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
+		return (bool)count($this->product_list);
 	}
 
 	public function setExpressCheckout()
 	{
-		$this->method			= 'SetExpressCheckout';
-		$fields['CANCELURL']	= Tools::getValue('current_shop_url');
+		$this->method = 'SetExpressCheckout';
+		$fields['CANCELURL'] = Tools::getValue('current_shop_url');
 
 		// Only this call need to get the value from the $_GET / $_POST array
 		if (!$this->initParameters(true) || !$fields['CANCELURL'])
-		{
 			return false;
-		}
 
 		// Set payment detail (reference)
 		$this->_setPaymentDetails($fields);
-		$fields['SOLUTIONTYPE']	= 'Sole';
-		$fields['LANDINGPAGE']	= 'Login';
+		$fields['SOLUTIONTYPE'] = 'Sole';
+		$fields['LANDINGPAGE'] = 'Login';
 
 		// Seller informations
-		$fields['USER']			= Configuration::get('PAYPAL_API_USER');
-		$fields['PWD']			= Configuration::get('PAYPAL_API_PASSWORD');
-		$fields['SIGNATURE']	= Configuration::get('PAYPAL_API_SIGNATURE');
+		$fields['USER'] = Configuration::get('PAYPAL_API_USER');
+		$fields['PWD'] = Configuration::get('PAYPAL_API_PASSWORD');
+		$fields['SIGNATURE'] = Configuration::get('PAYPAL_API_SIGNATURE');
 
 		$this->callAPI($fields);
 		$this->_storeToken();
@@ -203,8 +179,8 @@ class PaypalExpressCheckout extends Paypal
 
 	public function getExpressCheckout()
 	{
-		$this->method		= 'GetExpressCheckoutDetails';
-		$fields['TOKEN']	= $this->token;
+		$this->method = 'GetExpressCheckoutDetails';
+		$fields['TOKEN'] = $this->token;
 
 		$this->initParameters();
 		$this->callAPI($fields);
@@ -217,13 +193,11 @@ class PaypalExpressCheckout extends Paypal
 	{
 		$this->method = 'DoExpressCheckoutPayment';
 
-		$fields['TOKEN']	= $this->token;
-		$fields['PAYERID']	= $this->payer_id;
+		$fields['TOKEN'] = $this->token;
+		$fields['PAYERID'] = $this->payer_id;
 
 		if (count($this->product_list) <= 0)
-		{
 			$this->initParameters();
-		}
 
 		// Set payment detail (reference)
 		$this->_setPaymentDetails($fields);
@@ -234,30 +208,27 @@ class PaypalExpressCheckout extends Paypal
 
 	private function callAPI($fields)
 	{
-		$this->logs		= array();
-		$paypal_lib		= new PaypalLib();
+		$this->logs = array();
+		$paypal_lib = new PaypalLib();
 
-		$this->result	= $paypal_lib->makeCall($this->getAPIURL(), $this->getAPIScript(), $this->method, $fields, $this->method_version);
-		$this->logs		= array_merge($this->logs, $paypal_lib->getLogs());
+		$this->result = $paypal_lib->makeCall($this->getAPIURL(), $this->getAPIScript(), $this->method, $fields, $this->method_version);
+		$this->logs = array_merge($this->logs, $paypal_lib->getLogs());
 
 		$this->_storeToken();
 	}
 
 	private function _setPaymentDetails(&$fields)
 	{
-		// Setting Express Checkout return url
-		$shop_url = PayPal::getShopDomainSsl(true, true);
-
 		// Required field
-		$fields['RETURNURL']			= $shop_url . _MODULE_DIR_ . $this->name . '/express_checkout/submit.php';
-		$fields['REQCONFIRMSHIPPING']	= '0';
-		$fields['NOSHIPPING']			= '1';
-		$fields['BUTTONSOURCE']			= TRACKING_CODE;
+		$fields['RETURNURL'] = PayPal::getShopDomainSsl(true, true)._MODULE_DIR_.$this->name.'/express_checkout/submit.php';
+		$fields['REQCONFIRMSHIPPING'] = '0';
+		$fields['NOSHIPPING'] = '1';
+		$fields['BUTTONSOURCE'] = TRACKING_CODE;
 
 		// Products
-		$taxes	= 0;
-		$total	= 0;
-		$index	= -1;
+		$taxes = 0;
+		$total = 0;
+		$index = -1;
 
 		$id_address = (int)$this->context->cart->id_address_invoice;
 
@@ -275,49 +246,45 @@ class PaypalExpressCheckout extends Paypal
 		$this->setPaymentValues($fields, $total, $taxes);
 
 		foreach ($fields as &$field)
-		{
 			if (is_numeric($field))
-			{
 				$field = str_replace(',', '.', $field);
-			}
-		}
 	}
 
 	private function setShippingAddress(&$fields, $id_address)
 	{
-		$address	= new Address($id_address);
+		$address = new Address($id_address);
 
-		$fields['ADDROVERRIDE']							= '1';
-		$fields['PAYMENTREQUEST_0_SHIPTOSTREET']		= $address->address1;
-		$fields['PAYMENTREQUEST_0_SHIPTOSTREET2']		= $address->address2;
-		$fields['PAYMENTREQUEST_0_SHIPTOCITY'] 			= $address->city;
+		$fields['ADDROVERRIDE'] = '1';
+		$fields['PAYMENTREQUEST_0_SHIPTOSTREET'] = $address->address1;
+		$fields['PAYMENTREQUEST_0_SHIPTOSTREET2'] = $address->address2;
+		$fields['PAYMENTREQUEST_0_SHIPTOCITY'] = $address->city;
 
 		if ($address->id_state)
 		{
 			$state	= new State((int)$address->id_state);
-			$fields['PAYMENTREQUEST_0_SHIPTOSTATE'] 	= $state->iso_code;
+			$fields['PAYMENTREQUEST_0_SHIPTOSTATE'] = $state->iso_code;
 		}
 
 		$country	= new Country((int)$address->id_country);
-		$fields['PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE']	= $country->iso_code;
-		$fields['PAYMENTREQUEST_0_SHIPTOZIP'] 			= $address->postcode;
+		$fields['PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE'] = $country->iso_code;
+		$fields['PAYMENTREQUEST_0_SHIPTOZIP'] = $address->postcode;
 	}
 
 	private function setProductsList(&$fields, &$index, &$total, &$taxes)
 	{
 		foreach ($this->product_list as $product)
 		{
-			$fields['L_PAYMENTREQUEST_0_NUMBER'.++$index]	= $product['id_product'];
+			$fields['L_PAYMENTREQUEST_0_NUMBER'.++$index] = $product['id_product'];
 
-			$fields['L_PAYMENTREQUEST_0_NAME'.$index]		= $product['name'];
-			$fields['L_PAYMENTREQUEST_0_DESC'.$index]		= substr(strip_tags($product['description_short']), 0, 120).'...';
+			$fields['L_PAYMENTREQUEST_0_NAME'.$index] = $product['name'];
+			$fields['L_PAYMENTREQUEST_0_DESC'.$index] = substr(strip_tags($product['description_short']), 0, 120).'...';
 
-			$fields['L_PAYMENTREQUEST_0_AMT'.$index]		= Tools::ps_round($product['price'], $this->decimals);
-			$fields['L_PAYMENTREQUEST_0_TAXAMT'.$index]		= Tools::ps_round($product['price_wt'] - $product['price'], $this->decimals);
-			$fields['L_PAYMENTREQUEST_0_QTY'.$index]		= Tools::ps_round($product['quantity'], $this->decimals);
+			$fields['L_PAYMENTREQUEST_0_AMT'.$index] = Tools::ps_round($product['price'], $this->decimals);
+			$fields['L_PAYMENTREQUEST_0_TAXAMT'.$index] = Tools::ps_round($product['price_wt'] - $product['price'], $this->decimals);
+			$fields['L_PAYMENTREQUEST_0_QTY'.$index] = Tools::ps_round($product['quantity'], $this->decimals);
 
-			$taxes	= Tools::ps_round($taxes + ($fields['L_PAYMENTREQUEST_0_TAXAMT'.$index] * $fields['L_PAYMENTREQUEST_0_QTY'.$index]), $this->decimals);
-			$total	= Tools::ps_round($total + ($fields['L_PAYMENTREQUEST_0_AMT'.$index] * $fields['L_PAYMENTREQUEST_0_QTY'.$index]), $this->decimals);
+			$taxes = Tools::ps_round($taxes + ($fields['L_PAYMENTREQUEST_0_TAXAMT'.$index] * $fields['L_PAYMENTREQUEST_0_QTY'.$index]), $this->decimals);
+			$total = Tools::ps_round($total + ($fields['L_PAYMENTREQUEST_0_AMT'.$index] * $fields['L_PAYMENTREQUEST_0_QTY'.$index]), $this->decimals);
 		}
 	}
 
@@ -325,24 +292,22 @@ class PaypalExpressCheckout extends Paypal
 	{
 		$discounts = $this->context->cart->getDiscounts();
 
-		if (sizeof($discounts) > 0)
-		{
+		if (count($discounts) > 0)
 			foreach ($discounts as $discount)
 			{
-				$fields['L_PAYMENTREQUEST_0_NUMBER'.++$index]	= $discount['id_discount'];
+				$fields['L_PAYMENTREQUEST_0_NUMBER'.++$index] = $discount['id_discount'];
 
-				$fields['L_PAYMENTREQUEST_0_NAME'.$index]		= $discount['name'];
-				$fields['L_PAYMENTREQUEST_0_DESC'.$index]		= substr(strip_tags($discount['description']), 0, 120).'...';
+				$fields['L_PAYMENTREQUEST_0_NAME'.$index] = $discount['name'];
+				$fields['L_PAYMENTREQUEST_0_DESC'.$index] = substr(strip_tags($discount['description']), 0, 120).'...';
 
 				/* It is a discount so we store a negative value */
-				$fields['L_PAYMENTREQUEST_0_AMT'.$index]		= -1 * Tools::ps_round($discount['value_real'], $this->decimals);
-				$fields['L_PAYMENTREQUEST_0_TAXAMT'.$index]		= -1 * (Tools::ps_round($discount['value_real'] - $discount['value_tax_exc'], $this->decimals));
-				$fields['L_PAYMENTREQUEST_0_QTY'.$index]		= 1;
+				$fields['L_PAYMENTREQUEST_0_AMT'.$index] = -1 * Tools::ps_round($discount['value_real'], $this->decimals);
+				$fields['L_PAYMENTREQUEST_0_TAXAMT'.$index] = -1 * (Tools::ps_round($discount['value_real'] - $discount['value_tax_exc'], $this->decimals));
+				$fields['L_PAYMENTREQUEST_0_QTY'.$index] = 1;
 
-				$taxes	= Tools::ps_round($taxes + $fields['L_PAYMENTREQUEST_0_TAXAMT'.$index], $this->decimals);
-				$total	= Tools::ps_round($total + $fields['L_PAYMENTREQUEST_0_AMT'.$index], $this->decimals);
+				$taxes = Tools::ps_round($taxes + $fields['L_PAYMENTREQUEST_0_TAXAMT'.$index], $this->decimals);
+				$total = Tools::ps_round($total + $fields['L_PAYMENTREQUEST_0_AMT'.$index], $this->decimals);
 			}
-		}
 	}
 
 	private function setGiftWrapping(&$fields, &$index, &$total)
@@ -353,8 +318,8 @@ class PaypalExpressCheckout extends Paypal
 
 			$fields['L_PAYMENTREQUEST_0_NAME'.++$index]	= $this->l('Gift wrapping');
 
-			$fields['L_PAYMENTREQUEST_0_AMT'.$index]		= Tools::ps_round($gift_wrapping_price, $this->decimals);
-			$fields['L_PAYMENTREQUEST_0_QTY'.$index]		= 1;
+			$fields['L_PAYMENTREQUEST_0_AMT'.$index] = Tools::ps_round($gift_wrapping_price, $this->decimals);
+			$fields['L_PAYMENTREQUEST_0_QTY'.$index] = 1;
 
 			$total = Tools::ps_round($total + $gift_wrapping_price, $this->decimals);
 		}
@@ -364,26 +329,26 @@ class PaypalExpressCheckout extends Paypal
 	{
 		if (_PS_VERSION_ < '1.5')
 		{
-			$shipping_cost		= $this->context->cart->getOrderShippingCost(null, false);
-			$shipping_cost_wt	= $this->context->cart->getOrderShippingCost();
+			$shipping_cost = $this->context->cart->getOrderShippingCost(null, false);
+			$shipping_cost_wt = $this->context->cart->getOrderShippingCost();
 		}
 		else
 		{
-			$shipping_cost	= $this->context->cart->getTotalShippingCost(null, true);
-			$shipping_cost_wt	= $this->context->cart->getTotalShippingCost();
+			$shipping_cost = $this->context->cart->getTotalShippingCost(null, true);
+			$shipping_cost_wt = $this->context->cart->getTotalShippingCost();
 		}
 
-		$fields['PAYMENTREQUEST_0_PAYMENTACTION']	= 'Sale';
-		$fields['PAYMENTREQUEST_0_CURRENCYCODE']	= $this->currency->iso_code;
+		$fields['PAYMENTREQUEST_0_PAYMENTACTION'] = 'Sale';
+		$fields['PAYMENTREQUEST_0_CURRENCYCODE'] = $this->currency->iso_code;
 
-		$fields['PAYMENTREQUEST_0_SHIPPINGAMT']		= Tools::ps_round($shipping_cost_wt, $this->decimals);
-		$shipping_tax 								= $shipping_cost_wt - $shipping_cost;
+		$fields['PAYMENTREQUEST_0_SHIPPINGAMT'] = Tools::ps_round($shipping_cost_wt, $this->decimals);
+		$shipping_tax = $shipping_cost_wt - $shipping_cost;
 
-		$fields['PAYMENTREQUEST_0_ITEMAMT']			= Tools::ps_round($total, $this->decimals);
-		$fields['PAYMENTREQUEST_0_TAXAMT']			= Tools::ps_round($taxes, $this->decimals);
+		$fields['PAYMENTREQUEST_0_ITEMAMT'] = Tools::ps_round($total, $this->decimals);
+		$fields['PAYMENTREQUEST_0_TAXAMT'] = Tools::ps_round($taxes, $this->decimals);
 
-		$total_order_amt							= $fields['PAYMENTREQUEST_0_ITEMAMT'] + $fields['PAYMENTREQUEST_0_TAXAMT'] + $fields['PAYMENTREQUEST_0_SHIPPINGAMT'];
-		$fields['PAYMENTREQUEST_0_AMT']				= Tools::ps_round($total_order_amt, $this->decimals);
+		$total_order_amt = $fields['PAYMENTREQUEST_0_ITEMAMT'] + $fields['PAYMENTREQUEST_0_TAXAMT'] + $fields['PAYMENTREQUEST_0_SHIPPINGAMT'];
+		$fields['PAYMENTREQUEST_0_AMT'] = Tools::ps_round($total_order_amt, $this->decimals);
 	}
 
 	public function rightPaymentProcess()
@@ -393,13 +358,8 @@ class PaypalExpressCheckout extends Paypal
 		// float problem with php, have to use the string cast.
 		if ((isset($this->result['AMT']) && ((string)$this->result['AMT'] != (string)$total)) ||
 			(isset($this->result['PAYMENTINFO_0_AMT']) && ((string)$this->result['PAYMENTINFO_0_AMT'] != (string)$total)))
-		{
 			return false;	
-		}
-		else
-		{
-			return true;
-		}
+		return true;
 	}
 
 	/**
@@ -411,42 +371,32 @@ class PaypalExpressCheckout extends Paypal
 
 		foreach ($this->product_list as $product)
 		{
-			$price		= Tools::ps_round($product['price_wt'], $this->decimals);
-			$quantity	= Tools::ps_round($product['quantity'], $this->decimals);
-			$total		= Tools::ps_round($total + ($price * $quantity), $this->decimals);
+			$price = Tools::ps_round($product['price_wt'], $this->decimals);
+			$quantity = Tools::ps_round($product['quantity'], $this->decimals);
+			$total = Tools::ps_round($total + ($price * $quantity), $this->decimals);
 		}
 		
 		$discounts = $this->context->cart->getDiscounts();
-		if (sizeof($discounts) > 0)
-		{
+		if (count($discounts) > 0)
 			foreach ($discounts as $product)
 			{
-				$price	= -1 * Tools::ps_round($product['value_real'], $this->decimals);
-				$total	= Tools::ps_round($total + $price, $this->decimals);
+				$price = -1 * Tools::ps_round($product['value_real'], $this->decimals);
+				$total = Tools::ps_round($total + $price, $this->decimals);
 			}
-		}
 
 		if ($this->context->cart->gift == 1)
-		{
 			$total += Configuration::get('PS_GIFT_WRAPPING_PRICE');
-		}
 
 		if (_PS_VERSION_ < '1.5')
-		{
 			return Tools::ps_round($this->context->cart->getOrderShippingCost(), $this->decimals) + $total;
-		}
 		else
-		{
 			return Tools::ps_round($this->context->cart->getTotalShippingCost(), $this->decimals) + $total;
-		}
 	}
 
 	private function _storeToken()
 	{
 		if (is_array($this->result) && isset($this->result['TOKEN']))
-		{
-			$this->token = strval($this->result['TOKEN']);
-		}
+			$this->token = (string)$this->result['TOKEN'];
 	}
 
 	// Store data for the next reloading page
@@ -455,27 +405,17 @@ class PaypalExpressCheckout extends Paypal
 		$tab = array();
 
 		foreach ($this->cookie_key as $key)
-		{
 			$tab[$key] = $this->{$key};
-		}
 
 		$this->context->cookie->{PaypalExpressCheckout::$COOKIE_NAME} = serialize($tab);
 	}
 
 	public function hasSucceedRequest()
 	{
-		$ack_list = array('ACK', 'PAYMENTINFO_0_ACK');
-
 		if (is_array($this->result))
-		{
-			foreach($ack_list as $key)
-			{
+			foreach(array('ACK', 'PAYMENTINFO_0_ACK') as $key)
 				if (isset($this->result[$key]) && strtoupper($this->result[$key]) == 'SUCCESS')
-				{
 					return true;
-				}
-			}
-		}
 
 		return false;
 	}
@@ -483,36 +423,25 @@ class PaypalExpressCheckout extends Paypal
 	private function getSecureKey()
 	{
 		if (!count($this->product_list))
-		{
 			$this->initParameters();
-		}
 
 		$key = array();
 
 		foreach($this->product_list as $product)
 		{
-			$id_product				= $product['id_product'];
-			$id_product_attribute	= $product['id_product_attribute'];
-			$quantity				= $product['quantity'];
+			$id_product = $product['id_product'];
+			$id_product_attribute = $product['id_product_attribute'];
+			$quantity = $product['quantity'];
 
 			$key[] = $id_product.$id_product_attribute.$quantity._COOKIE_KEY_;
 		}
 
-		return MD5(serialize($key));
+		return md5(serialize($key));
 	}
 
 	public function isProductsListStillRight()
 	{
-		$key = $this->getSecureKey();
-
-		if ($this->secure_key != $key)
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
+		return $this->secure_key == $this->getSecureKey();
 	}
 
 	public function setExpressCheckoutType($type)
@@ -522,10 +451,7 @@ class PaypalExpressCheckout extends Paypal
 			$this->type = $type;
 			return true;
 		}
-		else
-		{
-			return false;
-		}
+		return false;
 	}
 
 	public function redirectToAPI()
@@ -543,23 +469,19 @@ class PaypalExpressCheckout extends Paypal
 		$this->ready = true;
 		$this->_storeCookieInfo();
 
-		$this->context->cookie->id_customer			= (int)$customer->id;
-		$this->context->cookie->customer_lastname	= $customer->lastname;
-		$this->context->cookie->customer_firstname	= $customer->firstname;
-		$this->context->cookie->passwd				= $customer->passwd;
-		$this->context->cookie->email				= $customer->email;
-		$this->context->cookie->id_cart				= (int)Cart::lastNoneOrderedCart((int)$customer->id);
-		$this->context->cookie->is_guest			= $customer->isGuest();
-		$this->context->cookie->logged				= 1;
+		$this->context->cookie->id_customer = (int)$customer->id;
+		$this->context->cookie->customer_lastname = $customer->lastname;
+		$this->context->cookie->customer_firstname = $customer->firstname;
+		$this->context->cookie->passwd = $customer->passwd;
+		$this->context->cookie->email = $customer->email;
+		$this->context->cookie->id_cart = (int)Cart::lastNoneOrderedCart((int)$customer->id);
+		$this->context->cookie->is_guest = $customer->isGuest();
+		$this->context->cookie->logged = 1;
 
 		if (_PS_VERSION_ < '1.5')
-		{
 			Module::hookExec('authentication');
-		}
 		else
-		{
 			Hook::exec('authentication');
-		}
 
 		if ($redirect)
 		{

@@ -40,72 +40,44 @@ class PayPalTools
 	public static function formatMessage($response, &$message)
 	{
 		foreach ($response as $key => $value)
-		{
-			$message .= $key . ': ' . $value . '<br>';
-		}
+			$message .= $key.': '.$value.'<br>';
 	}
 
 	public function moveTopPayments($position)
 	{
 		if (_PS_VERSION_ < '1.5')
-		{
 			$hookPayment = (int)Hook::get('payment');
-		}
 		else
-		{
 			$hookPayment = (int)Hook::getIdByName('payment');
-		}
 
 		$moduleInstance = Module::getInstanceByName($this->name);
 
 		if (_PS_VERSION_ < '1.5')
-		{
 			$moduleInfo = Hook::getModuleFromHook($hookPayment, $moduleInstance->id);
-		}
 		else
-		{
 			$moduleInfo = Hook::getModulesFromHook($hookPayment, $moduleInstance->id);
-		}
 
 		if ((int)$moduleInfo['position'] > (int)$position)
-		{
 			return $moduleInstance->updatePosition($hookPayment, 0, (int)$position);
-		}
-		else
-		{
-			return $moduleInstance->updatePosition($hookPayment, 1, (int)$position);
-		}
+		return $moduleInstance->updatePosition($hookPayment, 1, (int)$position);
 	}
 
 	public function moveRightColumn($position)
 	{
 		if (_PS_VERSION_ < '1.5')
-		{
 			$hookRight = (int)Hook::get('rightColumn');
-		}
 		else
-		{
 			$hookRight = (int)Hook::getIdByName('rightColumn');
-		}
 
 		$moduleInstance = Module::getInstanceByName($this->name);
 
 		if (_PS_VERSION_ < '1.5')
-		{
 			$moduleInfo = Hook::getModuleFromHook($hookRight, $moduleInstance->id);
-		}
 		else
-		{
 			$moduleInfo = Hook::getModulesFromHook($hookRight, $moduleInstance->id);
-		}
 
 		if ((int)$moduleInfo['position'] > (int)$position)
-		{
 			return $moduleInstance->updatePosition($hookRight, 0, (int)$position);
-		}
-		else
-		{
-			return $moduleInstance->updatePosition($hookRight, 1, (int)$position);
-		}
+		return $moduleInstance->updatePosition($hookRight, 1, (int)$position);
 	}
 }

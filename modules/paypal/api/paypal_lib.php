@@ -25,7 +25,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-include_once(_PS_MODULE_DIR_ . 'paypal/api/paypal_connect.php');
+include_once(_PS_MODULE_DIR_.'paypal/api/paypal_connect.php');
 
 define('PAYPAL_API_VERSION', '60.0');
 
@@ -51,41 +51,29 @@ class PaypalLib extends PayPal
 			'SIGNATURE' => Configuration::get('PAYPAL_API_SIGNATURE')
 		);
 
-		$request		= http_build_query($params, '', '&');
-		$request		.= '&'.(!is_array($data) ? $data : http_build_query($data, '', '&'));
+		$request = http_build_query($params, '', '&');
+		$request .= '&'.(!is_array($data) ? $data : http_build_query($data, '', '&'));
 
 		// Making connection
-		$result			= $this->makeSimpleCall($host, $script, $request, true);
-		$response		= explode('&', $result);
+		$result = $this->makeSimpleCall($host, $script, $request, true);
+		$response = explode('&', $result);
 
 		foreach ($response as $value)
 		{
 			$tmp = explode('=', $value);
-
-			if (!isset($tmp[1]))
-			{
-				$return[$tmp[0]] = urldecode($tmp[0]);
-			}
-			else
-			{
-				$return[$tmp[0]] = urldecode($tmp[1]);
-			}
+			$return[$tmp[0]] = urldecode(!isset($tmp[1]) ? $tmp[0] : $tmp[1]);
 		}
 
 		if (!Configuration::get('PAYPAL_DEBUG_MODE'))
-		{
 			$this->_logs = array();
-		}
 
-		$toExclude		= array('TOKEN', 'SUCCESSPAGEREDIRECTREQUESTED', 'VERSION', 'BUILD', 'ACK', 'CORRELATIONID');
-		$this->_logs[]	= '<b>'.$this->l('PayPal response:').'</b>';
+		$toExclude = array('TOKEN', 'SUCCESSPAGEREDIRECTREQUESTED', 'VERSION', 'BUILD', 'ACK', 'CORRELATIONID');
+		$this->_logs[] = '<b>'.$this->l('PayPal response:').'</b>';
 
 		foreach ($return as $key => $value)
 		{
 			if (!Configuration::get('PAYPAL_DEBUG_MODE') && in_array($key, $toExclude))
-			{
 				continue;
-			}
 			$this->_logs[] = $key.' -> '.$value;
 		}
 
@@ -97,10 +85,9 @@ class PaypalLib extends PayPal
 		// Making connection
 		$paypal_connect = new PayPalConnect();
 
-		$result			= $paypal_connect->makeConnection($host, $script, $request, $simple_mode);
-		$this->_logs	= $paypal_connect->getLogs();
+		$result = $paypal_connect->makeConnection($host, $script, $request, $simple_mode);
+		$this->_logs = $paypal_connect->getLogs();
 
 		return $result;
 	}
 }
-

@@ -1,4 +1,29 @@
 <?php
+/*
+* 2007-2012 PrestaShop
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Academic Free License (AFL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/afl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author PrestaShop SA <contact@prestashop.com>
+*  @copyright  2007-2012 PrestaShop SA
+*  @version  Release: $Revision: 14390 $
+*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  International Registered Trademark & Property of PrestaShop SA
+*/
 
 class PayPalConnect extends Paypal
 {
@@ -19,10 +44,7 @@ class PayPalConnect extends Paypal
 		if (!$simple_mode || !preg_match('/[A-Z]+=/', $tmp, $result))
 			return $tmp;
 
-		$pos	= strpos($tmp, $result[0]);
-		$body	= substr($tmp, $pos);
-
-		return $body;
+		return substr($tmp, strpos($tmp, $result[0]));
 	}
 
 	public function getLogs()
@@ -33,7 +55,6 @@ class PayPalConnect extends Paypal
 	/************************************************************/
 	/********************** CONNECT METHODS *********************/
 	/************************************************************/
-
 	private function _connectByCURL($url, $body)
 	{
 		$ch = @curl_init();
@@ -46,31 +67,27 @@ class PayPalConnect extends Paypal
 			$this->_logs[] = '<b>'.$this->l('Sending this params:').'</b>';
 			$this->_logs[] = $body;
 
-			@curl_setopt($ch, CURLOPT_URL,				'https://'.$url);
-			@curl_setopt($ch, CURLOPT_POST,				true);
-			@curl_setopt($ch, CURLOPT_POSTFIELDS,		$body);
-			@curl_setopt($ch, CURLOPT_RETURNTRANSFER,	true);
-			@curl_setopt($ch, CURLOPT_HEADER,			false);
-			@curl_setopt($ch, CURLOPT_TIMEOUT,			30);
-			@curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,	false);
-			@curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,	false);
-			@curl_setopt($ch, CURLOPT_SSLVERSION,		3);
-			@curl_setopt($ch, CURLOPT_VERBOSE,			true);
+			@curl_setopt($ch, CURLOPT_URL, 'https://'.$url);
+			@curl_setopt($ch, CURLOPT_POST, true);
+			@curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+			@curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			@curl_setopt($ch, CURLOPT_HEADER, false);
+			@curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+			@curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+			@curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+			@curl_setopt($ch, CURLOPT_SSLVERSION, 3);
+			@curl_setopt($ch, CURLOPT_VERBOSE, true);
 
 			$result = @curl_exec($ch);
 
 			if (!$result)
-			{
 				$this->_logs[] = $this->l('Send with CURL method failed ! Error:').' '.curl_error($ch);
-			}
 			else
-			{
 				$this->_logs[] = $this->l('Send with CURL method successful');
-			}
 
 			@curl_close($ch);
 		}
-		return (isset($result) ? $result : false);
+		return $result ? $result : false;
 	}
 
 	private function _connectByFSOCK($host, $script, $body)
@@ -78,14 +95,12 @@ class PayPalConnect extends Paypal
 		$fp = @fsockopen('sslv3://'.$host, 443, $errno, $errstr, 4);
 
 		if (!$fp)
-		{
 			$this->_logs[] = $this->l('Connect failed with fsockopen method');
-		}
 		else
 		{
-			$header			= $this->_makeHeader($host, $script, strlen($body));
-			$this->_logs[]	= $this->l('Connect with fsockopen method successful');
-			$this->_logs[]	= $this->l('Sending this params:').' '.$header.$body;
+			$header = $this->_makeHeader($host, $script, strlen($body));
+			$this->_logs[] = $this->l('Connect with fsockopen method successful');
+			$this->_logs[] = $this->l('Sending this params:').' '.$header.$body;
 
 			@fputs($fp, $header.$body);
 
@@ -94,28 +109,21 @@ class PayPalConnect extends Paypal
 				$tmp .= trim(fgets($fp, 1024));
 
 			fclose($fp);
-			$result = $tmp;
 
 			if (!$result)
-			{
 				$this->_logs[] = $this->l('Send with fsockopen method failed !');
-			}
 			else
-			{
 				$this->_logs[] = $this->l('Send with fsockopen method successful');
-			}
 		}
-		return (isset($result) ? $result : false);
+		return $tmp ? $tmp : false;
 	}
 
 	private function _makeHeader($host, $script, $lenght)
 	{
-		$header =	'POST '.strval($script).' HTTP/1.0'."\r\n" .
-					'Host: '.strval($host)."\r\n".
-					'Content-Type: application/x-www-form-urlencoded'."\r\n".
-					'Content-Length: '.(int)($lenght)."\r\n".
-					'Connection: close'."\r\n\r\n";
-
-		return $header;
+		return 'POST '.(string)$script.' HTTP/1.0'."\r\n".
+		'Host: '.(string)$host."\r\n".
+		'Content-Type: application/x-www-form-urlencoded'."\r\n".
+		'Content-Length: '.(int)$lenght."\r\n".
+		'Connection: close'."\r\n\r\n";
 	}
 }

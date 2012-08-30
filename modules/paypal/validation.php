@@ -44,11 +44,11 @@ $paypalServer = 'www.'.(Configuration::get('PAYPAL_SANDBOX') ? 'sandbox.' : '').
 if (function_exists('curl_exec'))
 {
 	// curl ready
-	$ch = curl_init('https://' . $paypalServer . '/cgi-bin/webscr');
+	$ch = curl_init('https://'.$paypalServer.'/cgi-bin/webscr');
     
 	// If the above fails, then try the url with a trailing slash (fixes problems on some servers)
  	if (!$ch)
-		$ch = curl_init('https://' . $paypalServer . '/cgi-bin/webscr/');
+		$ch = curl_init('https://'.$paypalServer.'/cgi-bin/webscr/');
 	
 	if (!$ch)
 	{
@@ -72,16 +72,14 @@ if (function_exists('curl_exec'))
 		curl_close($ch);
 	}
 }
-elseif (($fp = @fsockopen('ssl://' . $paypalServer, 443, $errno, $errstr, 30)) || ($fp = @fsockopen($paypalServer, 80, $errno, $errstr, 30)))
+elseif (($fp = @fsockopen('ssl://'.$paypalServer, 443, $errno, $errstr, 30)) || ($fp = @fsockopen($paypalServer, 80, $errno, $errstr, 30)))
 {
 	// fsockopen ready
-	$header = 'POST /cgi-bin/webscr HTTP/1.0'."\r\n" .
-          'Host: '.$paypalServer."\r\n".
-          'Content-Type: application/x-www-form-urlencoded'."\r\n".
-          'Content-Length: '.Tools::strlen($params)."\r\n".
-          'Connection: close'."\r\n\r\n";
-	fputs($fp, $header.$params);
- 	
+
+	fputs($fp, 'POST /cgi-bin/webscr HTTP/1.0'."\r\n".'Host: '.$paypalServer."\r\n".
+          'Content-Type: application/x-www-form-urlencoded'."\r\n".'Content-Length: '.Tools::strlen($params)."\r\n".
+          'Connection: close'."\r\n\r\n".$params);
+
  	$read = '';
  	while (!feof($fp))
 	{
@@ -143,7 +141,9 @@ if (strtoupper($result) == 'VERIFIED')
 		elseif (Order::getOrderByCartId((int)($cart_secure[0])))
 			$errors = $paypal->l('Order has already been placed').'<br />';
 		else
-			$paypal->validateOrder((int)$cart_secure[0], Configuration::get('PS_OS_PAYMENT'), (float)($_POST['mc_gross']), $paypal->displayName, $paypal->l('Paypal Transaction ID: ').$_POST['txn_id'], array('transaction_id' => $_POST['txn_id'], 'payment_status' => $_POST['payment_status']), NULL, false, $cart_secure[1]);
+			$paypal->validateOrder((int)$cart_secure[0], Configuration::get('PS_OS_PAYMENT'), (float)($_POST['mc_gross']),
+				$paypal->displayName, $paypal->l('Paypal Transaction ID: ').$_POST['txn_id'], array('transaction_id' => $_POST['txn_id'],
+				'payment_status' => $_POST['payment_status']), null, false, $cart_secure[1]);
 	}
 }
 else
@@ -151,15 +151,16 @@ else
 
 // Set transaction details if pcc is defiend in PaymentModule class
 if (isset($paypal->pcc))
-{
 	$paypal->pcc->transaction_id = (isset($_POST['txn_id']) ? $_POST['txn_id'] : '');
-}
 
 if (!empty($errors) AND isset($_POST['custom']))
 {
 	if (strtoupper($_POST['payment_status']) == 'PENDING')
-		$paypal->validateOrder((int)$cart_secure[0], Configuration::get('PS_OS_PAYPAL'), (float)$_POST['mc_gross'], $paypal->displayName, $paypal->l('Paypal Transaction ID: ').$_POST['txn_id'].'<br />'.$errors, array('transaction_id' => $_POST['txn_id'], 'payment_status' => $_POST['payment_status']), NULL, false, $cart_secure[1]);
+		$paypal->validateOrder((int)$cart_secure[0], Configuration::get('PS_OS_PAYPAL'), (float)$_POST['mc_gross'], 
+			$paypal->displayName, $paypal->l('Paypal Transaction ID: ').$_POST['txn_id'].'<br />'.$errors, 
+			array('transaction_id' => $_POST['txn_id'], 'payment_status' => $_POST['payment_status']), NULL, false, $cart_secure[1]);
 	else
-		$paypal->validateOrder((int)$cart_secure[0], Configuration::get('PS_OS_ERROR'), 0, $paypal->displayName, $errors.'<br />', array(), NULL, false, $cart_secure[1]);
+		$paypal->validateOrder((int)$cart_secure[0], Configuration::get('PS_OS_ERROR'), 0, $paypal->displayName,
+			$errors.'<br />', array(), NULL, false, $cart_secure[1]);
 
 }

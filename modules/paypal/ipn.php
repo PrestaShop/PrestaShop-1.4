@@ -29,8 +29,8 @@ include_once(dirname(__FILE__).'/../../config/config.inc.php');
 include_once(dirname(__FILE__).'/../../init.php');
 
 include_once(_PS_MODULE_DIR_.'paypal/paypal.php');
-$paypal			= new Paypal();
-$paypal_order	= new PayPalOrder();
+$paypal = new Paypal();
+$paypal_order = new PayPalOrder();
 
 if (!$transaction_id = Tools::getValue('txn_id'))
 	die($paypal->l('No transaction id'));
@@ -38,12 +38,12 @@ if (!$id_order = $paypal_order->getIdOrderByTransactionId($transaction_id))
 	die($paypal->l('No order'));
 
 $order = new Order((int)$id_order);
-if (!Validate::isLoadedObject($order) OR !$order->id)
+if (!Validate::isLoadedObject($order) || !$order->id)
 	die($paypal->l('Invalid order'));
 if (!$amount = (float)Tools::getValue('mc_gross') || ($amount != $order->total_paid))
 	die($paypal->l('Incorrect amount'));
 
-if (!$status = strval(Tools::getValue('payment_status')))
+if (!$status = (string)Tools::getValue('payment_status'))
 	die($paypal->l('Incorrect order status'));
 
 // Getting params
@@ -52,7 +52,7 @@ foreach ($_POST as $key => $value)
 	$params .= '&'.$key.'='.urlencode(stripslashes($value));
 
 // Checking params by asking PayPal
-include(_PS_MODULE_DIR_ . 'paypal/api/paypal_lib.php');
+include(_PS_MODULE_DIR_.'paypal/api/paypal_lib.php');
 $paypalAPI = new PaypalLib();
 $result = $paypalAPI->makeSimpleCall($paypal->getAPIURL(), $paypal->getAPIScript(), $params);
 if (!$result || (Tools::strlen($result) < 8) || (!$status = substr($result, -8)) || $status != 'VERIFIED')
