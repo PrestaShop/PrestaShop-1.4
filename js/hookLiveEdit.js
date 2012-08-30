@@ -19,12 +19,12 @@ $(document).ready(function() {
 		var href = $(this).attr('href');
 		var search = $(this).attr('search');
 		var hrefAdd = 'live_edit&liveToken=' + get('liveToken') + '&ad=' + get('ad');
-		if (href != undefined && href != '#' && href.substr(0, baseDir.length) == baseDir) {
-			if (search.length == 0) {
+		if (href != undefined && href != '#' && href.substr(0, baseDir.length) == baseDir)
+		{
+			if (!search || search.length == 0)
 				$(this).attr('search', hrefAdd);
-			} else {
+			else
 				$(this).attr('search', search + '&' + hrefAdd);
-			}
 		}
 	});
 	getHookableList();

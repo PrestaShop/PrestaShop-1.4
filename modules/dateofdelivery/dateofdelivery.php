@@ -47,11 +47,9 @@ class DateOfDelivery extends Module
 	}
 	
 	public function install()
-	{	
-		if (!parent::install() OR !$this->registerHook('beforeCarrier') OR !$this->registerHook('orderDetailDisplayed'))
-			return false;
-		
-		if (!Db::getInstance()->Execute('
+	{
+		return parent::install() && $this->registerHook('beforeCarrier') && $this->registerHook('orderDetailDisplayed')
+		&& Db::getInstance()->Execute('
 		CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'dateofdelivery_carrier_rule` (
 			`id_carrier_rule` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 			`id_carrier` INT NOT NULL,
@@ -59,33 +57,21 @@ class DateOfDelivery extends Module
 			`maximal_time` INT NOT NULL,
 			`delivery_saturday` TINYINT(1) NOT NULL,
 			`delivery_sunday` TINYINT(1) NOT NULL
-		) ENGINE ='._MYSQL_ENGINE_.';
-		'))
-			return false;
-		
-		Configuration::updateValue('DOD_EXTRA_TIME_PRODUCT_OOS', 0);
-		Configuration::updateValue('DOD_EXTRA_TIME_PREPARATION', 1);
-		Configuration::updateValue('DOD_PREPARATION_SATURDAY', 1);
-		Configuration::updateValue('DOD_PREPARATION_SUNDAY', 1);
-		Configuration::updateValue('DOD_DATE_FORMAT', 'l j F Y');
-		
-		return true;
+		) ENGINE = '._MYSQL_ENGINE_) && Configuration::updateValue('DOD_EXTRA_TIME_PRODUCT_OOS', 0)
+		&& Configuration::updateValue('DOD_EXTRA_TIME_PREPARATION', 1) && Configuration::updateValue('DOD_PREPARATION_SATURDAY', 1)
+		&& Configuration::updateValue('DOD_PREPARATION_SUNDAY', 1) && Configuration::updateValue('DOD_DATE_FORMAT', 'l j F Y');
 	}
 	
 	public function uninstall()
 	{
-		Configuration::deleteByName('DOD_EXTRA_TIME_PRODUCT_OOS');
-		Configuration::deleteByName('DOD_EXTRA_TIME_PREPARATION');
-		Configuration::deleteByName('DOD_PREPARATION_SATURDAY');
-		Configuration::deleteByName('DOD_PREPARATION_SUNDAY');
-		Configuration::deleteByName('DOD_DATE_FORMAT');
-		Db::getInstance()->Execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'dateofdelivery_carrier_rule`');
-		
-		return parent::uninstall();
+		return Configuration::deleteByName('DOD_EXTRA_TIME_PRODUCT_OOS') && Configuration::deleteByName('DOD_EXTRA_TIME_PREPARATION')
+		&& Configuration::deleteByName('DOD_PREPARATION_SATURDAY') && Configuration::deleteByName('DOD_PREPARATION_SUNDAY')
+		&& Configuration::deleteByName('DOD_DATE_FORMAT') && Db::getInstance()->Execute('DROP TABLE IF EXISTS `'._DB_PREFIX_.'dateofdelivery_carrier_rule`')
+		&& parent::uninstall();
 	}
 
 	public function getContent()
-	{		
+	{
 		$this->_html .= '<h2>'.$this->l('Date of delivery configuration').'</h2>';
 		
 		$this->_postProcess();
@@ -230,7 +216,7 @@ class DateOfDelivery extends Module
 			<h3>'.$this->l('List of carrier rules').'</h3>';
 			
 		$carrier_rules = $this->_getCarrierRulesWithCarrierName();
-		if (sizeof($carrier_rules))
+		if (count($carrier_rules))
 		{
 			$this->_html .= '<table width="100%" class="table" cellspacing="0" cellpadding="0">
 			<thead>
@@ -242,8 +228,7 @@ class DateOfDelivery extends Module
 				<th width="10%" class="center"><b>'.$this->l('Actions').'</b></th>
 			</tr>
 			</thead>
-			<tbody>
-			';
+			<tbody>';
 			
 			foreach ($carrier_rules as $rule)
 			{
@@ -320,19 +305,16 @@ class DateOfDelivery extends Module
 	{
 		global $currentIndex, $cookie;
 		
-		$carriers = Carrier::getCarriers((int)($cookie->id_lang), true , false,false, NULL, Carrier::ALL_CARRIERS);
-		if (Tools::isSubmit('editCarrierRule') AND $this->_isCarrierRuleExists((int)(Tools::getValue('id_carrier_rule'))))
-			$carrier_rule = $this->_getCarrierRule((int)(Tools::getValue('id_carrier_rule')));
+		$carriers = Carrier::getCarriers((int)$cookie->id_lang, true, false, false, null, Carrier::ALL_CARRIERS);
+		if (Tools::isSubmit('editCarrierRule') && $this->_isCarrierRuleExists((int)Tools::getValue('id_carrier_rule')))
+			$carrier_rule = $this->_getCarrierRule((int)Tools::getValue('id_carrier_rule'));
 		
-		$this->_html .= '
-		<form method="POST" action="'.$_SERVER['REQUEST_URI'].'">
-		';
+		$this->_html .= '<form method="POST" action="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'">';
 		
-		if (isset($carrier_rule) AND $carrier_rule['id_carrier_rule'])
+		if (isset($carrier_rule) && $carrier_rule['id_carrier_rule'])
 			$this->_html .= '<input type="hidden" name="id_carrier_rule" value="'.(int)($carrier_rule['id_carrier_rule']).'" />';
 		$this->_html .= '
-		<fieldset>
-		';
+		<fieldset>';
 		
 		if (Tools::isSubmit('addCarrierRule'))
 			$this->_html .= '<legend><img src="'._PS_BASE_URL_.__PS_BASE_URI__.'modules/'.$this->name.'/img/time_add.png" alt="" /> '.$this->l('New carrier rule').'</legend>';
@@ -363,16 +345,11 @@ class DateOfDelivery extends Module
 					<li><input type="checkbox" name="delivery_saturday" id="delivery_saturday" '.(Tools::isSubmit('delivery_saturday') ? 'checked="checked"' : ((isset($carrier_rule) AND $carrier_rule['delivery_saturday']) ? 'checked="checked"' : '')).' /> <label class="t" for="delivery_saturday">'.$this->l('Saturday delivery').'</label></li>
 					<li><input type="checkbox" name="delivery_sunday" id="delivery_sunday" '.(Tools::isSubmit('delivery_sunday') ? 'checked="checked"' : ((isset($carrier_rule) AND $carrier_rule['delivery_sunday']) ? 'checked="checked"' : '')).' /> <label class="t" for="delivery_sunday">'.$this->l('Sunday delivery').'</label></li>
 				</ul>
-			</div>
-			
+			</div>			
 			<p class="center"><input type="submit" class="button" name="submitCarrierRule" value="'.$this->l('Save').'" /></p>
 			<p class="center"><a href="'.$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'">'.$this->l('Cancel').'</a></p>
-		';
-		
-		$this->_html .= '
 		</fieldset>
-		</form>
-		';
+		</form>';
 	}
 	
 	private function _getCarrierRulesWithCarrierName()
@@ -380,8 +357,7 @@ class DateOfDelivery extends Module
 		return Db::getInstance()->ExecuteS('
 		SELECT * 
 		FROM `'._DB_PREFIX_.'dateofdelivery_carrier_rule` dcr 
-		LEFT JOIN `'._DB_PREFIX_.'carrier` c ON (c.`id_carrier` = dcr.`id_carrier`)
-		');
+		LEFT JOIN `'._DB_PREFIX_.'carrier` c ON (c.`id_carrier` = dcr.`id_carrier`)');
 	}
 	
 	private function _getCarrierRule($id_carrier_rule)

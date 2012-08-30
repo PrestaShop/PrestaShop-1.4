@@ -129,7 +129,7 @@ function checkImageUploadError($file)
   * @param string $file $_FILE of the current file
   * @param array $types Allowed MIME types
   */
-function isPicture($file, $types = NULL)
+function isPicture($file, $types = null)
 {
 	// Filter on file extension
 	$authorized_extensions = array('gif', 'jpg', 'jpeg', 'jpe', 'png');
@@ -170,7 +170,7 @@ function isPicture($file, $types = NULL)
 		$mimeType = $file['type'];
 
 	/* For each allowed MIME type, we are looking for it inside the current MIME type */
-	foreach ($types AS $type)
+	foreach ($types as $type)
 		if (strstr($mimeType, $type))
 			return true;
 
@@ -204,7 +204,7 @@ function checkIco($file, $maxFileSize)
   *
   * @return boolean Operation result
   */
-function imageResize($sourceFile, $destFile, $destWidth = NULL, $destHeight = NULL, $fileType = 'jpg')
+function imageResize($sourceFile, $destFile, $destWidth = null, $destHeight = null, $fileType = 'jpg')
 {
 	if (!file_exists($sourceFile))
 		return false;
@@ -218,8 +218,8 @@ function imageResize($sourceFile, $destFile, $destWidth = NULL, $destHeight = NU
 	
 	if (!$sourceWidth)
 		return false;
-	if ($destWidth == NULL) $destWidth = $sourceWidth;
-	if ($destHeight == NULL) $destHeight = $sourceHeight;
+	if ($destWidth == null) $destWidth = $sourceWidth;
+	if ($destHeight == null) $destHeight = $sourceHeight;
 
 	$sourceImage = createSrcImage($type, $sourceFile);
 
@@ -277,7 +277,7 @@ function imageResize($sourceFile, $destFile, $destWidth = NULL, $destHeight = NU
   *
   * @return boolean Operation result
   */
-function imageCut($srcFile, $destFile, $destWidth = NULL, $destHeight = NULL, $fileType = 'jpg', $destX = 0, $destY = 0)
+function imageCut($srcFile, $destFile, $destWidth = null, $destHeight = null, $fileType = 'jpg', $destX = 0, $destY = 0)
 {
 	if (!isset($srcFile['tmp_name']) OR !file_exists($srcFile['tmp_name']))
 		return false;
@@ -291,8 +291,8 @@ function imageCut($srcFile, $destFile, $destWidth = NULL, $destHeight = NULL, $f
 	// Destination infos
 	$dest['x'] = $destX;
 	$dest['y'] = $destY;
-	$dest['width'] = $destWidth != NULL ? $destWidth : $src['width'];
-	$dest['height'] = $destHeight != NULL ? $destHeight : $src['height'];
+	$dest['width'] = $destWidth != null ? $destWidth : $src['width'];
+	$dest['height'] = $destHeight != null ? $destHeight : $src['height'];
 	$dest['ressource'] = createDestImage($dest['width'], $dest['height']);
 
 	$white = imagecolorallocate($dest['ressource'], 255, 255, 255);
@@ -358,7 +358,7 @@ function returnDestImage($type, $ressource, $filename)
   * @param integer $id_image Image id
   * TODO This function will soon be deprecated.
   */
-function deleteImage($id_item, $id_image = NULL)
+function deleteImage($id_item, $id_image = null)
 {
 	// Category
 	if (!$id_image)
@@ -372,7 +372,7 @@ function deleteImage($id_item, $id_image = NULL)
 		
 		/* Auto-generated images */
 		$imagesTypes = ImageType::getImagesTypes();
-		foreach ($imagesTypes AS $k => $imagesType)
+		foreach ($imagesTypes as $k => $imagesType)
 			if (file_exists($path.$id_item.'-'.$imagesType['name'].'.jpg'))
 				unlink($path.$id_item.'-'.$imagesType['name'].'.jpg');
 	}else // Product
@@ -387,7 +387,7 @@ function deleteImage($id_item, $id_image = NULL)
 			
 		/* Auto-generated images */
 		$imagesTypes = ImageType::getImagesTypes();
-		foreach ($imagesTypes AS $k => $imagesType)
+		foreach ($imagesTypes as $k => $imagesType)
 			if (file_exists($path.$image->getExistingImgPath().'-'.$imagesType['name'].'.jpg'))
 				unlink($path.$image->getExistingImgPath().'-'.$imagesType['name'].'.jpg');
 	}

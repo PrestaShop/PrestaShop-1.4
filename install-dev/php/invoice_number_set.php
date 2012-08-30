@@ -41,7 +41,7 @@ function invoice_number_set()
 		$history = $order->getHistory(false);
 		foreach ($history as $row2)
 		{
-			$oS = new OrderState((int)($row2['id_order_state']), _PS_LANG_DEFAULT_);
+			$oS = new OrderState((int)($row2['id_order_state']), (int)Configuration::get('PS_LANG_DEFAULT'));
 			if ($oS->invoice)
 			{
 				Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'orders SET invoice_number = '.(int)($number++).', `invoice_date` = `date_add` WHERE id_order = '.(int)($order->id));
@@ -52,4 +52,3 @@ function invoice_number_set()
 	// Add configuration var
 	Configuration::updateValue('PS_INVOICE_NUMBER', (int)($number));
 }
-

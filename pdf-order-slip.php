@@ -42,6 +42,5 @@ $order = new Order((int)($orderSlip->id_order));
 if (!Validate::isLoadedObject($order))
     die(Tools::displayError('Order not found'));
 $order->products = OrderSlip::getOrdersSlipProducts((int)($orderSlip->id), $order);
-$ref = NULL;
+$ref = null;
 PDF::invoice($order, 'D', false, $ref, $orderSlip);
-

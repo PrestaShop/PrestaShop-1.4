@@ -288,7 +288,7 @@ if (!$fail_result)
 					else
 						$parameters = array();
 					if (is_array($parameters))
-						foreach ($parameters AS &$parameter)
+						foreach ($parameters as &$parameter)
 							$parameter = str_replace('\'', '', $parameter);
 
 					// Call a simple function

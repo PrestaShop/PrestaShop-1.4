@@ -113,8 +113,7 @@ class StatsForecast extends Module
 			: 'IFNULL(MAKEDATE(YEAR(invoice_date), DAYOFYEAR(invoice_date) - WEEKDAY(invoice_date)), CONCAT(YEAR(invoice_date), "-01-01*"))');
 
 		$result = $db->ExecuteS('
-		SELECT '.$dateFromGInvoice.' fix_date, COUNT(DISTINCT o.`id_order`) countOrders,  SUM(od.`product_quantity`) countProducts,
-		SUM(o.`total_products` / o.`conversion_rate`) totalProducts, SUM(o.`total_shipping` / (1 + o.`carrier_tax_rate` * 0.01)) totalShipping
+		SELECT '.$dateFromGInvoice.' fix_date, COUNT(DISTINCT o.`id_order`) countOrders,  SUM(od.`product_quantity`) countProducts
 		FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON (o.`id_order` = od.`id_order`)
 		WHERE o.`valid` = 1 AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween().'
@@ -122,9 +121,18 @@ class StatsForecast extends Module
 
 		while ($row = $db->nextRow($result))
 			$dataTable[$row['fix_date']] = $row;
+			
+		$result = $db->ExecuteS('
+		SELECT '.$dateFromGInvoice.' fix_date, SUM(o.`total_products` / o.`conversion_rate`) totalProducts, SUM(o.`total_shipping` / (1 + (o.`carrier_tax_rate` * 0.01))) totalShipping
+		FROM `'._DB_PREFIX_.'orders` o
+		WHERE o.`valid` = 1 AND o.`invoice_date` BETWEEN '.ModuleGraph::getDateBetween().'
+		GROUP BY '.$dateFromGInvoice, false);
 
-		$this->_html .= '<div style="float:left;width:660px">
-		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
+		while ($row = $db->nextRow($result))
+			$dataTable[$row['fix_date']] = array_merge($dataTable[$row['fix_date']], $row);
+
+		$this->_html .= '<div style="float: left; width: 660px;">
+		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" alt="" /> '.$this->displayName.'</legend>
 			<p style="float:left">'.$this->l('All amounts are without taxes. Dates are referring to the invoices dates.').'</p>
 			<form id="granularity" action="'.$ru.'#granularity" method="post" style="float:right">
 				<input type="hidden" name="submitGranularity" value="1" />
@@ -180,20 +188,20 @@ class StatsForecast extends Module
 			$this->_html .= '<tr>
 				<td>'.$row['fix_date'].'</td>
 				<td align="center">'.$visitsToday.'</td>
-				<td align="center">'.(int)($row['registrations']).'</td>
-				<td align="center">'.(int)($row['countOrders']).'</td>
-				<td align="center">'.(int)($row['countProducts']).'</td>
-				<td align="center">'.($visitsToday ? min(100, round(100 * (int)($row['registrations']) / $visitsToday, 2)).'%' : '-').'</td>
-				<td align="center">'.($visitsToday ? min(100, round(100 * (int)($row['countOrders']) / $visitsToday, 2)).'%' : '-').'</td>
+				<td align="center">'.(int)$row['registrations'].'</td>
+				<td align="center">'.(int)$row['countOrders'].'</td>
+				<td align="center">'.(int)$row['countProducts'].'</td>
+				<td align="center">'.($visitsToday ? min(100, round(100 * (int)$row['registrations'] / $visitsToday, 2)).'%' : '-').'</td>
+				<td align="center">'.($visitsToday ? min(100, round(100 * (int)$row['countOrders'] / $visitsToday, 2)).'%' : '-').'</td>
 				<td align="right">'.Tools::displayPrice($discountToday, $currency).'</td>
 				<td align="right">'.Tools::displayPrice($row['totalProducts'], $currency).'</td>
 				<td align="right">'.Tools::displayPrice($row['totalShipping'], $currency).'</td>
 			</tr>';
 
 			$this->t1 += $visitsToday;
-			$this->t2 += (int)($row['registrations']);
-			$this->t3 += (int)($row['countOrders']);
-			$this->t4 += (int)($row['countProducts']);
+			$this->t2 += (int)$row['registrations'];
+			$this->t3 += (int)$row['countOrders'];
+			$this->t4 += (int)$row['countProducts'];
 			$this->t7 += $discountToday;
 			$this->t8 += $row['totalProducts'];
 			$this->t9 += $row['totalShipping'];

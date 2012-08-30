@@ -91,7 +91,7 @@ else
 		
 	/* Key format: <sha1-filename>-<hashOrder> */
 	$tmp = explode('-', $key);
-	if (sizeof($tmp) != 2)
+	if (count($tmp) != 2)
 		displayError('Invalid key.');
 
 	$filename = $tmp[0];
@@ -290,7 +290,6 @@ if (empty($mimeType))
 	else
 		$mimeType = 'application/octet-stream';
 }
-
 
 /* Set headers for download */
 header('Content-Transfer-Encoding: binary');

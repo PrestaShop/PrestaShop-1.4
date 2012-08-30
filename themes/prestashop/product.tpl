@@ -120,7 +120,7 @@ var fieldRequired = '{l s='Please fill in all required fields, then save your cu
 
 {include file="$tpl_dir./breadcrumb.tpl"}
 <div id="primary_block" class="clearfix">
-	<h1>{$product->name|escape:'htmlall':'UTF-8'}</h1>
+	<h1>{$product->name|truncate:65:'...'|escape:'htmlall':'UTF-8'}</h1>
 
 	{if isset($adminActionDisplay) && $adminActionDisplay}
 	<div id="admin-action">
