@@ -119,8 +119,23 @@ class PayPalLogos
 	{
 		// 604800 => One week timestamp
 		if (!file_exists(_PS_MODULE_DIR_.$destination) || ((time() - filemtime(_PS_MODULE_DIR_.$destination)) > 604800) || $force)
-			if (($handle = @fopen(_PS_MODULE_DIR_.$destination, 'w+')))
-				return fwrite($handle, file_get_contents($source)) ? _MODULE_DIR_.$destination : false;
+		{
+			if ($handle = @fopen(_PS_MODULE_DIR_.$destination, 'w+'))
+			{
+				$url_fopen = ini_get('allow_url_fopen');
+				if (!empty($url_fopen))
+					$picture = @file_get_contents($source);
+				elseif(is_callable('curl_init'))
+				{
+					$ch = curl_init();
+					curl_setopt($ch, CURLOPT_URL, $source);
+					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					$picture = curl_exec($ch);
+					curl_close($ch);
+				}
+				return fwrite($handle, $picture) ? _MODULE_DIR_.$destination : false;
+			}
+		}
 
 		return _MODULE_DIR_.$destination;
 	}

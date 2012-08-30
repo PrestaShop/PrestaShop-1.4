@@ -64,7 +64,7 @@ abstract class PayPalAbstract extends PaymentModule
 		$this->page = basename(__FILE__, '.php');
 
 		$this->displayName = $this->l('PayPal');
-		$this->description = $this->l('Accepts payments by credit cards with PayPal.');
+		$this->description = $this->l('Accepts payments by credit cards (CB, Visa, MasterCard, Amex, Aurore, Cofinoga, 4 stars) with PayPal.');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details?');
 
         // Default methods (initialization & checks)
