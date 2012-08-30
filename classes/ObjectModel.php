@@ -210,9 +210,9 @@ abstract class ObjectModelCore
 		{
 			$fields = $this->getTranslationsFieldsChild();
 			if ($fields AND is_array($fields))
-				foreach ($fields AS $field)
+				foreach ($fields as $field)
 				{
-					foreach (array_keys($field) AS $key)
+					foreach (array_keys($field) as $key)
 					 	if (!Validate::isTableOrIdentifier($key))
 			 				die(Tools::displayError('key is not table or identifier, ').Tools::safeOutput($key));
 					$field[$this->identifier] = (int)$this->id;
@@ -304,7 +304,7 @@ abstract class ObjectModelCore
 		if (!is_array($selection) OR !Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
 			die(Tools::displayError());
 		$result = true;
-		foreach ($selection AS $id)
+		foreach ($selection as $id)
 		{
 			$this->id = (int)($id);
 			$result = $result AND $this->delete();
@@ -479,19 +479,19 @@ abstract class ObjectModelCore
 
 		/* Checking for required fields */
 		$fieldsRequired = array_merge($this->fieldsRequired, (isset(self::$fieldsRequiredDatabase[get_class($this)]) ? self::$fieldsRequiredDatabase[get_class($this)] : array()));
-		foreach ($fieldsRequired AS $field)
+		foreach ($fieldsRequired as $field)
 		if (($value = Tools::getValue($field, $this->{$field})) == false AND (string)$value != '0')
 			if (!$this->id OR $field != 'passwd')
 				$errors[] = '<b>'.self::displayFieldName($field, get_class($this), $htmlentities).'</b> '.Tools::displayError('is required.');
 
 
 		/* Checking for maximum fields sizes */
-		foreach ($this->fieldsSize AS $field => $maxLength)
+		foreach ($this->fieldsSize as $field => $maxLength)
 			if (($value = Tools::getValue($field, $this->{$field})) AND Tools::strlen($value) > $maxLength)
 				$errors[] = '<b>'.self::displayFieldName($field, get_class($this), $htmlentities).'</b> '.Tools::displayError('is too long.').' ('.Tools::displayError('Maximum length:').' '.$maxLength.')';
 
 		/* Checking for fields validity */
-		foreach ($this->fieldsValidate AS $field => $function)
+		foreach ($this->fieldsValidate as $field => $function)
 		{
 
 			if ($copy_post && is_array($this->exclude_copy_post) && in_array($field, $this->exclude_copy_post))
@@ -517,7 +517,7 @@ abstract class ObjectModelCore
 		return $errors;
 	}
 
-	public function getWebserviceParameters($wsParamsAttributeName = NULL)
+	public function getWebserviceParameters($wsParamsAttributeName = null)
 	{
 		$defaultResourceParameters = array(
 			'objectSqlId' => $this->identifier,
@@ -650,7 +650,7 @@ abstract class ObjectModelCore
 	public function getWebserviceObjectList($sql_join, $sql_filter, $sql_sort, $sql_limit)
 	{
 		$query = '
-		SELECT DISTINCT main.`'.$this->identifier.'` FROM `'._DB_PREFIX_.$this->table.'` AS main
+		SELECT DISTINCT main.`'.$this->identifier.'` FROM `'._DB_PREFIX_.$this->table.'` main
 		'.$sql_join.'
 		WHERE 1 '.$sql_filter.'
 		'.($sql_sort != '' ? $sql_sort : '').'
@@ -675,7 +675,7 @@ abstract class ObjectModelCore
 		if (!Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'required_field WHERE object_name = \''.pSQL(get_class($this)).'\''))
 			return false;
 
-		foreach ($fields AS $field)
+		foreach ($fields as $field)
 			if (!Db::getInstance()->AutoExecute(_DB_PREFIX_.'required_field', array('object_name' => pSQL(get_class($this)), 'field_name' => pSQL($field)), 'INSERT'))
 				return false;
 		return true;

@@ -84,7 +84,7 @@ class ManufacturerCore extends ObjectModel
 		),
 	);
 
-	public function __construct($id = NULL, $id_lang = NULL)
+	public function __construct($id = null, $id_lang = null)
 	{
 		parent::__construct($id, $id_lang);
 
@@ -163,23 +163,20 @@ class ManufacturerCore extends ObjectModel
 		if (!is_array($selection) || !Validate::isTableOrIdentifier($this->identifier) || !Validate::isTableOrIdentifier($this->table))
 			die(Tools::displayError());
 		$result = true;
-		foreach ($selection AS $id)
+		foreach ($selection as $id)
 		{
-			$this->id = (int)($id);
+			$this->id = (int)$id;
 			$this->id_address = self::getManufacturerAddress();
-			$result = $result AND $this->delete();
+			$result &= $this->delete();
 		}
 		return $result;
 	}
 
 	protected function getManufacturerAddress()
 	{
-		if (!(int)($this->id))
+		if (!(int)$this->id)
 			return false;
-		$result = Db::GetInstance(_PS_USE_SQL_SLAVE_)->getRow('SELECT `id_address` FROM '._DB_PREFIX_.'address WHERE `id_manufacturer` = '.(int)($this->id));
-		if (!$result)
-			return false;
-		return $result['id_address'];
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT `id_address` FROM '._DB_PREFIX_.'address WHERE `id_manufacturer` = '.(int)$this->id);
 	}
 
 	/**
@@ -194,9 +191,9 @@ class ManufacturerCore extends ObjectModel
 			$id_lang = (int)_PS_LANG_DEFAULT_;
 		$sql = 'SELECT m.*, ml.`description`';
 		$sql.= ' FROM `'._DB_PREFIX_.'manufacturer` m
-		LEFT JOIN `'._DB_PREFIX_.'manufacturer_lang` ml ON (m.`id_manufacturer` = ml.`id_manufacturer` AND ml.`id_lang` = '.(int)($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'manufacturer_lang` ml ON (m.`id_manufacturer` = ml.`id_manufacturer` AND ml.`id_lang` = '.(int)$id_lang.')
 		'.($active ? ' WHERE m.`active` = 1' : '');
-		$sql.= ' ORDER BY m.`name` ASC'.($p ? ' LIMIT '.(((int)($p) - 1) * (int)($n)).','.(int)($n) : '');
+		$sql .= ' ORDER BY m.`name` ASC'.($p ? ' LIMIT '.(((int)$p - 1) * (int)$n).','.(int)$n : '');
 		$manufacturers = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
 		if ($manufacturers === false)
 			return false;
@@ -213,7 +210,7 @@ class ManufacturerCore extends ObjectModel
 				$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('SELECT p.`id_product`
 				FROM `'._DB_PREFIX_.'product` p
 				LEFT JOIN `'._DB_PREFIX_.'manufacturer` as m ON (m.`id_manufacturer`= p.`id_manufacturer`)
-				WHERE m.`id_manufacturer` = '.(int)($manufacturer['id_manufacturer']).
+				WHERE m.`id_manufacturer` = '.(int)$manufacturer['id_manufacturer'].
 				($active ? ' AND p.`active` = 1 ' : '').
 				($all_group ? '' : ' AND p.`id_product` IN (
 					SELECT cp.`id_product`
@@ -221,11 +218,12 @@ class ManufacturerCore extends ObjectModel
 					LEFT JOIN `'._DB_PREFIX_.'category_product` cp ON (cp.`id_category` = cg.`id_category`)
 					WHERE cg.`id_group` '.$sqlGroups.')'));
 
-				$manufacturers[$key]['nb_products'] = sizeof($result);
+				$manufacturers[$key]['nb_products'] = count($result);
 			}
 		}
 		$rewrite_settings = (int)Configuration::get('PS_REWRITING_SETTINGS');
-		for ($i = 0; $i < sizeof($manufacturers); $i++)
+		$count_manufacturers = count($manufacturers);
+		for ($i = 0; $i < $count_manufacturers; $i++)
 			if ($rewrite_settings)
 				$manufacturers[$i]['link_rewrite'] = Tools::link_rewrite($manufacturers[$i]['name'], false);
 			else
@@ -239,10 +237,11 @@ class ManufacturerCore extends ObjectModel
 	public static function getManufacturersWithoutAddress()
 	{
 		Tools::displayAsDeprecated();
-		$sql = 'SELECT m.* FROM `'._DB_PREFIX_.'manufacturer` m
-				LEFT JOIN `'._DB_PREFIX_.'address` a ON (a.`id_manufacturer` = m.`id_manufacturer` AND a.`deleted` = 0)
-				WHERE a.`id_manufacturer` IS NULL';
-		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($sql);
+
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT m.* FROM `'._DB_PREFIX_.'manufacturer` m
+		LEFT JOIN `'._DB_PREFIX_.'address` a ON (a.`id_manufacturer` = m.`id_manufacturer` AND a.`deleted` = 0)
+		WHERE a.`id_manufacturer` IS NULL');
 	}
 
 	/**
@@ -276,7 +275,7 @@ class ManufacturerCore extends ObjectModel
 		return Tools::link_rewrite($this->name, false);
 	}
 
-	public static function getProducts($id_manufacturer, $id_lang, $p, $n, $orderBy = NULL, $orderWay = NULL, $getTotal = false, $active = true, $active_category = true)
+	public static function getProducts($id_manufacturer, $id_lang, $p, $n, $orderBy = null, $orderWay = null, $getTotal = false, $active = true, $active_category = true)
 	{
 		if ($p < 1) $p = 1;
 	 	if (empty($orderBy) ||$orderBy == 'position') $orderBy = 'name';
@@ -355,7 +354,7 @@ class ManufacturerCore extends ObjectModel
 		$row = Db::getInstance()->getRow('
 		SELECT `id_manufacturer`
 		FROM '._DB_PREFIX_.'manufacturer m
-		WHERE m.`id_manufacturer` = '.(int)($id_manufacturer));
+		WHERE m.`id_manufacturer` = '.(int)$id_manufacturer);
 
 		return isset($row['id_manufacturer']);
 	}
@@ -363,21 +362,19 @@ class ManufacturerCore extends ObjectModel
 	public function getAddresses($id_lang)
 	{
 		return Db::getInstance()->ExecuteS('
-		SELECT a.*, cl.name AS `country`, s.name AS `state`
-		FROM `'._DB_PREFIX_.'address` AS a
-		LEFT JOIN `'._DB_PREFIX_.'country_lang` AS cl ON (cl.`id_country` = a.`id_country` AND cl.`id_lang` = '.(int)($id_lang).')
-		LEFT JOIN `'._DB_PREFIX_.'state` AS s ON (s.`id_state` = a.`id_state`)
-		WHERE `id_manufacturer` = '.(int)($this->id).'
-		AND a.`deleted` = 0');
+		SELECT a.*, cl.name `country`, s.name `state`
+		FROM `'._DB_PREFIX_.'address` a
+		LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (cl.`id_country` = a.`id_country` AND cl.`id_lang` = '.(int)$id_lang.')
+		LEFT JOIN `'._DB_PREFIX_.'state` s ON (s.`id_state` = a.`id_state`)
+		WHERE `id_manufacturer` = '.(int)$this->id.' AND a.`deleted` = 0');
 	}
 
 	public function getWsAddresses()
 	{
-			return Db::getInstance()->ExecuteS('
-		SELECT a.id_address as id
-		FROM `'._DB_PREFIX_.'address` AS a
-		WHERE `id_manufacturer` = '.(int)($this->id).'
-		AND a.`deleted` = 0');
+		return Db::getInstance()->ExecuteS('
+		SELECT a.id_address id
+		FROM `'._DB_PREFIX_.'address` a
+		WHERE `id_manufacturer` = '.(int)$this->id.' AND a.`deleted` = 0');
 	}
 
 	public function setWsAddresses($id_addresses)
@@ -400,4 +397,3 @@ class ManufacturerCore extends ObjectModel
 		return ($result1 && $result2);
 	}
 }
-
