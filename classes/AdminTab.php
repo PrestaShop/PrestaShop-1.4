@@ -133,15 +133,15 @@ abstract class AdminTabCore
 	public $tabAccess;
 
 	/** @var string specificConfirmDelete */
-	public $specificConfirmDelete = NULL;
+	public $specificConfirmDelete = null;
 
 	protected $identifiersDnd = array('id_product' => 'id_product', 'id_category' => 'id_category_to_move','id_cms_category' => 'id_cms_category_to_move', 'id_cms' => 'id_cms');
 
 	/** @var bool Redirect or not ater a creation */
 	protected $_redirect = true;
 
-	protected	$_languages = NULL;
-	protected	$_defaultFormLanguage = NULL;
+	protected	$_languages = null;
+	protected	$_defaultFormLanguage = null;
 
 	protected $_includeObj = array();
 	protected $_includeVars = false;
@@ -353,7 +353,7 @@ abstract class AdminTabCore
 
 			/* Extra variables addition */
 			if (!empty($extraVars) AND is_array($extraVars))
-				foreach ($extraVars AS $varKey => $varValue)
+				foreach ($extraVars as $varKey => $varValue)
 					$adminTab->$varKey = $varValue;
 
 			/* Actions management */
@@ -386,18 +386,18 @@ abstract class AdminTabCore
 				}
 			}
 			$inc = false;
-			if ((isset($ok_inc) AND $ok_inc) OR !sizeof($actions))
+			if ((isset($ok_inc) && $ok_inc) || !count($actions))
 			{
 				if (!$adminTab->viewAccess())
 				{
 					echo Tools::displayError('Access denied');
 					return false;
 				}
-				if (!sizeof($actions))
+				if (!count($actions))
 					if (($methodname == 'displayErrors' AND sizeof($adminTab->_errors)) OR $methodname != 'displayErrors')
 						echo (isset($this->_includeTabTitle[$key]) ? '<h2>'.$this->_includeTabTitle[$key].'</h2>' : '');
 				if ($adminTab->_includeVars)
-					foreach ($adminTab->_includeVars AS $var => $value)
+					foreach ($adminTab->_includeVars as $var => $value)
 						$adminTab->$var = $this->$value;
 				$adminTab->$methodname();
 				$inc = true;
@@ -420,7 +420,7 @@ abstract class AdminTabCore
 		/* Class specific validation rules */
 		$rules = call_user_func(array($className, 'getValidationRules'), $className);
 
-		if ((sizeof($rules['requiredLang']) OR sizeof($rules['sizeLang']) OR sizeof($rules['validateLang'])))
+		if (count($rules['requiredLang']) || count($rules['sizeLang']) || count($rules['validateLang']))
 		{
 			/* Language() instance determined by default language */
 			$defaultLanguage = new Language((int)(_PS_LANG_DEFAULT_));
@@ -430,24 +430,24 @@ abstract class AdminTabCore
 		}
 
 		/* Checking for required fields */
-		foreach ($rules['required'] AS $field)
+		foreach ($rules['required'] as $field)
 			if (($value = Tools::getValue($field)) == false AND (string)$value != '0')
 				if (!Tools::getValue($this->identifier) OR ($field != 'passwd' AND $field != 'no-picture'))
 					$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $field, $className).'</b> '.$this->l('is required');
 
 		/* Checking for multilingual required fields */
-		foreach ($rules['requiredLang'] AS $fieldLang)
+		foreach ($rules['requiredLang'] as $fieldLang)
 			if (($empty = Tools::getValue($fieldLang.'_'.$defaultLanguage->id)) === false OR $empty !== '0' AND empty($empty))
 				$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).'</b> '.$this->l('is required at least in').' '.$defaultLanguage->name;
 
 		/* Checking for maximum fields sizes */
-		foreach ($rules['size'] AS $field => $maxLength)
+		foreach ($rules['size'] as $field => $maxLength)
 			if (Tools::getValue($field) !== false AND Tools::strlen(Tools::getValue($field)) > $maxLength)
 				$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $field, $className).'</b> '.$this->l('is too long').' ('.$maxLength.' '.$this->l('chars max').')';
 
 		/* Checking for maximum multilingual fields size */
-		foreach ($rules['sizeLang'] AS $fieldLang => $maxLength)
-			foreach ($languages AS $language)
+		foreach ($rules['sizeLang'] as $fieldLang => $maxLength)
+			foreach ($languages as $language)
 				if (Tools::getValue($fieldLang.'_'.$language['id_lang']) !== false AND Tools::strlen(Tools::getValue($fieldLang.'_'.$language['id_lang'])) > $maxLength)
 					$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).' ('.$language['name'].')</b> '.$this->l('is too long').' ('.$maxLength.' '.$this->l('chars max, html chars including').')';
 
@@ -455,7 +455,7 @@ abstract class AdminTabCore
 		$this->_childValidation();
 
 		/* Checking for fields validity */
-		foreach ($rules['validate'] AS $field => $function)
+		foreach ($rules['validate'] as $field => $function)
 			if (($value = Tools::getValue($field)) !== false AND !empty($value) AND ($field != 'passwd')) 			
 				if (!Validate::$function($value))
 					$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $field, $className).'</b> '.$this->l('is invalid');
@@ -470,8 +470,8 @@ abstract class AdminTabCore
 		}
 
 		/* Checking for multilingual fields validity */
-		foreach ($rules['validateLang'] AS $fieldLang => $function)
-			foreach ($languages AS $language)
+		foreach ($rules['validateLang'] as $fieldLang => $function)
+			foreach ($languages as $language)
 				if (($value = Tools::getValue($fieldLang.'_'.$language['id_lang'])) !== false AND !empty($value))
 					if (!Validate::$function($value))
 						$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).' ('.$language['name'].')</b> '.$this->l('is invalid');
@@ -503,7 +503,7 @@ abstract class AdminTabCore
 		if (file_exists(_PS_TMP_IMG_DIR_.$this->table.'_mini_'.$id.'.'.$this->imageType) AND !unlink(_PS_TMP_IMG_DIR_.$this->table.'_mini_'.$id.'.'.$this->imageType))
 			return false;
 		$types = ImageType::getImagesTypes();
-		foreach ($types AS $imageType)
+		foreach ($types as $imageType)
 			if (file_exists(_PS_IMG_DIR_.$dir.$id.'-'.stripslashes($imageType['name']).'.'.$this->imageType) AND !unlink(_PS_IMG_DIR_.$dir.$id.'-'.stripslashes($imageType['name']).'.'.$this->imageType))
 				return false;
 		return true;
@@ -592,7 +592,15 @@ abstract class AdminTabCore
 				if (Validate::isLoadedObject($object = $this->loadObject()))
 				{
 					if ($object->toggleStatus())
-						Tools::redirectAdmin($currentIndex.'&conf=5'.((($id_category = (int)(Tools::getValue('id_category'))) AND Tools::getValue('id_product')) ? '&id_category='.$id_category : '').'&token='.$token);
+					{
+						if ($id_category = Tools::getValue('id_category'))
+						{
+							if (isset($object->id_parent) && $object->id_parent)
+								$id_category = (int)$object->id_parent;
+						}
+						
+						Tools::redirectAdmin($currentIndex.'&conf=5'.($id_category ? '&id_category='.(int)$id_category : '').'&token='.$token);
+					}
 					else
 						$this->_errors[] = Tools::displayError('An error occurred while updating status.');
 				}
@@ -631,7 +639,7 @@ abstract class AdminTabCore
 						$result = true;
 						if ($this->deleted)
 						{
-							foreach(Tools::getValue($this->table.'Box') as $id)
+							foreach (Tools::getValue($this->table.'Box') as $id)
 							{
 								$toDelete = new $this->className($id);
 								$toDelete->deleted = 1;
@@ -675,7 +683,7 @@ abstract class AdminTabCore
 							{
 								// Create new one with old objet values
 								$objectNew = new $this->className($object->id);
-								$objectNew->id = NULL;
+								$objectNew->id = null;
 								$objectNew->date_add = '';
 								$objectNew->date_upd = '';
 
@@ -786,7 +794,7 @@ abstract class AdminTabCore
 		elseif (Tools::isSubmit('submitFilter'.$this->table) OR $cookie->{'submitFilter'.$this->table} !== false)
 		{
 			$_POST = array_merge($cookie->getFamily($this->table.'Filter_'), (isset($_POST) ? $_POST : array()));
-			foreach ($_POST AS $key => $value)
+			foreach ($_POST as $key => $value)
 			{
 				/* Extracting filters from $_POST on key filter_ */
 				if ($value != NULL AND !strncmp($key, $this->table.'Filter_', 7 + Tools::strlen($this->table)))
@@ -941,7 +949,7 @@ abstract class AdminTabCore
 			{
 				$_FILES[$name]['tmp_name'] = $tmpName;
 				// Copy new image
-				if (!imageResize($tmpName, _PS_IMG_DIR_.$dir.$id.'.'.$this->imageType, NULL, NULL, ($ext ? $ext : $this->imageType)))
+				if (!imageResize($tmpName, _PS_IMG_DIR_.$dir.$id.'.'.$this->imageType, null, null, ($ext ? $ext : $this->imageType)))
 					$this->_errors[] = Tools::displayError('An error occurred while uploading image.');
 				if (sizeof($this->_errors))
 					return false;
@@ -985,7 +993,7 @@ abstract class AdminTabCore
 		if (isset($this->fieldImageSettings['name']) AND isset($this->fieldImageSettings['dir']))
 			return $this->uploadImage($id, $this->fieldImageSettings['name'], $this->fieldImageSettings['dir'].'/');
 		elseif (!empty($this->fieldImageSettings))
-			foreach ($this->fieldImageSettings AS $image)
+			foreach ($this->fieldImageSettings as $image)
 				if (isset($image['name']) AND isset($image['dir']))
 					$this->uploadImage($id, $image['name'], $image['dir'].'/');
 		return !sizeof($this->_errors) ? true : false;
@@ -1000,7 +1008,7 @@ abstract class AdminTabCore
 	protected function copyFromPost(&$object, $table)
 	{
 		/* Classical fields */
-		foreach ($_POST AS $key => $value)
+		foreach ($_POST as $key => $value)
 			if (key_exists($key, $object) AND $key != 'id_'.$table)
 			{
 				/* Do not take care of password field if empty */
@@ -1017,8 +1025,8 @@ abstract class AdminTabCore
 		if (sizeof($rules['validateLang']))
 		{
 			$languages = Language::getLanguages(false);
-			foreach ($languages AS $language)
-				foreach (array_keys($rules['validateLang']) AS $field)
+			foreach ($languages as $language)
+				foreach (array_keys($rules['validateLang']) as $field)
 					if (isset($_POST[$field.'_'.(int)($language['id_lang'])]))
 						$object->{$field}[(int)($language['id_lang'])] = $_POST[$field.'_'.(int)($language['id_lang'])];
 		}
@@ -1047,7 +1055,7 @@ abstract class AdminTabCore
 			else
 			{
 				echo $nbErrors.' '.$this->l('errors').'<br /><ol>';
-				foreach ($this->_errors AS $error)
+				foreach ($this->_errors as $error)
 					echo '<li>'.$error.'</li>';
 				echo '</ol>';
 			}
@@ -1097,7 +1105,7 @@ abstract class AdminTabCore
 				.'<span style="margin-left:20px;" id="labelSeeMore">
 				<a id="linkSeeMore" href="#" style="text-decoration:underline">'.$this->l('Click here to see more').'</a>
 				<a id="linkHide" href="#" style="text-decoration:underline;display:none">'.$this->l('Hide warning').'</a></span><ul style="display:none;" id="seeMore">';
-				foreach($warn as $val)
+				foreach ($warn as $val)
 					$str_output .= '<li>'.$val.'</li>';
 				$str_output .= '</ul>';
 			}
@@ -1127,7 +1135,7 @@ abstract class AdminTabCore
 	 * @param integer $start Offset in LIMIT clause
 	 * @param integer $limit Row count in LIMIT clause
 	 */
-	public function getList($id_lang, $orderBy = NULL, $orderWay = NULL, $start = 0, $limit = NULL)
+	public function getList($id_lang, $orderBy = null, $orderWay = null, $start = 0, $limit = null)
 	{
 		global $cookie;
 
@@ -1199,7 +1207,7 @@ abstract class AdminTabCore
 	 *
 	 * @global string $currentIndex Current URL in order to keep current Tab
 	 */
-	public function displayImage($id, $image, $size, $id_image = NULL, $token = NULL, $disableCache = false)
+	public function displayImage($id, $image, $size, $id_image = null, $token = null, $disableCache = false)
 	{
 		global $currentIndex;
 
@@ -1220,7 +1228,7 @@ abstract class AdminTabCore
 	 *
 	 * @global string $currentIndex Current URL in order to keep current Tab
 	 */
-	public function displayListHeader($token = NULL)
+	public function displayListHeader($token = null)
 	{
 		global $currentIndex, $cookie;
 		$isCms = false;
@@ -1264,8 +1272,8 @@ abstract class AdminTabCore
 		echo '			| '.$this->l('Display').'
 						<select name="pagination">';
 		/* Choose number of results per page */
-		$selectedPagination = Tools::getValue('pagination', (isset($cookie->{$this->table.'_pagination'}) ? $cookie->{$this->table.'_pagination'} : NULL));
-		foreach ($this->_pagination AS $value)
+		$selectedPagination = Tools::getValue('pagination', (isset($cookie->{$this->table.'_pagination'}) ? $cookie->{$this->table.'_pagination'} : null));
+		foreach ($this->_pagination as $value)
 			echo '<option value="'.(int)($value).'"'.($selectedPagination == $value ? ' selected="selected"' : (($selectedPagination == NULL && $value == $this->_pagination[1]) ? ' selected="selected2"' : '')).'>'.(int)($value).'</option>';
 		echo '
 						</select>
@@ -1287,7 +1295,7 @@ abstract class AdminTabCore
 			echo '
 			<script type="text/javascript" src="../js/jquery/jquery.tablednd_0_5.js"></script>
 			<script type="text/javascript">
-				var token = \''.($token!=NULL ? $token : $this->token).'\';
+				var token = \''.($token != null ? $token : $this->token).'\';
 				var come_from = \''.$this->table.'\';
 				var alternate = \''.($this->_orderWay == 'DESC' ? '1' : '0' ).'\';
 			</script>
@@ -1301,7 +1309,7 @@ abstract class AdminTabCore
 		if ($this->delete)
 			echo '		<input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \''.$this->table.'Box[]\', this.checked)" />';
 		echo '		</th>';
-		foreach ($this->fieldsDisplay AS $key => $params)
+		foreach ($this->fieldsDisplay as $key => $params)
 		{
 			echo '	<th '.(isset($params['widthColumn']) ? 'style="width: '.$params['widthColumn'].'px"' : '').'>'.$params['title'];
 			if (!isset($params['orderby']) OR $params['orderby'])
@@ -1330,7 +1338,7 @@ abstract class AdminTabCore
 		$keyPress = 'onkeypress="formSubmit(event, \'submitFilterButton_'.$this->table.'\');"';
 
 		/* Filters (input, select, date or bool) */
-		foreach ($this->fieldsDisplay AS $key => $params)
+		foreach ($this->fieldsDisplay as $key => $params)
 		{
 			$width = (isset($params['width']) ? ' style="width: '.(int)($params['width']).'px;"' : '');
 			echo '<td'.(isset($params['align']) ? ' class="'.$params['align'].'"' : '').'>';
@@ -1374,10 +1382,8 @@ abstract class AdminTabCore
 						echo '<select onchange="$(\'#submitFilter'.$this->table.'\').focus();$(\'#submitFilter'.$this->table.'\').click();" name="'.$this->table.'Filter_'.$params['filter_key'].'" '.(isset($params['width']) ? 'style="width: '.$params['width'].'px"' : '').'>
 								<option value=""'.(($value == 0 AND $value != '') ? ' selected="selected"' : '').'>--</option>';
 						if (isset($params['select']) AND is_array($params['select']))
-							foreach ($params['select'] AS $optionValue => $optionDisplay)
-							{
+							foreach ($params['select'] as $optionValue => $optionDisplay)
 								echo '<option value="'.$optionValue.'"'.((isset($_POST[$this->table.'Filter_'.$params['filter_key']]) AND Tools::getValue($this->table.'Filter_'.$params['filter_key']) == $optionValue AND Tools::getValue($this->table.'Filter_'.$params['filter_key']) != '') ? ' selected="selected"' : '').'>'.$optionDisplay.'</option>';
-								}
 						echo '</select>';
 						break;
 					}
@@ -1434,7 +1440,7 @@ abstract class AdminTabCore
 		$this->displayListFooter();
 	}
 
-	public function displayListContent($token = NULL)
+	public function displayListContent($token = null)
 	{
 		/* Display results in a table
 		 *
@@ -1463,7 +1469,7 @@ abstract class AdminTabCore
 			if (preg_match('/cms/Ui', $this->identifier))
 				$isCms = true;
 			$keyToGet = 'id_'.($isCms ? 'cms_' : '').'category'.(in_array($this->identifier, array('id_category', 'id_cms_category')) ? '_parent' : '');
-			foreach ($this->_list AS $tr)
+			foreach ($this->_list as $tr)
 			{
 				$id = $tr[$this->identifier];
 				echo '<tr'.(array_key_exists($this->identifier,$this->identifiersDnd) ? ' id="tr_'.(($id_category = (int)(Tools::getValue('id_'.($isCms ? 'cms_' : '').'category', '1'))) ? $id_category : '').'_'.$id.'_'.$tr['position'].'"' : '').($irow++ % 2 ? ' class="alt_row"' : '').' '.((isset($tr['color']) AND $this->colorOnBackground) ? 'style="background-color: '.$tr['color'].'"' : '').'>
@@ -1471,7 +1477,7 @@ abstract class AdminTabCore
 				if ($this->delete AND (!isset($this->_listSkipDelete) OR !in_array($id, $this->_listSkipDelete)))
 					echo '<input type="checkbox" name="'.$this->table.'Box[]" value="'.$id.'" class="noborder" />';
 				echo '</td>';
-				foreach ($this->fieldsDisplay AS $key => $params)
+				foreach ($this->fieldsDisplay as $key => $params)
 				{
 					$tmp = explode('!', $key);
 					$key = isset($tmp[1]) ? $tmp[1] : $tmp[0];
@@ -1559,61 +1565,61 @@ abstract class AdminTabCore
 	}
 
 
-	protected function _displayEnableLink($token, $id, $value, $active,  $id_category = NULL, $id_product = NULL)
+	protected function _displayEnableLink($token, $id, $value, $active, $id_category = null, $id_product = null)
 	{
 		global $currentIndex;
 
 		echo '<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&'.$active.$this->table.
-			((int)$id_category AND (int)$id_product ? '&id_category='.$id_category : '').'&token='.($token!=NULL ? $token : $this->token).'">
+			(((int)$id_category && (int)$id_product) ? '&id_category='.$id_category : '').'&token='.($token ? $token : $this->token).'">
 			<img src="../img/admin/'.($value ? 'enabled.gif' : 'disabled.gif').'"
 			alt="'.($value ? $this->l('Enabled') : $this->l('Disabled')).'" title="'.($value ? $this->l('Enabled') : $this->l('Disabled')).'" /></a>';
 	}
 
-	protected function 	_displayDuplicate($token = NULL, $id)
+	protected function _displayDuplicate($token = null, $id)
 	{
 		global $currentIndex;
 
 		$_cacheLang['Duplicate'] = $this->l('Duplicate');
-		$_cacheLang['Copy images too?'] = $this->l('Copy images too?', __CLASS__, TRUE, FALSE);
+		$_cacheLang['Copy images too?'] = $this->l('Copy images too?', __CLASS__, true, false);
 
 		$duplicate = $currentIndex.'&'.$this->identifier.'='.$id.'&duplicate'.$this->table;
 
 		echo '
-			<a class="pointer" onclick="if (confirm(\''.$_cacheLang['Copy images too?'].'\')) document.location = \''.$duplicate.'&token='.($token!=NULL ? $token : $this->token).'\'; else document.location = \''.$duplicate.'&noimage=1&token='.($token ? $token : $this->token).'\';">
+			<a class="pointer" onclick="if (confirm(\''.$_cacheLang['Copy images too?'].'\')) document.location = \''.$duplicate.'&token='.($token ? $token : $this->token).'\'; else document.location = \''.$duplicate.'&noimage=1&token='.($token ? $token : $this->token).'\';">
 			<img src="../img/admin/duplicate.png" alt="'.$_cacheLang['Duplicate'].'" title="'.$_cacheLang['Duplicate'].'" /></a>';
 	}
 
-	protected function _displayViewLink($token = NULL, $id)
+	protected function _displayViewLink($token = null, $id)
 	{
 		global $currentIndex;
 
 		$_cacheLang['View'] = $this->l('View');
 
 		echo '
-			<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&view'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'">
+			<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&view'.$this->table.'&token='.($token ? $token : $this->token).'">
 			<img src="../img/admin/details.gif" alt="'.$_cacheLang['View'].'" title="'.$_cacheLang['View'].'" /></a>';
 	}
 
-	protected function _displayEditLink($token = NULL, $id)
+	protected function _displayEditLink($token = null, $id)
 	{
 		global $currentIndex;
 
 		$_cacheLang['Edit'] = $this->l('Edit');
 
 		echo '
-			<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&update'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'">
+			<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&update'.$this->table.'&token='.($token ? $token : $this->token).'">
 			<img src="../img/admin/edit.gif" alt="" title="'.$_cacheLang['Edit'].'" /></a>';
 	}
 
-	protected function _displayDeleteLink($token = NULL, $id)
+	protected function _displayDeleteLink($token = null, $id)
 	{
 		global $currentIndex;
 
 		$_cacheLang['Delete'] = $this->l('Delete');
-		$_cacheLang['DeleteItem'] = $this->l('Delete item #', __CLASS__, TRUE, FALSE);
+		$_cacheLang['DeleteItem'] = $this->l('Delete item #', __CLASS__, true, false);
 
 		echo '
-			<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&delete'.$this->table.'&token='.($token!=NULL ? $token : $this->token).'" onclick="return confirm(\''.$_cacheLang['DeleteItem'].$id.' ?'.
+			<a href="'.$currentIndex.'&'.$this->identifier.'='.$id.'&delete'.$this->table.'&token='.($token ? $token : $this->token).'" onclick="return confirm(\''.$_cacheLang['DeleteItem'].$id.' ?'.
 					(!is_null($this->specificConfirmDelete) ? '\r'.$this->specificConfirmDelete : '').'\');">
 			<img src="../img/admin/delete.gif" alt="'.$_cacheLang['Delete'].'" title="'.$_cacheLang['Delete'].'" /></a>';
 	}
@@ -1621,7 +1627,7 @@ abstract class AdminTabCore
 	/**
 	 * Close list table and submit button
 	 */
-	public function displayListFooter($token = NULL)
+	public function displayListFooter($token = null)
 	{
 		echo '</table>';
 		if ($this->delete)
@@ -1632,7 +1638,7 @@ abstract class AdminTabCore
 		</table>
 		<input type="hidden" name="token" value="'.($token ? $token : $this->token).'" />
 		</form>';
-		if (isset($this->_includeTab) AND sizeof($this->_includeTab))
+		if (isset($this->_includeTab) && count($this->_includeTab))
 			echo '<br /><br />';
 	}
 
@@ -1643,7 +1649,7 @@ abstract class AdminTabCore
 	{
 		global $currentIndex, $cookie, $tab;
 
-		if (!isset($this->_fieldsOptions) OR !sizeof($this->_fieldsOptions))
+		if (!isset($this->_fieldsOptions) || !count($this->_fieldsOptions))
 			return false;
 
 		$defaultLanguage = (int)_PS_LANG_DEFAULT_;
@@ -1660,7 +1666,7 @@ abstract class AdminTabCore
 				echo (isset($this->optionTitle) ? '<legend>
 					<img src="'.(!empty($tab['module']) && file_exists($_SERVER['DOCUMENT_ROOT']._MODULE_DIR_.$tab['module'].'/'.$tab['class_name'].'.gif') ? _MODULE_DIR_.$tab['module'].'/' : '../img/t/').$tab['class_name'].'.gif" />'
 					.$this->optionTitle.'</legend>' : '');
-		foreach ($this->_fieldsOptions AS $key => $field)
+		foreach ($this->_fieldsOptions as $key => $field)
 		{
 			$val = Tools::getValue($key, Configuration::get($key));
 			if ($field['type'] != 'textLang')
@@ -1673,7 +1679,7 @@ abstract class AdminTabCore
 			{
 				case 'select':
 					echo '<select name="'.$key.'">';
-					foreach ($field['list'] AS $value)
+					foreach ($field['list'] as $value)
 						echo '<option
 							value="'.(isset($field['cast']) ? $field['cast']($value[$field['identifier']]) : $value[$field['identifier']]).'"'.($val == $value[$field['identifier']] ? ' selected="selected"' : '').'>'.$value['name'].'</option>';
 					echo '</select>';
@@ -1694,7 +1700,7 @@ abstract class AdminTabCore
 							$val = Configuration::get($key);
 						echo '
 						<div id="'.$key.'_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
-							<input size="'.$field['size'].'" type="text" name="'.$key.'_'.$language['id_lang'].'" value="'.$val.'" />
+							<input size="'.$field['size'].'" type="text" name="'.$key.'_'.(int)$language['id_lang'].'" value="'.$val.'" />
 						</div>';
 					}
 					$this->displayFlags($this->_languages, $defaultLanguage, $key, $key);
@@ -1770,7 +1776,7 @@ abstract class AdminTabCore
 	 * @param integer $id_lang Language id (optional)
 	 * @return string
 	 */
-	protected function getFieldValue($obj, $key, $id_lang = NULL)
+	protected function getFieldValue($obj, $key, $id_lang = null)
 	{
 		if ($id_lang)
 			$defaultValue = ($obj->id AND isset($obj->{$key}[$id_lang])) ? $obj->{$key}[$id_lang] : '';
@@ -1912,7 +1918,7 @@ abstract class AdminTabCore
 		<div id="languages_'.$id.'" class="language_flags">
 			'.$this->l('Choose language:').'<br /><br />';
 		foreach ($languages as $language)
-			if($use_vars_instead_of_ids)
+			if ($use_vars_instead_of_ids)
 				$output .= '<img src="../img/l/'.(int)($language['id_lang']).'.jpg" class="pointer" alt="'.$language['name'].'" title="'.$language['name'].'" onclick="changeLanguage(\''.$id.'\', '.$ids.', '.$language['id_lang'].', \''.$language['iso_code'].'\');" /> ';
 			else
 				$output .= '<img src="../img/l/'.(int)($language['id_lang']).'.jpg" class="pointer" alt="'.$language['name'].'" title="'.$language['name'].'" onclick="changeLanguage(\''.$id.'\', \''.$ids.'\', '.$language['id_lang'].', \''.$language['iso_code'].'\');" /> ';

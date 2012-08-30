@@ -316,11 +316,13 @@ class FrontControllerCore
 		if ($this->restrictedCountry)
 			$this->displayRestrictedCountryPage();
 
-		//live edit
-		if (Tools::isSubmit('live_edit') && $ad = Tools::getValue('ad') && Tools::getValue('liveToken') == sha1(Tools::getValue('ad')._COOKIE_KEY_))
-			if (!is_dir(_PS_ROOT_DIR_.DIRECTORY_SEPARATOR.$ad))
+		/* Check Live Edit parameters */
+		if (Tools::isSubmit('live_edit'))
+		{
+			$ad = Tools::getValue('ad');
+			if (!$ad || Tools::getValue('liveToken') != sha1($ad._COOKIE_KEY_) || !is_dir(_PS_ROOT_DIR_.DIRECTORY_SEPARATOR.$ad))
 				die(Tools::displayError());
-
+		}
 
 		$this->iso = $iso;
 		$this->setMedia();
@@ -452,11 +454,8 @@ class FrontControllerCore
 		Tools::addJS(array(_PS_JS_DIR_.'jquery/jquery.min.js', _PS_JS_DIR_.'jquery/jquery.easing.1.3.js', _PS_JS_DIR_.'tools.js'));
 		if (Tools::isSubmit('live_edit') && Tools::getValue('ad') && Tools::getValue('liveToken') == sha1(Tools::getValue('ad')._COOKIE_KEY_))
 		{
-			Tools::addJS(array(
-							_PS_JS_DIR_.'jquery/jquery-ui-1.8.10.custom.min.js',
-							_PS_JS_DIR_.'jquery/jquery.fancybox-1.3.4.js',
-							_PS_JS_DIR_.'hookLiveEdit.js')
-							);
+			Tools::addJS(array(_PS_JS_DIR_.'jquery/jquery-ui-1.8.10.custom.min.js', _PS_JS_DIR_.'jquery/jquery.fancybox-1.3.4.js',
+			_PS_JS_DIR_.'hookLiveEdit.js'));
 			Tools::addCSS(_PS_CSS_DIR_.'jquery.fancybox-1.3.4.css');
 		}
 		$language = new Language($cookie->id_lang);
@@ -519,7 +518,6 @@ class FrontControllerCore
 
 	public function displayFooter()
 	{
-
 		if (!self::$initialized)
 			$this->init();
 
@@ -528,14 +526,19 @@ class FrontControllerCore
 			'HOOK_FOOTER' => Module::hookExec('footer'),
 			'content_only' => (int)Tools::getValue('content_only')));
 		self::$smarty->display(_PS_THEME_DIR_.'footer.tpl');
-		//live edit
-		if (Tools::isSubmit('live_edit') && $ad = Tools::getValue('ad') && Tools::getValue('liveToken') == sha1(Tools::getValue('ad')._COOKIE_KEY_))
+		
+		/* Display Live Edit Template */
+		if (Tools::isSubmit('live_edit'))
 		{
-			self::$smarty->assign(array('ad' => $ad, 'live_edit' => true));
-			self::$smarty->display(_PS_ALL_THEMES_DIR_.'live_edit.tpl');
+			$ad = Tools::getValue('ad');
+			if (!$ad || Tools::getValue('liveToken') != sha1($ad._COOKIE_KEY_) || !is_dir(_PS_ROOT_DIR_.DIRECTORY_SEPARATOR.$ad))
+				die(Tools::displayError());
+			else
+			{		
+				self::$smarty->assign(array('ad' => $ad, 'live_edit' => true));
+				self::$smarty->display(_PS_ALL_THEMES_DIR_.'live_edit.tpl');
+			}
 		}
-		else
-			Tools::displayError();
 	}
 
 	public function productSort()

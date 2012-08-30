@@ -68,7 +68,7 @@ class LocalizationPackCore
 
 			return $res;
 		}
-		foreach ($selection AS $selected)
+		foreach ($selection as $selected)
 			if (!Validate::isLocalizationPackSelection($selected) OR !$this->{'_install'.ucfirst($selected)}($xml))
 				return false;
 
@@ -78,17 +78,26 @@ class LocalizationPackCore
 	protected function _installStates($xml)
 	{
 		if (isset($xml->states->state))
-			foreach ($xml->states->state AS $data)
+			foreach ($xml->states->state as $data)
 			{
 				$attributes = $data->attributes();
 
-				if (!$id_state = State::getIdByName($attributes['name']))
+				/* Check if the state already exists and make sure it belongs to the same country */
+				$id_state = State::getIdByName($attributes['name']);
+				if ($id_state)
+				{
+					$new_state = new State((int)$id_state);
+					if (!Validate::isLoadedObject($new_state) || Country::getByIso(strval($attributes['country'])) != $new_state->id_country)
+						$id_state = 0;
+				}
+
+				if (!$id_state)
 				{
 					$state = new State();
 					$state->name = strval($attributes['name']);
 					$state->iso_code = strval($attributes['iso_code']);
 					$state->id_country = Country::getByIso(strval($attributes['country']));
-					$state->id_zone = (int)(Zone::getIdByName(strval($attributes['zone'])));
+					$state->id_zone = (int)Zone::getIdByName(strval($attributes['zone']));
 
 					if (!$state->validateFields())
 					{
@@ -109,7 +118,9 @@ class LocalizationPackCore
 						$this->_errors[] = Tools::displayError('An error occurred while adding the state.');
 						return false;
 					}
-				} else {
+				}
+				else
+				{
 					$state = new State($id_state);
 					if (!Validate::isLoadedObject($state))
 					{
@@ -119,7 +130,7 @@ class LocalizationPackCore
 				}
 
 				// Add counties
-				foreach ($data->county AS $xml_county)
+				foreach ($data->county as $xml_county)
 				{
 					$county_attributes = $xml_county->attributes();
 					if (!$id_county = County::getIdCountyByNameAndIdState($county_attributes['name'], $state->id))
@@ -140,7 +151,9 @@ class LocalizationPackCore
 							$this->_errors[] = Tools::displayError('An error has occurred while adding the county');
 							return false;
 						}
-					} else {
+					}
+					else
+					{
 						$county = new County((int)$id_county);
 						if (!Validate::isLoadedObject($county))
 						{
@@ -150,7 +163,7 @@ class LocalizationPackCore
 					}
 
 					// add zip codes
-					foreach ($xml_county->zipcode AS $xml_zipcode)
+					foreach ($xml_county->zipcode as $xml_zipcode)
 					{
 							$zipcode_attributes = $xml_zipcode->attributes();
 
@@ -173,7 +186,6 @@ class LocalizationPackCore
 				}
 			}
 
-
 		return true;
 	}
 
@@ -183,14 +195,14 @@ class LocalizationPackCore
 		{
 			$available_behavior = array(PS_PRODUCT_TAX, PS_STATE_TAX, PS_BOTH_TAX);
 			$assoc_taxes = array();
-			foreach ($xml->taxes->tax AS $taxData)
+			foreach ($xml->taxes->tax as $taxData)
 			{
 				$attributes = $taxData->attributes();
 				if (Tax::getTaxIdByName($attributes['name']))
 					continue;
 				$tax = new Tax();
-				$tax->name[(int)(_PS_LANG_DEFAULT_)] = strval($attributes['name']);
-				$tax->rate = (float)($attributes['rate']);
+				$tax->name[(int)_PS_LANG_DEFAULT_] = strval($attributes['name']);
+				$tax->rate = (float)$attributes['rate'];
 				$tax->active = 1;
 
 				if (!$tax->validateFields())
@@ -208,7 +220,7 @@ class LocalizationPackCore
 				$assoc_taxes[(int)$attributes['id']] = $tax->id;
 			}
 
-			foreach ($xml->taxes->taxRulesGroup AS $group)
+			foreach ($xml->taxes->taxRulesGroup as $group)
 			{
 				$group_attributes = $group->attributes();
 				if (!Validate::isGenericName($group_attributes['name']))
@@ -291,7 +303,7 @@ class LocalizationPackCore
 				return false;
 			}
 
-			foreach ($xml->currencies->currency AS $data)
+			foreach ($xml->currencies->currency as $data)
 			{
 				$attributes = $data->attributes();
 				if (Currency::exists($attributes['iso_code']))
@@ -336,14 +348,14 @@ class LocalizationPackCore
 	{
 		$attributes = array();
 		if (isset($xml->languages->language))
-			foreach ($xml->languages->language AS $data)
+			foreach ($xml->languages->language as $data)
 			{
 				$attributes = $data->attributes();
 				if (Language::getIdByIso($attributes['iso_code']))
 					continue;
 				$native_lang = Language::getLanguages();
 				$native_iso_code = array();
-				foreach ($native_lang AS $lang)
+				foreach ($native_lang as $lang)
 					$native_iso_code[] = $lang['iso_code'];
 				if ((in_array((string)$attributes['iso_code'], $native_iso_code) AND !$install_mode) OR !in_array((string)$attributes['iso_code'], $native_iso_code))
 					$errno = 0;
@@ -395,7 +407,7 @@ class LocalizationPackCore
 	{
 		$varNames = array('weight' => 'PS_WEIGHT_UNIT', 'volume' => 'PS_VOLUME_UNIT', 'short_distance' => 'PS_DIMENSION_UNIT', 'base_distance' => 'PS_BASE_DISTANCE_UNIT', 'long_distance' => 'PS_DISTANCE_UNIT');
 		if (isset($xml->units->unit))
-			foreach ($xml->units->unit AS $data)
+			foreach ($xml->units->unit as $data)
 			{
 				$attributes = $data->attributes();
 				if (!isset($varNames[strval($attributes['type'])]))
@@ -493,4 +505,3 @@ class LocalizationPackCore
 		return $this->_errors;
 	}
 }
-

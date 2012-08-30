@@ -229,7 +229,7 @@ class CategoryCore extends ObjectModel
 		echo '<option value="'.$id_category.'"'.(($id_selected == $id_category) ? ' selected="selected"' : '').'>'.
 		str_repeat('&nbsp;', $current['infos']['level_depth'] * 5).stripslashes($current['infos']['name']).'</option>';
 		if (isset($categories[$id_category]))
-			foreach (array_keys($categories[$id_category]) AS $key)
+			foreach (array_keys($categories[$id_category]) as $key)
 				self::recurseCategory($categories, $categories[$id_category][$key], $key, $id_selected);
 	}
 
@@ -280,7 +280,7 @@ class CategoryCore extends ObjectModel
 
 		/* Delete category images and its children images */
 		$tmpCategory= new Category();
-		foreach ($toDelete AS $id_category)
+		foreach ($toDelete as $id_category)
 		{
 			$tmpCategory->id = (int)$id_category;
 			$tmpCategory->deleteImage();
@@ -312,7 +312,7 @@ class CategoryCore extends ObjectModel
 		Module::hookExec('categoryDeletion', array('category' => $this));
 
 		/* Delete Categories in GroupReduction */
-		foreach ($toDelete AS $category)
+		foreach ($toDelete as $category)
 			if (GroupReduction::getGroupReductionByCategoryId((int)$category))
 				GroupReduction::deleteCategory($category);
 
@@ -327,7 +327,7 @@ class CategoryCore extends ObjectModel
 	public function deleteSelection($categories)
 	{
 		$return = 1;
-		foreach ($categories AS $id_category)
+		foreach ($categories as $id_category)
 		{
 			$category = new Category((int)($id_category));
 			$return &= $category->delete();
@@ -374,7 +374,7 @@ class CategoryCore extends ObjectModel
 	{
 		$left = (int)$n++;
 		if (isset($categories[(int)$id_category]['subcategories']))
-			foreach (array_keys($categories[(int)$id_category]['subcategories']) AS $id_subcategory)
+			foreach (array_keys($categories[(int)$id_category]['subcategories']) as $id_subcategory)
 				self::_subTree($categories, (int)$id_subcategory, $n);
 		$right = (int)$n++;
 
@@ -425,19 +425,18 @@ class CategoryCore extends ObjectModel
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'category` c
-		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON c.`id_category` = cl.`id_category`
+		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category`)
 		WHERE 1 '.$sql_filter.' '.($id_lang ? 'AND `id_lang` = '.(int)($id_lang) : '').'
 		'.($active ? 'AND `active` = 1' : '').'
 		'.(!$id_lang ? 'GROUP BY c.id_category' : '').'
 		'.($sql_sort != '' ? $sql_sort : 'ORDER BY c.`level_depth` ASC, c.`position` ASC').'
-		'.($sql_limit != '' ? $sql_limit : '')
-		);
+		'.($sql_limit != '' ? $sql_limit : ''));
 
 		if (!$order)
 			return $result;
 
 		$categories = array();
-		foreach ($result AS $row)
+		foreach ($result as $row)
 			$categories[$row['id_parent']][$row['id_category']]['infos'] = $row;
 
 		return $categories;
@@ -449,7 +448,7 @@ class CategoryCore extends ObjectModel
 		SELECT c.`id_category`, cl.`name`
 		FROM `'._DB_PREFIX_.'category` c
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category`)
-		WHERE cl.`id_lang` = '.(int)($id_lang).'
+		WHERE cl.`id_lang` = '.(int)$id_lang.'
 		ORDER BY c.`position`');
 	}
 
@@ -476,7 +475,7 @@ class CategoryCore extends ObjectModel
 		
 		foreach ($result as &$row)
 		{
-			$row['id_image'] = (bool)file_exists(_PS_CAT_IMG_DIR_.$row['id_category'].'.jpg') ? (int)$row['id_category'] : Language::getIsoById((int)$id_lang).'-default';
+			$row['id_image'] = file_exists(_PS_CAT_IMG_DIR_.$row['id_category'].'.jpg') ? (int)$row['id_category'] : Language::getIsoById((int)$id_lang).'-default';
 			$row['legend'] = 'no picture';
 		}
 
@@ -600,7 +599,7 @@ class CategoryCore extends ObjectModel
 		return self::getChildren(1, $id_lang, $active);
 	}
 
-	public static function getRootCategory($id_lang = NULL)
+	public static function getRootCategory($id_lang = null)
 	{
 		return new Category (1, is_null($id_lang) ? (int)_USER_ID_LANG_ : (int)($id_lang));
 	}
@@ -621,8 +620,8 @@ class CategoryCore extends ObjectModel
 		SELECT c.`id_category`, cl.`name`, cl.`link_rewrite`
 		FROM `'._DB_PREFIX_.'category` c
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON c.`id_category` = cl.`id_category`
-		WHERE `id_lang` = '.(int)($id_lang).'
-		AND c.`id_parent` = '.(int)($id_parent).'
+		WHERE `id_lang` = '.(int)$id_lang.'
+		AND c.`id_parent` = '.(int)$id_parent.'
 		'.($active ? 'AND `active` = 1' : '').'
 		ORDER BY `position` ASC');
 	}
@@ -643,17 +642,17 @@ class CategoryCore extends ObjectModel
 			SELECT COUNT(*)
 			FROM `'._DB_PREFIX_.'category` c2
 			WHERE c2.`id_parent` = c.`id_category`
-		) > 0, 1, 0) AS has_children, '.($selectedCat ? '(
+		) > 0, 1, 0) has_children, '.($selectedCat ? '(
 			SELECT count(c3.`id_category`)
 			FROM `'._DB_PREFIX_.'category` c3
 			WHERE c3.`nleft` > c.`nleft`
 			AND c3.`nright` < c.`nright`
 			AND c3.`id_category`  IN ('.implode(',', array_map('intval', $selectedCat)).')
-		)' : '0').' AS nbSelectedSubCat
+		)' : '0').' nbSelectedSubCat
 		FROM `'._DB_PREFIX_.'category` c
 		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON c.`id_category` = cl.`id_category`
-		WHERE `id_lang` = '.(int)($id_lang).'
-		AND c.`id_parent` = '.(int)($id_parent).'
+		WHERE `id_lang` = '.(int)$id_lang.'
+		AND c.`id_parent` = '.(int)$id_parent.'
 		ORDER BY `position` ASC');
 	}
 
@@ -669,11 +668,11 @@ class CategoryCore extends ObjectModel
 		$result = Db::getInstance()->ExecuteS('
 		SELECT `id_category`
 		FROM `'._DB_PREFIX_.'category_product`
-		WHERE `id_product` = '.(int)($id_old));
+		WHERE `id_product` = '.(int)$id_old);
 
 		$row = array();
 		if ($result)
-			foreach ($result AS $i)
+			foreach ($result as $i)
 				$row[] = '('.implode(', ', array((int)($id_new), $i['id_category'], '(SELECT tmp.max + 1 FROM (SELECT MAX(cp.`position`) AS max FROM `'._DB_PREFIX_.'category_product` cp WHERE cp.`id_category`='.(int)($i['id_category']).') AS tmp)')).')';
 
 		$flag = Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'category_product` (`id_product`, `id_category`, `position`) VALUES '.implode(',', $row));
@@ -727,7 +726,7 @@ class CategoryCore extends ObjectModel
 		return $link->getCategoryLink($this->id, $this->link_rewrite);
 	}
 
-	public function getName($id_lang = NULL)
+	public function getName($id_lang = null)
 	{
 		if (!$id_lang)
 		{
@@ -821,22 +820,21 @@ class CategoryCore extends ObjectModel
 		$row = Db::getInstance()->getRow('
 		SELECT `id_category`
 		FROM '._DB_PREFIX_.'category c
-		WHERE c.`id_category` = '.(int)($id_category));
+		WHERE c.`id_category` = '.(int)$id_category);
 
 		return isset($row['id_category']);
 	}
 
-
 	public function cleanGroups()
 	{
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_group` WHERE `id_category` = '.(int)($this->id));
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_group` WHERE `id_category` = '.(int)$this->id);
 	}
 
 	public function addGroups($groups)
 	{
 		foreach ($groups as $group)
 		{
-			$row = array('id_category' => (int)($this->id), 'id_group' => (int)($group));
+			$row = array('id_category' => (int)$this->id, 'id_group' => (int)$group);
 			Db::getInstance()->AutoExecute(_DB_PREFIX_.'category_group', $row, 'INSERT');
 		}
 	}
@@ -847,7 +845,7 @@ class CategoryCore extends ObjectModel
 		$result = Db::getInstance()->ExecuteS('
 		SELECT cg.`id_group`
 		FROM '._DB_PREFIX_.'category_group cg
-		WHERE cg.`id_category` = '.(int)($this->id));
+		WHERE cg.`id_category` = '.(int)$this->id);
 		foreach ($result as $group)
 			$groups[] = $group['id_group'];
 		return $groups;
@@ -892,12 +890,9 @@ class CategoryCore extends ObjectModel
 
 	public static function setNewGroupForHome($id_group)
 	{
-		if (!(int)($id_group))
+		if (!(int)$id_group)
 			return false;
-		return Db::getInstance()->Execute('
-		INSERT INTO `'._DB_PREFIX_.'category_group`
-		VALUES (1, '.(int)($id_group).')
-		');
+		return Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'category_group` VALUES (1, '.(int)$id_group.')');
 	}
 
 	public function updatePosition($way, $position)
@@ -906,12 +901,11 @@ class CategoryCore extends ObjectModel
 			SELECT cp.`id_category`, cp.`position`, cp.`id_parent`
 			FROM `'._DB_PREFIX_.'category` cp
 			WHERE cp.`id_parent` = '.(int)$this->id_parent.'
-			ORDER BY cp.`position` ASC'
-		))
+			ORDER BY cp.`position` ASC'))
 			return false;
 
-		foreach ($res AS $category)
-			if ((int)($category['id_category']) == (int)($this->id))
+		foreach ($res as $category)
+			if ((int)$category['id_category'] == (int)$this->id)
 				$movedCategory = $category;
 
 		if (!isset($movedCategory) || !isset($position))
@@ -923,14 +917,14 @@ class CategoryCore extends ObjectModel
 			SET `position`= `position` '.($way ? '- 1' : '+ 1').'
 			WHERE `position`
 			'.($way
-				? '> '.(int)($movedCategory['position']).' AND `position` <= '.(int)($position)
-				: '< '.(int)($movedCategory['position']).' AND `position` >= '.(int)($position)).'
-			AND `id_parent`='.(int)($movedCategory['id_parent']))
+				? '> '.(int)$movedCategory['position'].' AND `position` <= '.(int)$position
+				: '< '.(int)$movedCategory['position'].' AND `position` >= '.(int)$position).'
+			AND `id_parent`='.(int)$movedCategory['id_parent'])
 		AND Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'category`
-			SET `position` = '.(int)($position).'
-			WHERE `id_parent` = '.(int)($movedCategory['id_parent']).'
-			AND `id_category`='.(int)($movedCategory['id_category'])));
+			SET `position` = '.(int)$position.'
+			WHERE `id_parent` = '.(int)$movedCategory['id_parent'].'
+			AND `id_category`='.(int)$movedCategory['id_category']));
 		Module::hookExec('categoryUpdate', array('category' => $this));
 		return $result;
 	}
@@ -950,15 +944,15 @@ class CategoryCore extends ObjectModel
 		$result = Db::getInstance()->ExecuteS('
 		SELECT `id_category`
 		FROM `'._DB_PREFIX_.'category`
-		WHERE `id_parent` = '.(int)($id_category_parent).'
+		WHERE `id_parent` = '.(int)$id_category_parent.'
 		ORDER BY `position`');
 		$sizeof = sizeof($result);
 		for ($i = 0; $i < $sizeof; $i++){
 				$sql = '
 				UPDATE `'._DB_PREFIX_.'category`
-				SET `position` = '.(int)($i).'
-				WHERE `id_parent` = '.(int)($id_category_parent).'
-				AND `id_category` = '.(int)($result[$i]['id_category']);
+				SET `position` = '.(int)$i.'
+				WHERE `id_parent` = '.(int)$id_category_parent.'
+				AND `id_category` = '.(int)$result[$i]['id_category'];
 				$return &= Db::getInstance()->Execute($sql);
 			}
 		return $return;
@@ -972,40 +966,34 @@ class CategoryCore extends ObjectModel
 	 */
 	public static function getLastPosition($id_category_parent)
 	{
-		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'._DB_PREFIX_.'category` WHERE `id_parent` = '.(int)($id_category_parent)));
+		return Db::getInstance()->getValue('SELECT MAX(position) + 1 FROM `'._DB_PREFIX_.'category` WHERE `id_parent` = '.(int)$id_category_parent);
 	}
 
     public static function getUrlRewriteInformations($id_category)
 	{
 		return Db::getInstance()->ExecuteS('
 		SELECT l.`id_lang`, c.`link_rewrite`
-		FROM `'._DB_PREFIX_.'category_lang` AS c
-		LEFT JOIN  `'._DB_PREFIX_.'lang` AS l ON c.`id_lang` = l.`id_lang`
-		WHERE c.`id_category` = '.(int)$id_category.'
-		AND l.`active` = 1'
-		);
-
+		FROM `'._DB_PREFIX_.'category_lang` c
+		LEFT JOIN  `'._DB_PREFIX_.'lang` l (ON c.`id_lang` = l.`id_lang`)
+		WHERE c.`id_category` = '.(int)$id_category.' AND l.`active` = 1');
 	}
 
 	public function getChildrenWs()
 	{
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT c.`id_category` as id
 		FROM `'._DB_PREFIX_.'category` c
-		WHERE c.`id_parent` = '.(int)($this->id).'
-		AND `active` = 1
+		WHERE c.`id_parent` = '.(int)$this->id.' AND `active` = 1
 		ORDER BY `position` ASC');
-		return $result;
 	}
 
 	public function getProductsWs()
 	{
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT cp.`id_product` as id
 		FROM `'._DB_PREFIX_.'category_product` cp
-		WHERE cp.`id_category` = '.(int)($this->id).'
+		WHERE cp.`id_category` = '.(int)$this->id.'
 		ORDER BY `position` ASC');
-		return $result;
 	}
 
 	/**
@@ -1018,9 +1006,7 @@ class CategoryCore extends ObjectModel
 		return Db::getInstance()->getRow('
 		SELECT c.`id_category` as id
 		FROM `'._DB_PREFIX_.'category` c
-		WHERE c.`id_parent` = '.(int)($this->id_parent).'
-		AND `position` = '.(int)($this->position).'
-		AND c.`id_category` != '.(int)($this->id));
+		WHERE c.`id_parent` = '.(int)$this->id_parent.' AND `position` = '.(int)$this->position.' AND c.`id_category` != '.(int)$this->id);
 	}
 
 	public function getWsNbProductsRecursive()
@@ -1029,8 +1015,7 @@ class CategoryCore extends ObjectModel
 		SELECT count(distinct(id_product)) as nb_product_recursive FROM  `'._DB_PREFIX_.'category_product`
 		WHERE id_category IN (SELECT id_category
 		FROM `'._DB_PREFIX_.'category`
-		WHERE nleft > '.(int)$this->nleft.
-		' AND nright < '.(int)$this->nright.' AND active = 1 UNION SELECT '.(int)$this->id.')');
+		WHERE nleft > '.(int)$this->nleft.' AND nright < '.(int)$this->nright.' AND active = 1 UNION SELECT '.(int)$this->id.')');
 		if (!$result)
 			return -1;
 		return $result[0]['nb_product_recursive'];
@@ -1050,22 +1035,20 @@ class CategoryCore extends ObjectModel
 			$id_lang = $cookie->id_lang;
 		}
 
-		if (!is_array($ids_category) || !sizeof($ids_category))
+		if (!is_array($ids_category) || !count($ids_category))
 			return;
 
 		$categories = array();
 		$results = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-			SELECT c.`id_category`, cl.`name`, cl.`link_rewrite`, cl.`id_lang`
-			FROM `'._DB_PREFIX_.'category` c
-			LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category`)
-			WHERE cl.`id_lang` = '.(int)$id_lang.'
-			AND c.`id_category` IN ('.implode(',', array_map('intval', $ids_category)).')
-		');
+		SELECT c.`id_category`, cl.`name`, cl.`link_rewrite`, cl.`id_lang`
+		FROM `'._DB_PREFIX_.'category` c
+		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category`)
+		WHERE cl.`id_lang` = '.(int)$id_lang.'
+		AND c.`id_category` IN ('.implode(',', array_map('intval', $ids_category)).')');
 
-		foreach($results as $category)
+		foreach ($results as $category)
 			$categories[$category['id_category']] = $category;
 
 		return $categories;
 	}
 }
-

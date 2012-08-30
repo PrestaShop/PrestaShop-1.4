@@ -114,7 +114,7 @@ class LinkCore
 			return _PS_BASE_URL_.__PS_BASE_URI__.'product.php?id_product='.(int)$id_product;
 	}
 
-	public function getCategoryLink($id_category, $alias = NULL, $id_lang = NULL)
+	public function getCategoryLink($id_category, $alias = null, $id_lang = null)
 	{
 		if (is_object($id_category))
 			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).(int)($id_category->id).'-'.$id_category->link_rewrite) :
@@ -125,18 +125,18 @@ class LinkCore
 		return _PS_BASE_URL_.__PS_BASE_URI__.'category.php?id_category='.(int)($id_category);
 	}
 
-	public function getCMSCategoryLink($id_category, $alias = NULL, $id_lang = NULL)
+	public function getCMSCategoryLink($id_category, $alias = null, $id_lang = null)
 	{
 		if (is_object($id_category))
 			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).'content/category/'.(int)($id_category->id).'-'.$id_category->link_rewrite) :
 			(_PS_BASE_URL_.__PS_BASE_URI__.'cms.php?id_cms_category='.(int)($id_category->id));
 		if ($alias)
 			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).'content/category/'.(int)($id_category).'-'.$alias) :
-			(_PS_BASE_URL_.__PS_BASE_URI__.'cms.php?id_cms_category='.(int)($id_category));
-		return _PS_BASE_URL_.__PS_BASE_URI__.'cms.php?id_cms_category='.(int)($id_category);
+			(_PS_BASE_URL_.__PS_BASE_URI__.'cms.php?id_cms_category='.(int)$id_category);
+		return _PS_BASE_URL_.__PS_BASE_URI__.'cms.php?id_cms_category='.(int)$id_category;
 	}
 
-	public function getCMSLink($cms, $alias = null, $ssl = false, $id_lang = NULL)
+	public function getCMSLink($cms, $alias = null, $ssl = false, $id_lang = null)
 	{
 		$base = (($ssl && _PS_SSL_ENABLED_) ? Tools::getShopDomainSsl(true) : Tools::getShopDomain(true));
 	
@@ -144,50 +144,50 @@ class LinkCore
 		{
 			return ($this->allow == 1) ? 
 				($base.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).'content/'.(int)($cms->id).'-'.$cms->link_rewrite) :
-				($base.__PS_BASE_URI__.'cms.php?id_cms='.(int)($cms->id));
+				($base.__PS_BASE_URI__.'cms.php?id_cms='.(int)$cms->id);
 		}
 		
 		if ($alias)
-			return ($this->allow == 1) ? ($base.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).'content/'.(int)($cms).'-'.$alias) :
-			($base.__PS_BASE_URI__.'cms.php?id_cms='.(int)($cms));
-		return $base.__PS_BASE_URI__.'cms.php?id_cms='.(int)($cms);
+			return ($this->allow == 1) ? ($base.__PS_BASE_URI__.$this->getLangLink((int)$id_lang).'content/'.(int)$cms.'-'.$alias) :
+			($base.__PS_BASE_URI__.'cms.php?id_cms='.(int)$cms);
+		return $base.__PS_BASE_URI__.'cms.php?id_cms='.(int)$cms;
 	}
 
-	public function getSupplierLink($id_supplier, $alias = NULL, $id_lang = NULL)
+	public function getSupplierLink($id_supplier, $alias = null, $id_lang = null)
 	{
 		if (is_object($id_supplier))
-			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).(int)($id_supplier->id).'__'.$id_supplier->link_rewrite) :
-			(_PS_BASE_URL_.__PS_BASE_URI__.'supplier.php?id_supplier='.(int)($id_supplier->id));
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)$id_lang).(int)$id_supplier->id.'__'.$id_supplier->link_rewrite) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'supplier.php?id_supplier='.(int)$id_supplier->id);
 		if ($alias)
-			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).(int)($id_supplier).'__'.$alias) :
-			(_PS_BASE_URL_.__PS_BASE_URI__.'supplier.php?id_supplier='.(int)($id_supplier));
-		return _PS_BASE_URL_.__PS_BASE_URI__.'supplier.php?id_supplier='.(int)($id_supplier);
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)$id_lang).(int)$id_supplier.'__'.$alias) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'supplier.php?id_supplier='.(int)$id_supplier);
+		return _PS_BASE_URL_.__PS_BASE_URI__.'supplier.php?id_supplier='.(int)$id_supplier;
 	}
 
-	public function getManufacturerLink($id_manufacturer, $alias = NULL, $id_lang = NULL)
+	public function getManufacturerLink($id_manufacturer, $alias = null, $id_lang = null)
 	{
 		if (is_object($id_manufacturer))
-			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).(int)($id_manufacturer->id).'_'.$id_manufacturer->link_rewrite) :
-			(_PS_BASE_URL_.__PS_BASE_URI__.'manufacturer.php?id_manufacturer='.(int)($id_manufacturer->id));
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)$id_lang).(int)$id_manufacturer->id.'_'.$id_manufacturer->link_rewrite) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'manufacturer.php?id_manufacturer='.(int)$id_manufacturer->id);
 		if ($alias)
-			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).(int)($id_manufacturer).'_'.$alias) :
-			(_PS_BASE_URL_.__PS_BASE_URI__.'manufacturer.php?id_manufacturer='.(int)($id_manufacturer));
-		return _PS_BASE_URL_.__PS_BASE_URI__.'manufacturer.php?id_manufacturer='.(int)($id_manufacturer);
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)$id_lang).(int)$id_manufacturer.'_'.$alias) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.'manufacturer.php?id_manufacturer='.(int)$id_manufacturer);
+		return _PS_BASE_URL_.__PS_BASE_URI__.'manufacturer.php?id_manufacturer='.(int)$id_manufacturer;
 	}
 
 	/**
 	 * @deprecated
 	 */
-	public function getCustomLink($id_custom, $page, $prefix = '~', $alias = NULL, $id_lang = NULL)
+	public function getCustomLink($id_custom, $page, $prefix = '~', $alias = null, $id_lang = null)
 	{
 		Tools::displayAsDeprecated();
 		if (is_object($id_custom))
 			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).(int)($id_custom->id).$prefix.$id_custom->link_rewrite) :
 			(_PS_BASE_URL_.__PS_BASE_URI__.$page.'?id_custom='.(int)($id_custom->id));
 		if ($alias)
-			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)($id_lang)).(int)($id_custom).$prefix.$alias) :
-			(_PS_BASE_URL_.__PS_BASE_URI__.$page.'?id_custom='.(int)($id_custom));
-		return _PS_BASE_URL_.__PS_BASE_URI__.$page.'?id_custom='.(int)($id_custom);
+			return ($this->allow == 1) ? (_PS_BASE_URL_.__PS_BASE_URI__.$this->getLangLink((int)$id_lang).(int)$id_custom.$prefix.$alias) :
+			(_PS_BASE_URL_.__PS_BASE_URI__.$page.'?id_custom='.(int)$id_custom);
+		return _PS_BASE_URL_.__PS_BASE_URI__.$page.'?id_custom='.(int)$id_custom;
 	}
 
 	/**
@@ -271,7 +271,7 @@ class LinkCore
 					SELECT url_rewrite
 					FROM `'._DB_PREFIX_.'meta` m
 					LEFT JOIN `'._DB_PREFIX_.'meta_lang` ml ON (m.id_meta = ml.id_meta)
-					WHERE id_lang = '.(int)($id_lang).' AND `page` = \''.pSQL($pagename).'\'');
+					WHERE id_lang = '.(int)$id_lang.' AND `page` = \''.pSQL($pagename).'\'');
 					$uri_path = $this->getLangLink((int)$id_lang).($url_rewrite ? $url_rewrite : $filename);
 				}
 				else
@@ -341,7 +341,7 @@ class LinkCore
 	public function getLanguageLinkAdmin($id_lang)
 	{
 		Tools::displayAsDeprecated();
-		return $this->getUrlWith('id_lang', (int)($id_lang));
+		return $this->getUrlWith('id_lang', (int)$id_lang);
 	}
 
 	/**
@@ -369,13 +369,13 @@ class LinkCore
 
 	public function goPage($url, $p)
 	{
-		return $url.($p == 1 ? '' : (!strstr($url, '?') ? '?' : '&amp;').'p='.(int)($p));
+		return $url.($p == 1 ? '' : (!strstr($url, '?') ? '?' : '&amp;').'p='.(int)$p);
 	}
 
 	public function getPaginationLink($type, $id_object, $nb = false, $sort = false, $pagination = false, $array = false)
 	{
 		if ($type && $id_object)
-			$url = $this->{'get'.$type.'Link'}($id_object, NULL);
+			$url = $this->{'get'.$type.'Link'}($id_object, null);
 		else
 		{
 			$url = $this->url;
@@ -388,7 +388,7 @@ class LinkCore
 		$varsPagination = array('p');
 
 		$n = 0;
-		foreach ($_GET AS $k => $value)
+		foreach ($_GET as $k => $value)
 			if ($k != 'id_'.$type)
 			{
 				if (Configuration::get('PS_REWRITING_SETTINGS') && ($k == 'isolang' || $k == 'id_lang'))
@@ -412,7 +412,7 @@ class LinkCore
 		return $url.(!strstr($url, '?') ? '?' : '&').'orderby='.urlencode($orderby).'&orderway='.urlencode($orderway);
 	}
 	
-	protected function getLangLink($id_lang = NULL)
+	protected function getLangLink($id_lang = null)
 	{
 		if (!$this->allow || Language::countActiveLanguages() <= 1)
 			return '';
