@@ -27,78 +27,78 @@
 
 class CustomerCore extends ObjectModel
 {
-	public 		$id;
+	public $id;
 
 	/** @var string Secure key */
-	public		$secure_key;
+	public $secure_key;
 
 	/** @var string protected note */
-	public		$note;
+	public $note;
 
 	/** @var integer Gender ID */
-	public		$id_gender = 9;
+	public $id_gender = 9;
 
 	/** @var integer Default group ID */
-	public		$id_default_group;
+	public $id_default_group;
 
 	/** @var string Lastname */
-	public 		$lastname;
+	public $lastname;
 
 	/** @var string Firstname */
-	public 		$firstname;
+	public $firstname;
 
 	/** @var string Birthday (yyyy-mm-dd) */
-	public 		$birthday = NULL;
+	public $birthday = null;
 
 	/** @var string e-mail */
-	public 		$email;
+	public $email;
 
 	/** @var boolean Newsletter subscription */
-	public 		$newsletter;
+	public $newsletter;
 
 	/** @var string Newsletter ip registration */
-	public		$ip_registration_newsletter;
+	public $ip_registration_newsletter;
 
 	/** @var string Newsletter ip registration */
-	public		$newsletter_date_add;
+	public $newsletter_date_add;
 
 	/** @var boolean Opt-in subscription */
-	public 		$optin;
+	public $optin;
 
 	/** @var integer Password */
-	public 		$passwd;
+	public $passwd;
 
 	/** @var datetime Password */
 	public $last_passwd_gen;
 
 	/** @var boolean Status */
-	public 		$active = true;
+	public $active = true;
 
 	/** @var boolean Status */
-	public 		$is_guest = 0;
+	public $is_guest = 0;
 
 	/** @var boolean True if carrier has been deleted (staying in database as deleted) */
-	public 		$deleted = 0;
+	public $deleted = 0;
 
 	/** @var string Object creation date */
-	public 		$date_add;
+	public $date_add;
 
 	/** @var string Object last modification date */
-	public 		$date_upd;
+	public $date_upd;
 
-	public		$years;
-	public		$days;
-	public		$months;
+	public $years;
+	public $days;
+	public $months;
 
 	protected $tables = array ('customer');
 
- 	protected 	$fieldsRequired = array('lastname', 'passwd', 'firstname', 'email');
- 	protected 	$fieldsSize = array('lastname' => 32, 'passwd' => 32, 'firstname' => 32, 'email' => 128, 'note' => 65000);
- 	protected 	$fieldsValidate = array('secure_key' => 'isMd5', 'lastname' => 'isName', 'firstname' => 'isName', 'email' => 'isEmail', 'passwd' => 'isPasswd',
+ 	protected $fieldsRequired = array('lastname', 'passwd', 'firstname', 'email');
+ 	protected $fieldsSize = array('lastname' => 32, 'passwd' => 32, 'firstname' => 32, 'email' => 128, 'note' => 65000);
+ 	protected $fieldsValidate = array('secure_key' => 'isMd5', 'lastname' => 'isName', 'firstname' => 'isName', 'email' => 'isEmail', 'passwd' => 'isPasswd',
 		 'id_gender' => 'isUnsignedId', 'birthday' => 'isBirthDate', 'newsletter' => 'isBool', 'optin' => 'isBool', 'active' => 'isBool', 'note' => 'isCleanHtml', 'is_guest' => 'isBool');
-	protected	$exclude_copy_post = array('secure_key', 'active', 'date_add', 'date_upd', 'last_passwd_gen', 'newsletter_date_add', 'id_default_group', 'ip_registration_newsletter', 'note', 'is_guest', 'deleted');
+	protected $exclude_copy_post = array('secure_key', 'active', 'date_add', 'date_upd', 'last_passwd_gen', 'newsletter_date_add', 'id_default_group', 'ip_registration_newsletter', 'note', 'is_guest', 'deleted');
 
-	protected	$webserviceParameters = array(
+	protected $webserviceParameters = array(
 		'fields' => array(
 			'id_default_group' => array('xlink_resource' => 'groups'),
 			'newsletter_date_add' => array(),
@@ -112,8 +112,8 @@ class CustomerCore extends ObjectModel
 				'groups' => array('resource' => 'group'),
 		));
 
-	protected 	$table = 'customer';
-	protected 	$identifier = 'id_customer';
+	protected $table = 'customer';
+	protected $identifier = 'id_customer';
 
 	protected static $_defaultGroupId = array();
 	protected static $_customerHasAddress = array();
@@ -173,7 +173,7 @@ class CustomerCore extends ObjectModel
 	public function delete()
 	{
 		$addresses = $this->getAddresses((int)(_PS_LANG_DEFAULT_));
-		foreach ($addresses AS $address)
+		foreach ($addresses as $address)
 		{
 			$obj = new Address((int)($address['id_address']));
 			$obj->delete();
@@ -221,7 +221,7 @@ class CustomerCore extends ObjectModel
 		if (!$result)
 			return false;
 		$this->id = $result['id_customer'];
-		foreach ($result AS $key => $value)
+		foreach ($result as $key => $value)
 			if (key_exists($key, $this))
 				$this->{$key} = $value;
 
@@ -278,9 +278,9 @@ class CustomerCore extends ObjectModel
 		if (!Validate::isEmail($this->email))
 	 		die (Tools::displayError());
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT COUNT(`id_customer`) AS total
+		SELECT COUNT(`id_customer`) total
 		FROM `'._DB_PREFIX_.'customer`
-		WHERE `email` = \''.pSQL($this->email).'\' AND `id_customer` != '.(int)($this->id));
+		WHERE `email` = \''.pSQL($this->email).'\' AND `id_customer` != '.(int)$this->id);
 
 		return $result['total'];
 	}
@@ -299,10 +299,9 @@ class CustomerCore extends ObjectModel
 			self::$_customerHasAddress[$id_customer] = (bool)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 			SELECT `id_address`
 			FROM `'._DB_PREFIX_.'address`
-			WHERE `id_customer` = '.(int)($id_customer).'
-			AND `id_address` = '.(int)($id_address).'
-			AND `deleted` = 0');
+			WHERE `id_customer` = '.(int)$id_customer.' AND `id_address` = '.(int)$id_address.' AND `deleted` = 0');
 		}
+
 		return self::$_customerHasAddress[$id_customer];
 	}
 
@@ -345,7 +344,7 @@ class CustomerCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'connections`
 		WHERE `id_guest` IN (SELECT `id_guest` FROM `'._DB_PREFIX_.'guest` WHERE `id_customer` = '.(int)($this->id).')
 		ORDER BY `date_add` DESC
-		LIMIT 0,'.(int)($nb));
+		LIMIT 0,'.(int)$nb);
 	}
 
 	/**
@@ -359,8 +358,7 @@ class CustomerCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT COUNT(a.`id_address`)
 		FROM `'._DB_PREFIX_.'address` a
-		WHERE a.`id_customer` = '.(int)($id_customer).'
-		AND a.`deleted` = 0');
+		WHERE a.`id_customer` = '.(int)$id_customer.' AND a.`deleted` = 0');
 	}
 
 	/**
@@ -371,14 +369,13 @@ class CustomerCore extends ObjectModel
 	  */
 	public static function checkPassword($id_customer, $passwd)
 	{
-	 	if (!Validate::isUnsignedId($id_customer) OR !Validate::isMd5($passwd))
-	 		die (Tools::displayError());
+	 	if (!Validate::isUnsignedId($id_customer) || !Validate::isMd5($passwd))
+	 		die(Tools::displayError());
 
 		return (bool)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT `id_customer`
 		FROM `'._DB_PREFIX_.'customer`
-		WHERE `id_customer` = '.(int)($id_customer).'
-		AND `passwd` = \''.pSQL($passwd).'\'');
+		WHERE `id_customer` = '.(int)$id_customer.' AND `passwd` = \''.pSQL($passwd).'\'');
 	}
 
 	/**
@@ -393,8 +390,7 @@ class CustomerCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT `email`, `firstname`, `lastname`, `newsletter`, `ip_registration_newsletter`, `newsletter_date_add`
 		FROM `'._DB_PREFIX_.'customer`
-		WHERE `newsletter` = 1
-		AND `active` = 1');
+		WHERE `newsletter` = 1 AND `active` = 1');
 	}
 
 	/**
@@ -407,10 +403,9 @@ class CustomerCore extends ObjectModel
 	{
 		Tools::displayAsDeprecated();
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT COUNT(`id_customer`) as nb
+		SELECT COUNT(`id_customer`) nb
 		FROM `'._DB_PREFIX_.'customer`
-		WHERE DAYOFYEAR(`date_add`) = DAYOFYEAR(NOW())
-		AND YEAR(`date_add`) = YEAR(NOW())');
+		WHERE DAYOFYEAR(`date_add`) = DAYOFYEAR(NOW()) AND YEAR(`date_add`) = YEAR(NOW())');
 		if (!$result['nb'])
 			return '0';
 		return $result['nb'];
@@ -440,13 +435,13 @@ class CustomerCore extends ObjectModel
 	{
 		// Get Row because we want $result to be an array
 		$result = Db::getInstance()->getRow('
-		SELECT COUNT(`id_order`) AS nb_orders, SUM(`total_paid` / o.`conversion_rate`) AS total_orders
+		SELECT COUNT(`id_order`) nb_orders, SUM(`total_paid` / o.`conversion_rate`) total_orders
 		FROM `'._DB_PREFIX_.'orders` o
 		WHERE o.`id_customer` = '.(int)$this->id.'
 		AND o.valid = 1');
 
 		$result['last_visit'] = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
-		SELECT MAX(c.`date_add`) AS last_visit
+		SELECT MAX(c.`date_add`) last_visit
 		FROM `'._DB_PREFIX_.'guest` g
 		LEFT JOIN `'._DB_PREFIX_.'connections` c ON c.id_guest = g.id_guest
 		WHERE g.`id_customer` = '.(int)$this->id);
@@ -464,11 +459,11 @@ class CustomerCore extends ObjectModel
 	public function getLastConnections()
     {
         return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-        SELECT c.date_add, COUNT(cp.id_page) AS pages, TIMEDIFF(MAX(cp.time_end), c.date_add) as time, http_referer,INET_NTOA(ip_address) as ipaddress
+        SELECT c.date_add, COUNT(cp.id_page) pages, TIMEDIFF(MAX(cp.time_end), c.date_add) as time, http_referer,INET_NTOA(ip_address) ipaddress
         FROM `'._DB_PREFIX_.'guest` g
         LEFT JOIN `'._DB_PREFIX_.'connections` c ON c.id_guest = g.id_guest
         LEFT JOIN `'._DB_PREFIX_.'connections_page` cp ON c.id_connections = cp.id_connections
-        WHERE g.`id_customer` = '.(int)($this->id).'
+        WHERE g.`id_customer` = '.(int)$this->id.'
         GROUP BY c.`id_connections`
         ORDER BY c.date_add DESC
         LIMIT 10');
@@ -483,13 +478,11 @@ class CustomerCore extends ObjectModel
 	public function getLastCart()
 	{
 		Tools::displayAsDeprecated();
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT MAX(c.`id_cart`) AS id_cart
+
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+		SELECT MAX(c.`id_cart`)
 		FROM `'._DB_PREFIX_.'cart` c
-		WHERE c.`id_customer` = '.(int)($this->id));
-		if (isset($result['id_cart']))
-			return $result['id_cart'];
-		return false;
+		WHERE c.`id_customer` = '.(int)$this->id);
 	}
 	/*
 	* Specify if a customer already in base
@@ -508,23 +501,20 @@ class CustomerCore extends ObjectModel
 		$row = Db::getInstance()->getRow('
 		SELECT `id_customer`
 		FROM '._DB_PREFIX_.'customer c
-		WHERE c.`id_customer` = '.(int)($id_customer));
+		WHERE c.`id_customer` = '.(int)$id_customer);
 
 		return isset($row['id_customer']);
 	}
 
 	public function cleanGroups()
 	{
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customer_group` WHERE `id_customer` = '.(int)($this->id));
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customer_group` WHERE `id_customer` = '.(int)$this->id);
 	}
 
 	public function addGroups($groups)
 	{
 		foreach ($groups as $group)
-		{
-			$row = array('id_customer' => (int)($this->id), 'id_group' => (int)($group));
-			Db::getInstance()->AutoExecute(_DB_PREFIX_.'customer_group', $row, 'INSERT');
-		}
+			Db::getInstance()->AutoExecute(_DB_PREFIX_.'customer_group', array('id_customer' => (int)($this->id), 'id_group' => (int)$group), 'INSERT');
 	}
 
 	public static function getGroupsStatic($id_customer)
@@ -533,15 +523,16 @@ class CustomerCore extends ObjectModel
 		$result = Db::getInstance()->ExecuteS('
 		SELECT cg.`id_group`
 		FROM '._DB_PREFIX_.'customer_group cg
-		WHERE cg.`id_customer` = '.(int)($id_customer));
-		foreach ($result AS $group)
+		WHERE cg.`id_customer` = '.(int)$id_customer);
+		foreach ($result as $group)
 			$groups[] = (int)$group['id_group'];
+
 		return $groups;
 	}
 
 	public function getGroups()
 	{
-		return self::getGroupsStatic((int)($this->id));
+		return self::getGroupsStatic((int)$this->id);
 	}
 
 	public function isUsed()
@@ -557,13 +548,11 @@ class CustomerCore extends ObjectModel
 	public function isMemberOfGroup($id_group)
 	{
 		Tools::displayAsDeprecated();
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT count(cg.`id_group`) as nb
-		FROM '._DB_PREFIX_.'customer_group cg
-		WHERE cg.`id_customer` = '.(int)($this->id).'
-		AND cg.`id_group` = '.(int)($id_group));
 
-		return $result['nb'];
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+		SELECT COUNT(cg.`id_group`)
+		FROM '._DB_PREFIX_.'customer_group cg
+		WHERE cg.`id_customer` = '.(int)$this->id.' AND cg.`id_group` = '.(int)$id_group);
 	}
 
 	public function getBoughtProducts()
@@ -571,7 +560,7 @@ class CustomerCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT * FROM `'._DB_PREFIX_.'orders` o
 		LEFT JOIN `'._DB_PREFIX_.'order_detail` od ON o.id_order = od.id_order
-		WHERE o.valid = 1 AND o.`id_customer` = '.(int)($this->id));
+		WHERE o.valid = 1 AND o.`id_customer` = '.(int)$this->id);
 	}
 
 	/**
@@ -612,16 +601,15 @@ class CustomerCore extends ObjectModel
 		return Db::getInstance()->Execute('
 		UPDATE `'.pSQL(_DB_PREFIX_.$this->table).'`
 		SET `date_upd` = NOW()
-		WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
+		WHERE `'.pSQL($this->identifier).'` = '.(int)$this->id);
 	}
-
 
 	public function isGuest()
 	{
 		return (bool)$this->is_guest;
 	}
 
-	public function transformToCustomer($id_lang, $password = NULL)
+	public function transformToCustomer($id_lang, $password = null)
 	{
 		if (!$this->isGuest())
 			return false;
@@ -634,13 +622,7 @@ class CustomerCore extends ObjectModel
 		$this->passwd = Tools::encrypt($password);
 		if ($this->update())
 		{
-			$vars = array(
-				'{firstname}' => $this->firstname,
-				'{lastname}' => $this->lastname,
-			    '{email}' => $this->email,
-			    '{passwd}' => $password
-			);
-
+			$vars = array('{firstname}' => $this->firstname, '{lastname}' => $this->lastname, '{email}' => $this->email, '{passwd}' => $password);
 			Mail::Send((int)$id_lang, 'guest_to_customer', Mail::l('Your guest account has been transformed to customer account', (int)$id_lang), $vars, $this->email, $this->firstname.' '.$this->lastname);
 			return true;
 		}
@@ -663,8 +645,7 @@ class CustomerCore extends ObjectModel
 		if (!Validate::isLoadedObject($customer))
 			die(Tools::displayError('Invalid objects'));
 		echo '<a href="index.php?tab=AdminCustomers&id_customer='.(int)($customer->id).'&changeOptinVal&token='.Tools::getAdminTokenLite('AdminCustomers').'">'.
-				($customer->optin ? '<img src="../img/admin/enabled.gif" />' : '<img src="../img/admin/disabled.gif" />').
-			'</a>';
+				($customer->optin ? '<img src="../img/admin/enabled.gif" alt="" />' : '<img src="../img/admin/disabled.gif" alt="" />').'</a>';
 	}
 
 	public function setWsPasswd($passwd)
@@ -682,7 +663,7 @@ class CustomerCore extends ObjectModel
 	public function getWsGroups()
 	{
 		return Db::getInstance()->ExecuteS('
-		SELECT cg.`id_group` as id
+		SELECT cg.`id_group` id
 		FROM '._DB_PREFIX_.'customer_group cg
 		WHERE cg.`id_customer` = '.(int)$this->id);
 	}

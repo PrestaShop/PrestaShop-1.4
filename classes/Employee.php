@@ -127,7 +127,7 @@ class EmployeeCore extends ObjectModel
 	{
 		Tools::displayAsDeprecated();
 		return Db::getInstance()->ExecuteS('
-		SELECT `id_employee`, CONCAT(`firstname`, \' \', `lastname`) AS "name"
+		SELECT `id_employee`, CONCAT(`firstname`, \' \', `lastname`) name
 		FROM `'._DB_PREFIX_.'employee`
 		WHERE `active` = 1
 		ORDER BY `email`');
@@ -146,9 +146,9 @@ class EmployeeCore extends ObjectModel
 	  * @param string $passwd Password is also checked if specified
 	  * @return Employee instance
 	  */
-	public function getByEmail($email, $passwd = NULL)
+	public function getByEmail($email, $passwd = null)
 	{
-	 	if (!Validate::isEmail($email) OR ($passwd != NULL AND !Validate::isPasswd($passwd)))
+	 	if (!Validate::isEmail($email) || ($passwd != null && !Validate::isPasswd($passwd)))
 	 		die(Tools::displayError());
 
 		$result = Db::getInstance()->getRow('
@@ -161,7 +161,7 @@ class EmployeeCore extends ObjectModel
 			return false;
 		$this->id = $result['id_employee'];
 		$this->id_profile = $result['id_profile'];
-		foreach ($result AS $key => $value)
+		foreach ($result as $key => $value)
 			if (key_exists($key, $this))
 				$this->{$key} = $value;
 		return $this;

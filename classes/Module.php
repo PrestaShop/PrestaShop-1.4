@@ -154,18 +154,16 @@ abstract class ModuleCore
 		$result = Db::getInstance()->ExecuteS('
 		SELECT `id_hook`
 		FROM `'._DB_PREFIX_.'hook_module` hm
-		WHERE `id_module` = '.(int)($this->id));
-		foreach	($result AS $row)
+		WHERE `id_module` = '.(int)$this->id);
+		foreach	($result as $row)
 		{
 			Db::getInstance()->Execute('
 			DELETE FROM `'._DB_PREFIX_.'hook_module`
-			WHERE `id_module` = '.(int)($this->id).'
-			AND `id_hook` = '.(int)($row['id_hook']));
+			WHERE `id_module` = '.(int)$this->id.'
+			AND `id_hook` = '.(int)$row['id_hook']);
 			$this->cleanPositions($row['id_hook']);
 		}
-		return Db::getInstance()->Execute('
-			DELETE FROM `'._DB_PREFIX_.'module`
-			WHERE `id_module` = '.(int)($this->id));
+		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'module` WHERE `id_module` = '.(int)$this->id);
 	}
 
 	/**
@@ -240,15 +238,14 @@ abstract class ModuleCore
 	{
 		if (!Validate::isHookName($hook_name))
 			die(Tools::displayError());
-		if (!isset($this->id) OR !is_numeric($this->id))
+		if (!isset($this->id) || !is_numeric($this->id))
 			return false;
 
 		// Check if already register
 		$result = Db::getInstance()->getRow('
-		SELECT hm.`id_module` FROM `'._DB_PREFIX_.'hook_module` hm, `'._DB_PREFIX_.'hook` h
-		WHERE hm.`id_module` = '.(int)($this->id).'
-		AND h.`name` = \''.pSQL($hook_name).'\'
-		AND h.`id_hook` = hm.`id_hook`');
+		SELECT hm.`id_module`
+		FROM `'._DB_PREFIX_.'hook_module` hm, `'._DB_PREFIX_.'hook` h
+		WHERE hm.`id_module` = '.(int)$this->id.' AND h.`name` = \''.pSQL($hook_name).'\'	AND h.`id_hook` = hm.`id_hook`');
 		if ($result)
 			return true;
 
@@ -261,19 +258,18 @@ abstract class ModuleCore
 			return false;
 
 		// Get module position in hook
-		$result2 = Db::getInstance()->getRow('
-		SELECT MAX(`position`) AS position
+		if (Db::getInstance()->getValue('
+		SELECT MAX(`position`)
 		FROM `'._DB_PREFIX_.'hook_module`
-		WHERE `id_hook` = '.(int)($result['id_hook']));
-		if (!$result2)
+		WHERE `id_hook` = '.(int)$result['id_hook']) === false)
 			return false;
 
 		// Register module in hook
 		$return = Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'hook_module` (`id_module`, `id_hook`, `position`)
-		VALUES ('.(int)($this->id).', '.(int)($result['id_hook']).', '.(int)($result2['position'] + 1).')');
+		VALUES ('.(int)$this->id.', '.(int)$result['id_hook'].', '.(int)($result2['position'] + 1).')');
 
-		$this->cleanPositions((int)($result['id_hook']));
+		$this->cleanPositions((int)$result['id_hook']);
 
 		return $return;
 	}
@@ -300,9 +296,9 @@ abstract class ModuleCore
 			'.$this->l('Choose language:').'<br /><br />';
 		foreach ($languages as $language)
 			if ($use_vars_instead_of_ids)
-				$output .= '<img src="../img/l/'.(int)($language['id_lang']).'.jpg" class="pointer" alt="'.$language['name'].'" title="'.$language['name'].'" onclick="changeLanguage(\''.$id.'\', '.$ids.', '.$language['id_lang'].', \''.$language['iso_code'].'\');" /> ';
+				$output .= '<img src="../img/l/'.(int)$language['id_lang'].'.jpg" class="pointer" alt="'.$language['name'].'" title="'.$language['name'].'" onclick="changeLanguage(\''.$id.'\', '.$ids.', '.$language['id_lang'].', \''.$language['iso_code'].'\');" /> ';
 			else
-				$output .= '<img src="../img/l/'.(int)($language['id_lang']).'.jpg" class="pointer" alt="'.$language['name'].'" title="'.$language['name'].'" onclick="changeLanguage(\''.$id.'\', \''.$ids.'\', '.$language['id_lang'].', \''.$language['iso_code'].'\');" /> ';
+				$output .= '<img src="../img/l/'.(int)$language['id_lang'].'.jpg" class="pointer" alt="'.$language['name'].'" title="'.$language['name'].'" onclick="changeLanguage(\''.$id.'\', \''.$ids.'\', '.$language['id_lang'].', \''.$language['iso_code'].'\');" /> ';
 		$output .= '</div>';
 
 		if ($return)
@@ -321,8 +317,7 @@ abstract class ModuleCore
 		return Db::getInstance()->Execute('
 		DELETE
 		FROM `'._DB_PREFIX_.'hook_module`
-		WHERE `id_module` = '.(int)($this->id).'
-		AND `id_hook` = '.(int)($hook_id));
+		WHERE `id_module` = '.(int)$this->id.' AND `id_hook` = '.(int)$hook_id);
 	}
 
 	/**
@@ -336,8 +331,7 @@ abstract class ModuleCore
 		return Db::getInstance()->Execute('
 		DELETE
 		FROM `'._DB_PREFIX_.'hook_module_exceptions`
-		WHERE `id_module` = '.(int)($this->id).'
-		AND `id_hook` = '.(int)($hook_id));
+		WHERE `id_module` = '.(int)$this->id.' AND `id_hook` = '.(int)$hook_id);
 	}
 
 	/**
@@ -349,27 +343,26 @@ abstract class ModuleCore
 	  */
 	public function registerExceptions($id_hook, $excepts)
 	{
-		foreach ($excepts AS $except)
-		{
+		foreach ($excepts as $except)
 			if (!empty($except))
 			{
 				$result = Db::getInstance()->Execute('
 				INSERT INTO `'._DB_PREFIX_.'hook_module_exceptions` (`id_module`, `id_hook`, `file_name`)
-				VALUES ('.(int)($this->id).', '.(int)($id_hook).', \''.pSQL(strval($except)).'\')');
+				VALUES ('.(int)$this->id.', '.(int)$id_hook.', \''.pSQL(strval($except)).'\')');
 				if (!$result)
 					return false;
 			}
-		}
+
 		return true;
 	}
 
 	public function editExceptions($id_hook, $excepts)
 	{
-		// Cleaning...
 		Db::getInstance()->Execute('
-				DELETE FROM `'._DB_PREFIX_.'hook_module_exceptions`
-				WHERE `id_module` = '.(int)($this->id).' AND `id_hook` ='.(int)($id_hook));
-		return $this->registerExceptions($id_hook, $excepts);
+		DELETE FROM `'._DB_PREFIX_.'hook_module_exceptions`
+		WHERE `id_module` = '.(int)$this->id.' AND `id_hook` ='.(int)$id_hook);
+
+		return $this->registerExceptions((int)$id_hook, $excepts);
 	}
 
 
@@ -424,9 +417,9 @@ abstract class ModuleCore
 	  */
 	public static function getInstanceByName($moduleName)
 	{
-		if (!isset(self::$_INSTANCE[$moduleName]))
+		if (!isset(self::$_INSTANCE[$moduleName]) && file_exists(_PS_MODULE_DIR_.$moduleName.'/'.$moduleName.'.php'))
 		{
-			@include_once(_PS_MODULE_DIR_.$moduleName.'/'.$moduleName.'.php');
+			include_once(_PS_MODULE_DIR_.$moduleName.'/'.$moduleName.'.php');
 			if (class_exists($moduleName, false))
 				return self::$_INSTANCE[$moduleName] = new $moduleName;
 			return false;
@@ -443,9 +436,8 @@ abstract class ModuleCore
 	public static function preloadModuleNameFromId($ids)
 	{
 		static $preloadedModuleNameFromId;
-		if (!isset($preloadedModuleNameFromId)) {
+		if (!isset($preloadedModuleNameFromId))
 			$preloadedModuleNameFromId = array();
-		}
 
 		if (is_array($ids))
 		{
@@ -471,10 +463,10 @@ abstract class ModuleCore
 				$preloadedModuleNameFromId[$ids] = false;
 		}
 
-
-		if (is_array($ids)) {
+		if (is_array($ids))
 			return $preloadedModuleNameFromId;
-		} else {
+		else
+		{
 			if (!isset($preloadedModuleNameFromId[$ids]))
 				return false;
 			return $preloadedModuleNameFromId[$ids];
@@ -632,7 +624,7 @@ abstract class ModuleCore
 	{
 		$moduleList = array();
 		$modules = scandir(_PS_MODULE_DIR_);
-		foreach ($modules AS $name)
+		foreach ($modules as $name)
 		{
 			if (is_dir(_PS_MODULE_DIR_.$name) && file_exists(_PS_MODULE_DIR_.$name.'/'.$name.'.php'))
 			{
@@ -787,7 +779,7 @@ abstract class ModuleCore
 		$result = self::getPaymentModules();
 
 		if ($result)
-			foreach ($result AS $module)
+			foreach ($result as $module)
 				if (($moduleInstance = Module::getInstanceByName($module['name'])) AND is_callable(array($moduleInstance, 'hookpayment')))
 					if (!$moduleInstance->currencies OR ($moduleInstance->currencies AND sizeof(Currency::checkPaymentCurrencies($moduleInstance->id))))
 						$output .= call_user_func(array($moduleInstance, 'hookpayment'), $hookArgs);
@@ -904,7 +896,7 @@ abstract class ModuleCore
 	 * @param boolean $way Up (1) or Down (0)
 	 * @param intger $position
 	 */
-	public function updatePosition($id_hook, $way, $position = NULL)
+	public function updatePosition($id_hook, $way, $position = null)
 	{
 		if (!$res = Db::getInstance()->ExecuteS('
 		SELECT hm.`id_module`, hm.`position`, hm.`id_hook`
@@ -912,7 +904,7 @@ abstract class ModuleCore
 		WHERE hm.`id_hook` = '.(int)($id_hook).'
 		ORDER BY hm.`position` '.((int)($way) ? 'ASC' : 'DESC')))
 			return false;
-		foreach ($res AS $key => $values)
+		foreach ($res as $key => $values)
 			if ((int)($values[$this->identifier]) == (int)($this->id))
 			{
 				$k = $key ;
@@ -949,15 +941,15 @@ abstract class ModuleCore
 		$result = Db::getInstance()->ExecuteS('
 		SELECT `id_module`
 		FROM `'._DB_PREFIX_.'hook_module`
-		WHERE `id_hook` = '.(int)($id_hook).'
+		WHERE `id_hook` = '.(int)$id_hook.'
 		ORDER BY `position`');
-		$sizeof = sizeof($result);
+		$sizeof = count($result);
 		for ($i = 0; $i < $sizeof; ++$i)
 			Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'hook_module`
 			SET `position` = '.(int)($i + 1).'
-			WHERE `id_hook` = '.(int)($id_hook).'
-			AND `id_module` = '.(int)($result[$i]['id_module']));
+			WHERE `id_hook` = '.(int)$id_hook.'
+			AND `id_module` = '.(int)$result[$i]['id_module']);
 		return true;
 	}
 
@@ -1072,7 +1064,7 @@ abstract class ModuleCore
 			$smarty->currentTemplate = substr(basename($template), 0, -4);
 		}
 		$smarty->assign('module_dir', __PS_BASE_URI__.'modules/'.basename($file, '.php').'/');
-		if (($overloaded = self::_isTemplateOverloadedStatic(basename($file, '.php'), $template)) === NULL)
+		if (($overloaded = self::_isTemplateOverloadedStatic(basename($file, '.php'), $template)) === null)
 			$result = Tools::displayError('No template found for module').' '.basename($file,'.php');
 		else
 		{
@@ -1089,7 +1081,7 @@ abstract class ModuleCore
 		return ($this->_isTemplateOverloaded($template) ? _PS_THEME_DIR_.'modules/' : _PS_MODULE_DIR_).$this->name.'/';
 	}
 
-	public function isCached($template, $cacheId = NULL, $compileId = NULL)
+	public function isCached($template, $cacheId = null, $compileId = null)
 	{
 		global $smarty;
 
@@ -1101,7 +1093,7 @@ abstract class ModuleCore
 			return $smarty->is_cached($this->_getApplicableTemplateDir($template).$template, $cacheId, $compileId);
 	}
 
-	protected function _clearCache($template, $cacheId = NULL, $compileId = NULL)
+	protected function _clearCache($template, $cacheId = null, $compileId = null)
 	{
 		global $smarty;
 		Tools::clearCache($smarty);
