@@ -83,14 +83,14 @@ class PDF_PageGroupCore extends FPDF
 
 class PDFCore extends PDF_PageGroupCore
 {
-	protected static $order = NULL;
-	protected static $orderReturn = NULL;
-	protected static $orderSlip = NULL;
-	protected static $delivery = NULL;
+	protected static $order = null;
+	protected static $orderReturn = null;
+	protected static $orderSlip = null;
+	protected static $delivery = null;
 	protected static $_priceDisplayMethod;
 
 	/** @var object Order currency object */
-	protected static $currency = NULL;
+	protected static $currency = null;
 
 	protected static $_iso;
 
@@ -117,7 +117,7 @@ class PDFCore extends PDF_PageGroupCore
 	{
 		if (!$languages = Language::getLanguages())
 			die(Tools::displayError());
-		foreach ($languages AS $language)
+		foreach ($languages as $language)
 		{
 			$isoCode = strtoupper($language['iso_code']);
 			$conf = Configuration::getMultiple(array('PS_PDF_ENCODING_'.$isoCode, 'PS_PDF_FONT_'.$isoCode));
@@ -280,7 +280,7 @@ class PDFCore extends PDF_PageGroupCore
 		$conf['PS_SHOP_NAME_UPPER'] = Tools::strtoupper($conf['PS_SHOP_NAME']);
 		$y_delta = array_key_exists('PS_SHOP_DETAILS', $conf) ? substr_count($conf['PS_SHOP_DETAILS'],"\n") : 0;
 
-		foreach($conf as $key => $value)
+		foreach ($conf as $key => $value)
 			$conf[$key] = Tools::iconv('utf-8', self::encoding(), $value);
 		foreach ($arrayConf as $key)
 			if (!isset($conf[$key]))
@@ -334,7 +334,7 @@ class PDFCore extends PDF_PageGroupCore
 	public static function multipleInvoices($invoices)
 	{
 		$pdf = new PDF('P', 'mm', 'A4');
-		foreach ($invoices AS $id_order)
+		foreach ($invoices as $id_order)
 		{
 			$orderObj = new Order((int)$id_order);
 			if (Validate::isLoadedObject($orderObj))
@@ -346,7 +346,7 @@ class PDFCore extends PDF_PageGroupCore
 	public static function multipleOrderSlips($orderSlips)
 	{
 		$pdf = new PDF('P', 'mm', 'A4');
-		foreach ($orderSlips AS $id_order_slip)
+		foreach ($orderSlips as $id_order_slip)
 		{
 			$orderSlip = new OrderSlip((int)$id_order_slip);
 			$order = new Order((int)$orderSlip->id_order);
@@ -360,7 +360,7 @@ class PDFCore extends PDF_PageGroupCore
 	public static function multipleDelivery($slips)
 	{
 		$pdf = new PDF('P', 'mm', 'A4');
-		foreach ($slips AS $id_order)
+		foreach ($slips as $id_order)
 		{
 			$orderObj = new Order((int)$id_order);
 			if (Validate::isLoadedObject($orderObj))
@@ -369,7 +369,7 @@ class PDFCore extends PDF_PageGroupCore
 		return $pdf->Output('invoices.pdf', 'D');
 	}
 
-	public static function orderReturn($orderReturn, $mode = 'D', $multiple = false, &$pdf = NULL)
+	public static function orderReturn($orderReturn, $mode = 'D', $multiple = false, &$pdf = null)
 	{
 		$pdf = new PDF('P', 'mm', 'A4');
 		self::$orderReturn = $orderReturn;
@@ -467,7 +467,7 @@ class PDFCore extends PDF_PageGroupCore
 		$this->SetFont(self::fontname(), '', 7);
 
 		$products = OrderReturn::getOrdersReturnProducts(self::$orderReturn->id, self::$order);
-		foreach ($products AS $product)
+		foreach ($products as $product)
 		{
 			$before = $this->GetY();
 			$this->MultiCell($w[0], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']), 'B');
@@ -487,7 +487,7 @@ class PDFCore extends PDF_PageGroupCore
 
 		$maxY = 0;
 		$pdf->setY($pdf->GetY() + 5);
-		foreach(array_keys($addressType) as $type)
+		foreach (array_keys($addressType) as $type)
 		{
 			$currentY = $pdf->GetY();
 
@@ -503,7 +503,7 @@ class PDFCore extends PDF_PageGroupCore
 				if (($patternsList = explode(' ', $line)))
 				{
 					$tmp = '';
-					foreach($patternsList as $pattern)
+					foreach ($patternsList as $pattern)
 						if (!in_array($pattern, $patternRules['avoid']))
 						{
 							if ($pattern == 'State:name' &&
@@ -544,7 +544,7 @@ class PDFCore extends PDF_PageGroupCore
 	* @param object $order Order
 	* @param string $mode Download or display (optional)
 	*/
-	public static function invoice($order, $mode = 'D', $multiple = false, &$pdf = NULL, $slip = false, $delivery = false)
+	public static function invoice($order, $mode = 'D', $multiple = false, &$pdf = null, $slip = false, $delivery = false)
 	{
 	 	global $cookie;
 
@@ -604,7 +604,7 @@ class PDFCore extends PDF_PageGroupCore
 			$pdf->Ln(5);
 		}
 
-		if ($addressType['invoice']['addressObject']->dni != NULL)
+		if ($addressType['invoice']['addressObject']->dni != null)
 			$pdf->Cell($width, 10,
 				self::l('Tax ID number:').' '.Tools::iconv('utf-8', self::encoding(),
 				$addressType['invoice']['addressObject']->dni), 0, 'L');
@@ -616,7 +616,7 @@ class PDFCore extends PDF_PageGroupCore
 		if ($carrier->name == '0')
 				$carrier->name = Configuration::get('PS_SHOP_NAME');
 		$history = self::$order->getHistory(self::$order->id_lang);
-		foreach($history as $h)
+		foreach ($history as $h)
 			if ($h['id_order_state'] == Configuration::get('PS_OS_SHIPPING'))
 				$shipping_date = $h['date_add'];
 		$pdf->Ln(12);
@@ -892,7 +892,7 @@ class PDFCore extends PDF_PageGroupCore
 		$lineSize = 0;
 		$line = 0;
 
-		foreach($products AS $product)
+		foreach ($products as $product)
 			if (!$delivery OR ((int)($product['product_quantity']) - (int)($product['product_quantity_refunded']) > 0))
 			{
 				if ($counter >= $lines)
@@ -935,7 +935,7 @@ class PDFCore extends PDF_PageGroupCore
 				{
 					$custoLabel = '';
 
-					foreach($customizedDatas[$product['product_id']][$product['product_attribute_id']] as $customizedData)
+					foreach ($customizedDatas[$product['product_id']][$product['product_attribute_id']] as $customizedData)
 					{
 						$customizationGroup = $customizedData['datas'];
 						$nb_images = 0;
@@ -944,7 +944,7 @@ class PDFCore extends PDF_PageGroupCore
 							$nb_images = sizeof($customizationGroup[_CUSTOMIZE_FILE_]);
 
 						if (array_key_exists(_CUSTOMIZE_TEXTFIELD_, $customizationGroup))
-							foreach($customizationGroup[_CUSTOMIZE_TEXTFIELD_] as $customization)
+							foreach ($customizationGroup[_CUSTOMIZE_TEXTFIELD_] as $customization)
 								if (!empty($customization['name'])) $custoLabel .= '- '.$customization['name'].': '.$customization['value']."\n";
 
 
@@ -1005,7 +1005,7 @@ class PDFCore extends PDF_PageGroupCore
 		$this->SetFont(self::fontname(), 'B', 7);
 		$discounts = self::$order->getDiscounts();
 
-		foreach($discounts AS $discount)
+		foreach ($discounts as $discount)
 		{
 			$this->Cell($w[0], 6, self::l('Discount:').' '.$discount['name'], 'B');
 			$this->Cell($w[1], 6, '', 'B');
@@ -1059,7 +1059,7 @@ class PDFCore extends PDF_PageGroupCore
 		$amountWithoutTax = 0;
 		$taxes = array();
 		/* Firstly calculate all prices */
-		foreach ($products AS &$product)
+		foreach ($products as &$product)
 		{
 			if (!isset($priceBreakDown['totalsWithTax'][$product['tax_rate']]))
 				$priceBreakDown['totalsWithTax'][$product['tax_rate']] = 0;
@@ -1138,7 +1138,7 @@ class PDFCore extends PDF_PageGroupCore
 		if (($priceBreakDown['totalsWithoutTax'] == $priceBreakDown['totalsWithTax']) AND (!$carrier_tax_rate OR $carrier_tax_rate == '0.00') AND (!self::$order->total_wrapping OR self::$order->total_wrapping == '0.00'))
 			return ;
 
-		foreach ($taxes AS $tax_rate => &$vat)
+		foreach ($taxes as $tax_rate => &$vat)
 		{
 			if (self::$_priceDisplayMethod == PS_TAX_EXC)
 			{
@@ -1215,7 +1215,7 @@ class PDFCore extends PDF_PageGroupCore
 		$nb_tax = 0;
 
 		// Display product tax
-		foreach (array_keys($priceBreakDown['taxes']) AS $tax_rate)
+		foreach (array_keys($priceBreakDown['taxes']) as $tax_rate)
 		{
 			if ($tax_rate != '0.00' AND $priceBreakDown['totalsProductsWithTax'][$tax_rate] != '0.00')
 			{

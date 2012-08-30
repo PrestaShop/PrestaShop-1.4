@@ -75,7 +75,7 @@ class LanguageCore extends ObjectModel
 		'pdf' => '_LANGPDF',
 	);
 
-	public	function __construct($id = NULL, $id_lang = NULL)
+	public	function __construct($id = null, $id_lang = null)
 	{
 		parent::__construct($id);
 	}
@@ -118,7 +118,7 @@ class LanguageCore extends ObjectModel
 	 */
 	public function moveToIso($newIso)
 	{
-		if($newIso == $this->iso_code)
+		if ($newIso == $this->iso_code)
 			return true;
 
 		if (file_exists(_PS_TRANSLATIONS_DIR_.$this->iso_code))
@@ -350,24 +350,25 @@ class LanguageCore extends ObjectModel
 		$tables = Db::getInstance()->ExecuteS('SHOW TABLES LIKE \''._DB_PREFIX_.'%_lang\' ');
 		$langTables = array();
 
-		foreach($tables as $table)
-			foreach($table as $t)
+		foreach ($tables as $table)
+			foreach ($table as $t)
 				if ($t != _DB_PREFIX_.'configuration_lang')
 					$langTables[] = $t;
 
 		Db::getInstance()->Execute('SET @id_lang_default = (SELECT c.`value` FROM `'._DB_PREFIX_.'configuration` c WHERE c.`name` = \'PS_LANG_DEFAULT\' LIMIT 1)');
 		$return = true;
-		foreach($langTables as $name)
+		foreach ($langTables as $name)
 		{
 			$fields = '';
 			$columns = Db::getInstance()->ExecuteS('SHOW COLUMNS FROM `'.$name.'`');
-			foreach($columns as $column)
+			foreach ($columns as $column)
 				$fields .= $column['Field'].', ';
 			$fields = rtrim($fields, ', ');
 			$identifier = 'id_'.str_replace('_lang', '', str_replace(_DB_PREFIX_, '', $name));
 
 			$sql = 'INSERT IGNORE INTO `'.$name.'` ('.$fields.') (SELECT ';
-			foreach($columns as $column) {
+			foreach ($columns as $column)
+			{
 				if ($identifier != $column['Field'] and $column['Field'] != 'id_lang')
 					$sql .= '(SELECT `'.$column['Field'].'` FROM `'.$name.'` tl WHERE tl.`id_lang` = @id_lang_default AND tl.`'.$identifier.'` = `'.str_replace('_lang', '', $name).'`.`'.$identifier.'`), ';
 				else
@@ -448,8 +449,8 @@ class LanguageCore extends ObjectModel
 		// delete images
 		$files_copy = array('/en.jpg', '/en-default-thickbox.jpg', '/en-default-home.jpg', '/en-default-large.jpg', '/en-default-medium.jpg', '/en-default-small.jpg', '/en-default-large_scene.jpg');
 		$tos = array(_PS_CAT_IMG_DIR_, _PS_MANU_IMG_DIR_, _PS_PROD_IMG_DIR_, _PS_SUPP_IMG_DIR_);
-		foreach($tos AS $to)
-			foreach($files_copy AS $file)
+		foreach ($tos as $to)
+			foreach ($files_copy as $file)
 			{
 				$name = str_replace('/en', ''.$this->iso_code, $file);
 
@@ -477,10 +478,10 @@ class LanguageCore extends ObjectModel
 		if (!is_array($selection) OR !Validate::isTableOrIdentifier($this->identifier) OR !Validate::isTableOrIdentifier($this->table))
 			die(Tools::displayError());
 		$result = true;
-		foreach ($selection AS $id)
+		foreach ($selection as $id)
 		{
-			$this->id = (int)($id);
-			$result = $result AND $this->delete();
+			$this->id = (int)$id;
+			$result &= $this->delete();
 		}
 
 		// If url_rewrite is not enabled, we don't need to regenerate .htaccess
@@ -580,19 +581,19 @@ class LanguageCore extends ObjectModel
 	public static function copyLanguageData($from, $to)
 	{
 		$result = Db::getInstance()->ExecuteS('SHOW TABLES FROM `'._DB_NAME_.'`');
-		foreach ($result AS $row)
+		foreach ($result as $row)
 			if (preg_match('/_lang/', $row['Tables_in_'._DB_NAME_]) AND $row['Tables_in_'._DB_NAME_] != _DB_PREFIX_.'lang')
 			{
 				$result2 = Db::getInstance()->ExecuteS('SELECT * FROM `'.$row['Tables_in_'._DB_NAME_].'` WHERE `id_lang` = '.(int)($from));
-				if (!sizeof($result2))
+				if (!count($result2))
 					continue;
 				Db::getInstance()->Execute('DELETE FROM `'.$row['Tables_in_'._DB_NAME_].'` WHERE `id_lang` = '.(int)($to));
 				$query = 'INSERT INTO `'.$row['Tables_in_'._DB_NAME_].'` VALUES ';
-				foreach ($result2 AS $row2)
+				foreach ($result2 as $row2)
 				{
 					$query .= '(';
 					$row2['id_lang'] = $to;
-					foreach ($row2 AS $field)
+					foreach ($row2 as $field)
 						$query .= '\''.pSQL($field, true).'\',';
 					$query = rtrim($query, ',').'),';
 				}
@@ -627,8 +628,7 @@ class LanguageCore extends ObjectModel
 							(int)(Configuration::get('PS_REWRITING_SETTINGS')),
 							(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')),
 							Configuration::get('PS_HTACCESS_SPECIFIC'),
-							(int)Configuration::get('PS_HTACCESS_DISABLE_MULTIVIEWS')
-							);
+							(int)Configuration::get('PS_HTACCESS_DISABLE_MULTIVIEWS'));
 	}
 
 	public static function checkAndAddLanguage($iso_code)
@@ -657,7 +657,7 @@ class LanguageCore extends ObjectModel
 				if ($lang_pack)
 				{
 					$flag = Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/flags/jpeg/'.$iso_code.'.jpg');
-					if ($flag != NULL && !preg_match('/<body>/', $flag))
+					if ($flag != null && !preg_match('/<body>/', $flag))
 					{
 						$file = fopen(dirname(__FILE__).'/../img/l/'.$insert_id.'.jpg', 'w');
 						if ($file)
@@ -676,8 +676,8 @@ class LanguageCore extends ObjectModel
 
 				$files_copy = array('/en.jpg', '/en-default-thickbox.jpg', '/en-default-home.jpg', '/en-default-large.jpg', '/en-default-medium.jpg', '/en-default-small.jpg', '/en-default-large_scene.jpg');
 				$tos = array(_PS_CAT_IMG_DIR_, _PS_MANU_IMG_DIR_, _PS_PROD_IMG_DIR_, _PS_SUPP_IMG_DIR_);
-				foreach($tos AS $to)
-					foreach($files_copy AS $file)
+				foreach ($tos as $to)
+					foreach ($files_copy as $file)
 					{
 						$name = str_replace('/en', '/'.$iso_code, $file);
 						copy(dirname(__FILE__).'/../img/l'.$file, $to.$name);

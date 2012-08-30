@@ -69,7 +69,7 @@ class ImageCore extends ObjectModel
 
 	protected	static $_cacheGetSize = array();
 
-	public function __construct($id = NULL, $id_lang = NULL)
+	public function __construct($id = null, $id_lang = null)
 	{
 		parent::__construct($id, $id_lang);
 		$this->image_dir = _PS_PROD_IMG_DIR_;
@@ -79,9 +79,9 @@ class ImageCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_product'] = (int)($this->id_product);
-		$fields['position'] = (int)($this->position);
-		$fields['cover'] = (int)($this->cover);
+		$fields['id_product'] = (int)$this->id_product;
+		$fields['position'] = (int)$this->position;
+		$fields['cover'] = (int)$this->cover;
 		return $fields;
 	}
 
@@ -103,7 +103,7 @@ class ImageCore extends ObjectModel
 			foreach ($result as $row)
 			{
 				$row['position'] = $i++;
-				Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table, $row, 'UPDATE', '`id_image` = '.(int)($row['id_image']), 1);
+				Db::getInstance()->AutoExecute(_DB_PREFIX_.$this->table, $row, 'UPDATE', '`id_image` = '.(int)$row['id_image'], 1);
 			}
 
 		return true;
@@ -207,7 +207,7 @@ class ImageCore extends ObjectModel
 			if ($imageNew->add())
             {
 				$new_path = $imageNew->getPathForCreation();
-            	foreach ($imagesTypes AS $imageType)
+            	foreach ($imagesTypes as $imageType)
             	{
 					if (file_exists(_PS_PROD_IMG_DIR_.$imageOld->getExistingImgPath().'-'.$imageType['name'].'.jpg'))
 					{
@@ -232,8 +232,8 @@ class ImageCore extends ObjectModel
 	{
 		if (!isset($combinationImages['new']) OR !is_array($combinationImages['new']))
 			return ;
-		foreach ($combinationImages['new'] AS $id_product_attribute => $imageIds)
-			foreach ($imageIds AS $key => $imageId)
+		foreach ($combinationImages['new'] as $id_product_attribute => $imageIds)
+			foreach ($imageIds as $key => $imageId)
 				if ((int)($imageId) == (int)($saved_id))
 					$combinationImages['new'][$id_product_attribute][$key] = (int)($id_image);
 	}
@@ -248,8 +248,8 @@ class ImageCore extends ObjectModel
 		if (!isset($combinationImages['new']) OR !is_array($combinationImages['new']))
 			return true;
 		$query = 'INSERT INTO `'._DB_PREFIX_.'product_attribute_image` (`id_product_attribute`, `id_image`) VALUES ';
-		foreach ($combinationImages['new'] AS $id_product_attribute => $imageIds)
-			foreach ($imageIds AS $imageId)
+		foreach ($combinationImages['new'] as $id_product_attribute => $imageIds)
+			foreach ($imageIds as $imageId)
 				$query .= '('.(int)($id_product_attribute).', '.(int)($imageId).'), ';
 		$query = rtrim($query, ', ');
 		return DB::getInstance()->Execute($query);
@@ -263,33 +263,33 @@ class ImageCore extends ObjectModel
 	  */
 	public function positionImage($position, $direction)
 	{
-		$position = (int)($position);
-		$direction = (int)($direction);
+		$position = (int)$position;
+		$direction = (int)$direction;
 
 		// temporary position
 		$high_position = Image::getHighestPosition($this->id_product) + 1;
 
 		Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'image`
-		SET `position` = '.(int)($high_position).'
-		WHERE `id_product` = '.(int)($this->id_product).'
+		SET `position` = '.(int)$high_position.'
+		WHERE `id_product` = '.(int)$this->id_product.'
 		AND `position` = '.($direction ? $position - 1 : $position + 1));
 
 		Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'image`
 		SET `position` = `position`'.($direction ? '-1' : '+1').'
-		WHERE `id_image` = '.(int)($this->id));
+		WHERE `id_image` = '.(int)$this->id);
 
 		Db::getInstance()->Execute('
 		UPDATE `'._DB_PREFIX_.'image`
 		SET `position` = '.$this->position.'
-		WHERE `id_product` = '.(int)($this->id_product).'
-		AND `position` = '.(int)($high_position));
+		WHERE `id_product` = '.(int)$this->id_product.'
+		AND `position` = '.(int)$high_position);
 	}
 
 	public static function getSize($type)
 	{
-		if (!isset(self::$_cacheGetSize[$type]) OR self::$_cacheGetSize[$type] === NULL)
+		if (!isset(self::$_cacheGetSize[$type]) || self::$_cacheGetSize[$type] === null)
 			self::$_cacheGetSize[$type] = Db::getInstance()->getRow('SELECT `width`, `height` FROM '._DB_PREFIX_.'image_type WHERE `name` = \''.pSQL($type).'\'');
 	 	return self::$_cacheGetSize[$type];
 	}
@@ -299,7 +299,7 @@ class ImageCore extends ObjectModel
 	  */
 	public static function clearTmpDir()
 	{
-		foreach (scandir(_PS_TMP_IMG_DIR_) AS $d)
+		foreach (scandir(_PS_TMP_IMG_DIR_) as $d)
 			if (preg_match('/(.*)\.jpg$/', $d))
 				unlink(_PS_TMP_IMG_DIR_.$d);
 	}
@@ -309,10 +309,9 @@ class ImageCore extends ObjectModel
 	public function deleteProductAttributeImage()
 	{
 		return Db::getInstance()->Execute('
-			DELETE
-			FROM `'._DB_PREFIX_.'product_attribute_image`
-			WHERE `id_image` = '.(int)($this->id)
-		);
+		DELETE
+		FROM `'._DB_PREFIX_.'product_attribute_image`
+		WHERE `id_image` = '.(int)$this->id);
 	}
 
 	/**
@@ -334,7 +333,7 @@ class ImageCore extends ObjectModel
 
 		// Delete auto-generated images
 		$imageTypes = ImageType::getImagesTypes();
-		foreach ($imageTypes AS $imageType)
+		foreach ($imageTypes as $imageType)
 			$files_to_delete[] = $this->image_dir.$this->getExistingImgPath().'-'.$imageType['name'].'.'.$this->image_format;
 
 		// Delete watermark image
@@ -528,7 +527,7 @@ class ImageCore extends ObjectModel
 					$new_path = _PS_PROD_IMG_DIR_.$image->getImgPath().(isset($matches[3]) ? $matches[3] : '').'.jpg';
 					if (file_exists($new_path))
 					{
-						if(!file_exists(_PS_PROD_IMG_DIR_.$tmp_folder))
+						if (!file_exists(_PS_PROD_IMG_DIR_.$tmp_folder))
 						{
 							@mkdir(_PS_PROD_IMG_DIR_.$tmp_folder, 0755);
 							@chmod(_PS_PROD_IMG_DIR_.$tmp_folder, 0755);
@@ -587,7 +586,8 @@ class ImageCore extends ObjectModel
 			if (!$this->id_product)
 				return false;
 			$path = $this->id_product.'-'.$this->id;
-		} else
+		}
+		else
 		{
 			$path = $this->getImgPath();
 			$this->createImgFolder();

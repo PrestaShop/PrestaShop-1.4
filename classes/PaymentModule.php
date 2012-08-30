@@ -30,9 +30,9 @@ include_once(dirname(__FILE__).'/../config/config.inc.php');
 abstract class PaymentModuleCore extends Module
 {
 	/** @var integer Current order's id */
-	public	$currentOrder;
-	public	$currencies = true;
-	public	$currencies_mode = 'checkbox';
+	public $currentOrder;
+	public $currencies = true;
+	public $currencies_mode = 'checkbox';
 
 	public function install()
 	{
@@ -51,7 +51,7 @@ abstract class PaymentModuleCore extends Module
 		{
 			if (!Db::getInstance()->Execute('
 			INSERT INTO `'._DB_PREFIX_.'module_currency` (id_module, id_currency)
-			VALUES ('.(int)($this->id).', -2)'))
+			VALUES ('.(int)$this->id.', -2)'))
 				return false;
 		}
 		else
@@ -182,7 +182,7 @@ abstract class PaymentModuleCore extends Module
 
 				$store_all_taxes = array();
 
-				foreach ($products AS $key => $product)
+				foreach ($products as $key => $product)
 				{
 					$productQuantity = (int)(Product::getQuantity((int)($product['id_product']), ($product['id_product_attribute'] ? (int)($product['id_product_attribute']) : NULL)));
 					$quantityInStock = ($productQuantity - (int)($product['cart_quantity']) < 0) ? $productQuantity : (int)($product['cart_quantity']);
@@ -241,7 +241,7 @@ abstract class PaymentModuleCore extends Module
 
 					// Add some informations for virtual products
 					$deadline = '0000-00-00 00:00:00';
-					$download_hash = NULL;
+					$download_hash = null;
 					if ($id_product_download = ProductDownload::getIdFromIdProduct((int)($product['id_product'])))
 					{
 						$productDownload = new ProductDownload((int)($id_product_download));
@@ -300,14 +300,14 @@ abstract class PaymentModuleCore extends Module
 					if (isset($customizedDatas[$product['id_product']][$product['id_product_attribute']]))
 					{
 						$customizationText = '';
-						foreach ($customizedDatas[$product['id_product']][$product['id_product_attribute']] AS $customization)
+						foreach ($customizedDatas[$product['id_product']][$product['id_product_attribute']] as $customization)
 						{
 							if (isset($customization['datas'][_CUSTOMIZE_TEXTFIELD_]))
-								foreach ($customization['datas'][_CUSTOMIZE_TEXTFIELD_] AS $text)
+								foreach ($customization['datas'][_CUSTOMIZE_TEXTFIELD_] as $text)
 									$customizationText .= $text['name'].':'.' '.$text['value'].'<br />';
 
 							if (isset($customization['datas'][_CUSTOMIZE_FILE_]))
-								$customizationText .= sizeof($customization['datas'][_CUSTOMIZE_FILE_]) .' '. Tools::displayError('image(s)').'<br />';
+								$customizationText .= count($customization['datas'][_CUSTOMIZE_FILE_]).' '.Tools::displayError('image(s)').'<br />';
 
 							$customizationText .= '---<br />';
 						}
@@ -342,7 +342,7 @@ abstract class PaymentModuleCore extends Module
 				$allTaxes = TaxRulesGroup::getTaxes((int)Carrier::getIdTaxRulesGroupByIdCarrier((int)$order->id_carrier), $id_country, $id_state, $id_county);
 				$nTax = 0;
 
-				foreach ($allTaxes AS $res)
+				foreach ($allTaxes as $res)
 				{
 					if (!isset($res->id))
 						continue;
@@ -374,10 +374,10 @@ abstract class PaymentModuleCore extends Module
 				$discountsList = '';
 				$total_discount_value = 0;
 				$shrunk = false;
-				foreach ($discounts AS $discount)
+				foreach ($discounts as $discount)
 				{
 					$objDiscount = new Discount((int)$discount['id_discount']);
-					$value = $objDiscount->getValue(sizeof($discounts), $cart->getOrderTotal(true, Cart::ONLY_PRODUCTS), $order->total_shipping, $cart->id);
+					$value = $objDiscount->getValue(count($discounts), $cart->getOrderTotal(true, Cart::ONLY_PRODUCTS), $order->total_shipping, $cart->id);
 					if ($objDiscount->id_discount_type == 2 AND in_array($objDiscount->behavior_not_exhausted, array(1,2)))
 						$shrunk = true;
 
@@ -387,7 +387,7 @@ abstract class PaymentModuleCore extends Module
 						if ($objDiscount->id_discount_type == 2 AND $objDiscount->behavior_not_exhausted == 2)
 						{
 							$voucher = new Discount();
-							foreach ($objDiscount AS $key => $discountValue)
+							foreach ($objDiscount as $key => $discountValue)
 								$voucher->$key = $discountValue;
 							$voucher->name = 'VSRK'.(int)$order->id_customer.'O'.(int)$order->id;
 							$voucher->value = (float)$value - $amount_to_add;
@@ -429,7 +429,7 @@ abstract class PaymentModuleCore extends Module
 				if (Validate::isLoadedObject($orderStatus))
 				{
 					Hook::newOrder($cart, $order, $customer, $currency, $orderStatus);
-					foreach ($cart->getProducts() AS $product)
+					foreach ($cart->getProducts() as $product)
 						if ($orderStatus->logable)
 							ProductSale::addProductSale((int)$product['id_product'], (int)$product['cart_quantity']);
 				}
@@ -521,7 +521,7 @@ abstract class PaymentModuleCore extends Module
 						$fileAttachment['mime'] = 'application/pdf';
 					}
 					else
-						$fileAttachment = NULL;
+						$fileAttachment = null;
 
 					if (Validate::isEmail($customer->email))
 						Mail::Send((int)$order->id_lang, 'order_conf', Mail::l('Order confirmation', (int)$order->id_lang), $data, $customer->email, $customer->firstname.' '.$customer->lastname, NULL, NULL, $fileAttachment);
@@ -553,7 +553,7 @@ abstract class PaymentModuleCore extends Module
 		$out = '';
 		$adr_fields = AddressFormat::getOrderedAddressFields($the_address->id_country, false, true);
 		$r_values = array();
-		foreach($adr_fields as $fields_line)
+		foreach ($adr_fields as $fields_line)
 		{
 			$tmp_values = array();
 			foreach (explode(' ', $fields_line) as $field_item)
@@ -582,7 +582,7 @@ abstract class PaymentModuleCore extends Module
 	 * @param int $id_currency : this parameter is optionnal but on 1.5 version of Prestashop, it will be REQUIRED
 	 * @return Currency
 	 */
-	public function getCurrency($current_id_currency = NULL)
+	public function getCurrency($current_id_currency = null)
 	{
 		if (!(int)$current_id_currency)
 			global $cookie;

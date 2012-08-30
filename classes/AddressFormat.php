@@ -122,7 +122,7 @@ class AddressFormatCore extends ObjectModel
 			
 			// Check if the property is accessible
 			$publicProperties = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
-			foreach($publicProperties as $property)
+			foreach ($publicProperties as $property)
 			{
 				$propertyName = $property->getName();
 				if (($propertyName == $fieldName) && ($isIdField ||
@@ -200,12 +200,10 @@ class AddressFormatCore extends ObjectModel
 
 		$multipleLineFields = explode("\n", $this->format);
 		if ($multipleLineFields && is_array($multipleLineFields))
-			foreach($multipleLineFields as $lineField)
-			{
+			foreach ($multipleLineFields as $lineField)
 				if (($patternsName = preg_split(self::_CLEANING_REGEX_, $lineField, -1, PREG_SPLIT_NO_EMPTY)))
 					if (is_array($patternsName))
-					{
-						foreach($patternsName as $patternName)
+						foreach ($patternsName as $patternName)
 						{
 							if (!in_array($patternName, $usedKeyList))
 							{
@@ -216,8 +214,7 @@ class AddressFormatCore extends ObjectModel
 								$this->_errorFormatList[] = Tools::displayError('This key is used too many times (once allowed)').
 									': '.$patternName;
 						}
-					}
-			}
+
 		return (count($this->_errorFormatList)) ? false : true;
 	}
 	
@@ -239,13 +236,13 @@ class AddressFormatCore extends ObjectModel
 		if ($currentKeyList && is_array($currentKeyList))
 			if ($originalFormattedPatternList = explode(' ', $currentLine))
 				// Foreach the available pattern
-				foreach($originalFormattedPatternList as $patternNum => $pattern)
+				foreach ($originalFormattedPatternList as $patternNum => $pattern)
 				{
 					// Var allows to modify the good formatted key value when multiple key exist into the same pattern
 					$mainFormattedKey = '';
 					
 					// Multiple key can be found in the same pattern
-					foreach($currentKeyList as $key)
+					foreach ($currentKeyList as $key)
 					{
 						// Check if we need to use an older modified pattern if a key has already be matched before
 						$count = 0;
@@ -272,12 +269,12 @@ class AddressFormatCore extends ObjectModel
 	*/
 	public static function cleanOrderedAddress(&$orderedAddressField)
 	{
-		foreach($orderedAddressField as &$line)
+		foreach ($orderedAddressField as &$line)
 		{
 			$cleanedLine = '';
 			if (($keyList = preg_split(self::_CLEANING_REGEX_, $line, -1, PREG_SPLIT_NO_EMPTY)))
 			{
-				foreach($keyList as $key)
+				foreach ($keyList as $key)
 					$cleanedLine .= $key.' ';
 				$cleanedLine = trim($cleanedLine);
 				$line = $cleanedLine;
@@ -301,11 +298,11 @@ class AddressFormatCore extends ObjectModel
 		
 		// Check if $address exist and it's an instanciate object of Address
 		if ($address && ($address instanceof Address))
-			foreach($addressFormat as $line)
+			foreach ($addressFormat as $line)
 			{
 				if (($keyList = preg_split(self::_CLEANING_REGEX_, $line, -1, PREG_SPLIT_NO_EMPTY)) && is_array($keyList))
 				{
-					foreach($keyList as $pattern)
+					foreach ($keyList as $pattern)
 						if ($associateName = explode(':', $pattern))
 						{
 							$totalName = count($associateName);
@@ -337,7 +334,7 @@ class AddressFormatCore extends ObjectModel
 			}
 		self::cleanOrderedAddress($addressFormat);
 		// Free the instanciate objects
-		foreach($temporyObject as &$object)
+		foreach ($temporyObject as &$object)
 			unset($object);
 		return $tab;
 	}
@@ -359,7 +356,7 @@ class AddressFormatCore extends ObjectModel
 			if (($patternsList = preg_split(self::_CLEANING_REGEX_, $line, -1, PREG_SPLIT_NO_EMPTY)))
 				{
 					$tmpText = '';
-					foreach($patternsList as $pattern)
+					foreach ($patternsList as $pattern)
 						if (!in_array($pattern, $patternRules['avoid']))
 							$tmpText .= (isset($addressFormatedValues[$pattern])) ?
 								(((isset($style[$pattern])) ? 
@@ -386,7 +383,7 @@ class AddressFormatCore extends ObjectModel
 			
 			// Check if the property is accessible
 			$publicProperties = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
-			foreach($publicProperties as $property)
+			foreach ($publicProperties as $property)
 			{
 				$propertyName = $property->getName();
 				if ((!in_array($propertyName, AddressFormat::$forbiddenPropertyList)) && 
@@ -413,7 +410,7 @@ class AddressFormatCore extends ObjectModel
 
 			// Get all the name object liable to the Address class
 			$publicProperties = $reflect->getProperties(ReflectionProperty::IS_PUBLIC);
-			foreach($publicProperties as $property)
+			foreach ($publicProperties as $property)
 			{
 				$propertyName = $property->getName();
 				if (preg_match('#id_\w#', $propertyName) && strlen($propertyName) > 3)
@@ -446,7 +443,7 @@ class AddressFormatCore extends ObjectModel
 				if ($cleaned)
 					$keyList = ($cleaned) ? preg_split(self::_CLEANING_REGEX_, $field_item, -1, PREG_SPLIT_NO_EMPTY) : 
 						explode(' ', $field_item);
-				foreach($keyList as $word_item)
+				foreach ($keyList as $word_item)
 					$out[] = trim($word_item);
 			}
 			else
