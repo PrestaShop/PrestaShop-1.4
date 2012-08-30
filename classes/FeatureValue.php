@@ -155,7 +155,7 @@ class FeatureValueCore extends ObjectModel
 			$featureValue = new FeatureValue();
 			
 			$languages = Language::getLanguages();
-			foreach ($languages AS $language)
+			foreach ($languages as $language)
 				$featureValue->value[$language['id_lang']] = strval($name);
 
 			$featureValue->id_feature = (int)$id_feature;

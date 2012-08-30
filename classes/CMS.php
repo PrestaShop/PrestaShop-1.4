@@ -128,7 +128,7 @@ class CMSCore extends ObjectModel
 		return $results;
 	}
 	
-	public static function listCms($id_lang = NULL, $id_block = false, $active = true)
+	public static function listCms($id_lang = null, $id_block = false, $active = true)
 	{
 		if (empty($id_lang))
 			$id_lang = (int)_PS_LANG_DEFAULT_;
@@ -164,7 +164,7 @@ class CMSCore extends ObjectModel
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'block_cms` WHERE `id_block` = '.(int)$id_block);
 
 		$list = '';
-		foreach ($cms AS $id_cms)
+		foreach ($cms as $id_cms)
 			$list .= '('.(int)($id_block).', '.(int)($id_cms).'),';
 		$list = rtrim($list, ',');
 		
@@ -183,7 +183,7 @@ class CMSCore extends ObjectModel
 		ORDER BY cp.`position` ASC'))
 			return false;
 		
-		foreach ($res AS $cms)
+		foreach ($res as $cms)
 			if ((int)$cms['id_cms'] == (int)$this->id)
 				$movedCms = $cms;
 		
@@ -231,7 +231,7 @@ class CMSCore extends ObjectModel
 		return (Db::getInstance()->getValue('SELECT MAX(position)+1 FROM `'._DB_PREFIX_.'cms` WHERE `id_cms_category` = '.(int)($id_category)));
 	}
 	
-	public static function getCMSPages($id_lang = NULL, $id_cms_category = NULL, $active = true)
+	public static function getCMSPages($id_lang = null, $id_cms_category = null, $active = true)
 	{
 		return Db::getInstance()->ExecuteS('
 		SELECT *
@@ -246,8 +246,8 @@ class CMSCore extends ObjectModel
 	{
 		return Db::getInstance()->ExecuteS('
 		SELECT l.`id_lang`, c.`link_rewrite`
-		FROM `'._DB_PREFIX_.'cms_lang` AS c
-		LEFT JOIN  `'._DB_PREFIX_.'lang` AS l ON (c.`id_lang` = l.`id_lang`)
+		FROM `'._DB_PREFIX_.'cms_lang` c
+		LEFT JOIN  `'._DB_PREFIX_.'lang` l ON (c.`id_lang` = l.`id_lang`)
 		WHERE c.`id_cms` = '.(int)$id_cms.'	AND l.`active` = 1');
 	}
 }

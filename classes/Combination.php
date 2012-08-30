@@ -147,34 +147,25 @@ class CombinationCore extends ObjectModel
 	
 	public function getWsProductOptionValues()
 	{
-		$result = Db::getInstance()->executeS('SELECT id_attribute AS id from `'._DB_PREFIX_.'product_attribute_combination` WHERE id_product_attribute = '.(int)$this->id);
-		return $result;
+		return Db::getInstance()->ExecuteS('SELECT id_attribute id from `'._DB_PREFIX_.'product_attribute_combination` WHERE id_product_attribute = '.(int)$this->id);
 	}
 	
 	public function getWsImages()
 	{
 		return Db::getInstance()->ExecuteS('
-		SELECT `id_image` as id
+		SELECT `id_image` id
 		FROM `'._DB_PREFIX_.'product_attribute_image`
-		WHERE `id_product_attribute` = '.(int)($this->id).'
-		');
+		WHERE `id_product_attribute` = '.(int)$this->id);
 	}
 	
 	public function setWsImages($values)
 	{
-		if (Db::getInstance()->Execute('
-			DELETE FROM `'._DB_PREFIX_.'product_attribute_image`
-			WHERE `id_product_attribute` = '.(int)($this->id)) === false)
-		return false;
+		if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute_image` WHERE `id_product_attribute` = '.(int)$this->id) === false)
+			return false;
 		$sqlValues = array();
 		foreach ($values as $value)
 			$sqlValues[] = '('.(int)$this->id.', '.(int)$value['id'].')';
-		Db::getInstance()->Execute('
-			INSERT INTO `'._DB_PREFIX_.'product_attribute_image` (`id_product_attribute`, `id_image`)
-			VALUES '.implode(',', $sqlValues)
-		);
+		Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'product_attribute_image` (`id_product_attribute`, `id_image`) VALUES '.implode(',', $sqlValues));
 		return true;
 	}
 }
-
-

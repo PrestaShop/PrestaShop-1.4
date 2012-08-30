@@ -122,7 +122,7 @@ class CountyCore extends ObjectModel
 	{
 		$zip_codes = preg_split('/-/', $zip_codes);
 
-		if (sizeof($zip_codes) == 2)
+		if (count($zip_codes) == 2)
 		{
 			$from = $zip_codes[0];
 			$to   = $zip_codes[1];
@@ -137,7 +137,7 @@ class CountyCore extends ObjectModel
 				$to = $from;
 			}
 		}
-		elseif (sizeof($zip_codes) == 1)
+		elseif (count($zip_codes) == 1)
 		{
 			$from = $zip_codes[0];
 			$to = $from;

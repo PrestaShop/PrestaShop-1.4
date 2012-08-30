@@ -120,7 +120,7 @@ class CurrencyCore extends ObjectModel
 		if (!is_array($selection) || !Validate::isTableOrIdentifier($this->identifier) || !Validate::isTableOrIdentifier($this->table))
 			die(Tools::displayError());
 
-		foreach ($selection AS $id)
+		foreach ($selection as $id)
 		{
 			$obj = new Currency((int)($id));
 			$res[$id] = $obj->delete();
@@ -153,7 +153,7 @@ class CurrencyCore extends ObjectModel
 	 * @param string $side left or right
 	 * @return string formated sign
 	 */
-	public function getSign($side=NULL)
+	public function getSign($side = null)
 	{
 		if (!$side)
 			return $this->sign;
@@ -301,7 +301,7 @@ class CurrencyCore extends ObjectModel
 
 		/* Change defaultCurrency rate if not as currency of feed source */
 		if ($defaultCurrency->iso_code != $isoCodeSource)
-			foreach ($data->currency AS $obj)
+			foreach ($data->currency as $obj)
 				if ($defaultCurrency->iso_code == strval($obj['iso_code']))
 					$defaultCurrency->conversion_rate = round((float)($obj['rate']), 6);
 

@@ -74,13 +74,13 @@ class OrderReturnCore extends ObjectModel
 	{
 		/* Classic product return */
 		if ($orderDetailList)
-			foreach ($orderDetailList AS $key => $orderDetail)
+			foreach ($orderDetailList as $key => $orderDetail)
 				if ($qty = (int)($productQtyList[$key]))
 					Db::getInstance()->AutoExecute(_DB_PREFIX_.'order_return_detail', array('id_order_return' => (int)($this->id), 'id_order_detail' => (int)($orderDetail), 'product_quantity' => $qty, 'id_customization' => 0), 'INSERT');
 		/* Customized product return */
 		if ($customizationIds)
-			foreach ($customizationIds AS $orderDetailId => $customizations)
-				foreach ($customizations AS $customizationId)
+			foreach ($customizationIds as $orderDetailId => $customizations)
+				foreach ($customizations as $customizationId)
 					if ($quantity = (int)($customizationQtyInput[(int)($customizationId)]))
 						Db::getInstance()->AutoExecute(_DB_PREFIX_.'order_return_detail', array('id_order_return' => (int)($this->id), 'id_order_detail' => (int)($orderDetailId), 'product_quantity' => $quantity, 'id_customization' => (int)($customizationId)), 'INSERT');
 	}
@@ -93,15 +93,15 @@ class OrderReturnCore extends ObjectModel
 		$products = $order->getProducts();
 		/* Products already returned */
 		$order_return = self::getOrdersReturn($order->id_customer, $order->id, true);
-		foreach ($order_return AS $or)
+		foreach ($order_return as $or)
 		{
 			$order_return_products = self::getOrdersReturnProducts($or['id_order_return'], $order);
-			foreach ($order_return_products AS $key => $orp)
+			foreach ($order_return_products as $key => $orp)
 				$products[$key]['product_quantity'] -= (int)($orp['product_quantity']);
 		}
 		/* Quantity check */
 		if ($orderDetailList)
-			foreach (array_keys($orderDetailList) AS $key)
+			foreach (array_keys($orderDetailList) as $key)
 				if ($qty = (int)($productQtyList[$key]))
 					if ($products[$key]['product_quantity'] - $qty < 0)
 						return false;
@@ -109,8 +109,8 @@ class OrderReturnCore extends ObjectModel
 		if ($customizationIds)
 		{
 			$orderedCustomizations = Customization::getOrderedCustomizations((int)($order->id_cart));
-			foreach ($customizationIds AS $customizations)
-				foreach ($customizations AS $customizationId)
+			foreach ($customizationIds as $customizations)
+				foreach ($customizations as $customizationId)
 				{
 					$customizationId = (int)($customizationId);
 					if (!isset($orderedCustomizations[$customizationId]))
@@ -125,12 +125,10 @@ class OrderReturnCore extends ObjectModel
 
 	public function countProduct()
 	{
-		if (!$data = Db::getInstance()->getRow('
-		SELECT COUNT(`id_order_return`) AS total
+		return Db::getInstance()->getValue('
+		SELECT COUNT(`id_order_return`)
 		FROM `'._DB_PREFIX_.'order_return_detail`
-		WHERE `id_order_return` = '.(int)($this->id)))
-			return false;
-		return (int)($data['total']);
+		WHERE `id_order_return` = '.(int)$this->id);
 	}
 	
 	public static function getOrdersReturn($customer_id, $order_id = false, $no_denied = false)
@@ -140,11 +138,11 @@ class OrderReturnCore extends ObjectModel
 		$data = Db::getInstance()->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'order_return`
-		WHERE `id_customer` = '.(int)($customer_id).
-		($order_id ? ' AND `id_order` = '.(int)($order_id) : '').
+		WHERE `id_customer` = '.(int)$customer_id.
+		($order_id ? ' AND `id_order` = '.(int)$order_id : '').
 		($no_denied ? ' AND `state` != 4' : '').'
 		ORDER BY `date_add` DESC');
-		foreach ($data AS $k => $or)
+		foreach ($data as $k => $or)
 		{
 			$state = new OrderReturnState($or['state']);
 			$data[$k]['state_name'] = $state->name[$cookie->id_lang];
@@ -165,13 +163,13 @@ class OrderReturnCore extends ObjectModel
 		$productsRet = self::getOrdersReturnDetail($orderReturnId);
 		$products = $order->getProducts();
 		$tmp = array();
-		foreach ($productsRet AS $return_detail)
+		foreach ($productsRet as $return_detail)
 		{
 			$tmp[$return_detail['id_order_detail']]['quantity'] = isset($tmp[$return_detail['id_order_detail']]['quantity']) ? $tmp[$return_detail['id_order_detail']]['quantity'] + (int)($return_detail['product_quantity']) : (int)($return_detail['product_quantity']);
 			$tmp[$return_detail['id_order_detail']]['customizations'] = (int)($return_detail['id_customization']);
 		}
 		$resTab = array();
-		foreach ($products AS $key => $product)
+		foreach ($products as $key => $product)
 			if (isset($tmp[$product['id_order_detail']]))
 			{
 				$resTab[$key] = $product;
@@ -188,7 +186,7 @@ class OrderReturnCore extends ObjectModel
 		if (!Validate::isLoadedObject($order))
 			die(Tools::displayError());
 		$products = $order->getProducts();
-		foreach ($returns AS &$return)
+		foreach ($returns as &$return)
 		{
 			$return['product_id'] = (int)($products[(int)($return['id_order_detail'])]['product_id']);
 			$return['product_attribute_id'] = (int)($products[(int)($return['id_order_detail'])]['product_attribute_id']);
@@ -200,7 +198,9 @@ class OrderReturnCore extends ObjectModel
 
 	public static function deleteOrderReturnDetail($id_order_return, $id_order_detail, $id_customization = 0)
 	{
-		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'order_return_detail` WHERE `id_order_detail` = '.(int)($id_order_detail).' AND `id_order_return` = '.(int)($id_order_return).' AND `id_customization` = '.(int)($id_customization));
+		return Db::getInstance()->Execute('
+		DELETE
+		FROM `'._DB_PREFIX_.'order_return_detail`
+		WHERE `id_order_detail` = '.(int)$id_order_detail.' AND `id_order_return` = '.(int)$id_order_return.' AND `id_customization` = '.(int)$id_customization);
 	}
 }
-

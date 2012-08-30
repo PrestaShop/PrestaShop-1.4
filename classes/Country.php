@@ -234,18 +234,13 @@ class CountryCore extends ObjectModel
 	* @param string $country Country Name
 	* @return intval Country id
 	*/
-	public static function getIdByName($id_lang = NULL, $country)
+	public static function getIdByName($id_lang, $country)
 	{
-		$sql = '
+		return (int)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT `id_country`
 		FROM `'._DB_PREFIX_.'country_lang`
-		WHERE `name` LIKE \''.pSQL($country).'\'';
-		if ($id_lang)
-			$sql .= ' AND `id_lang` = '.(int)($id_lang);
-
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow($sql);
-
-		return ((int)($result['id_country']));
+		WHERE `name` LIKE \''.pSQL($country).'\''.
+		($id_lang ? ' AND `id_lang` = '.(int)$id_lang : ''));
 	}
 
 
@@ -261,7 +256,7 @@ class CountryCore extends ObjectModel
 
 	public static function getNeedZipCode($id_country)
 	{
-		if (!(int)($id_country))
+		if (!(int)$id_country)
 			return false;
 
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
@@ -272,7 +267,7 @@ class CountryCore extends ObjectModel
 
 	public static function getZipCodeFormat($id_country)
 	{
-		if (!(int)($id_country))
+		if (!(int)$id_country)
 			return false;
 
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('

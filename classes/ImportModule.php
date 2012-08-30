@@ -14,7 +14,7 @@
 
 abstract class ImportModuleCore extends Module
 {
-	protected $_link = NULL;
+	protected $_link = null;
 	
 	public $server;
 	
@@ -36,7 +36,7 @@ abstract class ImportModuleCore extends Module
 	
 	protected function initDatabaseConnection()
 	{
-		if ($this->_link != NULL)
+		if ($this->_link != null)
 			return $this->_link;
 		if ($this->_link = mysql_connect($this->server, $this->user, $this->passwd, true))
 		{
@@ -71,7 +71,7 @@ abstract class ImportModuleCore extends Module
 	{
 		$this->initDatabaseConnection();
 		$result = $this->ExecuteS($query);
-		if (!sizeof($result))
+		if (!count($result))
 			return 0;
 		else
 			return array_shift($result[0]);

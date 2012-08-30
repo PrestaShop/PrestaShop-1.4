@@ -116,7 +116,7 @@ class GuestCore extends ObjectModel
 		}
 		
 		// Only the first language is returned
-		return (sizeof($langsArray) ? key($langsArray) : '');
+		return (count($langsArray) ? key($langsArray) : '');
 	}
 
 	protected function getBrowser($userAgent)
@@ -141,7 +141,7 @@ class GuestCore extends ObjectModel
 				
 				return $result['id_web_browser'];
 			}
-		return NULL;
+		return null;
 	}
 	
 	protected function getOs($userAgent)
@@ -162,7 +162,7 @@ class GuestCore extends ObjectModel
 				
 				return $result['id_operating_system'];
 			}
-		return NULL;
+		return null;
 	}
 	
 	public static function getFromCustomer($id_customer)

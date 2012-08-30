@@ -88,9 +88,13 @@ class ConfigurationCore extends ObjectModel
 	  */
 	public static function deleteByName($key)
 	{
+		/* If the key does not exist, return true (emulate a successful deletion) */
+		if (!isset(self::$_CONF_IDS[$key]) && !isset(self::$_CONF[$key]))
+			return true;
+
 		// If the key is invalid or if it does not exists, do nothing.
-	 	if (!Validate::isConfigName($key) || !isset(self::$_CONF_IDS[$key]) || !isset(self::$_CONF[$key]))
-			return false;
+	 	if (!Validate::isConfigName($key))
+			return false;		
 
 		/* Delete the key from the main configuration table */
 		if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'configuration` WHERE `id_configuration` = '.(int)self::$_CONF_IDS[$key].' LIMIT 1'))

@@ -72,7 +72,7 @@ class HelperCore
 		<script type="text/javascript">
 			var inputName = "'.$input_name.'";
 		';
-		if (sizeof($selected_cat) > 0)
+		if (count($selected_cat) > 0)
 		{
 			if (isset($selected_cat[0]))
 				$html .= 'var selectedCat = "'.implode(',', $selected_cat).'"';
@@ -101,7 +101,7 @@ class HelperCore
 		';
 		
 		$home_is_selected = false;
-		foreach($selected_cat AS $cat)
+		foreach ($selected_cat as $cat)
 		{
 			if (is_array($cat))
 			{

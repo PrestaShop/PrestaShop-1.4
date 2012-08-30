@@ -59,11 +59,11 @@ class StateCore extends ObjectModel
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_country'] = (int)($this->id_country);
-		$fields['id_zone'] = (int)($this->id_zone);
+		$fields['id_country'] = (int)$this->id_country;
+		$fields['id_zone'] = (int)$this->id_zone;
 		$fields['iso_code'] = pSQL(strtoupper($this->iso_code));
 		$fields['name'] = pSQL($this->name);
-		$fields['active'] = (int)($this->active);
+		$fields['active'] = (int)$this->active;
 		return $fields;
 	}
 
@@ -84,12 +84,10 @@ class StateCore extends ObjectModel
 	*/
 	public static function getNameById($id_state)
 	{
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 		SELECT `name`
 		FROM `'._DB_PREFIX_.'state`
-		WHERE `id_state` = '.(int)($id_state));
-
-        return $result['name'];
+		WHERE `id_state` = '.(int)$id_state);
     }
 
 	/**
@@ -100,12 +98,10 @@ class StateCore extends ObjectModel
 	*/
 	public static function getIdByName($state)
     {
-	  	$result = Db::getInstance()->getRow('
+	  	return (int)Db::getInstance()->getValue('
 		SELECT `id_state`
 		FROM `'._DB_PREFIX_.'state`
 		WHERE `name` LIKE \''.pSQL($state).'\'');
-
-        return ((int)($result['id_state']));
     }
 
 	/**
@@ -117,10 +113,9 @@ class StateCore extends ObjectModel
 	public static function getIdByIso($iso_code)
     {
 	  	return Db::getInstance()->getValue('
-			SELECT `id_state`
-			FROM `'._DB_PREFIX_.'state`
-			WHERE `iso_code` = \''.pSQL($iso_code).'\''
-		);
+		SELECT `id_state`
+		FROM `'._DB_PREFIX_.'state`
+		WHERE `iso_code` = \''.pSQL($iso_code).'\'');
     }
 
 	/**
@@ -166,11 +161,10 @@ class StateCore extends ObjectModel
 	 */
 	public function countUsed()
 	{
-		$row = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT COUNT(*) AS nb_used
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+		SELECT COUNT(*)
 		FROM `'._DB_PREFIX_.'address`
-		WHERE `'.pSQL($this->identifier).'` = '.(int)($this->id));
-		return $row['nb_used'];
+		WHERE `'.pSQL($this->identifier).'` = '.(int)$this->id);
 	}
 
     public static function getStatesByIdCountry($id_country)
@@ -200,4 +194,3 @@ class StateCore extends ObjectModel
 		WHERE `id_state` = '.(int)($id_state));
 	}
 }
-

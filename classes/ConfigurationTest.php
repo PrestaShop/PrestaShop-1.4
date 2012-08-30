@@ -30,7 +30,7 @@ class	ConfigurationTestCore
 	static function check($tests)
 	{
 		$res = array();
-		foreach ($tests AS $key => $test)
+		foreach ($tests as $key => $test)
 			$res[$key] = self::run($key, $test);
 		return $res;
 	}
@@ -70,7 +70,7 @@ class	ConfigurationTestCore
 
 	static function test_system($funcs)
 	{
-		foreach ($funcs AS $func)
+		foreach ($funcs as $func)
 			if (!function_exists($func))
 				return false;
 		return true;

@@ -125,15 +125,14 @@ class OrderStateCore extends ObjectModel
 	*/
 	public static function invoiceAvailable($id_order_state)
 	{
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT `invoice` AS ok
+		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+		SELECT `invoice`
 		FROM `'._DB_PREFIX_.'order_state`
-		WHERE `id_order_state` = '.(int)($id_order_state));
-		return $result['ok'];
+		WHERE `id_order_state` = '.(int)$id_order_state);
 	}
 
 	public function isRemovable()
 	{
-	 	return !($this->unremovable);
+	 	return !$this->unremovable;
 	}
 }

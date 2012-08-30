@@ -371,7 +371,7 @@ class DiscountCore extends ObjectModel
 		Tools::displayAsDeprecated();
 		$category = new Category((int)($id_category_product));
 		$parentCategories = $category->getParentsCategories();
-		foreach($parentCategories AS $parentCategory)
+		foreach ($parentCategories as $parentCategory)
 			if ($id_category_discount == $parentCategory['id_category'])
 				return true;
 		return false;
@@ -401,23 +401,23 @@ class DiscountCore extends ObjectModel
 			foreach ($result as $row)
 				$categories[] = $row['id_category'];
 		}
-		elseif (!is_array($categories) OR !sizeof($categories))
+		elseif (!is_array($categories) || !count($categories))
 			return false;
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_category` WHERE `id_discount`='.(int)$this->id);
-		foreach($categories AS $category)
+		foreach ($categories as $category)
 		{
 			Db::getInstance()->ExecuteS('
 			SELECT `id_discount`
 			FROM `'._DB_PREFIX_.'discount_category`
-			WHERE `id_discount`='.(int)($this->id).' AND `id_category`='.(int)($category));
+			WHERE `id_discount`='.(int)$this->id.' AND `id_category`='.(int)$category);
 			if (Db::getInstance()->NumRows() == 0)
-				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'discount_category` (`id_discount`, `id_category`) VALUES('.(int)($this->id).','.(int)($category).')');
+				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'discount_category` (`id_discount`, `id_category`) VALUES('.(int)$this->id.','.(int)$category.')');
 		}
 	}
 
 	public static function discountExists($discountName, $id_discount = 0)
 	{
-		return Db::getInstance()->getRow('SELECT `id_discount` FROM '._DB_PREFIX_.'discount WHERE `name` LIKE \''.pSQL($discountName).'\' AND `id_discount` != '.(int)($id_discount));
+		return Db::getInstance()->getRow('SELECT `id_discount` FROM '._DB_PREFIX_.'discount WHERE `name` LIKE \''.pSQL($discountName).'\' AND `id_discount` != '.(int)$id_discount);
 	}
 
 	public static function createOrderDiscount($order, $productList, $qtyList, $name, $shipping_cost = false, $id_category = 0, $subcategory = 0)

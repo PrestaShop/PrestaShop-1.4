@@ -70,9 +70,9 @@ class OrderHistoryCore extends ObjectModel
 		return $fields;
 	}
 
-	public function changeIdOrderState($new_order_state = NULL, $id_order)
+	public function changeIdOrderState($new_order_state = null, $id_order)
 	{
-		if ($new_order_state != NULL)
+		if ($new_order_state != null)
 		{
 			Hook::updateOrderStatus((int)($new_order_state), (int)($id_order));
 			$order = new Order((int)($id_order));
@@ -121,7 +121,7 @@ class OrderHistoryCore extends ObjectModel
 		$id_order_state = Db::getInstance()->getValue('
 		SELECT `id_order_state`
 		FROM `'._DB_PREFIX_.'order_history`
-		WHERE `id_order` = '.(int)($id_order).'
+		WHERE `id_order` = '.(int)$id_order.'
 		ORDER BY `date_add` DESC, `id_order_history` DESC');
 		if (!$id_order_state)
 			return false;
@@ -136,13 +136,13 @@ class OrderHistoryCore extends ObjectModel
 			return false;
 
 		$result = Db::getInstance()->getRow('
-		SELECT osl.`template`, c.`lastname`, c.`firstname`, osl.`name` AS osname, c.`email`
+		SELECT osl.`template`, c.`lastname`, c.`firstname`, osl.`name` osname, c.`email`
 		FROM `'._DB_PREFIX_.'order_history` oh
 		LEFT JOIN `'._DB_PREFIX_.'orders` o ON oh.`id_order` = o.`id_order`
 		LEFT JOIN `'._DB_PREFIX_.'customer` c ON o.`id_customer` = c.`id_customer`
 		LEFT JOIN `'._DB_PREFIX_.'order_state` os ON oh.`id_order_state` = os.`id_order_state`
 		LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = o.`id_lang`)
-		WHERE oh.`id_order_history` = '.(int)($this->id).' AND os.`send_email` = 1');
+		WHERE oh.`id_order_history` = '.(int)$this->id.' AND os.`send_email` = 1');
 
 		if (isset($result['template']) AND Validate::isEmail($result['email']))
 		{
@@ -159,7 +159,7 @@ class OrderHistoryCore extends ObjectModel
 			{
 				global $smarty;
 				$assign = array();
-				foreach ($virtualProducts AS $key => $virtualProduct)
+				foreach ($virtualProducts as $key => $virtualProduct)
 				{
 					$id_product_download = ProductDownload::getIdFromIdProduct($virtualProduct['product_id']);
 					$product_download = new ProductDownload($id_product_download);
@@ -192,11 +192,9 @@ class OrderHistoryCore extends ObjectModel
 	public function isValidated()
 	{
 		return Db::getInstance()->getValue('
-		SELECT COUNT(oh.`id_order_history`) AS nb
+		SELECT COUNT(oh.`id_order_history`) nb
 		FROM `'._DB_PREFIX_.'order_state` os
 		LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON (os.`id_order_state` = oh.`id_order_state`)
-		WHERE oh.`id_order` = '.(int)$this->id_order.'
-		AND os.`logable` = 1');
+		WHERE oh.`id_order` = '.(int)$this->id_order.' AND os.`logable` = 1');
 	}
-
 }

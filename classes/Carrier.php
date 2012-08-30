@@ -417,14 +417,14 @@ class CarrierCore extends ObjectModel
 		ORDER BY s.`name` ASC');
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-			SELECT cl.*,c.*, cl.`name` AS country, zz.`name` AS zone FROM `'._DB_PREFIX_.'country` c 
-			LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country` AND cl.`id_lang` = '.(int)($id_lang).') 
+			SELECT cl.*,c.*, cl.`name` country, zz.`name` zone FROM `'._DB_PREFIX_.'country` c 
+			LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country` AND cl.`id_lang` = '.(int)$id_lang.') 
 			INNER JOIN (`'._DB_PREFIX_.'carrier_zone` cz INNER JOIN `'._DB_PREFIX_.'carrier` cr ON ( cr.id_carrier = cz.id_carrier AND cr.deleted = 0 '.($activeCarriers ?
 			'AND cr.active = 1) ' : ') ').'
 			LEFT JOIN `'._DB_PREFIX_.'zone` zz ON cz.id_zone = zz.id_zone) ON zz.`id_zone` = c.`id_zone` 
 			WHERE 1
 			'.($activeCountries ? 'AND c.active = 1' : '').'
-			'.(!is_null($containStates) ? 'AND c.`contains_states` = '.(int)($containStates) : '').'
+			'.(!is_null($containStates) ? 'AND c.`contains_states` = '.(int)$containStates : '').'
 			ORDER BY cl.name ASC');
 	
 		$countries = array();

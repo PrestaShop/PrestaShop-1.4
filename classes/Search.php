@@ -173,7 +173,7 @@ class SearchCore
 		$scoreArray = array();
 		$words = explode(' ', Search::sanitize($expr, (int)$id_lang));
 
-		foreach ($words AS $key => $word)
+		foreach ($words as $key => $word)
 			if (!empty($word) AND strlen($word) >= (int)Configuration::get('PS_SEARCH_MINWORDLEN'))
 			{
 				$word = str_replace('%', '\\%', $word);
@@ -195,11 +195,11 @@ class SearchCore
 			else
 				unset($words[$key]);
 
-		if (!sizeof($words))
+		if (!count($words))
 			return ($ajax ? array() : array('total' => 0, 'result' => array()));
 
 		$score = '';
-		if (sizeof($scoreArray))
+		if (count($scoreArray))
 			$score = ',(
 				SELECT SUM(weight)
 				FROM '._DB_PREFIX_.'search_word sw
@@ -301,7 +301,7 @@ class SearchCore
 		SELECT t.name FROM '._DB_PREFIX_.'product_tag pt
 		LEFT JOIN '._DB_PREFIX_.'tag t ON (pt.id_tag = t.id_tag AND t.id_lang = '.(int)$id_lang.')
 		WHERE pt.id_product = '.(int)$id_product);
-		foreach ($tagsArray AS $tag)
+		foreach ($tagsArray as $tag)
 			$tags .= $tag['name'].' ';
 		return $tags;
 	}
@@ -314,7 +314,7 @@ class SearchCore
 		INNER JOIN '._DB_PREFIX_.'product_attribute_combination pac ON pa.id_product_attribute = pac.id_product_attribute
 		INNER JOIN '._DB_PREFIX_.'attribute_lang al ON (pac.id_attribute = al.id_attribute AND al.id_lang = '.(int)$id_lang.')
 		WHERE pa.id_product = '.(int)$id_product);
-		foreach ($attributesArray AS $attribute)
+		foreach ($attributesArray as $attribute)
 			$attributes .= $attribute['name'].' ';
 		return $attributes;
 	}
@@ -326,7 +326,7 @@ class SearchCore
 		SELECT fvl.value FROM '._DB_PREFIX_.'feature_product fp
 		LEFT JOIN '._DB_PREFIX_.'feature_value_lang fvl ON (fp.id_feature_value = fvl.id_feature_value AND fvl.id_lang = '.(int)$id_lang.')
 		WHERE fp.id_product = '.(int)$id_product);
-		foreach ($featuresArray AS $feature)
+		foreach ($featuresArray as $feature)
 			$features .= $feature['value'].' ';
 		return $features;
 	}
@@ -368,9 +368,9 @@ class SearchCore
 
 			$ids = array();
 			if ($products)
-				foreach($products AS $product)
+				foreach ($products as $product)
 					$ids[] = (int)$product['id_product'];
-			if (sizeof($ids))
+			if (count($ids))
 				$db->Execute('DELETE FROM '._DB_PREFIX_.'search_index WHERE id_product IN ('.implode(',', $ids).')');
 		}
 
@@ -423,11 +423,11 @@ class SearchCore
 
 				// Data must be cleaned of html, bad characters, spaces and anything, then if the resulting words are long enough, they're added to the array
 				$pArray = array();
-				foreach ($product AS $key => $value)
+				foreach ($product as $key => $value)
 					if (strncmp($key, 'id_', 3))
 					{
 						$words = explode(' ', Search::sanitize($value, (int)$product['id_lang'], true));
-						foreach ($words AS $word)
+						foreach ($words as $word)
 							if (!empty($word))
 							{
 								$word = Tools::substr($word, 0, PS_SEARCH_MAX_WORD_LENGTH);
@@ -441,11 +441,11 @@ class SearchCore
 					}
 
 				// If we find words that need to be indexed, they're added to the word table in the database
-				if (sizeof($pArray))
+				if (count($pArray))
 				{
 					$queryArray = array();
 					$queryArray2 = array();
-					foreach ($pArray AS $word => $weight)
+					foreach ($pArray as $word => $weight)
 						if ($weight AND !isset($wordIdsByWord['_'.$word]))
 						{
 							$queryArray[$word] = '('.(int)$product['id_lang'].',\''.pSQL($word).'\')';
@@ -478,12 +478,12 @@ class SearchCore
 						AND sw.id_lang = '.(int)$product['id_lang'].'
 						LIMIT '.count($queryArray2));
 						// replace accents from the retrieved words so that words without accents or with differents accents can still be linked
-						foreach ($addedWords AS $wordId)
+						foreach ($addedWords as $wordId)
 							$wordIdsByWord[$product['id_lang']]['_'.Tools::replaceAccentedChars($wordId['word'])] = (int)$wordId['id_word'];
 					}
 				}
 
-				foreach ($pArray AS $word => $weight)
+				foreach ($pArray as $word => $weight)
 				{
 					if (!$weight)
 						continue;

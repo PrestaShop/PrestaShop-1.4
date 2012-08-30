@@ -82,7 +82,7 @@ class AttributeCore extends ObjectModel
 		$combinationIds = array();
 		if (Db::getInstance()->numRows())
 		{
-			foreach ($result AS $row)
+			foreach ($result as $row)
 				$combinationIds[] = (int)($row['id_product_attribute']);
 			if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute_combination` WHERE `'.$this->identifier.'` = '.(int)($this->id)) === false)
 				return false;
@@ -121,11 +121,11 @@ class AttributeCore extends ObjectModel
 	public static function getAttributes($id_lang, $notNull = false)
 	{
 		return Db::getInstance()->ExecuteS('
-		SELECT ag.*, agl.*, a.`id_attribute`, al.`name`, agl.`name` AS `attribute_group`
+		SELECT ag.*, agl.*, a.`id_attribute`, al.`name`, agl.`name` attribute_group
 		FROM `'._DB_PREFIX_.'attribute_group` ag
-		LEFT JOIN `'._DB_PREFIX_.'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND agl.`id_lang` = '.(int)($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND agl.`id_lang` = '.(int)$id_lang.')
 		LEFT JOIN `'._DB_PREFIX_.'attribute` a ON a.`id_attribute_group` = ag.`id_attribute_group`
-		LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = '.(int)($id_lang).')
+		LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = '.(int)$id_lang.')
 		'.($notNull ? 'WHERE a.`id_attribute` IS NOT NULL AND al.`name` IS NOT NULL' : '').'
 		ORDER BY agl.`name` ASC, al.`name` ASC');
 	}
@@ -157,14 +157,12 @@ class AttributeCore extends ObjectModel
 	 */
 	public static function getAttributeQty($id_product)
 	{
-		$row = Db::getInstance()->getRow('
-		SELECT SUM(quantity) as quantity
+		$quantity = Db::getInstance()->getValue('
+		SELECT SUM(quantity)
 		FROM `'._DB_PREFIX_.'product_attribute` 
-		WHERE `id_product` = '.(int)($id_product));
+		WHERE `id_product` = '.(int)$id_product);
 		
-		if ($row['quantity'] !== NULL)
-			return (int)($row['quantity']);
-		return false;
+		return $quantity !== false ? (int)$quantity : false;
 	}
 
 	/**
@@ -176,12 +174,10 @@ class AttributeCore extends ObjectModel
 	 */
 	public static function updateQtyProduct(&$arr)
 	{
-		$id_product = (int)($arr['id_product']);
-		$qty = self::getAttributeQty($id_product);
-		
+		$qty = self::getAttributeQty((int)$arr['id_product']);
 		if ($qty !== false)
 		{
-			$arr['quantity'] = (int)($qty);
+			$arr['quantity'] = (int)$qty;
 			return true;
 		}
 		return false;
@@ -191,7 +187,7 @@ class AttributeCore extends ObjectModel
 	{
 		if (!Db::getInstance()->getRow('
 			SELECT `is_color_group` FROM `'._DB_PREFIX_.'attribute_group` WHERE `id_attribute_group` = (
-				SELECT `id_attribute_group` FROM `'._DB_PREFIX_.'attribute` WHERE `id_attribute` = '.(int)($this->id).')
+				SELECT `id_attribute_group` FROM `'._DB_PREFIX_.'attribute` WHERE `id_attribute` = '.(int)$this->id.')
 				AND is_color_group = 1'))
 			return false;
 		return Db::getInstance()->NumRows();
@@ -209,7 +205,7 @@ class AttributeCore extends ObjectModel
 		$minimal_quantity = Db::getInstance()->getValue('
 		SELECT `minimal_quantity`
 		FROM `'._DB_PREFIX_.'product_attribute` 
-		WHERE `id_product_attribute` = '.(int)($id_product_attribute));
+		WHERE `id_product_attribute` = '.(int)$id_product_attribute);
 		
 		if ($minimal_quantity > 1)
 			return (int)$minimal_quantity;

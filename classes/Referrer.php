@@ -120,8 +120,7 @@ class ReferrerCore extends ObjectModel
 			SELECT id_referrer, id_connections_source
 			FROM '._DB_PREFIX_.'referrer r
 			LEFT JOIN '._DB_PREFIX_.'connections_source cs ON ('.self::$_join.')
-			WHERE id_connections_source = '.(int)($id_connections_source).'
-		)');
+			WHERE id_connections_source = '.(int)$id_connections_source.')');
 	}
 	
 	public static function getReferrers($id_customer)
@@ -143,15 +142,14 @@ class ReferrerCore extends ObjectModel
 		{
 			$join = 'LEFT JOIN `'._DB_PREFIX_.'page` p ON cp.`id_page` = p.`id_page`
 					 LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON pt.`id_page_type` = p.`id_page_type`';
-			$where = 'AND pt.`name` = \'product.php\'
-					  AND p.`id_object` = '.(int)$id_product;
+			$where = 'AND pt.`name` = \'product.php\' AND p.`id_object` = '.(int)$id_product;
 		}
 
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT 	COUNT(DISTINCT cs.id_connections_source) AS visits,
-				COUNT(DISTINCT cs.id_connections) as visitors,
-				COUNT(DISTINCT c.id_guest) as uniqs,
-				COUNT(DISTINCT cp.time_start) as pages
+		SELECT COUNT(DISTINCT cs.id_connections_source) visits,
+		COUNT(DISTINCT cs.id_connections) visitors,
+		COUNT(DISTINCT c.id_guest) uniqs,
+		COUNT(DISTINCT cp.time_start) pages
 		FROM '._DB_PREFIX_.'referrer_cache rc
 		LEFT JOIN '._DB_PREFIX_.'connections_source cs ON rc.id_connections_source = cs.id_connections_source
 		LEFT JOIN '._DB_PREFIX_.'connections c ON cs.id_connections = c.id_connections
@@ -163,54 +161,37 @@ class ReferrerCore extends ObjectModel
 	}
 	
 	public function getRegistrations($id_product = null, $employee = null)
-	{
-		list($join, $where) = array('','');
-		if ((int)($id_product))
-		{
-			$join = 'LEFT JOIN '._DB_PREFIX_.'connections_page cp ON cp.id_connections = c.id_connections
-					 LEFT JOIN `'._DB_PREFIX_.'page` p ON cp.`id_page` = p.`id_page`
-					 LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON pt.`id_page_type` = p.`id_page_type`';
-			$where = 'AND pt.`name` = \'product.php\'
-					  AND p.`id_object` = '.(int)($id_product);
-		}
-		
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-		SELECT COUNT(DISTINCT cu.id_customer) AS registrations
+	{	
+		return (int)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+		SELECT COUNT(DISTINCT cu.id_customer)
 		FROM '._DB_PREFIX_.'referrer_cache rc
-		LEFT JOIN '._DB_PREFIX_.'connections_source cs ON rc.id_connections_source = cs.id_connections_source
-		LEFT JOIN '._DB_PREFIX_.'connections c ON cs.id_connections = c.id_connections
-		LEFT JOIN '._DB_PREFIX_.'guest g ON g.id_guest = c.id_guest
-		LEFT JOIN '._DB_PREFIX_.'customer cu ON cu.id_customer = g.id_customer
-		'.$join.'
+		LEFT JOIN `'._DB_PREFIX_.'connections_source` cs ON (rc.id_connections_source = cs.id_connections_source)
+		LEFT JOIN `'._DB_PREFIX_.'connections` c ON (cs.id_connections = c.id_connections)
+		LEFT JOIN `'._DB_PREFIX_.'guest` g ON (g.id_guest = c.id_guest)
+		LEFT JOIN `'._DB_PREFIX_.'customer` cu ON (cu.id_customer = g.id_customer)
+		'.($id_product ? '
+		LEFT JOIN `'._DB_PREFIX_.'connections_page` cp ON (cp.id_connections = c.id_connections)
+		LEFT JOIN `'._DB_PREFIX_.'page` p ON (cp.`id_page` = p.`id_page`)
+		LEFT JOIN `'._DB_PREFIX_.'page_type` pt ON (pt.`id_page_type` = p.`id_page_type`)' : '').'
 		WHERE cu.date_add BETWEEN '.ModuleGraph::getDateBetween($employee).'
-		AND cu.date_add > cs.date_add
-		AND rc.id_referrer = '.(int)($this->id).'
-		'.$where);
-		return $result['registrations'];
+		AND cu.date_add > cs.date_add AND rc.id_referrer = '.(int)$this->id.'
+		'.($id_product ? ' AND pt.`name` = \'product.php\' AND p.`id_object` = '.(int)$id_product : ''));
 	}
 	
 	public function getStatsSales($id_product = null, $employee = null)
-	{
-		list($join, $where) = array('','');
-		if ((int)($id_product))
-		{
-			$join =	'LEFT JOIN '._DB_PREFIX_.'order_detail od ON oo.id_order = od.id_order';
-			$where = 'AND od.product_id = '.(int)($id_product);
-		}
-		
-		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->executeS('
+	{	
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT oo.id_order
 		FROM '._DB_PREFIX_.'referrer_cache rc
-		INNER JOIN '._DB_PREFIX_.'connections_source cs ON rc.id_connections_source = cs.id_connections_source
-		INNER JOIN '._DB_PREFIX_.'connections c ON cs.id_connections = c.id_connections
-		INNER JOIN '._DB_PREFIX_.'guest g ON g.id_guest = c.id_guest
-		LEFT JOIN '._DB_PREFIX_.'orders oo ON oo.id_customer = g.id_customer
-		'.$join.'
+		INNER JOIN '._DB_PREFIX_.'connections_source cs ON (rc.id_connections_source = cs.id_connections_source)
+		INNER JOIN '._DB_PREFIX_.'connections c ON (cs.id_connections = c.id_connections)
+		INNER JOIN '._DB_PREFIX_.'guest g ON (g.id_guest = c.id_guest)
+		LEFT JOIN '._DB_PREFIX_.'orders oo ON (oo.id_customer = g.id_customer)
+		'.($id_product ? '
+		LEFT JOIN '._DB_PREFIX_.'order_detail od ON (oo.id_order = od.id_order)' : '').'
 		WHERE oo.invoice_date BETWEEN '.ModuleGraph::getDateBetween($employee).'
-		AND oo.date_add > cs.date_add
-		AND rc.id_referrer = '.(int)($this->id).'
-		AND oo.valid = 1
-		'.$where);
+		AND oo.date_add > cs.date_add AND rc.id_referrer = '.(int)$this->id.' AND oo.valid = 1
+		'.($id_product ? 'AND od.product_id = '.(int)$id_product : ''));
 		
 		$implode = array();
 		foreach ($result as $row)
@@ -219,7 +200,7 @@ class ReferrerCore extends ObjectModel
 		
 		if ($implode)
 			return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-			SELECT COUNT(o.id_order) AS orders, SUM(o.total_paid_real / o.conversion_rate) AS sales
+			SELECT COUNT(o.id_order) orders, SUM(o.total_paid_real / o.conversion_rate) sales
 			FROM '._DB_PREFIX_.'orders o
 			WHERE o.id_order IN ('.implode($implode, ',').')
 			AND o.valid = 1');
@@ -273,8 +254,7 @@ class ReferrerCore extends ObjectModel
 					SELECT id_referrer, id_connections_source
 					FROM '._DB_PREFIX_.'referrer r
 					LEFT JOIN '._DB_PREFIX_.'connections_source cs ON ('.self::$_join.')
-					WHERE id_referrer = '.(int)$row['id_referrer'].'
-				)');
+					WHERE id_referrer = '.(int)$row['id_referrer'].')');
 			}
 	}
 	
@@ -293,7 +273,7 @@ class ReferrerCore extends ObjectModel
 		$statsSales = $referrer->getStatsSales($id_product, $employee);
 
 		// If it's a product and it has no visits nor orders
-		if ((int)($id_product) AND !$statsVisits['visits'] AND !$statsSales['orders'])
+		if ((int)$id_product && !$statsVisits['visits'] && !$statsSales['orders'])
 			exit;
 		
 		$jsonArray = array();
@@ -315,5 +295,3 @@ class ReferrerCore extends ObjectModel
 		die ('[{'.implode(',', $jsonArray).'}]');
 	}
 }
-
-

@@ -59,7 +59,7 @@ class	CookieCore
 	  * @param $name Cookie name before encrypting
 	  * @param $path
 	  */
-	public function __construct($name, $path = '', $expire = NULL)
+	public function __construct($name, $path = '', $expire = null)
 	{
 		$this->_content = array();
 		$this->_expire = isset($expire) ? (int)($expire) : (time() + 1728000);
@@ -93,7 +93,7 @@ class	CookieCore
 		$subDomains = SubDomain::getSubDomains();
 		if ($subDomains === false)
 			die(Tools::displayError('Bad SubDomain SQL query.'));
-		foreach ($subDomains AS $subDomain)
+		foreach ($subDomains as $subDomain)
 		{
 			$subDomainLength = strlen($subDomain) + 1;
 			if (strncmp($subDomain.'.', $domain, $subDomainLength) == 0)
@@ -258,7 +258,7 @@ class	CookieCore
 			foreach ($tmpTab as $keyAndValue)
 			{
 				$tmpTab2 = explode('|', $keyAndValue);
-				if (sizeof($tmpTab2) == 2)
+				if (count($tmpTab2) == 2)
 					 $this->_content[$tmpTab2[0]] = $tmpTab2[1];
 			 }
 			/* Blowfish fix */
@@ -283,7 +283,7 @@ class	CookieCore
 	/**
 	  * Setcookie according to php version
 	  */
-	protected function _setcookie($cookie = NULL)
+	protected function _setcookie($cookie = null)
 	{
 		if ($cookie)
 		{
@@ -311,7 +311,7 @@ class	CookieCore
 
 		/* Serialize cookie content */
 		if (isset($this->_content['checksum'])) unset($this->_content['checksum']);
-		foreach ($this->_content AS $key => $value)
+		foreach ($this->_content as $key => $value)
 			$cookie .= $key.'|'.$value.'¤';
 
 		/* Add checksum to cookie */
@@ -329,7 +329,7 @@ class	CookieCore
 		$result = array();
 		if (count($this->_content) == 0)
 			return $result;
-		foreach ($this->_content AS $key => $value)
+		foreach ($this->_content as $key => $value)
 			if (strncmp($key, $origin, strlen($origin)) == 0)
 				$result[$key] = $value;
 		return $result;
@@ -341,7 +341,7 @@ class	CookieCore
 	public function unsetFamily($origin)
 	{
 		$family = $this->getFamily($origin);
-		foreach (array_keys($family) AS $member)
+		foreach (array_keys($family) as $member)
 			unset($this->$member);
 	}
 

@@ -51,12 +51,12 @@ class SceneCore extends ObjectModel
  	protected 	$fieldsSizeLang = array('name' => 100);
  	protected 	$fieldsValidateLang = array('name' => 'isGenericName');
  	
- 	public function __construct($id = NULL, $id_lang = NULL, $liteResult = true, $hideScenePosition = false)
+ 	public function __construct($id = null, $id_lang = null, $liteResult = true, $hideScenePosition = false)
 	{
-		parent::__construct((int)($id), (int)($id_lang));
+		parent::__construct((int)$id, (int)$id_lang);
 		
 		if (!$liteResult)
-			$this->products = $this->getProducts(true, (int)($id_lang), false);		
+			$this->products = $this->getProducts(true, (int)$id_lang, false);		
 		if ($hideScenePosition)
 			$this->name = Scene::hideScenePosition($this->name);
 		$this->image_dir = _PS_SCENE_IMG_DIR_;
@@ -123,7 +123,7 @@ class SceneCore extends ObjectModel
 	public function addCategories($categories)
 	{
 		$result = true;
-		foreach ($categories AS $category)
+		foreach ($categories as $category)
 		{
 			if (!Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'scene_category` ( `id_scene` , `id_category`) VALUES ('.(int)($this->id).', '.(int)($category).')'))
 				$result = false;
@@ -150,7 +150,7 @@ class SceneCore extends ObjectModel
 	public function addZoneProducts($zones)
 	{
 		$result = true;
-		foreach ($zones AS $zone)
+		foreach ($zones as $zone)
 		{
 			$sql = 'INSERT INTO `'._DB_PREFIX_.'scene_products` ( `id_scene` , `id_product` , `x_axis` , `y_axis` , `zone_width` , `zone_height`) VALUES
 				 ('.(int)($this->id).', '.(int)($zone['id_product']).', '.(int)($zone['x1']).', '.(int)($zone['y1']).', '.(int)($zone['width']).', '.(int)($zone['height']).')';
@@ -181,21 +181,21 @@ class SceneCore extends ObjectModel
 	*
 	* @return array Products
 	*/
-	public static function getScenes($id_category, $id_lang = NULL, $onlyActive = true, $liteResult = true, $hideScenePosition = true)
+	public static function getScenes($id_category, $id_lang = null, $onlyActive = true, $liteResult = true, $hideScenePosition = true)
 	{
-		$id_lang = is_null($id_lang) ? _USER_ID_LANG_ : (int)($id_lang);
+		$id_lang = is_null($id_lang) ? _USER_ID_LANG_ : (int)$id_lang;
 
 		$scenes = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT s.*
 		FROM `'._DB_PREFIX_.'scene_category` sc
 		LEFT JOIN `'._DB_PREFIX_.'scene` s ON (sc.id_scene = s.id_scene)
 		LEFT JOIN `'._DB_PREFIX_.'scene_lang` sl ON (sl.id_scene = s.id_scene)
-		WHERE sc.id_category = '.(int)($id_category).'	AND sl.id_lang = '.(int)($id_lang).($onlyActive ? ' AND s.active = 1' : '').'
+		WHERE sc.id_category = '.(int)$id_category.'	AND sl.id_lang = '.(int)$id_lang.($onlyActive ? ' AND s.active = 1' : '').'
 		ORDER BY sl.name ASC');
 		
-		if (!$liteResult AND $scenes)
-			foreach($scenes AS &$scene)
-				$scene = new Scene((int)($scene['id_scene']), (int)($id_lang), false, $hideScenePosition);
+		if (!$liteResult && $scenes)
+			foreach ($scenes as &$scene)
+				$scene = new Scene((int)$scene['id_scene'], (int)$id_lang, false, $hideScenePosition);
 		return $scenes;
 	}
 	
@@ -204,24 +204,24 @@ class SceneCore extends ObjectModel
 	*
 	* @return array Products
 	*/
-	public function getProducts($onlyActive = true, $id_lang = NULL, $liteResult = true)
+	public function getProducts($onlyActive = true, $id_lang = null, $liteResult = true)
 	{
 		global $link;
 		
-		$id_lang = is_null($id_lang) ? _USER_ID_LANG_ : (int)($id_lang);
+		$id_lang = is_null($id_lang) ? _USER_ID_LANG_ : (int)$id_lang;
 		
 		$products = Db::getInstance()->ExecuteS('
 		SELECT s.*
 		FROM `'._DB_PREFIX_.'scene_products` s
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.id_product = s.id_product)
-		WHERE s.id_scene = '.(int)($this->id).($onlyActive ? ' AND p.active = 1' : ''));
+		WHERE s.id_scene = '.(int)$this->id.($onlyActive ? ' AND p.active = 1' : ''));
 		
-		if (!$liteResult AND $products)
-			foreach ($products AS &$product)
+		if (!$liteResult && $products)
+			foreach ($products as &$product)
 			{
-				$product['details'] = new Product((int)($product['id_product']), !$liteResult, (int)($id_lang));
-				$product['link'] = $link->getProductLink((int)($product['details']->id), $product['details']->link_rewrite, $product['details']->category, $product['details']->ean13);
-				$cover = Product::getCover((int)($product['details']->id));
+				$product['details'] = new Product((int)$product['id_product'], !$liteResult, (int)$id_lang);
+				$product['link'] = $link->getProductLink((int)$product['details']->id, $product['details']->link_rewrite, $product['details']->category, $product['details']->ean13);
+				$cover = Product::getCover((int)$product['details']->id);
 				if (is_array($cover))
 					$product = array_merge($cover, $product);
 			}
@@ -240,7 +240,7 @@ class SceneCore extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT `id_category`
 		FROM `'._DB_PREFIX_.'scene_category`
-		WHERE `id_scene` = '.(int)($id_scene));
+		WHERE `id_scene` = '.(int)$id_scene);
 	}
 	
 	/**
@@ -254,5 +254,3 @@ class SceneCore extends ObjectModel
 		return preg_replace('/^[0-9]+\./', '', $name);
 	}
 }
-
-

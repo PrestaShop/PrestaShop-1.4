@@ -96,7 +96,7 @@ class HookCore extends ObjectModel
 		INNER JOIN `'._DB_PREFIX_.'module` as m    ON (m.id_module = hm.id_module)
 		'.($position ? 'WHERE h.`position` = 1' : ''));
 		
-		foreach($results as $result)
+		foreach ($results as $result)
 		{
 			if (!isset(self::$preloadModulesFromHooks[$result['id_hook']]))
 				self::$preloadModulesFromHooks[$result['id_hook']] = array('data' => array(), 'module_position' => array());

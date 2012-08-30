@@ -106,11 +106,11 @@ class MessageCore extends ObjectModel
 		global $cookie;
 		
 		return Db::getInstance()->ExecuteS('
-		SELECT m.*, c.`firstname` AS cfirstname, c.`lastname` AS clastname, e.`firstname` AS efirstname, e.`lastname` AS elastname, (COUNT(mr.id_message) = 0 AND m.id_customer != 0) AS is_new_for_me
+		SELECT m.*, c.`firstname` cfirstname, c.`lastname` clastname, e.`firstname` efirstname, e.`lastname` elastname, (COUNT(mr.id_message) = 0 AND m.id_customer != 0) is_new_for_me
 		FROM `'._DB_PREFIX_.'message` m
-		LEFT JOIN `'._DB_PREFIX_.'customer` c ON m.`id_customer` = c.`id_customer`
+		LEFT JOIN `'._DB_PREFIX_.'customer` c ON (m.`id_customer` = c.`id_customer`)
 		LEFT JOIN `'._DB_PREFIX_.'message_readed` mr ON (mr.id_message = m.id_message AND mr.id_employee = '.(int)$cookie->id_employee.')
-		LEFT OUTER JOIN `'._DB_PREFIX_.'employee` e ON e.`id_employee` = m.`id_employee`
+		LEFT OUTER JOIN `'._DB_PREFIX_.'employee` e ON (e.`id_employee` = m.`id_employee`)
 		WHERE id_order = '.(int)$id_order.'
 		'.(!$private ? ' AND m.`private` = 0' : '').'
 		GROUP BY m.id_message
@@ -132,11 +132,11 @@ class MessageCore extends ObjectModel
 		global $cookie;
 
 		return Db::getInstance()->ExecuteS('
-		SELECT m.*, c.`firstname` AS cfirstname, c.`lastname` AS clastname, e.`firstname` AS efirstname, e.`lastname` AS elastname, (COUNT(mr.id_message) = 0 AND m.id_customer != 0) AS is_new_for_me
+		SELECT m.*, c.`firstname` cfirstname, c.`lastname` clastname, e.`firstname` efirstname, e.`lastname` elastname, (COUNT(mr.id_message) = 0 AND m.id_customer != 0) is_new_for_me
 		FROM `'._DB_PREFIX_.'message` m
 		LEFT JOIN `'._DB_PREFIX_.'customer` c ON m.`id_customer` = c.`id_customer`
 		LEFT JOIN `'._DB_PREFIX_.'message_readed` mr ON (mr.id_message = m.id_message AND mr.id_employee = '.(int)$cookie->id_employee.')
-		LEFT OUTER JOIN `'._DB_PREFIX_.'employee` e ON e.`id_employee` = m.`id_employee`
+		LEFT OUTER JOIN `'._DB_PREFIX_.'employee` e ON (e.`id_employee` = m.`id_employee`)
 		WHERE id_cart = '.(int)$id_cart.'
 		'.(!$private ? ' AND m.`private` = 0' : '').'
 		GROUP BY m.id_message
@@ -147,19 +147,14 @@ class MessageCore extends ObjectModel
 	  * Registered a message 'readed'
 	  *
 	  * @param integer $id_message Message ID
-	  * @param integer $id_emplyee Employee ID
+	  * @param integer $id_employee Employee ID
 	  */
-	public static function markAsReaded($id_message, $id_employee)
+	public static function markAsRead($id_message, $id_employee)
 	{
-	 	if (!Validate::isUnsignedId($id_message) OR !Validate::isUnsignedId($id_employee))
+	 	if (!Validate::isUnsignedId($id_message) || !Validate::isUnsignedId($id_employee))
 	 		die(Tools::displayError());
 
-		$result = Db::getInstance()->Execute('
-		INSERT INTO '._DB_PREFIX_.'message_readed (id_message , id_employee , date_add) VALUES
-		('.(int)($id_message).', '.(int)($id_employee).', NOW());
-		');
-		return $result;
+		return Db::getInstance()->Execute('
+		INSERT INTO '._DB_PREFIX_.'message_readed (id_message , id_employee , date_add) VALUES ('.(int)$id_message.', '.(int)$id_employee.', NOW())');
 	}
 }
-
-

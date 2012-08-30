@@ -45,7 +45,7 @@ class FeatureCore extends ObjectModel
 
 	public function getFields()
 	{
-		return array('id_feature' => NULL);
+		return array('id_feature' => null);
 	}
 	
 	/**
@@ -101,7 +101,8 @@ class FeatureCore extends ObjectModel
 	public function deleteSelection($selection)
 	{
 		/* Also delete Attributes */
-		foreach ($selection AS $value) {
+		foreach ($selection as $value)
+		{
 			$obj = new Feature($value);
 			if (!$obj->delete())
 				return false;
@@ -191,7 +192,7 @@ class FeatureCore extends ObjectModel
 	public static function getFeaturesForComparison($list_ids_product, $id_lang)
 	{
 		$ids = '';
-		foreach($list_ids_product as $id)
+		foreach ($list_ids_product as $id)
 			$ids .= (int)($id).',';
 			
 		$ids = rtrim($ids, ',');
@@ -205,7 +206,7 @@ class FeatureCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'feature_product` fp ON f.`id_feature` = fp.`id_feature`
 		LEFT JOIN `'._DB_PREFIX_.'feature_lang` fl ON f.`id_feature` = fl.`id_feature`
 		WHERE fp.`id_product` IN ('.$ids.')
-		AND `id_lang` = '.(int)($id_lang).'
+		AND `id_lang` = '.(int)$id_lang.'
 		GROUP BY f.`id_feature`
 		ORDER BY nb DESC');
 	}

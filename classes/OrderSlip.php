@@ -91,7 +91,7 @@ class OrderSlipCore extends ObjectModel
 	public static function getOrdersSlipDetail($id_order_slip = true, $id_order_detail = false)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS(
-		($id_order_detail ? 'SELECT SUM(`product_quantity`) AS `total`' : 'SELECT *').
+		($id_order_detail ? 'SELECT SUM(`product_quantity`) `total`' : 'SELECT *').
 		'FROM `'._DB_PREFIX_.'order_slip_detail`'
 		.($id_order_slip ? ' WHERE `id_order_slip` = '.(int)($id_order_slip) : '')
 		.($id_order_detail ? ' WHERE `id_order_detail` = '.(int)($id_order_detail) : ''));
@@ -112,7 +112,7 @@ class OrderSlipCore extends ObjectModel
 			{
 				$resTab[$key] = $product;
 				$resTab[$key]['product_quantity'] = $tmp[$product['id_order_detail']];
-				if (sizeof($discounts))
+				if (count($discounts))
 				{
 					$order->setProductPrices($product);
 					$realProductPrice = $resTab[$key]['product_price'];
@@ -139,7 +139,7 @@ class OrderSlipCore extends ObjectModel
 
 		$order = new Order($this->id_order);
 		$products = array();
-		foreach ($result AS $row)
+		foreach ($result as $row)
 		{
 			$order->setProductPrices($row);
 			$products[] = $row;
@@ -156,7 +156,7 @@ class OrderSlipCore extends ObjectModel
 		ORDER BY `date_add` ASC');
 
 		$slips = array();
-		foreach ($result AS $slip)
+		foreach ($result as $slip)
 			$slips[] = (int)$slip['id_order_slip'];
 		return $slips;
 	}
@@ -176,4 +176,3 @@ class OrderSlipCore extends ObjectModel
 		return true;
 	}
 }
-

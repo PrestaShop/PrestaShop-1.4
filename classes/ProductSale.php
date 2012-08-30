@@ -47,9 +47,9 @@ class ProductSaleCore
 	public static function getNbSales()
 	{
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
-			SELECT COUNT(ps.`id_product`) AS nb
+			SELECT COUNT(ps.`id_product`) nb
 			FROM `'._DB_PREFIX_.'product_sale` ps
-			LEFT JOIN `'._DB_PREFIX_.'product` p ON p.`id_product` = ps.`id_product`
+			LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.`id_product` = ps.`id_product`)
 			WHERE p.`active` = 1');
 		return (int)($result['nb']);
 	}
@@ -62,7 +62,7 @@ class ProductSaleCore
 	** @param integer $nbProducts Number of products to return (optional)
 	** @return array from Product::getProductProperties
 	*/
-	public static function getBestSales($id_lang, $pageNumber = 0, $nbProducts = 10, $orderBy=NULL, $orderWay=NULL)
+	public static function getBestSales($id_lang, $pageNumber = 0, $nbProducts = 10, $orderBy = null, $orderWay = null)
 	{
 		if ($pageNumber < 0) $pageNumber = 0;
 		if ($nbProducts < 1) $nbProducts = 10;
@@ -74,10 +74,10 @@ class ProductSaleCore
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT p.*,
-			pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, m.`name` AS manufacturer_name, p.`id_manufacturer` as id_manufacturer,
+			pl.`description`, pl.`description_short`, pl.`link_rewrite`, pl.`meta_description`, pl.`meta_keywords`, pl.`meta_title`, pl.`name`, m.`name` manufacturer_name, p.`id_manufacturer` as id_manufacturer,
 			i.`id_image`, il.`legend`,
-			ps.`quantity` AS sales, t.`rate`, pl.`meta_keywords`, pl.`meta_title`, pl.`meta_description`,
-			DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 AS new
+			ps.`quantity` sales, t.`rate`, pl.`meta_keywords`, pl.`meta_title`, pl.`meta_description`,
+			DATEDIFF(p.`date_add`, DATE_SUB(NOW(), INTERVAL '.(Validate::isUnsignedInt(Configuration::get('PS_NB_DAYS_NEW_PRODUCT')) ? Configuration::get('PS_NB_DAYS_NEW_PRODUCT') : 20).' DAY)) > 0 new
 		FROM `'._DB_PREFIX_.'product_sale` ps
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON ps.`id_product` = p.`id_product`
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)($id_lang).')
@@ -124,7 +124,7 @@ class ProductSaleCore
 		$sqlGroups = (count($groups) ? 'IN ('.implode(',', $groups).')' : '= 1');
 
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT p.id_product, pl.`link_rewrite`, pl.`name`, pl.`description_short`, i.`id_image`, il.`legend`, ps.`quantity` AS sales, p.`ean13`, p.`upc`, cl.`link_rewrite` AS category
+		SELECT p.id_product, pl.`link_rewrite`, pl.`name`, pl.`description_short`, i.`id_image`, il.`legend`, ps.`quantity` sales, p.`ean13`, p.`upc`, cl.`link_rewrite` category
 		FROM `'._DB_PREFIX_.'product_sale` ps
 		LEFT JOIN `'._DB_PREFIX_.'product` p ON ps.`id_product` = p.`id_product`
 		LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (p.`id_product` = pl.`id_product` AND pl.`id_lang` = '.(int)$id_lang.')
@@ -139,12 +139,12 @@ class ProductSaleCore
 			WHERE cg.`id_group` '.$sqlGroups.'
 		)
 		ORDER BY sales DESC
-		LIMIT '.(int)($pageNumber * $nbProducts).', '.(int)($nbProducts));
+		LIMIT '.(int)($pageNumber * $nbProducts).', '.(int)$nbProducts);
 
 		if (!$result)
 			return false;
 
-		foreach ($result AS &$row)
+		foreach ($result as &$row)
 		{
 		 	$row['link'] = $link->getProductLink($row['id_product'], $row['link_rewrite'], $row['category'], $row['ean13']);
 		 	$row['id_image'] = Product::defineProductImage($row, $id_lang);
@@ -157,26 +157,25 @@ class ProductSaleCore
 		return Db::getInstance()->Execute('
 			INSERT INTO '._DB_PREFIX_.'product_sale
 			(`id_product`, `quantity`, `sale_nbr`, `date_upd`)
-			VALUES ('.(int)($product_id).', '.(int)($qty).', 1, NOW())
-			ON DUPLICATE KEY UPDATE `quantity` = `quantity` + '.(int)($qty).', `sale_nbr` = `sale_nbr` + 1, `date_upd` = NOW()');
+			VALUES ('.(int)$product_id.', '.(int)$qty.', 1, NOW())
+			ON DUPLICATE KEY UPDATE `quantity` = `quantity` + '.(int)$qty.', `sale_nbr` = `sale_nbr` + 1, `date_upd` = NOW()');
 	}
 
 	public static function getNbrSales($id_product)
 	{
-		$result = Db::getInstance()->getRow('SELECT `sale_nbr` FROM '._DB_PREFIX_.'product_sale WHERE `id_product` = '.(int)($id_product));
-		if (!$result OR empty($result) OR !key_exists('sale_nbr', $result))
+		$result = Db::getInstance()->getRow('SELECT `sale_nbr` FROM '._DB_PREFIX_.'product_sale WHERE `id_product` = '.(int)$id_product);
+		if (!$result || empty($result) || !key_exists('sale_nbr', $result))
 			return -1;
-		return (int)($result['sale_nbr']);
+		return (int)$result['sale_nbr'];
 	}
 
 	public static function removeProductSale($id_product, $qty = 1)
 	{
 		$nbrSales = self::getNbrSales($id_product);
 		if ($nbrSales > 1)
-			return Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product_sale SET `quantity` = `quantity` - '.(int)($qty).', `sale_nbr` = `sale_nbr` - 1, `date_upd` = NOW() WHERE `id_product` = '.(int)($id_product));
+			return Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product_sale SET `quantity` = `quantity` - '.(int)$qty.', `sale_nbr` = `sale_nbr` - 1, `date_upd` = NOW() WHERE `id_product` = '.(int)$id_product);
 		elseif ($nbrSales == 1)
-			return Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'product_sale WHERE `id_product` = '.(int)($id_product));
+			return Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'product_sale WHERE `id_product` = '.(int)$id_product);
 		return true;
 	}
 }
-
