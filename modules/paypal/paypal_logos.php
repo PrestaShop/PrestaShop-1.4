@@ -127,11 +127,11 @@ class PayPalLogos
 					$picture = @file_get_contents($source);
 				elseif(is_callable('curl_init'))
 				{
-					$ch = curl_init();
-					curl_setopt($ch, CURLOPT_URL, $source);
-					curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-					$picture = curl_exec($ch);
-					curl_close($ch);
+					$ch = @curl_init();
+					@curl_setopt($ch, CURLOPT_URL, $source);
+					@curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+					$picture = @curl_exec($ch);
+					@curl_close($ch);
 				}
 				return fwrite($handle, $picture) ? _MODULE_DIR_.$destination : false;
 			}
