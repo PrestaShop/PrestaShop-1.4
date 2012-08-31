@@ -147,13 +147,13 @@ class CustomerCore extends ObjectModel
 
 	public function add($autodate = true, $nullValues = true)
 	{
-		$this->birthday = (empty($this->years) ? $this->birthday : (int)($this->years).'-'.(int)($this->months).'-'.(int)($this->days));
+		$this->birthday = (empty($this->years) ? $this->birthday : (int)$this->years.'-'.(int)$this->months.'-'.(int)$this->days);
 		$this->secure_key = md5(uniqid(rand(), true));
 		$this->last_passwd_gen = date('Y-m-d H:i:s', strtotime('-'.Configuration::get('PS_PASSWD_TIME_FRONT').'minutes'));
 		if (empty($this->id_default_group))
 			$this->id_default_group = 1;
 		/* Can't create a guest customer, if this feature is disabled */
-		if ($this->is_guest AND !Configuration::get('PS_GUEST_CHECKOUT_ENABLED'))
+		if ($this->is_guest && !Configuration::get('PS_GUEST_CHECKOUT_ENABLED'))
 			return false;
 	 	if (!parent::add($autodate, $nullValues))
 			return false;
