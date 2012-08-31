@@ -36,13 +36,13 @@ class Ogone extends PaymentModule
 	{
 		$this->name = 'ogone';
 		$this->tab = 'payments_gateways';
-		$this->version = '2.3.2';
+		$this->version = '2.3.3';
 		$this->module_key = '787557338b78e1705f2a4cb72b1dbb84';
 
 		parent::__construct();
 
 		$this->displayName = 'Ogone';
-		$this->description = '';
+		$this->description = $this->l('With over 80 different payment methods and 200+ acquirer connections, Ogone helps you manage, collect and secure your online or mobile payments, help prevent fraud and drive your business!');
 
 		/* For 1.4.3 and less compatibility */
 		$updateConfig = array('PS_OS_CHEQUE', 'PS_OS_PAYMENT', 'PS_OS_PREPARATION', 'PS_OS_SHIPPING', 'PS_OS_CANCELED', 'PS_OS_REFUND', 'PS_OS_ERROR', 'PS_OS_OUTOFSTOCK', 'PS_OS_BANKWIRE', 'PS_OS_PAYPAL', 'PS_OS_WS_PAYMENT');
@@ -57,11 +57,29 @@ class Ogone extends PaymentModule
 	
 	public function install()
 	{
-		return (parent::install() AND 
-				$this->registerHook('payment') AND 
-				$this->registerHook('orderConfirmation'));
+		return (parent::install() &&
+				$this->registerHook('payment') &&
+				$this->registerHook('orderConfirmation') &&
+				$this->registerHook('backOfficeHeader'));
 	}
-	
+
+	public function hookBackOfficeHeader()
+	{
+		if ((int)strcmp((_PS_VERSION_ < '1.5' ? Tools::getValue('configure') : Tools::getValue('module_name')), $this->name) == 0)
+		{
+			if (_PS_VERSION_ < '1.5')
+				return '<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/jquery-ui-1.8.10.custom.min.js"></script>
+					<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/jquery.fancybox-1.3.4.js"></script>
+					<link type="text/css" rel="stylesheet" href="'.__PS_BASE_URI__.'css/jquery.fancybox-1.3.4.css" />';
+			else
+			{
+				$this->context->controller->addJquery();
+				$this->context->controller->addJQueryPlugin('fancybox');
+			}
+		}
+		return '';
+	}
+
 	public function getContent()
 	{
 		if (Tools::isSubmit('submitOgone'))
@@ -118,38 +136,58 @@ class Ogone extends PaymentModule
 		<div class="clear">&nbsp;</div>
 		<form action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'" method="post">
 			<fieldset><legend><img src="../img/admin/contact.gif" /> '.$this->l('Settings').'</legend>
-				<label for="pspid">'.$this->l('PSPID').'</label>
-				<div class="margin-form">
-					<input type="text" id="pspid" size="20" name="OGONE_PSPID" value="'.Tools::safeOutput(Tools::getValue('OGONE_PSPID', Configuration::get('OGONE_PSPID'))).'" />
+				<div style="float: left; width: 48%; margin: 1%;">
+					<label for="pspid">'.$this->l('PSPID').'</label>
+					<div class="margin-form">
+						<input type="text" id="pspid" size="20" name="OGONE_PSPID" value="'.Tools::safeOutput(Tools::getValue('OGONE_PSPID', Configuration::get('OGONE_PSPID'))).'" />
+					</div>
+					<div class="clear">&nbsp;</div>
+					<label for="sha-in">'.$this->l('SHA-in signature').'</label>
+					<div class="margin-form">
+						<input type="text" id="sha-in" size="20" name="OGONE_SHA_IN" value="'.Tools::safeOutput(Tools::getValue('OGONE_SHA_IN', Configuration::get('OGONE_SHA_IN'))).'" />
+					</div>
+					<div class="clear">&nbsp;</div>
+					<label for="sha-out">'.$this->l('SHA-out signature').'</label>
+					<div class="margin-form">
+						<input type="text" id="sha-out" size="20" name="OGONE_SHA_OUT" value="'.Tools::safeOutput(Tools::getValue('OGONE_SHA_OUT', Configuration::get('OGONE_SHA_OUT'))).'" />
+					</div>
+					<div class="clear">&nbsp;</div>
+					<label>'.$this->l('Mode').'</label>
+					<div class="margin-form">
+						<span style="display:block;float:left;margin-top:3px;"><input type="radio" id="test" name="OGONE_MODE" value="0" style="vertical-align:middle;display:block;float:left;margin-top:2px;margin-right:3px;"
+							'.(!Tools::getValue('OGONE_MODE', Configuration::get('OGONE_MODE')) ? 'checked="checked"' : '').' />
+						<label for="test" style="color:#900;display:block;float:left;text-align:left;width:60px;">'.$this->l('Test').'</label>&nbsp;</span>
+						<span style="display:block;float:left;margin-top:3px;">
+						<input type="radio" id="production" name="OGONE_MODE" value="1" style="vertical-align:middle;display:block;float:left; margin-top:2px;margin-right:3px;"
+							'.(Tools::getValue('OGONE_MODE', Configuration::get('OGONE_MODE')) ? 'checked="checked"' : '').' />
+						<label for="production" style="color:#080;display:block;float:left;text-align:left;width:85px;">'.$this->l('Production').'</label></span>
+					</div>
+					<div class="clear">&nbsp;</div>
+					<input type="submit" name="submitOgone" value="'.$this->l('Update settings').'" class="button" />
 				</div>
-				<div class="clear">&nbsp;</div>
-				<label for="sha-in">'.$this->l('SHA-in signature').'</label>
-				<div class="margin-form">
-					<input type="text" id="sha-in" size="20" name="OGONE_SHA_IN" value="'.Tools::safeOutput(Tools::getValue('OGONE_SHA_IN', Configuration::get('OGONE_SHA_IN'))).'" />
+				<div style="float: left; width: 48%; margin: 1%;">
+					<ol>
+						<li><a class="ogone_screenshot" href="'._MODULE_DIR_.$this->name.'/screenshots/en1.png" title="'.$this->l('Step').'1">'.$this->l('Screenshot').' <u>'.$this->l('Step').' 1</u></a></li>
+						<li><a class="ogone_screenshot" href="'._MODULE_DIR_.$this->name.'/screenshots/en2.png" title="'.$this->l('Step').'2">'.$this->l('Screenshot').' <u>'.$this->l('Step').' 2</u></a></li>
+						<li><a class="ogone_screenshot" href="'._MODULE_DIR_.$this->name.'/screenshots/en3.png" title="'.$this->l('Step').'3">'.$this->l('Screenshot').' <u>'.$this->l('Step').' 3</u></a></li>
+						<li><a class="ogone_screenshot" href="'._MODULE_DIR_.$this->name.'/screenshots/en4.png" title="'.$this->l('Step').'4">'.$this->l('Screenshot').' <u>'.$this->l('Step').' 4</u></a></li>
+						<li><a class="ogone_screenshot" href="'._MODULE_DIR_.$this->name.'/screenshots/en5.png" title="'.$this->l('Step').'5">'.$this->l('Screenshot').' <u>'.$this->l('Step').' 5</u></a></li>
+					</ol>
 				</div>
-				<div class="clear">&nbsp;</div>
-				<label for="sha-out">'.$this->l('SHA-out signature').'</label>
-				<div class="margin-form">
-					<input type="text" id="sha-out" size="20" name="OGONE_SHA_OUT" value="'.Tools::safeOutput(Tools::getValue('OGONE_SHA_OUT', Configuration::get('OGONE_SHA_OUT'))).'" />
-				</div>
-				<div class="clear">&nbsp;</div>
-				<label>'.$this->l('Mode').'</label>
-				<div class="margin-form">
-					<span style="display:block;float:left;margin-top:3px;"><input type="radio" id="test" name="OGONE_MODE" value="0" style="vertical-align:middle;display:block;float:left;margin-top:2px;margin-right:3px;"
-						'.(!Tools::getValue('OGONE_MODE', Configuration::get('OGONE_MODE')) ? 'checked="checked"' : '').'
-					/>
-					<label for="test" style="color:#900;display:block;float:left;text-align:left;width:60px;">'.$this->l('Test').'</label>&nbsp;</span>
-					<span style="display:block;float:left;margin-top:3px;">
-					<input type="radio" id="production" name="OGONE_MODE" value="1" style="vertical-align:middle;display:block;float:left; margin-top:2px;margin-right:3px;"
-						'.(Tools::getValue('OGONE_MODE', Configuration::get('OGONE_MODE')) ? 'checked="checked"' : '').'
-					/>
-					<label for="production" style="color:#080;display:block;float:left;text-align:left;width:85px;">'.$this->l('Production').'</label></span>
-				</div>
-				<div class="clear">&nbsp;</div>
-				<input type="submit" name="submitOgone" value="'.$this->l('Update settings').'" class="button" />
 			</fieldset>
 		</form>
-		<div class="clear">&nbsp;</div>';
+		<div class="clear">&nbsp;</div>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$(".ogone_screenshot").fancybox({
+					helpers : {
+						title : {
+							type : \'over\'
+						}
+					}
+				});
+			});
+		</script>';
 	}
 	
 	public function getIgnoreKeyList()

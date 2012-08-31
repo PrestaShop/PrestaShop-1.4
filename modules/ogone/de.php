@@ -8,6 +8,7 @@ $_MODULE['<{ogone}prestashop>hookorderconfirmation_30163d8fc3068e8297e7ab5bf32ae
 $_MODULE['<{ogone}prestashop>hookorderconfirmation_0db71da7150c27142eef9d22b843b4a9'] = 'Bei Fragen oder für weitere Informationen, kontaktieren Sie bitte unseren';
 $_MODULE['<{ogone}prestashop>hookorderconfirmation_64430ad2835be8ad60c59e7d44e4b0b1'] = 'Kunden-Support';
 $_MODULE['<{ogone}prestashop>hookorderconfirmation_8de637e24570c1edb0357826a2ad5aea'] = 'Wir haben ein Problem bei Ihrer Bestellung festgestellt. Wenn Sie denken, dies sei ein Fehler, können Sie an unseren';
+$_MODULE['<{ogone}prestashop>ogone_40904c61c99a28a3acc110767753fade'] = 'Mit über 80 verschiedenen Zahlungsmethoden und über 200 Akzeptanzpartnern, hilft Ogone Ihnen bei der Verwaltung, dem Collecting und der Sicherung Ihrer Online und Mobile Zahlungen.';
 $_MODULE['<{ogone}prestashop>ogone_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Konfiguration aktualisiert';
 $_MODULE['<{ogone}prestashop>ogone_6a26f548831e6a8c26bfbbd9f6ec61e0'] = 'Hilfe';
 $_MODULE['<{ogone}prestashop>ogone_879dd0a17cb07d91581b85fa6ade410b'] = 'Ogone ist ein führender europäischer Anbieter von Payment Services mit internationaler Ausrichtung.';
@@ -30,6 +31,8 @@ $_MODULE['<{ogone}prestashop>ogone_650be61892bf690026089544abbd9d26'] = 'Modus';
 $_MODULE['<{ogone}prestashop>ogone_0cbc6611f5540bd0809a388dc95a615b'] = 'Test';
 $_MODULE['<{ogone}prestashop>ogone_756d97bb256b8580d4d71ee0c547804e'] = 'Betrieb';
 $_MODULE['<{ogone}prestashop>ogone_b17f3f4dcf653a5776792498a9b44d6a'] = 'Einstellungen aktualisieren';
+$_MODULE['<{ogone}prestashop>ogone_48c7c41b72e1d678923ce3571aa65b2d'] = 'Schritt';
+$_MODULE['<{ogone}prestashop>ogone_3afbd9828e011526955ca93b48b57524'] = 'Screenshot';
 $_MODULE['<{ogone}prestashop>ogone_75310bf8b7cf2ca4e09332871f98c271'] = 'Bezahlen Sie mit Ogone';
 $_MODULE['<{ogone}prestashop>ogone_51e550f8a0e9e127a566c21e9a15538b'] = 'Ogone Logo';
 $_MODULE['<{ogone}prestashop>ogone_15ee0c3bac84f0ff0a2af1e6cdc1a048'] = 'Bezahlen Sie sicher und schnell auf der nächsten Seite mit IDEAL / Mastercard / Visa / Paypal / Mister Cash / Bancontact.';

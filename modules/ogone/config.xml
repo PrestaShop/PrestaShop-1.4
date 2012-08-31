@@ -2,8 +2,8 @@
 <module>
 	<name>ogone</name>
 	<displayName><![CDATA[Ogone]]></displayName>
-	<version><![CDATA[2.3.2]]></version>
-	<description><![CDATA[]]></description>
+	<version><![CDATA[2.3.3]]></version>
+	<description><![CDATA[With over 80 different payment methods and 200+ acquirer connections, Ogone helps you manage, collect and secure your online or mobile payments, help prevent fraud and drive your business!]]></description>
 	<author><![CDATA[]]></author>
 	<tab><![CDATA[payments_gateways]]></tab>
 	<is_configurable>1</is_configurable>

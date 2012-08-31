@@ -8,6 +8,7 @@ $_MODULE['<{ogone}prestashop>hookorderconfirmation_30163d8fc3068e8297e7ab5bf32ae
 $_MODULE['<{ogone}prestashop>hookorderconfirmation_0db71da7150c27142eef9d22b843b4a9'] = 'Pour toute question ou pour plus d\'informations, merci de contacter notre';
 $_MODULE['<{ogone}prestashop>hookorderconfirmation_64430ad2835be8ad60c59e7d44e4b0b1'] = 'service client';
 $_MODULE['<{ogone}prestashop>hookorderconfirmation_8de637e24570c1edb0357826a2ad5aea'] = 'Nous avons constaté un problème avec votre commande. Si vous pensez que c\'est une erreur, merci de contacter notre';
+$_MODULE['<{ogone}prestashop>ogone_40904c61c99a28a3acc110767753fade'] = 'Avec 80 méthodes de paiement et 200 banques à travers le monde, Ogone vous propose une solution clé en main pour stimuler et sécuriser vos paiements en ligne !';
 $_MODULE['<{ogone}prestashop>ogone_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Configuration enregistrée';
 $_MODULE['<{ogone}prestashop>ogone_6a26f548831e6a8c26bfbbd9f6ec61e0'] = 'Aide';
 $_MODULE['<{ogone}prestashop>ogone_879dd0a17cb07d91581b85fa6ade410b'] = 'Ogone Payment Services est le service de paiement leader en Europe, avec une couverture mondiale.';
@@ -31,6 +32,8 @@ $_MODULE['<{ogone}prestashop>ogone_650be61892bf690026089544abbd9d26'] = 'Mode';
 $_MODULE['<{ogone}prestashop>ogone_0cbc6611f5540bd0809a388dc95a615b'] = 'Test';
 $_MODULE['<{ogone}prestashop>ogone_756d97bb256b8580d4d71ee0c547804e'] = 'Production';
 $_MODULE['<{ogone}prestashop>ogone_b17f3f4dcf653a5776792498a9b44d6a'] = 'Mettre à jour';
+$_MODULE['<{ogone}prestashop>ogone_48c7c41b72e1d678923ce3571aa65b2d'] = 'Étape';
+$_MODULE['<{ogone}prestashop>ogone_3afbd9828e011526955ca93b48b57524'] = 'Voir capture d\'écran';
 $_MODULE['<{ogone}prestashop>ogone_75310bf8b7cf2ca4e09332871f98c271'] = 'Payer avec Ogone';
 $_MODULE['<{ogone}prestashop>ogone_51e550f8a0e9e127a566c21e9a15538b'] = 'Logo Ogone';
 $_MODULE['<{ogone}prestashop>ogone_15ee0c3bac84f0ff0a2af1e6cdc1a048'] = 'Payer rapidement et en toute sécurité à la page suivante avec IDEAL / Mastercard / Visa / Paypal / Mister Cash / Bancontact.';
