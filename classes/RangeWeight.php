@@ -30,7 +30,7 @@ class RangeWeightCore extends ObjectModel
 	public		$id_carrier;
 	public 		$delimiter1;
 	public 		$delimiter2;
-	
+
  	protected 	$fieldsRequired = array('id_carrier', 'delimiter1', 'delimiter2');
  	protected 	$fieldsValidate = array('id_carrier' => 'isInt', 'delimiter1' => 'isUnsignedFloat', 'delimiter2' => 'isUnsignedFloat');
 
@@ -41,16 +41,15 @@ class RangeWeightCore extends ObjectModel
 			'objectNodeName' => 'weight_range',
 			'objectsNodeName' => 'weight_ranges',
 			'fields' => array(
-			'id_carrier' => array('xlink_resource' => 'carriers'),
-		)
-	);
+				'id_carrier' => array('xlink_resource' => 'carriers'),
+		));
 	
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_carrier'] = (int)($this->id_carrier);
-		$fields['delimiter1'] = (float)($this->delimiter1);
-		$fields['delimiter2'] = (float)($this->delimiter2);
+		$fields['id_carrier'] = (int)$this->id_carrier;
+		$fields['delimiter1'] = (float)$this->delimiter1;
+		$fields['delimiter2'] = (float)$this->delimiter2;
 		return $fields;
 	}
 	
@@ -64,8 +63,7 @@ class RangeWeightCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT *
 		FROM `'._DB_PREFIX_.'range_weight`
-		WHERE `id_carrier` = '.(int)($id_carrier).'
+		WHERE `id_carrier` = '.(int)$id_carrier.'
 		ORDER BY `delimiter1` ASC');
 	}
 }
-

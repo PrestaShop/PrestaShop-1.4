@@ -49,7 +49,7 @@
 		{assign var='requestNb' value=$link->getPaginationLink(false, false, true, false, false, true)}
 	{/if}
 	<!-- Pagination -->
-	<div id="pagination" class="pagination">
+	<div id="pagination" class="pagination" style="padding-top: 0;">
 	{if $start!=$stop}
 		<ul class="pagination">
 		{if $p != 1}
@@ -62,7 +62,7 @@
 			<li><a {$no_follow_text}  href="{$link->goPage($requestPage, 1)}">1</a></li>
 			<li class="truncate">...</li>
 		{/if}
-		{section name=pagination start=$start loop=$stop+1 step=1}
+		{section name=pagination start=$start loop=$stop step=1}
 			{if $p == $smarty.section.pagination.index}
 				<li class="current"><span>{$p|escape:'htmlall':'UTF-8'}</span></li>
 			{else}
@@ -83,7 +83,7 @@
 	{/if}
 	{if $nb_products > $products_per_page}
 		<form action="{if !is_array($requestNb)}{$requestNb}{else}{$requestNb.requestUrl}{/if}" method="get" class="pagination">
-			<p>
+			<p style="margin-top: 0; margin-bottom: 0;">
 				{if isset($search_query) AND $search_query}<input type="hidden" name="search_query" value="{$search_query|escape:'htmlall':'UTF-8'}" />{/if}
 				{if isset($tag) AND $tag AND !is_array($tag)}<input type="hidden" name="tag" value="{$tag|escape:'htmlall':'UTF-8'}" />{/if}
 				<input type="submit" class="button_mini" value="{l s='OK'}" />

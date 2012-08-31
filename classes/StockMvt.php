@@ -103,22 +103,20 @@ class StockMvtCore extends ObjectModel
 	public static function addMissingMvt($id_employee)
 	{
 		$products_without_attributes = Db::getInstance()->ExecuteS('
-			SELECT p.`id_product`, pa.`id_product_attribute`, (p.`quantity` - SUM(IFNULL(sm.`quantity`, 0))) quantity
-			FROM `'._DB_PREFIX_.'product` p
-			LEFT JOIN `'._DB_PREFIX_.'stock_mvt` sm ON (sm.`id_product` = p.`id_product`)
-			LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pa.`id_product` = p.`id_product`)
-			WHERE pa.`id_product_attribute` IS NULL
-			GROUP BY p.`id_product`
-		');
+		SELECT p.`id_product`, pa.`id_product_attribute`, (p.`quantity` - SUM(IFNULL(sm.`quantity`, 0))) quantity
+		FROM `'._DB_PREFIX_.'product` p
+		LEFT JOIN `'._DB_PREFIX_.'stock_mvt` sm ON (sm.`id_product` = p.`id_product`)
+		LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pa.`id_product` = p.`id_product`)
+		WHERE pa.`id_product_attribute` IS NULL
+		GROUP BY p.`id_product`');
 		
 		$products_with_attributes = Db::getInstance()->ExecuteS('
-			SELECT p.`id_product`, pa.`id_product_attribute`, SUM(pa.`quantity`) - SUM(IFNULL(sm.`quantity`, 0)) quantity
-			FROM `'._DB_PREFIX_.'product` p
-			LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pa.`id_product` = p.`id_product`)
-			LEFT JOIN `'._DB_PREFIX_.'stock_mvt` sm ON (sm.`id_product` = pa.`id_product` AND sm.`id_product_attribute` = pa.`id_product_attribute`)
-			WHERE pa.`id_product_attribute` IS NOT NULL
-			GROUP BY pa.`id_product_attribute`
-		');
+		SELECT p.`id_product`, pa.`id_product_attribute`, SUM(pa.`quantity`) - SUM(IFNULL(sm.`quantity`, 0)) quantity
+		FROM `'._DB_PREFIX_.'product` p
+		LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pa.`id_product` = p.`id_product`)
+		LEFT JOIN `'._DB_PREFIX_.'stock_mvt` sm ON (sm.`id_product` = pa.`id_product` AND sm.`id_product_attribute` = pa.`id_product_attribute`)
+		WHERE pa.`id_product_attribute` IS NOT NULL
+		GROUP BY pa.`id_product_attribute`');
 
 		$products = array_merge($products_without_attributes, $products_with_attributes);
 		if ($products)

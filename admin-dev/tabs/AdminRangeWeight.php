@@ -55,15 +55,30 @@ class AdminRangeWeight extends AdminTab
 				$this->_list[$key]['carrier_name'] = Configuration::get('PS_SHOP_NAME');
 		parent::displayListContent($token);
 	}
-	
+
 	public function postProcess()
 	{
-		if (isset($_POST['submitAdd'.$this->table]) AND Tools::getValue('delimiter1') >= Tools::getValue('delimiter2'))
-			$this->_errors[] = Tools::displayError('Invalid range');
-		else
-			parent::postProcess();
+		if (isset($_POST['submitAdd'.$this->table]))
+		{
+			$delimiter1 = Tools::getValue('delimiter1');
+			$delimiter2 = Tools::getValue('delimiter2');
+			
+			if ($delimiter1 >= $delimiter2)
+				$this->_errors[] = Tools::displayError('Invalid range, "From" must be lower than "To"');
+
+			/* Check that a similar range does not exist yet for this carrier */
+			if (!count($this->_errors) && $ranges = RangeWeight::getRanges((int)Tools::getValue('id_carrier')))
+				foreach ($ranges as $range)
+					if (!($delimiter2 <= $range['delimiter1'] || $delimiter1 >= $range['delimiter2']))
+					{
+						$this->_errors[] = Tools::displayError('Invalid range, this range is overlapping an existing range');
+						break;
+					}
+		}
+
+		parent::postProcess();
 	}
-	
+
 	public function displayForm($isMainTab = true)
 	{
 		global $currentIndex;

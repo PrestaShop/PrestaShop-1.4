@@ -58,9 +58,12 @@ class AdminStockMvt extends AdminTab
 
 	public function postProcess()
 	{
-		global $cookie;
 		if (Tools::isSubmit('rebuildStock'))
-			StockMvt::addMissingMvt((int)$cookie->id_employee, false);
+		{
+			global $cookie;
+			StockMvt::addMissingMvt((int)$cookie->id_employee);
+		}
+
 		return parent::postProcess();
 	}
 	

@@ -2,7 +2,7 @@
 <module>
 	<name>statscarrier</name>
 	<displayName><![CDATA[Carrier distribution]]></displayName>
-	<version><![CDATA[1]]></version>
+	<version><![CDATA[1.1]]></version>
 	<description><![CDATA[Display the carriers distribution]]></description>
 	<author><![CDATA[PrestaShop]]></author>
 	<tab><![CDATA[analytics_stats]]></tab>

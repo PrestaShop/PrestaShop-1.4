@@ -101,7 +101,7 @@ class AdminCarriers extends AdminTab
 		</script>
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
-			<fieldset><legend><img src="../img/admin/delivery.gif" />'.$this->l('Carriers').'</legend>
+			<fieldset><legend><img src="../img/admin/delivery.gif" alt="" />'.$this->l('Carriers').'</legend>
 				<label>'.$this->l('Company:').' </label>
 				<div class="margin-form">
 					<input type="text" size="25" name="name" value="'.htmlentities($this->getFieldValue($obj, 'name'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
@@ -149,11 +149,11 @@ class AdminCarriers extends AdminTab
 				</div>
 				<label>'.$this->l('Group access').'</label>
 				<div class="margin-form">';
-					$groups = Group::getGroups((int)($cookie->id_lang));
+					$groups = Group::getGroups((int)$cookie->id_lang);
 					if (sizeof($groups))
 					{
 						echo '
-					<table cellspacing="0" cellpadding="0" class="table" style="width: 28em;">
+						<table cellspacing="0" cellpadding="0" class="table" style="width: 28em;">
 						<tr>
 							<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \'groupBox[]\', this.checked)"'.(!isset($obj->id) ? 'checked="checked" ' : '').' /></th>
 							<th>'.$this->l('ID').'</th>
@@ -168,9 +168,8 @@ class AdminCarriers extends AdminTab
 								<td><label for="groupBox_'.$group['id_group'].'" class="t">'.$group['name'].'</label></td>
 							</tr>';
 						echo '
-					</table>
-					<p style="padding:0px; margin:10px 0px 10px 0px;">'.$this->l('Mark all groups you want to give access to this carrier').'</p>
-					';
+						</table>
+						<p style="padding:0px; margin:10px 0px 10px 0px;">'.$this->l('Mark all groups you want to give access to this carrier').'</p>';
 					}
 					else
 						echo '<p>'.$this->l('No group created').'</p>';
@@ -298,10 +297,10 @@ class AdminCarriers extends AdminTab
 			$this->validateRules();
 			if (!count($this->_errors))
 			{
-				$id = (int)(Tools::getValue('id_'.$this->table));
+				$id = (int)Tools::getValue('id_'.$this->table);
 
 				/* Object update */
-				if (isset($id) AND !empty($id))
+				if (isset($id) && !empty($id))
 				{
 					if ($this->tabAccess['edit'] === '1')
 					{

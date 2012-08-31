@@ -126,13 +126,13 @@ switch ($response[0]) // Response code
 		$authorizeaim->validateOrder((int)$cart->id,
 			Configuration::get('PS_OS_PAYMENT'), (float)$response[9],
 			$payment_method, $message, NULL, NULL, false, $customer->secure_key);
-		break ;
+		break;
 
 	case 4: // Hold for review
 		$authorizeaim->validateOrder((int)$cart->id,
 			Configuration::get('AUTHORIZE_AIM_HOLD_REVIEW_OS'), (float)$response[9],
 			$authorizeaim->displayName, $response[3], NULL, NULL, false, $customer->secure_key);
-		break ;
+		break;
 
 	default:
 		$error_message = (isset($response[3]) && !empty($response[3])) ? urlencode(Tools::safeOutput($response[3])) : '';

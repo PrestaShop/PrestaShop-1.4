@@ -42,6 +42,8 @@ class AdminTracking extends AdminTab
 		echo '<h2 class="space">'.$this->l('Catalog tracking').'</h2>';
 		$this->getObjects('categories_empty');
 		$this->displayCategories();
+		$this->getObjects('categories_disabled');
+		$this->displayCategories();
 		$this->getObjects('products_disabled');
 		$this->displayProducts();
 		$this->getObjects('products_nostock');
@@ -58,39 +60,35 @@ class AdminTracking extends AdminTab
 		{
 			case 'categories_empty':
 				$sql = '
-					SELECT id_category
-					FROM `'._DB_PREFIX_.'category`
-					WHERE id_category NOT IN (
-					  SELECT DISTINCT(id_category)
-					  FROM `'._DB_PREFIX_.'category_product`
-					)
-				';
-				$this->_list['message'] = $this->l('List of empty categories:');
-				break ;
+				SELECT id_category
+				FROM `'._DB_PREFIX_.'category`
+				WHERE active = 1 AND id_category NOT IN (SELECT id_category FROM `'._DB_PREFIX_.'category_product`)';
+				$this->_list['message'] = $this->l('List of active but empty categories:');
+				break;
+			case 'categories_disabled':
+				$sql = '
+				SELECT *
+				FROM `'._DB_PREFIX_.'category`
+				WHERE active = 0';
+				$this->_list['message'] = $this->l('List of disabled categories:');
+				break;
 			case 'products_disabled':
 				$sql = '
-					SELECT *
-					FROM `'._DB_PREFIX_.'product`
-					WHERE active = 0
-				';
+				SELECT *
+				FROM `'._DB_PREFIX_.'product`
+				WHERE active = 0';
 				$this->_list['message'] = $this->l('List of disabled products:');
-				break ;
+				break;
 			case 'products_nostock':
 				$sql = '
-					SELECT DISTINCT(id_product)
+				SELECT DISTINCT(id_product)
+				FROM `'._DB_PREFIX_.'product`
+				WHERE id_product IN (
+					SELECT id_product
 					FROM `'._DB_PREFIX_.'product`
-					WHERE id_product IN (
-					  SELECT id_product
-					  FROM `'._DB_PREFIX_.'product`
-					  WHERE id_product NOT IN (
-						SELECT DISTINCT(id_product)
-						FROM `'._DB_PREFIX_.'product_attribute`
-					  )
-					  AND quantity <= 0
-					)
-				';
+					WHERE id_product NOT IN (SELECT DISTINCT(id_product) FROM `'._DB_PREFIX_.'product_attribute`) AND quantity <= 0)';
 				$this->_list['message'] = $this->l('List of out of stock products without attributes:');
-				break ;
+				break;
 			case 'attributes_nostock':
 				$sql = '
 				SELECT pa.*, ag.`id_attribute_group`, ag.`is_color_group`, agl.`name` AS group_name, al.`name` AS attribute_name, a.`id_attribute`,
@@ -99,16 +97,15 @@ class AdminTracking extends AdminTab
 				LEFT JOIN `'._DB_PREFIX_.'product_attribute_combination` pac ON pac.`id_product_attribute` = pa.`id_product_attribute`
 				LEFT JOIN `'._DB_PREFIX_.'attribute` a ON a.`id_attribute` = pac.`id_attribute`
 				LEFT JOIN `'._DB_PREFIX_.'attribute_group` ag ON ag.`id_attribute_group` = a.`id_attribute_group`
-				LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = '.(int)($cookie->id_lang).')
-				LEFT JOIN `'._DB_PREFIX_.'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND agl.`id_lang` = '.(int)($cookie->id_lang).')
+				LEFT JOIN `'._DB_PREFIX_.'attribute_lang` al ON (a.`id_attribute` = al.`id_attribute` AND al.`id_lang` = '.(int)$cookie->id_lang.')
+				LEFT JOIN `'._DB_PREFIX_.'attribute_group_lang` agl ON (ag.`id_attribute_group` = agl.`id_attribute_group` AND agl.`id_lang` = '.(int)$cookie->id_lang.')
 				LEFT JOIN `'._DB_PREFIX_.'product` p ON (p.`id_product` = pa.`id_product`)
-				LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang`  = '.(int)($cookie->id_lang).')
+				LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.`id_product` = p.`id_product` AND pl.`id_lang`  = '.(int)$cookie->id_lang.')
 				LEFT JOIN `'._DB_PREFIX_.'manufacturer` m ON (p.`id_manufacturer` = m.`id_manufacturer`)
 				WHERE pa.quantity <= 0
-				ORDER BY pa.`id_product_attribute`
-				';
+				ORDER BY pa.`id_product_attribute`';
 				$this->_list['message'] = $this->l('List of out of stock products with attributes:');
-				break ;
+				break;
 		}
 		$this->_list['obj'] = Db::getInstance()->ExecuteS($sql);
 	}
@@ -126,12 +123,11 @@ class AdminTracking extends AdminTab
 			echo '
 			<table cellspacing="0" cellpadding="0" class="table">';
 			$irow = 0;
-			foreach ($this->_list['obj'] AS $k => $category)
+			foreach ($this->_list['obj'] as $k => $category)
 				echo '<tr class="'.($irow++ % 2 ? 'alt_row' : '').'"><td>'.rtrim(getPath('index.php?tab=AdminCatalog', $category['id_category']), ' >').'</td></tr>';
-			echo '</table><br /><br />';
+			echo '</table><br />';
 		}
 	}
-
 
 	public function displayProducts()
 	{
@@ -159,11 +155,11 @@ class AdminTracking extends AdminTab
 			echo '
 			<table class="table" cellpadding="0" cellspacing="0">
 				<tr>';
-			foreach ($this->fieldsDisplay AS $field)
+			foreach ($this->fieldsDisplay as $field)
 				echo '<th'.(isset($field['width']) ? 'style="width: '.$field['width'].'"' : '').'>'.$field['title'].'</th>';
 			echo '
 				</tr>';
-			foreach ($this->_list['obj'] AS $k => $prod)
+			foreach ($this->_list['obj'] as $k => $prod)
 			{
 				$product = new Product((int)($prod['id_product']));
 				$product->name = $product->name[(int)($cookie->id_lang)];
@@ -219,14 +215,14 @@ class AdminTracking extends AdminTab
 			echo '
 			<table class="table" cellpadding="0" cellspacing="0">
 				<tr>';
-			foreach ($this->fieldsDisplay AS $field)
+			foreach ($this->fieldsDisplay as $field)
 				echo '<th'.(isset($field['width']) ? 'style="width: '.$field['width'].'"' : '').'>'.$field['title'].'</th>';
 			echo '
 				</tr>';
 
 			$attributes = array();
 			$prevAttributeId = '';
-			foreach ($this->_list['obj'] AS $prod)
+			foreach ($this->_list['obj'] as $prod)
 			{
 				if ($prevAttributeId == $prod['id_product_attribute'])
 					$prod['combination_name'] = $attributes[$prod['id_product_attribute']]['combination_name'].', '.$prod['group_name'].' : '.$prod['attribute_name'];
@@ -237,7 +233,7 @@ class AdminTracking extends AdminTab
 				$prevAttributeId = $prod['id_product_attribute'];
 			}
 
-			foreach ($attributes AS $prod)
+			foreach ($attributes as $prod)
 			{
 				$taxrate = Tax::getProductTaxRate($prod['id_product']);
 
@@ -264,4 +260,3 @@ class AdminTracking extends AdminTab
 		}
 	}
 }
-

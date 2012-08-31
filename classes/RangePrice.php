@@ -38,19 +38,18 @@ class RangePriceCore extends ObjectModel
 	protected 	$identifier = 'id_range_price';
 
 	protected	$webserviceParameters = array(
-			'objectsNodeName' => 'price_ranges',
 			'objectNodeName' => 'price_range',
+			'objectsNodeName' => 'price_ranges',
 			'fields' => array(
 				'id_carrier' => array('xlink_resource' => 'carriers'),
-			)
-	);
+		));
 	
 	public function getFields()
 	{
 		parent::validateFields();
-		$fields['id_carrier'] = (int)($this->id_carrier);
-		$fields['delimiter1'] = (float)($this->delimiter1);
-		$fields['delimiter2'] = (float)($this->delimiter2);
+		$fields['id_carrier'] = (int)$this->id_carrier;
+		$fields['delimiter1'] = (float)$this->delimiter1;
+		$fields['delimiter2'] = (float)$this->delimiter2;
 		return $fields;
 	}
 	
@@ -64,8 +63,7 @@ class RangePriceCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
 		SELECT * 
 		FROM `'._DB_PREFIX_.'range_price` 
-		WHERE `id_carrier` = '.(int)($id_carrier).' 
+		WHERE `id_carrier` = '.(int)$id_carrier.' 
 		ORDER BY `delimiter1` ASC');
 	}
 }
-

@@ -71,21 +71,21 @@ class BlockLanguages extends Module
 			if ($phpSelf == 'product.php' AND $id_product = (int)Tools::getValue('id_product'))
 			{
 				$rewrite_infos = Product::getUrlRewriteInformations((int)$id_product);
-				foreach ($rewrite_infos AS $infos)
+				foreach ($rewrite_infos as $infos)
 					$default_rewrite[$infos['id_lang']] = $link->getProductLink((int)$id_product, $infos['link_rewrite'], $infos['category_rewrite'], $infos['ean13'], (int)$infos['id_lang']);
 			}
 		
 			if ($phpSelf == 'category.php' AND $id_category = (int)Tools::getValue('id_category'))
 			{
 				$rewrite_infos = Category::getUrlRewriteInformations((int)$id_category);
-				foreach ($rewrite_infos AS $infos)
+				foreach ($rewrite_infos as $infos)
 					$default_rewrite[$infos['id_lang']] = $link->getCategoryLink((int)$id_category, $infos['link_rewrite'], $infos['id_lang']);
 			}
 			
 			if ($phpSelf == 'cms.php' AND ($id_cms = (int)Tools::getValue('id_cms') OR $id_cms_category = (int)Tools::getValue('id_cms_category')))
 			{
 				$rewrite_infos = (isset($id_cms) AND !isset($id_cms_category)) ? CMS::getUrlRewriteInformations($id_cms) : CMSCategory::getUrlRewriteInformations($id_cms_category);
-				foreach ($rewrite_infos AS $infos)
+				foreach ($rewrite_infos as $infos)
 				{
 					$arr_link = (isset($id_cms) AND !isset($id_cms_category)) ?
 						$link->getCMSLink($id_cms, $infos['link_rewrite'], NULL, $infos['id_lang']) :

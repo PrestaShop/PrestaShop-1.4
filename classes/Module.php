@@ -258,16 +258,17 @@ abstract class ModuleCore
 			return false;
 
 		// Get module position in hook
-		if (Db::getInstance()->getValue('
+		$position = Db::getInstance()->getValue('
 		SELECT MAX(`position`)
 		FROM `'._DB_PREFIX_.'hook_module`
-		WHERE `id_hook` = '.(int)$result['id_hook']) === false)
+		WHERE `id_hook` = '.(int)$result['id_hook']);
+		if ($position === false)
 			return false;
 
 		// Register module in hook
 		$return = Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'hook_module` (`id_module`, `id_hook`, `position`)
-		VALUES ('.(int)$this->id.', '.(int)$result['id_hook'].', '.(int)($result2['position'] + 1).')');
+		VALUES ('.(int)$this->id.', '.(int)$result['id_hook'].', '.(int)($position + 1).')');
 
 		$this->cleanPositions((int)$result['id_hook']);
 
@@ -908,7 +909,7 @@ abstract class ModuleCore
 			if ((int)($values[$this->identifier]) == (int)($this->id))
 			{
 				$k = $key ;
-				break ;
+				break;
 			}
 		if (!isset($k) OR !isset($res[$k]) OR !isset($res[$k + 1]))
 			return false;

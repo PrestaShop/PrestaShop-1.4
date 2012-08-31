@@ -974,14 +974,14 @@ class CategoryCore extends ObjectModel
 		return Db::getInstance()->ExecuteS('
 		SELECT l.`id_lang`, c.`link_rewrite`
 		FROM `'._DB_PREFIX_.'category_lang` c
-		LEFT JOIN  `'._DB_PREFIX_.'lang` l (ON c.`id_lang` = l.`id_lang`)
+		LEFT JOIN  `'._DB_PREFIX_.'lang` l ON (c.`id_lang` = l.`id_lang`)
 		WHERE c.`id_category` = '.(int)$id_category.' AND l.`active` = 1');
 	}
 
 	public function getChildrenWs()
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT c.`id_category` as id
+		SELECT c.`id_category` id
 		FROM `'._DB_PREFIX_.'category` c
 		WHERE c.`id_parent` = '.(int)$this->id.' AND `active` = 1
 		ORDER BY `position` ASC');
@@ -990,7 +990,7 @@ class CategoryCore extends ObjectModel
 	public function getProductsWs()
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT cp.`id_product` as id
+		SELECT cp.`id_product` id
 		FROM `'._DB_PREFIX_.'category_product` cp
 		WHERE cp.`id_category` = '.(int)$this->id.'
 		ORDER BY `position` ASC');

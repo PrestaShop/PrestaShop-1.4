@@ -227,7 +227,7 @@ class AvalaraTax extends Module
 					{
 						if (unlink(_PS_ROOT_DIR_.'/'.$params['dest']))
 							$removed = true;
-						break ;
+						break;
 					}
 				if (!$removed)
 					$this->_errors[] = $this->l('Error while removing override: ').$key;

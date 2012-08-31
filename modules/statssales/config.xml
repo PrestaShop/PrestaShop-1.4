@@ -2,7 +2,7 @@
 <module>
 	<name>statssales</name>
 	<displayName><![CDATA[Sales and orders]]></displayName>
-	<version><![CDATA[1]]></version>
+	<version><![CDATA[1.1]]></version>
 	<description><![CDATA[Display the sales evolution and orders by statuses]]></description>
 	<author><![CDATA[PrestaShop]]></author>
 	<tab><![CDATA[analytics_stats]]></tab>

@@ -608,13 +608,13 @@ class Shipwire extends Module
 		{
 			case 'confirm':
 				$img = 'ok.gif';
-				break ;
+				break;
 			case 'warn':
 				$img = 'warn2.png';
-				break ;
+				break;
 			case 'error':
 				$img = 'disabled.gif';
-				break ;
+				break;
 			default:
 				die('Invalid type.');
 		}

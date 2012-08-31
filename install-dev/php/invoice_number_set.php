@@ -45,7 +45,7 @@ function invoice_number_set()
 			if ($oS->invoice)
 			{
 				Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'orders SET invoice_number = '.(int)($number++).', `invoice_date` = `date_add` WHERE id_order = '.(int)($order->id));
-				break ;
+				break;
 			}
 		}
 	}

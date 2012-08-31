@@ -191,8 +191,8 @@ class AdminImport extends AdminTab
 				'quantity' => 0,
 				'price' => 0,
 				'id_tax_rules_group' => 0,
-				'description_short' => array((int)(_PS_LANG_DEFAULT_) => ''),
-				'link_rewrite' => array((int)(_PS_LANG_DEFAULT_) => ''),
+				'description_short' => array((int)_PS_LANG_DEFAULT_ => ''),
+				'link_rewrite' => array((int)_PS_LANG_DEFAULT_ => ''),
 				'online_only' => 0,
 				'date_add' => date('Y-m-d H:i:s'),
 				'condition' => 'new');

@@ -20,35 +20,25 @@
 *
 *  @author PrestaShop SA <contact@prestashop.com>
 *  @copyright  2007-2012 PrestaShop SA
-*  @version  Release: $Revision$
+*  @version  Release: $Revision: 14012 $
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-function delivery_number_set()
+/* Remove duplicate entries from ps_category_product */
+function clean_category_product()
 {
-	Configuration::loadConfiguration();
-	$number = 1;
+	$list = Db::getInstance()->ExecuteS('
+	SELECT id_category, id_product, COUNT(*) n
+	FROM '._DB_PREFIX_.'category_product
+	GROUP BY CONCAT(id_category,\'|\',id_product)
+	HAVING n > 1');
 
-	// Update each order with a number
-	$result = Db::getInstance()->ExecuteS('
-	SELECT id_order
-	FROM '._DB_PREFIX_.'orders
-	ORDER BY id_order');
-	foreach ($result as $row)
-	{
-		$order = new Order((int)($row['id_order']));
-		$history = $order->getHistory(false);
-		foreach ($history as $row2)
-		{
-			$oS = new OrderState((int)($row2['id_order_state']), (int)Configuration::get('PS_LANG_DEFAULT'));
-			if ($oS->delivery)
-			{
-				Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'orders SET delivery_number = '.(int)($number++).', `delivery_date` = `date_add` WHERE id_order = '.(int)($order->id));
-				break;
-			}
-		}
-	}
-	// Add configuration var
-	Configuration::updateValue('PS_DELIVERY_NUMBER', (int)($number));
+	$result = true;
+	if ($list)
+		foreach ($list as $l)
+			$result &= Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'category_product
+			WHERE id_product = '.(int)$l['id_product'].' AND id_category = '.(int)$l['id_category'].' LIMIT '.(int)($l['n'] - 1));
+
+	return $result;
 }

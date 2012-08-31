@@ -1,7 +1,10 @@
 SET NAMES 'utf8';
 
 ALTER TABLE `PREFIX_image` ADD UNIQUE KEY `idx_product_image` (`id_image` , `id_product` , `cover`);
+
+/* PHP:clean_category_product(); */;
 ALTER TABLE `PREFIX_category_product` DROP INDEX `category_product_index`, ADD PRIMARY KEY (`id_category`, `id_product`);
+
 ALTER TABLE `PREFIX_cms_category_lang` DROP INDEX `category_lang_index`, ADD PRIMARY KEY (`id_cms_category`, `id_lang`);
 ALTER TABLE `PREFIX_order_tax` ADD `id_order_tax` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
 ALTER TABLE `PREFIX_feature_lang` ADD INDEX feature_name (`id_lang`, `name`);
@@ -21,5 +24,4 @@ INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`)(SEL
 
 DELETE FROM `PREFIX_referrer_cache` WHERE id_referrer NOT IN (SELECT id_referrer FROM `PREFIX_referrer`);
 
-/* PHP:update_module_mailalerts(); */;
 /* PHP:update_module_blocklayered(); */;
