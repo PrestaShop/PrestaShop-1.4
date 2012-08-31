@@ -1,19 +1,17 @@
 {literal}
 
-var js_paypal = jQuery.noConflict(true);
+$(document).ready( function() {
 
-js_paypal(document).ready( function() {
+	$('#payment_paypal_express_checkout').click(function() {
+		var nb = $('#quantity_wanted').val();
+		var id = $('#idCombination').val();
 
-	js_paypal('#payment_paypal_express_checkout').click(function() {
-		var nb = js_paypal('#quantity_wanted').val();
-		var id = js_paypal('#idCombination').val();
-
-		js_paypal('#paypal_payment_form input[name=quantity]').val(nb);
-		js_paypal('#paypal_payment_form input[name=id_p_attr]').val(id);
-		js_paypal('#paypal_payment_form').submit();
+		$('#paypal_payment_form input[name=quantity]').val(nb);
+		$('#paypal_payment_form input[name=id_p_attr]').val(id);
+		$('#paypal_payment_form').submit();
 	});
 
-	if (js_paypal('form[target="hss_iframe"]').length == 0) {
+	if ($('form[target="hss_iframe"]').length == 0) {
 		return false;
 	} else {
 		var hostname = 'http://' + window.location.hostname + '{/literal}{$base_uri}{literal}';
@@ -25,14 +23,14 @@ js_paypal(document).ready( function() {
 	}
 
 	function getOrdersCount() {
-		js_paypal.get(
+		$.get(
 			fullPath + '/confirm.php',
 			{ id_cart: '{/literal}{$id_cart}{literal}' },
 			function (data) {
 				if (data && (data > 0)) {
 					clearInterval(confirmTimer);
 					window.location.replace(fullPath + '/submit.php?id_cart={/literal}{$id_cart}{literal}');
-					js_paypal('p.payment_module, p.cart_navigation').hide();
+					$('p.payment_module, p.cart_navigation').hide();
 				}
 			}
 		);
@@ -40,4 +38,3 @@ js_paypal(document).ready( function() {
 });
 
 {/literal}
-

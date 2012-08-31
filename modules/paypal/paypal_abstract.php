@@ -299,14 +299,7 @@ abstract class PayPalAbstract extends PaymentModule
 	public function hookHeader()
 	{
 		$this->context->smarty->assign(array('base_uri' => __PS_BASE_URI__, 'id_cart'  => (int)$this->context->cart->id));
-
-		// Backward compatibility
-		if (_PS_VERSION_ < '1.5')
-			Tools::addCSS(_MODULE_DIR_.$this->name.'/css/paypal.css');
-		else
-			$this->context->controller->addCSS(_MODULE_DIR_.$this->name.'/css/paypal.css');
-			
-		Tools::addJS(_MODULE_DIR_.$this->name.'/js/jquery-1.7.2.min.js');
+		$this->context->controller->addCSS(_MODULE_DIR_.$this->name.'/css/paypal.css');
 		return '<script type="text/javascript">'.$this->fetchTemplate('/js/', 'front_office', 'js').'</script>';
 	}
 
@@ -553,15 +546,26 @@ abstract class PayPalAbstract extends PaymentModule
 
 	public function hookBackOfficeHeader()
 	{
-		if ((int)strcmp((_PS_VERSION_ < '1.5' ? Tools::getValue('configure') : Tools::getValue('module_name')), $this->name) != 0)
-			return '';
-		else
-        {
-            $this->getContext()->smarty->assign(array('PayPal_module_dir' => _MODULE_DIR_.$this->name,
-			'PayPal_WPS' => (int)WPS, 'PayPal_HSS' => (int)HSS, 'PayPal_ECS' => (int)ECS));
+		if ((int)strcmp((_PS_VERSION_ < '1.5' ? Tools::getValue('configure') : Tools::getValue('module_name')), $this->name) == 0)
+		{
+			if (_PS_VERSION_ < '1.5')
+			{
+				$output =  '<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/jquery-ui-1.8.10.custom.min.js"></script>
+					<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/jquery.fancybox-1.3.4.js"></script>
+					<link type="text/css" rel="stylesheet" href="'.__PS_BASE_URI__.'css/jquery.fancybox-1.3.4.css" />
+					<link type="text/css" rel="stylesheet" href="'._MODULE_DIR_.$this->name.'/css/paypal.css" />';
+			}
+			else
+			{
+				$this->context->controller->addJquery();
+				$this->context->controller->addJQueryPlugin('fancybox');
+				$this->context->controller->addCSS(_MODULE_DIR_.$this->name.'/css/paypal.css');
+			}
 
-			return $this->fetchTemplate('/views/templates/back/', 'header');
+			$this->getContext()->smarty->assign(array('PayPal_module_dir' => _MODULE_DIR_.$this->name, 'PayPal_WPS' => (int)WPS, 'PayPal_HSS' => (int)HSS, 'PayPal_ECS' => (int)ECS));
+			return (isset($output)?$output:null).$this->fetchTemplate('/views/templates/back/', 'header');
 		}
+		return '';
 	}
 
 	public function getTranslations()

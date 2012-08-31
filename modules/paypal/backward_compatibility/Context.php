@@ -210,4 +210,13 @@ class ControllerBackwardModule
 	{
 		Tools::addCSS($css_uri, $css_media_type);
 	}
+
+	public function addJquery()
+	{
+		if (_PS_VERSION_ < '1.5')
+			$this->addJS(_PS_JS_DIR_.'jquery/jquery-1.4.4.min.js');
+		elseif (_PS_VERSION_ >= '1.5')
+			$this->addJS(_PS_JS_DIR_.'jquery/jquery-1.7.2.min.js');
+	}
+
 }
