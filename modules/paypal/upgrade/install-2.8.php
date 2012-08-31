@@ -53,14 +53,12 @@ function upgrade_module_2_8($object, $install = false)
 				$paypalapi->uninstall();
 				Configuration::loadConfiguration();
 
-				foreach ($confs AS $key => $value)
+				foreach ($confs as $key => $value)
 					Configuration::updateValue($key, $value);
 			}
 		}
 
 		/* Create Table */
-		$sql = ;
-
 		if (!Db::getInstance()->Execute('
 		CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'paypal_order` (
 		`id_order` int(10) unsigned NOT null auto_increment,
@@ -85,7 +83,7 @@ function upgrade_module_2_8($object, $install = false)
 			$order_state = new OrderState();
 			$order_state->name = array();
 
-			foreach (Language::getLanguages() AS $language)
+			foreach (Language::getLanguages() as $language)
 			{
 				if (Tools::strtolower($language['iso_code']) == 'fr')
 					$order_state->name[$language['id_lang']] = 'Autorisation acceptée par PayPal';
