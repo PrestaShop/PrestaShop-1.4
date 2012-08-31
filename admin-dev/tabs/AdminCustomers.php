@@ -47,17 +47,17 @@ class AdminCustomers extends AdminTab
 		) as connect';
 		$genders = array(1 => $this->l('M'), 2 => $this->l('F'), 9 => $this->l('?'));
  		$this->fieldsDisplay = array(
-		'id_customer' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
-		'id_gender' => array('title' => $this->l('Gender'), 'width' => 25, 'align' => 'center', 'icon' => array(1 => 'male.gif', 2 => 'female.gif', 'default' => 'unknown.gif'), 'orderby' => false, 'type' => 'select', 'select' => $genders, 'filter_key' => 'a!id_gender'),
-		'lastname' => array('title' => $this->l('Last Name'), 'width' => 80),
-		'firstname' => array('title' => $this->l('First name'), 'width' => 60),
-		'email' => array('title' => $this->l('E-mail address'), 'width' => 120, 'maxlength' => 19),
-		'age' => array('title' => $this->l('Age'), 'width' => 30, 'search' => false),
-		'active' => array('title' => $this->l('Enabled'), 'width' => 25, 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false),
-		'newsletter' => array('title' => $this->l('News.'), 'width' => 25, 'align' => 'center', 'type' => 'bool', 'callback' => 'printNewsIcon', 'orderby' => false),
-		'optin' => array('title' => $this->l('Opt.'), 'width' => 25, 'align' => 'center', 'type' => 'bool', 'callback' => 'printOptinIcon', 'orderby' => false),
-		'date_add' => array('title' => $this->l('Registration'), 'width' => 30, 'type' => 'date', 'align' => 'right'),
-		'connect' => array('title' => $this->l('Connection'), 'width' => 60, 'type' => 'datetime', 'search' => false));
+			'id_customer' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
+			'id_gender' => array('title' => $this->l('Gender'), 'width' => 25, 'align' => 'center', 'icon' => array(1 => 'male.gif', 2 => 'female.gif', 'default' => 'unknown.gif'), 'orderby' => false, 'type' => 'select', 'select' => $genders, 'filter_key' => 'a!id_gender'),
+			'lastname' => array('title' => $this->l('Last Name'), 'width' => 80),
+			'firstname' => array('title' => $this->l('First name'), 'width' => 60),
+			'email' => array('title' => $this->l('E-mail address'), 'width' => 120, 'maxlength' => 19),
+			'age' => array('title' => $this->l('Age'), 'width' => 30, 'search' => false),
+			'active' => array('title' => $this->l('Enabled'), 'width' => 25, 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'orderby' => false),
+			'newsletter' => array('title' => $this->l('News.'), 'width' => 25, 'align' => 'center', 'type' => 'bool', 'callback' => 'printNewsIcon', 'orderby' => false),
+			'optin' => array('title' => $this->l('Opt.'), 'width' => 25, 'align' => 'center', 'type' => 'bool', 'callback' => 'printOptinIcon', 'orderby' => false),
+			'date_add' => array('title' => $this->l('Registration'), 'width' => 30, 'type' => 'date', 'align' => 'right'),
+			'connect' => array('title' => $this->l('Connection'), 'width' => 60, 'type' => 'datetime', 'search' => false));
 
 		$this->optionTitle = $this->l('Customers options');
 		$this->_fieldsOptions = array(
@@ -103,10 +103,11 @@ class AdminCustomers extends AdminTab
 
 		 	/* Checking fields validity */
 			$this->validateRules();
-			if (!sizeof($this->_errors))
+			if (!count($this->_errors))
 			{
 				$id = (int)(Tools::getValue('id_'.$this->table));
-				if (isset($id) AND !empty($id))
+				$customer_email = Tools::getValue('email');
+				if (isset($id) && !empty($id))
 				{
 					if ($this->tabAccess['edit'] !== '1')
 						$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
@@ -115,7 +116,6 @@ class AdminCustomers extends AdminTab
 						$object = new $this->className($id);
 						if (Validate::isLoadedObject($object))
 						{
-							$customer_email = strval(Tools::getValue('email'));
 
 							// check if e-mail already used
 							if ($customer_email != $object->email)
@@ -123,25 +123,25 @@ class AdminCustomers extends AdminTab
 								$customer = new Customer();
 								$customer->getByEmail($customer_email);
 								if ($customer->id)
-									$this->_errors[] = Tools::displayError('An account already exists for this e-mail address:').' '.$customer_email;
+									$this->_errors[] = Tools::displayError('An account already exists for this e-mail address:').' '.Tools::safeOutput($customer_email);
 							}
 
-							if (!is_array($groupList) OR sizeof($groupList) == 0)
+							if (!is_array($groupList) || count($groupList) == 0)
 								$this->_errors[] = Tools::displayError('Customer must be in at least one group.');
 							else
 								if (!in_array(Tools::getValue('id_default_group'), $groupList))
 									$this->_errors[] = Tools::displayError('Default customer group must be selected in group box.');
 
 							// Updating customer's group
-							if (!sizeof($this->_errors))
+							if (!count($this->_errors))
 							{
 								$object->cleanGroups();
-								if (is_array($groupList) AND sizeof($groupList) > 0)
+								if (is_array($groupList) && count($groupList) > 0)
 									$object->addGroups($groupList);
 							}
 						}
 						else
-							$this->_errors[] = Tools::displayError('An error occurred while loading object.').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
+							$this->_errors[] = Tools::displayError('An error occurred while loading object.').' <b>'.Tools::safeOutput($this->table).'</b> '.Tools::displayError('(cannot load object)');
 					}
 				}
 				else
@@ -149,24 +149,34 @@ class AdminCustomers extends AdminTab
 					if ($this->tabAccess['add'] === '1')
 					{
 						$object = new $this->className();
-						$this->copyFromPost($object, $this->table);
-						if (!$object->add())
-							$this->_errors[] = Tools::displayError('An error occurred while creating object.').' <b>'.$this->table.' ('.mysql_error().')</b>';
-						elseif (($_POST[$this->identifier] = $object->id /* voluntary */) AND $this->postImage($object->id) AND !sizeof($this->_errors) AND $this->_redirect)
+						$object->getByEmail($customer_email);
+						if ($object->id)
+							$this->_errors[] = Tools::displayError('An account already exists for this e-mail address:').' '.Tools::safeOutput($customer_email);
+						else
 						{
-							// Add Associated groups
-							$group_list = Tools::getValue('groupBox');
-							if (is_array($group_list) && sizeof($group_list) > 0)
-								$object->addGroups($group_list, true);
-							$parent_id = (int)(Tools::getValue('id_parent', 1));
-							// Save and stay on same form
-							if (Tools::isSubmit('submitAdd'.$this->table.'AndStay'))
-								Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$object->id.'&conf=3&update'.$this->table.'&token='.$this->token);
-							// Save and back to parent
-							if (Tools::isSubmit('submitAdd'.$this->table.'AndBackToParent'))
-								Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$parent_id.'&conf=3&token='.$this->token);
-							// Default behavior (save and back)
-							Tools::redirectAdmin($currentIndex.($parent_id ? '&'.$this->identifier.'='.$object->id : '').'&conf=3&token='.$this->token);
+							$this->copyFromPost($object, $this->table);
+							if (!$object->add())
+								$this->_errors[] = Tools::displayError('An error occurred while creating object.').' <b>'.$this->table.' ('.mysql_error().')</b>';
+							else
+							{
+								$_POST[$this->identifier] = $object->id; /* voluntary */
+								if ($_POST[$this->identifier] && $this->postImage($object->id) && !count($this->_errors) && $this->_redirect)
+								{
+									// Add Associated groups
+									$group_list = Tools::getValue('groupBox');
+									if (is_array($group_list) && count($group_list) > 0)
+										$object->addGroups($group_list, true);
+									$parent_id = (int)(Tools::getValue('id_parent', 1));
+									// Save and stay on same form
+									if (Tools::isSubmit('submitAdd'.$this->table.'AndStay'))
+										Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$object->id.'&conf=3&update'.$this->table.'&token='.$this->token);
+									// Save and back to parent
+									if (Tools::isSubmit('submitAdd'.$this->table.'AndBackToParent'))
+										Tools::redirectAdmin($currentIndex.'&'.$this->identifier.'='.$parent_id.'&conf=3&token='.$this->token);
+									// Default behavior (save and back)
+									Tools::redirectAdmin($currentIndex.($parent_id ? '&'.$this->identifier.'='.$object->id : '').'&conf=3&token='.$this->token);
+								}
+							}
 						}
 					}
 					else
@@ -174,7 +184,7 @@ class AdminCustomers extends AdminTab
 				}
 			}
 		}
-		elseif (Tools::isSubmit('delete'.$this->table) AND $this->tabAccess['delete'] === '1')
+		elseif (Tools::isSubmit('delete'.$this->table) && $this->tabAccess['delete'] === '1')
 		{
 			switch (Tools::getValue('deleteMode'))
 			{
@@ -244,16 +254,16 @@ class AdminCustomers extends AdminTab
 			Tools::redirectAdmin($currentIndex.'&token='.$this->token);
 
 		}elseif (Tools::isSubmit('changeOptinVal') AND Tools::getValue('id_customer'))
-		{
-			$id_customer = (int)Tools::getValue('id_customer');
-			$customer = new Customer($id_customer);
-			if (!Validate::isLoadedObject($customer))
-				$this->_errors[] = Tools::displayError('An error occurred while updating customer.');
-			$update = Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'customer` SET optin = '.($customer->optin ? 0 : 1).' WHERE `id_customer` = '.(int)($customer->id));
-			if (!$update)
-				$this->_errors[] = Tools::displayError('An error occurred while updating customer.');
-			Tools::redirectAdmin($currentIndex.'&token='.$this->token);
-		}
+			{
+				$id_customer = (int)Tools::getValue('id_customer');
+				$customer = new Customer($id_customer);
+				if (!Validate::isLoadedObject($customer))
+					$this->_errors[] = Tools::displayError('An error occurred while updating customer.');
+				$update = Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'customer` SET optin = '.($customer->optin ? 0 : 1).' WHERE `id_customer` = '.(int)($customer->id));
+				if (!$update)
+					$this->_errors[] = Tools::displayError('An error occurred while updating customer.');
+				Tools::redirectAdmin($currentIndex.'&token='.$this->token);
+			}
 
 		return parent::postProcess();
 	}
@@ -309,16 +319,16 @@ class AdminCustomers extends AdminTab
 			echo '
 			<div>
 			'.$this->l('This customer is registered as').' <b>'.$this->l('guest').'</b>';
-				if (!Customer::customerExists($customer->email, false, true))
-				{
-					echo '
+			if (!Customer::customerExists($customer->email, false, true))
+			{
+				echo '
 					<form method="POST" action="index.php?tab=AdminCustomers&id_customer='.(int)$customer->id.'&token='.Tools::getAdminTokenLite('AdminCustomers').'">
 						<input type="hidden" name="id_lang" value="'.(int)(count($orders) ? $orders[0]['id_lang'] : _PS_LANG_DEFAULT_).'" />
 						<p class="center"><input class="button" type="submit" name="submitGuestToCustomer" value="'.$this->l('Transform to customer').'" /></p>
 						'.$this->l('This feature generates a random password and sends an e-mail to the customer').'</form>';
-				}
-				else
-					echo '</div><div><b style="color:red;">'.$this->l('A registered customer account exists with the same email address').'</b>';
+			}
+			else
+				echo '</div><div><b style="color:red;">'.$this->l('A registered customer account exists with the same email address').'</b>';
 			echo '
 			</div>
 			';
@@ -358,8 +368,8 @@ class AdminCustomers extends AdminTab
 		</script>';
 
 
-		echo '<h2>'.$this->l('Messages').' ('.sizeof($messages).')</h2>';
-		if (sizeof($messages))
+		echo '<h2>'.$this->l('Messages').' ('.count($messages).')</h2>';
+		if (count($messages))
 		{
 			echo '
 			<table cellspacing="0" cellpadding="0" class="table">
@@ -368,7 +378,7 @@ class AdminCustomers extends AdminTab
 					<th class="center">'.$this->l('Message').'</th>
 					<th class="center">'.$this->l('Sent on').'</th>
 				</tr>';
-			foreach ($messages AS $message)
+			foreach ($messages as $message)
 				echo '<tr>
 					<td>'.$message['status'].'</td>
 					<td><a href="index.php?tab=AdminCustomerThreads&id_customer_thread='.(int)($message['id_customer_thread']).'&viewcustomer_thread&token='.Tools::getAdminTokenLite('AdminCustomerThreads').'">'.substr(strip_tags(html_entity_decode($message['message'], ENT_NOQUOTES, 'UTF-8')), 0, 75).'...</a></td>
@@ -385,8 +395,8 @@ class AdminCustomers extends AdminTab
 			echo '<div>'.$hook.'</div>';
 		echo '<div class="clear">&nbsp;</div>';
 
-		echo '<h2>'.$this->l('Groups').' ('.sizeof($groups).')</h2>';
-		if ($groups AND sizeof($groups))
+		echo '<h2>'.$this->l('Groups').' ('.count($groups).')</h2>';
+		if ($groups && count($groups))
 		{
 			echo '
 			<table cellspacing="0" cellpadding="0" class="table">
@@ -396,7 +406,7 @@ class AdminCustomers extends AdminTab
 					<th class="center">'.$this->l('Actions').'</th>
 				</tr>';
 			$tokenGroups = Tools::getAdminToken('AdminGroups'.(int)(Tab::getIdFromClassName('AdminGroups')).(int)($cookie->id_employee));
-			foreach ($groups AS $group)
+			foreach ($groups as $group)
 			{
 				$objGroup = new Group($group);
 				echo '
@@ -410,7 +420,7 @@ class AdminCustomers extends AdminTab
 			</table>';
 		}
 		echo '<div class="clear">&nbsp;</div>';
-		echo '<h2>'.$this->l('Orders').' ('.sizeof($orders).')</h2>';
+		echo '<h2>'.$this->l('Orders').' ('.count($orders).')</h2>';
 		if ($orders && count($orders))
 		{
 			$totalOK = 0;
@@ -436,12 +446,12 @@ class AdminCustomers extends AdminTab
 					<th class="center">'.$this->l('State').'</th>
 					<th class="center">'.$this->l('Actions').'</th>
 				</tr>';
-				$orderFoot = '</table>';
-				if ($countOK = sizeof($ordersOK))
-				{
-					echo '<div style="float:left;margin-right:20px"><h3 style="color:green;font-weight:700">'.$this->l('Valid orders:').' '.$countOK.' '.$this->l('for').' '.Tools::displayPrice($totalOK, new Currency($defaultCurrency)).'</h3>'.$orderHead;
-					foreach ($ordersOK AS $order)
-						echo '<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'\'">
+			$orderFoot = '</table>';
+			if ($countOK = count($ordersOK))
+			{
+				echo '<div style="float:left;margin-right:20px"><h3 style="color:green;font-weight:700">'.$this->l('Valid orders:').' '.$countOK.' '.$this->l('for').' '.Tools::displayPrice($totalOK, new Currency($defaultCurrency)).'</h3>'.$orderHead;
+				foreach ($ordersOK as $order)
+					echo '<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'\'">
 						<td class="center">'.$order['id_order'].'</td>
 							<td>'.Tools::displayDate($order['date_add'], (int)($cookie->id_lang)).'</td>
 							<td align="right">'.$order['nb_products'].'</td>
@@ -450,13 +460,13 @@ class AdminCustomers extends AdminTab
 							<td>'.$order['order_state'].'</td>
 							<td align="center"><a href="?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'"><img src="../img/admin/details.gif" /></a></td>
 						</tr>';
-					echo $orderFoot.'</div>';
-				}
-				if ($countKO = sizeof($ordersKO))
-				{
-					echo '<div style="float:left;margin-right:20px"><h3 style="color:red;font-weight:700">'.$this->l('Invalid orders:').' '.$countKO.'</h3>'.$orderHead;
-					foreach ($ordersKO as $order)
-						echo '
+				echo $orderFoot.'</div>';
+			}
+			if ($countKO = count($ordersKO))
+			{
+				echo '<div style="float:left;margin-right:20px"><h3 style="color:red;font-weight:700">'.$this->l('Invalid orders:').' '.$countKO.'</h3>'.$orderHead;
+				foreach ($ordersKO as $order)
+					echo '
 						<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'\'">
 							<td class="center">'.$order['id_order'].'</td>
 							<td>'.Tools::displayDate($order['date_add'], (int)($cookie->id_lang)).'</td>
@@ -466,16 +476,16 @@ class AdminCustomers extends AdminTab
 							<td>'.$order['order_state'].'</td>
 							<td align="center"><a href="?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'"><img src="../img/admin/details.gif" /></a></td>
 						</tr>';
-					echo $orderFoot.'</div><div class="clear">&nbsp;</div>';
-				}
+				echo $orderFoot.'</div><div class="clear">&nbsp;</div>';
+			}
 		}
 		else
 			echo $customer->firstname.' '.$customer->lastname.' '.$this->l('has not placed any orders yet');
 
-		if ($products AND sizeof($products))
+		if ($products && count($products))
 		{
 			echo '<div class="clear">&nbsp;</div>
-			<h2>'.$this->l('Products').' ('.sizeof($products).')</h2>
+			<h2>'.$this->l('Products').' ('.count($products).')</h2>
 			<table cellspacing="0" cellpadding="0" class="table">
 				<tr>
 					<th class="center">'.$this->l('Date').'</th>
@@ -484,7 +494,7 @@ class AdminCustomers extends AdminTab
 					<th class="center">'.$this->l('Actions').'</th>
 				</tr>';
 			$tokenOrders = Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee));
-			foreach ($products AS $product)
+			foreach ($products as $product)
 				echo '
 				<tr '.($irow++ % 2 ? 'class="alt_row"' : '').' style="cursor: pointer" onclick="document.location = \'?tab=AdminOrders&id_order='.$product['id_order'].'&vieworder&token='.$tokenOrders.'\'">
 					<td>'.Tools::displayDate($product['date_add'], (int)($cookie->id_lang), true).'</td>
@@ -496,8 +506,8 @@ class AdminCustomers extends AdminTab
 			</table>';
 		}
 		echo '<div class="clear">&nbsp;</div>
-		<h2>'.$this->l('Addresses').' ('.sizeof($addresses).')</h2>';
-		if (sizeof($addresses))
+		<h2>'.$this->l('Addresses').' ('.count($addresses).')</h2>';
+		if (count($addresses))
 		{
 			echo '
 			<table cellspacing="0" cellpadding="0" class="table">
@@ -510,7 +520,7 @@ class AdminCustomers extends AdminTab
 					<th>'.$this->l('Actions').'</th>
 				</tr>';
 			$tokenAddresses = Tools::getAdminToken('AdminAddresses'.(int)(Tab::getIdFromClassName('AdminAddresses')).(int)($cookie->id_employee));
-			foreach ($addresses AS $address)
+			foreach ($addresses as $address)
 				echo '
 				<tr '.($irow++ % 2 ? 'class="alt_row"' : '').'>
 					<td>'.($address['company'] ? $address['company'] : '--').'</td>
@@ -529,8 +539,8 @@ class AdminCustomers extends AdminTab
 		else
 			echo $customer->firstname.' '.$customer->lastname.' '.$this->l('has not registered any addresses yet').'.';
 		echo '<div class="clear">&nbsp;</div>
-		<h2>'.$this->l('Discounts').' ('.sizeof($discounts).')</h2>';
-		if (sizeof($discounts))
+		<h2>'.$this->l('Discounts').' ('.count($discounts).')</h2>';
+		if (count($discounts))
 		{
 			echo '
 			<table cellspacing="0" cellpadding="0" class="table">
@@ -544,7 +554,7 @@ class AdminCustomers extends AdminTab
 					<th>'.$this->l('Actions').'</th>
 				</tr>';
 			$tokenDiscounts = Tools::getAdminToken('AdminDiscounts'.(int)(Tab::getIdFromClassName('AdminDiscounts')).(int)($cookie->id_employee));
-			foreach ($discounts AS $discount)
+			foreach ($discounts as $discount)
 			{
 				echo '
 				<tr '.($irow++ % 2 ? 'class="alt_row"' : '').'>
@@ -569,8 +579,8 @@ class AdminCustomers extends AdminTab
 		echo '<div class="clear">&nbsp;</div>';
 
 		echo '<div style="float:left">
-		<h2>'.$this->l('Carts').' ('.sizeof($carts).')</h2>';
-		if ($carts AND sizeof($carts))
+		<h2>'.$this->l('Carts').' ('.count($carts).')</h2>';
+		if ($carts && count($carts))
 		{
 			echo '
 			<table cellspacing="0" cellpadding="0" class="table">
@@ -582,7 +592,7 @@ class AdminCustomers extends AdminTab
 					<th class="center">'.$this->l('Actions').'</th>
 				</tr>';
 			$tokenCarts = Tools::getAdminToken('AdminCarts'.(int)(Tab::getIdFromClassName('AdminCarts')).(int)($cookie->id_employee));
-			foreach ($carts AS $cart)
+			foreach ($carts as $cart)
 			{
 				$cartI = new Cart((int)($cart['id_cart']));
 				$summary = $cartI->getSummaryDetails();
@@ -628,7 +638,7 @@ class AdminCustomers extends AdminTab
 
 		/* Last connections */
 		$connections = $customer->getLastConnections();
-	if (sizeof($connections))
+		if (count($connections))
 		{
 			echo '<h2>'.$this->l('Last connections').'</h2>
 			<table cellspacing="0" cellpadding="0" class="table">
@@ -649,7 +659,7 @@ class AdminCustomers extends AdminTab
 					</tr>';
 			echo '</table><div class="clear">&nbsp;</div>';
 		}
-		if (sizeof($referrers))
+		if (count($referrers))
 		{
 			echo '<h2>'.$this->l('Referrers').'</h2>
 			<table cellspacing="0" cellpadding="0" class="table">
@@ -702,60 +712,60 @@ class AdminCustomers extends AdminTab
 					<input type="text" size="33" name="firstname" value="'.htmlentities($this->getFieldValue($obj, 'firstname'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 					<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' 0-9!<>,;?=+()@#"�{}_$%:<span class="hint-pointer">&nbsp;</span></span>
 				</div>';
-				// if the customer is guest, he hasn't any password
-				if ($obj->id && !$obj->is_guest || Tools::isSubmit('add').$this->table)
-				{
-					echo '<label>'.$this->l('Password:').' </label>
+		// if the customer is guest, he hasn't any password
+		if ($obj->id && !$obj->is_guest || Tools::isSubmit('add').$this->table)
+		{
+			echo '<label>'.$this->l('Password:').' </label>
 					<div class="margin-form">
 						<input type="password" size="33" name="passwd" value="" /> '.(!$obj->id ? '<sup>*</sup>' : '').'
 						<p>'.($obj->id ? $this->l('Leave blank if there is no change') : $this->l('min 5 characters, only letters and numbers').' -_').'</p>
 					</div>';
-				}
-				echo '
+		}
+		echo '
 				<label>'.$this->l('E-mail address:').' </label>
 				<div class="margin-form">
 					<input type="text" size="33" name="email" value="'.htmlentities($this->getFieldValue($obj, 'email'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 				</div>
 				<label>'.$this->l('Birthday:').' </label>';
-				$sl_year = ($this->getFieldValue($obj, 'birthday')) ? $birthday[0] : 0;
-				$years = Tools::dateYears();
-				$sl_month = ($this->getFieldValue($obj, 'birthday')) ? $birthday[1] : 0;
-				$months = Tools::dateMonths();
-				$sl_day = ($this->getFieldValue($obj, 'birthday')) ? $birthday[2] : 0;
-				$days = Tools::dateDays();
-				$tab_months = array(
-					$this->l('January'),
-					$this->l('February'),
-					$this->l('March'),
-					$this->l('April'),
-					$this->l('May'),
-					$this->l('June'),
-					$this->l('July'),
-					$this->l('August'),
-					$this->l('September'),
-					$this->l('October'),
-					$this->l('November'),
-					$this->l('December'));
-				echo '
+		$sl_year = ($this->getFieldValue($obj, 'birthday')) ? $birthday[0] : 0;
+		$years = Tools::dateYears();
+		$sl_month = ($this->getFieldValue($obj, 'birthday')) ? $birthday[1] : 0;
+		$months = Tools::dateMonths();
+		$sl_day = ($this->getFieldValue($obj, 'birthday')) ? $birthday[2] : 0;
+		$days = Tools::dateDays();
+		$tab_months = array(
+			$this->l('January'),
+			$this->l('February'),
+			$this->l('March'),
+			$this->l('April'),
+			$this->l('May'),
+			$this->l('June'),
+			$this->l('July'),
+			$this->l('August'),
+			$this->l('September'),
+			$this->l('October'),
+			$this->l('November'),
+			$this->l('December'));
+		echo '
 					<div class="margin-form">
 					<select name="days">
 						<option value="">-</option>';
-						foreach ($days as $v)
-							echo '<option value="'.$v.'" '.($sl_day == $v ? 'selected="selected"' : '').'>'.$v.'</option>';
-					echo '
+		foreach ($days as $v)
+			echo '<option value="'.$v.'" '.($sl_day == $v ? 'selected="selected"' : '').'>'.$v.'</option>';
+		echo '
 					</select>
 					<select name="months">
 						<option value="">-</option>';
-						foreach ($months as $k => $v)
-							echo '<option value="'.$k.'" '.($sl_month == $k ? 'selected="selected"' : '').'>'.$this->l($v).'</option>';
-					echo '</select>
+		foreach ($months as $k => $v)
+			echo '<option value="'.$k.'" '.($sl_month == $k ? 'selected="selected"' : '').'>'.$this->l($v).'</option>';
+		echo '</select>
 					<select name="years">
 						<option value="">-</option>';
-						foreach ($years as $v)
-							echo '<option value="'.$v.'" '.($sl_year == $v ? 'selected="selected"' : '').'>'.$v.'</option>';
-					echo '</select>
+		foreach ($years as $v)
+			echo '<option value="'.$v.'" '.($sl_year == $v ? 'selected="selected"' : '').'>'.$v.'</option>';
+		echo '</select>
 				</div>';
-				echo '<label>'.$this->l('Status:').' </label>
+		echo '<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">
 					<input type="radio" name="active" id="active_on" value="1" '.($this->getFieldValue($obj, 'active') ? 'checked="checked" ' : '').'/>
 					<label class="t" for="active_on"><img src="../img/admin/enabled.gif" alt="'.$this->l('Enabled').'" title="'.$this->l('Enabled').'" /></label>
@@ -782,40 +792,40 @@ class AdminCustomers extends AdminTab
 				<label>'.$this->l('Default group:').' </label>
 				<div class="margin-form">
 					<select name="id_default_group" onchange="checkDefaultGroup(this.value);">';
-				foreach ($groups as $group)
-					echo '<option value="'.(int)($group['id_group']).'"'.($group['id_group'] == $obj->id_default_group ? ' selected="selected"' : '').'>'.htmlentities($group['name'], ENT_NOQUOTES, 'utf-8').'</option>';
-				echo '
+		foreach ($groups as $group)
+			echo '<option value="'.(int)($group['id_group']).'"'.($group['id_group'] == $obj->id_default_group ? ' selected="selected"' : '').'>'.htmlentities($group['name'], ENT_NOQUOTES, 'utf-8').'</option>';
+		echo '
 					</select>
 					<p>'.$this->l('Apply non-cumulative rules (e.g., price, display method, reduction)').'</p>
 				</div>
 				<label>'.$this->l('Groups:').' </label>
 				<div class="margin-form">';
-					if (sizeof($groups))
-					{
-						echo '
+		if (count($groups))
+		{
+			echo '
 					<table cellspacing="0" cellpadding="0" class="table" style="width: 29.5em;">
 						<tr>
 							<th><input type="checkbox" name="checkme" class="noborder" onclick="checkDelBoxes(this.form, \'groupBox[]\', this.checked)" /></th>
 							<th>'.$this->l('ID').'</th>
 							<th>'.$this->l('Group name').'</th>
 						</tr>';
-						$irow = 0;
-						foreach ($groups as $group)
-						{
-							echo '
+			$irow = 0;
+			foreach ($groups as $group)
+			{
+				echo '
 							<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
 								<td>'.'<input type="checkbox" name="groupBox[]" class="groupBox" id="groupBox_'.$group['id_group'].'" value="'.$group['id_group'].'" '.(in_array($group['id_group'], $customer_groups) ? 'checked="checked" ' : '').'/></td>
 								<td>'.$group['id_group'].'</td>
 								<td><label for="groupBox_'.$group['id_group'].'" class="t">'.$group['name'].'</label></td>
 							</tr>';
-						}
-						echo '
+			}
+			echo '
 					</table>
 					<p style="padding:0px; margin:10px 0px 10px 0px;">'.$this->l('Check all the box(es) of groups to which the customer is member').'<sup> *</sup></p>
 					';
-					} else
-						echo '<p>'.$this->l('No group created').'</p>';
-				echo '
+		} else
+			echo '<p>'.$this->l('No group created').'</p>';
+		echo '
 				</div>
 				<div class="margin-form">
 					<input type="submit" value="'.$this->l('   Save   ').'" name="submitAdd'.$this->table.'" class="button" />
