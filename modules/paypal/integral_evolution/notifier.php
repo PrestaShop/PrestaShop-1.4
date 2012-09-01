@@ -94,8 +94,8 @@ class PayPalNotifier extends PayPal
 				$message = $this->l('Payment accepted.').'<br />';
 			}
 
-			$customer = new Customer($cart->id_customer);
-			$id_order = (int)Order::getOrderByCartId($id_cart);
+			$customer = new Customer((int)$cart->id_customer);
+			$id_order = (int)Order::getOrderByCartId((int)$cart->id);
 			$transaction = array(
 				'currency' => pSQL(Tools::getValue(CURRENCY)),
 				'id_invoice' => pSQL(Tools::getValue(ID_INVOICE)),
