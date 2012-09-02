@@ -148,7 +148,7 @@ $(function(){ldelim}
 						<input type="radio" name="id_gender" id="id_gender1" value="1" {if isset($smarty.post.id_gender) && $smarty.post.id_gender == '1'}checked="checked"{/if}>
 						<label for="id_gender1" class="top">{l s='Mr.'}</label>
 						<input type="radio" name="id_gender" id="id_gender2" value="2" {if isset($smarty.post.id_gender) && $smarty.post.id_gender == '2'}checked="checked"{/if}>
-						<label for="id_gender2" class="top">{l s='Ms.'}</label>
+						<label for="id_gender2" class="top">{l s='Mrs.'}</label>
 					</p>
 					<p class="required text">
 						<label for="firstname">{l s='First name'}</label>
