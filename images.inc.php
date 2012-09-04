@@ -132,12 +132,11 @@ function checkImageUploadError($file)
 function isPicture($file, $types = null)
 {
 	// Filter on file extension
-	$authorized_extensions = array('gif', 'jpg', 'jpeg', 'jpe', 'png');
-	$name_explode = explode('.', $file['name']);
+	$name = isset($file['name']) ? $file['name'] : $file['tmp_name'];
+	$name_explode = explode('.', $name);
 	if (count($name_explode) >= 2)
 	{
-		$current_extension = strtolower($name_explode[count($name_explode)-1]);
-		if (!in_array($current_extension, $authorized_extensions))
+		if (!in_array(strtolower($name_explode[count($name_explode) - 1]), array('gif', 'jpg', 'jpeg', 'jpe', 'png')))
 			return false;
 	}
 	else
@@ -166,7 +165,7 @@ function isPicture($file, $types = null)
 		if (!$mimeType)
 			$mimeType = trim(exec('file -bi '.escapeshellarg($file['tmp_name'])));
 	}
-	if (empty($mimeType) OR $mimeType == 'regular file' OR $mimeType == 'text/plain')
+	if (empty($mimeType) || $mimeType == 'regular file' || $mimeType == 'text/plain')
 		$mimeType = $file['type'];
 
 	/* For each allowed MIME type, we are looking for it inside the current MIME type */

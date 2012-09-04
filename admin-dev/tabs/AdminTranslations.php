@@ -25,9 +25,6 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-include_once(PS_ADMIN_DIR.'/../classes/AdminTab.php');
-include_once(PS_ADMIN_DIR.'/../tools/tar/Archive_Tar.php');
-include_once(PS_ADMIN_DIR.'/../tools/pear/PEAR.php');
 define ('TEXTAREA_SIZED', 70);
 
 class AdminTranslations extends AdminTab
@@ -198,11 +195,13 @@ class AdminTranslations extends AdminTab
 
 		$lang = strtolower(Tools::getValue('iso_code'));
 		$theme = strval(Tools::getValue('theme'));
-		if ($lang AND $theme)
+		if ($lang && $theme)
 		{
+			include_once(PS_ADMIN_DIR.'/../tools/pear/PEAR.php');
+			include_once(PS_ADMIN_DIR.'/../tools/tar/Archive_Tar.php');
 			$items = array_flip(Language::getFilesList($lang, $theme, false, false, false, false, true));
 			$gz = new Archive_Tar(_PS_TRANSLATIONS_DIR_.'/export/'.$lang.'.gzip', true);
-			if ($gz->createModify($items, NULL, _PS_ROOT_DIR_));
+			if ($gz->createModify($items, null, _PS_ROOT_DIR_));
 				Tools::redirect('translations/export/'.$lang.'.gzip');
 			$this->_errors[] = Tools::displayError('An error occurred while creating archive.');
 		}
@@ -284,6 +283,8 @@ class AdminTranslations extends AdminTab
 			$this->_errors[] = Tools::displayError('No file selected');
 		else
 		{
+			include_once(PS_ADMIN_DIR.'/../tools/pear/PEAR.php');
+			include_once(PS_ADMIN_DIR.'/../tools/tar/Archive_Tar.php');
 			$gz = new Archive_Tar($_FILES['file']['tmp_name'], true);
 			$iso_code = str_replace('.gzip', '', $_FILES['file']['name']);
 			$files_list = $gz->listContent();
@@ -316,6 +317,8 @@ class AdminTranslations extends AdminTab
 				$file = _PS_TRANSLATIONS_DIR_.$arr_import_lang[0].'.gzip';
 				if (file_put_contents($file, $content))
 				{
+					include_once(PS_ADMIN_DIR.'/../tools/pear/PEAR.php');
+					include_once(PS_ADMIN_DIR.'/../tools/tar/Archive_Tar.php');
 					$gz = new Archive_Tar($file, true);
 					$files_list = $gz->listContent();
 					if ($gz->extract(_PS_TRANSLATIONS_DIR_.'../', false))
@@ -645,31 +648,34 @@ class AdminTranslations extends AdminTab
 		
 		$arr_mail_content = array();
 		$arr_mail_path = array();
-		if (Tools::getValue('core_mail')) {
+		if (Tools::getValue('core_mail'))
+		{
 			$arr_mail_content['core_mail'] = Tools::getValue('core_mail');
 			$arr_mail_path['core_mail'] = _PS_MAIL_DIR_.$obj_lang->iso_code.'/';
 		}
-		if (Tools::getValue('module_mail')) {
+		if (Tools::getValue('module_mail'))
+		{
 			$arr_mail_content['module_mail'] = Tools::getValue('module_mail');
 			$arr_mail_path['module_mail'] = _PS_MODULE_DIR_.'{module}'.'/mails/'.$obj_lang->iso_code.'/';
 		}
-		if (Tools::getValue('theme_mail')) {
+		if (Tools::getValue('theme_mail'))
+		{
 			$arr_mail_content['theme_mail'] = Tools::getValue('theme_mail');
 			$arr_mail_path['theme_mail'] = _PS_THEME_DIR_.'mails/'.$obj_lang->iso_code.'/';
 		}
-		if (Tools::getValue('theme_module_mail')) {
+		if (Tools::getValue('theme_module_mail'))
+		{
 			$arr_mail_content['theme_module_mail'] = Tools::getValue('theme_module_mail');
 			$arr_mail_path['theme_module_mail'] = _PS_THEME_DIR_.'modules/{module}'.'/mails/'.$obj_lang->iso_code.'/';
 		}
 		
 		// Save each mail content
-		foreach ($arr_mail_content as $group_name=>$all_content)
-		{
-			foreach ($all_content as $type_content=>$mails)
+		foreach ($arr_mail_content as $group_name => $all_content)
+			foreach ($all_content as $type_content => $mails)
 			{
 				if (!in_array($type_content, array('txt', 'html')))
 					die(Tools::displayError());
-				foreach ($mails as $mail_name=>$content)
+				foreach ($mails as $mail_name => $content)
 				{
 					$module_name = false;
 					$module_name_pipe_pos = stripos($mail_name, '|');
@@ -682,7 +688,7 @@ class AdminTranslations extends AdminTab
 						if (!Validate::isTplName($mail_name))
 							die(Tools::displayError());
 					}
-					
+
 					if ($type_content == 'html')
 					{
 						$content = Tools::htmlentitiesUTF8($content);
@@ -692,9 +698,8 @@ class AdminTranslations extends AdminTab
 						
 						$title = '';
 						if (Tools::getValue('title_'.$group_name.'_'.$mail_name))
-						{
 							$title = Tools::getValue('title_'.$group_name.'_'.$mail_name);
-						}
+
 						$string_mail = $this->getMailPattern();
 						$content = str_replace(array('#title', '#content'), array($title, $content), $string_mail);
 
@@ -702,6 +707,7 @@ class AdminTranslations extends AdminTab
 						if (_PS_MAGIC_QUOTES_GPC_)
 							$content = stripslashes($content);
 					}
+
 					if (Validate::isCleanHTML($content))
 					{
 						$path = $arr_mail_path[$group_name];
@@ -711,13 +717,10 @@ class AdminTranslations extends AdminTab
 						chmod($path.$mail_name.'.'.$type_content, 0777);
 					}
 					else
-					{
 						$this->_errors[] = Tools::displayError('HTML e-mail templates cannot contain JavaScript code.');
-					}
 				}
 			}
-		}
-		
+
 		// Update subjects
 		$array_subjects = array();
 		if ($subjects = Tools::getValue('subject') AND is_array($subjects))
@@ -1548,7 +1551,7 @@ class AdminTranslations extends AdminTab
 		}
 		
 		// Before 1.4.0.14 each theme folder was parsed,
-		// This page was really to low to load.
+		// This page was really to slow to load.
 		// Now just use the current theme.
 		if (_THEME_NAME_ !== AdminTranslations::DEFAULT_THEME_NAME)
 		{
@@ -1559,9 +1562,9 @@ class AdminTranslations extends AdminTab
 			}
 			if (file_exists(_PS_THEME_DIR_.'/modules'))
 			{
-				foreach (scandir(_PS_THEME_DIR_.'/modules') AS $module_dir)
+				foreach (scandir(_PS_THEME_DIR_.'/modules') as $module_dir)
 				{
-					if ($module_dir[0] != '.' AND file_exists(_PS_THEME_DIR_.'modules/'.$module_dir.'/mails'))
+					if ($module_dir[0] != '.' && file_exists(_PS_THEME_DIR_.'modules/'.$module_dir.'/mails'))
 					{
 						$theme_mails[$module_dir] = $this->getMailFiles(_PS_THEME_DIR_.'modules/'.$module_dir.'/mails/', $lang, 'theme_module_mail');
 						$theme_mails[$module_dir]['subject'] = $theme_mails['theme_mail']['subject'];

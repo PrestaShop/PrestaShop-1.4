@@ -1043,7 +1043,7 @@ class AdminProducts extends AdminTab
 					throw new Exception(Tools::displayError('An error occurred while resizing image.'));
 				}
 
-				foreach ($imagesTypes AS $k => $imageType)
+				foreach ($imagesTypes as $k => $imageType)
 					if (!imageResize($image->getPathForCreation().'.jpg', $image->getPathForCreation().'-'.stripslashes($imageType['name']).'.jpg', $imageType['width'], $imageType['height']))
 					{
 						$image->delete();
@@ -1057,10 +1057,12 @@ class AdminProducts extends AdminTab
 		{
 			if ($error = $e->getMessage());
 				$this->_errors[] = $error;
+			@unlink($zipfile);
 			Tools::deleteDirectory($subdir);
 			return false;
 		}
 
+		@unlink($zipfile);
 		Tools::deleteDirectory($subdir);
 		return true;
 	}

@@ -159,7 +159,7 @@ class VatNumber extends Module
 				echo ($check ? $this->displayConfirmation($this->l('VAT number verification with the WebService is now enabled.')) : $this->displayConfirmation($this->l('VAT number verification with the WebService is now disabled.')));
 		}
 		echo '
-		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->displayName.'</legend>
+		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" alt="" /> '.$this->displayName.'</legend>
 			<form action="'.htmlentities($_SERVER['REQUEST_URI']).'" method="post">
 				<label>'.$this->l('Your country').'</label>
 				<div class="margin-form">
@@ -183,4 +183,3 @@ class VatNumber extends Module
 		</fieldset>';
 	}
 }
-
