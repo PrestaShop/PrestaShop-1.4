@@ -158,7 +158,7 @@ ALTER TABLE PREFIX_attribute_lang DROP INDEX `id_lang_2`;
 ALTER TABLE PREFIX_attribute_lang DROP INDEX `id_attribute`;
 ALTER TABLE PREFIX_attribute_lang DROP INDEX `attribute_lang_index`, ADD PRIMARY KEY (`id_attribute`, `id_lang`);
 ALTER TABLE PREFIX_carrier_zone DROP INDEX `carrier_zone_index`, ADD PRIMARY KEY (`id_carrier`, `id_zone`);
-ALTER TABLE PREFIX_discount_category CHANGE `id_discount` `id_discount` int(11) NOT NULL AFTER `id_category`;
+ALTER TABLE PREFIX_discount_category CHANGE `id_discount` `id_discount` int(10) NOT NULL AFTER `id_category`;
 ALTER TABLE PREFIX_feature_product DROP INDEX `id_feature`;
 ALTER TABLE PREFIX_hook_module DROP INDEX `id_module`;
 ALTER TABLE PREFIX_image_lang DROP INDEX `id_image`;
@@ -264,8 +264,8 @@ CREATE TABLE `PREFIX_referrer` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_referrer_cache` (
-  `id_connections_source` int(11) NOT NULL,
-  `id_referrer` int(11) NOT NULL,
+  `id_connections_source` int(10) NOT NULL,
+  `id_referrer` int(10) NOT NULL,
   PRIMARY KEY  (`id_connections_source`, `id_referrer`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -290,8 +290,8 @@ CREATE TABLE `PREFIX_product_attribute_image` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_search_index` (
-  `id_product` int(11) NOT NULL,
-  `id_word` int(11) NOT NULL,
+  `id_product` int(10) NOT NULL,
+  `id_word` int(10) NOT NULL,
   `weight` tinyint(4) NOT NULL default '1',
   PRIMARY KEY  (`id_word`, `id_product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

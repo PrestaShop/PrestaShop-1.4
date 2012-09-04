@@ -5,9 +5,9 @@
 SET NAMES 'utf8';
 
 CREATE TABLE PREFIX_attribute_impact (
-  id_attribute_impact int(11) NOT NULL AUTO_INCREMENT,
-  id_product int(11) NOT NULL,
-  id_attribute int(11) NOT NULL,
+  id_attribute_impact int(10) NOT NULL AUTO_INCREMENT,
+  id_product int(10) NOT NULL,
+  id_attribute int(10) NOT NULL,
   weight float NOT NULL,
   price decimal(10,2) NOT NULL,
   PRIMARY KEY  (id_attribute_impact),
@@ -30,7 +30,7 @@ CREATE TABLE PREFIX_manufacturer_lang (
 
 CREATE TABLE PREFIX_state (
   id_state int(10) unsigned NOT NULL AUTO_INCREMENT,
-  id_country int(11) NOT NULL,
+  id_country int(10) NOT NULL,
   name varchar(64) NOT NULL,
   iso_code varchar(3) NOT NULL,
   active tinyint(1) NOT NULL default 0,

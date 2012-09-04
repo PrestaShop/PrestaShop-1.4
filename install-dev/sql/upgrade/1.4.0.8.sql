@@ -1,7 +1,7 @@
 SET NAMES 'utf8';
 
 CREATE TEMPORARY TABLE `PREFIX_tab_tmp1` (
-	`id_parent` int(11)
+	`id_parent` int(10)
 );
 INSERT INTO `PREFIX_tab_tmp1` (SELECT * FROM (SELECT `id_parent` FROM `PREFIX_tab` WHERE `class_name` = 'AdminTaxes') AS  tmp);
 

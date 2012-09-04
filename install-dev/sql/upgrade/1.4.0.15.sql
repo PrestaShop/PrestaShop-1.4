@@ -11,9 +11,9 @@ ALTER TABLE `PREFIX_tax_rule` ADD UNIQUE (
 );
 
 CREATE TABLE `PREFIX_county` (
-  `id_county` int(11) NOT NULL AUTO_INCREMENT,
+  `id_county` int(10) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
-  `id_state` int(11) NOT NULL,
+  `id_state` int(10) NOT NULL,
   `active` tinyint(1) NOT NULL,
   PRIMARY KEY (`id_county`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8 ;

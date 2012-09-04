@@ -1,16 +1,16 @@
 SET NAMES 'utf8';
 
 CREATE TABLE IF NOT EXISTS `PREFIX_country_tax` (
-  `id_country_tax` int(11) NOT NULL AUTO_INCREMENT,
-  `id_country` int(11) NOT NULL,
-  `id_tax` int(11) NOT NULL,
+  `id_country_tax` int(10) NOT NULL AUTO_INCREMENT,
+  `id_country` int(10) NOT NULL,
+  `id_tax` int(10) NOT NULL,
   PRIMARY KEY (`id_country_tax`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_product_country_tax` (
-  `id_product` int(11) NOT NULL,
-  `id_country` int(11) NOT NULL,
-  `id_tax` int(11) NOT NULL,
+  `id_product` int(10) NOT NULL,
+  `id_country` int(10) NOT NULL,
+  `id_tax` int(10) NOT NULL,
   UNIQUE KEY `id_product` (`id_product`,`id_country`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 

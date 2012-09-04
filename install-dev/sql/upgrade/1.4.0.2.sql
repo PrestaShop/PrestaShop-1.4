@@ -52,7 +52,7 @@ ALTER TABLE `PREFIX_customer` ADD `note` text AFTER `secure_key`;
 ALTER TABLE `PREFIX_contact` ADD `customer_service` tinyint(1) NOT NULL DEFAULT 0 AFTER `email`;
 
 CREATE TABLE `PREFIX_customer_thread` (
-  `id_customer_thread` int(11) unsigned NOT NULL auto_increment,
+  `id_customer_thread` int(10) unsigned NOT NULL auto_increment,
   `id_lang` int(10) unsigned NOT NULL,
   `id_contact` int(10) unsigned NOT NULL,
   `id_customer` int(10) unsigned default NULL,
@@ -69,7 +69,7 @@ CREATE TABLE `PREFIX_customer_thread` (
 
 CREATE TABLE `PREFIX_customer_message` (
   `id_customer_message` int(10) unsigned NOT NULL auto_increment,
-  `id_customer_thread` int(11) default NULL,
+  `id_customer_thread` int(10) default NULL,
   `id_employee` int(10) unsigned default NULL,
   `message` text NOT NULL,
   `file_name` varchar(18) DEFAULT NULL,
@@ -482,12 +482,12 @@ ALTER TABLE `PREFIX_discount` ADD `cart_display` TINYINT( 4 ) NOT NULL AFTER `ac
 ALTER TABLE `PREFIX_carrier` ADD `shipping_method` INT( 2 ) NOT NULL DEFAULT '0';
 
 CREATE TABLE `PREFIX_stock_mvt` (
-  `id_stock_mvt` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `id_product` int(11) unsigned DEFAULT NULL,
-  `id_product_attribute` int(11) unsigned DEFAULT NULL,
-  `id_order` int(11) unsigned DEFAULT NULL,
-  `id_stock_mvt_reason` int(11) unsigned NOT NULL,
-  `id_employee` int(11) unsigned NOT NULL,
+  `id_stock_mvt` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_product` int(10) unsigned DEFAULT NULL,
+  `id_product_attribute` int(10) unsigned DEFAULT NULL,
+  `id_order` int(10) unsigned DEFAULT NULL,
+  `id_stock_mvt_reason` int(10) unsigned NOT NULL,
+  `id_employee` int(10) unsigned NOT NULL,
   `quantity` int(11) NOT NULL,
   `date_add` datetime NOT NULL,
   `date_upd` datetime NOT NULL,
@@ -499,7 +499,7 @@ CREATE TABLE `PREFIX_stock_mvt` (
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_stock_mvt_reason` (
-  `id_stock_mvt_reason` int(11) NOT NULL AUTO_INCREMENT,
+  `id_stock_mvt_reason` int(10) NOT NULL AUTO_INCREMENT,
   `date_add` datetime NOT NULL,
   `date_upd` datetime NOT NULL,
   PRIMARY KEY (`id_stock_mvt_reason`)
@@ -510,8 +510,8 @@ ALTER TABLE `PREFIX_product` CHANGE `quantity` `quantity` INT( 10 ) NOT NULL DEF
 ALTER TABLE `PREFIX_product_attribute` CHANGE `quantity` `quantity` INT( 10 ) NOT NULL DEFAULT '0';
 
 CREATE TABLE `PREFIX_stock_mvt_reason_lang` (
-  `id_stock_mvt_reason` int(11) NOT NULL,
-  `id_lang` int(11) NOT NULL,
+  `id_stock_mvt_reason` int(10) NOT NULL,
+  `id_lang` int(10) NOT NULL,
   `name` varchar(255) CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`id_stock_mvt_reason`,`id_lang`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
@@ -644,7 +644,7 @@ INSERT INTO `PREFIX_hook` (`name`, `title`, `description`, `position`) VALUES
 DELETE FROM `PREFIX_hook_module` WHERE `id_module` = 0;
 
 CREATE TABLE `PREFIX_required_field` (
-  `id_required_field` int(11) NOT NULL AUTO_INCREMENT,
+  `id_required_field` int(10) NOT NULL AUTO_INCREMENT,
   `object_name` varchar(32) NOT NULL,
   `field_name` varchar(32) NOT NULL,
   PRIMARY KEY (`id_required_field`),
@@ -652,14 +652,14 @@ CREATE TABLE `PREFIX_required_field` (
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_memcached_servers` (
-`id_memcached_server` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`id_memcached_server` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
 `ip` VARCHAR( 254 ) NOT NULL ,
 `port` INT(11) UNSIGNED NOT NULL ,
 `weight` INT(11) UNSIGNED NOT NULL
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_webservice_account` (
-  `id_webservice_account` int(11) NOT NULL AUTO_INCREMENT,
+  `id_webservice_account` int(10) NOT NULL AUTO_INCREMENT,
   `key` varchar(32) NOT NULL,
   `active` tinyint(2) NOT NULL,
   PRIMARY KEY (`id_webservice_account`),
@@ -667,10 +667,10 @@ CREATE TABLE `PREFIX_webservice_account` (
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
 
 CREATE TABLE `PREFIX_webservice_permission` (
-  `id_webservice_permission` int(11) NOT NULL AUTO_INCREMENT,
+  `id_webservice_permission` int(10) NOT NULL AUTO_INCREMENT,
   `resource` varchar(50) NOT NULL,
   `method` enum('GET','POST','PUT','DELETE') NOT NULL,
-  `id_webservice_account` int(11) NOT NULL,
+  `id_webservice_account` int(10) NOT NULL,
   PRIMARY KEY (`id_webservice_permission`),
   UNIQUE KEY `resource_2` (`resource`,`method`,`id_webservice_account`),
   KEY `resource` (`resource`),
