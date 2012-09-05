@@ -56,7 +56,6 @@ class MerchantWareController extends FrontController
 		{
 			//d($e);
 		}
-
 		if (isset($result->CreateTransactionResult) && isset($result->CreateTransactionResult->TransportKey) && $result->CreateTransactionResult->TransportKey != '')
 		{
 			self::$smarty->assign('formLink', $this->_paymentLink[Configuration::get('MERCHANT_WARE_MODE')]);
@@ -64,7 +63,7 @@ class MerchantWareController extends FrontController
 		}
 		elseif (isset($result->CreateTransactionResult))
 		{
-			Logger::addLog('Module merchantware: '.$result->CreateTransactionResult->Messages, 2);
+			Logger::addLog('Module merchantware: '.$result->CreateTransactionResult->Messages[0]->information, 2);
 			self::$smarty->assign('error', true);
 		}
 		else

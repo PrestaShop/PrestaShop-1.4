@@ -42,18 +42,18 @@ class MerchantWare extends PaymentModule
 	{
 		$this->name = 'merchantware';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.0.8';
+		$this->version = '1.0.9';
 		$this->author = 'PrestaShop';
-		$this->className = 'MerchantWare';
+		$this->className = 'Merchantware';
 
 		parent::__construct();
 
-		$this->displayName = $this->l('MerchantWare');
-		$this->description = $this->l('Specialized in providing customized payment processing solutions for businesses nationwide.');
+		$this->displayName = $this->l('Merchant Warehouse');
+		$this->description = $this->l('Eliminate expensive and unnecessary gateway fees by partnering with Merchant Warehouse for your payment processing needs!');
 
 		$this->confirmUninstall =	$this->l('Are you sure you want to delete your details?');
 		if (!extension_loaded('soap'))
-			$this->warning = $this->l('In order to use your module, please activate Soap');
+			$this->warning = $this->l('In order to use your module, please activate Soap (PHP extension)');
 		/* Backward compatibility */
 		require(_PS_MODULE_DIR_.'merchantware/backward_compatibility/backward.php');
 		$this->context->smarty->assign('base_dir', __PS_BASE_URI__);
@@ -146,16 +146,16 @@ class MerchantWare extends PaymentModule
 					'intro' => array(
 						'title' => $this->l('Registration'),
 						'content' => $this->_displayIntroTpl(),
-						'icon' => '',
+						'icon' => '../modules/merchantware/img/registration.png',
 						'tab' => 1,
-						'selected' => (Tools::isSubmit('subscribeMerchantWare') ? true: false),
+						'selected' => (Tools::isSubmit('submitLayoutMerchantWare') || Tools::isSubmit('submitMerchantWare') ? false : true),
 					),
 					'credential' => array(
-						'title' => $this->l('Credential'),
+						'title' => $this->l('Credentials'),
 						'content' => $this->_displayCredentialTpl(),
 						'icon' => '../modules/merchantware/img/credential.png',
 						'tab' => 2,
-						'selected' => (Tools::isSubmit('submitLayoutMerchantWare') || Tools::isSubmit('subscribeMerchantWare') ? false : true),
+						'selected' => (Tools::isSubmit('submitMerchantWare') ? true : false),
 					),
 					'layout' => array(
 						'title' => $this->l('Layout'),
@@ -190,8 +190,8 @@ class MerchantWare extends PaymentModule
 	{
 		$this->context->smarty->assign(array(
 				'formCredential' => './index.php?tab=AdminModules&configure=merchantware&token='.Tools::getAdminTokenLite('AdminModules').'&tab_module='.$this->tab.'&module_name=merchantware&submitMerchantWare',
-				'credentialTitle' => $this->l('Authentification'),
-				'credentialText' => $this->l('In order to use the module, please fill out the form'),
+				'credentialTitle' => $this->l('Log in'),
+				'credentialText' => $this->l('In order to use this module, please fill out the form with the logins provided to you by Merchant Warehouse.'),
 				'credentialInputVar' => array(
 					'merchantName' => array(
 						'name' => 'merchantName',
@@ -275,13 +275,13 @@ class MerchantWare extends PaymentModule
 		$merchantKey = Tools::getValue('merchantKey');
 
 		if ($merchantName == '' || $merchantSiteId == '' || $merchantKey == '')
-			$this->_postErrors[] = $this->l('Please full fill the entire form.');
+			$this->_postErrors[] = $this->l('Please fill out the entire form.');
 		if (Tools::strlen($merchantName) > 160)
-			$this->_postErrors[] = $this->l('Your Merchant Name has to be less than 160 caracters.');
+			$this->_postErrors[] = $this->l('Your Merchant Name has to be less than 160 characters.');
 		if (Tools::strlen($merchantSiteId) > 160 || Tools::strlen($merchantSiteId) < 8)
-			$this->_postErrors[] = $this->l('Your Merchant Site Id has to be less than 160 caracters and more than 8 caracters.');
+			$this->_postErrors[] = $this->l('Your Merchant Site ID has to be less than 160 characters and more than 8 characters.');
 		if (Tools::strlen($merchantKey) > 160)
-			$this->_postErrors[] = $this->l('Your Merchant Key has to be less than 160 caracters.');
+			$this->_postErrors[] = $this->l('Your Merchant Key has to be less than 160 characters.');
 	}
 
 	private function _postValidationLayout()
@@ -363,7 +363,7 @@ class MerchantWare extends PaymentModule
 
 	private function _displayWarning()
 	{
-		$this->context->smarty->assign('warnings', array($this->l('Please, activate Soap.')));
+		$this->context->smarty->assign('warnings', array($this->l('Please, activate Soap (PHP extension).')));
 		return $this->display(__FILE__, 'tpl/warning.tpl');
 	}
 
@@ -433,7 +433,7 @@ class MerchantWare extends PaymentModule
 				$this->context->smarty->assign('message', $this->l('Action succeded.'));
 			}
 			else
-				$this->context->smarty->assign('error', (isset($result->RefundResult->ApprovalStatus) ? Tools::safeOutput($result->RefundResult->ApprovalStatus) : $this->l('ERROR, please contact MerchantWare for Support assistance.')));
+				$this->context->smarty->assign('error', (isset($result->RefundResult->ApprovalStatus) ? Tools::safeOutput($result->RefundResult->ApprovalStatus) : $this->l('ERROR, please contact Merchant Warehouse for Support assistance.')));
 		}
 
 		return $this->display(__FILE__, 'tpl/adminOrder.tpl');

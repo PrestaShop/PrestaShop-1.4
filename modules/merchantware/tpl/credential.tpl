@@ -26,6 +26,7 @@
 
 <form action="{$formCredential|escape:'htmlall':'UTF-8'}" method="POST">
 <fieldset>
+<img src="../modules/merchantware/img/partner.png">
   <h4>{$credentialTitle|escape:'htmlall':'UTF-8'}</h4>
   <p>{$credentialText|escape:'htmlall':'UTF-8'}</p>
   {foreach from=$credentialInputVar item=input}

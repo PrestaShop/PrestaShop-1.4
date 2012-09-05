@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
 	<name>merchantware</name>
-	<displayName><![CDATA[MerchantWare]]></displayName>
+	<displayName><![CDATA[Merchant Warehouse]]></displayName>
 	<version><![CDATA[1.0.8]]></version>
-	<description><![CDATA[Specialized in providing customized payment processing solutions for businesses nationwide.]]></description>
+	<description><![CDATA[Eliminate expensive and unnecessary gateway fees by partnering with Merchant Warehouse for your payment processing needs!]]></description>
 	<author><![CDATA[PrestaShop]]></author>
 	<tab><![CDATA[payments_gateways]]></tab>
 	<confirmUninstall>Are you sure you want to delete your details?</confirmUninstall>
