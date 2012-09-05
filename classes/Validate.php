@@ -471,7 +471,7 @@ class ValidateCore
 		$events .= '|onoffline|ononline|onpaste|onpropertychange|onreadystatechange|onresizeend|onresizestart|onrowenter|onrowexit|onrowsdelete|onrowsinserted|onscroll|onsearch|onselectionchange';
 		$events .= '|onselectstart|onstart|onstop';
 		
-		return (!preg_match('/<[ \t\n]*script/ims', $html) && !preg_match('/<?.*('.$events.')[ \t\n]*=/ims', $html) && !preg_match('/.*script\:/ims', $html) && !preg_match('/<[ \t\n]*i?frame/ims', $html));
+		return (!preg_match('/<[ \t\n]*script/ims', $html) && !preg_match('/('.$events.')[ \t\n]*=/ims', $html) && !preg_match('/.*script\:/ims', $html) && !preg_match('/<[ \t\n]*i?frame/ims', $html));
 	}
 
 	/**
