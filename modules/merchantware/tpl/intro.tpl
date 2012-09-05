@@ -80,7 +80,7 @@
     <div class="margin-form">
       <select id="state" name="state_id">
 	{foreach from=$states item=state}
-	<option value='{$state.id_state}'>{$state.name|escape:'htmlall':'UTF-8'}</option>
+	<option value='{$state.id_state|intval}'>{$state.name|escape:'htmlall':'UTF-8'}</option>
 	{/foreach}
       </select>
     </div>

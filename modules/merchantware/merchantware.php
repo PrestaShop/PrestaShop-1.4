@@ -42,7 +42,7 @@ class MerchantWare extends PaymentModule
 	{
 		$this->name = 'merchantware';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.0.9';
+		$this->version = '1.1.0';
 		$this->author = 'PrestaShop';
 		$this->className = 'Merchantware';
 
