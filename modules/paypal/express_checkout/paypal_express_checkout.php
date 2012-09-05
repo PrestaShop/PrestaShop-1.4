@@ -272,7 +272,6 @@ class PaypalExpressCheckout extends Paypal
 
 	private function setProductsList(&$fields, &$index, &$total)
 	{
-//		d($this->context->cart->getSummaryDetails());
 		foreach ($this->product_list as $product)
 		{
 			$fields['L_PAYMENTREQUEST_0_NUMBER'.++$index] = (int)$product['id_product'];
