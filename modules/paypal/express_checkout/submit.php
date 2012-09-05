@@ -244,7 +244,6 @@ else
 			{
 				$id_order = (int)$ppec->currentOrder;
 				$order = new Order($id_order);
-				$order->total_paid = $ppec->getTotalPaid();
 			}
 
 			unset(Context::getContext()->cookie->{PaypalExpressCheckout::$COOKIE_NAME});
@@ -252,8 +251,6 @@ else
 			// Update for the Paypal shipping cost
 			if ($order)
 			{
-				$order->update();
-
 				$values = array('key' => $customer->secure_key, 'id_module' => (int)$ppec->id,
                 'id_cart'   => (int)$cart->id, 'id_order'  => (int)$ppec->currentOrder);
 

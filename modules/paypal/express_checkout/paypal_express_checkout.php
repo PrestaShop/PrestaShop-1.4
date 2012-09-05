@@ -270,25 +270,24 @@ class PaypalExpressCheckout extends Paypal
 		$fields['PAYMENTREQUEST_0_SHIPTOZIP'] = $address->postcode;
 	}
 
-	private function setProductsList(&$fields, &$index, &$total, &$taxes)
+	private function setProductsList(&$fields, &$index, &$total)
 	{
+//		d($this->context->cart->getSummaryDetails());
 		foreach ($this->product_list as $product)
 		{
-			$fields['L_PAYMENTREQUEST_0_NUMBER'.++$index] = $product['id_product'];
+			$fields['L_PAYMENTREQUEST_0_NUMBER'.++$index] = (int)$product['id_product'];
 
 			$fields['L_PAYMENTREQUEST_0_NAME'.$index] = $product['name'];
 			$fields['L_PAYMENTREQUEST_0_DESC'.$index] = substr(strip_tags($product['description_short']), 0, 120).'...';
 
-			$fields['L_PAYMENTREQUEST_0_AMT'.$index] = Tools::ps_round($product['price'], $this->decimals);
-			$fields['L_PAYMENTREQUEST_0_TAXAMT'.$index] = Tools::ps_round($product['price_wt'] - $product['price'], $this->decimals);
-			$fields['L_PAYMENTREQUEST_0_QTY'.$index] = Tools::ps_round($product['quantity'], $this->decimals);
+			$fields['L_PAYMENTREQUEST_0_AMT'.$index] = Tools::ps_round($product['price_wt'], $this->decimals);
+			$fields['L_PAYMENTREQUEST_0_QTY'.$index] = $product['quantity'];
 
-			$taxes = Tools::ps_round($taxes + ($fields['L_PAYMENTREQUEST_0_TAXAMT'.$index] * $fields['L_PAYMENTREQUEST_0_QTY'.$index]), $this->decimals);
-			$total = Tools::ps_round($total + ($fields['L_PAYMENTREQUEST_0_AMT'.$index] * $fields['L_PAYMENTREQUEST_0_QTY'.$index]), $this->decimals);
+			$total = $total + ($fields['L_PAYMENTREQUEST_0_AMT'.$index] * $product['quantity']);
 		}
 	}
 
-	private function setDiscountsList(&$fields, &$index, &$total, &$taxes)
+	private function setDiscountsList(&$fields, &$index, &$total)
 	{
 		$discounts = $this->context->cart->getDiscounts();
 
@@ -302,10 +301,8 @@ class PaypalExpressCheckout extends Paypal
 
 				/* It is a discount so we store a negative value */
 				$fields['L_PAYMENTREQUEST_0_AMT'.$index] = -1 * Tools::ps_round($discount['value_real'], $this->decimals);
-				$fields['L_PAYMENTREQUEST_0_TAXAMT'.$index] = -1 * (Tools::ps_round($discount['value_real'] - $discount['value_tax_exc'], $this->decimals));
 				$fields['L_PAYMENTREQUEST_0_QTY'.$index] = 1;
 
-				$taxes = Tools::ps_round($taxes + $fields['L_PAYMENTREQUEST_0_TAXAMT'.$index], $this->decimals);
 				$total = Tools::ps_round($total + $fields['L_PAYMENTREQUEST_0_AMT'.$index], $this->decimals);
 			}
 	}
@@ -328,27 +325,16 @@ class PaypalExpressCheckout extends Paypal
 	private function setPaymentValues(&$fields, &$total, &$taxes)
 	{
 		if (_PS_VERSION_ < '1.5')
-		{
-			$shipping_cost = $this->context->cart->getOrderShippingCost(null, false);
 			$shipping_cost_wt = $this->context->cart->getOrderShippingCost();
-		}
 		else
-		{
-			$shipping_cost = $this->context->cart->getTotalShippingCost(null, true);
 			$shipping_cost_wt = $this->context->cart->getTotalShippingCost();
-		}
 
 		$fields['PAYMENTREQUEST_0_PAYMENTACTION'] = 'Sale';
 		$fields['PAYMENTREQUEST_0_CURRENCYCODE'] = $this->currency->iso_code;
 
 		$fields['PAYMENTREQUEST_0_SHIPPINGAMT'] = Tools::ps_round($shipping_cost_wt, $this->decimals);
-		$shipping_tax = $shipping_cost_wt - $shipping_cost;
-
 		$fields['PAYMENTREQUEST_0_ITEMAMT'] = Tools::ps_round($total, $this->decimals);
-		$fields['PAYMENTREQUEST_0_TAXAMT'] = Tools::ps_round($taxes, $this->decimals);
-
-		$total_order_amt = $fields['PAYMENTREQUEST_0_ITEMAMT'] + $fields['PAYMENTREQUEST_0_TAXAMT'] + $fields['PAYMENTREQUEST_0_SHIPPINGAMT'];
-		$fields['PAYMENTREQUEST_0_AMT'] = Tools::ps_round($total_order_amt, $this->decimals);
+		$fields['PAYMENTREQUEST_0_AMT'] = $total + $fields['PAYMENTREQUEST_0_SHIPPINGAMT'];
 	}
 
 	public function rightPaymentProcess()
