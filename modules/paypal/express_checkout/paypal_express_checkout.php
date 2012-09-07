@@ -223,7 +223,7 @@ class PaypalExpressCheckout extends Paypal
 		$fields['RETURNURL'] = PayPal::getShopDomainSsl(true, true)._MODULE_DIR_.$this->name.'/express_checkout/submit.php';
 		$fields['REQCONFIRMSHIPPING'] = '0';
 		$fields['NOSHIPPING'] = '1';
-		$fields['BUTTONSOURCE'] = TRACKING_CODE;
+		$fields['BUTTONSOURCE'] = $this->getTrackingCode();
 
 		// Products
 		$taxes = 0;
@@ -288,7 +288,7 @@ class PaypalExpressCheckout extends Paypal
 
 	private function setDiscountsList(&$fields, &$index, &$total)
 	{
-		$discounts = $this->context->cart->getDiscounts();
+		$discounts = (_PS_VERSION_ < '1.5') ? $this->context->cart->getDiscounts() : $this->context->cart->getCartRules();
 
 		if (count($discounts) > 0)
 			foreach ($discounts as $discount)
@@ -444,7 +444,10 @@ class PaypalExpressCheckout extends Paypal
 		$this->secure_key = $this->getSecureKey();
 		$this->_storeCookieInfo();
 
-		header('Location: https://'.$this->getPayPalURL().'/websc&cmd=_express-checkout&token='.urldecode($this->token));
+		if (method_exists($this->context, 'getMobileDevice') && $this->context->getMobileDevice())
+			header('Location: https://'.$this->getPayPalURL().'/cgi-bin/webscr?cmd=_express-checkout-mobile&token='.urldecode($this->token));
+		else
+			header('Location: https://'.$this->getPayPalURL().'/websc&cmd=_express-checkout&token='.urldecode($this->token));
 
 		exit(0);
 	}

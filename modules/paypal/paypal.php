@@ -40,7 +40,11 @@ else
 define('WPS', 1);
 define('HSS', 2);
 define('ECS', 4);
+
 define('TRACKING_CODE', 'FR_PRESTASHOP_H3S');
+define('SMARTPHONE_TRACKING_CODE', 'Prestashop_Cart_smartphone_EC');
+define('TABLET_TRACKING_CODE', 'Prestashop_Cart_tablet_EC');
+
 define('_PAYPAL_LOGO_XML_', 'logos.xml');
 define('_PAYPAL_MODULE_DIRNAME_', 'paypal');
 define('_PAYPAL_TRANSLATIONS_XML_', 'translations.xml');
