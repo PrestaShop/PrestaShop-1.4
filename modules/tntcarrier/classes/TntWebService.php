@@ -146,8 +146,8 @@ class TntWebService
 			$phone = '0'.$number;
 		}
 
-		if (strlen($phone) > 10)
-			$phone = substr($phone, 0, 10);
+		if (strlen($phone) > 16)
+			$phone = substr($phone, 0, 16);
 
 		if ($info[4] == null)
 			$receiver = array(

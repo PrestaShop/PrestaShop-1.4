@@ -71,3 +71,5 @@ $_MODULE['<{tntcarrier}prestashop>shippingnumber_c3f15ecc6da0827a8da712cb43a0b59
 $_MODULE['<{tntcarrier}prestashop>shippingnumber_0c458988127eb2150776881e2ef3f0c4'] = 'Lieferadresse:';
 $_MODULE['<{tntcarrier}prestashop>shippingnumber_e19726b466603bc3e444dd26fbcde074'] = 'Kundenadresse';
 $_MODULE['<{tntcarrier}prestashop>weightform_c3f15ecc6da0827a8da712cb43a0b596'] = 'Informationen zum Lieferanten';
+
+?>

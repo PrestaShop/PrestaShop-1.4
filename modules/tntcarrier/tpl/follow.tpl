@@ -90,7 +90,7 @@
 	</tr>
 	{/if}
 	<tr class="item">
-		<td class="bold">deposit status</td>
+		<td class="bold">{l s='deposit status' mod='tntcarrier'}</td>
 		<td colspan="3">
 			{foreach $f.long_status as $line}
 			{$line}<br/>
