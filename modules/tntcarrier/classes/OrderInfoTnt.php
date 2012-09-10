@@ -68,6 +68,8 @@ class OrderInfoTnt
 			$next_day = '';
 		$newDate = Tools::getValue('dateErrorOrder');
 		$info[2] = array('delivery_date' => ($newDate != '' ? $newDate : $next_day));
+
+
 		if ($option)
 		{
 			if (strpos($option['option'], 'S') !== false)
@@ -85,7 +87,52 @@ class OrderInfoTnt
 		$info[0]['phone_mobile'] = str_replace('.', '', $info[0]['phone_mobile']);
 		return $info;
 	}
-	
+
+	public function isFirstPackage()
+	{
+		$id_order = Db::getInstance()->getValue('SELECT `id_order` FROM `'._DB_PREFIX_.'tnt_package_history` WHERE `pickup_date` = NOW()');
+		if ($id_order)
+			return false;
+		return true;
+	}
+
+	public function getDeleveryDate($idOrder, &$info)
+	{
+		if (Configuration::get('TNT_CARRIER_SHIPPING_COLLECT') == 1)
+		{
+			if (date('w') == 5)
+			{
+				if ((date('H') < date('H', strtotime(Configuration::get('TNT_CARRIER_SHIPPING_CLOSING'))) && !$this->isFirstPackage()) || (date('H') < 15 && $this->isFirstPackage()))
+				{
+					$delivery_day = date("Y-m-d");
+					$info[5] = array('saturday' => true);
+				}
+				else
+					date("Y-m-d", strtotime(' + 2 days'));
+			}
+			else if (date("w") == 6)
+				$delivery_day = date("Y-m-d", strtotime(' + 2 days'));
+			else if ((date('H') < date('H', strtotime(Configuration::get('TNT_CARRIER_SHIPPING_CLOSING'))) && !$this->isFirstPackage() && date('H') >= 15)	|| date('H') < 15)
+				$delivery_day = date("Y-m-d");
+			else
+				$delivery_day = date("Y-m-d", strtotime(' + 1 day'));
+		}
+		else
+		{
+			if (date('w') == 5 && date('H') < date('H', strtotime(Configuration::get('TNT_CARRIER_SHIPPING_CLOSING'))))
+			{
+				$delivery_day = date("Y-m-d");
+				$info[5] = array('saturday' => true);
+			}
+			else if ((date('w') == 5 && date('H') >= date('H', strtotime(Configuration::get('TNT_CARRIER_SHIPPING_CLOSING')))) || date("w") == 6)
+				$delivery_day = date("Y-m-d", strtotime(' + 2 days'));
+			else if (date('H') < date('H', strtotime(Configuration::get('TNT_CARRIER_SHIPPING_CLOSING'))))
+				$delivery_day = date("Y-m-d");
+			else
+				$delivery_day = date("Y-m-d", strtotime(' + 1 day'));
+		}
+		$info[2] = array('delivery_date' => $delivery_day);
+	}
 }
 
 ?>

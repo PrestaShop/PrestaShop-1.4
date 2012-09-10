@@ -164,12 +164,12 @@ $_MODULE['<{tntcarrier}prestashop>shippingform_e9f79aa2b1f455a52497a126d9442582'
 $_MODULE['<{tntcarrier}prestashop>shippingform_3d4d4cac03e194ab20154382cd544e0f'] = 'Adresse ligne 2';
 $_MODULE['<{tntcarrier}prestashop>shippingform_25f75488c91cb6c3bab92672e479619f'] = 'Code postal';
 $_MODULE['<{tntcarrier}prestashop>shippingform_57d056ed0984166336b7879c2af3657f'] = 'Ville';
-$_MODULE['<{tntcarrier}prestashop>shippingform_aebdb4c64006c8addc403e43b787ef3a'] = 'Heure de fermeture';
 $_MODULE['<{tntcarrier}prestashop>shippingform_957ed71874c1481df52fd2141dc6e6b7'] = 'Nom du contact';
 $_MODULE['<{tntcarrier}prestashop>shippingform_251a7b59d516d8335d81a4e3ab930f76'] = 'Prénom du contact';
 $_MODULE['<{tntcarrier}prestashop>shippingform_c019e2e64906ee18ab5628981c2c9e41'] = 'Adresse Email du contact';
 $_MODULE['<{tntcarrier}prestashop>shippingform_789511c3c50cc84ffd48cd496ce3f128'] = 'Numéro de téléphone du contact';
 $_MODULE['<{tntcarrier}prestashop>shippingform_7ac2964ba0a2e00142b66d2564878c2c'] = 'Cochez cette case si vous êtes en ramassage sur demande';
+$_MODULE['<{tntcarrier}prestashop>shippingform_e078781b0e29ebcf39083d65cfb144e6'] = 'Horaire de passage du livreur TNT';
 $_MODULE['<{tntcarrier}prestashop>shippingform_dc86b23a40568ae3ece2d3008ca61442'] = 'Format de l\'étiquette pour l\'impression (Cette étiquette doit être collée sur l\'emballage)';
 $_MODULE['<{tntcarrier}prestashop>shippingform_2976cd63d00184e3f0a45c1337cd31f0'] = 'impression A4';
 $_MODULE['<{tntcarrier}prestashop>shippingform_2f95a5450ee306f7faca792e379ccb34'] = 'sans imprimer le logo de TNT';

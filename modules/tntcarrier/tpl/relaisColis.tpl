@@ -40,15 +40,16 @@ $().ready(function()
 			}
 		});
 });
+
 $("input[name='id_carrier']").click(function() {
-    id_carrier = $(this).val();
-    if (date_carrier[id_carrier] != undefined)
+    idcarrier = $(this).val();
+    if (date_carrier[idcarrier] != undefined)
     {
 	idCart = document.getElementById("cartRelaisColis").value;
 	$.ajax({
 	    type: "POST",
 	    url: "./modules/tntcarrier/relaisColis/postRelaisData.php",
-	    data: "id_cart="+idCart+"&due_date="+date_carrier[id_carrier]
+	    data: "id_cart="+idCart+"&due_date="+date_carrier[idcarrier]
 	});
     }
     getAjaxRelais($("input[name='id_carrier']:checked").val());
@@ -62,11 +63,17 @@ $("input[name='id_carrier']").click(function() {
 
 function displayNewTable(response, id)
 {
-	$("#id_carrier"+id).parent().parent().after("<tr><td colspan='4' style='display:none' id='tr_carrier_relais'></td></tr>");
+    var display = false
+    for (x in id_carrier)
+	if (id_carrier[x] == id)
+	    display = true;
+    if (!display)
+	return false;
+    $("#id_carrier"+id).parent().parent().after("<tr><td colspan='4' style='display:none' id='tr_carrier_relais'></td></tr>");
     $("#tr_carrier_relais").html(response);
-	$("#tr_carrier_relais").slideDown('slow');
-	tntRCInitMap();
-	tntRCgetCommunes();
+    $("#tr_carrier_relais").slideDown('slow');
+    tntRCInitMap();
+    tntRCgetCommunes();
 }
 		
 {/literal}

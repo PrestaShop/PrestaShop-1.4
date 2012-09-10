@@ -215,7 +215,9 @@ class TntWebService
 			'instructions' => ""
 		);
 
-		if (Configuration::get('TNT_CARRIER_SHIPPING_COLLECT') == 1)
+		$firstRequest = Db::getInstance()->getValue('SELECT `id_order` FROM `'._DB_PREFIX_.'tnt_package_history` WHERE `pickup_date` = NOW()');
+
+		if (Configuration::get('TNT_CARRIER_SHIPPING_COLLECT') == 1 && !$firstRequest)
 		{
 			$paremeters = array(
 			'pickUpRequest' => $pickUpRequest,

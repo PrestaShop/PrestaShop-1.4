@@ -17,8 +17,6 @@
 		{if $varShipping.city}<option value="{$varShipping.city}">{$varShipping.city}</option>{/if}
 		</select>
 		<span style="color:red">* {$soap}</span></div>
-		<label>{l s='Company Closing Time' mod='tntcarrier'} : </label>
-		<div class="margin-form"><input type="text" size="20" name="tnt_carrier_shipping_closing" value="{$varShipping.closing}" /> (HH:MM) <span style="color:red">*</span></div>
 		<br/>
 		<label>{l s='Contact last name' mod='tntcarrier'} : </label>
 		<div class="margin-form"><input type="text" size="20" id="tnt_carrier_shipping_last_name" name="tnt_carrier_shipping_last_name" value="{$varShipping.lastName}" /> <span style="color:red">*</span></div>
@@ -31,6 +29,9 @@
 		<div style="padding-left:210px">
 		<input type='checkbox' name='tnt_carrier_shipping_collect' {if $varShipping.collect} checked='checked'{/if}/> : {l s='Check this box if you are in on-demand pickup' mod='tntcarrier'}
 		</div>
+		<br/>
+		<label>{l s='Passage of time tnt courier' mod='tntcarrier'} : </label>
+		<div class="margin-form"><input type="text" size="20" name="tnt_carrier_shipping_closing" value="{$varShipping.closing}" /> (HH:MM) <span style="color:red">*</span></div>
 		<br/><br/>
 		<span style="font-weight:bold">{l s='Label Format for printing (This Label will have to be sticked on the package)' mod='tntcarrier'} : </span><br/><br/>
         <div style="padding-left:210px">

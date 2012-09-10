@@ -27,7 +27,7 @@ class TntCarrier extends CarrierModule
 	{
 		$this->name = 'tntcarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.7.4';
+		$this->version = '1.7.5';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 		$this->module_key = 'd4dcfde9937b67002235598ac35cbdf8';
@@ -124,8 +124,7 @@ class TntCarrier extends CarrierModule
 			$carrierConfig = array(
 				'name' => $v->name,
 				'id_tax_rules_group' => 0,
-				'active' => true,
-				'deleted' => false,
+				'deleted' => ($v->option == 'JS' ? 1 : 0),
 				'shipping_handling' => false,
 				'range_behavior' => 0,
 				'delay' => array('fr' => $v->descriptionfr, 'en' => $v->description),
@@ -133,7 +132,8 @@ class TntCarrier extends CarrierModule
 				'is_module' => true,
 				'shipping_external' => true,
 				'external_module_name' => $this->_moduleName,
-				'need_range' => true
+				'need_range' => true,
+				'active' => true
 			);
 			$id_carrier = $this->installExternalCarrier($carrierConfig);
 			Configuration::updateValue('TNT_CARRIER_'.$v->option.'_ID', (int)($id_carrier));
@@ -168,6 +168,7 @@ class TntCarrier extends CarrierModule
 		$carrier->shipping_external = $config['shipping_external'];
 		$carrier->external_module_name = $config['external_module_name'];
 		$carrier->need_range = $config['need_range'];
+		$carrier->active = $config['active'];
 
 		$languages = Language::getLanguages(true);
 		foreach ($languages as $language)
@@ -220,13 +221,17 @@ class TntCarrier extends CarrierModule
 		Db::getInstance()->autoExecute(_DB_PREFIX_.'carrier', array('deleted' => 1), 'UPDATE', '`external_module_name` = \'tntcarrier\'');
 		// Uninstall Config
 		foreach ($this->_fieldsList as $keyConfiguration => $name)
-			if (!Configuration::deleteByName($keyConfiguration))
-				return false;
+		{
+			Configuration::deleteByName($keyConfiguration);
+			/*if (!Configuration::deleteByName($keyConfiguration))
+				return false;*/
+		}
 		// Uninstall SQL
 		include(dirname(__FILE__).'/sql-uninstall.php');
 		foreach ($sql as $s)
 			if (!Db::getInstance()->Execute($s))
 				return false;
+
 		// Uninstall Module
 		if (!parent::uninstall() OR !$this->unregisterHook('updateCarrier'))
 			return false;
@@ -343,10 +348,22 @@ class TntCarrier extends CarrierModule
 	{
 		global $cookie, $smarty;
 
-		$var = array('moduleName' => $this->_moduleName, 'collect' => Configuration::get('TNT_CARRIER_SHIPPING_COLLECT'), 'pex' => Configuration::get('TNT_CARRIER_SHIPPING_PEX'), 'company' => Configuration::get('TNT_CARRIER_SHIPPING_COMPANY'),
-					 'lastName' => Configuration::get('TNT_CARRIER_SHIPPING_LASTNAME'), 'firstName' => Configuration::get('TNT_CARRIER_SHIPPING_FIRSTNAME'), 'address1' => Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS1'),
-					 'address2' => Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS2'), 'zipCode' => Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE'), 'city' => Configuration::get('TNT_CARRIER_SHIPPING_CITY'), 'email' => Configuration::get('TNT_CARRIER_SHIPPING_EMAIL'),
-					 'phone' => Configuration::get('TNT_CARRIER_SHIPPING_PHONE'), 'closing' => Configuration::get('TNT_CARRIER_SHIPPING_CLOSING'), 'delivery' => Configuration::get('TNT_CARRIER_SHIPPING_DELIVERY'), 'sticker' => Configuration::get('TNT_CARRIER_PRINT_STICKER'));
+		$var = array(
+			'moduleName' => $this->_moduleName,
+			'collect' => Configuration::get('TNT_CARRIER_SHIPPING_COLLECT'),
+			'pex' => Configuration::get('TNT_CARRIER_SHIPPING_PEX'),
+			'company' => Configuration::get('TNT_CARRIER_SHIPPING_COMPANY'),
+			'lastName' => Configuration::get('TNT_CARRIER_SHIPPING_LASTNAME'),
+			'firstName' => Configuration::get('TNT_CARRIER_SHIPPING_FIRSTNAME'),
+			'address1' => Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS1'),
+			'address2' => Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS2'),
+			'zipCode' => Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE'),
+			'city' => Configuration::get('TNT_CARRIER_SHIPPING_CITY'),
+			'email' => Configuration::get('TNT_CARRIER_SHIPPING_EMAIL'),
+			'phone' => Configuration::get('TNT_CARRIER_SHIPPING_PHONE'),
+			'closing' => Configuration::get('TNT_CARRIER_SHIPPING_CLOSING') ? Configuration::get('TNT_CARRIER_SHIPPING_CLOSING') : '17:00',
+			'delivery' => Configuration::get('TNT_CARRIER_SHIPPING_DELIVERY'),
+			'sticker' => Configuration::get('TNT_CARRIER_PRINT_STICKER'));
 		$smarty->assign('varShipping', $var);
 		$smarty->assign('soap', (!extension_loaded('soap') ? $this->l('Soap is disable') : ''));
 		return $this->display( __FILE__, 'tpl/shippingForm.tpl' );
@@ -982,6 +999,8 @@ class TntCarrier extends CarrierModule
 			$tntWebService = new TntWebService();
 			try
 			{
+				if (!isset($_POST['dateErrorOrder']))
+					$orderInfoTnt->getDeleveryDate((int)$params['id_order'], $info);
 				$package = $tntWebService->getPackage($info);
 			}
 			catch(SoapFault $e)
@@ -1006,7 +1025,10 @@ class TntCarrier extends CarrierModule
 				return $this->display( __FILE__, 'tpl/formerror.tpl' );
 			}
 			if (isset($package->Expedition->parcelResponses->parcelNumber))
+			{
 				$pack->setShippingNumber($package->Expedition->parcelResponses->parcelNumber);
+				Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tnt_package_history` (`id_order`, `pickup_date`) VALUES ("'.(int)$params['id_order'].'", "'.pSQL($info[2]['delivery_date']).'")');
+			}
 			else
 				foreach ($package->Expedition->parcelResponses as $k => $v)
 					$pack->setShippingNumber($v->parcelNumber);
