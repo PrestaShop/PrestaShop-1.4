@@ -1040,7 +1040,7 @@ class TntCarrier extends CarrierModule
 				'error' => '',
 				'shipping_numbers' => $pack->getShippingNumber(),
 				'sticker' => "../modules/".$this->_moduleName.'/pdf/'.$pack->getOrder()->shipping_number.'.pdf',
-				'date' => $info[2]['delivery_date'],
+				'date' => Db::getInstance()->getValue('SELECT `pickup_date` FROM `'._DB_PREFIX_.'tnt_package_history` WHERE `id_order` = "'.(int)$params['id_order'].'"'),
 				'relay' => (isset($info[4]) ? $info[4]['name'].'<br/>'.$info[4]['address'].'<br/>'.$info[4]['zipcode'].' '.$info[4]['city']: ''),
 				'place' => Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS1')." ".Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS2')."<br/>".Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE')." ".$this->putCityInNormeTnt(Configuration::get('TNT_CARRIER_SHIPPING_CITY')));
 			$smarty->assign('var', $var);
