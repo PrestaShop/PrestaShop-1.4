@@ -28,7 +28,7 @@
   <legend><img src="../img/admin/delivery.gif" alt="" />{l s='Shipping information'}</legend>
   {$var.error}
   <br/>
-  {if $var.errorFriendly != ''}
+  {if isset($var.errorFriendly) && $var.errorFriendly != ''}
   <p style="color:red">{$var.errorFriendly}</p>
   <br/>
   {/if}

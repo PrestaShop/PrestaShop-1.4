@@ -981,7 +981,8 @@ class TntCarrier extends CarrierModule
 		}
 		$orderInfoTnt = new OrderInfoTnt((int)($params['id_order']));
 		$info = $orderInfoTnt->getInfo();
-		if (isset($info[3]) && (strlen($info[3]['option']) == 1 || substr($info[3]['option'], 1, 1) == 'S'))
+
+		if (is_array($info) && isset($info[3]) && (strlen($info[3]['option']) == 1 || substr($info[3]['option'], 1, 1) == 'S'))
 			$smarty->assign('weight', '30');
 		else
 			$smarty->assign('weight', '20');
