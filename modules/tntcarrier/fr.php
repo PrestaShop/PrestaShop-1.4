@@ -180,7 +180,7 @@ $_MODULE['<{tntcarrier}prestashop>shippingform_70397c4b252a5168c5ec003931cea215'
 $_MODULE['<{tntcarrier}prestashop>shippingnumber_c3f15ecc6da0827a8da712cb43a0b596'] = 'L\'information d\'expédition';
 $_MODULE['<{tntcarrier}prestashop>shippingnumber_4d344ab4392dca3969a9af3cedbd560d'] = 'Merci de vérifier que chaque colis pèse un maximum de';
 $_MODULE['<{tntcarrier}prestashop>shippingnumber_2ce124d87604bed00f310d4585d26ea7'] = 'Kg';
-$_MODULE['<{tntcarrier}prestashop>shippingnumber_4d8a6577fb58ee0adbc4b1b578e1ea8d'] = 'Afin d\'obtenir un numéro d\'expédition, merci de modifier le statut de la commande à \\\"Expédié/Livré\\\"';
+$_MODULE['<{tntcarrier}prestashop>shippingnumber_4d8a6577fb58ee0adbc4b1b578e1ea8d'] = 'Afin d\'obtenir un numéro d\'expédition, merci de modifier le statut de la commande à \"En cours de livraison\"';
 $_MODULE['<{tntcarrier}prestashop>shippingnumber_337d01bac642ef65f5c694d91a78551c'] = 'Numéro(s) d\'expédition';
 $_MODULE['<{tntcarrier}prestashop>shippingnumber_0b77915df34c7873750ea67e88c88451'] = 'Etiquette';
 $_MODULE['<{tntcarrier}prestashop>shippingnumber_d5aad80114d8aa47f31a6f5050ef6835'] = 'Expédition';
