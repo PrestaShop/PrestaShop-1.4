@@ -52,7 +52,7 @@ abstract class PayPalAbstract extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'payments_gateways';
-		$this->version = '3.1.0';
+		$this->version = '3.2.0';
 
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
@@ -94,7 +94,8 @@ abstract class PayPalAbstract extends PaymentModule
 		if (!parent::install() || !$this->registerHook('payment') || !$this->registerHook('paymentReturn') ||
         !$this->registerHook('shoppingCartExtra') || !$this->registerHook('backBeforePayment') || !$this->registerHook('rightColumn') ||
         !$this->registerHook('cancelProduct') || !$this->registerHook('productFooter') || !$this->registerHook('header') ||
-		!$this->registerHook('adminOrder') || !$this->registerHook('backOfficeHeader') || !$this->registerHook('displayMobileHeader'))
+		!$this->registerHook('adminOrder') || !$this->registerHook('backOfficeHeader') || !$this->registerHook('displayMobileHeader')
+		|| !$this->registerHook('displayMobileShoppingCartTop') || !$this->registerHook('displayMobileAddToCartTop'))
 			return false;
 
 		if (file_exists(_PS_MODULE_DIR_.$this->name.'/paypal_tools.php'))
@@ -315,8 +316,55 @@ abstract class PayPalAbstract extends PaymentModule
 	{
 		return $this->hookHeader();
 	}
-
+	
+	public function hookDisplayMobileShoppingCartTop()
+	{
+		if (!$this->context->customer->isLogged())
+			return $this->renderExpressCheckoutButton('cart').$this->renderExpressCheckoutForm('cart');
+	}
+	
+	public function hookDisplayMobileAddToCartTop()
+	{
+		if (!$this->context->customer->isLogged())
+			return $this->renderExpressCheckoutButton('cart');
+	}
+	
 	public function hookProductFooter()
+	{
+		if ($this->context->customer->isLogged())
+			return;
+		
+		$content = '';
+		if (!$this->context->getMobileDevice())
+			$content .= $this->renderExpressCheckoutButton('product');
+
+		$content .= $this->renderExpressCheckoutForm('product');
+
+		return $content;
+	}
+	
+	public function renderExpressCheckoutButton($type)
+	{
+		if (!Configuration::get('PAYPAL_EXPRESS_CHECKOUT_SHORTCUT'))
+			return;
+		if (!in_array(ECS, $this->getPaymentMethods()) || ((int)Configuration::get('PAYPAL_BUSINESS') == 1 
+		&& (int)Configuration::get('PAYPAL_PAYMENT_METHOD') == HSS))
+			return;
+
+		$iso_lang = array('en' => 'en_US', 'fr' => 'fr_FR');
+
+		$this->context->smarty->assign(array(
+			'use_mobile' => (bool)$this->context->getMobileDevice(),
+			'PayPal_payment_type' => $type,
+			'PayPal_lang_code' => (isset($iso_lang[$this->context->language->iso_code])) ? $iso_lang[$this->context->language->iso_code] : 'en_US',
+			'PayPal_current_shop_url' => PayPal::getShopDomainSsl(true, true).$_SERVER['REQUEST_URI'],
+			'PayPal_tracking_code' => $this->getTrackingCode())
+		);
+
+		return $this->fetchTemplate('/views/templates/front/express_checkout/', 'express_checkout');
+	}
+	
+	public function renderExpressCheckoutForm($type)
 	{
 		if (!Configuration::get('PAYPAL_EXPRESS_CHECKOUT_SHORTCUT') || !in_array(ECS, $this->getPaymentMethods()) ||
 		((int)Configuration::get('PAYPAL_BUSINESS') == 1 && (int)Configuration::get('PAYPAL_PAYMENT_METHOD') == HSS))
@@ -325,13 +373,12 @@ abstract class PayPalAbstract extends PaymentModule
 		$iso_lang = array('en' => 'en_US', 'fr' => 'fr_FR');
 
 		$this->context->smarty->assign(array(
-			'PayPal_payment_type' => 'product',
-			'PayPal_lang_code' => (isset($iso_lang[$this->context->language->iso_code])) ? $iso_lang[$this->context->language->iso_code] : 'en_US',
+			'PayPal_payment_type' => $type,
 			'PayPal_current_shop_url' => PayPal::getShopDomainSsl(true, true).$_SERVER['REQUEST_URI'],
 			'PayPal_tracking_code' => $this->getTrackingCode())
 		);
 
-		return $this->fetchTemplate('/views/templates/front/express_checkout/', 'express_checkout');
+		return $this->fetchTemplate('/views/templates/front/express_checkout/', 'express_checkout_form');
 	}
 
 	private function useMobileMethod()
@@ -362,9 +409,12 @@ abstract class PayPalAbstract extends PaymentModule
 				Tools::redirectLink($link.'?'.http_build_query($values, '', '&'));
 			}
 		}
-
-		$this->context->smarty->assign(array('logos' => $this->paypal_logos->getLogos(), 'sandbox_mode' => Configuration::get('PAYPAL_SANDBOX')));
-
+		$this->context->smarty->assign(array(
+			'logos' => $this->paypal_logos->getLogos(), 
+			'sandbox_mode' => Configuration::get('PAYPAL_SANDBOX'), 
+			'use_mobile' => (bool)$this->context->getMobileDevice(),
+			'PayPal_lang_code' => (isset($iso_lang[$this->context->language->iso_code])) ? $iso_lang[$this->context->language->iso_code] : 'en_US'
+			));
 		if ($method == HSS)
 		{
 			$billing_address = new Address($this->context->cart->id_address_invoice);
@@ -412,7 +462,6 @@ abstract class PayPalAbstract extends PaymentModule
 		elseif ($method == WPS || $method == ECS)
 		{
 			$this->getTranslations();
-
 			$this->context->smarty->assign(array(
 				'PayPal_integral' => WPS,
 				'PayPal_express_checkout' => ECS,
@@ -450,7 +499,9 @@ abstract class PayPalAbstract extends PaymentModule
 			'PayPal_payment_type' => 'cart',
 			'PayPal_lang_code' => (isset($values[$this->context->language->iso_code]) ? $values[$this->context->language->iso_code] : 'en_US'),
 			'PayPal_current_shop_url' => PayPal::getShopDomainSsl(true, true).$_SERVER['REQUEST_URI'],
-			'PayPal_tracking_code' => $this->getTrackingCode()));
+			'PayPal_tracking_code' => $this->getTrackingCode(),
+			'include_form' => true,
+			'template_dir' => dirname(__FILE__).'/views/templates/front/express_checkout/'));
 
 		return $this->fetchTemplate('/views/templates/front/express_checkout/', 'express_checkout');
 	}

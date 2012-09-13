@@ -1,14 +1,13 @@
-<div id="container_express_checkout" class="clearfix" style="float:right; text-align: right; padding: 0 40px;">
-	<img id="payment_paypal_express_checkout" src="https://www.paypal.com/{$PayPal_lang_code}/i/btn/btn_xpressCheckout.gif" />
-	<form id="paypal_payment_form" action="{$base_dir_ssl}modules/paypal/express_checkout/submit.php" data-ajax="false" title="{l s='Pay with PayPal' mod='paypal'}" method="post">
-
-		{if isset($smarty.get.id_product)}<input type="hidden" name="id_product" value="{$smarty.get.id_product}" />{/if}
-		
-		<!-- Change dynamicaly when the form is submitted -->
-		<input type="hidden" name="quantity" value="1" />
-		<input type="hidden" name="id_p_attr" value="" />
-		<input type="hidden" name="express_checkout" value="{$PayPal_payment_type}"/>
-		<input type="hidden" name="current_shop_url" value="{$PayPal_current_shop_url}" />
-        <input type="hidden" name="bn" value="{$PayPal_tracking_code}" />
-	</form>
+<div id="container_express_checkout" style="float:right; margin: 10px 40px 0 0">
+	{if isset($use_mobile) && $use_mobile}
+		<div style="margin-left:30px">
+			<img id="payment_paypal_express_checkout" src="{$base_dir_ssl}modules/paypal/img/logos/express_checkout_mobile/CO_{$PayPal_lang_code}_orange_295x43.png" alt="" />
+		</div>
+	{else}
+		<img id="payment_paypal_express_checkout" src="https://www.paypal.com/{$PayPal_lang_code}/i/btn/btn_xpressCheckout.gif" alt="" />
+	{/if}
+	{if isset($include_form) && $include_form}
+		{include file="$template_dir./express_checkout_form.tpl"}
+	{/if}
 </div>
+<div class="clearfix"></div>

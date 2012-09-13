@@ -24,18 +24,22 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-{capture name=path}<a href="order.php">{l s='Your shopping cart' mod='paypal'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='PayPal' mod='paypal'}{/capture}
-{include file="$tpl_dir./breadcrumb.tpl"}
+{if $smarty.const._PS_VERSION_ < 1.5 && isset($use_mobile) && $use_mobile}
+	{include file="$tpl_dir./modules/paypal/views/templates/front/error.tpl"}
+{else}
+	{capture name=path}<a href="order.php">{l s='Your shopping cart' mod='paypal'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='PayPal' mod='paypal'}{/capture}
+	{include file="$tpl_dir./breadcrumb.tpl"}
 
-<h2>{$message}</h2>
-{if isset($logs) && $logs}
-	<div class="error">
-		<p><b>{l s='Please refer to logs:' mod='paypal'}</b></p>
-		<ol>
-		{foreach from=$logs key=key item=log}
-			<li>{$log}</li>
-		{/foreach}
-		</ol>
-		<p><a href="{$base_dir}" class="button_small" title="{l s='Back' mod='paypal'}">&laquo; {l s='Back' mod='paypal'}</a></p>
-	</div>
+	<h2>{$message}</h2>
+	{if isset($logs) && $logs}
+		<div class="error">
+			<p><b>{l s='Please refer to logs:' mod='paypal'}</b></p>
+			<ol>
+			{foreach from=$logs key=key item=log}
+				<li>{$log}</li>
+			{/foreach}
+			</ol>
+			<p><a href="{$base_dir}" class="button_small" title="{l s='Back' mod='paypal'}">&laquo; {l s='Back' mod='paypal'}</a></p>
+		</div>
+	{/if}
 {/if}

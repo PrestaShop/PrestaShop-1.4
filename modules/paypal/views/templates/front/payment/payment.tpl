@@ -27,12 +27,13 @@
 <p class="payment_module">
 	<a href="{$base_dir_ssl}modules/paypal/payment/submit.php" title="{l s='Pay with PayPal' mod='paypal'}">
 			<img src="{$logos.LocalPayPalLogoMedium}" alt="{l s='Pay with PayPal' mod='paypal'}" style="float:left;" />
-		<br />
-		{if $integral}
-			{l s='Pay with your PayPal account, credit card (CB, Visa, Mastercard...), or private credit card' mod='paypal'}
-		{else}
-			{l s='Pay with your PayPal account' mod='paypal'}
-		{/if}
-	<br style="clear:both" />
+	</a>
+	<br/>
+	<a href="{$base_dir_ssl}modules/paypal/payment/submit.php" title="{l s='Pay with PayPal' mod='paypal'}">
+	{if $integral}
+		{l s='Pay with your PayPal account, credit card (CB, Visa, Mastercard...), or private credit card' mod='paypal'}
+	{else}
+		{l s='Pay with your PayPal account' mod='paypal'}
+	{/if}
 	</a>
 </p>

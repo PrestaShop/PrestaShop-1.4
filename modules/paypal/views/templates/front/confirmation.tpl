@@ -28,5 +28,6 @@
 	<br /><br />
 	{l s='You have chosen the PayPal method.' mod='paypal'}
 	<br /><br /><span class="bold">{l s='Your order will be sent very soon.' mod='paypal'}</span>
-	<br /><br />{l s='For any questions or for further information, please contact our' mod='paypal'} <a href="{$link->getPageLink('contact', true)}contact-form.php">{l s='customer support' mod='paypal'}</a>.
+	<br /><br />{l s='For any questions or for further information, please contact our' mod='paypal'}
+	<a href="{$link->getPageLink('contact', true)}contact-form.php" data-ajax="false">{l s='customer support' mod='paypal'}</a>.
 </p>

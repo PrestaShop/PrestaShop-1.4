@@ -128,7 +128,7 @@ class PaypalExpressCheckout extends Paypal
 				$product = new Product((int)$this->id_product);
 				if (!$product || !$this->quantity)
 					return false;
-
+					
 				// Build a product array with needed values
 				$this->product_list[] = array(
 				'id_product' => $product->id,
@@ -212,6 +212,7 @@ class PaypalExpressCheckout extends Paypal
 		$paypal_lib = new PaypalLib();
 
 		$this->result = $paypal_lib->makeCall($this->getAPIURL(), $this->getAPIScript(), $this->method, $fields, $this->method_version);
+
 		$this->logs = array_merge($this->logs, $paypal_lib->getLogs());
 
 		$this->_storeToken();
@@ -236,6 +237,8 @@ class PaypalExpressCheckout extends Paypal
 		{
 			$this->setShippingAddress($fields, $id_address);
 		}
+		else
+			$fields['NOSHIPPING'] = '0';
 
 		// Set cart products list
 		$this->setProductsList($fields, $index, $total, $taxes);
@@ -361,7 +364,11 @@ class PaypalExpressCheckout extends Paypal
 			$total = Tools::ps_round($total + ($price * $quantity), $this->decimals);
 		}
 		
-		$discounts = $this->context->cart->getDiscounts();
+		if (_PS_VERSION_ < '1.5')
+			$discounts = $this->context->cart->getDiscounts();
+		else
+			$discounts = $this->context->cart->getCartRules();
+		
 		if (count($discounts) > 0)
 			foreach ($discounts as $product)
 			{
@@ -473,7 +480,7 @@ class PaypalExpressCheckout extends Paypal
 
 		if ($redirect)
 		{
-			Tools::redirectLink(__PS_BASE_URI__.'order.php?step=1');
+			Tools::redirectLink(__PS_BASE_URI__.'order.php?step=3');
 			exit(0);
 		}
 	}

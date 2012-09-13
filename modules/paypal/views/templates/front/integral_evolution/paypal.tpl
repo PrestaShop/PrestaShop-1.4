@@ -25,7 +25,7 @@
 *}
 
 <p class="payment_module">
-	<a href="modules/paypal/integral_evolution/redirect.php" title="{l s='Pay with PayPal' mod='paypal'}">
+	<a href="modules/paypal/integral_evolution/redirect.php"  data-ajax="false" title="{l s='Pay with PayPal' mod='paypal'}">
 		<img src="{$logos.LocalPayPalHorizontalSolutionPP}" alt="{l s='Pay with PayPal' mod='paypal'}" />
 	</a>
 </p>

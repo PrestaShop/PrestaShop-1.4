@@ -116,7 +116,6 @@ $_MODULE['<{paypal}prestashop>order-confirmation_a378cd7a0839cbd4ec3e45bbdeeb69b
 $_MODULE['<{paypal}prestashop>order-confirmation_6e860dc1cf94ca08b3fd99993aa2dc68'] = 'Votre numéro de transaction PayPal est :';
 $_MODULE['<{paypal}prestashop>order-confirmation_4082ea29b4f196c4f60533500139725a'] = 'Suivre ma commande';
 $_MODULE['<{paypal}prestashop>order-confirmation_9390390581f54c65d6acfc8da4e17362'] = 'Retour aux commandes';
-$_MODULE['<{paypal}prestashop>express_checkout_dac2693baa5c5c9a5318609ed81c4f2a'] = 'Payer par PayPal';
 $_MODULE['<{paypal}prestashop>payment_a40cab5994f36d4c48103a22ca082e8f'] = 'Votre panier';
 $_MODULE['<{paypal}prestashop>payment_ad69e733ebae8d264bccaa38d68830e8'] = 'PayPal';
 $_MODULE['<{paypal}prestashop>payment_f1d3b424cd68795ecaa552883759aceb'] = 'Résumé de la commande';
