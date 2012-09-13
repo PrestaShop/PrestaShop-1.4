@@ -33,7 +33,7 @@ class Mobile_Theme extends Module
 	{
 		$this->name = 'mobile_theme';
 		$this->tab = (version_compare(_PS_VERSION_, 1.4) >= 0 ? 'administration' : 'Theme');
-		$this->version = '0.3.3';
+		$this->version = '0.3.4';
 
 		parent::__construct();
 
@@ -479,12 +479,12 @@ class Mobile_Theme extends Module
 		$smarty->assign('ps_mobile_styles', Configuration::getMultiple(array('PS_MOBILE_THEME_HEADINGS', 'PS_MOBILE_THEME_FILTERING_BAR',
 		'PS_MOBILE_THEME_PROCESS_BAR', 'PS_MOBILE_THEME_CONF_MSG', 'PS_MOBILE_THEME_ERROR_MSG', 'PS_MOBILE_THEME_LIST_HEADERS',
 		'PS_MOBILE_THEME_BUTTONS', 'PS_MOBILE_THEME_HEADER_FOOTER')));
-		
+
 
 		echo '<script type="text/javascript">var translate_nopaymentmodule = \''.$this->l('Sorry, no payment module is available in your country.').'\';</script>';
 		$paypal = Module::getInstanceByName('paypal');
-		if ($paypal && $paypal->active && !$params['cookie']->isLogged())
-		{	
+		if ($paypal && $paypal->active && && version_compare($paypal->version, '3.2.0', '>=') && !$params['cookie']->isLogged())
+		{
 			if (strpos($_SERVER['PHP_SELF'], 'product.php') !== false)
 				$smarty->assign('paypal_product', $paypal->renderExpressCheckoutButton('product').$paypal->renderExpressCheckoutForm('product'));
 			if (strpos($_SERVER['PHP_SELF'], 'order.php') !== false || strpos($_SERVER['PHP_SELF'], '.php') !== false)
