@@ -33,7 +33,7 @@ class Mobile_Theme extends Module
 	{
 		$this->name = 'mobile_theme';
 		$this->tab = (version_compare(_PS_VERSION_, 1.4) >= 0 ? 'administration' : 'Theme');
-		$this->version = '0.3.4';
+		$this->version = '0.3.5';
 
 		parent::__construct();
 
@@ -483,7 +483,7 @@ class Mobile_Theme extends Module
 
 		echo '<script type="text/javascript">var translate_nopaymentmodule = \''.$this->l('Sorry, no payment module is available in your country.').'\';</script>';
 		$paypal = Module::getInstanceByName('paypal');
-		if ($paypal && $paypal->active && && version_compare($paypal->version, '3.2.0', '>=') && !$params['cookie']->isLogged())
+		if ($paypal && $paypal->active && version_compare($paypal->version, '3.2.0', '>=') && !$params['cookie']->isLogged())
 		{
 			if (strpos($_SERVER['PHP_SELF'], 'product.php') !== false)
 				$smarty->assign('paypal_product', $paypal->renderExpressCheckoutButton('product').$paypal->renderExpressCheckoutForm('product'));
