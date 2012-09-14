@@ -52,6 +52,8 @@
 	{/foreach}
 {/if}
 
+{if isset($translate_nopayment)}{$translate_nopayment}{/if}
+
 {if isset($js_files_mobile)}
 	{foreach from=$js_files_mobile item=js_uri}
 	<script type="text/javascript" src="{$js_uri}"></script>

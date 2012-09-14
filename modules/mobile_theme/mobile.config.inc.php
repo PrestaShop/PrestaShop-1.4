@@ -25,7 +25,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-if (_THEME_NAME_ == 'prestashop_mobile')
+if (_THEME_NAME_ == 'prestashop_mobile' || (isset($_GET['ps_mobile_site']) && $_GET['ps_mobile_site'] == 1))
 {
   /* Do not allow One-page Checkout and Guest Checkout with Mobile template */
 	Configuration::set('PS_ORDER_PROCESS_TYPE', 0);

@@ -33,7 +33,7 @@ class Mobile_Theme extends Module
 	{
 		$this->name = 'mobile_theme';
 		$this->tab = (version_compare(_PS_VERSION_, 1.4) >= 0 ? 'administration' : 'Theme');
-		$this->version = '0.3.5';
+		$this->version = '0.3.6';
 
 		parent::__construct();
 
@@ -276,6 +276,19 @@ class Mobile_Theme extends Module
 
 		global $js_files;
 
+		// Make sure order-opc is well redirected to order
+		if ($site_type == 'ps_mobile_site' && strpos($_SERVER['PHP_SELF'], 'order-opc.php') !== false)
+		{
+			global $link;
+
+			$dest = $link->getPageLink('order.php', true);
+
+			header('HTTP/1.0 302 Moved');
+			header('Location: '.$dest.(strpos($dest, '?') !== false ? '&' : '?').'ps_mobile_site=1'.(isset($_GET['mobile_iframe']) ? '&mobile_iframe=1' : ''));
+			exit;
+		}
+
+
 		$site_type_cookie = (int)($site_type == 'ps_full_site');
 		if (isset($params['cookie']->full_site) && $params['cookie']->full_site == $site_type_cookie && !isset($_GET['ps_mobile_site']) && !isset($_GET['ps_full_site']))
 		{
@@ -481,7 +494,6 @@ class Mobile_Theme extends Module
 		'PS_MOBILE_THEME_BUTTONS', 'PS_MOBILE_THEME_HEADER_FOOTER')));
 
 
-		echo '<script type="text/javascript">var translate_nopaymentmodule = \''.$this->l('Sorry, no payment module is available in your country.').'\';</script>';
 		$paypal = Module::getInstanceByName('paypal');
 		if ($paypal && $paypal->active && version_compare($paypal->version, '3.2.0', '>=') && !$params['cookie']->isLogged())
 		{
@@ -493,6 +505,10 @@ class Mobile_Theme extends Module
 
 		// Display/assign specific content for pages
 		self::_pageStore($params);
+
+		// Add translation of JS message for the payment page
+		if (strpos($_SERVER['PHP_SELF'], 'order.php') !== false)
+			$smarty->assign('translate_nopayment', '<script type="text/javascript">var translate_nopaymentmodule = "'.$this->l('Sorry, no payment module is available in your country.').'";</script>');
 	}
 
 	/**
