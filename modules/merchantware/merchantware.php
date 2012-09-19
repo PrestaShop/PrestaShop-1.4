@@ -260,9 +260,9 @@ class MerchantWare extends PaymentModule
 	 */
 	private function _postValidation()
 	{
-		if (Tools::isSubmit('submit'.$this->className))
+		if (Tools::isSubmit('submitMerchantWare'))
 			$this->_postValidationCredentials();
-		else if (Tools::isSubmit('subscribe'.$this->className))
+		else if (Tools::isSubmit('subscribeMerchantWare'))
 			$this->_postValidationSubscription();
 		else
 			$this->_postValidationLayout();
@@ -328,6 +328,7 @@ class MerchantWare extends PaymentModule
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $_POST);
 
 		$output = curl_exec($ch);
+
 		curl_close($ch);
 		if ($output != 'sent')
 		{
