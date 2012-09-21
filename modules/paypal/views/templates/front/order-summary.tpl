@@ -30,7 +30,7 @@
 	{capture name=path}<a href="order.php">{l s='Your shopping cart' mod='paypal'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='PayPal' mod='paypal'}{/capture}
 	{include file="$tpl_dir./breadcrumb.tpl"}
 
-	<h2>{l s='Order summary' mod='paypal'}</h2>
+	<h1>{l s='Order summary' mod='paypal'}</h1>
 
 	{assign var='current_step' value='payment'}
 	{include file="$tpl_dir./order-steps.tpl"}
@@ -45,7 +45,7 @@
 		</p>
 		<p style="margin-top:20px;">
 			- {l s='The total amount of your order is' mod='paypal'}
-			<span id="amount" class="price">{$total}</span> {if $use_taxes == 1}{l s='(tax incl.)' mod='paypal'}{/if}
+			<span id="amount" class="price"><strong>{$total}</strong></span> {if $use_taxes == 1}{l s='(tax incl.)' mod='paypal'}{/if}
 		</p>
 		<p>
 			- {l s='We accept the following currency to be sent by PayPal:' mod='paypal'}&nbsp;<b>{$currency->name}</b>

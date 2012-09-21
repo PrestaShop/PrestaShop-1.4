@@ -19,7 +19,11 @@
 }
 
 #paypal-wrapper {
-	position: relative;
+	position: relative
+}
+
+#paypal-wrapper ul li {
+	text-align: left
 }
 
 #paypal-wrapper hr {
@@ -43,7 +47,7 @@
 	z-index: 100;
 	background: #fff2cf;
 	border: 1px solid #aaa;
-	padding-bottom: 6px !important;
+	padding-bottom: 6px !important
 }
 
 .disabled,

@@ -42,12 +42,12 @@ class PayPalSubmitModuleFrontController extends ModuleFrontController
 
 		$this->id_module = (int)Tools::getValue('id_module');
 		$this->id_order = (int)Tools::getValue('id_order');
-		$this->order = PayPalOrder::getOrderById($this->id_order);
+		$order = PayPalOrder::getOrderById($this->id_order);
 
 		$this->context->smarty->assign(array(
-		'currency' => $this->context->currency,
 		'is_guest' => $this->context->customer->is_guest,
-		'order' => $this->order,
+		'order' => $order,
+		'price' => Tools::displayPrice($order['total_paid'], $this->context->currency),
 		'HOOK_ORDER_CONFIRMATION' => $this->displayOrderConfirmation(),
 		'HOOK_PAYMENT_RETURN' => $this->displayPaymentReturn()));
 

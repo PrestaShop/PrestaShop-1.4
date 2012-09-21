@@ -37,9 +37,9 @@ abstract class PayPalAbstract extends PaymentModule
 	public $context;
 	public $paypal_logos;
 
+	const BACKWARD_REQUIREMENT = '0.1';
 	const DEFAULT_COUNTRY_ISO = 'GB';
 
-	// Prestashop 1.3 retro-compatibility
 	const ONLY_PRODUCTS	= 1;
 	const ONLY_DISCOUNTS = 2;
 	const BOTH = 3;
@@ -52,7 +52,7 @@ abstract class PayPalAbstract extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'payments_gateways';
-		$this->version = '3.2.0';
+		$this->version = '3.2.1';
 
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
@@ -63,28 +63,49 @@ abstract class PayPalAbstract extends PaymentModule
 		$this->description = $this->l('Accepts payments by credit cards (CB, Visa, MasterCard, Amex, Aurore, Cofinoga, 4 stars) with PayPal.');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details?');
 
-		/** Backward compatibility */
-		require(_PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php');
+		/* Backward compatibility */
+		if (_PS_VERSION_ < '1.5')
+			$this->backwardCompatibilityChecks();
 		$this->page = basename(__FILE__, '.php');
 
 		if (self::isInstalled($this->name))
 		{
-			// Default methods (initialization & checks)
+			/* Default methods (initialization & checks) */
 			$this->loadLangDefault();
 			$this->paypal_logos = new PayPalLogos($this->iso_code);
 
 			if (defined('_PS_ADMIN_DIR_'))
 			{
-				// Upgrade and compatibility checks
+				/* Upgrade and compatibility checks */
 				$this->runUpgrades();
 				$this->compatibilityCheck();
 				$this->warningsCheck();
 
+				/* Allowed countries for mobile */
 				$iso_code = Country::getIsoById((int)Configuration::get('PS_DEFAULT_COUNTRY'));
 				$paypal_countries = array('ES', 'FR', 'PL', 'IT');
 				if (!$this->active && ($this->context->shop->getTheme() == 'default') && in_array($iso_code, $paypal_countries))
 					$this->warning .= $this->l('The mobile theme only works with the PayPal\'s payment module at this time. Please activate the module to enable payments.');
 			}
+		}
+	}
+
+	/* Check status of backward compatibility module*/
+	private function backwardCompatibilityChecks()
+	{
+		if (self::isInstalled($this->name))
+		{
+			if (Module::isInstalled('backwardcompatibility'))
+			{
+				$backward_module = Module::getInstanceByName('backwardcompatibility');
+				if (!$backward_module->active)
+					$this->warning .= $this->l('To work properly the module requires the backward compatibility module enabled');
+				elseif ($backward_module->version < PayPal::BACKWARD_REQUIREMENT)
+					$this->warning .= $this->l('To work properly the module requires at least the backward compatibility module v').PayPal::BACKWARD_REQUIREMENT;
+			}
+			else
+				$this->warning .= $this->l('In order to use the module you need to install the backward compatibility.');
+			require(_PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php');
 		}
 	}
 
@@ -94,8 +115,11 @@ abstract class PayPalAbstract extends PaymentModule
 		if (!parent::install() || !$this->registerHook('payment') || !$this->registerHook('paymentReturn') ||
         !$this->registerHook('shoppingCartExtra') || !$this->registerHook('backBeforePayment') || !$this->registerHook('rightColumn') ||
         !$this->registerHook('cancelProduct') || !$this->registerHook('productFooter') || !$this->registerHook('header') ||
-		!$this->registerHook('adminOrder') || !$this->registerHook('backOfficeHeader') || !$this->registerHook('displayMobileHeader')
-		|| !$this->registerHook('displayMobileShoppingCartTop') || !$this->registerHook('displayMobileAddToCartTop'))
+		!$this->registerHook('adminOrder') || !$this->registerHook('backOfficeHeader'))
+			return false;
+
+		if ((_PS_VERSION_ >= '1.5') && (!$this->registerHook('displayMobileHeader') ||
+		!$this->registerHook('displayMobileShoppingCartTop') || !$this->registerHook('displayMobileAddToCartTop')))
 			return false;
 
 		if (file_exists(_PS_MODULE_DIR_.$this->name.'/paypal_tools.php'))
@@ -284,6 +308,7 @@ abstract class PayPalAbstract extends PaymentModule
 			'PayPal_logo' => $this->paypal_logos->getLogos(),
 			'PayPal_allowed_methods' => $this->getPaymentMethods(),
 			'PayPal_country' => Country::getNameById((int)$english_language_id, (int)$this->default_country),
+			'PayPal_country_id' => (int)$this->default_country,
 			'PayPal_business' => Configuration::get('PAYPAL_BUSINESS'),
 			'PayPal_payment_method'	=> (int)Configuration::get('PAYPAL_PAYMENT_METHOD'),
 			'PayPal_api_username' => Configuration::get('PAYPAL_API_USER'),
@@ -319,36 +344,28 @@ abstract class PayPalAbstract extends PaymentModule
 	
 	public function hookDisplayMobileShoppingCartTop()
 	{
-		if (!$this->context->customer->isLogged())
-			return $this->renderExpressCheckoutButton('cart').$this->renderExpressCheckoutForm('cart');
+		return $this->renderExpressCheckoutButton('cart').$this->renderExpressCheckoutForm('cart');
 	}
 	
 	public function hookDisplayMobileAddToCartTop()
 	{
-		if (!$this->context->customer->isLogged())
-			return $this->renderExpressCheckoutButton('cart');
+		return $this->renderExpressCheckoutButton('cart');
 	}
 	
 	public function hookProductFooter()
 	{
-		if ($this->context->customer->isLogged())
-			return;
-		
-		$content = '';
-		if (!$this->context->getMobileDevice())
-			$content .= $this->renderExpressCheckoutButton('product');
-
-		$content .= $this->renderExpressCheckoutForm('product');
-
-		return $content;
+		$content = (!$this->context->getMobileDevice()) ? $this->renderExpressCheckoutButton('product') : '';
+		return $content.$this->renderExpressCheckoutForm('product');
 	}
 	
 	public function renderExpressCheckoutButton($type)
 	{
 		if (!Configuration::get('PAYPAL_EXPRESS_CHECKOUT_SHORTCUT'))
 			return;
-		if (!in_array(ECS, $this->getPaymentMethods()) || ((int)Configuration::get('PAYPAL_BUSINESS') == 1 
-		&& (int)Configuration::get('PAYPAL_PAYMENT_METHOD') == HSS))
+
+		if (!in_array(ECS, $this->getPaymentMethods()) ||
+		(((int)Configuration::get('PAYPAL_BUSINESS') == 1) &&
+		(int)Configuration::get('PAYPAL_PAYMENT_METHOD') == HSS))
 			return;
 
 		$iso_lang = array('en' => 'en_US', 'fr' => 'fr_FR');
@@ -367,10 +384,8 @@ abstract class PayPalAbstract extends PaymentModule
 	public function renderExpressCheckoutForm($type)
 	{
 		if (!Configuration::get('PAYPAL_EXPRESS_CHECKOUT_SHORTCUT') || !in_array(ECS, $this->getPaymentMethods()) ||
-		((int)Configuration::get('PAYPAL_BUSINESS') == 1 && (int)Configuration::get('PAYPAL_PAYMENT_METHOD') == HSS))
+		(((int)Configuration::get('PAYPAL_BUSINESS') == 1) && ((int)Configuration::get('PAYPAL_PAYMENT_METHOD') == HSS)))
 			return;
-
-		$iso_lang = array('en' => 'en_US', 'fr' => 'fr_FR');
 
 		$this->context->smarty->assign(array(
 			'PayPal_payment_type' => $type,
@@ -388,7 +403,7 @@ abstract class PayPalAbstract extends PaymentModule
 		return Configuration::get('PAYPAL_PAYMENT_METHOD');
 	}
 
-	public function hookPayment($params)
+	public function hookPayment()
 	{
 		if (!$this->active)
 			return;
@@ -406,7 +421,15 @@ abstract class PayPalAbstract extends PaymentModule
 				$values = array('get_confirmation' => true);
 				$link = $shop_url._MODULE_DIR_.$this->name.'/express_checkout/submit.php';
 
-				Tools::redirectLink($link.'?'.http_build_query($values, '', '&'));
+				if (_PS_VERSION_ < '1.5')
+					Tools::redirectLink($link.'?'.http_build_query($values, '', '&'));
+				else
+				{
+					$controller = new FrontController();
+					$controller->init();
+
+					Tools::redirect(Context::getContext()->link->getModuleLink('paypal', 'confirm', $values));
+				}
 			}
 		}
 		$this->context->smarty->assign(array(
@@ -477,6 +500,13 @@ abstract class PayPalAbstract extends PaymentModule
 
 	public function getTrackingCode()
 	{
+		if ((_PS_VERSION_ < '1.5') && (_THEME_NAME_ == 'prestashop_mobile' || (isset($_GET['ps_mobile_site']) && $_GET['ps_mobile_site'] == 1)))
+		{
+			if (_PS_MOBILE_TABLET_)
+				return TABLET_TRACKING_CODE;
+			elseif (_PS_MOBILE_PHONE_)
+				return SMARTPHONE_TRACKING_CODE;
+		}
 		if (isset($this->context->mobile_detect))
 		{
 			if ($this->context->mobile_detect->isTablet())
@@ -506,7 +536,7 @@ abstract class PayPalAbstract extends PaymentModule
 		return $this->fetchTemplate('/views/templates/front/express_checkout/', 'express_checkout');
 	}
 
-	public function hookPaymentReturn($params)
+	public function hookPaymentReturn()
 	{
 		if (!$this->active)
 			return;
@@ -514,15 +544,15 @@ abstract class PayPalAbstract extends PaymentModule
 		return $this->fetchTemplate('/views/templates/front/', 'confirmation');
 	}
 
-	public function hookRightColumn($params)
+	public function hookRightColumn()
 	{
 		$this->context->smarty->assign('logo', $this->paypal_logos->getCardsLogo(true));
 		return $this->fetchTemplate('/views/templates/front/', 'column');
 	}
 
-	public function hookLeftColumn($params)
+	public function hookLeftColumn()
 	{
-		return $this->hookRightColumn($params);
+		return $this->hookRightColumn();
 	}
 
 	public function hookBackBeforePayment($params)

@@ -43,7 +43,7 @@
 	<br />
 
 	{if $order}
-	<p>{l s='Total of the transaction (taxes incl.) :'} <span class="bold">{$order.total_paid}{$currency->sign}</span></p>
+	<p>{l s='Total of the transaction (taxes incl.) :'} <span class="bold">{$price}</span></p>
 	<p>{l s='Your order ID is :'} <span class="bold">{$order.id_order}</span></p>
 	<p>{l s='Your PayPal transaction ID is :'} <span class="bold">{$order.id_transaction}</span></p>
 	{/if}

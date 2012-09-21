@@ -57,7 +57,7 @@
 
 						<select name="paypal_country_default" id="paypal_country_default">
 						{foreach from=$Countries item=country}
-							<option value="{$country.id_country}">{$country.name}</option>
+							<option value="{$country.id_country}" {if $country.id_country == $PayPal_country_id}selected="selected"{/if}>{$country.name}</option>
 						{/foreach}
 						</select>
 

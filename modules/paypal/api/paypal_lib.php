@@ -27,7 +27,7 @@
 
 include_once(_PS_MODULE_DIR_.'paypal/api/paypal_connect.php');
 
-define('PAYPAL_API_VERSION', '60.0');
+define('PAYPAL_API_VERSION', '94.0');
 
 class PaypalLib extends PayPal
 {

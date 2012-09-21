@@ -49,7 +49,10 @@ class PayPalExpressCheckoutSubmit extends OrderConfirmationControllerCore
 	{
 		$order = PayPalOrder::getOrderById((int)Tools::getValue('id_order'));
 
-		$this->context->smarty->assign(array('order' => $order, 'currency' => $this->context->currency, 'use_mobile' => $this->context->getMobileDevice()));
+		$this->context->smarty->assign(array(
+			'order' => $order,
+			'price' => Tools::displayPrice($order['total_paid'], $this->context->currency),
+			'use_mobile' => $this->context->getMobileDevice()));
 
 		if (!$order)
 			$this->context->smarty->assign('errors', array($this->paypal->l('Payment error')));
@@ -280,14 +283,18 @@ else
 	// Display payment confirmation
 	if ($ppec->ready && Tools::getValue('get_confirmation'))
 	{
-		$ppec->getContext()->smarty->assign(array(
-		'form_action' => PayPal::getShopDomainSsl(true, true)._MODULE_DIR_.$ppec->name.'/express_checkout/submit.php',
-		'currency' => new Currency((int)$ppec->getContext()->cart->id_currency),
-		'total' => $ppec->getContext()->cart->getOrderTotal(true),
-		'logos' => $ppec->paypal_logos->getLogos(),
-		'use_mobile' => (bool)$ppec->getContext()->getMobileDevice()));
+		if (_PS_VERSION_ < '1.5')
+		{
+			$currency = new Currency((int)$ppec->getContext()->cart->id_currency);
 
-		$display->setTemplate(_PS_MODULE_DIR_.'paypal/views/templates/front/express_checkout/payment.tpl');
+			$ppec->getContext()->smarty->assign(array(
+			'form_action' => PayPal::getShopDomainSsl(true, true)._MODULE_DIR_.$ppec->name.'/express_checkout/submit.php',
+			'total' => Tools::displayPrice($ppec->getContext()->cart->getOrderTotal(true), $currency),
+			'logos' => $ppec->paypal_logos->getLogos(),
+			'use_mobile' => (bool)$ppec->getContext()->getMobileDevice()));
+
+			$display->setTemplate(_PS_MODULE_DIR_.'paypal/views/templates/front/order-summary.tpl');
+		}
 	}
 	// Display result if error occurred
 	else
