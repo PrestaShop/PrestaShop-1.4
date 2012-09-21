@@ -50,8 +50,12 @@ class PayPalIntegralEvolutionSubmit extends OrderConfirmationControllerCore
 	 */
 	public function displayContent()
 	{
-		$this->context->smarty->assign(array('order' => PayPalOrder::getOrderById((int)Tools::getValue('id_order')),
-		'currency' => $this->context->currency));
+		$order = PayPalOrder::getOrderById((int)Tools::getValue('id_order'));
+
+		$this->context->smarty->assign(array(
+			'order' => $order,
+			'price' => Tools::displayPrice($order['total_paid'], $this->context->currency)
+		));
 
 		echo $this->context->smarty->fetch(_PS_MODULE_DIR_.'/paypal/views/templates/front/order-confirmation.tpl');
 	}

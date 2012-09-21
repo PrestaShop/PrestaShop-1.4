@@ -279,7 +279,7 @@ else
 	}
 
 	$display = new BWDisplay();
-	
+
 	// Display payment confirmation
 	if ($ppec->ready && Tools::getValue('get_confirmation'))
 	{

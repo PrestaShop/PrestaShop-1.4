@@ -24,7 +24,6 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-
 <p class="payment_module">
 	<a href="javascript:void(0)" onclick="$('#paypal_payment_form').submit();" id="paypal_process_payment" title="{l s='Pay with PayPal' mod='paypal'}">
 		{if isset($use_mobile) && $use_mobile}

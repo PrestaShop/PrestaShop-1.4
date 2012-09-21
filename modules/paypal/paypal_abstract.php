@@ -432,12 +432,14 @@ abstract class PayPalAbstract extends PaymentModule
 				}
 			}
 		}
+
 		$this->context->smarty->assign(array(
 			'logos' => $this->paypal_logos->getLogos(), 
 			'sandbox_mode' => Configuration::get('PAYPAL_SANDBOX'), 
 			'use_mobile' => (bool)$this->context->getMobileDevice(),
 			'PayPal_lang_code' => (isset($iso_lang[$this->context->language->iso_code])) ? $iso_lang[$this->context->language->iso_code] : 'en_US'
 			));
+
 		if ($method == HSS)
 		{
 			$billing_address = new Address($this->context->cart->id_address_invoice);

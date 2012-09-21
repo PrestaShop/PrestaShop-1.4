@@ -128,7 +128,7 @@ class PaypalExpressCheckout extends Paypal
 				$product = new Product((int)$this->id_product);
 				if (!$product || !$this->quantity)
 					return false;
-					
+
 				// Build a product array with needed values
 				$this->product_list[] = array(
 				'id_product' => $product->id,

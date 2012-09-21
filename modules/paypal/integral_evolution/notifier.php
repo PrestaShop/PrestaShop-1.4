@@ -140,7 +140,7 @@ class PayPalNotifier extends PayPal
 
 		return $result;
 	}
-	
+
 	public function createLog($data, $file = false)
 	{
 		// Integral Evolution log file generation
@@ -148,7 +148,7 @@ class PayPalNotifier extends PayPal
 		var_dump($data);
 		$buff = ob_get_contents();
 		ob_end_clean();
-	
+
 		$file = $file ? $file : 'log.txt';
 		$handle = @fopen($file, 'w+');
 		fwrite($handle, $buff);

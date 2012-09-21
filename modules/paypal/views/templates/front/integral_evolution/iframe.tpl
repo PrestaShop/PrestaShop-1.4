@@ -74,8 +74,10 @@
     <input type="hidden" name="bn" value="{$tracking_code}" />
 </form>
 
+{literal}
 <script type="text/javascript">
 	$(document).ready( function() {
 		$('#paypal_hss_iframe').submit();
 	});
 </script>
+{/literal}
