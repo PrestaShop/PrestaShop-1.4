@@ -52,14 +52,14 @@ class BackwardCompatibility extends Module
 
 	public function install()
 	{
-		if (!parent::install() || !$this->registerHook('header') || !$this->registerHook('backOfficeHeader'))
+		if (!parent::install() || !$this->registerHook('header') || !$this->registerHook('backOfficeHeader') || !$this->registerHook('processCarrier'))
 			return false;
 
 		/* Move module to top */
 		if (_PS_VERSION_ < '1.5')
-			$hooks = array((int)Hook::get('header'), (int)Hook::get('backOfficeHeader'));
+			$hooks = array((int)Hook::get('header'), (int)Hook::get('backOfficeHeader'), (int)Hook::get('processCarrier'));
 		else
-			$hooks = array((int)Hook::getIdByName('header'), (int)Hook::getIdByName('backOfficeHeader'));
+			$hooks = array((int)Hook::getIdByName('header'), (int)Hook::getIdByName('backOfficeHeader'), (int)Hook::getIdByName('processCarrier'));
 
 		$module = Module::getInstanceByName($this->name);
 
@@ -72,9 +72,9 @@ class BackwardCompatibility extends Module
 
 			if ((isset($moduleInfo['position']) && (int)$moduleInfo['position'] > 0) ||
 				(isset($moduleInfo['m.position']) && (int)$moduleInfo['m.position'] > 0))
-				return $module->updatePosition((int)$hook, 0, 0);
-			return $module->updatePosition((int)$hook, 1, 0);
+				$module->updatePosition((int)$hook, 0, 1);
 		}
+		return true;
 	}
 }
 
