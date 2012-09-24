@@ -82,7 +82,7 @@ class UpgraderCore
 
 	/**
 	 * downloadLast download the last version of PrestaShop and save it in $dest/$filename
-	 * 
+	 *
 	 * @param string $dest directory where to save the file
 	 * @param string $filename new filename
 	 * @return boolean
@@ -110,7 +110,7 @@ class UpgraderCore
 
 	/**
 	 * checkPSVersion ask to prestashop.com if there is a new version. return an array if yes, false otherwise
-	 * 
+	 *
 	 * @param boolean $refresh if set to true, will force to download channel.xml
 	 * @param array $array_no_major array of channels which will return only the immediate next version number.
 	 *
@@ -157,7 +157,7 @@ class UpgraderCore
 
 				$channel_name = (string)$channel['name'];
 				// stable means major and minor
-				// boolean algebra 
+				// boolean algebra
 				// skip if one of theses props are true:
 				// - "stable" in xml, "minor" or "major" in configuration
 				// - channel in xml is not channel in configuration
@@ -166,12 +166,12 @@ class UpgraderCore
 				// now we are on the correct channel (minor, major, ...)
 				foreach ($channel as $branch)
 				{
-					// branch name = which version 
+					// branch name = which version
 					$branch_name = (string)$branch['name'];
 					// if channel is "minor" in configuration, do not allow something else than current branch
 					// otherwise, allow superior or equal
 					if (
-						(in_array($this->channel, $followed_channels) 
+						(in_array($this->channel, $followed_channels)
 						&& version_compare($branch_name, $this->branch, '>='))
 					)
 					{
@@ -211,24 +211,23 @@ class UpgraderCore
 
 	/**
 	 * delete the file /config/xml/$version.xml if exists
-	 * 
+	 *
 	 * @param string $version
 	 * @return boolean true if succeed
 	 */
 	public function clearXmlMd5File($version)
 	{
-		$filename = _PS_ROOT_DIR_.'/config/xml/'.$version.'.xml';
-		if (file_exists($filename))
-			return unlink ($filename);
+		if (file_exists(_PS_ROOT_DIR_.'/config/xml/'.$version.'.xml'))
+			return unlink(_PS_ROOT_DIR_.'/config/xml/'.$version.'.xml');
 		return true;
 	}
 
 	/**
 	 * use the addons api to get xml files
-	 * 
-	 * @param mixed $xml_localfile 
-	 * @param mixed $postData 
-	 * @param mixed $refresh 
+	 *
+	 * @param mixed $xml_localfile
+	 * @param mixed $postData
+	 * @param mixed $refresh
 	 * @access public
 	 * @return void
 	 */
@@ -240,8 +239,7 @@ class UpgraderCore
 				unlink(_PS_ROOT_DIR_.'/config/xml');
 			mkdir(_PS_ROOT_DIR_.'/config/xml', 0777);
 		}
-		$delay = (3600 * Upgrader::DEFAULT_CHECK_VERSION_DELAY_HOURS);
-		if ($refresh || !file_exists($xml_localfile) || filemtime($xml_localfile) < (time() - $delay))
+		if ($refresh || !file_exists($xml_localfile) || filemtime($xml_localfile) < (time() - (3600 * Upgrader::DEFAULT_CHECK_VERSION_DELAY_HOURS)))
 		{
 			$protocolsList = array('https://' => 443, 'http://' => 80);
 
@@ -280,11 +278,10 @@ class UpgraderCore
 				unlink(_PS_ROOT_DIR_.'/config/xml');
 			mkdir(_PS_ROOT_DIR_.'/config/xml', 0777);
 		}
-		$delay = (3600 * Upgrader::DEFAULT_CHECK_VERSION_DELAY_HOURS);
-		if ($refresh || !file_exists($xml_localfile) || filemtime($xml_localfile) < (time() - $delay))
+		if ($refresh || !file_exists($xml_localfile) || filemtime($xml_localfile) < (time() - (3600 * Upgrader::DEFAULT_CHECK_VERSION_DELAY_HOURS)))
 		{
 			// @ to hide errors if md5 file is not reachable
-			$xml_string = @file_get_contents($xml_remotefile, false, 
+			$xml_string = @file_get_contents($xml_remotefile, false,
 				stream_context_create(array('http' => array('timeout' => 3))));
 			$xml = @simplexml_load_string($xml_string);
 			if ($xml !== false)
@@ -297,9 +294,7 @@ class UpgraderCore
 
 	public function getXmlChannel($refresh = false)
 	{
-		$xml_local = _PS_ROOT_DIR_.'/config/xml/channel.xml';
-		$xml_remote = $this->rss_channel_link;
-		$xml = $this->getXmlFile($xml_local, $xml_remote, $refresh);
+		$xml = $this->getXmlFile(_PS_ROOT_DIR_.'/config/xml/channel.xml', $this->rss_channel_link, $refresh);
 		if ($refresh)
 		{
 			if (class_exists('Configuration', false))
@@ -309,21 +304,19 @@ class UpgraderCore
 	}
 
 	/**
-	 * return xml containing the list of all default PrestaShop files for version $version, 
+	 * return xml containing the list of all default PrestaShop files for version $version,
 	 * and their respective md5sum
-	 * 
-	 * @param string $version 
+	 *
+	 * @param string $version
 	 * @return SimpleXMLElement or false if error
 	 */
 	public function getXmlMd5File($version, $refresh = false)
 	{
-		$xml_local = _PS_ROOT_DIR_.'/config/xml/'.$version.'.xml';
-		$xml_remote = $this->rss_md5file_link_dir.$version.'.xml';
-		return $this->getXmlFIle($xml_local, $xml_remote, $refresh);
+		return $this->getXmlFIle(_PS_ROOT_DIR_.'/config/xml/'.$version.'.xml', $this->rss_md5file_link_dir.$version.'.xml', $refresh);
 	}
 
 	/**
-	 * returns an array of files which are present in PrestaShop version $version and has been modified 
+	 * returns an array of files which are present in PrestaShop version $version and has been modified
 	 * in the current filesystem.
 	 * @return array of string> array of filepath
 	 */
@@ -335,9 +328,7 @@ class UpgraderCore
 		{
 			$checksum = $this->getXmlMd5File($version, $refresh);
 			if ($checksum == false)
-			{
 				$this->changed_files = false;
-			}
 			else
 				$this->browseXmlAndCompare($checksum->ps_root_dir[0]);
 		}
@@ -345,23 +336,18 @@ class UpgraderCore
 	}
 
 	/** populate $this->changed_files with $path
-	 * in sub arrays  mail, translation and core items 
+	 * in sub arrays  mail, translation and core items
 	 * @param string $path filepath to add, relative to _PS_ROOT_DIR_
 	 */
 	protected function addChangedFile($path)
 	{
 		$this->version_is_modified = true;
-		
+
 		if (strpos($path, 'mails/') !== false)
 			$this->changed_files['mail'][] = $path;
-		else if (
-			strpos($path, '/en.php') !== false
-			|| strpos($path, '/fr.php') !== false
-			|| strpos($path, '/es.php') !== false
-			|| strpos($path, '/it.php') !== false
-			|| strpos($path, '/de.php') !== false
-			|| strpos($path, 'translations/') !== false
-		)
+		elseif (strpos($path, '/en.php') !== false || strpos($path, '/fr.php') !== false
+			|| strpos($path, '/es.php') !== false || strpos($path, '/it.php') !== false
+			|| strpos($path, '/de.php') !== false || strpos($path, 'translations/') !== false)
 			$this->changed_files['translation'][] = $path;
 		else
 			$this->changed_files['core'][] = $path;
@@ -376,7 +362,7 @@ class UpgraderCore
 		$this->missing_files[] = $path;
 	}
 
-	
+
 	public function md5FileAsArray($node, $dir = '/')
 	{
 		$array = array();
@@ -397,11 +383,11 @@ class UpgraderCore
 	}
 
 	/**
-	 * getDiffFilesList 
-	 * 
-	 * @param string $version1 
-	 * @param string $version2 
-	 * @param boolean $show_modif 
+	 * getDiffFilesList
+	 *
+	 * @param string $version1
+	 * @param string $version2
+	 * @param boolean $show_modif
 	 * @return array array('modified'=>array(...), 'deleted'=>array(...))
 	 */
 	public  function getDiffFilesList($version1, $version2, $show_modif = true, $refresh = false)
@@ -422,13 +408,13 @@ class UpgraderCore
 	}
 
 	/**
-	 * returns an array of files which 
-	 * 
+	 * returns an array of files which
+	 *
 	 * @param array $v1 result of method $this->md5FileAsArray()
 	 * @param array $v2 result of method $this->md5FileAsArray()
 	 * @param boolean $show_modif if set to false, the method will only
-	 *   list deleted files 
-	 * @param string $path 
+	 *   list deleted files
+	 * @param string $path
 	 * 		deleted files in version $v2. Otherwise, only deleted.
 	 * @return array('modified' => array(files..), 'deleted' => array(files..)
 	 */
@@ -465,13 +451,13 @@ class UpgraderCore
 		return array('deleted' => $deletedFiles, 'modified' => $modifiedFiles);
 	}
 
-	
+
 	/**
-	 * Compare the md5sum of the current files with the md5sum of the original 
-	 * 
-	 * @param mixed $node 
-	 * @param array $current_path 
-	 * @param int $level 
+	 * Compare the md5sum of the current files with the md5sum of the original
+	 *
+	 * @param mixed $node
+	 * @param array $current_path
+	 * @param int $level
 	 * @return void
 	 */
 	protected function browseXmlAndCompare($node, &$current_path = array(), $level = 1)
@@ -483,19 +469,19 @@ class UpgraderCore
 				$current_path[$level] = (string)$child['name'];
 				$this->browseXmlAndCompare($child, $current_path, $level + 1);
 			}
-			else if (is_object($child) && $child->getName() == 'md5file')
+			elseif (is_object($child) && $child->getName() == 'md5file')
 			{
 				// We will store only relative path.
 				// absolute path is only used for file_exists and compare
 				$relative_path = '';
 					for ($i = 1; $i < $level; $i++)
-					$relative_path .= $current_path[$i].'/';
+						$relative_path .= $current_path[$i].'/';
 				$relative_path .= (string)$child['name'];
 
 				$fullpath = _PS_ROOT_DIR_.DIRECTORY_SEPARATOR.$relative_path;
 				$fullpath = str_replace('ps_root_dir', _PS_ROOT_DIR_, $fullpath);
 
-					// replace default admin dir by current one 
+					// replace default admin dir by current one
 				$fullpath = str_replace(_PS_ROOT_DIR_.'/admin', _PS_ADMIN_DIR_, $fullpath);
 				if (!file_exists($fullpath))
 					$this->addMissingFile($relative_path);

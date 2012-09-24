@@ -1257,14 +1257,14 @@ class Tools14
 		return self::$file_exists_cache[$filename];
 	}
 
-	public static function file_get_contents($url, $useIncludePath = false, $streamContext = null, $curlTimeOut = 5)
+	public static function file_get_contents($url, $useIncludePath = false, $streamContext = NULL, $curlTimeOut = 5)
 	{
-		if ($streamContext == null)
+		if ($streamContext == NULL)
 			$streamContext = @stream_context_create(array('http' => array('timeout' => 5)));
 
 		if (in_array(ini_get('allow_url_fopen'), array('On', 'on', '1')))
 			return @file_get_contents($url, $useIncludePath, $streamContext);
-		elseif (function_exists('curl_init'))
+		elseif (function_exists('curl_init') && in_array(ini_get('allow_url_fopen'), array('On', 'on', '1')))
 		{
 			$curl = curl_init();
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -1360,12 +1360,14 @@ class Tools14
 		if (strlen($html_content) > 0)
 		{
 			$htmlContentCopy = $html_content;
-			$html_content = preg_replace_callback('/\\s*(<script\\b[^>]*?>)([\\s\\S]*?)(<\\/script>)\\s*/i', array('Tools', 'packJSinHTMLpregCallback'), $html_content);
+			$html_content = preg_replace_callback(
+				'/\\s*(<script\\b[^>]*?>)([\\s\\S]*?)(<\\/script>)\\s*/i'
+				,array('Tools', 'packJSinHTMLpregCallback')
+				,$html_content);
 			
 			// If the string is too big preg_replace return an error
 			// In this case, we don't compress the content
-			if (preg_last_error() == PREG_BACKTRACK_LIMIT_ERROR)
-			{
+			if ( preg_last_error() == PREG_BACKTRACK_LIMIT_ERROR ) {
 				error_log('ERROR: PREG_BACKTRACK_LIMIT_ERROR in function packJSinHTML');
 				return $htmlContentCopy;
 			}
@@ -1376,13 +1378,14 @@ class Tools14
 
 	public static function packJSinHTMLpregCallback($preg_matches)
 	{
-		$preg_matches[1] .= '/* <![CDATA[ */';
+		$preg_matches[1] = $preg_matches[1].'/* <![CDATA[ */';
 		$preg_matches[2] = self::packJS($preg_matches[2]);
-		$preg_matches[count($preg_matches) - 1] = '/* ]]> */'.$preg_matches[count($preg_matches) - 1];
+		$preg_matches[count($preg_matches)-1] = '/* ]]> */'.$preg_matches[count($preg_matches)-1];
 		unset($preg_matches[0]);
-
-		return implode('', $preg_matches);
+		$output = implode('', $preg_matches);
+		return $output;
 	}
+
 
 	public static function packJS($js_content)
 	{

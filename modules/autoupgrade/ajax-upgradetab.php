@@ -25,7 +25,6 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-
 if (function_exists('date_default_timezone_set'))
 {
 	// date_default_timezone_get calls date_default_timezone_set, which can provide warning
@@ -34,14 +33,13 @@ if (function_exists('date_default_timezone_set'))
 }
 
 if (!defined('_PS_MODULE_DIR_'))
-	define('_PS_MODULE_DIR_', realpath(dirname(__FILE__).'/../../') .'/modules/');
+	define('_PS_MODULE_DIR_', realpath(dirname(__FILE__).'/../../').'/modules/');
 
 define('AUTOUPGRADE_MODULE_DIR', _PS_MODULE_DIR_.'autoupgrade/');
 require_once(AUTOUPGRADE_MODULE_DIR.'functions.php');
 //
 // the following test confirm the directory exists
-if ( realpath(dirname(__FILE__).'/../../').DIRECTORY_SEPARATOR.$_POST['dir'] 
-		!==  realpath(realpath(dirname(__FILE__).'/../../').DIRECTORY_SEPARATOR.$_POST['dir']))
+if (realpath(dirname(__FILE__).'/../../').DIRECTORY_SEPARATOR.$_POST['dir'] !== realpath(realpath(dirname(__FILE__).'/../../').DIRECTORY_SEPARATOR.$_POST['dir']))
 	die('wrong directory :'.$_POST['dir']);
 
 define('_PS_ADMIN_DIR_', realpath(dirname(__FILE__).'/../../').DIRECTORY_SEPARATOR.$_POST['dir']);
@@ -59,6 +57,7 @@ include(AUTOUPGRADE_MODULE_DIR.'init.php');
 
 // this is used to set this->ajax = true in the constructor
 global $ajax;
+
 $ajax = true;
 $adminObj = new AdminSelfUpgrade();
 
@@ -67,30 +66,28 @@ if (is_object($adminObj))
 	$adminObj->ajax = 1;
 	if ($adminObj->checkToken())
 	{
-		// the differences with index.php is here 
+		// the differences with index.php is here
 		$adminObj->ajaxPreProcess();
 		$action = Tools14::getValue('action');
 
 		// no need to use displayConf() here
 
-		if (!empty($action) AND method_exists($adminObj, 'ajaxProcess'.$action) )
+		if (!empty($action) && method_exists($adminObj, 'ajaxProcess'.$action) )
 			$adminObj->{'ajaxProcess'.$action}();
 		else
 			$adminObj->ajaxProcess();
 
 		// @TODO We should use a displayAjaxError
 		$adminObj->displayErrors();
-		if (!empty($action) AND method_exists($adminObj, 'displayAjax'.$action))
+		if (!empty($action) && method_exists($adminObj, 'displayAjax'.$action))
 			$adminObj->{'displayAjax'.$action}();
 		else
 			$adminObj->displayAjax();
-
 	}
 	else
 	{
 		// If this is an XSS attempt, then we should only display a simple, secure page
 		ob_clean();
 		$adminObj->displayInvalidToken();
-
 	}
 }
