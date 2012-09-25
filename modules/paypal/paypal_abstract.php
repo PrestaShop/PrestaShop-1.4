@@ -63,12 +63,10 @@ abstract class PayPalAbstract extends PaymentModule
 		$this->description = $this->l('Accepts payments by credit cards (CB, Visa, MasterCard, Amex, Aurore, Cofinoga, 4 stars) with PayPal.');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details?');
 
-		/* Backward compatibility */
-		if (_PS_VERSION_ < '1.5')
-			$this->backwardCompatibilityChecks();
 		$this->page = basename(__FILE__, '.php');
+		require(_PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php');
 
-		if (self::isInstalled($this->name))
+		if ($this->active)
 		{
 			/* Default methods (initialization & checks) */
 			$this->loadLangDefault();
@@ -76,6 +74,10 @@ abstract class PayPalAbstract extends PaymentModule
 
 			if (defined('_PS_ADMIN_DIR_'))
 			{
+				/* Backward compatibility */
+				if (_PS_VERSION_ < '1.5')
+					$this->backwardCompatibilityChecks();
+
 				/* Upgrade and compatibility checks */
 				$this->runUpgrades();
 				$this->compatibilityCheck();
@@ -93,20 +95,16 @@ abstract class PayPalAbstract extends PaymentModule
 	/* Check status of backward compatibility module*/
 	private function backwardCompatibilityChecks()
 	{
-		if (self::isInstalled($this->name))
+		if (Module::isInstalled('backwardcompatibility'))
 		{
-			if (Module::isInstalled('backwardcompatibility'))
-			{
-				$backward_module = Module::getInstanceByName('backwardcompatibility');
-				if (!$backward_module->active)
-					$this->warning .= $this->l('To work properly the module requires the backward compatibility module enabled');
-				elseif ($backward_module->version < PayPal::BACKWARD_REQUIREMENT)
-					$this->warning .= $this->l('To work properly the module requires at least the backward compatibility module v').PayPal::BACKWARD_REQUIREMENT;
-			}
-			else
-				$this->warning .= $this->l('In order to use the module you need to install the backward compatibility.');
-			require(_PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php');
+			$backward_module = Module::getInstanceByName('backwardcompatibility');
+			if (!$backward_module->active)
+				$this->warning .= $this->l('To work properly the module requires the backward compatibility module enabled');
+			elseif ($backward_module->version < PayPal::BACKWARD_REQUIREMENT)
+				$this->warning .= $this->l('To work properly the module requires at least the backward compatibility module v').PayPal::BACKWARD_REQUIREMENT;
 		}
+		else
+			$this->warning .= $this->l('In order to use the module you need to install the backward compatibility.');
 	}
 
 	public function install()
