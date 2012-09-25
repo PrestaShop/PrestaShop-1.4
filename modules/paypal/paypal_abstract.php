@@ -64,7 +64,9 @@ abstract class PayPalAbstract extends PaymentModule
 		$this->confirmUninstall = $this->l('Are you sure you want to delete your details?');
 
 		$this->page = basename(__FILE__, '.php');
-		require(_PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php');
+
+		if (_PS_VERSION_ < '1.5')
+			require(_PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php');
 
 		if ($this->active)
 		{
