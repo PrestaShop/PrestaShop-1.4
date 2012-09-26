@@ -50,6 +50,8 @@ class CloudCache extends Module
 	/** @var _api Cloudcache Api Object */
 	private $_api;
 
+	const BACKWARD_REQUIREMENT = 0.1;
+
 	/******************************************************************/
 	/** Construct Method **********************************************/
 	/******************************************************************/
@@ -57,7 +59,7 @@ class CloudCache extends Module
 	{
 		$this->name = 'cloudcache';
 		$this->tab = 'administration';
-		$this->version = '1.4.3';
+		$this->version = '1.4.4';
 		$this->author = 'PrestaShop';
 
 		parent::__construct();
@@ -65,6 +67,9 @@ class CloudCache extends Module
 		$this->displayName = $this->l('CloudCache');
 		$this->description = $this->l('Supercharge your Shop with the CloudCache.com Content Delivery Network (CDN).');
 
+
+		if ($this->active && (_PS_VERSION_ < '1.5'))
+			$this->backwardCompatibilityChecks();
 
 		/* Backward compatibility */
 		require(_PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php');
@@ -76,6 +81,26 @@ class CloudCache extends Module
 			$this->_cipherTool = new Blowfish(_COOKIE_KEY_, _COOKIE_IV_);
 
 		$this->_api = new CloudcacheApi();
+	}
+
+	/* Check status of backward compatibility module*/
+	protected function backwardCompatibilityChecks()
+	{
+		if (Module::isInstalled('backwardcompatibility'))
+		{
+			$backward_module = Module::getInstanceByName('backwardcompatibility');
+			if (!$backward_module->active)
+				$this->warning .= $this->l('To work properly the module requires the backward compatibility module enabled');
+			elseif ($backward_module->version < CloudCache::BACKWARD_REQUIREMENT)
+				$this->warning .= $this->l('To work properly the module requires at least the backward compatibility module v').CloudCache::BACKWARD_REQUIREMENT;
+			else
+			{
+				include_once(_PS_MODULE_DIR_.'/'.$backward_module->name.'/backwardcompatibility.php');
+				new BackwardCompatibility();
+			}
+		}
+		else
+			$this->warning .= $this->l('In order to use the module you need to install the backward compatibility.');
 	}
 
 	/**
