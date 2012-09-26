@@ -67,7 +67,6 @@ class CloudCache extends Module
 		$this->displayName = $this->l('CloudCache');
 		$this->description = $this->l('Supercharge your Shop with the CloudCache.com Content Delivery Network (CDN).');
 
-
 		if ($this->active && (_PS_VERSION_ < '1.5'))
 			$this->backwardCompatibilityChecks();
 
