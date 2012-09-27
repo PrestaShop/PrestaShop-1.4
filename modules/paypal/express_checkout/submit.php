@@ -278,7 +278,10 @@ else
 		}
 	}
 
-	$display = new BWDisplay();
+	if (_PS_VERSION_ < '1.5')
+		$display = new BWDisplay();
+	else
+		$display = new Display();
 
 	// Display payment confirmation
 	if ($ppec->ready && Tools::getValue('get_confirmation'))

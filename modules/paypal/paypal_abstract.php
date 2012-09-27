@@ -95,7 +95,7 @@ abstract class PayPalAbstract extends PaymentModule
 	}
 
 	/* Check status of backward compatibility module*/
-	private function backwardCompatibilityChecks()
+	protected function backwardCompatibilityChecks()
 	{
 		if (Module::isInstalled('backwardcompatibility'))
 		{
