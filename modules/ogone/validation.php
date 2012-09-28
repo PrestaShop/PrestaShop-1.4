@@ -38,7 +38,7 @@ foreach ($neededVars as $k)
 	if (!isset($_GET[$k]))
 		die($ogone->l('Missing parameter:').' '.$k);
 	else
-		$params .= Tools::safeOuput($k).' : '.Tools::safeOuput($_GET[$k]).'<br />';
+		$params .= Tools::safeOutput($k).' : '.Tools::safeOutput($_GET[$k]).'<br />';
 
 /* Then, load the customer cart and perform some checks */
 $cart = new Cart((int)($_GET['orderID']));
@@ -64,16 +64,16 @@ if (Validate::isLoadedObject($cart))
 		{
 			case 1:
 				/* Real error or payment canceled */
-				$ogone->validate((int)$_GET['orderID'], Configuration::get('PS_OS_ERROR'), 0, Tools::safeOuput($_GET['NCERROR']).$params, Tools::safeOuput($_GET['secure_key']));
+				$ogone->validate((int)$_GET['orderID'], Configuration::get('PS_OS_ERROR'), 0, Tools::safeOutput($_GET['NCERROR']).$params, Tools::safeOutput($_GET['secure_key']));
 				break;
 			case 2:
 				/* Real error - authorization refused */
-				$ogone->validate((int)$_GET['orderID'], Configuration::get('PS_OS_ERROR'), 0, $ogone->l('Error (auth. refused)').'<br />'.Tools::safeOuput($_GET['NCERROR']).$params, Tools::safeOuput($_GET['secure_key']));
+				$ogone->validate((int)$_GET['orderID'], Configuration::get('PS_OS_ERROR'), 0, $ogone->l('Error (auth. refused)').'<br />'.Tools::safeOutput($_GET['NCERROR']).$params, Tools::safeOutput($_GET['secure_key']));
 				break;
 			case 5:
 			case 9:
 				/* Payment OK */
-				$ogone->validate((int)$_GET['orderID'], Configuration::get('PS_OS_PAYMENT'), (float)$_GET['amount'], $ogone->l('Payment authorized / OK').$params, Tools::safeOuput($_GET['secure_key']));
+				$ogone->validate((int)$_GET['orderID'], Configuration::get('PS_OS_PAYMENT'), (float)$_GET['amount'], $ogone->l('Payment authorized / OK').$params, Tools::safeOutput($_GET['secure_key']));
 				break;
 			case 6:
 			case 7:
@@ -94,14 +94,14 @@ if (Validate::isLoadedObject($cart))
 				}
 				break;
 			default:
-				$ogone->validate((int)$_GET['orderID'], Configuration::get('PS_OS_ERROR'), (float)($_GET['amount']), $ogone->l('Unknown status:').' '.Tools::safeOuput($_GET['STATUS']).$params, Tools::safeOuput($_GET['secure_key']));
+				$ogone->validate((int)$_GET['orderID'], Configuration::get('PS_OS_ERROR'), (float)($_GET['amount']), $ogone->l('Unknown status:').' '.Tools::safeOutput($_GET['STATUS']).$params, Tools::safeOutput($_GET['secure_key']));
 		}
 		exit;
 	}
 	else
 	{
-		$message = $ogone->l('Invalid SHA-1 signature').'<br />'.$ogone->l('SHA-1 given:').' '.Tools::safeOuput($_GET['SHASIGN']).'<br />'.
-		$ogone->l('SHA-1 calculated:').' '.Tools::safeOuput($sha1).'<br />'.$ogone->l('Plain key:').' '.Tools::safeOuput($shasign);
-		$ogone->validate((int)$_GET['orderID'], Configuration::get('PS_OS_ERROR'), 0, $message.'<br />'.$params, Tools::safeOuput($_GET['secure_key']));
+		$message = $ogone->l('Invalid SHA-1 signature').'<br />'.$ogone->l('SHA-1 given:').' '.Tools::safeOutput($_GET['SHASIGN']).'<br />'.
+		$ogone->l('SHA-1 calculated:').' '.Tools::safeOutput($sha1).'<br />'.$ogone->l('Plain key:').' '.Tools::safeOutput($shasign);
+		$ogone->validate((int)$_GET['orderID'], Configuration::get('PS_OS_ERROR'), 0, $message.'<br />'.$params, Tools::safeOutput($_GET['secure_key']));
 	}
 }
