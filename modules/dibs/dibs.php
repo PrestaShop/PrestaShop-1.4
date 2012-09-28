@@ -79,8 +79,8 @@ class dibs extends PaymentModule
 	 * @var array
 	 */
 	public static $dibs_subscription_link = array(
-		'fr'	=> 'http://www.dibspayment.com/order/fr_request/',
-		'en'	=> 'http://www.dibspayment.com/order/uk_request_2eng',
+		'fr'	=> 'http://www.dibspayment.com/products',
+		'en'	=> 'http://www.dibspayment.com/products',
 		'da'	=> 'http://www.dibs.dk/bestil/internet/',
 		'sv'	=> 'http://www.dibs.se/bestall/internet/',
 		'no'	=> 'http://www.dibs.no/bestill/internett/',
@@ -90,7 +90,7 @@ class dibs extends PaymentModule
 	{
 		$this->name = 'dibs';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.2';
+		$this->version = '1.2.1';
 		$this->author = 'PrestaShop';
 
 		parent::__construct();
