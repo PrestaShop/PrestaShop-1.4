@@ -25,9 +25,8 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-
-if ((bool)Configuration::get('PS_ALLOW_MOBILE_DEVICE'))
-	require_once(_PS_TOOL_DIR_.'mobile_Detect/Mobile_Detect.php');
+if ((bool)Configuration::get('PS_MOBILE_DEVICE'))
+	require_once(_PS_MODULE_DIR_ . '/mobile_theme/Mobile_Detect.php');
 
 // Retro 1.3, 'class_exists' cause problem with autoload...
 if (version_compare(_PS_VERSION_, '1.4', '<'))
@@ -177,7 +176,7 @@ class Context
 
 		$this->shop = new ShopBackwardModule();
 
-		if ((bool)Configuration::get('PS_ALLOW_MOBILE_DEVICE'))
+		if ((bool)Configuration::get('PS_MOBILE_DEVICE'))
 			$this->mobile_detect = new Mobile_Detect();
 	}
 
@@ -188,14 +187,14 @@ class Context
 			$this->mobile_device = false;
 			if ($this->checkMobileContext())
 			{
-				switch ((int)Configuration::get('PS_ALLOW_MOBILE_DEVICE'))
+				switch ((int)Configuration::get('PS_MOBILE_DEVICE'))
 				{
 					case 1: // Only for mobile device
 						if ($this->mobile_detect->isMobile() && !$this->mobile_detect->isTablet())
 							$this->mobile_device = true;
 						break;
 					case 2: // Only for touchpads
-						if ($this->mobile_detect->isTablet() && !$this->mobile_detect->is_mobile())
+						if ($this->mobile_detect->isTablet() && $this->mobile_detect->isMobile())
 							$this->mobile_device = true;
 						break;
 					case 3: // For touchpad or mobile devices
@@ -212,9 +211,8 @@ class Context
 	protected function checkMobileContext()
 	{
 		return isset($_SERVER['HTTP_USER_AGENT'])
-			&& (bool)Configuration::get('PS_ALLOW_MOBILE_DEVICE')
-			&& @filemtime(_PS_THEME_MOBILE_DIR_)
-				&& !Context::getContext()->cookie->no_mobile;
+			&& (bool)Configuration::get('PS_MOBILE_DEVICE')
+			&& !Context::getContext()->cookie->no_mobile;
 	}
 
 	/**

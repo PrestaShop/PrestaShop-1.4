@@ -34,47 +34,131 @@ class BackwardCompatibility extends Module
 	{
 		$this->name = 'backwardcompatibility';
 		$this->tab = 'compatibility_tools';
-		$this->version = 0.1;
+		$this->version = $this->getVersion();
 		$this->author = 'PrestaShop';
 		$this->need_instance = 1;
 
 		parent::__construct();
 
 		$this->displayName = $this->l('Backward compatibility');
-		$this->description = $this->l('Add compatibility tools.');
+		$this->description = $this->l('Improve modules compatibility.');
 
-		/**
-		 * Backward function compatibility
-		 * Need to be called for each module in 1.4
-		 */
-		include_once(dirname(__FILE__).'/backward.php');
+		if ($this->active && defined('_PS_ADMIN_DIR_'))
+			$this->addContext();
 	}
 
 	public function install()
 	{
-		if (!parent::install() || !$this->registerHook('header') || !$this->registerHook('backOfficeHeader') || !$this->registerHook('processCarrier'))
+		if (!parent::install())
 			return false;
-
-		/* Move module to top */
-		if (_PS_VERSION_ < '1.5')
-			$hooks = array((int)Hook::get('header'), (int)Hook::get('backOfficeHeader'), (int)Hook::get('processCarrier'));
-		else
-			$hooks = array((int)Hook::getIdByName('header'), (int)Hook::getIdByName('backOfficeHeader'), (int)Hook::getIdByName('processCarrier'));
-
-		$module = Module::getInstanceByName($this->name);
-
-		foreach ($hooks as $hook)
-		{
-			if (_PS_VERSION_ < '1.5')
-				$moduleInfo = Hook::getModuleFromHook((int)$hook, $module->id);
-			else
-				$moduleInfo = Hook::getModulesFromHook((int)$hook, $module->id);
-
-			if ((isset($moduleInfo['position']) && (int)$moduleInfo['position'] > 0) ||
-				(isset($moduleInfo['m.position']) && (int)$moduleInfo['m.position'] > 0))
-				$module->updatePosition((int)$hook, 0, 1);
-		}
 		return true;
+	}
+
+	protected function getVersion($ini_file = false)
+	{
+		if (!$ini_file)
+			$ini_file = dirname(__FILE__).'/backward_compatibility/backward.ini';
+
+		if (file_exists($ini_file))
+		{
+			$ini_values = parse_ini_file($ini_file);
+			return array_shift($ini_values);
+		}
+		return false;
+	}
+
+	public function addContext()
+	{
+		$backward_file = dirname(__FILE__).'/backward_compatibility/backward.php';
+		if (file_exists($backward_file))
+			include($backward_file);
+	}
+
+	public function _postProcess()
+	{
+		$results = array();
+		$modules = $this->getModulesList();
+		$local_backward = dirname(__FILE__).'/backward_compatibility/';
+		$files = $this->getFilesList($local_backward);
+
+		foreach ($modules as $module)
+			if (strcmp($module['name'], 'backwardcompatibility') != 0)
+			{
+				$module_backward = _PS_MODULE_DIR_.$module['name'].'/backward_compatibility';
+				if (file_exists($module_backward) && is_writable($module_backward))
+					$results[$module['name']] = $this->copyFiles($files, $module);
+			}
+
+		$this->context->smarty->assign('update_results', $results);
+	}
+
+	protected function getFilesList($from)
+	{
+		$iterator = new DirectoryIterator($from);
+		foreach ($iterator as $file)
+			if (!$file->isDot())
+				$files[] = array('filename' => $file->getFilename(), 'pathname' => $file->getPathname());
+		return $files;
+	}
+
+	protected function copyFiles($files, $module)
+	{
+		$result = true;
+		$module_backward = _PS_MODULE_DIR_.$module['name'].'/backward_compatibility';
+
+		foreach ($files as $file)
+			$result = $result && @copy($file['pathname'], $module_backward.'/'.$file['filename']);
+		return $result;
+	}
+
+	public function getContent()
+	{
+		if (Tools::getValue('submit'))
+			$this->_postProcess();
+
+		$this->context->smarty->assign(
+			array(
+				'modules' => $this->getModulesList(),
+				'image_dir' => _MODULE_DIR_.$this->name.'/img/'
+			)
+		);
+
+		return $this->context->smarty->fetch(dirname(__FILE__).'/views/templates/back/backwardcompatibility.tpl');
+	}
+
+	public function getModulesList()
+	{
+		$results = array();
+		$modules = Module::getModulesDirOnDisk();
+
+		foreach ($modules as $module)
+		{
+			$backward_directory = _PS_MODULE_DIR_.$module.'/backward_compatibility/';
+			$module = Module::getInstanceByName($module);
+
+			if (is_dir($backward_directory) && (strcmp($module->name, 'backwardcompatibility') != 0))
+			{
+				$ini_file = $backward_directory.'backward.ini';
+				$version = $this->getVersion($ini_file);
+
+				if (($handle = @fopen($ini_file, 'a+')) && (is_writable($backward_directory)))
+				{
+					@fclose($handle);
+					$writable = true;
+				}
+				else
+					$writable = false;
+
+				$results[] = array(
+					'name' => $module->name,
+					'display_name' => $module->displayName,
+					'version' => $version,
+					'writable' => $writable
+				);
+			}
+		}
+
+		return $results;
 	}
 }
 
