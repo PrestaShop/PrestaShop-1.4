@@ -33,7 +33,6 @@ include_once(_PS_MODULE_DIR_.'paypal/express_checkout/paypal_express_checkout.ph
 if (_PS_VERSION_ < '1.5')
 	require_once(_PS_ROOT_DIR_.'/controllers/OrderConfirmationController.php');
 
-
 /* 1.4 Compatibility */
 class PayPalExpressCheckoutSubmit extends OrderConfirmationControllerCore
 {
@@ -66,6 +65,19 @@ if (Tools::getValue('id_module') && Tools::getValue('key') && Tools::getValue('i
 	if (_PS_VERSION_ < '1.5')
 		new PayPalExpressCheckoutSubmit();
 }
+elseif (Tools::getValue('get_qty'))
+{
+	/* Ajax response */
+	$id_product = (int)Tools::getValue('id_product');
+	$id_product_attribute = (int)Tools::getValue('id_product_attribute');
+
+	if (Product::getQuantity((int)$id_product, (int)$id_product_attribute) <= 0)
+	{
+		$paypal = new Paypal();
+		die($paypal->l('This product is no longer in stock with those attributes but is available with others'));
+	}
+	die(true);
+}
 else
 {
 	$request_type = Tools::getValue('express_checkout');
@@ -76,7 +88,7 @@ else
 		$id_product_attribute = (int)Tools::getValue('id_p_attr');
 		$product_quantity = (int)Tools::getValue('quantity');
 
-		if ($id_product && $id_product_attribute && $product_quantity)
+		if (($id_product > 0 && ($id_product_attribute !== false) && $product_quantity > 0))
 		{
             // Create new Cart to avoid any refresh or other bad manipulations
             $ppec->context->cart = new Cart();
@@ -91,17 +103,26 @@ else
             $ppec->context->cart->id_guest = (int)$ppec->context->cookie->id_guest;
             $ppec->context->cart->id_customer = (int)$ppec->context->customer->id;
 
-            if (!$ppec->context->cart->add())
+            if (!$ppec->context->cart->add()) {
                 $ppec->logs[] = $ppec->l('Cannot create new cart');
+
+				if (_PS_VERSION_ < '1.5')
+					$display = new BWDisplay();
+				else
+					$display = new FrontController();
+				$ppec->getContext()->smarty->assign(array('message' => $ppec->l('Error occurred:'), 'logs' => $ppec->logs, 'use_mobile' => $ppec->getContext()->getMobileDevice()));
+				$display->setTemplate(_PS_MODULE_DIR_.'paypal/views/templates/front/error.tpl');
+			}
 			else
 				$ppec->context->cookie->id_cart = (int)$ppec->context->cart->id;
-			
+
 			$ppec->context->cart->updateQty((int)$product_quantity, (int)$id_product, (int)$id_product_attribute);
 			$ppec->context->cart->update();
 		}
 
 		// Set details for a payment
 		$ppec->setExpressCheckout();
+
 		if ($ppec->hasSucceedRequest() && !empty($ppec->token))
 			$ppec->redirectToAPI();
 		// Display Error and die with this method

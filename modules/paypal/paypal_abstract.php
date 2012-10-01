@@ -37,7 +37,7 @@ abstract class PayPalAbstract extends PaymentModule
 	public $context;
 	public $paypal_logos;
 
-	const BACKWARD_REQUIREMENT = '0.1';
+	const BACKWARD_REQUIREMENT = '0.2';
 	const DEFAULT_COUNTRY_ISO = 'GB';
 
 	const ONLY_PRODUCTS	= 1;
@@ -52,7 +52,7 @@ abstract class PayPalAbstract extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'payments_gateways';
-		$this->version = '3.2.1';
+		$this->version = '3.2.2';
 
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';

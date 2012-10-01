@@ -11,7 +11,34 @@ $(document).ready( function() {
 		$('#paypal_payment_form').submit();
 	});
 
+	function displayExpressCheckoutShortcut() {
+		var id_product = $('input[name="id_product"]').val();
+		var id_product_attribute = $('input[name="id_product_attribute"]').val();
+
+		$.ajax({
+			type: "GET",
+			url: baseDir+'/modules/paypal/express_checkout/submit.php',
+			data: { get_qty: "1", id_product: id_product, id_product_attribute: id_product_attribute}
+		}).done(function(result) {
+			if (result == '1')
+				$('#container_express_checkout').slideDown();
+			else
+				$('#container_express_checkout').slideUp();
+			return true;
+		});
+	}
+
+	$('select[name^="group_"]').bind('change', function () {
+		displayExpressCheckoutShortcut();
+	});
+
+	$('.color_pick').bind('click', function () {
+		displayExpressCheckoutShortcut();
+	});
+
 	if ($('form[target="hss_iframe"]').length == 0) {
+		if ($('select[name^="group_"]').length > 0)
+			displayExpressCheckoutShortcut();
 		return false;
 	} else {
 		var hostname = 'http://' + window.location.hostname + '{/literal}{$base_uri}{literal}';

@@ -212,7 +212,6 @@ class PaypalExpressCheckout extends Paypal
 		$paypal_lib = new PaypalLib();
 
 		$this->result = $paypal_lib->makeCall($this->getAPIURL(), $this->getAPIScript(), $this->method, $fields, $this->method_version);
-
 		$this->logs = array_merge($this->logs, $paypal_lib->getLogs());
 
 		$this->_storeToken();
@@ -469,7 +468,6 @@ class PaypalExpressCheckout extends Paypal
 		$this->context->cookie->customer_firstname = $customer->firstname;
 		$this->context->cookie->passwd = $customer->passwd;
 		$this->context->cookie->email = $customer->email;
-		$this->context->cookie->id_cart = (int)Cart::lastNoneOrderedCart((int)$customer->id);
 		$this->context->cookie->is_guest = $customer->isGuest();
 		$this->context->cookie->logged = 1;
 
@@ -480,7 +478,7 @@ class PaypalExpressCheckout extends Paypal
 
 		if ($redirect)
 		{
-			Tools::redirectLink(__PS_BASE_URI__.'order.php?step=3');
+			Tools::redirectLink(Context::getContext()->link->getPageLink('order.php'));
 			exit(0);
 		}
 	}
