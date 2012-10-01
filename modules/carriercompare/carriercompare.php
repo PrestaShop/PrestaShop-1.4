@@ -214,7 +214,7 @@ class CarrierCompare extends Module
 		$cookie->id_country = $id_country;
 		if ($id_state != 0)
 			$cookie->id_state = $id_state;
-		if ($zipcode != 0)
+		if ($zipcode !== 0)
 			$cookie->postcode = $zipcode;
 
 		$id_zone = 0;
@@ -247,7 +247,7 @@ class CarrierCompare extends Module
 			$cart->id_address_delivery = $current_id_address_delivery;
 		}
 
-		return (sizeof($carriers) ? $carriers : array());
+		return (count($carriers) ? $carriers : array());
 	}
 
 	public function saveSelection($id_country, $id_state, $zipcode, $id_carrier)
