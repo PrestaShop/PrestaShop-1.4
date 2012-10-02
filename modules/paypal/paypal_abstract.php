@@ -567,7 +567,7 @@ abstract class PayPalAbstract extends PaymentModule
 		{
 			if ($params['module'] != $this->name || !$this->context->cookie->paypal_token || !$this->context->cookie->paypal_payer_id)
 				return false;
-			Tools::redirect('modules/paypal/express/submit.php?confirm=1&token='.$this->context->cookie->paypal_token.'&payerID='.$this->context->cookie->paypal_payer_id);
+			Tools::redirect('modules/paypal/express_checkout/submit.php?confirm=1&token='.$this->context->cookie->paypal_token.'&payerID='.$this->context->cookie->paypal_payer_id);
 		}
 	}
 
