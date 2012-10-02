@@ -403,9 +403,9 @@ abstract class PayPalAbstract extends PaymentModule
 		return Configuration::get('PAYPAL_PAYMENT_METHOD');
 	}
 
-	public function hookPayment()
+	public function hookPayment($params)
 	{
-		if (!$this->active)
+		if (!$this->active || !$this->checkCurrency($params['cart']))
 			return;
 
 		$method = $this->useMobileMethod();
@@ -1178,6 +1178,15 @@ abstract class PayPalAbstract extends PaymentModule
         $this->default_country	= ($paypal_country_default ? (int)$paypal_country_default : (int)Configuration::get('PS_COUNTRY_DEFAULT'));
         $this->iso_code	= $this->getCountryDependency(Country::getIsoById((int)$this->default_country));
     }
+
+	private function checkCurrency($cart)
+	{
+		$currency_module = $this->getCurrency((int)$cart->id_currency);
+
+		if ((int)$cart->id_currency == (int)$currency_module->id)
+			return true;
+		return false;
+	}
 
 	public function getContext()
 	{
