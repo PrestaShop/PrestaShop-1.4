@@ -150,4 +150,3 @@ if (function_exists('date_default_timezone_set'))
 
 /* Smarty */
 require_once(dirname(__FILE__).'/smarty.config.inc.php');
-/* PrestaShop Mobile */ if (file_exists(_PS_MODULE_DIR_.'mobile_theme/mobile.config.inc.php')) include(_PS_MODULE_DIR_.'mobile_theme/mobile.config.inc.php');
