@@ -90,7 +90,7 @@ class dibs extends PaymentModule
 	{
 		$this->name = 'dibs';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.2.1';
+		$this->version = '1.2.2';
 		$this->author = 'PrestaShop';
 
 		parent::__construct();
@@ -98,35 +98,38 @@ class dibs extends PaymentModule
 		$this->displayName = $this->l('DIBS');
 		$this->description = $this->l('DIBS payment API');
 
-		if (self::$site_url === NULL)
+		if ($this->active)
 		{
-			if(method_exists('Tools', 'getProtocol'))
-			self::$site_url = Tools::htmlentitiesutf8(Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
-			else
-				self::$site_url = Tools::htmlentitiesutf8((!is_null($use_ssl) && $use_ssl ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
+			if (self::$site_url === NULL)
+			{
+				if(method_exists('Tools', 'getProtocol'))
+					self::$site_url = Tools::htmlentitiesutf8(Tools::getProtocol().$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
+				else
+					self::$site_url = Tools::htmlentitiesutf8((!is_null($use_ssl) && $use_ssl ? 'https://' : 'http://').$_SERVER['HTTP_HOST'].__PS_BASE_URI__);
+			}
+
+			self::$ID_MERCHANT = Configuration::get('DIBS_ID_MERCHANT');
+			self::$ACCEPTED_URL = Configuration::get('DIBS_ACCEPTED_URL');
+			self::$CANCELLED_URL = Configuration::get('DIBS_CANCELLED_URL');
+			self::$TESTING = (int)Configuration::get('DIBS_TESTING');
+			self::$MORE_SETTINGS = Configuration::get('DIBS_MORE_SETTINGS') != '' ? unserialize(Tools::htmlentitiesDecodeUTF8(Configuration::get('DIBS_MORE_SETTINGS'))) : array();
+
+			if (!isset(self::$MORE_SETTINGS['k1'])
+				OR (isset(self::$MORE_SETTINGS['k1']) AND (self::$MORE_SETTINGS['k1'] === '' OR self::$MORE_SETTINGS['k2'] === '') ))
+				$this->warning = $this->l('For security reasons, you must set key #1 and key #2 used by MD5 control of DIBS API.');
+			if (!self::$ID_MERCHANT OR self::$ID_MERCHANT === '')
+				$this->warning = $this->l('You have to set your merchant ID to use DIBS API.');
+
+			/* For 1.4.3 and less compatibility */
+			$updateConfig = array('PS_OS_CHEQUE', 'PS_OS_PAYMENT', 'PS_OS_PREPARATION', 'PS_OS_SHIPPING', 'PS_OS_CANCELED', 'PS_OS_REFUND', 'PS_OS_ERROR', 'PS_OS_OUTOFSTOCK', 'PS_OS_BANKWIRE', 'PS_OS_PAYPAL', 'PS_OS_WS_PAYMENT');
+			if (!Configuration::get('PS_OS_PAYMENT'))
+				foreach ($updateConfig as $u)
+					if (!Configuration::get($u) && defined('_'.$u.'_'))
+						Configuration::updateValue($u, constant('_'.$u.'_'));
+
+			/** Backward compatibility */
+			require(_PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php');
 		}
-
-		self::$ID_MERCHANT = Configuration::get('DIBS_ID_MERCHANT');
-		self::$ACCEPTED_URL = Configuration::get('DIBS_ACCEPTED_URL');
-		self::$CANCELLED_URL = Configuration::get('DIBS_CANCELLED_URL');
-		self::$TESTING = (int)Configuration::get('DIBS_TESTING');
-		self::$MORE_SETTINGS = Configuration::get('DIBS_MORE_SETTINGS') != '' ? unserialize(Tools::htmlentitiesDecodeUTF8(Configuration::get('DIBS_MORE_SETTINGS'))) : array();
-
-		if (!isset(self::$MORE_SETTINGS['k1'])
-			OR (isset(self::$MORE_SETTINGS['k1']) AND (self::$MORE_SETTINGS['k1'] === '' OR self::$MORE_SETTINGS['k2'] === '') ))
-			$this->warning = $this->l('For security reasons, you must set key #1 and key #2 used by MD5 control of DIBS API.');
-		if (!self::$ID_MERCHANT OR self::$ID_MERCHANT === '')
-			$this->warning = $this->l('You have to set your merchant ID to use DIBS API.');
-
-		/* For 1.4.3 and less compatibility */
-		$updateConfig = array('PS_OS_CHEQUE', 'PS_OS_PAYMENT', 'PS_OS_PREPARATION', 'PS_OS_SHIPPING', 'PS_OS_CANCELED', 'PS_OS_REFUND', 'PS_OS_ERROR', 'PS_OS_OUTOFSTOCK', 'PS_OS_BANKWIRE', 'PS_OS_PAYPAL', 'PS_OS_WS_PAYMENT');
-		if (!Configuration::get('PS_OS_PAYMENT'))
-			foreach ($updateConfig as $u)
-				if (!Configuration::get($u) && defined('_'.$u.'_'))
-					Configuration::updateValue($u, constant('_'.$u.'_'));
-		
-		/** Backward compatibility */
-		require(_PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php');
 	}
 
 	public function install()

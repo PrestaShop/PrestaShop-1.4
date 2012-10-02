@@ -61,68 +61,72 @@ class Ebay extends Module
 
 		$this->name = 'ebay';
 		$this->tab = 'market_place';
-		$this->version = '1.3.5';
+		$this->version = '1.3.6';
 		$this->author = 'PrestaShop';
 		parent::__construct();
 		$this->displayName = $this->l('eBay');
 		$this->description = $this->l('Open your shop on the eBay market place !');
 		$this->id_lang = Language::getIdByIso('fr');
 
-		// Check the country and ask the bypass if not 'fr'
-		if (strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'))) != 'fr' && !isset($cookie->ebay_country_default_fr))
+
+		if ($this->active)
 		{
-			$this->warning = $this->l('eBay module currently works only for eBay.fr');
-			return false;
-		}
-
-		// Checking Extension
-		if (!extension_loaded('curl') || !ini_get('allow_url_fopen'))
-		{
-			if (!extension_loaded('curl') && !ini_get('allow_url_fopen'))
-				$this->warning = $this->l('You must enable cURL extension and allow_url_fopen option on your server if you want to use this module.');
-			elseif (!extension_loaded('curl'))
-				$this->warning = $this->l('You must enable cURL extension on your server if you want to use this module.');
-			elseif (!ini_get('allow_url_fopen'))
-				$this->warning = $this->l('You must enable allow_url_fopen option on your server if you want to use this module.');
-			return false;
-		}
-
-		// Checking compatibility with older PrestaShop and fixing it
-		if (!Configuration::get('PS_SHOP_DOMAIN'))
-			Configuration::updateValue('PS_SHOP_DOMAIN', $_SERVER['HTTP_HOST']);
-
-		// Generate eBay Security Token if not exists
-		if (!Configuration::get('EBAY_SECURITY_TOKEN'))
-			Configuration::updateValue('EBAY_SECURITY_TOKEN', Tools::passwdGen(30));
-
-		// For 1.4.3 and less compatibility
-		$updateConfig = array('PS_OS_CHEQUE' => 1, 'PS_OS_PAYMENT' => 2, 'PS_OS_PREPARATION' => 3, 'PS_OS_SHIPPING' => 4, 'PS_OS_DELIVERED' => 5, 'PS_OS_CANCELED' => 6,
-				      'PS_OS_REFUND' => 7, 'PS_OS_ERROR' => 8, 'PS_OS_OUTOFSTOCK' => 9, 'PS_OS_BANKWIRE' => 10, 'PS_OS_PAYPAL' => 11, 'PS_OS_WS_PAYMENT' => 12);
-		foreach ($updateConfig as $u => $v)
-			if (!Configuration::get($u) || (int)Configuration::get($u) < 1)
+			// Check the country and ask the bypass if not 'fr'
+			if (strtolower(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'))) != 'fr' && !isset($cookie->ebay_country_default_fr))
 			{
-				if (defined('_'.$u.'_') && (int)constant('_'.$u.'_') > 0)
-					Configuration::updateValue($u, constant('_'.$u.'_'));
-				else
-					Configuration::updateValue($u, $v);
+				$this->warning = $this->l('eBay module currently works only for eBay.fr');
+				return false;
 			}
 
-		// Check if installed
-		if (self::isInstalled($this->name))
-		{
-			// Upgrade eBay module
-			if (Configuration::get('EBAY_VERSION') != $this->version)
-				$this->upgrade();
+			// Checking Extension
+			if (!extension_loaded('curl') || !ini_get('allow_url_fopen'))
+			{
+				if (!extension_loaded('curl') && !ini_get('allow_url_fopen'))
+					$this->warning = $this->l('You must enable cURL extension and allow_url_fopen option on your server if you want to use this module.');
+				elseif (!extension_loaded('curl'))
+					$this->warning = $this->l('You must enable cURL extension on your server if you want to use this module.');
+				elseif (!ini_get('allow_url_fopen'))
+					$this->warning = $this->l('You must enable allow_url_fopen option on your server if you want to use this module.');
+				return false;
+			}
 
-			// Generate warnings
-			if (!Configuration::get('EBAY_API_TOKEN'))
-				$this->warning = $this->l('You must register your module on eBay.');
+			// Checking compatibility with older PrestaShop and fixing it
+			if (!Configuration::get('PS_SHOP_DOMAIN'))
+				Configuration::updateValue('PS_SHOP_DOMAIN', $_SERVER['HTTP_HOST']);
 
-			// Loading Shipping Method
-			$this->loadShippingMethod();
+			// Generate eBay Security Token if not exists
+			if (!Configuration::get('EBAY_SECURITY_TOKEN'))
+				Configuration::updateValue('EBAY_SECURITY_TOKEN', Tools::passwdGen(30));
 
-			// Warning uninstall
-			$this->confirmUninstall = $this->l('Are you sure you want uninstall this module ? All your configuration will be lost.');
+			// For 1.4.3 and less compatibility
+			$updateConfig = array('PS_OS_CHEQUE' => 1, 'PS_OS_PAYMENT' => 2, 'PS_OS_PREPARATION' => 3, 'PS_OS_SHIPPING' => 4, 'PS_OS_DELIVERED' => 5, 'PS_OS_CANCELED' => 6,
+						  'PS_OS_REFUND' => 7, 'PS_OS_ERROR' => 8, 'PS_OS_OUTOFSTOCK' => 9, 'PS_OS_BANKWIRE' => 10, 'PS_OS_PAYPAL' => 11, 'PS_OS_WS_PAYMENT' => 12);
+			foreach ($updateConfig as $u => $v)
+				if (!Configuration::get($u) || (int)Configuration::get($u) < 1)
+				{
+					if (defined('_'.$u.'_') && (int)constant('_'.$u.'_') > 0)
+						Configuration::updateValue($u, constant('_'.$u.'_'));
+					else
+						Configuration::updateValue($u, $v);
+				}
+
+			// Check if installed
+			if (self::isInstalled($this->name))
+			{
+				// Upgrade eBay module
+				if (Configuration::get('EBAY_VERSION') != $this->version)
+					$this->upgrade();
+
+				// Generate warnings
+				if (!Configuration::get('EBAY_API_TOKEN'))
+					$this->warning = $this->l('You must register your module on eBay.');
+
+				// Loading Shipping Method
+				$this->loadShippingMethod();
+
+				// Warning uninstall
+				$this->confirmUninstall = $this->l('Are you sure you want uninstall this module ? All your configuration will be lost.');
+			}
 		}
 	}
 

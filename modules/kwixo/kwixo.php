@@ -87,7 +87,7 @@ class kwixo extends PaymentModule {
 
   public function __construct() {
     $this->name = 'kwixo';
-    $this->version = '4.1';
+    $this->version = '4.2';
     if (preg_match("/1\.4/", _PS_VERSION_))
       $this->tab = 'payments_gateways';
     else
@@ -98,10 +98,13 @@ class kwixo extends PaymentModule {
     $this->displayName = $this->l('Kwixo');
     $this->description = $this->l('Accepts payments by "Kwixo"');
 
-    if (intval(Configuration::get('RNP_MERCHID')) == 0
-            OR Configuration::get('RNP_CRYPTKEY') == NULL
-            OR Configuration::get('RNP_DEFAULTCATEGORYID') == NULL)
-      $this->warning = $this->l('MerchID, CryptKey and a Category must be configured in order to use this module correctly');
+	if ($this->active)
+	{
+		if (intval(Configuration::get('RNP_MERCHID')) == 0
+			OR Configuration::get('RNP_CRYPTKEY') == NULL
+			OR Configuration::get('RNP_DEFAULTCATEGORYID') == NULL)
+				$this->warning = $this->l('MerchID, CryptKey and a Category must be configured in order to use this module correctly');
+	}
   }
 
   public function install() {

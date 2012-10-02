@@ -36,7 +36,7 @@ class FianetSceau extends Module
 	{
 	 	$this->name = 'fianetsceau';
 	 	$this->tab = 'front_office_features';
-	 	$this->version = '1.0';
+	 	$this->version = '1.1';
 		$this->limited_countries = array('fr');
 		
 	 	parent::__construct();
@@ -44,10 +44,14 @@ class FianetSceau extends Module
 		$this->author = 'PrestaShop';
 		$this->displayName = $this->l('FIA-NET Seal of Confidence');
 		$this->description = $this->l('Turn your visitors into buyers by creating confidence in your site.');
-		if (!Configuration::get('FIANET_SCEAU_PRIVATEKEY'))
-			$this->warning = $this->l('Please enter your Private Key field.');
-		if (!Configuration::get('FIANET_SCEAU_SITEID'))
-			$this->warning = $this->l('Please enter your site ID.');
+
+		if ($this->active)
+		{
+			if (!Configuration::get('FIANET_SCEAU_PRIVATEKEY'))
+				$this->warning = $this->l('Please enter your Private Key field.');
+			if (!Configuration::get('FIANET_SCEAU_SITEID'))
+				$this->warning = $this->l('Please enter your site ID.');
+		}
 	}
 	
 	public function install()

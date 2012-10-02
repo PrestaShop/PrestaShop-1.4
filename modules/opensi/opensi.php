@@ -61,28 +61,31 @@ class opensi extends Module
 	public function __construct() {
 		$this->name = 'opensi';
 		$this->tab = "billing_invoicing";
-		$this->version = '1.1.0';
+		$this->version = '1.1.1';
 		$this->author = 'PrestaShop';
 		$this->displayName = $this->l('OpenSi connector');
 		$this->description = $this->l('Self-made Management Accounting Software for PrestaShop');
 		$this->confirmUninstall = $this->l('Are you sure you want to delete OpenSi connector ?');
 		parent::__construct();
 
-		/* Check minimum version required of Prestashop */
-		if(substr(_PS_VERSION_, 0, 5) < '1.3.2') {
-			$this->warning = $this->l('Error : the module is not compatible with your version of Prestashop (minimum required is 1.3.2).');
-		} else {
-			/* If no configuration => display alert message */
-			$urlws = Configuration::get('OSI_WS_URL');
-			$portws = Configuration::get('OSI_WS_PORT');
-			$loginws = Configuration::get('OSI_WS_LOGIN');
-			$passwdws = Configuration::get('OSI_WS_PASSWD');
-			$servicecode = Configuration::get('OSI_SERVICE_CODE');
-			$websitecode = Configuration::get('OSI_WEBSITE_CODE');
-			$depotcode = Configuration::get('OSI_DEPOSIT_CODE');
+		if ($this->active)
+		{
+			/* Check minimum version required of Prestashop */
+			if(substr(_PS_VERSION_, 0, 5) < '1.3.2') {
+				$this->warning = $this->l('Error : the module is not compatible with your version of Prestashop (minimum required is 1.3.2).');
+			} else {
+				/* If no configuration => display alert message */
+				$urlws = Configuration::get('OSI_WS_URL');
+				$portws = Configuration::get('OSI_WS_PORT');
+				$loginws = Configuration::get('OSI_WS_LOGIN');
+				$passwdws = Configuration::get('OSI_WS_PASSWD');
+				$servicecode = Configuration::get('OSI_SERVICE_CODE');
+				$websitecode = Configuration::get('OSI_WEBSITE_CODE');
+				$depotcode = Configuration::get('OSI_DEPOSIT_CODE');
 
-			if($urlws == '' || $portws == '' || $loginws == '' || $passwdws == '' || $servicecode == '' || $websitecode == '' || $depotcode == '')
-				$this->warning = $this->l('The webservice access OpenSi and the cron must be configured.');
+				if($urlws == '' || $portws == '' || $loginws == '' || $passwdws == '' || $servicecode == '' || $websitecode == '' || $depotcode == '')
+					$this->warning = $this->l('The webservice access OpenSi and the cron must be configured.');
+			}
 		}
 
 
