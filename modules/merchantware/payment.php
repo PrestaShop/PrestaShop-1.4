@@ -63,7 +63,7 @@ class MerchantWareController extends FrontController
 		}
 		elseif (isset($result->CreateTransactionResult))
 		{
-			Logger::addLog('Module merchantware: '.$result->CreateTransactionResult->Messages->message[0]->Information, 2);
+			Logger::addLog('Module merchantware: '.$result->CreateTransactionResult->Messages->Message[0]->Information, 2);
 			self::$smarty->assign('error', true);
 		}
 		else
