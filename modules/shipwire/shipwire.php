@@ -968,8 +968,8 @@ class Shipwire extends Module
 				<fieldset>
 					<legend><img src="../img/admin/tab-tools.gif" alt="" />'.$this->l('Shipwire Cronjob').'</legend>
 					'.$this->l('Use PrestaShop\'s web-service to update your stock and order statuses. Place this URL in crontab (suggested frequency: every 5 hrs.) or access it manually daily:').'<br />
-					<b><a href="'.(Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').Tools::htmlentitiesUTF8(Configuration::get('PS_SHOP_DOMAIN')).'/modules/shipwire/cronjob_update.php?secure_key='.md5(_COOKIE_KEY_.Configuration::get('PS_SHOP_NAME')).'" target="_blank">
-					'.(Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').Tools::htmlentitiesUTF8(Configuration::get('PS_SHOP_DOMAIN')).'/modules/shipwire/cronjob_update.php?secure_key='.md5(_COOKIE_KEY_.Configuration::get('PS_SHOP_NAME')).'</a></b>
+					<b><a href="'.(Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').Tools::htmlentitiesUTF8(Configuration::get('PS_SHOP_DOMAIN')).__PS_BASE_URI__.'modules/shipwire/cronjob_update.php?secure_key='.md5(_COOKIE_KEY_.Configuration::get('PS_SHOP_NAME')).'" target="_blank">
+					'.(Configuration::get('PS_SSL_ENABLED') ? 'https://' : 'http://').Tools::htmlentitiesUTF8(Configuration::get('PS_SHOP_DOMAIN')).__PS_BASE_URI__.'modules/shipwire/cronjob_update.php?secure_key='.md5(_COOKIE_KEY_.Configuration::get('PS_SHOP_NAME')).'</a></b>
 				</fieldset>
 				';
 		}
