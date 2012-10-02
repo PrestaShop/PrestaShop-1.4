@@ -87,7 +87,7 @@ class Shipwire extends Module
 	{
 		$this->name = 'shipwire';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.1.7';
+		$this->version = '1.1.8';
 		$this->author = 'PrestaShop';
 
 		$this->_initContext();
