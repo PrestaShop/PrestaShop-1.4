@@ -34,7 +34,7 @@ class ShoppingFluxExport extends Module
 	{
 	 	$this->name = 'shoppingfluxexport';
 	 	$this->tab = 'smart_shopping';
-	 	$this->version = '2.0';
+	 	$this->version = '2.0.2';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 
@@ -114,7 +114,8 @@ class ShoppingFluxExport extends Module
 		$status = $statusXML->Response->Status;
 		$price = (float)$statusXML->Response->Price;
 		
-		switch ($status)		{
+		switch ($status)
+		{
 			case 'Client':
 				$this->_html .= $this->_clientView();
 				break;
@@ -245,12 +246,12 @@ class ShoppingFluxExport extends Module
 	private function _getFeedContent($configuration)
 	{
 		return '
-		<img style="margin:10px" src="'.Tools::safeOutput($configuration['SHOPPING_FLUX_INDEX']).'modules/shoppingfluxmodule/logo.jpg" height="75" />
+		<img style="margin:10px" src="'.Tools::safeOutput($configuration['SHOPPING_FLUX_INDEX']).'modules/shoppingfluxexport/logo.jpg" height="75" />
 		<fieldset>
 			<legend>'.$this->l('Vos flux produits').'</legend>
 			<p>
-				<a href="'.Tools::safeOutput($configuration['SHOPPING_FLUX_INDEX']).'modules/shoppingfluxmodule/flux.php?token='.Tools::safeOutput($configuration['SHOPPING_FLUX_TOKEN']).'" target="_blank">
-					'.Tools::safeOutput($configuration['SHOPPING_FLUX_INDEX']).'modules/shoppingfluxmodule/flux.php?token='.Tools::safeOutput($configuration['SHOPPING_FLUX_TOKEN']).'
+				<a href="'.Tools::safeOutput($configuration['SHOPPING_FLUX_INDEX']).'modules/shoppingfluxexport/flux.php?token='.Tools::safeOutput($configuration['SHOPPING_FLUX_TOKEN']).'" target="_blank">
+					'.Tools::safeOutput($configuration['SHOPPING_FLUX_INDEX']).'modules/shoppingfluxexport/flux.php?token='.Tools::safeOutput($configuration['SHOPPING_FLUX_TOKEN']).'
 				</a>
 			</p>
 		</fieldset>
@@ -329,6 +330,16 @@ class ShoppingFluxExport extends Module
 				echo $this->_getFilAriane($product, $configuration);
 				echo '<manufacturer><![CDATA['.$product->manufacturer_name.']]></manufacturer>';
 				echo '<supplier><![CDATA['.$product->supplier_name.']]></supplier>';
+                                if (is_array($product->specificPrice))
+				{
+                                    echo '<from><![CDATA['.$product->specificPrice['from'].']]></from>';
+                                    echo '<to><![CDATA['.$product->specificPrice['to'].']]></to>';
+				}
+				else
+				{
+                                    echo '<from/>';
+                                    echo '<to/>';
+				}
 				echo '<url-fournisseur><![CDATA['.$link->getSupplierLink($product->id_supplier, NULL, $configuration['PS_LANG_DEFAULT']).']]></url-fournisseur>';
 				echo '<url-fabricant><![CDATA['.$link->getManufacturerLink($product->id_manufacturer, NULL, $configuration['PS_LANG_DEFAULT']).']]></url-fabricant>';
 				echo '</produit>';
@@ -430,7 +441,8 @@ class ShoppingFluxExport extends Module
 	private function _getImages($product, $configuration, $link)
 	{
 		$ret = '<images>';
-		foreach ($product->getImages($configuration['PS_LANG_DEFAULT']) as $images)		{
+		foreach ($product->getImages($configuration['PS_LANG_DEFAULT']) as $images)
+		{
 			$ids = $product->id.'-'.$images['id_image'];
 			$ret .= '<image><![CDATA[http://'.$link->getImageLink($product->link_rewrite, $ids, 'large').']]></image>';
 			$ret = str_replace('http://http://', 'http://', $ret);
@@ -443,7 +455,8 @@ class ShoppingFluxExport extends Module
 	private function _getUrlCategories($product, $configuration, $link)
 	{
 		$ret = '<uri-categories>';
-		foreach ($this->_getProductCategoriesFull($product->id, $configuration['PS_LANG_DEFAULT']) as $key => $categories)		{
+		foreach ($this->_getProductCategoriesFull($product->id, $configuration['PS_LANG_DEFAULT']) as $key => $categories)
+		{
 			$ids = $product->id.'-'.$images['id_image'];
 			$ret .= '<uri><![CDATA['.$link->getCategoryLink($key, null, $configuration['PS_LANG_DEFAULT']).']]></uri>';
 		}
@@ -471,7 +484,8 @@ class ShoppingFluxExport extends Module
 	private function _getFeatures($product, $configuration)
 	{
 		$ret = '<caracteristiques>';
-		foreach ($product->getFrontFeatures($configuration['PS_LANG_DEFAULT']) as $feature)		{
+		foreach ($product->getFrontFeatures($configuration['PS_LANG_DEFAULT']) as $feature)
+		{
 			$feature['name'] = $this->_clean($feature['name']);
 
 			if (!empty($feature['name']))
@@ -508,7 +522,8 @@ class ShoppingFluxExport extends Module
 
 			$image_child = true;
 
-			foreach ($product->_getAttributeImageAssociations($id) as $image)			{
+			foreach ($product->_getAttributeImageAssociations($id) as $image)
+			{
 				if (empty($image))
 				{
 					$image_child = false;
@@ -517,8 +532,10 @@ class ShoppingFluxExport extends Module
 				$ret .= '<image><![CDATA['.$link->getImageLink($product->link_rewrite, $product->id.'-'.$image, 'large').']]></image>';
 			}
 
-			if (!$image_child)			{
-				foreach ($product->getImages($configuration['PS_LANG_DEFAULT']) as $images)				{
+			if (!$image_child)
+			{
+				foreach ($product->getImages($configuration['PS_LANG_DEFAULT']) as $images)
+				{
 					$ids = $product->id.'-'.$images['id_image'];
 					$ret .= '<image><![CDATA[http://'.$link->getImageLink($product->link_rewrite, $ids, 'large').']]></image>';
 					$ret = str_replace('http://http://', 'http://', $ret);
@@ -529,7 +546,8 @@ class ShoppingFluxExport extends Module
 			$ret .= '<attributs>';
 
 			asort($combination['attributes']);
-			foreach ($combination['attributes'] as $attributeName => $attributeValue)			{
+			foreach ($combination['attributes'] as $attributeName => $attributeValue)
+			{
 				$attributeName = $this->_clean($attributeName);
 				if (!empty($attributeName))
 					$ret .= '<'.$attributeName.'><![CDATA['.$attributeValue.']]></'.$attributeName.'>';
@@ -567,18 +585,21 @@ class ShoppingFluxExport extends Module
 		WHERE p.`id_product` = '.(int)$id_product.'
 		AND cl.`id_lang` = '.(int)$id_lang);
 
-		foreach ($row as $val)		{
+		foreach ($row as $val)
+		{
 			$ret[$val['id_category']] = $val['name'];
 			$id_parent = $val['id_parent'];
 		}
 
-		while ($id_parent != 0)		{
+		while ($id_parent != 0)
+		{
 			$row = Db::getInstance(_PS_USE_SQL_SLAVE)->ExecuteS('
 			SELECT cl.`name`, c.`id_category`, c.`id_parent` FROM `'._DB_PREFIX_.'category_lang` cl
 			LEFT JOIN `'._DB_PREFIX_.'category` c ON (c.`id_category` = '.(int)$id_parent.')
 			WHERE cl.`id_category` = '.(int)$id_parent.'
 			AND cl.`id_lang` = '.(int)$id_lang);
-			foreach ($row as $val)			{
+			foreach ($row as $val)
+			{
 				$ret[$val['id_category']] = $val['name'];
 				$id_parent = $val['id_parent'];
 			}
@@ -590,12 +611,12 @@ class ShoppingFluxExport extends Module
 
 	public function hookbackOfficeTop($params)
 	{
-		if (Tools::getValue('tab') == 'AdminOrders' && Configuration::get('SHOPPING_FLUX_ORDERS') != '' && in_array('curl', get_loaded_extensions()))		{
-			$ordersValid = array();
-
+		if (Tools::getValue('controller') == 'adminorders' && Configuration::get('SHOPPING_FLUX_ORDERS') != '' && in_array('curl', get_loaded_extensions()))
+		{
 			$ordersXML = $this->_callWebService('GetOrders');
 
-			foreach ($ordersXML->Response->Orders->Order as $order)			{
+			foreach ($ordersXML->Response->Orders->Order as $order)
+			{
 				$this->_validOrders((string)$order->IdOrder, (string)$order->Marketplace);
 				$mail = strval($order->BillingAddress->Email);
 
@@ -611,32 +632,55 @@ class ShoppingFluxExport extends Module
 				$last_cart = new Cart($current_customer->getLastCart());
 				$add = true;
 				
-				if ($last_cart->id)				{
+				if ($last_cart->id)
+				{
 					$date_cart = date_create($last_cart->date_add);
 					$date = new Datetime();
 					$date->modify('-5 min');
 					if ($date<$date_cart) $add = false;
 				}
+                                
+                                $add = true;
 
-				if ($products_available&&$id_address_shipping&&$id_address_billing&&$id_customer&&$id_customer_shipping&&$add)				{
+				if ($products_available&&$id_address_shipping&&$id_address_billing&&$id_customer&&$id_customer_shipping&&$add)
+				{
 					$cart = $this->_getCart($id_customer, $id_address_billing, $id_address_shipping, $order->Products);
 
-					if ($cart)					{
-						Db::getInstance()->autoExecute(_DB_PREFIX_.'customer', array('email' => 'do-not-send'), 'UPDATE', '`id_customer` = '.(int)$id_customer);
-						$customerClear = new Customer();
+					if ($cart)
+					{
+						Db::getInstance()->autoExecute(_DB_PREFIX_.'customer', array('email' => 'do-not-send@alerts-shopping-flux.com'), 'UPDATE', '`id_customer` = '.(int)$id_customer);
+						
+                                                $customerClear = new Customer();
 						
 						if (method_exists($customerClear, 'clearCache'))
 							$customerClear->clearCache(true);
 
-						$id_order = $this->_validateOrder($cart, $order->Marketplace);
-
+						$paiement = $this->_validateOrder($cart, $order->Marketplace);
+                                                $id_order = $paiement->currentOrder;
+                                                $reference_order = $paiement->currentOrderReference;
+                                                
 						Db::getInstance()->autoExecute(_DB_PREFIX_.'customer', array('email' => pSQL($email)), 'UPDATE', '`id_customer` = '.(int)$id_customer);
 
 						Db::getInstance()->autoExecute(_DB_PREFIX_.'message', array('id_order' => $id_order, 'message' => 'Numéro de commande '.$order->Marketplace.' :'.$order->IdOrder, 'date_add' => date('Y-m-d H:i:s')), 'INSERT');
-						$this->_updatePrices($id_order, $order);
-
+						$this->_updatePrices($id_order, $order, $reference_order);
+                                                
 					}
 				}
+                                
+                                $cartClear = new Cart();
+						
+                                if (method_exists($cartClear, 'clearCache'))
+                                        $cartClear->clearCache(true);
+                                
+                                $addressClear = new Address();
+						
+                                if (method_exists($addressClear, 'clearCache'))
+                                        $addressClear->clearCache(true);
+                                
+                                $customerClear = new Customer();
+						
+                                if (method_exists($customerClear, 'clearCache'))
+                                        $customerClear->clearCache(true);
 			}
 		}
 	}
@@ -650,8 +694,10 @@ class ShoppingFluxExport extends Module
 		if ((Configuration::get('SHOPPING_FLUX_TRACKING')!=''||Configuration::get('SHOPPING_FLUX_BUYLINE')!='')&&!in_array($params['order']->payment, $this->_getMarketplaces()))
 			file_get_contents('http://tracking.shopping-flux.com/?ip='.$ip.'&cl='.Configuration::get('SHOPPING_FLUX_LOGIN').'&mt='.$params['order']->total_paid_real.'&cmd='.$params['order']->id.'&index='.Configuration::get('SHOPPING_FLUX_INDEX'));
 
-		if (Configuration::get('SHOPPING_FLUX_STOCKS')!=''&&!in_array($params['order']->payment, $this->_getMarketplaces()))		{
-			foreach ($params['cart']->getProducts() as $product)			{
+		if (Configuration::get('SHOPPING_FLUX_STOCKS')!=''&&!in_array($params['order']->payment, $this->_getMarketplaces()))
+		{
+			foreach ($params['cart']->getProducts() as $product)
+			{
 				$id = (isset($product['id_product_attribute'])) ? (int)$product['id_product'].'_'.(int)$product['id_product_attribute'] : (int)$product['id_product'];
 				$qty = (int)$product['stock_quantity'] - (int)$product['quantity'];
 
@@ -681,7 +727,8 @@ class ShoppingFluxExport extends Module
 		{
 			$order = new Order((int)$params['id_order']);
 
-			if (in_array($order->payment, $this->_getMarketplaces()))			{
+			if (in_array($order->payment, $this->_getMarketplaces()))
+			{
 				$message = $order->getFirstMessage();
 				$id_order_marketplace = explode(':', $message);
 
@@ -720,7 +767,8 @@ class ShoppingFluxExport extends Module
 
 			$routeXML = $this->_callWebService('GetBuylineRoute', $xml);
 
-			if (!empty($routeXML->Response->Route)){
+			if (!empty($routeXML->Response->Route))
+{
 				$this->_html .= '<br/>
 					<fieldset>
 						<legend>'.$this->l('Buyline').'</legend>
@@ -735,7 +783,8 @@ class ShoppingFluxExport extends Module
 
 	public function hookupdateProductAttribute($params)
 	{
-		if (Configuration::get('SHOPPING_FLUX_STOCKS') != '')		{
+		if (Configuration::get('SHOPPING_FLUX_STOCKS') != '')
+		{
 			$data = Db::getInstance()->getRow('SELECT `id_product`,`quantity` FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product_attribute` = '.(int)$params['id_product_attribute']);
 
 			$xml  = '<?xml version="1.0" encoding="UTF-8"?>';
@@ -754,7 +803,8 @@ class ShoppingFluxExport extends Module
 
 	public function hookupdateProduct($params)
 	{
-		if (Configuration::get('SHOPPING_FLUX_STOCKS') != '')		{
+		if (Configuration::get('SHOPPING_FLUX_STOCKS') != '')
+		{
 			$xml  = '<?xml version="1.0" encoding="UTF-8"?>';
 			$xml .= '<UpdateProduct>';
 			$xml .= '<Product>';
@@ -773,7 +823,8 @@ class ShoppingFluxExport extends Module
 	{
 		global $smarty, $cart, $cookie;
 
-		if ((int)Db::getInstance()->getValue('SELECT `id_customer_ip` FROM `'._DB_PREFIX_.'customer_ip` WHERE `id_customer` = '.(int)$cookie->id_customer) > 0)		{
+		if ((int)Db::getInstance()->getValue('SELECT `id_customer_ip` FROM `'._DB_PREFIX_.'customer_ip` WHERE `id_customer` = '.(int)$cookie->id_customer) > 0)
+		{
 			$updateIp = array('ip' => pSQL($_SERVER['REMOTE_ADDR']));
 			Db::getInstance()->autoExecute(_DB_PREFIX_.'customer_ip', $updateIp, 'UPDATE', '`id_customer` = '.(int)$cookie->id_customer);
 		}
@@ -855,7 +906,8 @@ class ShoppingFluxExport extends Module
 		$ligne2 = false;
 		$a = Explode (' ', (string)$addressNode->Street) ;
 
-		foreach ($a as $b)		{
+		foreach ($a as $b)
+		{
 			if (strlen($street1) + strlen($b) + 1 < 32 && !$ligne2)
 				$street1 .= $b.' ';
 			else
@@ -903,30 +955,86 @@ class ShoppingFluxExport extends Module
 		return $customer->id;
 	}
 
-	private function _updatePrices($id_order, $order)
+	private function _updatePrices($id_order, $order, $reference_order)
 	{
-		foreach ($order->Products->Product as $product)		{
+		foreach ($order->Products->Product as $product)
+		{
 			$skus = explode ('_', $product->SKU);
-			$tax_rate = Db::getInstance()->getValue('SELECT `tax_rate` FROM `'._DB_PREFIX_.'order_detail` WHERE `id_order` = '.(int)$id_order.' AND `product_id` = '.(int)$skus[0].' AND `product_attribute_id` = '.(int)$skus[1]);
-			Db::getInstance()->autoExecute(_DB_PREFIX_.'order_detail', array('product_price' => floatval((float)$product->Price / (1 + ($tax_rate / 100))), 'reduction_percent' => 0), 'UPDATE', '`id_order` = '.(int)$id_order.' AND `product_id` = '.(int)$skus[0].' AND `product_attribute_id` = '.(int)$skus[1]);
-		}
-
+                        
+			$row = Db::getInstance()->getRow('SELECT t.rate, od.id_order_detail  FROM '._DB_PREFIX_.'tax t
+                            LEFT JOIN '._DB_PREFIX_.'order_detail_tax odt ON t.id_tax = odt.id_tax
+                            LEFT JOIN '._DB_PREFIX_.'order_detail od ON odt.id_order_detail = od.id_order_detail
+                            WHERE od.id_order = '.(int)$id_order.' AND product_id = '.(int)$skus[0].' AND product_attribute_id = '.(int)$skus[1]);
+                        
+                        $tax_rate = $row['rate'];
+                        $id_order_detail = $row['id_order_detail'];
+                        
+                        $updateOrderDetail = array(
+                                'product_price' => floatval((float)$product->Price / (1 + ($tax_rate / 100))),
+                                'reduction_percent' => 0, 
+                                'reduction_amount' => 0,
+                                'total_price_tax_incl' => floatval($product->Price),
+                                'total_price_tax_excl' => floatval((float)$product->Price / (1 + ($tax_rate / 100))),
+                                'unit_price_tax_incl' => floatval($product->Price/$product->Quantity),
+                                'unit_price_tax_excl' => floatval((float)$product->Price / ((1 + ($tax_rate / 100))* $product->Quantity)),
+                        );
+                        
+                        Db::getInstance()->autoExecute(_DB_PREFIX_.'order_detail', $updateOrderDetail, 'UPDATE', '`id_order` = '.(int)$id_order.' AND `product_id` = '.(int)$skus[0].' AND `product_attribute_id` = '.(int)$skus[1]);
+		
+                        $updateOrderDetailTax = array(
+                                'unit_amount' => floatval((float)$product->Price - ((float)$product->Price/(1 + ($tax_rate / 100)))),
+                                'total_amount' => floatval(((float)$product->Price - ((float)$product->Price/(1 + ($tax_rate / 100))))* $product->Quantity),
+                        );
+                        
+                        Db::getInstance()->autoExecute(_DB_PREFIX_.'order_detail_tax', $updateOrderDetailTax, 'UPDATE', '`id_order_detail` = '.(int)$id_order_detail);
+		
+                }
+                
 		$updateOrder = array(
 			'total_paid' => floatval($order->TotalAmount),
+                        'total_paid_tax_incl' => floatval($order->TotalAmount),
+                        'total_paid_tax_excl' => floatval((float)$order->TotalAmount / (1 + ($tax_rate / 100))),
 			'total_paid_real' => floatval($order->TotalAmount),
 			'total_products' => floatval(Db::getInstance()->getValue('SELECT SUM(`product_price`) FROM `'._DB_PREFIX_.'order_detail` WHERE `id_order` = '.(int)$id_order)),
 			'total_products_wt' => floatval($order->TotalProducts),
 			'total_shipping' => floatval($order->TotalShipping),
+                        'total_shipping_tax_incl' => floatval($order->TotalShipping),
+                        'total_shipping_tax_excl' => floatval((float)$order->TotalShipping / (1 + ($tax_rate / 100))),
 		);
 		
 		Db::getInstance()->autoExecute(_DB_PREFIX_.'orders', $updateOrder, 'UPDATE', '`id_order` = '.(int)$id_order);
+                
+                $updateOrderInvoice = array(
+                        'total_paid_tax_incl' => floatval($order->TotalAmount),
+                        'total_paid_tax_excl' => floatval((float)$order->TotalAmount / (1 + ($tax_rate / 100))),
+			'total_products' => floatval(Db::getInstance()->getValue('SELECT SUM(`product_price`) FROM `'._DB_PREFIX_.'order_detail` WHERE `id_order` = '.(int)$id_order)),
+			'total_products_wt' => floatval($order->TotalProducts),
+                        'total_shipping_tax_incl' => floatval($order->TotalShipping),
+                        'total_shipping_tax_excl' => floatval((float)$order->TotalShipping / (1 + ($tax_rate / 100))),
+		);
+                
+		Db::getInstance()->autoExecute(_DB_PREFIX_.'order_invoice', $updateOrderInvoice, 'UPDATE', '`id_order` = '.(int)$id_order);
+                
+                $updatePaiement = array(
+			'amount' => floatval($order->TotalAmount),
+		);
+		
+		Db::getInstance()->autoExecute(_DB_PREFIX_.'order_payment', $updatePaiement, 'UPDATE', '`order_reference` = "'.$reference_order.'"');
+                
 	}
 
 	private function _validateOrder($cart, $marketplace)
 	{
 		$paiement = new SFPayment();
+                $paiement->name = 'SFPayment';
+                $paiement->active = true;
+                
+                
+                //we need to flush the cart because of cache problems
+                $cart->getPackageList(true);
+                
 		$paiement->validateOrder(intval($cart->id), 2, floatval($cart->getOrderTotal()), $marketplace, NULL, array(), $cart->id_currency, false, $cart->secure_key);
-		return $paiement->currentOrder;
+		return $paiement;
 	}
 
 	/*
@@ -946,7 +1054,8 @@ class ShoppingFluxExport extends Module
 		$cart->id_carrier = (int)Configuration::get('PS_CARRIER_DEFAULT');
 		$cart->add();
 
-		foreach ($productsNode->Product as $product)		{
+		foreach ($productsNode->Product as $product)
+		{
 			$skus = explode ('_', $product->SKU);
 			if (!$cart->updateQty((int)($product->Quantity), (int)($skus[0]),((isset($skus[1])) ? $skus[1] : NULL)))
 				return false;
@@ -961,17 +1070,22 @@ class ShoppingFluxExport extends Module
 	{
 		$available = true;
 
-		foreach ($productsNode->Product as $product)		{
-			if (strpos($product->SKU, '_')!==false)			{
+		foreach ($productsNode->Product as $product)
+		{
+			if (strpos($product->SKU, '_')!==false)
+			{
 				$skus = explode ('_', $product->SKU);
+                                
+                                $quantity = StockAvailable::getQuantityAvailableByProduct((int)$skus[0], (int)$skus[1]);
 
-				if (!Db::getInstance()->getValue('SELECT `id_product` FROM `'._DB_PREFIX_.'product` WHERE `id_product` = '.(int)$skus[0]) ||
-				!Db::getInstance()->getValue('SELECT `id_product_attribute` FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product` = '.(int)$skus[0].' AND `id_product_attribute` = '.(int)$skus[1]))
-					$available = false;
+                                if($quantity - $product->Quantity < 0)	
+                                    $available = false;
 			}
 			else
 			{
-				if (!Db::getInstance()->getValue('SELECT `id_product` FROM `'._DB_PREFIX_.'product` WHERE `id_product` = '.(int)$product->SKU))
+				$quantity = StockAvailable::getQuantityAvailableByProduct((int)$product->SKU);
+				
+				if($quantity - $product->Quantity < 0)
 					$available = false;
 			}
 		}

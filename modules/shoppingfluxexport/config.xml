@@ -9,5 +9,5 @@
 	<confirmUninstall>Êtes-vous sûr de vouloir supprimer ce module ?</confirmUninstall>
 	<is_configurable>1</is_configurable>
 	<need_instance>1</need_instance>
-	<limited_countries>fr</limited_countries>
+	<limited_countries></limited_countries>
 </module>
