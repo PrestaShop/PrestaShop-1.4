@@ -4,7 +4,7 @@
 *
 * NOTICE OF LICENSE
 *
-* This source file is subject to the Academic Free License (AFL 3.0)
+0* This source file is subject to the Academic Free License (AFL 3.0)
 * that is bundled with this package in the file LICENSE.txt.
 * It is also available through the world-wide-web at this URL:
 * http://opensource.org/licenses/afl-3.0.php
@@ -63,7 +63,7 @@ class MerchantWareController extends FrontController
 		}
 		elseif (isset($result->CreateTransactionResult))
 		{
-			Logger::addLog('Module merchantware: '.$result->CreateTransactionResult->Messages[0]->information, 2);
+			Logger::addLog('Module merchantware: '.$result->CreateTransactionResult->Messages->message[0]->Information, 2);
 			self::$smarty->assign('error', true);
 		}
 		else
