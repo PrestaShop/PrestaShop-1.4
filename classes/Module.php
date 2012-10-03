@@ -425,7 +425,7 @@ abstract class ModuleCore
 				return self::$_INSTANCE[$moduleName] = new $moduleName;
 			return false;
 		}
-		return self::$_INSTANCE[$moduleName];
+		return isset(self::$_INSTANCE[$moduleName]) ? self::$_INSTANCE[$moduleName] : false;
 	}
 
 	/**
