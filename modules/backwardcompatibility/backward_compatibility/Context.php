@@ -189,15 +189,15 @@ class Context
 			{
 				switch ((int)Configuration::get('PS_MOBILE_DEVICE'))
 				{
-					case 1: // Only for mobile device
+					case 0: // Only for mobile device
 						if ($this->mobile_detect->isMobile() && !$this->mobile_detect->isTablet())
 							$this->mobile_device = true;
 						break;
-					case 2: // Only for touchpads
-						if ($this->mobile_detect->isTablet() && $this->mobile_detect->isMobile())
+					case 1: // Only for touchpads
+						if ($this->mobile_detect->isTablet() && !$this->mobile_detect->isMobile())
 							$this->mobile_device = true;
 						break;
-					case 3: // For touchpad or mobile devices
+					case 2: // For touchpad or mobile devices
 						if ($this->mobile_detect->isMobile() || $this->mobile_detect->isTablet())
 							$this->mobile_device = true;
 						break;
