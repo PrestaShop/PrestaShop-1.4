@@ -61,7 +61,7 @@ class Socolissimo extends CarrierModule
 	{
 		$this->name = 'socolissimo';
 		$this->tab = 'shipping_logistics';
-		$this->version = '2.5';
+		$this->version = '2.6';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 		$this->module_key = 'faa857ecf7579947c8eee2d9b3d1fb04';
@@ -386,15 +386,15 @@ class Socolissimo extends CarrierModule
 			'trClientNumber' => (int)$params['address']->id_customer,
 			'orderId' => $this->formatOrderId((int)($params['address']->id)),
 			'numVersion' => $this->getNumVersion(),
-			'ceCivility' => $this->getTitle(new Customer($params['address']->id_customer)),
-			'ceFirstName' => substr($params['address']->firstname, 0, 29),
-			'ceCompanyName' => substr($params['address']->company, 0, 38),
-			'ceAdress3'  => substr($params['address']->address1, 0, 38),
-			'ceAdress4' => substr($params['address']->address2, 0, 38),
-			'ceZipCode' => $params['address']->postcode,
-			'ceTown' => substr($params['address']->city, 0, 32),
-			'ceEmail' => $params['cookie']->email,
-			'cePhoneNumber' => str_replace(array(' ', '.', '-', ',', ';', '+', '/', '\\', '+', '(', ')'),'',$params['address']->phone_mobile),
+			'ceCivility' => Tools::replaceAccentedChars($this->getTitle(new Customer($params['address']->id_customer))),
+			'ceFirstName' => Tools::replaceAccentedChars(substr($params['address']->firstname, 0, 29)),
+			'ceCompanyName' => Tools::replaceAccentedChars(substr($params['address']->company, 0, 38)),
+			'ceAdress3'  => Tools::replaceAccentedChars(substr($params['address']->address1, 0, 38)),
+			'ceAdress4' => Tools::replaceAccentedChars(substr($params['address']->address2, 0, 38)),
+			'ceZipCode' => Tools::replaceAccentedChars($params['address']->postcode),
+			'ceTown' => Tools::replaceAccentedChars(substr($params['address']->city, 0, 32)),
+			'ceEmail' => Tools::replaceAccentedChars($params['cookie']->email),
+			'cePhoneNumber' => Tools::replaceAccentedChars(str_replace(array(' ', '.', '-', ',', ';', '+', '/', '\\', '+', '(', ')'),'',$params['address']->phone_mobile)),
 			'dyWeight' => (float)($params['cart']->getTotalWeight()) * 1000,
 			'trParamPlus' => $carrierSo->id,
 			'trReturnUrlKo' => htmlentities($this->url, ENT_NOQUOTES, 'UTF-8'),
