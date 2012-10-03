@@ -52,7 +52,7 @@ abstract class PayPalAbstract extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'payments_gateways';
-		$this->version = '3.2.2';
+		$this->version = '3.2.3';
 
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
@@ -275,7 +275,7 @@ abstract class PayPalAbstract extends PaymentModule
 		$payment_method = Configuration::get('PAYPAL_PAYMENT_METHOD');
 
 		if ($payment_method != HSS && !is_null(Configuration::get('PAYPAL_API_USER')) &&
-		!is_null(Configuration::get('PAYPAL_API_PASSWORD')) && is_null(Configuration::get('PAYPAL_API_SIGNATURE')))
+		!is_null(Configuration::get('PAYPAL_API_PASSWORD')) && !is_null(Configuration::get('PAYPAL_API_SIGNATURE')))
 			return true;
 		elseif ($payment_method == HSS && !is_null(Configuration::get('PAYPAL_BUSINESS_ACCOUNT')))
 			return true;
