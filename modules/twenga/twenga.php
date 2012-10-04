@@ -695,7 +695,7 @@ class Twenga extends PaymentModule
 			// $str_return .= '&nbsp;<em style="color:red;">'.$this->l('Error(s) occurred: please contact Twenga').'</em>';
 			
 				$str_return .='				<a href="'.$this->inscription_url.'" target="_blank" class="link">&raquo;'.$this->l('List my website on Twenga').'&laquo;</a>
-					<li>'.$this->l('Complete the Twenga registration form.').'</li> 
+					<li>'.$this->l('Fill out the Twenga registration form. Certain fields concerning your site and your catalogue will be automatically filled in for your convenience.').'</li>
 					<li>'.$this->l('When you receive the Twenga hash-key by e-mail, return to this page and paste in the "hashkey" field. Click on Save and Activate.').'</li>
 				</ol>';
 
@@ -980,12 +980,12 @@ class Twenga extends PaymentModule
 					
 					// required Fields
 					echo '<product_url>'.$product_values['product_url'].'</product_url>';
-					echo '<designation>'.'<![CDATA['.$product_values['designation'].']]>'.'</designation>';
+					echo '<designation><![CDATA['.$product_values['designation'].']]></designation>';
 					echo '<price>'.$product_values['price'].'</price>';
-					echo '<category>'.'<![CDATA['.$product_values['category'].']]>'.'</category>';
+					echo '<category><![CDATA['.$product_values['category'].']]></category>';
 					echo '<image_url>'.$product_values['image_url'].'</image_url>';
-					echo '<description>'.'<![CDATA['.$product_values['description'].']]>'.'</description>';
-					echo '<brand>'.$product_values['brand'].'</brand>';
+					echo '<description><![CDATA['.$product_values['description'].']]></description>';
+					echo '<brand><![CDATA['.$product_values['brand'].']]></brand>';
 
 					// optionnals fields
 					echo '<merchant_id>'.$product_values['merchant_id'].'</merchant_id>';
