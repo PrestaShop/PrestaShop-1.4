@@ -52,7 +52,7 @@ abstract class PayPalAbstract extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'payments_gateways';
-		$this->version = '3.2.3';
+		$this->version = '3.2.4';
 
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
@@ -66,32 +66,61 @@ abstract class PayPalAbstract extends PaymentModule
 		$this->page = basename(__FILE__, '.php');
 
 		if (_PS_VERSION_ < '1.5')
+		{
+			$mobile_enabled = (int)Configuration::get('PS_MOBILE_DEVICE');
 			require(_PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php');
+		}
+		else
+			$mobile_enabled = (int)Configuration::get('PS_ALLOW_MOBILE_DEVICE');
 
 		if ($this->active)
+			$this->loadDefaults();
+
+		if ($mobile_enabled && $this->active && self::isInstalled($this->name))
+			$this->checkMobileCredentials();
+		elseif ($mobile_enabled && !$this->active || !self::isInstalled($this->name))
+			$this->checkMobileNeeds();
+	}
+
+	/**
+	 * Initialize default values
+	 */
+	protected  function loadDefaults()
+	{
+		$this->loadLangDefault();
+		$this->paypal_logos = new PayPalLogos($this->iso_code);
+
+		if (defined('_PS_ADMIN_DIR_'))
 		{
-			/* Default methods (initialization & checks) */
-			$this->loadLangDefault();
-			$this->paypal_logos = new PayPalLogos($this->iso_code);
+			/* Backward compatibility */
+			if (_PS_VERSION_ < '1.5')
+				$this->backwardCompatibilityChecks();
 
-			if (defined('_PS_ADMIN_DIR_'))
-			{
-				/* Backward compatibility */
-				if (_PS_VERSION_ < '1.5')
-					$this->backwardCompatibilityChecks();
-
-				/* Upgrade and compatibility checks */
-				$this->runUpgrades();
-				$this->compatibilityCheck();
-				$this->warningsCheck();
-
-				/* Allowed countries for mobile */
-				$iso_code = Country::getIsoById((int)Configuration::get('PS_DEFAULT_COUNTRY'));
-				$paypal_countries = array('ES', 'FR', 'PL', 'IT');
-				if (!$this->active && ($this->context->shop->getTheme() == 'default') && in_array($iso_code, $paypal_countries))
-					$this->warning .= $this->l('The mobile theme only works with the PayPal\'s payment module at this time. Please activate the module to enable payments.');
-			}
+			/* Upgrade and compatibility checks */
+			$this->runUpgrades();
+			$this->compatibilityCheck();
+			$this->warningsCheck();
 		}
+	}
+
+	protected function checkMobileCredentials()
+	{
+		$payment_method = Configuration::get('PAYPAL_PAYMENT_METHOD');
+
+		if (((int)$payment_method == HSS) && (
+			(!(bool)Configuration::get('PAYPAL_API_USER')) &&
+			(!(bool)Configuration::get('PAYPAL_API_PASSWORD')) &&
+			(!(bool)Configuration::get('PAYPAL_API_SIGNATURE'))))
+			$this->warning .= $this->l('You must set your PayPal Integral credentials in order to have the mobile theme work correctly.').'<br />';
+	}
+
+	protected function checkMobileNeeds()
+	{
+		$iso_code = Country::getIsoById((int)Configuration::get('PS_COUNTRY_DEFAULT'));
+		$paypal_countries = array('ES', 'FR', 'PL', 'IT');
+
+		if (($this->context->shop->getTheme() == 'default') && in_array($iso_code, $paypal_countries))
+			$this->warning .= $this->l('The mobile theme only works with the PayPal\'s payment module at this time. Please activate the module to enable payments.').'<br />';
 	}
 
 	/* Check status of backward compatibility module*/
@@ -101,12 +130,12 @@ abstract class PayPalAbstract extends PaymentModule
 		{
 			$backward_module = Module::getInstanceByName('backwardcompatibility');
 			if (!$backward_module->active)
-				$this->warning .= $this->l('To work properly the module requires the backward compatibility module enabled');
+				$this->warning .= $this->l('To work properly the module requires the backward compatibility module enabled').'<br />';
 			elseif ($backward_module->version < PayPal::BACKWARD_REQUIREMENT)
-				$this->warning .= $this->l('To work properly the module requires at least the backward compatibility module v').PayPal::BACKWARD_REQUIREMENT;
+				$this->warning .= $this->l('To work properly the module requires at least the backward compatibility module v').PayPal::BACKWARD_REQUIREMENT.'.<br />';
 		}
 		else
-			$this->warning .= $this->l('In order to use the module you need to install the backward compatibility.');
+			$this->warning .= $this->l('In order to use the module you need to install the backward compatibility.').'<br />';
 	}
 
 	public function install()
@@ -253,7 +282,7 @@ abstract class PayPalAbstract extends PaymentModule
 	private function compatibilityCheck()
 	{
 		if (file_exists(_PS_ROOT_DIR_.'/modules/paypalapi/paypalapi.php') && $this->active)
-			$this->warning = $this->l('All features of Paypal API module are include in the new Paypal module. In order to do not have any conflict, please do not use and remove PayPalAPI module.');
+			$this->warning = $this->l('All features of Paypal API module are include in the new Paypal module. In order to do not have any conflict, please do not use and remove PayPalAPI module.').'<br />';
 
 		/* For 1.4.3 and less compatibility */
 		$updateConfig = array('PS_OS_CHEQUE' => 1, 'PS_OS_PAYMENT' => 2, 'PS_OS_PREPARATION' => 3, 'PS_OS_SHIPPING' => 4,
@@ -360,12 +389,12 @@ abstract class PayPalAbstract extends PaymentModule
 	
 	public function renderExpressCheckoutButton($type)
 	{
-		if (!Configuration::get('PAYPAL_EXPRESS_CHECKOUT_SHORTCUT'))
+		if (!Configuration::get('PAYPAL_EXPRESS_CHECKOUT_SHORTCUT') && (!$this->context->getMobileDevice()))
 			return;
 
 		if (!in_array(ECS, $this->getPaymentMethods()) ||
 		(((int)Configuration::get('PAYPAL_BUSINESS') == 1) &&
-		(int)Configuration::get('PAYPAL_PAYMENT_METHOD') == HSS))
+		(int)Configuration::get('PAYPAL_PAYMENT_METHOD') == HSS) && !$this->context->getMobileDevice())
 			return;
 
 		$iso_lang = array('en' => 'en_US', 'fr' => 'fr_FR');
@@ -383,8 +412,8 @@ abstract class PayPalAbstract extends PaymentModule
 	
 	public function renderExpressCheckoutForm($type)
 	{
-		if (!Configuration::get('PAYPAL_EXPRESS_CHECKOUT_SHORTCUT') || !in_array(ECS, $this->getPaymentMethods()) ||
-		(((int)Configuration::get('PAYPAL_BUSINESS') == 1) && ((int)Configuration::get('PAYPAL_PAYMENT_METHOD') == HSS)))
+		if ((!Configuration::get('PAYPAL_EXPRESS_CHECKOUT_SHORTCUT') && (!$this->context->getMobileDevice())) || !in_array(ECS, $this->getPaymentMethods()) ||
+		(((int)Configuration::get('PAYPAL_BUSINESS') == 1) && ((int)Configuration::get('PAYPAL_PAYMENT_METHOD') == HSS) && !$this->context->getMobileDevice()))
 			return;
 
 		$this->context->smarty->assign(array(
@@ -400,7 +429,7 @@ abstract class PayPalAbstract extends PaymentModule
 	{
 		if (method_exists($this->context, 'getMobileDevice') && $this->context->getMobileDevice())
 			return ECS;
-		return Configuration::get('PAYPAL_PAYMENT_METHOD');
+		return (int)Configuration::get('PAYPAL_PAYMENT_METHOD');
 	}
 
 	public function hookPayment($params)
@@ -523,7 +552,8 @@ abstract class PayPalAbstract extends PaymentModule
 	{
 		// No active or ajax request, drop it
 		if (!$this->active || (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH']) ||
-		!Configuration::get('PAYPAL_EXPRESS_CHECKOUT_SHORTCUT') || !in_array(ECS, $this->getPaymentMethods()))
+			(((int)Configuration::get('PAYPAL_PAYMENT_METHOD') == HSS) && !$this->context->getMobileDevice()) ||
+			!Configuration::get('PAYPAL_EXPRESS_CHECKOUT_SHORTCUT') || !in_array(ECS, $this->getPaymentMethods()))
 			return;
 
 		$values = array('en' => 'en_US', 'fr' => 'fr_FR');
@@ -563,7 +593,7 @@ abstract class PayPalAbstract extends PaymentModule
 			return;
 
 		/* Only execute if you use PayPal API for payment */
-		if (Configuration::get('PAYPAL_PAYMENT_METHOD') != HSS && $this->isPayPalAPIAvailable())
+		if (((int)Configuration::get('PAYPAL_PAYMENT_METHOD') != HSS) && $this->isPayPalAPIAvailable())
 		{
 			if ($params['module'] != $this->name || !$this->context->cookie->paypal_token || !$this->context->cookie->paypal_payer_id)
 				return false;
@@ -1161,14 +1191,14 @@ abstract class PayPalAbstract extends PaymentModule
     private function warningsCheck()
     {
         if (Configuration::get('PAYPAL_PAYMENT_METHOD') == HSS && Configuration::get('PAYPAL_BUSINESS_ACCOUNT') == 'paypal@prestashop.com')
-            $this->warning = $this->l('You are currently using the default PayPal e-mail address, please enter your own e-mail address.');
+            $this->warning = $this->l('You are currently using the default PayPal e-mail address, please enter your own e-mail address.').'<br />';
 
         /* Check preactivation warning */
         if (Configuration::get('PS_PREACTIVATION_PAYPAL_WARNING'))
         {
             if (!empty($this->warning))
                 $this->warning .= ', ';
-            $this->warning .= Configuration::get('PS_PREACTIVATION_PAYPAL_WARNING');
+            $this->warning .= Configuration::get('PS_PREACTIVATION_PAYPAL_WARNING').'<br />';
         }
     }
 
