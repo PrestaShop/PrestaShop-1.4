@@ -61,7 +61,7 @@ class Socolissimo extends CarrierModule
 	{
 		$this->name = 'socolissimo';
 		$this->tab = 'shipping_logistics';
-		$this->version = '2.6.1';
+		$this->version = '2.6.3';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 		$this->module_key = 'faa857ecf7579947c8eee2d9b3d1fb04';
@@ -110,7 +110,7 @@ class Socolissimo extends CarrierModule
 		if (!parent::install() OR !Configuration::updateValue('SOCOLISSIMO_ID', NULL) OR !Configuration::updateValue('SOCOLISSIMO_KEY', NULL) ||
 				!Configuration::updateValue('SOCOLISSIMO_URL', 'https://ws.colissimo.fr/pudo-fo-frame/storeCall.do') OR !Configuration::updateValue('SOCOLISSIMO_PREPARATION_TIME', 1) ||
 				!Configuration::updateValue('SOCOLISSIMO_OVERCOST', 3.6) OR !$this->registerHook('extraCarrier') OR !$this->registerHook('AdminOrder') OR !$this->registerHook('updateCarrier') ||
-				!$this->registerHook('newOrder') OR !$this->registerHook('paymentTop') OR !Configuration::updateValue('SOCOLISSIMO_SUP_URL', 'http://ws.colissimo.fr/supervision-pudo-frame/supervision.jsp') ||
+				!$this->registerHook('newOrder') OR !$this->registerHook('paymentTop') OR !Configuration::updateValue('SOCOLISSIMO_SUP_URL', 'https://ws.colissimo.fr/supervision-pudo-frame/supervision.jsp') ||
 				!Configuration::updateValue('SOCOLISSIMO_SUP', true) OR !Configuration::updateValue('SOCOLISSIMO_USE_FANCYBOX', true))
 			return false;
 
@@ -167,8 +167,8 @@ class Socolissimo extends CarrierModule
 				!Db::getInstance()->execute('DROP TABLE IF EXISTS`'._DB_PREFIX_.'socolissimo_delivery_info`') ||
 		  	!$this->unregisterHook('extraCarrier') ||
 				!$this->unregisterHook('payment') ||
-				!$this->unregisterHook('Admin||der') ||
-				!$this->unregisterHook('new||der') ||
+				!$this->unregisterHook('AdminOrder') ||
+				!$this->unregisterHook('newOrder') ||
 				!$this->unregisterHook('updateCarrier')  ||
 				!$this->unregisterHook('paymentTop'))
 			return false;
@@ -376,17 +376,18 @@ class Socolissimo extends CarrierModule
 		if (method_exists($params['cart'], 'carrierIsSelected'))
 			if ($params['cart']->carrierIsSelected((int)$carrierSo->id, $params['address']->id))
 				$id_carrier = (int)$carrierSo->id;
-
+		$customer = new Customer($params['address']->id_customer);
+		
 		// Keep this fields order (see doc.)
 		$inputs = array_map('strtolower', array(
 			'pudoFOId' => Configuration::get('SOCOLISSIMO_ID'),
 			'ceName' => $this->replaceAccentedChars(substr($params['address']->lastname,0, 34)),
-			'dyPreparationTime' => (int)(Configuration::Get('SOCOLISSIMO_PREPARATION_TIME')),
+			'dyPreparationTime' => (int)Configuration::Get('SOCOLISSIMO_PREPARATION_TIME'),
 			'dyForwardingCharges' => number_format((float)(version_compare(_PS_VERSION_, '1.5', '>') ? $params['cart']->getTotalShippingCost() : $params['cart']->getOrderShippingCost($carrierSo->id)), 2, ',', ''),
 			'trClientNumber' => (int)$params['address']->id_customer,
-			'orderId' => $this->formatOrderId((int)($params['address']->id)),
+			'orderId' => $this->formatOrderId((int)$params['address']->id),
 			'numVersion' => $this->getNumVersion(),
-			'ceCivility' => $this->replaceAccentedChars($this->getTitle(new Customer($params['address']->id_customer))),
+			'ceCivility' => $this->replaceAccentedChars($this->getTitle($customer)),
 			'ceFirstName' => $this->replaceAccentedChars(substr($params['address']->firstname, 0, 29)),
 			'ceCompanyName' => $this->replaceAccentedChars(substr($params['address']->company, 0, 38)),
 			'ceAdress3'  => $this->replaceAccentedChars(substr($params['address']->address1, 0, 38)),
@@ -782,16 +783,18 @@ class Socolissimo extends CarrierModule
 	public function getTitle(Customer $customer)
 	{
 		$title = 'MR';
-
 		if (_PS_VERSION_ < '1.5')
 		{
-			$titles = array('1' => 'MR','2' => 'MME');
-			if (in_array((int)$customer->id_gender, $titles))
-				$title = $titles[(int)$customer->id_gender];
+			$titles = array('1' => 'MR', '2' => 'MME');
+			if (isset($titles[$customer->id_gender]))
+				return $titles[$customer->id_gender];
 		}
 		else
+		{
 			$gender = new Gender($customer->id_gender);
-		return isset($gender->name) ? $gender->name : $title;
+			return $gender->name;
+		}
+		return $title;
 	}
 
 	/**
