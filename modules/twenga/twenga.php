@@ -122,7 +122,7 @@ class Twenga extends PaymentModule
 		$this->token = Tools::getValue('token');
 	 	$this->name = 'twenga';
 	 	$this->tab = 'smart_shopping';
-	 	$this->version = '1.8.4';
+	 	$this->version = '1.8.5';
 		$this->author = 'PrestaShop';
 		
 	 	parent::__construct();
@@ -689,10 +689,10 @@ class Twenga extends PaymentModule
 				</div><p><strong>'.$this->l('CASE #1 - You never signed-up to the Twenga Ready to Sell programme before:').'</strong></p>
 				<ol>'.'<li>'.$this->l('Click on this link to register for the  Twenga Ready to Sell programme'); 
 
-		// if ($this->inscription_url !== NULL)
-			// $str_return .= '&nbsp;<a href="'.$this->inscription_url.'" target="_blank" class="link">&raquo;'.$this->l('List my website on Twenga').'&laquo;</a>'.'</li>';
-		// else
-			// $str_return .= '&nbsp;<em style="color:red;">'.$this->l('Error(s) occurred: please contact Twenga').'</em>';
+				// if ($this->inscription_url !== NULL)
+					// $str_return .= '&nbsp;<a href="'.$this->inscription_url.'" target="_blank" class="link">&raquo;'.$this->l('List my website on Twenga').'&laquo;</a>'.'</li>';
+				// else
+					// $str_return .= '&nbsp;<em style="color:red;">'.$this->l('Error(s) occurred: please contact Twenga').'</em>';
 			
 				$str_return .='				<a href="'.$this->inscription_url.'" target="_blank" class="link">&raquo;'.$this->l('List my website on Twenga').'&laquo;</a>
 					<li>'.$this->l('Fill out the Twenga registration form. Certain fields concerning your site and your catalogue will be automatically filled in for your convenience.').'</li>
