@@ -61,7 +61,7 @@ class Socolissimo extends CarrierModule
 	{
 		$this->name = 'socolissimo';
 		$this->tab = 'shipping_logistics';
-		$this->version = '2.6';
+		$this->version = '2.6.1';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 		$this->module_key = 'faa857ecf7579947c8eee2d9b3d1fb04';
@@ -380,7 +380,7 @@ class Socolissimo extends CarrierModule
 		// Keep this fields order (see doc.)
 		$inputs = array_map('strtolower', array(
 			'pudoFOId' => Configuration::get('SOCOLISSIMO_ID'),
-			'ceName' => substr($params['address']->lastname,0, 34),
+			'ceName' => $this->replaceAccentedChars(substr($params['address']->lastname,0, 34)),
 			'dyPreparationTime' => (int)(Configuration::Get('SOCOLISSIMO_PREPARATION_TIME')),
 			'dyForwardingCharges' => number_format((float)(version_compare(_PS_VERSION_, '1.5', '>') ? $params['cart']->getTotalShippingCost() : $params['cart']->getOrderShippingCost($carrierSo->id)), 2, ',', ''),
 			'trClientNumber' => (int)$params['address']->id_customer,
