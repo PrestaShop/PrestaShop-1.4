@@ -82,11 +82,7 @@ elseif ($id_cart = Tools::getValue('id_cart'))
 	if (_PS_VERSION_ < '1.5')
 		Tools::redirectLink(__PS_BASE_URI__ . '/modules/paypal/integral_evolution/submit.php?'.http_build_query($array, '', '&'));
 	else
-	{
-		$controller = new FrontController();
-		$controller->init();
-		Tools::redirect(Context::getContext()->link->getModuleLink('paypal', 'submit', $values));
-	}
+		Tools::redirect(Context::getContext()->link->getModuleLink('paypal', 'submit', $array));
 }
 else
 	Tools::redirectLink(__PS_BASE_URI__);
