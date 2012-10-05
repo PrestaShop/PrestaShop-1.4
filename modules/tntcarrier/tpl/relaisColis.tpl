@@ -79,8 +79,10 @@ function displayNewTable(response, id)
 {/literal}
 {else}
 {literal}
-$().ready(function()
+$(document).ready(function()
 	{
+var chosenCarrier = $("input[name*='delivery_option[']:checked").val().split(',');
+getAjaxRelais(chosenCarrier[0]);
 		$("[id*='delivery_option_']").each(function(){
 			var id_array = $(this).val().split(',');
 			var indexTab = jQuery.inArray(id_array[0], id_carrier);
