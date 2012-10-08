@@ -510,8 +510,8 @@ class SearchCore
 
 	protected static function setProductsAsIndexed(&$productsArray)
 	{
-		if ($i = count($productsArray))
-			Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET indexed = 1 WHERE id_product IN ('.implode(',', $productsArray).') LIMIT '.(int)$i);
+		if (!empty($productsArray))
+			Db::getInstance()->Execute('UPDATE '._DB_PREFIX_.'product SET indexed = 1 WHERE id_product IN ('.implode(',', $productsArray).')');
 		$productsArray = array();
 	}
 
