@@ -27,7 +27,7 @@ class TntCarrier extends CarrierModule
 	{
 		$this->name = 'tntcarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.7.7';
+		$this->version = '1.7.8';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 		$this->module_key = 'd4dcfde9937b67002235598ac35cbdf8';
@@ -405,7 +405,7 @@ class TntCarrier extends CarrierModule
 		if (Tools::getValue('action') == 'del' && Tools::getValue($cat) != '')
 		{
 			$id = Tools::getValue($cat);
-			Db::getInstance()->ExecuteS('DELETE FROM `'._DB_PREFIX_.'tnt_carrier_'.$this->bqSQL($cat).'` WHERE `id_'.$this->bqSQL($cat).'` = '.(int)$id.'');
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'tnt_carrier_'.$this->bqSQL($cat).'` WHERE `id_'.$this->bqSQL($cat).'` = '.(int)$id.'');
 		}
 
 		$html = '
