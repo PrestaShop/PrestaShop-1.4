@@ -27,7 +27,7 @@ class TntCarrier extends CarrierModule
 	{
 		$this->name = 'tntcarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.7.8';
+		$this->version = '1.7.9';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 		$this->module_key = 'd4dcfde9937b67002235598ac35cbdf8';
@@ -920,6 +920,12 @@ class TntCarrier extends CarrierModule
 		$smarty->assign('version', _PS_VERSION_);
 		$smarty->assign('services', $services);
 		$smarty->assign('dueDate', $dueDate);
+		if (_PS_VERSION_ >= 1.5)
+		{
+			$this->context->controller->addJS('http://maps.google.com/maps/api/js?sensor=true');
+			$this->context->controller->addJS($this->_path.'js/relais.js');
+			$this->context->controller->addJS($this->_path.'js/jquery-ui-1.8.10.custom.min.js');
+		}
 		return $this->display( __FILE__, 'tpl/relaisColis.tpl' );
 	}
 

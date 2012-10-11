@@ -1,8 +1,10 @@
 <link rel="stylesheet" href="./modules/tntcarrier/css/ui.tabs.css" type="text/css" />
 <link rel="stylesheet" href="./modules/tntcarrier/css/ui.dialog.css" type="text/css" />
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
-<script type="text/javascript" src="./modules/tntcarrier/js/relais.js"></script>
-<script type="text/javascript" src="./js/jquery/jquery-ui-1.8.10.custom.min.js"></script>
+{if $version < '1.5'}
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+    <script type="text/javascript" src="./modules/tntcarrier/js/relais.js"></script>
+    <script type="text/javascript" src="./js/jquery/jquery-ui-1.8.10.custom.min.js"></script>
+{/if}
 <script type="text/javascript">
 //date_carrier[$(this).val()]
 var id_carrier = new Array();
