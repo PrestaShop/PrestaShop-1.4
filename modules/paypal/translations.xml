@@ -2453,6 +2453,143 @@
 		</u6>
 	</country>
 
+	<country iso_code="PT">
+		<yes>Sim</yes>
+		<no>Não</no>
+		<payment_choice>Pague com o PayPal em 8x sem juros</payment_choice>
+		<leader>Líder em</leader>
+		<online_payment>Pagamentos online</online_payment>
+		<tagline>Fácil, seguro, rápido pagamento para seus clientes.</tagline>
+		<expectations>Só leva alguns minutos para começar com o PayPal</expectations>
+		<benefits>
+			<![CDATA[
+				<li><span class="bold">Conquiste mais clientes</span><br />Mais de 100 milhões de contas ativas no Paypal mundialmente</li>
+				<li><span class="bold">Acesse clientes internacionais</span><br />190 países, 25 moedas</li>
+				<li><span class="bold">Dê garantia aos seus clientes</span><br />Compradores não precisam compartilhar informações privadas</li>
+				<li><span class="bold">Aceite todos os principais métodos de pagamento</span><br />Visa, Mastercard, PayPal, etc.</li>
+			]]>
+		</benefits>
+
+		<your_country>Seu país</your_country>
+		<change_country>Mudar</change_country>
+		<country_change_title>Selecione seu país</country_change_title>
+
+		<customer_support><![CDATA[<span style="font-weight: bold">Precisa de Ajuda?</span>]]> Entre em contato:08008921555<![CDATA[<br />]]>(Serviço de atendimento ao cliente)</customer_support>
+		<customer_support_image>Ligue</customer_support_image>
+		<support_foonote></support_foonote>
+
+		<paypal_account>Já tem uma conta PayPal para empresa</paypal_account>
+		<select_solution>Selecione sua solução</select_solution>
+		<learn_more><![CDATA[<a href="https://altfarm.mediaplex.com/ad/ck/3484-148727-12439-23?ID=78" target="_blank">Saiba mais</a>]]></learn_more>
+
+		<sole_solution_section_title>Precisa do Paypal para processar todos seus pagamentos por cartão?</sole_solution_section_title>
+		<additional_solution_tagline>Precisa do Paypal além do seu processador de cartão de crédito atual?</additional_solution_tagline>
+
+		<choose>Escolher</choose>
+
+		<website_payment_standard>Website Payments Standard</website_payment_standard>
+		<website_payment_standard_tagline>
+			Comece a aceitar pagamentos imediatamente.<![CDATA[<br />]]>
+			Sem taxa de assinatura, somente uma pequena taxa de transação quando você recebe pagamento.
+		</website_payment_standard_tagline>
+
+		<website_payment_pro></website_payment_pro>
+		<website_payment_pro_tagline></website_payment_pro_tagline>
+		<website_payment_pro_disclaimer></website_payment_pro_disclaimer>
+
+		<express_checkout>Checkout Express</express_checkout>
+		<express_checkout_tagline>Aumente em 30% suas vendas on-line * com um simples processo de 3 cliques para a finalização da compra.</express_checkout_tagline>
+		<express_checkout_tagline_source>*Fonte1: Pesquisa Forrester conduzida em março de 2011</express_checkout_tagline_source>
+
+		<account_section_title>Registre-se para sua conta para empresa gratuíta do Paypal</account_section_title>
+
+		<credentials_section_title>Processe pagamentos na sua loja virtual</credentials_section_title>
+		<credentials_tagline></credentials_tagline>
+		<credentials_description>Forneça suas credenciais da API do Paypal para o PrestaShop</credentials_description>
+		<credentials_integral_description>Indique o email que você usou quando você se cadastrou para uma conta para empresa do Paypal</credentials_integral_description>
+		<credentials_button>Obtenha minhas credenciais da API do PayPal</credentials_button>
+		<credentials_button_disclaimer>Clique aqui e coloque no pop-up seu email e senha de login no Paypal, então copie e cole suas credenciais da API do PayPal nos campos abaixo.</credentials_button_disclaimer>
+		<credentials_username>API usuário</credentials_username>
+		<credentials_password>API senha</credentials_password>
+		<credentials_signature>API assinatura</credentials_signature>
+		<credentials_business_email>API e-mail da empresa</credentials_business_email>
+		<credentials_fields_disclaimer>Por favor verifique que você tenha copiado todos os caractéres.</credentials_fields_disclaimer>
+
+		<setup_finalize_title>Para finalizar a configuração da sua conta Paypal, você precisa</setup_finalize_title>
+		<setup_reminder_1>Confirmar seu endereço de email : veja o email enviado pelo Paypal quando você criou sua conta</setup_reminder_1>
+		<setup_reminder_2>Vincule sua conta do Paypal à uma conta bancária ou uma conta de cartão de crédito: Acesse sua conta PayPal e vá à “My business setup”</setup_reminder_2>
+
+		<configuration_options_title>Opções de Configuração</configuration_options_title>
+
+		<express_checkout_shortcut_title>Atalho para Checkout Express</express_checkout_shortcut_title>
+		<express_checkout_shortcut_tagline>Ofereça ao seu cliente uma experiência de 3 cliques para finalização da compra</express_checkout_shortcut_tagline>
+
+		<sandbox_title>Use uma Sandbox</sandbox_title>
+		<sandbox_recommended></sandbox_recommended>
+		<sandbox_tagline>Ative um ambiente teste em sua conta Paypal (somente para desenvolvedores).</sandbox_tagline>
+		<sandbox_learn_more>Saiba mais</sandbox_learn_more>
+		<sandbox_live_mode>Modo Live (recomendado)</sandbox_live_mode>
+		<sandbox_test_mode>Modo teste</sandbox_test_mode>
+
+		<sandbox_confirmation_title>Por favor note que se você escolher ativar o modo teste</sandbox_confirmation_title>
+		<sandbox_confirmation_content>
+			<![CDATA[
+				<li>Você ainda não poderá aceitar pagamentos</li>
+				<li>Você vai precisar voltar para a página do módulo PayPal para poder completar o Passo 3 antes de colocar no ar</li>
+				<li>Você vai precisar criar uma conta no site sandbox do PayPal (<a href="https://developer.paypal.com/" target="_blank">saiba mais</a>)</li>
+				<li>Você vai precisar entender de programação</li>
+			]]>
+		</sandbox_confirmation_content>
+		<sandbox_confirmation_question>Você tem certeza que você quer ativar o modo teste?</sandbox_confirmation_question>
+
+		<payment_type_title>Tipo de pagamento</payment_type_title>
+		<payment_type_tagline>Escolha sua maneira de processar pagamentos (automaticamente vs.autorização manual).</payment_type_tagline>
+		<payment_type_direct>Vendas diretas (recomendado)</payment_type_direct>
+		<payment_type_manual>Autorização/Captura manual (payment shipping)</payment_type_manual>
+
+		<save_button>Salvar</save_button>
+
+		<error_message>Você precisa fornecer suas credenciais da API do Paypal no passo 3 para poder aceitar pagamentos.</error_message>
+
+		<congratulation_title>Parabéns!</congratulation_title>
+		<congratulation_live_mode>Você pode começar agora a aceitar pagamentos com PayPal.</congratulation_live_mode>
+		<congratulation_test_mode>Você pode começar agora a testar as soluções do PayPal. Uma vez que você realizar seus testes, não esqueça de voltar para esta página e ativar o modo live para começar a aceitar pagamentos.</congratulation_test_mode>
+
+		<u1>
+			<signUpCallButton>Cadastre-se</signUpCallButton>
+			<content>Uma vez que você abriu sua conta PayPal, ou se você já tem uma, continue no passo 3.</content>
+			<signUpRedirectLink>https://altfarm.mediaplex.com/ad/ck/3484-148727-12439-23?ID=79</signUpRedirectLink>
+		</u1>
+		<u2>
+			<signUpCallButton></signUpCallButton>
+			<content></content>
+			<signUpRedirectLink></signUpRedirectLink>
+		</u2>
+		<u3>
+			<signUpCallButton>Cadastre-se</signUpCallButton>
+			<content>Uma vez que sua conta for criada, volte nesta página para completar o passo 3.</content>
+			<signUpRedirectLink>https://altfarm.mediaplex.com/ad/ck/3484-148727-12439-23?ID=80</signUpRedirectLink>
+		</u3>
+		<u4>
+			<signUpCallButton>Cadastre-se</signUpCallButton>
+			<content></content>
+			<signUpRedirectLink></signUpRedirectLink>
+		</u4>
+		<u5>
+			<signUpCallButton>Cadastre-se</signUpCallButton>
+			<content>
+				Importante: Por favor clique no botão SALVAR no pé da página quando o Paypal aprovar seu pedido de cadastro para este produto, ao contrário você não conseguirá processar nenhum pagamento por cartão. Este processo pode levar de 3 a 5 dias.<![CDATA[<br />]]>
+				Se o seu pedido de cadastro para Website Payments Pro já foi aprovado pelo Paypal, por favor vá diretamente para o passo 3.
+			</content>
+			<signUpRedirectLink></signUpRedirectLink>
+		</u5>
+		<u6>
+			<signUpCallButton></signUpCallButton>
+			<content></content>
+			<signUpRedirectLink></signUpRedirectLink>
+		</u6>
+	</country>
+
 	<country iso_code="RA">
 		<yes>Yes</yes>
 		<no>No</no>
