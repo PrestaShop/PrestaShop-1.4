@@ -507,22 +507,51 @@ class ThemeInstallator extends Module
 	{
 		$return = array();
 
-		foreach ($this->xml->images->image as $row)
-		{
-			if ($result = (bool)Db::getInstance()->executes(sprintf('SELECT * FROM `'._DB_PREFIX_.'image_type` WHERE `name` = \'%s\' ', pSQL($row['name']))))
+		if (isset($this->xml->images->image) && !empty($this->xml->images->image))
+			foreach ($this->xml->images->image as $row)
 			{
-				if (_PS_VERSION_ < '1.5')
+				if ($result = (bool)Db::getInstance()->executes(sprintf('SELECT * FROM `'._DB_PREFIX_.'image_type` WHERE `name` = \'%s\' ', pSQL($row['name']))))
 				{
-					Db::getInstance()->Execute('
-						UPDATE `'._DB_PREFIX_.'image_type`
-						SET `width` = '.(int)($row['width']).',
-							`height` = '.(int)($row['height']).',
-							`products` = '.($row['products'] == 'true' ? 1 : 0).',
-							`categories` = '.($row['categories'] == 'true' ? 1 : 0).',
-							`manufacturers` = '.($row['manufacturers'] == 'true' ? 1 : 0).',
-							`suppliers` = '.($row['suppliers'] == 'true' ? 1 : 0).',
-							`scenes` = '.($row['scenes'] == 'true' ? 1 : 0).'
-						WHERE name LIKE \''.pSQL($row['name']).'\'');
+					if (_PS_VERSION_ < '1.5')
+					{
+						Db::getInstance()->Execute('
+							UPDATE `'._DB_PREFIX_.'image_type`
+							SET `width` = '.(int)($row['width']).',
+								`height` = '.(int)($row['height']).',
+								`products` = '.($row['products'] == 'true' ? 1 : 0).',
+								`categories` = '.($row['categories'] == 'true' ? 1 : 0).',
+								`manufacturers` = '.($row['manufacturers'] == 'true' ? 1 : 0).',
+								`suppliers` = '.($row['suppliers'] == 'true' ? 1 : 0).',
+								`scenes` = '.($row['scenes'] == 'true' ? 1 : 0).'
+							WHERE name LIKE \''.pSQL($row['name']).'\'');
+
+						$return['ok'][] = array(
+							'name' => $row['name'],
+							'width' => (int)$row['width'],
+							'height' => (int)$row['height']
+						);
+					}
+					else
+					{
+						$return['error'][] = array(
+							'name' => $row['name'],
+							'width' => (int)$row['width'],
+							'height' => (int)$row['height']
+						);
+					}
+				}
+				else
+				{
+					Db::getInstance()->execute('
+					INSERT INTO `'._DB_PREFIX_.'image_type` (`name`, `width`, `height`, `products`, `categories`, `manufacturers`, `suppliers`, `scenes`)
+					VALUES (\''.pSQL($row['name']).'\',
+						'.(int)$row['width'].',
+						'.(int)$row['height'].',
+						'.($row['products'] == 'true' ? 1 : 0).',
+						'.($row['categories'] == 'true' ? 1 : 0).',
+						'.($row['manufacturers'] == 'true' ? 1 : 0).',
+						'.($row['suppliers'] == 'true' ? 1 : 0).',
+						'.($row['scenes'] == 'true' ? 1 : 0).')');
 
 					$return['ok'][] = array(
 						'name' => $row['name'],
@@ -530,35 +559,7 @@ class ThemeInstallator extends Module
 						'height' => (int)$row['height']
 					);
 				}
-				else
-				{
-					$return['error'][] = array(
-						'name' => $row['name'],
-						'width' => (int)$row['width'],
-						'height' => (int)$row['height']
-					);
-				}
 			}
-			else
-			{
-				Db::getInstance()->execute('
-				INSERT INTO `'._DB_PREFIX_.'image_type` (`name`, `width`, `height`, `products`, `categories`, `manufacturers`, `suppliers`, `scenes`)
-				VALUES (\''.pSQL($row['name']).'\',
-					'.(int)$row['width'].',
-					'.(int)$row['height'].',
-					'.($row['products'] == 'true' ? 1 : 0).',
-					'.($row['categories'] == 'true' ? 1 : 0).',
-					'.($row['manufacturers'] == 'true' ? 1 : 0).',
-					'.($row['suppliers'] == 'true' ? 1 : 0).',
-					'.($row['scenes'] == 'true' ? 1 : 0).')');
-
-				$return['ok'][] = array(
-					'name' => $row['name'],
-					'width' => (int)$row['width'],
-					'height' => (int)$row['height']
-				);
-			}
-		}
 
 		return $return;
 	}
@@ -651,14 +652,14 @@ class ThemeInstallator extends Module
 			{
 				$flag = 0;
 				// Disable native modules
-				if ($val == 2 && $this->to_disable && count($this->to_disable) && _PS_VERSION_ > '1.5')
+				if ($val == 2 && (($this->to_disable && count($this->to_disable)) || ($this->selected_disable_modules && count($this->selected_disable_modules)))&& _PS_VERSION_ > '1.5')
 					foreach (array_merge($this->to_disable, $this->selected_disable_modules) as $row)
 					{
 						$obj = Module::getInstanceByName($row);
 						if (Validate::isLoadedObject($obj))
 						{
 							if ($flag++ == 0)
-								$msg .= '<b>'.$this->l('The following modules have been unhooked:').'</b><br />';
+								$msg .= '<b>'.$this->l('The following modules have been disabled:').'</b><br />';
 
 							// Delete all native module which are in the front office feature category and in selected shops
 							$sql = 'DELETE FROM `'._DB_PREFIX_.'module_shop` WHERE `id_module` = '.pSQL($obj->id).' AND `id_shop` = '.(int)$id_shop;
@@ -856,7 +857,13 @@ class ThemeInstallator extends Module
 		}
 
 		$var = '';
-		foreach (array_diff($this->native_modules, $this->to_enable) as $row)
+
+		if (is_array($this->to_enable) && !empty($this->to_enable))
+			$list_to_disabled = array_diff($this->native_modules, $this->to_enable);
+		else
+			$list_to_disabled = $this->native_modules;
+
+		foreach ($list_to_disabled as $row)
 		{
 			$obj = Module::getInstanceByName($row);
 			if (Validate::isLoadedObject($obj))

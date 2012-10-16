@@ -18,7 +18,7 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_5b6cf869265c13af8566f19
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_6bdbe5a8a9f446d4d758ee4c22648771'] = 'Vous pouvez consulter la documentation';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_7348fd57bfb5c837fc57e54fcfeeed9e'] = 'Faites un clic droit sur le nom et choisissez \"enregistrer le lien sous\"';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_00f0916ff7ef4b0a0583b679b6e84d8c'] = 'Les modules suivants ont été installés :';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_e6178f22c62901662347cfb2f7972d1f'] = 'Les modules suivants ont été décrochés :';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_9bdbe38cc4695eeb974613a148cc92b7'] = 'Les modules suivants ont été désactivées :';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_04e4e6909614be09727ebe4fb79c9e27'] = 'Les modules suivants ont été activées :';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_0dfbf4744524c8573235d60589d8b66e'] = 'Les images ont bien été mises à jour dans la base de données';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_4e246bd71dd5fb033e402b373e6ee434'] = 'Attention: Copier/Coller vos erreurs si vous souhaitez définir manuellement le type d\'image (dans la page «Images» du menu \"Préférences\") :';
@@ -33,8 +33,9 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_f4ef3a40f287dd9849004a7
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_df8703a4066393da85e8188261660717'] = 'Sélectionnez les modules du thème que vous souhaitez installer';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_7b8e139260e50dd81e70b6ef6910e6f6'] = 'Sélectionnez les modules qui doivent être désactivés pour ce thème';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_7651cc4a979c5e21ee50de988ce574b0'] = 'Configuration des modules natifs';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_8ab378b3ad05e14cbe61bff60c50afa6'] = 'Configuration actuelle';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_f94545e00cff9d0395194458b2245702'] = 'Configuration du thème';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_b63327da4aa6711172df3d4b337a567c'] = 'Cette option détermine quels sont les modules natifs qui doivent être activés/désactivés';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_c62398aad687870575a4bd6d34d041bb'] = 'Conserver ma configuration actuelle';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_60c072d9e1166cec2cc60f06a018441c'] = 'Utiliser la configuration proposée par le thème (recommandé)';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_130c5b3473c57faa76e2a1c54e26f88e'] = 'Les deux';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_20be6bcfa3d8c557253841bf7b22235a'] = 'Sélectionnez votre boutique qui utilisera ce thème :';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_10ac3d04253ef7e1ddc73e6091c0cd55'] = 'Suivant';
@@ -100,7 +101,3 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_5da618e8e4b89c66fe86e32
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_3271e801d0a5db9dc2963a19ed9695d6'] = 'Choisissez un thème';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_ea4788705e6873b424c65e91c2846b19'] = 'Annuler';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_abb381ee4077396e5d5d475b9022ba86'] = 'Générer l\'archive maintenant!';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_b63327da4aa6711172df3d4b337a567c'] = 'Cette option détermine quels sont les modules natifs qui doivent être activés/désactivés';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_c62398aad687870575a4bd6d34d041bb'] = 'Conserver ma configuration actuelle';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_60c072d9e1166cec2cc60f06a018441c'] = 'Utiliser la configuration proposée par le thème (recommandé)';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_130c5b3473c57faa76e2a1c54e26f88e'] = 'Les deux';
