@@ -77,7 +77,7 @@ class PayPalTools
 		else
 			$moduleInfo = Hook::getModulesFromHook($hookRight, $moduleInstance->id);
 
-		if ((int)$moduleInfo['position'] > (int)$position)
+		if ($moduleInfo && isset($moduleInfo['position']) && (int)$moduleInfo['position'] > (int)$position)
 			return $moduleInstance->updatePosition($hookRight, 0, (int)$position);
 		return $moduleInstance->updatePosition($hookRight, 1, (int)$position);
 	}
