@@ -2,7 +2,7 @@
 <module>
 	<name>mailjet</name>
 	<displayName><![CDATA[Mailjet]]></displayName>
-	<version><![CDATA[1.2.2]]></version>
+	<version><![CDATA[1.2.3]]></version>
 	<description><![CDATA[This modules sends through Mailjet all email coming from your Prestashop installation]]></description>
 	<author><![CDATA[]]></author>
 	<tab><![CDATA[advertising_marketing]]></tab>

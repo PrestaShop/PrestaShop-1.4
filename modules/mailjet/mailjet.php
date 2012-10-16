@@ -46,7 +46,7 @@ class Mailjet extends Module
 	{
 		// Default module variable
 		$this->name = 'mailjet';
-		$this->version = '1.2.2';
+		$this->version = '1.2.3';
 		$this->displayName = 'Mailjet';
 		$this->module_key = '59cce32ad9a4b86c46e41ac95f298076';
 
@@ -85,10 +85,20 @@ class Mailjet extends Module
 	public function install()
 	{
 		// Can't do anything else for retrocompatibility
-		if (md5_file(dirname(__FILE__).'/mailjet_override/Message.php') != md5_file(dirname(__FILE__).'/../../tools/swift/Swift/Message.php'))
-			return false;
-		if (!@copy(dirname(__FILE__).'/mailjet_override/Message-mailjet.php', dirname(__FILE__).'/../../tools/swift/Swift/Message.php'))
-			return false;
+		if (_PS_VERSION_ < '1.5')
+		{
+			if (md5_file(dirname(__FILE__).'/mailjet_override/Message_14.php') != md5_file(dirname(__FILE__).'/../../tools/swift/Swift/Message.php'))
+				return false;
+			if (!@copy(dirname(__FILE__).'/mailjet_override/Message-mailjet_14.php', dirname(__FILE__).'/../../tools/swift/Swift/Message.php'))
+				return false;
+		}
+		else
+		{
+			if (md5_file(dirname(__FILE__).'/mailjet_override/Message_15.php') != md5_file(dirname(__FILE__).'/../../tools/swift/Swift/Message.php'))
+				return false;
+			if (!@copy(dirname(__FILE__).'/mailjet_override/Message-mailjet_15.php', dirname(__FILE__).'/../../tools/swift/Swift/Message.php'))
+				return false;
+		}
 
 		// Create Token
 		Configuration::updateValue('MAILJET_AJAX_TOKEN', md5(rand()));
@@ -106,10 +116,20 @@ class Mailjet extends Module
 	public function uninstall()
 	{
 		// Can't do anything else for retrocompatibility
-		if (md5_file(dirname(__FILE__).'/mailjet_override/Message-mailjet.php') != md5_file(dirname(__FILE__).'/../../tools/swift/Swift/Message.php'))
-			return false;
-		if (!@copy(dirname(__FILE__).'/mailjet_override/Message.php', dirname(__FILE__).'/../../tools/swift/Swift/Message.php'))
-			return false;
+		if (_PS_VERSION_ < '1.5')
+		{
+			if (md5_file(dirname(__FILE__).'/mailjet_override/Message-mailjet_14.php') != md5_file(dirname(__FILE__).'/../../tools/swift/Swift/Message.php'))
+				return false;
+			if (!@copy(dirname(__FILE__).'/mailjet_override/Message_14.php', dirname(__FILE__).'/../../tools/swift/Swift/Message.php'))
+				return false;
+		}
+		else
+		{
+			if (md5_file(dirname(__FILE__).'/mailjet_override/Message-mailjet_15.php') != md5_file(dirname(__FILE__).'/../../tools/swift/Swift/Message.php'))
+				return false;
+			if (!@copy(dirname(__FILE__).'/mailjet_override/Message_15.php', dirname(__FILE__).'/../../tools/swift/Swift/Message.php'))
+				return false;
+		}
 
 		// Disable tab
 		$id_tab = (int)Db::getInstance()->getValue('SELECT `id_tab` FROM `'._DB_PREFIX_.'tab` WHERE `class_name` = \'AdminMailjet\'');
