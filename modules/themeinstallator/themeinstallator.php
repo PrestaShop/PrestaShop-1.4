@@ -74,7 +74,7 @@ class ThemeInstallator extends Module
 		@ini_set('memory_limit', '2G');
 
 		$this->name = 'themeinstallator';
-		$this->version = '2.0';
+		$this->version = '2.1';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 		if (version_compare(_PS_VERSION_, 1.4) >= 0)
@@ -507,7 +507,7 @@ class ThemeInstallator extends Module
 	{
 		$return = array();
 
-		if (isset($this->xml->images->image) && !empty($this->xml->images->image))
+		if (isset($this->xml->images->image))
 			foreach ($this->xml->images->image as $row)
 			{
 				if ($result = (bool)Db::getInstance()->executes(sprintf('SELECT * FROM `'._DB_PREFIX_.'image_type` WHERE `name` = \'%s\' ', pSQL($row['name']))))
