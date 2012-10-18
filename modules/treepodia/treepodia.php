@@ -47,7 +47,7 @@ class Treepodia extends Module
 	{
 	 	$this->name = 'treepodia';
 	 	$this->tab = 'front_office_features';
-	 	$this->version = '1.6.1';
+	 	$this->version = '1.6.2';
 		$this->displayName = 'Treepodia';
 		$this->author = 'PrestaShop';
 
@@ -545,7 +545,7 @@ XML;
 		$lang = new Language((int)($cookie->id_lang));
 
 		$output = $this->_displayCSSAndJS().'<h2>'.$this->displayName.'</h2>
-		<img id="treepodia-logo" src="'.__PS_BASE_URI__.'modules/'.$this->name.'/logo.png'.'" alt="" />
+		<img id="treepodia-logo" src="'.__PS_BASE_URI__.'modules/'.$this->name.'/logos/logo.png'.'" alt="" />
 		<p>'.$this->l('It is well known that product videos increase sales, customer engagement and loyalty, and enhance your shoppers experience dramatically. They also enhance your shoppers\' overall experience and have a strong positive effect on your search engine visibility.').'. <a target="_blank" class="link-trpd" href="http://www.prestashop.com/en/partner_treepodia">'.$this->l('Learn more').'</a></p><div class="clear" /><br />';
 
 		$output .= '<script type="text/javascript">
