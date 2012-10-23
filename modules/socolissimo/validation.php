@@ -57,7 +57,7 @@ if (!$so->checkErrors($errors_codes, SCError::REQUIRED))
 
 	foreach ($so->getFields(SCFields::REQUIRED) as $field)
 		if (!isset($return[$field]))
-			$errors_list[] = $so->l('This key is require for Socolissimo:').$field;
+			$errors_list[] = $so->l('This key is required for Socolissimo:').$field;
 }
 else
 	foreach($errors_codes as $code)

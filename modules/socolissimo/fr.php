@@ -21,7 +21,7 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_d0b34d3e1cb0cc1150ae6bf650e9b569'
 $_MODULE['<{socolissimo}prestashop>socolissimo_6cefaa978ccec960693d10cefeb2c2bf'] = 'Livraison à domicile';
 $_MODULE['<{socolissimo}prestashop>socolissimo_46b7627e5f130e33f007ae9d430efe84'] = 'Livraison à domicile sur rendez-vous le soir entre 17h et 21h30';
 $_MODULE['<{socolissimo}prestashop>socolissimo_36b6babbab9524441a49cc7c6e2bbbfa'] = 'Livraison dans l\'un des 31 espaces Cityssimo, 7j/7 et 24h/24';
-$_MODULE['<{socolissimo}prestashop>socolissimo_deaaece9e88f4cfdf1f72c6df6b0a52a'] = 'Livraison dans l\'un des 10 000 bureaux de La Poste de leur choix';
+$_MODULE['<{socolissimo}prestashop>socolissimo_deaaece9e88f4cfdf1f72c6df6b0a52a'] = 'Livraison dans l\'un des 10 000 bureaux de poste de leur choix';
 $_MODULE['<{socolissimo}prestashop>socolissimo_2bb98ed92a6546e5adfee27046c2c0df'] = 'Livraison dans l\'un des nombreux point de retrait du réseau partenaire La Poste';
 $_MODULE['<{socolissimo}prestashop>socolissimo_9fbff0971c06ee404f638e9abcbd9446'] = 'Ce module est gratuit et vous permet d\'activer cette offre sur votre magasin.';
 $_MODULE['<{socolissimo}prestashop>socolissimo_5b6cf869265c13af8566f192b4ab3d2a'] = 'Documentation';
@@ -48,7 +48,7 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_b9f5c797ebbf55adccdd8539a65a0241'
 $_MODULE['<{socolissimo}prestashop>socolissimo_678f3f992afdb9f6e90cd36497ea76a1'] = 'Si vous activez cette option, la page SoColissimo sera affichée dans une fancybox';
 $_MODULE['<{socolissimo}prestashop>socolissimo_85068ddf0b9bcbb6913008356fe328a0'] = 'Supervision';
 $_MODULE['<{socolissimo}prestashop>socolissimo_fdd526b84abc0b8fc17060e62d022b84'] = 'Autoriser ou non la vérification de la disponibilité des services SoColissimo.';
-$_MODULE['<{socolissimo}prestashop>socolissimo_32996bdf4214d6cb8bf7fa02273813c8'] = 'Adresse de verification';
+$_MODULE['<{socolissimo}prestashop>socolissimo_32996bdf4214d6cb8bf7fa02273813c8'] = 'Adresse de vérification';
 $_MODULE['<{socolissimo}prestashop>socolissimo_af688489282270bcd9e3399db85e30df'] = 'L\'adresse de surveillance permet de s\'assurer de la disponibilité du service SoColissimo. Il n\'est pas conseillé de la désactiver.';
 $_MODULE['<{socolissimo}prestashop>socolissimo_c9cc8cce247e49bae79f15173ce97354'] = 'Sauvegarder';
 $_MODULE['<{socolissimo}prestashop>socolissimo_a82be0f551b8708bc08eb33cd9ded0cf'] = 'Information';
@@ -56,7 +56,7 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_3e387f5ebd657c6372f0594c8226863e'
 $_MODULE['<{socolissimo}prestashop>socolissimo_49977cbb6772deeac9ceb89f069e491c'] = 'Adresse web de validation';
 $_MODULE['<{socolissimo}prestashop>socolissimo_06dc3f24f73027164d2b19556118624e'] = 'Adresse web de retour';
 $_MODULE['<{socolissimo}prestashop>socolissimo_82c440defe28e2099cba1af1f0761807'] = 'Identifiant FO non spécifié';
-$_MODULE['<{socolissimo}prestashop>socolissimo_826361881cfc18b8b75405d398f633b5'] = 'Clé de cryptage non spécifiéé';
+$_MODULE['<{socolissimo}prestashop>socolissimo_826361881cfc18b8b75405d398f633b5'] = 'Clé de cryptage non spécifiée';
 $_MODULE['<{socolissimo}prestashop>socolissimo_0bf6a620e5f22d8b46e3903a993f7741'] = 'Temps de préparation non spécifié';
 $_MODULE['<{socolissimo}prestashop>socolissimo_228485c5faff886fa4520323dc5b2c76'] = 'Temps de préparation invalide';
 $_MODULE['<{socolissimo}prestashop>socolissimo_82b66af7b110e9bc75fd65479786e313'] = 'Surcoût non spécifié';

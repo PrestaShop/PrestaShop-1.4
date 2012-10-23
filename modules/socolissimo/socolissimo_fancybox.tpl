@@ -86,7 +86,7 @@ var soToken = "{$token}";
 			       data: "token=" + soToken,
 			       success: function(jsonData)
 			       {
-			       		if (jsonData && typeof jsonData.answer != undefined && !opc)
+			       		if (jsonData && jsonData.answer && typeof jsonData.answer != undefined && !opc)
 					      {
 						      if (jsonData.answer)
 							      $('#form').submit();
@@ -133,17 +133,21 @@ var soToken = "{$token}";
 		else if ((!soBwdCompat && $('#id_carrier' + soCarrierId).is(':not(:checked)')) ||
 			(soBwdCompat && soCarrierId == 0))
 		{
-			$('[name=processCarrier]').unbind('click').click(function () {
+			$('[name=processCarrier]').unbind('click').on('click', function () {
 				return true;
 			});
 		}
 		else
 		{
-			$('[name=processCarrier]').unbind('click').click(function () {
-				if (acceptCGV())
-					$("#soLink").trigger("click");
-				return false;
-			})
+			$('[name=processCarrier]').unbind('click').on('click', function () {
+				if (($('#id_carrier' + soCarrierId).is(':checked')) || ($('.delivery_option_radio:checked').val() == soCarrierId+','))
+				{
+					if (acceptCGV())
+						$("#soLink").trigger("click");
+					return false;
+				}
+				return true;
+			});
 		}
 	}
 

@@ -27,6 +27,8 @@ if ($result['answer'] && !($result = $socolissimo->getDeliveryInfos(Context::get
 	$result['msg'] = $socolissimo->l('No delivery information selected');
 }
 
-die(Tools::jsonEncode($result));
+header('Content-type: application/json');
+echo json_encode($result);
+exit(0);
 
 ?>

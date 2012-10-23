@@ -61,7 +61,7 @@ class Socolissimo extends CarrierModule
 	{
 		$this->name = 'socolissimo';
 		$this->tab = 'shipping_logistics';
-		$this->version = '2.6.4';
+		$this->version = '2.6.5';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 		$this->module_key = 'faa857ecf7579947c8eee2d9b3d1fb04';
@@ -379,7 +379,7 @@ class Socolissimo extends CarrierModule
 		$customer = new Customer($params['address']->id_customer);
 		
 		// Keep this fields order (see doc.)
-		$inputs = array_map('strtolower', array(
+		$inputs = array(
 			'pudoFOId' => Configuration::get('SOCOLISSIMO_ID'),
 			'ceName' => $this->replaceAccentedChars(substr($params['address']->lastname,0, 34)),
 			'dyPreparationTime' => (int)Configuration::Get('SOCOLISSIMO_PREPARATION_TIME'),
@@ -400,7 +400,7 @@ class Socolissimo extends CarrierModule
 			'trParamPlus' => $carrierSo->id,
 			'trReturnUrlKo' => htmlentities($this->url, ENT_NOQUOTES, 'UTF-8'),
 			'trReturnUrlOk' => htmlentities($this->url ,ENT_NOQUOTES, 'UTF-8')
-		));
+		);
 
 		$this->context->smarty->assign(array(
 			'select_label' => $this->l('Select delivery mode'),
@@ -545,7 +545,7 @@ class Socolissimo extends CarrierModule
 
 		foreach($params as $key => $value)
 			if (!in_array(strtoupper($key), array('SIGNATURE')))
-				$str .= $value;
+				$str .= utf8_decode($value);
 		return sha1($str.strtolower(Configuration::get('SOCOLISSIMO_KEY')));
 	}
 
