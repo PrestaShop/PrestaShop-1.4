@@ -27,7 +27,7 @@ class TntCarrier extends CarrierModule
 	{
 		$this->name = 'tntcarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.7.9';
+		$this->version = '1.7.9.1';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 		$this->module_key = 'd4dcfde9937b67002235598ac35cbdf8';
@@ -964,6 +964,14 @@ class TntCarrier extends CarrierModule
 			return $this->display( __FILE__, 'tpl/shippingNumber.tpl' );
 		}
 		$order = new Order($params['id_order']);
+
+		$orderInfoTnt = new OrderInfoTnt((int)($params['id_order']));
+		$info = $orderInfoTnt->getInfo();
+		if (is_array($info) && isset($info[3]) && (strlen($info[3]['option']) == 1 || substr($info[3]['option'], 1, 1) == 'S'))
+			$smarty->assign('weight', '30');
+		else
+			$smarty->assign('weight', '20');
+
 		$products = $order->getProducts();
 		$productWeight = array();
 
@@ -978,6 +986,7 @@ class TntCarrier extends CarrierModule
 				$p->update();
 			}
 		}
+
 		if (count($productWeight) > 0)
 		{
 			$var = array('currentIndex' => $currentIndex, 'table' => $table, 'token' => $token);
@@ -985,17 +994,10 @@ class TntCarrier extends CarrierModule
 			$smarty->assign('productWeight', $productWeight);
 			return $this->display( __FILE__, 'tpl/weightForm.tpl' );
 		}
-		$orderInfoTnt = new OrderInfoTnt((int)($params['id_order']));
-		$info = $orderInfoTnt->getInfo();
 
-		if (is_array($info) && isset($info[3]) && (strlen($info[3]['option']) == 1 || substr($info[3]['option'], 1, 1) == 'S'))
-			$smarty->assign('weight', '30');
-		else
-			$smarty->assign('weight', '20');
 		if (!is_array($info) && $info != false)
 		{
-			$var = array("error" => $info, "weight" => '',
-						 "weightHidden" => '1', "date" => '', "dateHidden" => '1', 'currentIndex' => $currentIndex, 'table' => $table, 'token' => $token);
+			$var = array("error" => $info, "date" => '', "dateHidden" => '1', 'currentIndex' => $currentIndex, 'table' => $table, 'token' => $token);
 			$smarty->assign('var', $var);
 			return $this->display( __FILE__, 'tpl/formerror.tpl' );
 		}

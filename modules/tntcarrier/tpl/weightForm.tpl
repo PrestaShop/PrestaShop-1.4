@@ -27,6 +27,7 @@
 <fieldset style="width:400px">
   <legend><img src="../img/admin/delivery.gif" />{l s='Shipping information'}</legend>
   <form action="{$var.currentIndex}&view{$var.table}&token={$var.token}" method="post" style="margin-top:10px;">
+{l s='Your package must be over 0.1 KG and' mod='tntcarrier'} {$weight} {l s='KG' mod='tntcarrier'}<br/><br/>
 {foreach from=$productWeight item=product}
 {$product.name} {l s='Weight (KG)' mod='tntcarrier'}: <input type="text" name="product_weight_{$product.id}"/><br/>
 {/foreach}
