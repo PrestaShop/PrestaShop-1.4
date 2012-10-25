@@ -24,16 +24,14 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-<link href="{$new_base_dir}css/style.css" rel="stylesheet" type="text/css" media="all" />
-
 {if $MR_overload_current_jquery}
-	{include file="$MR_local_path/tpl/jquery-overload.tpl"}
+	<script type="text/javascript">
+		var currentJquery = jQuery.noConflict(true);
+	</script>
+	<script type="text/javascript" src="{$new_base_dir}js/jquery-1.6.4.min.js"></script>
+{else}
+	<script type="text/javascript" src="{$new_base_dir}js/jquery-1.6.4.min.js"></script>
+	<script type="text/javascript">
+		var MRjQuery = jQuery.noConflict(true);
+	</script>
 {/if}
-
-<script type="text/javascript">
-	var PS_MR_ACCOUNT_SET = {if $MR_account_set}true{else}false{/if};
-	var _PS_MR_MODULE_DIR_ = "{$new_base_dir}";
-	var mrtoken = "{$MR_token}";
-</script>
-
-<script type="text/javascript" src="{$new_base_dir}js/mondialrelay.js"></script>

@@ -1,5 +1,7 @@
 var PS_MRObject = (function($, undifened) {
 
+	var selected_id_carrier = 0;
+	var selected_relay_point = 0;
 	var toggle_status_order_list = false;
 	var toggle_history_order_list = false;
 	var relay_point_max = 10;
@@ -422,7 +424,7 @@ var PS_MRObject = (function($, undifened) {
 
 		// Ajax call to add the selection in the database (compatibility for 1.3)
 		// But keep this way to add a selection better that the hook
-		$.ajax({
+		MRjQuery.ajax({
 			type: 'POST',
 			url: _PS_MR_MODULE_DIR_ + 'ajax.php',
 			data: {'method' : 'addSelectedCarrierToDB',
@@ -498,7 +500,17 @@ var PS_MRObject = (function($, undifened) {
 	 */
 	function PS_MRHideLastRelayPointList()
 	{
-		$('.PS_MRSelectedCarrier').fadeOut('fast');
+		var value = 0;
+		
+		if (PS_MRData.PS_VERSION < '1.5')
+			value = $('.id_carrier:checked').val();
+		else if (PS_MRData.PS_VERSION >= '1.5')
+			value = $('.delivery_option_radio:checked').val().replace(',', '');
+		
+		if (value != selected_id_carrier) {
+			selected_id_carrier = value;
+			$('.PS_MRSelectedCarrier').fadeOut('fast');
+		}
 	}
 
 	/**
@@ -546,7 +558,7 @@ var PS_MRObject = (function($, undifened) {
 			// Store Separated data for the ajax query
 			if (tab.length == 3)
 			{
-				var relayPointNumber = tab[1];
+				var relayPointNumber = selected_relay_point = tab[1];
 				var id_carrier = tab[2];
 				PS_MRAddSelectedRelayPointInDB(relayPointNumber, id_carrier);
 			}
@@ -649,12 +661,12 @@ var PS_MRObject = (function($, undifened) {
 		blockTR.after(' \
 		<tr class="PS_MRSelectedCarrier" id="PS_MRSelectedCarrier_' + carrier_id + '"> \
 			<td colspan="4"><div> \
-				<img src="' + _PS_MR_MODULE_DIR_ + 'images/loader.gif" alt="" /> \
+				<img src="' + _PS_MR_MODULE_DIR_ + 'images/loader.gif" /> \
 			</div> \
 		</td></tr>');
 
 		fetchingRelayPoint[carrier_id] = $('#PS_MRSelectedCarrier_' + carrier_id);
-		$.ajax(
+		MRjQuery.ajax(
 			{
 				type: 'POST',
 				url: _PS_MR_MODULE_DIR_ + 'ajax.php',
@@ -1000,15 +1012,16 @@ var PS_MRObject = (function($, undifened) {
 		if ($('#' + block_form_id).length == 0)
 			$('#MR_error_account').fadeIn('fast');
 	}
-	
+
 	function checkToDisplayRelayList()
 	{
 		if (typeof PS_MRData != 'undefined')
 		{
-			PS_MRSelectedRelayPoint['relayPointNum'] = PS_MRData.pre_selected_relay;
+			PS_MRSelectedRelayPoint['relayPointNum'] = selected_relay_point = PS_MRData.pre_selected_relay;
 			// PS_VERSION < '1.5'
 			if (PS_MRData.PS_VERSION < '1.5')
 			{
+				selected_id_carrier = $('input[name=id_carrier]:checked').val();
 				// Bind id_carrierX to an ajax call
 				$.each(PS_MRData.carrier_list, function(i, carrier) {
 					$('#id_carrier' + carrier.id_carrier).click(function(){
@@ -1022,15 +1035,20 @@ var PS_MRObject = (function($, undifened) {
 			}
 			else if (PS_MRData.PS_VERSION >= '1.5' && PS_MRData.carrier)
 			{ // 1.5 way
+				selected_id_carrier = $('input[class=delivery_option_radio]:checked').val().replace(',', '');
 				var carrier_block = $('input[class=delivery_option_radio]:checked').parent('div.delivery_option');
 				
 				PS_MRCarrierMethodList[PS_MRData.carrier.id] = PS_MRData.carrier.id_mr_method;	
 				PS_MRSelectedRelayPoint['carrier_id'] = PS_MRData.carrier.id;
 				// Simulate 1.4 table to store the relay point fetched
 				$(carrier_block).append(
-					'<div><table width="' + $(carrier_block).width() + '"><tr>'
-						+	  '<td><input type="hidden" id="id_carrier' + PS_MRData.carrier.id + '" value="'+PS_MRData.carrier.id+'" /></td>'
-						+ '</tr></table></div>');
+					'<div>'
+						+'<table width="' + $(carrier_block).width() + '">'
+							+'<tr>'
+							+	  '<td><input type="hidden" id="id_carrier' + PS_MRData.carrier.id + '" value="'+PS_MRData.carrier.id+'" /></td>'
+							+ '</tr>'
+						+'</table>'
+					+'</div>');
 	
 				PS_MRCarrierMethodList[PS_MRData.carrier.id_carrier] = PS_MRData.carrier.id_mr_method;
 				PS_MRCarrierSelectedProcess($('#id_carrier' + PS_MRData.carrier.id), PS_MRData.carrier.id, PS_MRData.carrier.mr_dlv_mode);
@@ -1091,6 +1109,21 @@ var PS_MRObject = (function($, undifened) {
 				PS_MRDisplayConfigurationForm($(this).attr('id'));
 			});
 		})
+		
+		$('input[name="processCarrier"]').on('click', function() {
+			if (PS_MRData != 'undefined' && PS_MRData.carrier != null) {
+				var result = false;
+				$.each(PS_MRData.carrier_list, function(key, value) {
+					if (value.id_carrier == selected_id_carrier && selected_relay_point > 0)
+						result = true;
+				});
+				if (result == true)
+					return true;
+				alert(PS_MRWarningMessage);
+				return false;
+			}
+			return true;
+		});
 
 		if (typeof(PS_MR_SELECTED_TAB ) != 'undefined')
 			$('#MR_' + PS_MR_SELECTED_TAB + '_block').fadeIn('fast');

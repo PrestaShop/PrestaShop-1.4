@@ -136,7 +136,7 @@
 				</li>
 				<li>
 					<label for="MR_webservice_key" class="mrLabel">{l s='Webservice Key:' mod='mondialrelay'}</label>
-					<input id="MR_webservice_key" class="mrInput" type="text" name="MR_webservice_key" value="{$MR_webservice_key}" />
+					<input id="MR_webservice_key" class="mrInput" type="text" name="MR_webservice_key" value="{$MR_webservice_key|escape:'htmlall'}" />
 					<sup>*</sup>
 				</li>
 				<li>
@@ -156,7 +156,7 @@
 				</li>
 				<li>
 					<label for="MR_weight_coefficient" class="mrLabel">{l s='Weight Coefficient:' mod='mondialrelay'}</label>
-					<input class="mrInput" type="text" name="MR_weight_coefficient" id="MR_weight_coefficient" style="width:45px; " value="{$MR_weight_coefficient}"/>
+					<input class="mrInput" type="text" name="MR_weight_coefficient" id="MR_weight_coefficient" style="width:45px; " value="{$MR_weight_coefficient|escape:'htmlall'}"/>
 					<sup>*</sup>
 					<span class="indication">{l s='grammes = 1 ' mod='mondialrelay'}{$MR_unit_weight_used}</span>
 				</li>
@@ -269,16 +269,12 @@
 						<li>
 							<form action="{$smarty.server.REQUEST_URI|escape:'htmlall'}&MR_tab_name=supplier_form" method="post">
 								<input type="hidden" name="delete_mr" value="{$carrier.id_mr_method}" >
-								<a class="send_disable_carrier_form" href="javascript:void(0)">
-									<img src="../img/admin/disabled.gif" alt="Delete" title="Delete" />
-								</a>
-							</form>
-							{$carrier.name} ({$carrier.col_mode}-{$carrier.dlv_mode} - {$carrier.insurance} : {$carrier.country_list})
-							<div style="float:right;">
-								<a href="index.php?tab=AdminCarriers&id_carrier={$carrier.id_carrier}&updatecarrier&token={$MR_token_admin_carriers}">
+								<a class="send_disable_carrier_form" href="javascript:void(0)"><img src="../img/admin/disabled.gif" alt="Delete" title="Delete" /></a>
+								{$carrier.name} ({$carrier.col_mode}-{$carrier.dlv_mode} - {$carrier.insurance} : {$carrier.country_list})
+								<a href="index.php?tab=AdminCarriers&id_carrier={$carrier.id_carrier}&updatecarrier&token={$MR_token_admin_carriers}" style="margin-left: 20px">
 									<b>{l s='Config Shipping' mod='mondialrelay'}</b>
 								</a>
-							</div>
+							</form>
 						</li>
 					{/foreach}
 				{/if}

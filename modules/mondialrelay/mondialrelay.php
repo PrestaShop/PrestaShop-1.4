@@ -71,7 +71,7 @@ class MondialRelay extends Module
 	{
 		$this->name		= 'mondialrelay';
 		$this->tab		= 'shipping_logistics';
-		$this->version	= '1.8.5';
+		$this->version	= '1.8.7';
 		$this->installed_version = '';
 		$this->module_key = '366584e511d311cfaa899fc2d9ec1bd0';
 		$this->author = 'PrestaShop';
@@ -123,9 +123,9 @@ class MondialRelay extends Module
 			$languages = Language::getLanguages(false);
 			foreach ($languages as $language)
 				$tab->name[$language['id_lang']] = 'Mondial Relay';
-      $tab->class_name = 'AdminMondialRelay';
-      $tab->module = 'mondialrelay';
-      $tab->id_parent = Tab::getIdFromClassName('AdminOrders');
+			$tab->class_name = 'AdminMondialRelay';
+			$tab->module = 'mondialrelay';
+			$tab->id_parent = Tab::getIdFromClassName('AdminOrders');
 
 			if (!$tab->add())
 				return false;
@@ -341,21 +341,26 @@ class MondialRelay extends Module
 			return;
 		
 		DB::getInstance()->execute('
-		UPDATE `'._DB_PREFIX_.'mr_selected`
-		SET `id_order` = '.(int)$params['order']->id.'
-		WHERE `id_cart` = '.(int)$params['cart']->id);
+			UPDATE `'._DB_PREFIX_.'mr_selected`
+			SET `id_order` = '.(int)$params['order']->id.'
+			WHERE `id_cart` = '.(int)$params['cart']->id);
 	}
 
 	public function hookBackOfficeHeader()
 	{
-		if (Tools::getValue('tab') == 'AdminMondialRelay' || Tools::getValue('module_name') == 'mondialrelay')
-		{
-			$this->context->smarty->assign(array(
-			'MR_token' => MondialRelay::$MRBackToken, 'MR_local_path' => MondialRelay::$modulePath,
-			'MR_account_set' => MondialRelay::isAccountSet(), 'new_base_dir' => MondialRelay::$moduleURL));
+		$overload_current_jquery = false;
+		if (Tools::getValue('tab') == 'AdminMondialRelay')
+			$overload_current_jquery = true;
 
-			return $this->fetchTemplate('/tpl/', 'bo-header');
-		}
+		$this->context->smarty->assign(array(
+			'MR_token' => MondialRelay::$MRBackToken,
+			'MR_jQuery_overload_type' => true,
+			'new_base_dir' => MondialRelay::$moduleURL,
+			'MR_local_path' => MondialRelay::$modulePath,
+			'MR_overload_current_jquery' => $overload_current_jquery,
+			'MR_account_set' => MondialRelay::isAccountSet()
+		));
+		return $this->fetchTemplate('/tpl/', 'bo-header');
 	}
 
 	public function hookOrderDetail($params)
@@ -499,11 +504,15 @@ class MondialRelay extends Module
 
 		if (in_array($file, array('order-opc', 'order', 'orderopc')))
 		{
-			$this->context->smarty->assign(array(
+			$this->context->smarty->assign(
+				array(
 					'one_page_checkout' => (Configuration::get('PS_ORDER_PROCESS_TYPE') ? Configuration::get('PS_ORDER_PROCESS_TYPE') : 0),
+					'warning_message' => $this->l('You need to select a dropp-off point before going to the next step.'),
 					'new_base_dir' => MondialRelay::$moduleURL,
 					'MR_local_path' => MondialRelay::$modulePath,
-					'MRToken' => MondialRelay::$MRFrontToken)
+					'MRToken' => MondialRelay::$MRFrontToken,
+					'MR_overload_current_jquery' => false
+				)
 			);
 			return $this->fetchTemplate('/tpl/', 'header');
 		}
@@ -532,13 +541,13 @@ class MondialRelay extends Module
 
 			// Temporary carrier for some test
 			$carrier = new Carrier((int)($row['id_carrier']));
-			if ((Configuration::get('PS_SHIPPING_METHOD') AND $carrier->getMaxDeliveryPriceByWeight($id_zone) === false) ||
-				(!Configuration::get('PS_SHIPPING_METHOD') AND $carrier->getMaxDeliveryPriceByPrice($id_zone) === false))
+			if ((Configuration::get('PS_SHIPPING_METHOD') && $carrier->getMaxDeliveryPriceByWeight($id_zone) === false) ||
+				(!Configuration::get('PS_SHIPPING_METHOD') && $carrier->getMaxDeliveryPriceByPrice($id_zone) === false))
 				unset($carriersList[$k]);
 			else if ($row['range_behavior'])
 			{
 				// Get id zone
-				$id_zone = (isset($this->context->cart->id_address_delivery) AND $this->context->cart->id_address_delivery) ?
+				$id_zone = (isset($this->context->cart->id_address_delivery) && $this->context->cart->id_address_delivery) ?
 					Address::getZoneById((int)$this->context->cart->id_address_delivery) :
 					(int)$this->context->country->id_zone;
 
@@ -551,6 +560,10 @@ class MondialRelay extends Module
 		}
 
 		$carrier = NULL;
+		
+		if (_PS_VERSION_ >= '1.5')
+				$id_carrier = (int)$this->context->cart->id_carrier;
+
 		if ($id_carrier && ($method = MondialRelay::getMethodByIdCarrier($id_carrier)))
 		{
 			$carrier = new Carrier((int)$id_carrier);
@@ -559,14 +572,18 @@ class MondialRelay extends Module
 			$carrier->mr_dlv_mode = $method['dlv_mode'];
 		}
 
-		$this->context->smarty->assign(array(
-			'MR_Data'=> MRTools::jsonEncode(array(
-				'carrier_list' => $carriersList,
-				'carrier' => $carrier,
-				'PS_VERSION' => _PS_VERSION_,
-				'pre_selected_relay' => isset($preSelectedRelay['MR_selected_num']) ? $preSelectedRelay['MR_selected_num'] : 0,
-			))
-		));
+		$this->context->smarty->assign(
+			array(
+				'MR_Data'=> MRTools::jsonEncode(
+					array(
+						'carrier_list' => $carriersList,
+						'carrier' => $carrier,
+						'PS_VERSION' => _PS_VERSION_,
+						'pre_selected_relay' => isset($preSelectedRelay['MR_selected_num']) ? $preSelectedRelay['MR_selected_num'] : 0,
+					)
+				)
+			)
+		);
 
 		return $this->fetchTemplate('/tpl/', 'checkout_process');
 	}
@@ -579,7 +596,7 @@ class MondialRelay extends Module
 	 */
 	public static function getAccountDetail()
 	{
-		return unserialize((string)Configuration::get('MR_ACCOUNT_DETAIL'));
+		return unserialize(Configuration::get('MR_ACCOUNT_DETAIL'));
 	}
 
 	/**

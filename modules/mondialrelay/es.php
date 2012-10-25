@@ -39,16 +39,19 @@ $_MODULE['<{mondialrelay}prestashop>mondialrelay_bba366864d25056c941b72f18ef79e7
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_a1c3470a944b9625cfb924fd15c8bdbf'] = 'Por favor, seleccione al menos un pedido';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_dc41aac14af17f1d19fca5e3b9439e74'] = 'La clave';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_306b346c19017609403424203ea3d720'] = 'está vacío y debe ser llenado';
+$_MODULE['<{mondialrelay}prestashop>mrcreatetickets_e6940b76f045c8bc0aaaa5b2476cdaf7'] = 'Parece que la petición no es válida:';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_c9b4de92f371ae545ad6f051c07d58ca'] = 'Hay un número de error:';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_ea5f761be4e4888eabf4e1501d7817d1'] = 'Detalles:';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_eabb11bf9623f08409a0a4c9d035a336'] = 'Envío Número:';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_b92c3d3319314513c547675924ceecd1'] = 'Ticket URL';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_66b793b6b4125e300717e8cf7449f533'] = 'URL de seguimiento:';
+$_MODULE['<{mondialrelay}prestashop>mrcreatetickets_2653c23b8c0daac59571e4be5e8fa7d0'] = 'El servicio web Mondial Relay no es seguro actualmente ';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_26b6b6eaec970108c5e84286159fbf48'] = 'Por favor, compruebe su configuración de idioma';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_557595c2e17c9948a9448eb763ac1a88'] = 'Por favor, compruebe la configuración de su nombre de la tienda';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_017ca6b770ad53669a4eec82894dfcd3'] = 'Por favor, compruebe la configuracion de la dirección1';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_3f79e1fc66b4f9cca7bd68cab176020d'] = 'Por favor, compruebe la configuración de su ciudad';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_404665d9b65239985d59b30b3dcb26b5'] = 'Por favor, compruebe la configuración de su código postal';
+$_MODULE['<{mondialrelay}prestashop>mrcreatetickets_74cb73eddbe6eaf556023f943fc7e1fd'] = 'Al parecer, la disposición de su país, el código postal no está configurado o que nopuso un código postal correcto';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_0b8a30478b9572b86718989d483fd88d'] = 'Por favor, compruebe la configuración de su país';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_7ddf2d94bf037b7d1088c0600ea589c3'] = 'Por favor, compruebe la configuración de su teléfono';
 $_MODULE['<{mondialrelay}prestashop>mrcreatetickets_9c7ce7be9a2c593b24d448edb4f804e0'] = 'Por favor, revise su configuración de correo';
@@ -59,7 +62,6 @@ $_MODULE['<{mondialrelay}prestashop>mrgetrelaypoint_135a7b9a62531e066a95093d8951
 $_MODULE['<{mondialrelay}prestashop>mrgetrelaypoint_e6940b76f045c8bc0aaaa5b2476cdaf7'] = 'Parece que la petición no es válida';
 $_MODULE['<{mondialrelay}prestashop>mrgetrelaypoint_c9b4de92f371ae545ad6f051c07d58ca'] = 'Hay un número de error:';
 $_MODULE['<{mondialrelay}prestashop>mrgetrelaypoint_ea5f761be4e4888eabf4e1501d7817d1'] = 'Detalles';
-$_MODULE['<{mondialrelay}prestashop>mrgetrelaypoint_4e274658c9e97c2a336dde79dd0a7772'] = 'MondialRelay no puede encontrar ningun punto cerca de su dirección. Quizás su dirección no es correcta?';
 $_MODULE['<{mondialrelay}prestashop>mrgetrelaypoint_2653c23b8c0daac59571e4be5e8fa7d0'] = 'El servicio web Mondial Relay no es seguro actualmente ';
 $_MODULE['<{mondialrelay}prestashop>mrgettickets_dc41aac14af17f1d19fca5e3b9439e74'] = 'La clave';
 $_MODULE['<{mondialrelay}prestashop>mrgettickets_135a7b9a62531e066a95093d8951b344'] = 'no tiene un formato de valor válido';
@@ -110,7 +112,6 @@ $_MODULE['<{mondialrelay}prestashop>configuration_a125105400f6e4ee4574da3793af5e
 $_MODULE['<{mondialrelay}prestashop>configuration_12a3fbd35c1cab4b1101b91d708efd15'] = 'Webservice Enseigne:';
 $_MODULE['<{mondialrelay}prestashop>configuration_6f0434b67007b555dfd1201f4e0d5254'] = 'Código de marca:';
 $_MODULE['<{mondialrelay}prestashop>configuration_08f785193c96b2a78dec8d76a46648d6'] = 'Webservice clave:';
-$_MODULE['<{mondialrelay}prestashop>configuration_0dae2d7c71f2daaedb00191af25dc28d'] = 'Idioma:';
 $_MODULE['<{mondialrelay}prestashop>configuration_a26329cba9723551cb8654deba32872b'] = 'Coeficiente de peso:';
 $_MODULE['<{mondialrelay}prestashop>configuration_99244b234ec089eca40ff9e8ec343e87'] = 'gramos = 1';
 $_MODULE['<{mondialrelay}prestashop>configuration_61cbc2d26b4157292673c772ddd6c0f7'] = 'Actualizar ajustes';
@@ -138,7 +139,7 @@ $_MODULE['<{mondialrelay}prestashop>configuration_0309a6c666a7a803fdb9db95de71cf
 $_MODULE['<{mondialrelay}prestashop>configuration_6c1674d14bf5f95742f572cddb0641a7'] = 'Bélgica';
 $_MODULE['<{mondialrelay}prestashop>configuration_06630c890abadde9228ea818ce52b621'] = 'Luxemburgo';
 $_MODULE['<{mondialrelay}prestashop>configuration_907eba32d950bfab68227fd7ea22999b'] = 'España';
-$_MODULE['<{mondialrelay}prestashop>configuration_0c24ec05a02c710cedd400e3680d8b81'] = 'Lista de método de envío \\\\\\\\ \'s';
+$_MODULE['<{mondialrelay}prestashop>configuration_0c24ec05a02c710cedd400e3680d8b81'] = 'Lista de método de envío \\ \'s';
 $_MODULE['<{mondialrelay}prestashop>configuration_14039af96b01e718a9c9d9c1259b6472'] = 'No hay métodos de envío creados';
 $_MODULE['<{mondialrelay}prestashop>configuration_daf999e234b6f358dda641bf381b685a'] = 'Envío de configuración';
 $_MODULE['<{mondialrelay}prestashop>header_e0626222614bdee31951d84c64e5e9ff'] = 'Seleccionar';
@@ -176,7 +177,11 @@ $_MODULE['<{mondialrelay}prestashop>history_3eb2bc1ee46258d2a166e89398756b3e'] =
 $_MODULE['<{mondialrelay}prestashop>history_9e50665937cbb2f3c833d3626a9f9abb'] = 'No hay historias disponibles';
 $_MODULE['<{mondialrelay}prestashop>history_fa98e6528c9df7f26978c2beb7de3d99'] = 'Eliminar el historial de seleccionados';
 $_MODULE['<{mondialrelay}prestashop>settings_0a4ee7474864081af12dba847fafdaa6'] = 'Configuraciones de admin Tab';
-$_MODULE['<{mondialrelay}prestashop>settings_d02bbc3cb147c272b0445ac5ca7d1a36'] = 'Estado de los pedidos';
 $_MODULE['<{mondialrelay}prestashop>settings_ca57625685f058f54d82c6e05876a131'] = 'Elige el estado para que las etiquetas.';
 $_MODULE['<{mondialrelay}prestashop>settings_c9cc8cce247e49bae79f15173ce97354'] = 'Guardar ';
 $_MODULE['<{mondialrelay}prestashop>settings_f4f70727dc34561dfde1a3c529b6205c'] = 'Ajustes';
+$_MODULE['<{mondialrelay}prestashop>install-1.8.0_212446275f2cee81b55a18a3106c6d59'] = 'No se puede crear la tabla  metodo';
+$_MODULE['<{mondialrelay}prestashop>install-1.8.0_c3f1bb9f4e93ec07fc892f1781ddb66b'] = 'No se puede cambiar el nombre de la tabla method';
+$_MODULE['<{mondialrelay}prestashop>install-1.8.0_e2aa3260446c53906857d068b0b940b5'] = 'No se puede renombrar la tabla history';
+$_MODULE['<{mondialrelay}prestashop>install-1.8.0_3ac9c6d6990ac32120d0c767a02ff961'] = 'No se puede actualizar la tabla mr_method_shop';
+$_MODULE['<{mondialrelay}prestashop>install-1.8.3_59b7c6d35d8f9547e5d72b93b843645f'] = 'No se puede añadir un nuevo campo en la tabla method';

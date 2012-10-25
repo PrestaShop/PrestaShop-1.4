@@ -24,6 +24,8 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
+{include file="$MR_local_path/tpl/jquery-overload.tpl"}
+
 <link href="{$new_base_dir}css/style.css" rel="stylesheet" type="text/css" media="all" />
 <script type="text/javascript">
 	// Global JS Value
@@ -33,6 +35,7 @@
 	var PS_MRTranslationList = [];
 	var PS_MRCarrierMethodList = [];
 	var PS_MRSelectedRelayPoint = {literal}{{/literal}'carrier_id': 0, 'relayPointNum': 0{literal}}{/literal};
+	var PS_MRWarningMessage = "{$warning_message}";
 	
 	PS_MRTranslationList['Select'] = "{l s='Select' mod='mondialrelay'}";
 	PS_MRTranslationList['Selected'] = "{l s='Selected' mod='mondialrelay'}";
