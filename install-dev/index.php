@@ -745,7 +745,7 @@ if ($lm->getIncludeTradFilename())
 					<script type="text/javascript">
 						var moduleChecked = new Array();
 						$(document).ready(function() {
-							$('#infosCountry').change(function() {
+							$('#infosCountry').on('change', function() {
 								$(".installModuleList.selected").removeClass("selected");
 								if ($("#modulesList" + $('select#infosCountry option:selected').attr('rel')))
 									$("#modulesList" + $('select#infosCountry option:selected').attr('rel')).addClass("selected");
