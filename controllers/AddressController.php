@@ -243,7 +243,7 @@ class AddressControllerCore extends FrontController
 			$selectedCountry = (int)_PS_COUNTRY_DEFAULT_;
 
 		if (Configuration::get('PS_RESTRICT_DELIVERED_COUNTRIES'))
-			$countries = Carrier::getDeliveredCountries((int)self::$cookie->id_lang, true, true, true);
+			$countries = Carrier::getDeliveredCountries((int)self::$cookie->id_lang, true, true);
 		else
 			$countries = Country::getCountries((int)self::$cookie->id_lang, true, false, true);
 
