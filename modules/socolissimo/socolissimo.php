@@ -61,7 +61,7 @@ class Socolissimo extends CarrierModule
 	{
 		$this->name = 'socolissimo';
 		$this->tab = 'shipping_logistics';
-		$this->version = '2.6.5';
+		$this->version = '2.7';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 		$this->module_key = 'faa857ecf7579947c8eee2d9b3d1fb04';
@@ -110,7 +110,7 @@ class Socolissimo extends CarrierModule
 		if (!parent::install() OR !Configuration::updateValue('SOCOLISSIMO_ID', NULL) OR !Configuration::updateValue('SOCOLISSIMO_KEY', NULL) ||
 				!Configuration::updateValue('SOCOLISSIMO_URL', 'https://ws.colissimo.fr/pudo-fo-frame/storeCall.do') OR !Configuration::updateValue('SOCOLISSIMO_PREPARATION_TIME', 1) ||
 				!Configuration::updateValue('SOCOLISSIMO_OVERCOST', 3.6) OR !$this->registerHook('extraCarrier') OR !$this->registerHook('AdminOrder') OR !$this->registerHook('updateCarrier') ||
-				!$this->registerHook('newOrder') OR !$this->registerHook('paymentTop') OR !Configuration::updateValue('SOCOLISSIMO_SUP_URL', 'https://ws.colissimo.fr/supervision-pudo-frame/supervision.jsp') ||
+				!$this->registerHook('newOrder') OR !$this->registerHook('paymentTop') OR !$this->registerHook('backOfficeHeader') OR !Configuration::updateValue('SOCOLISSIMO_SUP_URL', 'https://ws.colissimo.fr/supervision-pudo-frame/supervision.jsp') ||
 				!Configuration::updateValue('SOCOLISSIMO_SUP', true) OR !Configuration::updateValue('SOCOLISSIMO_USE_FANCYBOX', true))
 			return false;
 
@@ -141,7 +141,7 @@ class Socolissimo extends CarrierModule
 		if(!Db::getInstance()->execute($sql))
 			return false;
 
-		//add carrier in back office
+		// Add carrier in back office
 		if(!$this->createSoColissimoCarrier($this->_config))
 			return false;
 
@@ -170,12 +170,13 @@ class Socolissimo extends CarrierModule
 				!$this->unregisterHook('AdminOrder') ||
 				!$this->unregisterHook('newOrder') ||
 				!$this->unregisterHook('updateCarrier')  ||
-				!$this->unregisterHook('paymentTop'))
+				!$this->unregisterHook('paymentTop')  ||
+				!$this->unregisterHook('backOfficeHeader'))
 			return false;
 
-		//Delete So Carrier
+		// Delete So Carrier
 		$soCarrier = new Carrier($so_id);
-		//if socolissimo carrier is default set other one as default
+		// If socolissimo carrier is default set other one as default
 		if(Configuration::get('PS_CARRIER_DEFAULT') == (int)($soCarrier->id))
 		{
 			$carriersD = Carrier::getCarriers($this->context->language->id);
@@ -183,7 +184,7 @@ class Socolissimo extends CarrierModule
 				if ($carrierD['active'] AND !$carrierD['deleted'] AND ($carrierD['name'] != $this->_config['name']))
 					Configuration::updateValue('PS_CARRIER_DEFAULT', $carrierD['id_carrier']);
 		}
-		//save old carrier id
+		// Save old carrier id
 		Configuration::updateValue('SOCOLISSIMO_CARRIER_ID_HIST', Configuration::get('SOCOLISSIMO_CARRIER_ID_HIST').'|'.(int)($soCarrier->id));
 		$soCarrier->deleted = 1;
 
@@ -191,12 +192,33 @@ class Socolissimo extends CarrierModule
 			return false;
 		return true;
 	}
+	
+	public function hookBackOfficeHeader()
+	{
+		if (!Configuration::get('SOCOLISSIMO_PERSONAL_DATA'))
+		{
+			if (_PS_VERSION_ < '1.5')
+			{
+				return	'<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/jquery-1.4.4.min.js"></script>'
+						.'<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/jquery.fancybox-1.3.4.js"></script>'
+						.'<link type="text/css" rel="stylesheet" href="'.__PS_BASE_URI__.'css/jquery.fancybox-1.3.4.css" />';
+			}
+			else
+			{
+				$this->context->controller->addJQuery();
+				$this->context->controller->addJQueryPlugin('fancybox');
+			}
+		}
+	}
 
 	public function getContent()
 	{
 		$this->_html .= '<h2>' . $this->l('So Colissimo').'</h2>';
 
-		if (!empty($_POST) AND Tools::isSubmit('submitSave'))
+		if (!empty($_POST) && (Tools::isSubmit('submitPersonalSave') || Tools::isSubmit('submitPersonalCancel')))
+			$this->_postPersonalProcess();
+
+		if (!empty($_POST) && Tools::isSubmit('submitSave'))
 		{
 			$this->_postValidation();
 			if (!sizeof($this->_postErrors))
@@ -205,8 +227,145 @@ class Socolissimo extends CarrierModule
 				foreach ($this->_postErrors AS $err)
 					$this->_html .= '<div class="alert error"><img src="'._PS_IMG_.'admin/forbbiden.gif" alt="nok" />&nbsp;'.$err.'</div>';
 		}
+		
+		if (!Configuration::get('SOCOLISSIMO_PERSONAL_DATA'))
+			$this->displayPersonalDataForm();
+
 		$this->_displayForm();
 		return $this->_html;
+	}
+	
+	protected function displayPersonalDataForm()
+	{
+		$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : false;
+		
+		if (!$referer || ($referer && strpos($referer, 'configure')))
+			return false;
+		
+		$phone			= Tools::getValue('SOCOLISSIMO_PERSONAL_PHONE');
+		$zip_code		= Tools::getValue('SOCOLISSIMO_PERSONAL_ZIP_CODE');
+		$shop_zip_code	= Configuration::get('PS_SHOP_CODE');
+		$shop_phone		= Configuration::get('PS_SHOP_PHONE');
+	
+		$this->_html = '
+			<script type="text/javascript">
+				$(document).ready(function() {
+					var personal_content = $("#socolissimo_personal_content").html();
+					$.fancybox(personal_content, {type: \'html\', autoDimensions: false, minWidth: 600, height: 310, padding: 30, modal: false, hideOnOverlayClick: true});
+					
+					$(\'input[name=submitPersonalAskMeLater]\').on(\'click\', function() {
+						$.fancybox.close();
+						return false;
+					});
+				});
+			</script>
+			
+			<div id="socolissimo_personal_content" style="display: none;">
+				<div style="text-align: left; margin:0; padding: 0">
+					<img src="'._MODULE_DIR_.$this->name.'/logo.png" /> <h2 style="display: inline; vertical-align: middle; margin-left: 6px;">'.$this->l('Preliminary step').'</h2>
+				</div>
+				
+				<hr style="display: block; border-bottom: 1px solid #DDD;">
+				
+				<p style="text-align: justify">'.$this->l('In order to ensure correct use for this module, you need to complete this form.').'</p>
+				<p style="text-align: justify">'.$this->l('Fields followed by * are required.').'</p>
+			
+				<form action="" method="post" style="margin-top: 30px; text-align: center">
+					<dl style="margin: 0 auto; width: auto; text-align: left">
+						<dt style="width: 40%"><label for="personal_phone" style="width: 100%; line-height: 18px; vertical-align: middle">'.$this->l('Phone number').' * :</label></dt>
+						<dd><input type="text" value="'.Tools::safeOutput($phone ? $phone : $shop_phone).'" name="SOCOLISSIMO_PERSONAL_PHONE" id="personal_phone" />
+							&nbsp;&nbsp;<em style="font-size: .9em; '.(isset($this->personal_data_phone_error) ? 'color: red' : 'color: #999').'">('.$this->l('Example : 0144183004').')</em>
+						</dd><br>
+						
+						<dt style="width: 40%"><label for="personal_city" style="width: 100%; line-height: 18px; vertical-align: middle">'.$this->l('Zip code').' * :</label></dt>
+						<dd><input type="text" value="'.Tools::safeOutput($zip_code ? $zip_code : $shop_zip_code).'" name="SOCOLISSIMO_PERSONAL_ZIP_CODE" id="personal_zip_code" />
+							&nbsp;&nbsp;<em style="font-size: .9em; '.(isset($this->personal_data_zip_code_error) ? 'color: red' : 'color: #999').'">('.$this->l('Example : 92300').')</em>						</dd><br>
+						
+						<dt style="width: 40%"><label for="personal_quantities" style="width: 100%; line-height: 18px; vertical-align: middle">'.$this->l('Mean number of parcels').'* :</label></dt>
+						<dd>
+							<select name="SOCOLISSIMO_PERSONAL_QUANTITIES" id="personal_quantities">
+								<option value="< 250 colis / mois">'.$this->l('< 250 parcels / month').'</option>
+								<option value="> 250 colis / mois">'.$this->l('> 250 parcels / month').'</option>
+							</select>
+						</dd><br>
+						
+						<dt style="width: 40%"><label for="personal_siret" style="width: 100%;">'.$this->l('Siret').' :</label></dt>
+						<dd><input type="text" value="" name="SOCOLISSIMO_PERSONAL_SIRET" id="personal_city" /></dd>
+					</dl>
+					
+					<input type="submit" class="button" name="submitPersonalSave" value="'.$this->l('Confirm').'" style="float: right; margin-top: 30px; padding: 10px 20px" />
+					<input type="submit" class="button" name="submitPersonalAskMeLater" value="'.$this->l('Ask me later').'" style="float: right; margin-top: 30px; margin-right: 15px; padding: 10px 20px" />
+				</form>
+				<form action="" method="post">
+					<input type="submit" class="button" name="submitPersonalCancel" value="'.$this->l('Cancel').'" style="float: right; padding: 10px 20px; margin: 30px 15px 0 0" />
+				</form>
+			</div>
+			'.$this->_html;
+	}
+
+	protected function savePreactivationRequest()
+	{		
+		if (_PS_VERSION_ < '1.5')
+			return $this->savePreactivationRequest14();
+		return $this->savePreactivationRequest15();
+	}
+
+	protected function savePreactivationRequest14()
+	{
+		$employee = new Employee((int)Context::getContext()->cookie->id_employee);
+		
+		$data = array(
+			'version' => '1.0',
+			'partner' => $this->name,
+			'country_iso_code' => strtoupper(Country::getIsoById(Configuration::get('PS_COUNTRY_DEFAULT'))),
+			'security' => md5($employee->email._COOKIE_IV_),
+			'partner' => $this->name,
+			'email'=> $employee->email,
+			'firstName'=> $employee->firstname,
+			'lastName'=> $employee->lastname,
+			'shop'=> Configuration::get('PS_SHOP_NAME'),
+			'host' => $_SERVER['HTTP_HOST'],
+			'phoneNumber' => Configuration::get('SOCOLISSIMO_PERSONAL_PHONE'),
+			'postalCode' => Configuration::get('SOCOLISSIMO_PERSONAL_ZIP_CODE'),
+			'businessType' => Configuration::get('SOCOLISSIMO_PERSONAL_QUANTITIES'),
+			'siret' => Configuration::get('SOCOLISSIMO_PERSONAL_SIRET'),
+		);
+				
+		$query = http_build_query($data);
+		
+		return @file_get_contents('http://api.dev.prestashop.com/partner/preactivation/actions.php?'.$query);
+	}
+
+	protected function savePreactivationRequest15()
+	{
+	
+		$employee = new Employee((int)Context::getContext()->cookie->id_employee);
+		
+		$data = array(
+			'iso_lang' => strtolower($this->context->language->iso_code),
+			'iso_country' => strtoupper($this->context->country->iso_code),
+			'host' => $_SERVER['HTTP_HOST'],
+			'ps_version' => _PS_VERSION_,
+			'ps_creation' => _PS_CREATION_DATE_,
+			'partner' => $this->name,
+			'firstname'=> $employee->firstname,
+			'lastname'=> $employee->lastname,
+			'email'=> $employee->email,
+			'shop' => Configuration::get('PS_SHOP_NAME'),
+			'type' => 'home',
+			'phone' => Configuration::get('SOCOLISSIMO_PERSONAL_PHONE'),
+			'zipcode' => Configuration::get('SOCOLISSIMO_PERSONAL_ZIP_CODE'),
+			'fields' => serialize(
+				array(
+					'quantities' => Configuration::get('SOCOLISSIMO_PERSONAL_QUANTITIES'),
+					'siret' => Configuration::get('SOCOLISSIMO_PERSONAL_SIRET'),
+				)
+			),
+		);
+		
+		$query = http_build_query($data);
+		
+		return @file_get_contents('http://api.dev.prestashop.com/partner/premium/set_request.php?'.$query);
 	}
 
 
@@ -333,6 +492,42 @@ class Socolissimo extends CarrierModule
 		elseif (!Validate::isFloat(Tools::getValue('overcost')))
 				$this->_postErrors[] = $this->l('Invalid additional cost');
 	}
+	
+	protected function _postPersonalProcess()
+	{
+		if (Tools::isSubmit('submitPersonalSave'))
+		{
+			$result = true;
+			
+			$phone		= Tools::getValue('SOCOLISSIMO_PERSONAL_PHONE');
+			$zip_code	= Tools::getValue('SOCOLISSIMO_PERSONAL_ZIP_CODE');
+			$quantities	= Tools::getValue('SOCOLISSIMO_PERSONAL_QUANTITIES');
+			$siret		= Tools::getValue('SOCOLISSIMO_PERSONAL_SIRET');
+			
+			if (!(bool)preg_match('#^(([\d]{2})([\s]){0,1}){5}$#', $phone))
+			{
+				$this->personal_data_phone_error = true;
+				$result = false;
+			}
+			if (!(bool)preg_match('#^(([0-8][0-9])|(9[0-5]))[0-9]{3}$#', $zip_code))
+			{
+				$this->personal_data_zip_code_error = true;
+				$result = false;
+			}
+							
+			if ($result == false)
+				return false;
+				
+			Configuration::updateValue('SOCOLISSIMO_PERSONAL_PHONE', $phone);
+			Configuration::updateValue('SOCOLISSIMO_PERSONAL_ZIP_CODE', $zip_code);
+			Configuration::updateValue('SOCOLISSIMO_PERSONAL_QUANTITIES', $quantities);
+			Configuration::updateValue('SOCOLISSIMO_PERSONAL_SIRET', $siret);
+			$this->savePreactivationRequest();
+		}
+		
+		if (Tools::isSubmit('submitPersonalSave') || Tools::isSubmit('submitPersonalCancel'))
+			Configuration::updateValue('SOCOLISSIMO_PERSONAL_DATA', true);
+	}
 
 	private function _postProcess()
 	{
@@ -350,8 +545,7 @@ class Socolissimo extends CarrierModule
 			if (!in_array((int)(Tools::getValue('carrier')), explode('|',Configuration::get('SOCOLISSIMO_CARRIER_ID_HIST'))))
 				Configuration::updateValue('SOCOLISSIMO_CARRIER_ID_HIST', Configuration::get('SOCOLISSIMO_CARRIER_ID_HIST').'|'.(int)(Tools::getValue('carrier')));
 
-			$dataSync = (($so_login = Configuration::get('SOCOLISSIMO_ID'))
-				? '<img src="http://api.prestashop.com/modules/socolissimo.png?ps_id='.urlencode($so_login).'" style="float:right" />' : '');
+			$dataSync = (($so_login = Configuration::get('SOCOLISSIMO_ID')) ? '<img src="http://api.prestashop.com/modules/socolissimo.png?ps_id='.urlencode($so_login).'" style="float:right" />' : '');
 			$this->_html .= $this->displayConfirmation($this->l('Configuration updated').$dataSync);
 
 		}
