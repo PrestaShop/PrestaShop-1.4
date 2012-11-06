@@ -333,7 +333,7 @@ class Socolissimo extends CarrierModule
 				
 		$query = http_build_query($data);
 		
-		return @file_get_contents('http://api.dev.prestashop.com/partner/preactivation/actions.php?'.$query);
+		return @file_get_contents('http://api.prestashop.com/partner/preactivation/actions.php?'.$query);
 	}
 
 	protected function savePreactivationRequest15()
@@ -365,7 +365,7 @@ class Socolissimo extends CarrierModule
 		
 		$query = http_build_query($data);
 		
-		return @file_get_contents('http://api.dev.prestashop.com/partner/premium/set_request.php?'.$query);
+		return @file_get_contents('http://api.prestashop.com/partner/premium/set_request.php?'.$query);
 	}
 
 
