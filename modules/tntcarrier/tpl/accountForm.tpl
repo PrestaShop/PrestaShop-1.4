@@ -4,11 +4,11 @@
 		<fieldset style="border: 0px;">
 			<h4>{l s='Account TNT' mod='tntcarrier'} :</h4>
 			<label>{l s='Login' mod='tntcarrier'} : </label>
-			<div class="margin-form"><input type="text" size="20" name="tnt_carrier_login" value="{$varAccount.login}" /></div>
+			<div class="margin-form"><input type="text" size="20" name="tnt_carrier_login" value="{$varAccount.login|escape:'htmlall'}" /></div>
 			<label>{l s='Password' mod='tntcarrier'} : </label>
-			<div class="margin-form"><input type="password" size="20" name="tnt_carrier_password" value="{$varAccount.password}" /></div>
+			<div class="margin-form"><input type="password" size="20" name="tnt_carrier_password" value="{$varAccount.password|escape:'htmlall'}" /></div>
 			<label>{l s='Number account' mod='tntcarrier'} : </label>
-			<div class="margin-form"><input type="text" size="20" name="tnt_carrier_number_account" value="{$varAccount.account}" /></div>
+			<div class="margin-form"><input type="text" size="20" name="tnt_carrier_number_account" value="{$varAccount.account|escape:'htmlall'}" /></div>
 		</fieldset>
 	<div class="margin-form"><input class="button" name="submitSave" type="submit" value="{l s='save' mod='tntcarrier'}"></div>
 </form>

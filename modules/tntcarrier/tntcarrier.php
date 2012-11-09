@@ -27,7 +27,7 @@ class TntCarrier extends CarrierModule
 	{
 		$this->name = 'tntcarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.7.9.1';
+		$this->version = '1.8';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 		$this->module_key = 'd4dcfde9937b67002235598ac35cbdf8';
@@ -616,7 +616,7 @@ class TntCarrier extends CarrierModule
 			{
 				$this->_postErrors[] = $this->l('Verify your authentication');
 			}
-			if (!$verif)
+			if (!isset($verif) || !$verif)
 				$this->_postErrors[] = $this->l('The city is not compatible with the postal code');
 		}
 

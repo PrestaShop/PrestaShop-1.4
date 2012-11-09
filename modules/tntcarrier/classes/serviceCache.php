@@ -83,7 +83,7 @@ class serviceCache
 	{
 		foreach ($s as $key => $val)
 		{
-			if (is_array($val->Service))
+			if (isset($val->Service) && is_array($val->Service))
 				foreach ($val->Service as $k => $v)
 				{
 					if ($v->saturdayDelivery == '0')
