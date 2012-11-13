@@ -34,7 +34,7 @@ class Mobile_Theme extends Module
 	{
 		$this->name = 'mobile_theme';
 		$this->tab = (version_compare(_PS_VERSION_, 1.4) >= 0 ? 'administration' : 'Theme');
-		$this->version = '0.3.9';
+		$this->version = '0.3.10';
 
 		parent::__construct();
 
@@ -287,7 +287,7 @@ class Mobile_Theme extends Module
 		global $js_files;
 
 		// Make sure order-opc is well redirected to order
-		if ($site_type == 'ps_mobile_site' && strpos($_SERVER['PHP_SELF'], 'order-opc.php') !== false)
+		if (_THEME_NAME_ == 'prestashop_mobile' && $site_type == 'ps_mobile_site' && strpos($_SERVER['PHP_SELF'], 'order-opc.php') !== false)
 		{
 			global $link;
 
