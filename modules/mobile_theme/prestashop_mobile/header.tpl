@@ -60,6 +60,9 @@
 	{/foreach}
 {/if}
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+{if isset($HOOK_HEADER_MOBILE)}
+		{$HOOK_HEADER_MOBILE}
+{/if}
 	</head>
 
 	<body {if $page_name}id="{if $page_name == '404'}p{/if}{$page_name|escape:'htmlall':'UTF-8'}{if isset($smarty.get.id_product)}_{$smarty.get.id_product|intval}{/if}"{/if}>

@@ -28,12 +28,13 @@
 class Mobile_Theme extends Module
 {
 	public $_errors = array();
+	public $_html = '';
 
 	public function __construct()
 	{
 		$this->name = 'mobile_theme';
 		$this->tab = (version_compare(_PS_VERSION_, 1.4) >= 0 ? 'administration' : 'Theme');
-		$this->version = '0.3.6';
+		$this->version = '0.3.9';
 
 		parent::__construct();
 
@@ -55,7 +56,7 @@ class Mobile_Theme extends Module
 		&& Configuration::updateValue('PS_MOBILE_DOMAIN', 'm.'.Configuration::get('PS_SHOP_DOMAIN')) && Configuration::updateValue('PS_MOBILE_DEVICE', 0)
 		&& Configuration::updateValue('PS_REDIRECT_MOBILE_DOMAIN', 0) && Configuration::updateValue('PS_MOBILE_MODULE_ENABLED', 1)
 		&& $this->modifySettingsFile(true) && $this->installTheme(true) && parent::install() && $this->registerHook('header')
-		&& $this->registerHook('home') && $this->registerHook('footer') && $this->registerHook('backOfficeTop');
+		&& $this->registerHook('home') && $this->registerHook('footer') && $this->registerHook('backOfficeTop') && $this->installHook();
 	}
 
 	public function uninstall()
@@ -66,7 +67,16 @@ class Mobile_Theme extends Module
 		&& Configuration::deleteByName('PS_MOBILE_THEME_BUTTONS') && Configuration::deleteByName('PS_MOBILE_THEME_HEADER_FOOTER')
 		&& Configuration::deleteByName('PS_MOBILE_DOMAIN') && Configuration::deleteByName('PS_MOBILE_DEVICE')
 		&& Configuration::deleteByName('PS_REDIRECT_MOBILE_DOMAIN') && Configuration::deleteByName('PS_MOBILE_MODULE_ENABLED')
+		&& Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'hook` WHERE `id_hook` = '.(int)Configuration::get('PS_MOBILE_HOOK_HEADER_ID'))
+		&& Configuration::deleteByName('PS_MOBILE_HOOK_HEADER_ID')
 		&& $this->modifySettingsFile(false) && $this->installTheme(false) && parent::uninstall();
+	}
+
+	public function installHook()
+	{
+		return Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'hook` (`name`, `title`, `description`)
+		VALUE (\'displayMobileHeader\', \''.pSQL($this->l('Header of mobile pages')).'\', \''.pSQL($this->l('A hook which allow you to do things in the header of each pages of the Mobile version')).'\')') &&
+		Configuration::updateValue('PS_MOBILE_HOOK_HEADER_ID', Hook::get('displayMobileHeader'));
 	}
 
 	/**
@@ -137,14 +147,14 @@ class Mobile_Theme extends Module
 		/* Check that the settings file is writable */
 		if (!is_writable(_PS_ROOT_DIR_.'/config/config.inc.php'))
 		{
-			echo $this->l('Error: Your settings and/or your config files are not writable, please change the permissions on those files');
+			echo '<div class="error">'.$this->l('Error: Your /config/settings.inc.php and/or your /config/config.inc.php files are not writable, please change the permissions on those files').'</div>';
 			return false;
 		}
 
 		/* Check that the settings file is writable */
 		if (!is_writable(_PS_ROOT_DIR_.'/header.php') || !is_writable(_PS_ROOT_DIR_.'/footer.php'))
 		{
-			echo $this->l('Error: Your header.php and/or your footer.php files are not writable, please change the permissions on those files');
+			echo '<div class="error">'.$this->l('Error: Your /header.php and/or your /footer.php files are not writable, please change the permissions on those files').'</div>';
 			return false;
 		}
 
@@ -269,7 +279,7 @@ class Mobile_Theme extends Module
 	 * @param boolean addjs_exists whether Tools::addJS() exists or not
 	 *
 	 */
-	protected static function _redirectSite($params, $site_type, $addjs_exists = true)
+	protected function _redirectSite($params, $site_type, $addjs_exists = true)
 	{
 		if ($site_type != 'ps_full_site' && $site_type != 'ps_mobile_site')
 			return ;
@@ -303,7 +313,12 @@ class Mobile_Theme extends Module
 			unset($params['cookie']->full_site);
 
 		if ($site_type == 'ps_mobile_site' && !isset($_GET['ps_mobile_site']) && !isset($_GET['ps_full_site']))
-			echo '<script type="text/javascript">if (!(top === self)) location.replace(document.URL + \'&ps_mobile_site=1&mobile_iframe=1\');</script>';
+		{
+			if ($addjs_exists)
+				Tools::addJS(__PS_BASE_URI__.'modules/mobile_theme/iframe_redirect.js');
+			else
+				array_push($js_files, __PS_BASE_URI__.'modules/mobile_theme/mobile_iframe.js');
+		}
 
 		if ($site_type == 'ps_full_site' && isset($_GET['mobile_iframe']))
 		{
@@ -381,14 +396,14 @@ class Mobile_Theme extends Module
 		if (!defined('_PS_MOBILE_'))
 			Configuration::updateValue('PS_MOBILE_MODULE_ENABLED', 0);
 
-		$output = '<script type="text/javascript">function addEditSettingsInput() { return \'<input type="hidden" name="ps_disable_mobile" value="1" id="ps_disable_mobile" />\'; }</script>'."\n";
+		$this->_html .= '<script type="text/javascript">function addEditSettingsInput() { return \'<input type="hidden" name="ps_disable_mobile" value="1" id="ps_disable_mobile" />\'; }</script>'."\n";
 
 		if (version_compare(_PS_VERSION_, '1.0', '<'))
-			$output .= '<script type="text/javascript" src="'.__PS_BASE_URI__.'themes/prestashop_mobile/js/jquery.min.js"></script>';
+			$this->_html .= '<script type="text/javascript" src="'.__PS_BASE_URI__.'themes/prestashop_mobile/js/jquery.min.js"></script>';
 
 		// This occurs only in case of failure
 		if (!Configuration::get('PS_MOBILE_MODULE_ENABLED'))
-			$output .= '<script type="text/javascript">
+			$this->_html .= '<script type="text/javascript">
 				$(function() {
 					$(\'.path_bar\').after(function() {
 						return \'<div class="warn"><img src="../img/admin/warn2.png" alt="">'.$this->l('The Mobile Theme has been disabled').
@@ -405,19 +420,19 @@ class Mobile_Theme extends Module
 		}
 
 		if (isset($_GET['tab']) && $_GET['tab'] == 'AdminDb')
-			$output .= '<script type="text/javascript">
+			$this->_html .= '<script type="text/javascript">
 				$(function() {
 					$(\'form\').find(\'input[name="db_server"]\').after(addEditSettingsInput);
 				});
 				</script>';
 		elseif (isset($_GET['tab']) && $_GET['tab'] == 'AdminMeta')
-			$output .= '<script type="text/javascript">
+			$this->_html .= '<script type="text/javascript">
 				$(function() {
 					$(\'form\').find(\'input[name="__PS_BASE_URI__"]\').after(addEditSettingsInput);
 				});
 				</script>';
 		elseif (isset($_GET['tab']) && $_GET['tab'] == 'AdminPerformance')
-			$output .= '<script type="text/javascript">
+			$this->_html .= '<script type="text/javascript">
 				$(function() {
 					$(\'form\').find(\'input[name="memcachedIp"]\').after(addEditSettingsInput);
 					$(\'#PS_CIPHER_ALGORITHM_1, #caching_system, #_MEDIA_SERVER_1_\').after(addEditSettingsInput);
@@ -425,7 +440,7 @@ class Mobile_Theme extends Module
 				</script>';
 
 		// "hook" on the disable feature
-		$output .= '<script type="text/javascript">
+		$this->_html .= '<script type="text/javascript">
 				$(function() {
 					$(\'#modgo_mobile_theme a\').each(function() {
 						if ($(this).html() == \''.$this->l('Disable').'\' || $(this).children().first().attr(\'src\') == \'../img/admin/module_install.png\') {
@@ -439,7 +454,7 @@ class Mobile_Theme extends Module
 				});
 				</script>';
 
-		return $output;
+		return $this->_html;
 	}
 
 	public function hookHeader($params)
@@ -452,14 +467,26 @@ class Mobile_Theme extends Module
 		self::_initForceSite($params, $addjs_exists);
 
 		// If forced mobile site, need to make sure PrestaShop redirect well on mobile site
-		self::_redirectSite($params, 'ps_mobile_site', $addjs_exists);
+		$this->_redirectSite($params, 'ps_mobile_site', $addjs_exists);
 
 		// If the theme is not the mobile one, we just stop here.
 		if (_THEME_NAME_ != 'prestashop_mobile')
 			return;
 
+		// Load the hookMobileHeader for the registered modules
+		$modules = Db::getInstance()->ExecuteS('
+		SELECT `name`
+		FROM `'._DB_PREFIX_.'module` m
+		LEFT JOIN `'._DB_PREFIX_.'hook_module` hm ON (hm.id_module = m.id_module)
+		WHERE hm.`id_hook` = '.(int)Configuration::get('PS_MOBILE_HOOK_HEADER_ID'));
+		foreach ($modules as $m)
+		{
+			$tmp = Module::getInstanceByName($m['name']);
+			$this->_html .= $tmp->hookDisplayMobileHeader();
+		}
+
 		// If forced full site, need to make sure PrestaShop redirect well on full site
-		self::_redirectSite($params, 'ps_full_site', $addjs_exists);
+		$this->_redirectSite($params, 'ps_full_site', $addjs_exists);
 
 		self::_removeJQuery();
 		if (strpos($_SERVER['PHP_SELF'], 'order.php') !== false)
@@ -509,6 +536,9 @@ class Mobile_Theme extends Module
 		// Add translation of JS message for the payment page
 		if (strpos($_SERVER['PHP_SELF'], 'order.php') !== false)
 			$smarty->assign('translate_nopayment', '<script type="text/javascript">var translate_nopaymentmodule = "'.$this->l('Sorry, no payment module is available in your country.').'";</script>');
+
+		// The hookHeader is not called from the mobile template. Affect $smarty->HOOK_HEADER_MOBILE instead
+		$smarty->assign('HOOK_HEADER_MOBILE', $this->_html);
 	}
 
 	/**
@@ -610,7 +640,7 @@ class Mobile_Theme extends Module
 			$this->displayConf();
 		}
 
-		$output = '
+		$this->_html .= '
 		<h2>'.$this->l('PrestaShop Mobile Template').'</h2>
 		<form action="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'" method="post">
 		<fieldset style="margin-top: 10px; width: 900px;">
@@ -632,7 +662,7 @@ class Mobile_Theme extends Module
 		{
 			$configuration_value = Configuration::get($element['conf_key']);
 
-			$output .= '
+			$this->_html .= '
 			<h3 style="margin-bottom: 5px;">'.$element['name'].'</h3>
 			<select class="mobile_color" style="width: 110px;" name="mobile_color_'.(int)$i.'" onchange="$(\'#color_sample_'.(int)$i.'\').css(\'background-position\', \'-5px \'+(-1 * $(this).find(\'option:selected\').attr(\'rel\')+'.(int)($element['start_y']).')+\'px\');">
 				<option value="a"'.($configuration_value == 'a' ? ' selected="selected"' : '').' rel="0">'.$this->l('Theme').' A</option>
@@ -646,7 +676,7 @@ class Mobile_Theme extends Module
 			$i++;
 		}
 
-		$output .= '
+		$this->_html .= '
 			<br /><script type="text/javascript">$(\'select.mobile_color\').change();</script></div>
 			<div style="float: right; margin-top: -70px; padding-left: 34px; padding-top: 143px; background: url('.__PS_BASE_URI__.'modules/'.$this->name.'/iphone-bg.png) no-repeat; width: 350px; height: 615px;">
 				<iframe id="mobile_iframe" src="'.__PS_BASE_URI__.'?ps_mobile_site=1&mobile_iframe=1" frameborder="0" width="320" height="459" marginheight="0" marginwidth="0" scrolling="auto"></iframe>
@@ -684,7 +714,7 @@ class Mobile_Theme extends Module
 		</fieldset>
 		</form><br />';
 
-		echo $output;
+		return $this->_html;
 	}
 
 

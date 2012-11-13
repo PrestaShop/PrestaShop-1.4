@@ -24,6 +24,5 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-$(document).bind('pageshow', function() {
-    $('*').css('font-size', '11.5px');
-});
+if (!(top === self))
+    location.replace(document.URL + '&ps_mobile_site=1&mobile_iframe=1');
