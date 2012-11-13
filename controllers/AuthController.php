@@ -244,11 +244,7 @@ class AuthControllerCore extends FrontController
 				$customer = new Customer();
 				$authentication = $customer->getByEmail(trim($email), trim($passwd));
 				if (!$authentication OR !$customer->id)
-				{
-					/* Handle brute force attacks */
-					sleep(1);
 					$this->errors[] = Tools::displayError('Authentication failed');
-				}
 				else
 				{
 					self::$cookie->id_compare = isset(self::$cookie->id_compare) ? self::$cookie->id_compare: CompareProduct::getIdCompareByIdCustomer($customer->id);
