@@ -133,13 +133,13 @@ var soToken = "{$token}";
 		else if ((!soBwdCompat && $('#id_carrier' + soCarrierId).is(':not(:checked)')) ||
 			(soBwdCompat && soCarrierId == 0))
 		{
-			$('[name=processCarrier]').unbind('click').on('click', function () {
+			$('[name=processCarrier]').unbind('click').live('click', function () {
 				return true;
 			});
 		}
 		else
 		{
-			$('[name=processCarrier]').unbind('click').on('click', function () {
+			$('[name=processCarrier]').unbind('click').live('click', function () {
 				if (($('#id_carrier' + soCarrierId).is(':checked')) || ($('.delivery_option_radio:checked').val() == soCarrierId+','))
 				{
 					if (acceptCGV())

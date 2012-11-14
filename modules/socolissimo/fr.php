@@ -93,7 +93,6 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_e937c6393ce858786bd31a279b50572d'
 $_MODULE['<{socolissimo}prestashop>socolissimo_f109a88feec5ad3aeb82580c7a20ec31'] = 'Point de retrait';
 $_MODULE['<{socolissimo}prestashop>socolissimo_021944549c2795a6e4db23b92f198a5e'] = 'Adresse du point de retrait';
 $_MODULE['<{socolissimo}prestashop>socolissimo_ce8ae9da5b7cd6c3df2929543a9af92d'] = 'E-mail';
-$_MODULE['<{socolissimo}prestashop>validation_96ed568082bb9b65600afab1ecdbceab'] = 'Cette clé est requise pour SoColissimo :';
 $_MODULE['<{socolissimo}prestashop>validation_befec70964837a08794ca1b092471d83'] = 'Code d\'erreur :';
 $_MODULE['<{socolissimo}prestashop>validation_5386b25ee894102717d5fb2bdd836283'] = 'Impossible de mettre le panier à jour. Veuillez de nouveau effectuer votre sélection';
 $_MODULE['<{socolissimo}prestashop>scerror_09456f1fe3dbf4b7bbc3281e6cfcce8f'] = 'L\'ID FO est manquant';
