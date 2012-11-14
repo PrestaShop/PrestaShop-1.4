@@ -353,6 +353,8 @@ class FrontController extends FrontControllerCore
 		{
 			echo $hr.'<b '.$this->getTimeColor($time * 1000).'>'.round($time * 1000, 3).' ms</b> '.$q.'<br />';
 			$explain = Db::getInstance()->executeS('explain '.$q);
+			if (!is_array($explain))
+				continue;
 			if (stristr($explain[0]['Extra'], 'filesort'))
 				echo '<b '.$this->getTimeColor($time * 1000).'>USING FILESORT</b> - ';
 			$browsed_rows = 1;
