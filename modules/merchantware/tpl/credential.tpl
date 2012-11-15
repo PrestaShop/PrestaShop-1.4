@@ -25,18 +25,18 @@
 *}
 
 <form action="{$formCredential|escape:'htmlall':'UTF-8'}" method="POST">
-<fieldset>
-<img src="../modules/merchantware/img/partner.png">
-  <h4>{$credentialTitle|escape:'htmlall':'UTF-8'}</h4>
-  <p>{$credentialText|escape:'htmlall':'UTF-8'}</p>
-  {foreach from=$credentialInputVar item=input}
-  <label from="{$input.name|escape:'htmlall':'UTF-8'}">{$input.label|escape:'htmlall':'UTF-8'}</label>
-  <div class="margin-form">
-    <input type="{$input.type|escape:'htmlall':'UTF-8'}" name="{$input.name|escape:'htmlall':'UTF-8'}" id="{$input.name|escape:'htmlall':'UTF-8'}" value="{$input.value|escape:'htmlall':'UTF-8'}" /> {if $input.required}<span style="color:red">*</span>{/if} {$input.desc|escape:'htmlall':'UTF-8'}
-  </div>
-  {/foreach}
-  <div class="margin-form">
-    <input type="submit" class="button" value="{l s='Save' mod='merchantwarehouse'}" />
-  </div>
-</fieldset>
+	<fieldset class="merchant-warehouse-fixFiedlset">
+		<h4>{$credentialTitle|escape:'htmlall':'UTF-8'}</h4>
+		<p>{$credentialText|escape:'htmlall':'UTF-8'}</p>
+		<img src="{$module_dir}img/partner.png" class="merchant-warehouse-badge">
+		{foreach from=$credentialInputVar item=input}
+		<label from="{$input.name|escape:'htmlall':'UTF-8'}">{$input.label|escape:'htmlall':'UTF-8'}</label>
+		<div class="margin-form">
+			<input type="{$input.type|escape:'htmlall':'UTF-8'}" name="{$input.name|escape:'htmlall':'UTF-8'}" id="{$input.name|escape:'htmlall':'UTF-8'}" value="{$input.value|escape:'htmlall':'UTF-8'}" /> {if $input.required}<sup>*</sup>{/if} {$input.desc|escape:'htmlall':'UTF-8'}
+		</div>
+		{/foreach}
+		<div class="margin-form">
+			<input type="submit" class="button" value="{l s='Save' mod='merchantware'}" />
+		</div>
+	</fieldset>
 </form>

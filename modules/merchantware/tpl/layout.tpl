@@ -35,7 +35,7 @@
   </div>
   {/foreach}
   <div class="margin-form">
-    <input type="submit" class="button" value="{l s='Save' mod='merchantwarehouse'}" />
+    <input type="submit" class="button" value="{l s='Save' mod='merchantware'}" />
   </div>
 </fieldset>
 </form>

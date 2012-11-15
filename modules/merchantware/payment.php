@@ -4,7 +4,7 @@
 *
 * NOTICE OF LICENSE
 *
-0* This source file is subject to the Academic Free License (AFL 3.0)
+* This source file is subject to the Academic Free License (AFL 3.0)
 * that is bundled with this package in the file LICENSE.txt.
 * It is also available through the world-wide-web at this URL:
 * http://opensource.org/licenses/afl-3.0.php
@@ -88,7 +88,7 @@ class MerchantWareController extends FrontController
 		$params['amount'] = self::$cart->getOrderTotal();
 		$params['customer_id'] = self::$cart->id_customer;
 		$params['cart_id'] = self::$cart->id;
-		$params['store_name'] = 'http://'.htmlspecialchars($_SERVER['HTTP_HOST'], ENT_COMPAT, 'UTF-8').__PS_BASE_URI__;
+		$params['store_name'] = Configuration::get('PS_SHOP_NAME');
 		$params['customer_address'] = $address->address1.($address->address2 != '' ? ', '.$address->address2: '');
     $params['customer_zipcode'] = $address->postcode;
     $params['customer_lastname'] = $customer->lastname;

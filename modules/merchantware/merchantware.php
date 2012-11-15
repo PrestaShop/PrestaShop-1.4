@@ -34,7 +34,7 @@ include_once(_PS_MODULE_DIR_.'/merchantware/class/token.php');
 class MerchantWare extends PaymentModule
 {
 	private $_postErrors = array();
-
+	private $_warnings = array();
 	/**
 	 * @brief Constructor
 	 */
@@ -42,7 +42,7 @@ class MerchantWare extends PaymentModule
 	{
 		$this->name = 'merchantware';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.1.2';
+		$this->version = '1.2.1';
 		$this->author = 'PrestaShop';
 		$this->className = 'Merchantware';
 
@@ -53,7 +53,12 @@ class MerchantWare extends PaymentModule
 
 		$this->confirmUninstall =	$this->l('Are you sure you want to delete your details?');
 		if (!extension_loaded('soap'))
-			$this->warning = $this->l('In order to use your module, please activate Soap (PHP extension)');
+			$this->_warnings[] = $this->l('In order to use your module, please activate Soap (PHP extension)');
+		if (!extension_loaded('openssl'))
+			$this->_warnings[] = $this->l('In order to use your module, please activate OpenSsl (PHP extension)');
+		if (!function_exists('curl_init'))
+			$this->_warnings[] = $this->l('In order to use your module, please activate cURL (PHP extension)');
+
 		/* Backward compatibility */
 		require(_PS_MODULE_DIR_.'merchantware/backward_compatibility/backward.php');
 		$this->context->smarty->assign('base_dir', __PS_BASE_URI__);
@@ -118,7 +123,12 @@ class MerchantWare extends PaymentModule
 	public function getContent()
 	{
 		$html = '';
-		if (!extension_loaded('soap'))
+		if (version_compare(_PS_VERSION_,'1.5','>'))
+			$this->context->controller->addJQueryPlugin('fancybox');
+		else
+			$html .= '<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/jquery.fancybox-1.3.4.js"></script>
+		  	<link type="text/css" rel="stylesheet" href="'.__PS_BASE_URI__.'css/jquery.fancybox-1.3.4.css" />';
+		if (count($this->_warnings))
 			$html .= $this->_displayWarning();
 		if (Tools::isSubmit('submitMerchantWare') || Tools::isSubmit('submitLayoutMerchantWare') || Tools::isSubmit('subscribeMerchantWare'))
 		{
@@ -153,7 +163,7 @@ class MerchantWare extends PaymentModule
 					'credential' => array(
 						'title' => $this->l('Credentials'),
 						'content' => $this->_displayCredentialTpl(),
-						'icon' => '../modules/merchantware/img/credential.png',
+						'icon' => '../modules/merchantware/img/credentials.png',
 						'tab' => 2,
 						'selected' => (Tools::isSubmit('submitMerchantWare') ? true : false),
 					),
@@ -328,7 +338,6 @@ class MerchantWare extends PaymentModule
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $_POST);
 
 		$output = curl_exec($ch);
-
 		curl_close($ch);
 		if ($output != 'sent')
 		{
@@ -364,7 +373,7 @@ class MerchantWare extends PaymentModule
 
 	private function _displayWarning()
 	{
-		$this->context->smarty->assign('warnings', array($this->l('Please, activate Soap (PHP extension).')));
+		$this->context->smarty->assign('warnings', $this->_warnings);
 		return $this->display(__FILE__, 'tpl/warning.tpl');
 	}
 
@@ -448,7 +457,10 @@ class MerchantWare extends PaymentModule
 		$token = (int)Tools::getValue('Token');
 		$id_cart = (int)Tools::getValue('TransactionID');
 
+		$link = new Link();
+
 		$this->context->cart = new Cart($id_cart);
+		$this->context->link = $link;
 
 		if (Validate::isLoadedObject($this->context->cart))
 		{

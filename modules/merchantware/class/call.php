@@ -69,7 +69,7 @@ class Call
             'Amount' => $params['amount'],
             'ClerkId' => $params['customer_id'],
             'OrderNumber' => $params['cart_id'],
-            'Dba' =>$params['store_name'],
+            'Dba' => substr($params['store_name'], 0, 50),
             'SoftwareName' => 'prestashopmerchantwaremodule',
             'SoftwareVersion' => 1.0,
             'AddressLine1' => $params['customer_address'],
