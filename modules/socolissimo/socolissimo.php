@@ -248,6 +248,8 @@ class Socolissimo extends CarrierModule
 		$zip_code		= Tools::getValue('SOCOLISSIMO_PERSONAL_ZIP_CODE');
 		$shop_zip_code	= Configuration::get('PS_SHOP_CODE');
 		$shop_phone		= Configuration::get('PS_SHOP_PHONE');
+		$parcels		= Tools::getValue('SOCOLISSIMO_PERSONAL_QUANTITIES');
+		$siret			= Tools::getValue('SOCOLISSIMO_PERSONAL_SIRET');
 	
 		$this->_html = '
 			<script type="text/javascript">
@@ -286,13 +288,13 @@ class Socolissimo extends CarrierModule
 						<dt style="width: 40%"><label for="personal_quantities" style="width: 100%; line-height: 18px; vertical-align: middle">'.$this->l('Mean number of parcels').'* :</label></dt>
 						<dd>
 							<select name="SOCOLISSIMO_PERSONAL_QUANTITIES" id="personal_quantities">
-								<option value="< 250 colis / mois">'.$this->l('< 250 parcels / month').'</option>
-								<option value="> 250 colis / mois">'.$this->l('> 250 parcels / month').'</option>
+								<option value="< 250 colis / mois" '.($parcels == '< 250 colis / mois' ? 'selected' : '').'>'.$this->l('< 250 parcels / month').'</option>
+								<option value="> 250 colis / mois" '.($parcels == '> 250 colis / mois' ? 'selected' : '').'>'.$this->l('> 250 parcels / month').'</option>
 							</select>
 						</dd><br>
 						
 						<dt style="width: 40%"><label for="personal_siret" style="width: 100%;">'.$this->l('Siret').' :</label></dt>
-						<dd><input type="text" value="" name="SOCOLISSIMO_PERSONAL_SIRET" id="personal_city" /></dd>
+						<dd><input type="text" value="'.($siret ? $siret : '').'" name="SOCOLISSIMO_PERSONAL_SIRET" id="personal_city" /></dd>
 					</dl>
 					
 					<input type="submit" class="button" name="submitPersonalSave" value="'.$this->l('Confirm').'" style="float: right; margin-top: 30px; padding: 10px 20px" />
