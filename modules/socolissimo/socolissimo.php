@@ -216,7 +216,9 @@ class Socolissimo extends CarrierModule
 		$this->_html .= '<h2>' . $this->l('So Colissimo').'</h2>';
 
 		if (!empty($_POST) && (Tools::isSubmit('submitPersonalSave') || Tools::isSubmit('submitPersonalCancel')))
-			$this->_postPersonalProcess();
+			$validation = $this->_postPersonalProcess();
+		else	
+			$validation = true;
 
 		if (!empty($_POST) && Tools::isSubmit('submitSave'))
 		{
@@ -229,17 +231,17 @@ class Socolissimo extends CarrierModule
 		}
 		
 		if (!Configuration::get('SOCOLISSIMO_PERSONAL_DATA'))
-			$this->displayPersonalDataForm();
+			$this->displayPersonalDataForm($validation);
 
 		$this->_displayForm();
 		return $this->_html;
 	}
 	
-	protected function displayPersonalDataForm()
+	protected function displayPersonalDataForm($validation = false)
 	{
 		$referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : false;
 		
-		if (!$referer || ($referer && strpos($referer, 'configure')))
+		if ((!$referer || ($referer && strpos($referer, 'configure'))) && ($validation == true))
 			return false;
 		
 		$phone			= Tools::getValue('SOCOLISSIMO_PERSONAL_PHONE');
@@ -514,10 +516,10 @@ class Socolissimo extends CarrierModule
 				$this->personal_data_zip_code_error = true;
 				$result = false;
 			}
-							
+
 			if ($result == false)
 				return false;
-				
+
 			Configuration::updateValue('SOCOLISSIMO_PERSONAL_PHONE', $phone);
 			Configuration::updateValue('SOCOLISSIMO_PERSONAL_ZIP_CODE', $zip_code);
 			Configuration::updateValue('SOCOLISSIMO_PERSONAL_QUANTITIES', $quantities);
@@ -527,6 +529,8 @@ class Socolissimo extends CarrierModule
 		
 		if (Tools::isSubmit('submitPersonalSave') || Tools::isSubmit('submitPersonalCancel'))
 			Configuration::updateValue('SOCOLISSIMO_PERSONAL_DATA', true);
+		
+		return true;
 	}
 
 	private function _postProcess()
