@@ -31,6 +31,8 @@ include(dirname(__FILE__).'/ogone.php');
 /* PrestaShop < 1.5 */
 if (_PS_VERSION_ < '1.5')
 {
+	include(dirname(__FILE__).'/../../header.php');
+	
 	$ogone = new Ogone();
 	$id_module = $ogone->id;
 	$id_cart = Tools::getValue('orderID');
@@ -42,13 +44,11 @@ if (_PS_VERSION_ < '1.5')
 			'id_module' => $id_module,
 			'id_cart' => $id_cart,
 			'key' => $key,
-			'ogone_link' => _PS_BASE_URL_.'order-confirmation.php'
+			'ogone_link' => __PS_BASE_URI__.'order-confirmation.php'
 		)
 	);
 
-	include(dirname(__FILE__).'/../../header.php');
-
-	echo $ogone->display(dirname(__FILE__), 'waiting.tpl');
+	echo $ogone->display(dirname(__FILE__), '/views/templates/front/waiting.tpl');
 
 	include(dirname(__FILE__).'/../../footer.php');
 }

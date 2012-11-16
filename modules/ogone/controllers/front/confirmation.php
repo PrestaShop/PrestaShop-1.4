@@ -1,5 +1,6 @@
-{*
-* 2007-2011 PrestaShop 
+<?php
+/*
+* 2007-2012 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,27 +19,35 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2011 PrestaShop SA
-*  @version  Release: $Revision$
+*  @copyright  2007-2012 PrestaShop SA
+*  @version  Release: $Revision: 16008 $
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
-*}
+*/
 
-<p><img src="{$base_dir}img/loader.gif" /> {l s='Please wait while your order is being processed...' mod='ogone'}</p>
-<script type="text/javascript">
-function checkwaitingorder()
-{ldelim}
-	$.ajax({ldelim}
-		type:"POST",
-		async:true,
-		url:'{$base_dir}modules/ogone/checkwaitingorder.php',
-		data:'id_cart={$id_cart|intval}&id_module={$id_module|intval}&key={$key|escape}',
-		success:function (r) {ldelim}
-			if (r == 'ok')
-				window.location.href = '{$ogone_link}?id_cart={$id_cart|intval}&id_module={$id_module|intval}&key={$key|escape}';
-		{rdelim}
-	{rdelim});
-	setTimeout('checkwaitingorder()', 5000);
-{rdelim}	
-setTimeout('checkwaitingorder()', 5000);
-</script>
+class OgoneConfirmationModuleFrontController extends ModuleFrontController
+{
+	public function initContent()
+    {   parent::initContent();
+
+        $this->context = Context::getContext();     
+     
+		$ogone = new Ogone();
+		$id_module = $ogone->id;
+		$id_cart = Tools::getValue('orderID');
+		$key = Db::getInstance()->getValue('SELECT secure_key FROM '._DB_PREFIX_.'customer WHERE id_customer = '.(int)$this->context->customer->id);
+
+		$ogone_link = $this->context->link->getPageLink('order-confirmation');
+
+		$this->context->smarty->assign(
+			array(
+				'id_module' => $id_module,
+				'id_cart' => $id_cart,
+				'key' => $key,
+				'ogone_link' => $ogone_link
+			)
+		);
+
+        $this->setTemplate('waiting.tpl');
+    }
+}
