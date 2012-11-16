@@ -36,7 +36,7 @@ class Ogone extends PaymentModule
 	{
 		$this->name = 'ogone';
 		$this->tab = 'payments_gateways';
-		$this->version = '2.3.3';
+		$this->version = '2.4';
 		$this->author = 'PrestaShop';
 		$this->module_key = '787557338b78e1705f2a4cb72b1dbb84';
 
@@ -93,7 +93,7 @@ class Ogone extends PaymentModule
 				? '<img src="http://api.prestashop.com/modules/ogone.png?pspid='.urlencode($pspid).'&mode='.(int)Tools::getValue('OGONE_MODE').'" style="float:right" />'
 				: ''
 			);
-			echo $this->displayConfirmation($this->l('Configuration updated').$dataSync);
+			$this->_html .= '<div class="conf">'.$this->l('Configuration updated').$dataSync.'</div>';
 		}
 		
 		if ($this->context->language->iso_code == 'fr')
@@ -103,7 +103,7 @@ class Ogone extends PaymentModule
 		else 
 			$account_creation_link = 'https://secure.ogone.com/ncol/test/new_account.asp?BRANDING=ogone&ISP=OFR&SubID=3&SOLPRO=&MODE=STD&ACountry=FR&Lang=1';
 		
-		return '
+		return $this->_html.'
 		<fieldset><legend><img src="../modules/'.$this->name.'/logo.gif" /> '.$this->l('Help').'</legend>
 			<p>
 				<img src="../modules/'.$this->name.'/ogone.png" alt="ogone logo" style="float: left; margin: 0 5px 5px 0;"/>
@@ -244,7 +244,7 @@ class Ogone extends PaymentModule
 		else
 			$this->context->smarty->assign('status', 'failed');
 
-		$link = method_exists($link, 'getPageLink') ? $this->context->link->getPageLink('contact', true) : Tools::getHttpHost(true).'contact';
+		$link = method_exists('Link', 'getPageLink') ? $this->context->link->getPageLink('contact', true) : Tools::getHttpHost(true).'contact';
 		$this->context->smarty->assign('ogone_link', $link);
 		return $this->display(__FILE__, 'hookorderconfirmation.tpl');
 	}
