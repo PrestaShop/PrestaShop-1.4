@@ -44,7 +44,7 @@
 		</div>
 
 		{if isset($subcategories)}
-		<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="{$ps_mobile_styles.PS_MOBILE_THEME_LIST_HEADERS}">
+		<ul data-role="listview" data-inset="true" data-theme="{$ps_mobile_styles.PS_MOBILE_THEME_LIST_HEADERS}" data-dividertheme="{$ps_mobile_styles.PS_MOBILE_THEME_LIST_HEADERS}">
 			<li data-role="list-divider">{l s='Subcategories'}</li>
 			{foreach from=$subcategories item=subcategory}
 			<li>

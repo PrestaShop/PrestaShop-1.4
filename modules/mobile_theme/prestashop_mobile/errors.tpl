@@ -25,7 +25,7 @@
 *}
 
 {if isset($errors) && $errors}
-	<div class="ui-overlay-shadow ui-body-a ui-corner-all" style="padding: 12px; margin: 15px 0;">
+	<div class="ui-overlay-shadow ui-body-{$ps_mobile_styles.PS_MOBILE_THEME_ERROR_MSG} ui-corner-all" style="padding: 12px; margin: 15px 0;">
 		<p style="font-weight: bold;">{if $errors|@count > 1}{l s='There are'}{else}{l s='There is'}{/if} {$errors|@count} {if $errors|@count > 1}{l s='errors'}{else}{l s='error'}{/if} :</p>
 		<ol style="margin: 10px 0 0 18px;">
 		{foreach from=$errors key=k item=error}

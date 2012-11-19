@@ -52,9 +52,9 @@
 	// ]]>
 	</script>
 	<p style="display:none" id="emptyCartWarning" class="warning">{l s='Your shopping cart is empty.'}</p>
-	
+
 	{if isset($products)}
-	<ul data-role="listview" data-inset="true" data-split-theme="d" data-split-icon="delete">
+	<ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="{$ps_mobile_styles.PS_MOBILE_THEME_LIST_HEADERS}" data-split-theme="{$ps_mobile_styles.PS_MOBILE_THEME_LIST_HEADERS}" data-split-icon="delete">
 		<li data-role="list-divider">{l s='Products'}</li>
 		{foreach from=$products item=product}
 			<li id="element_product_{$product.id_product|intval}" style="height: 81px;">
@@ -124,7 +124,7 @@
 	</div>
 	{/if}
 
-	<ul data-role="listview" data-inset="true">
+	<ul data-role="listview" data-theme="c" data-dividertheme="{$ps_mobile_styles.PS_MOBILE_THEME_LIST_HEADERS}" data-inset="true">
 		<li data-role="list-divider">{l s='Totals'}</li>
 		<li>{l s='Products'}{if $use_taxes}{if $priceDisplay}{if $display_tax_label} {l s='(tax excl.)'}{/if}{else}{if $display_tax_label} {l s='(tax incl.)'}{/if}{/if}{/if}<span class="ui-li-aside">{if $use_taxes}{if $priceDisplay}{displayPrice price=$total_products}{else}{displayPrice price=$total_products_wt}{/if}{else}{displayPrice price=$total_products}{/if}</span></li>
 		<li{if $total_discounts == 0} style="display: none;"{/if}>{l s='Vouchers'}{if $use_taxes}{if $priceDisplay}{if $display_tax_label} {l s='(tax excl.)'}{/if}{else}{if $display_tax_label} {l s='(tax incl.)'}{/if}{/if}{/if}<span class="ui-li-aside" id="total_discount">{if $use_taxes}{if $priceDisplay}{displayPrice price=$total_discounts_tax_exc}{else}{displayPrice price=$total_discounts}{/if}{else}{displayPrice price=$total_discounts_tax_exc}{/if}</span></li>
@@ -137,7 +137,7 @@
 		<li class="cart_total_price">{l s='Total'}<span class="ui-li-aside" id="total_price">{displayPrice price=$total_price_without_tax}</span></li>
 		{/if}
 	</ul>
-	
+
 	{if isset($paypal_cart)}<fieldset class="ui-grid-a" data-type="horizontal"><div class="ui-block-a" style="width: 100%; text-align: center; margin-bottom: 15px;">{$paypal_cart}</div></fieldset>{/if}
 
 	<p style="text-align: center; margin-top: 10px;">

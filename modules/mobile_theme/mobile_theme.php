@@ -34,7 +34,7 @@ class Mobile_Theme extends Module
 	{
 		$this->name = 'mobile_theme';
 		$this->tab = (version_compare(_PS_VERSION_, 1.4) >= 0 ? 'administration' : 'Theme');
-		$this->version = '0.3.10';
+		$this->version = '0.3.11';
 
 		parent::__construct();
 
@@ -385,8 +385,23 @@ class Mobile_Theme extends Module
 				unset($js_files[$k]);
 	}
 
+	/**
+	 * @brief Disable the module
+	 *
+	 * When disabling the module, we need to edit the settings to also disable the theme swtich.
+	 * When enabling it, the settings will be rewritten automatically with the performances system.
+	 *
+	 */
+	public function disable()
+	{
+		Configuration::updateValue('PS_MOBILE_MODULE_ENABLED', 0);
+		$this->editSettings(false);
+		return parent::disable();
+	}
+
 	public function hookBackOfficeTop($params)
 	{
+		// If the module as been disabled (manually or via performances update) rewrite the settings
 		if (!Configuration::get('PS_MOBILE_MODULE_ENABLED'))
 		{
 			$this->editSettings(false);
@@ -396,12 +411,14 @@ class Mobile_Theme extends Module
 		if (!defined('_PS_MOBILE_'))
 			Configuration::updateValue('PS_MOBILE_MODULE_ENABLED', 0);
 
+		// Helper function for the performance/db tab
 		$this->_html .= '<script type="text/javascript">function addEditSettingsInput() { return \'<input type="hidden" name="ps_disable_mobile" value="1" id="ps_disable_mobile" />\'; }</script>'."\n";
 
+		// Make sure we have JQuery
 		if (version_compare(_PS_VERSION_, '1.0', '<'))
 			$this->_html .= '<script type="text/javascript" src="'.__PS_BASE_URI__.'themes/prestashop_mobile/js/jquery.min.js"></script>';
 
-		// This occurs only in case of failure
+		// Display warning message if the module is disabled (This occurs only in case of failure)
 		if (!Configuration::get('PS_MOBILE_MODULE_ENABLED'))
 			$this->_html .= '<script type="text/javascript">
 				$(function() {
@@ -413,12 +430,32 @@ class Mobile_Theme extends Module
 				});
 				</script>';
 
+		// If a form has been submitted with the 'ps_disable_mobile' param, revert the settings
 		if (Tools::isSubmit('ps_disable_mobile'))
 		{
 			Configuration::updateValue('PS_MOBILE_MODULE_ENABLED', 0);
 			$this->editSettings(false);
 		}
 
+		// Make sure to uninstall the module before deleting it
+		if (Tools::isSubmit('ps_delete_mobile') && Tools::getValue('token') == Tools::getAdminTokenLite('AdminModules'))
+		{
+			$this->uninstall();
+			$this->_html .= '<script type="text/javascript">
+				$(function() {
+								var tmp_url = $(\'#modgo_mobile_theme .action_module_delete\').attr(\'href\');
+								setTimeout(function() {
+												location.replace(tmp_url);
+								}, 1000);
+				 });</script>';
+		}
+		$this->_html .= '<script type="text/javascript">
+		 		$(function() {
+								$(\'#modgo_mobile_theme .action_module_delete\').attr(\'href\', window.location.href + \'&ps_delete_mobile\');
+				});
+				</script>';
+
+		// Make sure to rewrite the settings with performaces and database tab. (add ps_disable_mobile params to the forms)
 		if (isset($_GET['tab']) && $_GET['tab'] == 'AdminDb')
 			$this->_html .= '<script type="text/javascript">
 				$(function() {
@@ -436,21 +473,6 @@ class Mobile_Theme extends Module
 				$(function() {
 					$(\'form\').find(\'input[name="memcachedIp"]\').after(addEditSettingsInput);
 					$(\'#PS_CIPHER_ALGORITHM_1, #caching_system, #_MEDIA_SERVER_1_\').after(addEditSettingsInput);
-				});
-				</script>';
-
-		// "hook" on the disable feature
-		$this->_html .= '<script type="text/javascript">
-				$(function() {
-					$(\'#modgo_mobile_theme a\').each(function() {
-						if ($(this).html() == \''.$this->l('Disable').'\' || $(this).children().first().attr(\'src\') == \'../img/admin/module_install.png\') {
-							var dest = $(this).attr(\'href\');
-							$(this).attr(\'href\', \'#\');
-							$(this).click(function() {
-								location.replace(dest + \'&ps_disable_mobile=1\');
-							});
-						}
-					});
 				});
 				</script>';
 
@@ -522,7 +544,7 @@ class Mobile_Theme extends Module
 
 
 		$paypal = Module::getInstanceByName('paypal');
-		if ($paypal && $paypal->active && version_compare($paypal->version, '3.2.0', '>=') && !$params['cookie']->isLogged())
+		if ($paypal && $paypal->active && version_compare($paypal->version, '3.2.0', '>='))
 		{
 			if (strpos($_SERVER['PHP_SELF'], 'product.php') !== false)
 				$smarty->assign('paypal_product', $paypal->renderExpressCheckoutButton('product').$paypal->renderExpressCheckoutForm('product'));

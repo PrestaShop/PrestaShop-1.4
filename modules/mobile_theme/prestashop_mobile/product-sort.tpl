@@ -54,7 +54,7 @@ $(document).ready(function()
 
 </div>
 <form class="productsSortForm" action="{$request|escape:'htmlall':'UTF-8'}">
-	<div data-role="footer" style="width: 100%;">
+	<div data-role="footer" data-theme="{$ps_mobile_styles.PS_MOBILE_THEME_FILTERING_BAR}" style="width: 100%;">
 		<div data-role="navbar">
 			<ul id="selectPrductSort">
 				{if !$PS_CATALOG_MODE}
