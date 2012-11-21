@@ -190,7 +190,7 @@ $(document).ready( function() {
 				$('input[name="sandbox_mode"]').filter('[value="0"]').attr('checked', true);
 				var div = $('<div id="paypal-test-mode-confirmation">');
 				var inner = $('#paypal-test-mode-confirmation').clone().html();
-				$.fancybox({'content' : div.append(inner)});
+				$.fancybox({'hideOnOverlayClick' : true, 'content' : div.append(inner)});
 				return false;
 			}
 			return true;
@@ -206,9 +206,9 @@ $(document).ready( function() {
 		});
 
 		if ($('#paypal-save-success').length > 0)
-			$.fancybox({'content' : $('<div id="paypal-save-success">').append($('#paypal-save-success').clone().html())});
+			$.fancybox({'hideOnOverlayClick' : true, 'content' : $('<div id="paypal-save-success">').append($('#paypal-save-success').clone().html())});
 		else if ($('#paypal-save-failure').length > 0)
-			$.fancybox({'content' : $('<div id="paypal-save-failure">').append($('#paypal-save-failure').clone().html())});
+			$.fancybox({'hideOnOverlayClick' : true, 'content' : $('<div id="paypal-save-failure">').append($('#paypal-save-failure').clone().html())});
 
 		$('#paypal-get-identification').live('click', function() {
 			identificationButtonClicked = true;

@@ -19,7 +19,7 @@ $(document).ready( function() {
 			type: "GET",
 			url: baseDir+'/modules/paypal/express_checkout/submit.php',
 			data: { get_qty: "1", id_product: id_product, id_product_attribute: id_product_attribute}
-		}).done(function(result) {
+		}).success(function(result) {
 			if (result == '1')
 				$('#container_express_checkout').slideDown();
 			else
@@ -28,14 +28,26 @@ $(document).ready( function() {
 		});
 	}
 
-	$('select[name^="group_"]').bind('change', function () {
+	$('select[name^="group_"]').change(function () {
 		displayExpressCheckoutShortcut();
 	});
 
-	$('.color_pick').bind('click', function () {
+	$('.color_pick').click(function () {
 		displayExpressCheckoutShortcut();
 	});
-
+	
+	{/literal}
+	{if isset($paypal_one_page_checkout)}
+	{literal}
+	$('div#container_express_checkout').hide();
+	
+	$('input[type=checkbox]#cgv').click(function() {
+		$(location).attr('href', '{/literal}{$paypal_one_page_checkout}{literal}');
+	});
+	{/literal}
+	{/if}
+	{literal}
+	
 	if ($('form[target="hss_iframe"]').length == 0) {
 		if ($('select[name^="group_"]').length > 0)
 			displayExpressCheckoutShortcut();

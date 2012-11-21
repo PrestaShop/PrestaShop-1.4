@@ -52,7 +52,7 @@ abstract class PayPalAbstract extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'payments_gateways';
-		$this->version = '3.2.5';
+		$this->version = '3.3';
 
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
@@ -89,7 +89,7 @@ abstract class PayPalAbstract extends PaymentModule
 	{
 		$this->loadLangDefault();
 		$this->paypal_logos = new PayPalLogos($this->iso_code);
-
+		
 		if (defined('_PS_ADMIN_DIR_'))
 		{
 			/* Backward compatibility */
@@ -100,6 +100,20 @@ abstract class PayPalAbstract extends PaymentModule
 			$this->runUpgrades();
 			$this->compatibilityCheck();
 			$this->warningsCheck();
+		}
+		elseif (((int)Configuration::get('PS_ORDER_PROCESS_TYPE') == 1) && ((bool)Tools::getValue('isPaymentStep') == true))
+		{
+			$shop_url = PayPal::getShopDomainSsl(true, true);
+			if (_PS_VERSION_ < '1.5')
+			{
+				$link = $shop_url._MODULE_DIR_.$this->name.'/express_checkout/submit.php';
+				$this->context->smarty->assign('paypal_one_page_checkout', $link.'?'.http_build_query(array('get_confirmation' => true), '', '&'));
+			}
+			else
+			{
+				$values = array('fc' => 'module', 'module' => 'paypal', 'controller' => 'confirm', 'get_confirmation' => true);
+				$this->context->smarty->assign('paypal_one_page_checkout', $shop_url.__PS_BASE_URI__.'?'.http_build_query($values));
+			}
 		}
 	}
 
@@ -119,8 +133,13 @@ abstract class PayPalAbstract extends PaymentModule
 		$iso_code = Country::getIsoById((int)Configuration::get('PS_COUNTRY_DEFAULT'));
 		$paypal_countries = array('ES', 'FR', 'PL', 'IT');
 
-		if (($this->context->shop->getTheme() == 'default') && in_array($iso_code, $paypal_countries))
-			$this->warning .= $this->l('The mobile theme only works with the PayPal\'s payment module at this time. Please activate the module to enable payments.').'<br />';
+		if (method_exists($this->context->shop, 'getTheme'))
+		{
+			if (($this->context->shop->getTheme() == 'default') && in_array($iso_code, $paypal_countries))
+				$this->warning .= $this->l('The mobile theme only works with the PayPal\'s payment module at this time. Please activate the module to enable payments.').'<br />';
+		}
+		else
+			$this->warning .= $this->l('In order to use the module you need to install the backward compatibility.').'<br />';
 	}
 
 	/* Check status of backward compatibility module*/
@@ -383,8 +402,7 @@ abstract class PayPalAbstract extends PaymentModule
 
 	public function hookProductFooter()
 	{
-		$content = (!$this->context->getMobileDevice()) ? $this->renderExpressCheckoutButton('product') : '';
-		return $content.$this->renderExpressCheckoutForm('product');
+		return $this->renderExpressCheckoutButton('product').$this->renderExpressCheckoutForm('product');
 	}
 
 	public function renderExpressCheckoutButton($type)
@@ -453,12 +471,7 @@ abstract class PayPalAbstract extends PaymentModule
 				if (_PS_VERSION_ < '1.5')
 					Tools::redirectLink($link.'?'.http_build_query($values, '', '&'));
 				else
-				{
-					$controller = new FrontController();
-					$controller->init();
-
 					Tools::redirect(Context::getContext()->link->getModuleLink('paypal', 'confirm', $values));
-				}
 			}
 		}
 
@@ -603,33 +616,10 @@ abstract class PayPalAbstract extends PaymentModule
 
 	public function hookAdminOrder($params)
 	{
-		if (Tools::isSubmit('paypal'))
-		{
-			switch (Tools::getValue('paypal'))
-			{
-				case 'captureOk':
-					$message = $this->l('Funds have been recovered.');
-					break;
-				case 'captureError':
-					$message = $this->l('Recovery of funds request unsuccessful. Please see log message!');
-					break;
-				case 'validationOk':
-					$message = $this->l('Validation successful. Please see log message!');
-					break;
-				case 'refundOk':
-					$message = $this->l('Refund has been made.');
-					break;
-				case 'refundError':
-					$message = $this->l('Refund request unsuccessful. Please see log message!');
-					break;
-			}
-			if (isset($message) && $message)
-				$this->_html .= '
-				<br />
-				<div class="module_confirmation conf confirm" style="width: 400px;">
-					<img src="'._PS_IMG_.'admin/ok.gif" alt="" title="" /> '.Tools::safeOutput($message).'
-				</div>';
-		}
+		if (Tools::isSubmit('submitPayPalCapture'))
+			$this->_doCapture($params['id_order']);
+		elseif (Tools::isSubmit('submitPayPalRefund'))
+			$this->_doTotalRefund($params['id_order']);
 
 		$adminTemplates = array();
 		if ($this->isPayPalAPIAvailable())
@@ -644,16 +634,23 @@ abstract class PayPalAbstract extends PaymentModule
 
 		if (count($adminTemplates) > 0)
 		{
+			$order = new Order((int)$params['id_order']);
+			
 			if (_PS_VERSION_ >= '1.5')
-				$order_state = OrderHistory::getLastOrderState((int)$params['id_order'])->id;
-			else // Backward compatibility
-			{
-				$order = new Order((int)$params['id_order']);
-				$order_state = $order->current_state->id;
-			}
+				$order_state = $order->current_state;
+			else
+				$order_state = OrderHistory::getLastOrderState($order->id);
 
-			$this->context->smarty->assign(array('authorization' => (int)Configuration::get('PAYPAL_OS_AUTHORIZATION'),
-			'base_url' => _PS_BASE_URL_.__PS_BASE_URI__, 'module_name' => $this->name, 'order_state' => $order_state, 'params' => $params));
+			$this->context->smarty->assign(
+				array(
+					'authorization' => (int)Configuration::get('PAYPAL_OS_AUTHORIZATION'),
+					'base_url' => _PS_BASE_URL_.__PS_BASE_URI__,
+					'module_name' => $this->name,
+					'order_state' => $order_state,
+					'params' => $params,
+					'ps_version' => _PS_VERSION_
+				)
+			);
 
 			foreach ($adminTemplates as $adminTemplate)
 			{
@@ -884,7 +881,7 @@ abstract class PayPalAbstract extends PaymentModule
 		FROM `'._DB_PREFIX_.'paypal_order`
 		WHERE `id_order` = '.(int)$id_order);
 
-		return $order && $order['payment_status'] == 'Pending' && $order['payment_method'] == HSS;
+		return $order && $order['payment_method'] != HSS && $order['payment_status'] == 'Pending_validation';
 	}
 
 	private function _needCapture($id_order)
@@ -897,7 +894,7 @@ abstract class PayPalAbstract extends PaymentModule
 		FROM `'._DB_PREFIX_.'paypal_order`
 		WHERE `id_order` = '.(int)$id_order.' AND `capture` = 1');
 
-		return $result && $result['payment_method'] == 'Pending_authorization' && $result['payment_status'] == 'Completed';
+		return $result && $result['payment_method'] != HSS && $result['payment_status'] == 'Pending_capture';
 	}
 
 	private function _preProcess()
@@ -1010,7 +1007,7 @@ abstract class PayPalAbstract extends PaymentModule
 			return false;
 
 		$products = $order->getProducts();
-		$currency = new Currency((int)$this->context->cart->id_currency);
+		$currency = new Currency((int)$order->id_currency);
 		if (!Validate::isLoadedObject($currency))
 			$this->_errors[] = $this->l('Not a valid currency');
 
@@ -1028,13 +1025,13 @@ abstract class PayPalAbstract extends PaymentModule
 
 		// check if total or partial
 		if (Tools::ps_round($order->total_paid_real, $decimals) == Tools::ps_round($amt, $decimals))
-			$response = $this->_makeRefund($paypal_order->id_transaction, $id_order);
+			$response = $this->_makeRefund($paypal_order['id_transaction'], $id_order);
 		else
-			$response = $this->_makeRefund($paypal_order->id_transaction, $id_order, (float)($amt));
+			$response = $this->_makeRefund($paypal_order['id_transaction'], $id_order, (float)($amt));
 
 		$message = $this->l('Refund operation result:').'<br>';
-		foreach ($response as $k => $value)
-			$message .= $k.': '.$value.'<br>';
+		foreach ($response as $key => $value)
+			$message .= $key.': '.$value.'<br>';
 
 		if (array_key_exists('ACK', $response) && $response['ACK'] == 'Success' && $response['REFUNDTRANSACTIONID'] != '')
 		{
@@ -1044,15 +1041,16 @@ abstract class PayPalAbstract extends PaymentModule
 
 			$history = new OrderHistory();
 			$history->id_order = (int)$id_order;
-			$history->changeIdOrderState(Configuration::get('PS_OS_REFUND'), (int)$id_order);
+			$history->changeIdOrderState((int)Configuration::get('PS_OS_REFUND'), (int)$id_order);
 			$history->addWithemail();
+			$history->save();
 		}
 		else
 			$message .= $this->l('Transaction error!');
 
 		$this->_addNewPrivateMessage((int)$id_order, $message);
 
-		return $response;
+		Tools::redirect($_SERVER['HTTP_REFERER']);
 	}
 
 	private function _doCapture($id_order)
@@ -1068,7 +1066,7 @@ abstract class PayPalAbstract extends PaymentModule
 
 		$paypal_lib	= new PaypalLib();
 		$response = $paypal_lib->makeCall($this->getAPIURL(), $this->getAPIScript(), 'DoCapture',
-			'&'.http_build_query(array('AMT' => (float)$order->total_paid, 'AUTHORIZATIONID' => $paypal_order->id_transaction,
+			'&'.http_build_query(array('AMT' => (float)$order->total_paid, 'AUTHORIZATIONID' => $paypal_order['id_transaction'],
 			'CURRENCYCODE' => $currency->iso_code, 'COMPLETETYPE' => 'Complete'), '', '&'));
 		$message = $this->l('Capture operation result:').'<br>';
 
@@ -1079,7 +1077,11 @@ abstract class PayPalAbstract extends PaymentModule
 		{
 			$order_history = new OrderHistory();
 			$order_history->id_order = (int)$id_order;
-			$order_history->changeIdOrderState(Configuration::get('PS_OS_PAYMENT'), (int)$id_order);
+			
+			if (_PS_VERSION_ < '1.5')
+				$order_history->changeIdOrderState(Configuration::get('PS_OS_WS_PAYMENT'), (int)$id_order);
+			else
+				$order_history->changeIdOrderState(Configuration::get('PS_OS_WS_PAYMENT'), $order);
 			$order_history->addWithemail();
 			$message .= $this->l('Order finished with PayPal!');
 		}
@@ -1087,14 +1089,14 @@ abstract class PayPalAbstract extends PaymentModule
 			$message .= $this->l('Transaction error!');
 
 		if (!Db::getInstance()->Execute('
-		UPDATE `'._DB_PREFIX_.'paypal_order`
-		SET `capture` = 0, `payment_status` = \''.pSQL($response['PAYMENTSTATUS']).'\', `id_transaction` = \''.pSQL($response['TRANSACTIONID']).'\'
-		WHERE `id_order` = '.(int)$id_order))
+			UPDATE `'._DB_PREFIX_.'paypal_order`
+			SET `capture` = 0, `payment_status` = \''.pSQL($response['PAYMENTSTATUS']).'\', `id_transaction` = \''.pSQL($response['TRANSACTIONID']).'\'
+			WHERE `id_order` = '.(int)$id_order))
 			die(Tools::displayError('Error when updating PayPal database'));
 
 		$this->_addNewPrivateMessage((int)$id_order, $message);
 
-		return $response;
+		Tools::redirect($_SERVER['HTTP_REFERER']);
 	}
 
 	private function _updatePaymentStatusOfOrder($id_order)

@@ -58,9 +58,6 @@
 	<input type="hidden" name="invoice" value="{$customer->id}_{$time}" />
 	<input type="hidden" name="shipping" value="{$shipping}" />
 	<input type="hidden" name="tax" value="{$cart_details.total_tax}" />
-	{if ($cart->gift == 1)}
-		<input type="hidden" name="handling" value="{$gift_price}" />
-	{/if}
 	<input type="hidden" name="subtotal" value="{$subtotal}" />
 
 	<input type="hidden" name="custom" value="{$custom|escape:'htmlall'}" />

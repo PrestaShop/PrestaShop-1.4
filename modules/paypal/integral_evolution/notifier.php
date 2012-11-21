@@ -67,6 +67,17 @@ class PayPalNotifier extends PayPal
 		$cart = new Cart((int)$custom['id_cart']);
 		$cart_details = $cart->getSummaryDetails(null, true);
 		$cart_hash = sha1(serialize($cart->nbProducts()));
+		
+		$this->context->cart = $cart;
+		
+		$address = new Address((int)$cart->id_address_invoice);
+		$this->context->country = new Country((int)$address->id_country);
+		$this->context->customer = new Customer((int)$cart->id_customer);
+		$this->context->language = new Language((int)$cart->id_lang);
+		$this->context->currency = new Currency((int)$cart->id_currency);
+		
+		if (isset($cart->id_shop))
+			$this->context->shop = new Shop($cart->id_shop);
 
 		$this->createLog($cart->getProducts(true));
 
@@ -80,17 +91,17 @@ class PayPalNotifier extends PayPal
 		{
 			if ($mc_gross != $total_price)
 			{
-				$payment = Configuration::get('PS_OS_ERROR');
+				$payment = (int)Configuration::get('PS_OS_ERROR');
 				$message = $this->l('Price payed on paypal is not the same that on PrestaShop.').'<br />';
 			}
 			elseif ($custom['hash'] != $cart_hash)
 			{
-				$payment = Configuration::get('PS_OS_ERROR');
+				$payment = (int)Configuration::get('PS_OS_ERROR');
 				$message = $this->l('Cart changed, please retry.').'<br />';
 			}
 			else
 			{
-				$payment = Configuration::get('PS_OS_PAYMENT');
+				$payment = (int)Configuration::get('PS_OS_WS_PAYMENT');
 				$message = $this->l('Payment accepted.').'<br />';
 			}
 
@@ -106,11 +117,13 @@ class PayPalNotifier extends PayPal
 			);
 
 			$this->validateOrder($cart->id, $payment, $total_price, $this->displayName, $message, $transaction, $cart->id_currency, false, $customer->secure_key);
-		}
-	}
 
-	public function save($id_cart)
-	{
+			$history = new OrderHistory();
+			$history->id_order = (int)$id_order;
+			$history->changeIdOrderState((int)$payment, (int)$id_order);
+			$history->addWithemail();
+			$history->add();
+		}
 	}
 
 	public function verify()

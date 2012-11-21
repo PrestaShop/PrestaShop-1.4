@@ -60,16 +60,20 @@ class PayPalOrder
 	{
 		$order = new Order((int)$id_order);
 		$total_paid = (float)$transaction['total_paid'];
-
-		if ($order->gift)
-			$total_paid += (float)Configuration::get('PS_GIFT_WRAPPING_PRICE');
+			
+		if (!isset($transaction['payment_status']) || !$transaction['payment_status'])
+			$transaction['payment_status'] = 'NULL';
 
 		Db::getInstance()->Execute('
 		INSERT INTO `'._DB_PREFIX_.'paypal_order`
-		(`id_order`, `id_transaction`, `id_invoice`, `currency`, `total_paid`, `shipping`, `payment_date`, `payment_method`, `capture`)
+		(`id_order`, `id_transaction`, `id_invoice`, `currency`, `total_paid`, `shipping`, `capture`, `payment_date`, `payment_method`, `payment_status`)
 		VALUES ('.(int)$id_order.', \''.pSQL($transaction['id_transaction']).'\', \''.pSQL($transaction['id_invoice']).'\',
-			\''.pSQL($transaction['currency']).'\', \''.$total_paid.'\', \''.(float)$transaction['shipping'].'\',
-			\''.pSQL($transaction['payment_date']).'\', '.(int)Configuration::get('PAYPAL_PAYMENT_METHOD').',
-			'.(int)Configuration::get('PAYPAL_CAPTURE').')');
+			\''.pSQL($transaction['currency']).'\',
+			\''.$total_paid.'\',
+			\''.(float)$transaction['shipping'].'\',
+			\''.(int)Configuration::get('PAYPAL_CAPTURE').'\',
+			\''.pSQL($transaction['payment_date']).'\',
+			\''.(int)Configuration::get('PAYPAL_PAYMENT_METHOD').'\',
+			\''.pSQL($transaction['payment_status']).'\')');
 	}
 }
