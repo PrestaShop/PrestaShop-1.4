@@ -1,0 +1,78 @@
+[submodule "modules/alliedwallet/backward_compatibility"]
+	path = modules/alliedwallet/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/authorizeaim/backward_compatibility"]
+	path = modules/authorizeaim/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/avalaratax/backward_compatibility"]
+	path = modules/avalaratax/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/backwardcompatibility/backward_compatibility"]
+	path = modules/backwardcompatibility/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/canadapost/backward_compatibility"]
+	path = modules/canadapost/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/cloudcache/backward_compatibility"]
+	path = modules/cloudcache/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/dibs/backward_compatibility"]
+	path = modules/dibs/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/fedexcarrier/backward_compatibility"]
+	path = modules/fedexcarrier/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/gadsense/backward_compatibility"]
+	path = modules/gadsense/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/ganalytics/backward_compatibility"]
+	path = modules/ganalytics/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/gcheckout/backward_compatibility"]
+	path = modules/gcheckout/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/hipay/backward_compatibility"]
+	path = modules/hipay/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/jirafe/backward_compatibility"]
+	path = modules/jirafe/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/mailjet/backward_compatibility"]
+	path = modules/mailjet/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/merchantware/backward_compatibility"]
+	path = modules/merchantware/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/mondialrelay/backward_compatibility"]
+	path = modules/mondialrelay/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/ogone/backward_compatibility"]
+	path = modules/ogone/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/paypal/backward_compatibility"]
+	path = modules/paypal/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/paysafecard/backward_compatibility"]
+	path = modules/paysafecard/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/shipwire/backward_compatibility"]
+	path = modules/shipwire/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/socolissimo/backward_compatibility"]
+	path = modules/socolissimo/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/themeinstallator/backward_compatibility"]
+	path = modules/themeinstallator/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/trustedshops/backward_compatibility"]
+	path = modules/trustedshops/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/upscarrier/backward_compatibility"]
+	path = modules/upscarrier/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/uspscarrier/backward_compatibility"]
+	path = modules/uspscarrier/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/wexpay/backward_compatibility"]
+	path = modules/wexpay/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
