@@ -1,0 +1,2 @@
+img/logos/*.gif
+!img/logos/default_*.gif
