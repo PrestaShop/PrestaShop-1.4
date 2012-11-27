@@ -35,6 +35,8 @@ abstract class PayPalAbstract extends PaymentModule
 	public $iso_code;
 	public $context;
 	public $paypal_logos;
+	
+	public $module_key = '646dcec2b7ca20c4e9a5aebbbad98d7e';
 
 	const BACKWARD_REQUIREMENT = '0.2';
 	const DEFAULT_COUNTRY_ISO = 'GB';
@@ -72,7 +74,7 @@ abstract class PayPalAbstract extends PaymentModule
 		else
 			$mobile_enabled = (int)Configuration::get('PS_ALLOW_MOBILE_DEVICE');
 
-		if ($this->active)
+		if (self::isInstalled($this->name))
 			$this->loadDefaults();
 
 		if ($mobile_enabled && $this->active && self::isInstalled($this->name))
@@ -100,18 +102,18 @@ abstract class PayPalAbstract extends PaymentModule
 			$this->compatibilityCheck();
 			$this->warningsCheck();
 		}
-		elseif (((int)Configuration::get('PS_ORDER_PROCESS_TYPE') == 1) && ((bool)Tools::getValue('isPaymentStep') == true))
+		elseif ((((int)Configuration::get('PS_ORDER_PROCESS_TYPE') == 1) && ((bool)Tools::getValue('isPaymentStep') == true)) || (isset($this->context->cookie->express_checkout)))
 		{
 			$shop_url = PayPal::getShopDomainSsl(true, true);
 			if (_PS_VERSION_ < '1.5')
 			{
 				$link = $shop_url._MODULE_DIR_.$this->name.'/express_checkout/submit.php';
-				$this->context->smarty->assign('paypal_one_page_checkout', $link.'?'.http_build_query(array('get_confirmation' => true), '', '&'));
+				$this->context->smarty->assign('paypal_authorization', $link.'?'.http_build_query(array('get_confirmation' => true), '', '&'));
 			}
 			else
 			{
 				$values = array('fc' => 'module', 'module' => 'paypal', 'controller' => 'confirm', 'get_confirmation' => true);
-				$this->context->smarty->assign('paypal_one_page_checkout', $shop_url.__PS_BASE_URI__.'?'.http_build_query($values));
+				$this->context->smarty->assign('paypal_authorization', $shop_url.__PS_BASE_URI__.'?'.http_build_query($values));
 			}
 		}
 	}
@@ -374,11 +376,19 @@ abstract class PayPalAbstract extends PaymentModule
 		return $this->fetchTemplate('/views/templates/back/', 'back_office');
 	}
 
-	/*
-	** Added to be used properly with OPC
-	*/
 	public function hookHeader()
 	{
+		if (method_exists($this->context, 'getMobileDevice') && $this->context->getMobileDevice())
+		{
+			$id_hook = (int)Configuration::get('PS_MOBILE_HOOK_HEADER_ID');
+			
+			if ($id_hook > 0)
+			{
+				$module = Hook::getModuleFromHook($id_hook, $this->id);
+				if (!$module)
+					$this->registerHook('displayMobileHeader');
+			}
+		}
 		$this->context->smarty->assign(array('base_uri' => __PS_BASE_URI__, 'id_cart'  => (int)$this->context->cart->id));
 		$this->context->controller->addCSS(_MODULE_DIR_.$this->name.'/css/paypal.css');
 		return '<script type="text/javascript">'.$this->fetchTemplate('/js/', 'front_office', 'js').'</script>';
@@ -682,7 +692,7 @@ abstract class PayPalAbstract extends PaymentModule
 		$products = $order->getProducts();
 		$cancel_quantity = Tools::getValue('cancelQuantity');
 		$message = $this->l('Cancel products result:').'<br>';
-
+		
 		include_once(_PS_MODULE_DIR_.$this->name.'/paypal_tools.php');
 		PayPalTools::formatMessage($this->_makeRefund($paypal_order->id_transaction, (int)$order->id,
 		(float)($products[(int)$order_detail->id]['product_price_wt'] * (int)$cancel_quantity[(int)$order_detail->id])), $message);
