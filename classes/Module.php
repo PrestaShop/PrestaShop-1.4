@@ -776,7 +776,7 @@ abstract class ModuleCore
 		$hookArgs = array('cookie' => $cookie, 'cart' => $cart);
 		$output = '';
 
-		$result = self::getPaymentModules();
+		$result = Module::getPaymentModules();
 
 		if ($result)
 			foreach ($result as $module)
