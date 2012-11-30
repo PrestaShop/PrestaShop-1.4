@@ -61,7 +61,7 @@ class	CookieCore
 	public function __construct($name, $path = '', $expire = null)
 	{
 		$this->_content = array();
-		$this->_expire = isset($expire) ? (int)($expire) : (time() + 1728000);
+		$this->_expire = is_null($expire) ? time() + 1728000 : (int)$expire;
 		$this->_name = md5($name);
 		$this->_path = trim(__PS_BASE_URI__.$path, '/\\').'/';
 		if ($this->_path{0} != '/') $this->_path = '/'.$this->_path;
