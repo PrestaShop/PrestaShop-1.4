@@ -259,7 +259,7 @@ class ReferrerCore extends ObjectModel
 	
 	public function delete()
 	{
-		return Db::getInstance()->Execute('DELETE FROM `referrer_cache` WHERE id_referrer = '.(int)$this->id) && parent::delete();
+		return Db::getInstance()->Execute('DELETE FROM '._DB_PREFIX_.'referrer_cache WHERE id_referrer = '.(int)$this->id) && parent::delete();
 	}
 	
 	public static function getAjaxProduct($id_referrer, $id_product, $employee = null)
