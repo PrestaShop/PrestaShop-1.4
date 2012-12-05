@@ -33,7 +33,7 @@ class Mobile_Theme extends Module
 	{
 		$this->name = 'mobile_theme';
 		$this->tab = (version_compare(_PS_VERSION_, 1.4) >= 0 ? 'administration' : 'Theme');
-		$this->version = '0.3.11';
+		$this->version = '0.4.0';
 
 		parent::__construct();
 
@@ -48,6 +48,12 @@ class Mobile_Theme extends Module
 
 	public function install()
 	{
+		if (_PS_VERSION_ >= '1.5')
+		{
+			$this->_errors[] = $this->l('This module cannot be installed on this version of PrestaShop.');
+			return false;
+		}
+		
 		return Configuration::updateValue('PS_MOBILE_THEME_HEADINGS', 'b') && Configuration::updateValue('PS_MOBILE_THEME_FILTERING_BAR', 'a')
 		&& Configuration::updateValue('PS_MOBILE_THEME_PROCESS_BAR', 'a') && Configuration::updateValue('PS_MOBILE_THEME_CONF_MSG', 'e')
 		&& Configuration::updateValue('PS_MOBILE_THEME_ERROR_MSG', 'a') && Configuration::updateValue('PS_MOBILE_THEME_LIST_HEADERS', 'b')
