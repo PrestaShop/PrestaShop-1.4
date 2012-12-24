@@ -1189,8 +1189,10 @@ abstract class AdminTabCore
 			($this->_tmpTableFilter ? ') tmpTable WHERE 1'.$this->_tmpTableFilter : '').'
 			LIMIT '.(int)($start).','.(int)($limit);
 
-		$this->_list = Db::getInstance()->ExecuteS($sql);
-		$this->_listTotal = Db::getInstance()->getValue('SELECT FOUND_ROWS() AS `'._DB_PREFIX_.$this->table.'`');
+		if (!($this->_list = Db::getInstance()->ExecuteS($sql)))
+			$this->_list_error = Db::getInstance()->getMsgError();
+		else
+			$this->_listTotal = Db::getInstance()->getValue('SELECT FOUND_ROWS() AS `'._DB_PREFIX_.$this->table.'`');
 
 	}
 
@@ -1423,7 +1425,7 @@ abstract class AdminTabCore
 		/* Append when we get a syntax error in SQL query */
 		if ($this->_list === false)
 		{
-			$this->displayWarning($this->l('Bad SQL query'));
+			$this->displayWarning($this->l('Bad SQL query').'<br />'.htmlspecialchars($this->_list_error));
 			return false;
 		}
 
