@@ -47,7 +47,7 @@ if ($cookie->isLogged())
 	$smarty->assign('alerts', MailAlerts::getProductsAlerts((int)($cookie->id_customer), (int)($cookie->id_lang)));
 }
 else
-	$errors[] = Tools::displayError('You must be logged in to manage your alerts.'); 
+	Tools::redirect('authentication.php?back=modules/mailalerts/myalerts.php');
 
 $smarty->assign(array(
 	'id_customer' => (int)($cookie->id_customer),
