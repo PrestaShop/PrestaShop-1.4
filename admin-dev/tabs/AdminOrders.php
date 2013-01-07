@@ -394,7 +394,7 @@ class AdminOrders extends AdminTab
 			echo '
 			<tr>
 				<td align="center">'.(isset($image['id_image']) ? cacheImage(_PS_IMG_DIR_.'p/'.$imageObj->getExistingImgPath().'.jpg',
-				'product_mini_'.(int)($product['product_id']).(isset($product['product_attribute_id']) && $product['product_attribute_id'] > 0)? '_'.(int)($product['product_attribute_id']) : '').'.jpg', 45, 'jpg') : '--').'</td>
+				'product_mini_'.(int)($product['product_id']).((isset($product['product_attribute_id']) && $product['product_attribute_id'] > 0)? '_'.(int)($product['product_attribute_id']) : '').'.jpg', 45, 'jpg') : '--').'</td>
 				<td><a href="index.php?tab=AdminCatalog&id_product='.$product['product_id'].'&updateproduct&token='.$tokenCatalog.'">
 					<span class="productName">'.$product['product_name'].' - '.$this->l('customized').'</span><br />
 					'.($product['product_reference'] ? $this->l('Ref:').' '.$product['product_reference'].'<br />' : '')
