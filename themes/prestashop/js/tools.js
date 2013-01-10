@@ -82,6 +82,7 @@ function formatCurrency(price, currencyFormat, currencySign, currencyBlank)
 {
 	// if you modified this function, don't forget to modify the PHP function displayPrice (in the Tools.php class)
 	blank = '';
+	price = Number(price);
 	price = parseFloat(price.toFixed(6));
 	price = ps_round(price, priceDisplayPrecision);
 	if (currencyBlank > 0)
@@ -100,6 +101,7 @@ function formatCurrency(price, currencyFormat, currencySign, currencyBlank)
 //return a formatted number
 function formatNumber(value, numberOfDecimal, thousenSeparator, virgule)
 {
+	numberOfDecimal = Number(numberOfDecimal);
 	value = value.toFixed(numberOfDecimal);
 	var val_string = value+'';
 	var tmp = val_string.split('.');
