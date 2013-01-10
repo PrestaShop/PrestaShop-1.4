@@ -2,7 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{mailjet}prestashop>ajax_64b88c69849c8b362e7f97c6eaab574d'] = 'Mailjet correo electrónico de prueba';
 $_MODULE['<{mailjet}prestashop>ajax_8b1a9953c4611296a827abf8c47804d7'] = 'Hola';
 $_MODULE['<{mailjet}prestashop>ajax_c38b28d6adf75b2b2936de1f2168b6e6'] = 'Este e-mail que confirma que Mailjet se ha instalado correctamente en su tienda.';
 $_MODULE['<{mailjet}prestashop>ajax_cfc9dca01a0503813a5f9585ba6780d1'] = 'El correo electrónico no fue enviado con éxito';
@@ -12,19 +11,7 @@ $_MODULE['<{mailjet}prestashop>mailjet_64b88c69849c8b362e7f97c6eaab574d'] = 'Mai
 $_MODULE['<{mailjet}prestashop>mailjet_8b1a9953c4611296a827abf8c47804d7'] = 'Hola';
 $_MODULE['<{mailjet}prestashop>mailjet_c38b28d6adf75b2b2936de1f2168b6e6'] = 'Este e-mail que confirma que Mailjet se ha instalado correctamente en su tienda.';
 $_MODULE['<{mailjet}prestashop>mailjet_cfc9dca01a0503813a5f9585ba6780d1'] = 'El correo electrónico no fue enviado con éxito';
-$_MODULE['<{mailjet}prestashop>mailjet_8acabcc788c316f92b7850c76265b49b'] = 'Debe habilitar la extensión cURL y la opción \"allow_url_fopen\" en su servidor si quiere usar este módulo. ';
-$_MODULE['<{mailjet}prestashop>mailjet_d591cbc447d01e5a6165096ebfdf804e'] = 'Debe habilitar la extensión cURL en su servidor si quiere usar este módulo.';
-$_MODULE['<{mailjet}prestashop>mailjet_1b18bd5d9d85f4f667614345ee20e3b2'] = 'Debe habilitar la opción \"allow_url_fopen\" en su servidor si quiere usar este módulo.';
 $_MODULE['<{mailjet}prestashop>mailjet_c888438d14855d7d96a2724ee9c306bd'] = 'Ajustes actualizados';
-$_MODULE['<{mailjet}prestashop>mailjet_b9284bff13acffdd879ef4ac7fca5234'] = 'Configuración no actualizada';
-$_MODULE['<{mailjet}prestashop>mailjet_936ccdb97115e9f35a11d35e3d5b5cad'] = 'Pulse aquí';
-$_MODULE['<{mailjet}prestashop>mailjet_4966e00ec3e63d9123a1a9ac7e9a8e8b'] = 'Nombre :';
-$_MODULE['<{mailjet}prestashop>mailjet_cf3dc3cf61cbb6fd54d23305f594a772'] = 'apellido';
-$_MODULE['<{mailjet}prestashop>mailjet_7a0c933a5a7e228e0ceafe56c18dd1d6'] = 'email';
-$_MODULE['<{mailjet}prestashop>mailjet_254f642527b45bc260048e30704edb39'] = 'Configuración';
-$_MODULE['<{mailjet}prestashop>mailjet_9aa698f602b1e5694855cee73a683488'] = 'Contacto';
-$_MODULE['<{mailjet}prestashop>mailjet_452a7601dbc6f2c38aa89e68bda8b603'] = 'Estadisticas';
-$_MODULE['<{mailjet}prestashop>mailjet_d0834fcec6337785ee749c8f5464f6f6'] = 'Preferencias';
 $_MODULE['<{mailjet}prestashop>mailjet_f4f70727dc34561dfde1a3c529b6205c'] = 'Ajustes';
 $_MODULE['<{mailjet}prestashop>mailjet_6ad7efc596f5720291e748ff2185733f'] = 'Mailjet API Key:';
 $_MODULE['<{mailjet}prestashop>mailjet_a02496bddaea8e6616bf285fc37973be'] = 'Mailjet llave secreta';
