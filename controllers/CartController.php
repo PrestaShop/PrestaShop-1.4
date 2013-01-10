@@ -28,8 +28,14 @@ class CartControllerCore extends FrontController
 {
 	public $php_self = 'cart.php';
 
-	// This is not a public page, so the canonical redirection is disabled
-	public function canonicalRedirection(){}
+	public function canonicalRedirection()
+	{
+		if (Configuration::get('PS_CANONICAL_REDIRECT') && strtoupper($_SERVER['REQUEST_METHOD']) == 'GET' && !Tools::getValue('ajax'))
+		{
+			$this->php_self = ((Configuration::get('PS_ORDER_PROCESS_TYPE') == 1) ? 'order-opc.php' : 'order.php');
+			parent::canonicalRedirection();
+		}	
+	}
 
 	public function run()
 	{
