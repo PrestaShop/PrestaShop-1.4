@@ -765,7 +765,7 @@ class CartCore extends ObjectModel
 		{
 			$productTotalQuantity = (int)(Db::getInstance()->getValue('SELECT `quantity`
 				FROM `'._DB_PREFIX_.'cart_product`
-				WHERE `id_product` = '.(int)($id_product).' AND `id_product_attribute` = '.(int)($id_product_attribute)));
+				WHERE `id_product` = '.(int)($id_product).' AND `id_product_attribute` = '.(int)($id_product_attribute).' AND id_cart = ' .(int)$this->id));
 			$customizationQuantity = (int)(Db::getInstance()->getValue('SELECT `quantity`
 				FROM `'._DB_PREFIX_.'customization`
 				WHERE `id_cart` = '.(int)($this->id).'
