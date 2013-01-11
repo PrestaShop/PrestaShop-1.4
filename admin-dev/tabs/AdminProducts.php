@@ -2121,7 +2121,7 @@ class AdminProducts extends AdminTab
 		$has_attribute = false;
 		$qty_state = 'readonly';
 		$qty = Attribute::getAttributeQty($this->getFieldValue($obj, 'id_product'));
-		if ($qty === false) {
+		if ((bool)$qty === false) {
 			if (Validate::isLoadedObject($obj))
 				$qty = $this->getFieldValue($obj, 'quantity');
 			else
