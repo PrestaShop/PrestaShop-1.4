@@ -67,4 +67,9 @@ li.address_update,
 	background: transparent url('../img/bullet_myaccount.gif') no-repeat 0 0.4em;
 	margin-left: 1.4em
 }
+ul.address .address_alias {
+	font-weight: normal;
+	text-transform: none;
+	font-size: 0.8em;
+}
 #center_column .address_add { padding: 1em 0 }

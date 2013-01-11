@@ -329,7 +329,7 @@
 
 {if (($carrier->id AND !isset($virtualCart)) OR $delivery->id OR $invoice->id) AND !$opc}
 <div class="order_delivery">
-	{if !isset($formattedAddresses)}
+	{if !isset($formattedAddresses) || (count($formattedAddresses.invoice) == 0 && count($formattedAddresses.delivery) == 0) || (count($formattedAddresses.invoice.formated) == 0 && count($formattedAddresses.delivery.formated) == 0)}
 		{if $delivery->id}
 		<ul id="delivery_address" class="address item">
 			<li class="address_title">{l s='Delivery address'}</li>
@@ -353,15 +353,17 @@
 		</ul>
 		{/if}
 	{else}
-		{foreach from=$formattedAddresses item=address name=myLoop}
-			<ul class="address {if $smarty.foreach.myLoop.last}last_item{elseif $smarty.foreach.myLoop.first}first_item{/if} {if $smarty.foreach.myLoop.index % 2}alternate_item{else}item{/if}">
-				<li class="address_title">{$address.object.alias}</li>
-				{foreach from=$address.ordered name=adr_loop item=pattern}
+		{foreach from=$formattedAddresses key=k item=address}
+			<ul class="address {if $address@last}last_item{elseif $address@first}first_item{/if} {if $address@index % 2}alternate_item{else}item{/if}">
+				<li class="address_title">{if $k eq 'invoice'}{l s='Invoice address'}{elseif $k eq 'delivery'}{l s='Delivery address'}{/if}&nbsp;<span class="address_alias">({$address.object.alias})</span></li>
+				{foreach $address.ordered as $pattern}
 					{assign var=addressKey value=" "|explode:$pattern}
 					<li>
-					{foreach from=$addressKey item=key name="word_loop"}
+					{foreach $addressKey as $key}
 						<span class="{if isset($addresses_style[$key])}{$addresses_style[$key]}{/if}">
-							{$address.formated[$key]|escape:'htmlall':'UTF-8'}
+							{if isset($address.formated[$key])}
+								{$address.formated[$key]|escape:'htmlall':'UTF-8'}
+							{/if}
 						</span>
 					{/foreach}
 					</li>
