@@ -355,7 +355,7 @@
 	{else}
 		{foreach from=$formattedAddresses key=k item=address}
 			<ul class="address {if $address@last}last_item{elseif $address@first}first_item{/if} {if $address@index % 2}alternate_item{else}item{/if}">
-				<li class="address_title">{if $k eq 'invoice'}{l s='Invoice address'}{elseif $k eq 'delivery'}{l s='Delivery address'}{/if}&nbsp;<span class="address_alias">({$address.object.alias})</span></li>
+				<li class="address_title">{if $k eq 'invoice'}{l s='Invoice address'}{elseif $k eq 'delivery'}{l s='Delivery address'}{/if}</li>
 				{foreach $address.ordered as $pattern}
 					{assign var=addressKey value=" "|explode:$pattern}
 					<li>
