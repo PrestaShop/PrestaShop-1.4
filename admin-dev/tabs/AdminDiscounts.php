@@ -285,8 +285,9 @@ class AdminDiscounts extends AdminTab
 		$index = array();
 		$indexedCategories =  isset($_POST['categoryBox']) ? $_POST['categoryBox'] : ($obj->id ? Discount::getCategories($obj->id) : array());
 		$categories = Category::getCategories((int)($cookie->id_lang), false);
+
 		foreach ($indexedCategories AS $k => $row)
-			$index[] = $row['id_category'];
+			$index[] = isset($row['id_category']) ? (int)$row['id_category'] : (int)$row;
 		$this->recurseCategoryForInclude((int)(Tools::getValue($this->identifier)), $index, $categories, $categories[0][1], 1, $obj->id);
 		echo '
 							</table>
