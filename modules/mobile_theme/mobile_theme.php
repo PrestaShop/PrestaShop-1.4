@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2013 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -609,11 +609,21 @@ class Mobile_Theme extends Module
 
 		global $smarty, $link;
 
-		$result = Db::getInstance()->ExecuteS('
-		SELECT c.`id_category`, cl.`description` `desc`, cl.`name`, cl.`link_rewrite`
-		FROM `'._DB_PREFIX_.'category` c
-		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category`)
-		WHERE c.`id_parent` = 1 AND c.`active` = 1 AND cl.`id_lang` = '.(int)$params['cookie']->id_lang);
+		$id_customer = (int)($params['cookie']->id_customer);
+		$id_lang = (int)$params['cookie']->id_lang;
+		$groups = $id_customer ? implode(', ', Customer::getGroupsStatic($id_customer)) : (int)_PS_DEFAULT_CUSTOMER_GROUP_;
+
+		$maxdepth = Configuration::get('BLOCK_CATEG_MAX_DEPTH');
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+			SELECT c.`id_parent`, c.`id_category`, cl.`name`, cl.`description` as `desc`, cl.`link_rewrite`
+			FROM `'._DB_PREFIX_.'category` c
+			LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.(int)$id_lang.')
+			LEFT JOIN `'._DB_PREFIX_.'category_group` cg ON (cg.`id_category` = c.`id_category`)
+			WHERE (c.`active` = 1 AND c.`id_parent` = 1)
+			'.((int)($maxdepth) != 0 ? ' AND `level_depth` <= '.(int)($maxdepth) : '').'
+			AND cg.`id_group` IN ('.pSQL($groups).')
+			GROUP BY id_category
+			ORDER BY `level_depth` ASC, '.(Configuration::get('BLOCK_CATEG_SORT') ? 'cl.`name`' : 'c.`position`').' '.(Configuration::get('BLOCK_CATEG_SORT_WAY') ? 'DESC' : 'ASC'));
 
 		if ($result)
 		{

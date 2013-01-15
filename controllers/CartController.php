@@ -30,7 +30,8 @@ class CartControllerCore extends FrontController
 
 	public function canonicalRedirection()
 	{
-		if (Configuration::get('PS_CANONICAL_REDIRECT') && strtoupper($_SERVER['REQUEST_METHOD']) == 'GET' && !Tools::getValue('ajax'))
+		if (Configuration::get('PS_CANONICAL_REDIRECT') && strtoupper($_SERVER['REQUEST_METHOD']) == 'GET' 
+		&& !Tools::getValue('ajax') && !Tools::getIsset('ps_mobile_site') && !Tools::getIsset('add') && !Tools::getIsset('update') && !Tools::getIsset('delete'))
 		{
 			$this->php_self = ((Configuration::get('PS_ORDER_PROCESS_TYPE') == 1) ? 'order-opc.php' : 'order.php');
 			parent::canonicalRedirection();
