@@ -615,7 +615,7 @@ class Mobile_Theme extends Module
 
 		$maxdepth = Configuration::get('BLOCK_CATEG_MAX_DEPTH');
 		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-			SELECT c.id_parent, c.id_category, cl.name, cl.description, cl.link_rewrite
+			SELECT c.`id_parent`, c.`id_category`, cl.`name`, cl.`description` as `desc`, cl.`link_rewrite`
 			FROM `'._DB_PREFIX_.'category` c
 			LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.(int)$id_lang.')
 			LEFT JOIN `'._DB_PREFIX_.'category_group` cg ON (cg.`id_category` = c.`id_category`)
