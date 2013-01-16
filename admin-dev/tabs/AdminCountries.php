@@ -117,7 +117,7 @@ class AdminCountries extends AdminTab
 			$html .= '<li>
 				<a href="javascript:void(0);" onClick="displayAvailableFields(\''.$className.'\')">'.$className.'</a>';
 			foreach(AddressFormat::getValidateFields($className) as $name)
-				$fields[] = '<a style="color:#4B8;" href="javascript:void(0);" class="addPattern" id="'.$className.':'.$name.'">
+				$fields[] = '<a style="color:#4B8;" href="javascript:void(0);" class="addPattern" id="'.($className == 'Address' ? $name : $className.':'.$name).'">
 					'.$name.'</a>';
 			$html .= '
 				<div class="availableFieldsList" id="availableListFieldsFor_'.$className.'" style="width:300px;">
