@@ -161,6 +161,9 @@ class TaxRulesGroupCore extends ObjectModel
 
 	public static function getTaxesRate($id_tax_rules_group, $id_country, $id_state, $id_county)
 	{
+		if (!Configuration::get('PS_TAX'))
+			return 0;
+
 		$state = new State((int)$id_state);
 
 		/* Case 1: We need to multiply the taxes (example: Canadian law) */
