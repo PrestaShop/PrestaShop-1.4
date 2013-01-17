@@ -24,6 +24,21 @@
 */
 
 $(document).ready(function() {
+	initTableDnD();
+});
+
+function objToString(obj) {
+    var str = '';
+    for (var p in obj) {
+        if (obj.hasOwnProperty(p)) {
+            str += p + '=' + obj[p] + '&';
+        }
+    }
+    return str;
+}
+
+function initTableDnD(table)
+{
 	$('table.tableDnD').tableDnD({
 	
 		onDragStart: function(table, row) {
@@ -83,12 +98,11 @@ $(document).ready(function() {
 						token: token
 					};
 				}
-
 				$.ajax({
 					type: 'POST',
 					async: false,
-					url: 'ajax.php?' + $.tableDnD.serialize(),
-					data: params,
+					url: 'ajax.php?' ,
+					data: $.tableDnD.serialize() + '&' + objToString(params) ,
 					success: function(data) {
 					if (come_from == 'AdminModulesPositions') {
 							tableDrag.find('tr').removeClass('alt_row');
@@ -164,4 +178,4 @@ $(document).ready(function() {
 			}
 		}
 	});
-})
+}
