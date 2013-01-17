@@ -121,3 +121,6 @@ css: * { font-size: 0.959em !important; padding: 0; margin: 0; }
 	display: block;
 	margin: 0px auto;
 }
+#order #HOOK_PAYMENT li a.ui-link-inherit {
+	padding-left: 215px!important;
+}
