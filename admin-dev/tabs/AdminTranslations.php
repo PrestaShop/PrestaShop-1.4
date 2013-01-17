@@ -977,7 +977,7 @@ class AdminTranslations extends AdminTab
 				$newLang = array();
 				$fd = fopen($tpl, 'r');
 				$filesize = filesize($tpl);
-				if((int)$filesize > 0)
+				if((float)$filesize > 0)
 					$content = fread($fd, filesize($tpl));
 				else
 					continue;
@@ -1082,7 +1082,11 @@ class AdminTranslations extends AdminTab
 			{
 				$tab = basename(substr($tab, 0, -4));
 				$fd = fopen($tpl, 'r');
-				$content = fread($fd, filesize($tpl));
+				$filesize = filesize($tpl);
+				if((float)$filesize > 0)
+					$content = fread($fd, $filesize);
+				else
+					continue;
 				fclose($fd);
 				$regex = '/this->l\(\''._PS_TRANS_PATTERN_.'\'[\)|\,]/U';
 				preg_match_all($regex, $content, $matches);
@@ -1094,7 +1098,11 @@ class AdminTranslations extends AdminTab
 		{
 			$tab = PS_ADMIN_DIR.'/'.$tab.'.php';
 			$fd = fopen($tab, 'r');
-			$content = fread($fd, filesize($tab));
+			$filesize = filesize($tab);
+			if((float)$filesize > 0)			
+				$content = fread($fd, $filesize);
+			else
+				continue;
 			fclose($fd);
 			$regex = '/translate\(\''._PS_TRANS_PATTERN_.'\'\)/U';
 			preg_match_all($regex, $content, $matches);
@@ -1175,9 +1183,10 @@ class AdminTranslations extends AdminTab
 			foreach (scandir($dir) AS $file)
 				if (preg_match('/\.php$/', $file) AND file_exists($fn = $dir.$file) AND $file != 'index.php')
 				{
-					if (!filesize($fn))
+					$filesize = filesize($fn);
+					if (!$filesize)
 						continue;
-					preg_match_all('/Tools::displayError\(\''._PS_TRANS_PATTERN_.'\'(, ?(true|false))?\)/U', fread(fopen($fn, 'r'), filesize($fn)), $matches);
+					preg_match_all('/Tools::displayError\(\''._PS_TRANS_PATTERN_.'\'(, ?(true|false))?\)/U', fread(fopen($fn, 'r'), $filesize), $matches);
 					foreach($matches[1] AS $key)
 						$stringToTranslate[$key] = (key_exists(md5($key), $_ERRORS)) ? html_entity_decode($_ERRORS[md5($key)], ENT_COMPAT, 'UTF-8') : '';
 				}
