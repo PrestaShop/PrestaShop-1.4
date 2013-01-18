@@ -120,7 +120,8 @@ function updateAddressSelection()
 	
 	$.ajax({
            type: 'POST',
-           url: orderOpcUrl,
+		   headers: { "cache-control": "no-cache" },           
+           url: orderOpcUrl + '?rand=' + new Date().getTime(),
            async: true,
            cache: false,
            dataType : "json",
@@ -164,7 +165,8 @@ function getCarrierListAndUpdate()
 	$('#opc_delivery_methods-overlay').fadeIn('slow');
 	$.ajax({
         type: 'POST',
-        url: orderOpcUrl,
+		headers: { "cache-control": "no-cache" },        
+        url: orderOpcUrl + '?rand=' + new Date().getTime(),
         async: true,
         cache: false,
         dataType : "json",
@@ -212,7 +214,8 @@ function updateCarrierSelectionAndGift()
 	$('#opc_delivery_methods-overlay').fadeIn('slow');
 	$.ajax({
        type: 'POST',
-       url: orderOpcUrl,
+	   headers: { "cache-control": "no-cache" }       
+       url: orderOpcUrl + '?rand=' + new Date().getTime(),
        async: false,
        cache: false,
        dataType : "json",
@@ -256,7 +259,8 @@ function confirmFreeOrder()
 	$('#opc_payment_methods-overlay').fadeIn('slow');
 	$.ajax({
 		type: 'POST',
-		url: orderOpcUrl,
+		headers: { "cache-control": "no-cache" },		
+		url: orderOpcUrl + '?rand=' + new Date().getTime(),
 		async: true,
 		cache: false,
 		dataType : "html",
@@ -305,7 +309,8 @@ function saveAddress(type)
 	
 	$.ajax({
        type: 'POST',
-       url: addressUrl,
+	   headers: { "cache-control": "no-cache" },       
+       url: addressUrl + '?rand=' + new Date().getTime(),
        async: false,
        cache: false,
        dataType : "json",
@@ -359,7 +364,8 @@ function updateNewAccountToAddressBlock()
 	$('#opc_payment_methods-overlay').fadeIn('slow');
 	$.ajax({
 		type: 'POST',
-		url: orderOpcUrl,
+		headers: { "cache-control": "no-cache" },		
+		url: orderOpcUrl + '?rand=' + new Date().getTime(),
 		async: true,
 		cache: false,
 		dataType : "json",
@@ -468,7 +474,8 @@ $(function() {
 		$('#SubmitLogin').click(function() {
 			$.ajax({
 				type: 'POST',
-				url: authenticationUrl,
+				headers: { "cache-control": "no-cache" },
+				url: authenticationUrl + '?rand=' + new Date().getTime(),
 				async: false,
 				cache: false,
 				dataType : "json",
@@ -559,7 +566,8 @@ $(function() {
 			
 			$.ajax({
 				type: 'POST',
-				url: callingFile,
+				headers: { "cache-control": "no-cache" },				
+				url: callingFile + '?rand=' + new Date().getTime(),
 				async: false,
 				cache: false,
 				dataType : "json",
@@ -644,7 +652,8 @@ $(function() {
 		$('#opc_delivery_methods-overlay').fadeIn('slow');
 		$.ajax({
            type: 'POST',
-           url: orderOpcUrl,
+		   headers: { "cache-control": "no-cache" },           
+           url: orderOpcUrl + '?rand=' + new Date().getTime(),
            async: false,
            cache: false,
            dataType : "json",
@@ -704,7 +713,8 @@ $(function() {
 		$('#opc_payment_methods-overlay').fadeIn('slow');
 		$.ajax({
            type: 'POST',
-           url: orderOpcUrl,
+		   headers: { "cache-control": "no-cache" },           
+           url: orderOpcUrl + '?rand=' + new Date().getTime(),
            async: true,
            cache: false,
            dataType : "json",

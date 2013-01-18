@@ -64,6 +64,7 @@ function CMSBlocksDnD(secure_key)
 				var tableDrag = $('#' + table.id);
 				$.ajax({
 					type: 'POST',
+		   			headers: { "cache-control": "no-cache" },  					
 					async: false,
 					url: '../modules/blockcms/ajax_blockcms.php?' + $.tableDnD.serialize(),
 					data: 'action=dnd&secure_key='+secure_key,
@@ -109,6 +110,7 @@ function CMSBlocksDnD(secure_key)
 				var tableDrag = $('#' + table.id);
 				$.ajax({
 					type: 'POST',
+		   			headers: { "cache-control": "no-cache" },  					
 					async: false,
 					url: '../modules/blockcms/ajax_blockcms.php?' + $.tableDnD.serialize(),
 					data: 'action=dnd&secure_key='+secure_key,

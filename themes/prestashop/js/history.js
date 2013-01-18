@@ -112,7 +112,8 @@ function sendOrderMessage (){
 	});
 	$.ajax({
 		type: "POST",
-		url: baseDir + "order-detail.php",
+		headers: { "cache-control": "no-cache" },  		
+		url: baseDir + "order-detail.php" + '?rand=' + new Date().getTime(),
 		data: paramString,
 		success: function (msg){
 			$('#block-order-detail').fadeOut('slow', function() {

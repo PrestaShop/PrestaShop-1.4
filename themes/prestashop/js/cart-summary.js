@@ -68,12 +68,13 @@ function deletProductFromSummary(id)
 	if (typeof(ids[2]) != 'undefined')
 		customizationId = parseInt(ids[2]);
 	$.ajax({
-       type: 'GET',
-       url: baseDir + 'cart.php',
+       type: 'POST',
+	   headers: { "cache-control": "no-cache" },       
+       url: baseDir + 'cart.php' + '?rand=' + new Date().getTime(),
        async: true,
        cache: false,
        dataType: 'json',
-       data: 'ajax=true&delete&summary&id_product='+productId+'&ipa='+productAttributeId+ ( (customizationId != 0) ? '&id_customization='+customizationId : '') + '&token=' + static_token ,
+       data: 'ajax=true&delete=true&summary=true&id_product='+productId+'&ipa='+productAttributeId+ ( (customizationId != 0) ? '&id_customization='+customizationId : '') + '&token=' + static_token ,
        success: function(jsonData)
        {
        		if (jsonData.hasError)
@@ -144,12 +145,13 @@ function upQuantity(id, qty)
 	if (typeof(ids[2]) != 'undefined')
 		customizationId = parseInt(ids[2]);
 	$.ajax({
-       type: 'GET',
-       url: baseDir + 'cart.php',
+       type: 'POST',
+	   headers: { "cache-control": "no-cache" },       
+       url: baseDir + 'cart.php' + '?rand=' + new Date().getTime(),
        async: true,
        cache: false,
        dataType: 'json',
-       data: 'ajax=true&add&summary&id_product='+productId+'&ipa='+productAttributeId + ( (customizationId != 0) ? '&id_customization='+customizationId : '') + '&qty='+qty+'&token=' + static_token ,
+       data: 'ajax=true&add=true&summary=true&id_product='+productId+'&ipa='+productAttributeId + ( (customizationId != 0) ? '&id_customization='+customizationId : '') + '&qty='+qty+'&token=' + static_token ,
        success: function(jsonData)
        {
        		if (jsonData.hasError)
@@ -205,12 +207,13 @@ function downQuantity(id, qty)
 		if (typeof(ids[2]) != 'undefined')
 			customizationId = parseInt(ids[2]);
 		$.ajax({
-	       type: 'GET',
-	       url: baseDir + 'cart.php',
+	       type: 'POST',
+		   headers: { "cache-control": "no-cache" },	       
+	       url: baseDir + 'cart.php' + '?rand=' + new Date().getTime(),
 	       async: true,
 	       cache: false,
 	       dataType: 'json',
-	       data: 'ajax=true&add&summary&id_product='+productId+'&ipa='+productAttributeId+'&op=down' + ( (customizationId != 0) ? '&id_customization='+customizationId : '') + '&qty='+qty+'&token=' + static_token ,
+	       data: 'ajax=true&add=true&summary=true&id_product='+productId+'&ipa='+productAttributeId+'&op=down' + ( (customizationId != 0) ? '&id_customization='+customizationId : '') + '&qty='+qty+'&token=' + static_token ,
 	       success: function(jsonData)
 	       {
 	       		if (jsonData.hasError)
@@ -417,6 +420,8 @@ function updateHookShoppingCartExtra(html)
 	$('#HOOK_SHOPPING_CART_EXTRA').html(html);
 }
 
+
+
 function updateCartMinQuantity()
 {
 	/* Display errors only if necessary */
@@ -424,7 +429,8 @@ function updateCartMinQuantity()
 
 	$.ajax({
        type: 'POST',
-       url: baseDir + 'order.php',
+	   headers: { "cache-control": "no-cache" },       
+       url: baseDir + 'order.php' + '?rand=' + new Date().getTime(),
        async: false,
        cache: false,
        dataType : "json",

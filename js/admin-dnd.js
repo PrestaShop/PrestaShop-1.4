@@ -100,8 +100,9 @@ function initTableDnD(table)
 				}
 				$.ajax({
 					type: 'POST',
+		   			headers: { "cache-control": "no-cache" },   					
 					async: false,
-					url: 'ajax.php?' ,
+					url: 'ajax.php' + '?rand=' + new Date().getTime(),
 					data: $.tableDnD.serialize() + '&' + objToString(params) ,
 					success: function(data) {
 					if (come_from == 'AdminModulesPositions') {

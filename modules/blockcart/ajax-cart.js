@@ -105,10 +105,12 @@ var ajaxCart = {
 
 				// save the expand statut in the user cookie
 				$.ajax({
-					type: 'GET',
-					url: baseDir + 'modules/blockcart/blockcart-set-collapse.php',
+					type: 'POST',
+					headers: { "cache-control": "no-cache" },
+					url: baseDir + 'modules/blockcart/blockcart-set-collapse.php' + '?rand=' + new Date().getTime(),
 					async: true,
-					data: 'ajax_blockcart_display=expand' + '&rand=' + new Date().getTime()
+					cache: false,					
+					data: 'ajax_blockcart_display=expand'
 				});
 			}
 		});
@@ -118,8 +120,9 @@ var ajaxCart = {
 	refresh : function(){
 		//send the ajax request to the server
 		$.ajax({
-			type: 'GET',
-			url: baseDir + 'cart.php',
+			type: 'POST',
+			headers: { "cache-control": "no-cache" },
+			url: baseDir + 'cart.php' + '?rand=' + new Date().getTime(),
 			async: true,
 			cache: false,
 			dataType : "json",
@@ -152,10 +155,12 @@ var ajaxCart = {
 
 			// save the expand statut in the user cookie
 			$.ajax({
-				type: 'GET',
-				url: baseDir + 'modules/blockcart/blockcart-set-collapse.php',
+				type: 'POST',
+				headers: { "cache-control": "no-cache" },				
+				cache: false,				
+				url: baseDir + 'modules/blockcart/blockcart-set-collapse.php' + '?rand=' + new Date().getTime(),
 				async: true,
-				data: 'ajax_blockcart_display=collapse' + '&rand=' + new Date().getTime()
+				data: 'ajax_blockcart_display=collapse'
 			});
 		}
 	},
@@ -191,10 +196,12 @@ var ajaxCart = {
 
 		if ($('#cart_block #cart_block_list').hasClass('collapsed'))
 			this.expand();
+			var data = 
 		//send the ajax request to the server
 		$.ajax({
 			type: 'POST',
-			url: baseDir + 'cart.php',
+			headers: { "cache-control": "no-cache" },
+			url: baseDir + 'cart.php' + '?rand=' + new Date().getTime(),
 			async: true,
 			cache: false,
 			dataType : "json",
@@ -248,14 +255,15 @@ var ajaxCart = {
 		//send the ajax request to the server
 		$.ajax({
 			type: 'POST',
-			url: baseDir + 'cart.php',
+			headers: { "cache-control": "no-cache" },
+			url: baseDir + 'cart.php' + '?rand=' + new Date().getTime(),
 			async: true,
 			cache: false,
 			dataType : "json",
 			data: 'delete=1&id_product=' + idProduct + '&ipa=' + ((idCombination != null && parseInt(idCombination)) ? idCombination : '') + ((customizationId && customizationId != null) ? '&id_customization=' + customizationId : '') + '&token=' + static_token + '&ajax=true',
 			success: function(jsonData)	{
 				ajaxCart.updateCart(jsonData);
-				if ($('body').attr('id') == 'order' || $('body').attr('id') == 'order-opc')
+				if (($('body').attr('id') == 'order' || $('body').attr('id') == 'order-opc') && typeof(deletProductFromSummary) == 'function')
 					deletProductFromSummary(idProduct+'_'+idCombination);
 			},
 			error: function() {alert('ERROR: unable to delete the product');}
