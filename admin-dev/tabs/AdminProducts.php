@@ -851,15 +851,20 @@ class AdminProducts extends AdminTab
 				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		elseif (isset($_GET['position']))
-		{
+		{					
 			if ($this->tabAccess['edit'] !== '1')
 				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 			elseif (!Validate::isLoadedObject($object = $this->loadObject()))
 				$this->_errors[] = Tools::displayError('An error occurred while updating status for object.').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
-			if (!$object->updatePosition((int)(Tools::getValue('way')), (int)(Tools::getValue('position'))))
-				$this->_errors[] = Tools::displayError('Failed to update the position.');
+			if ($object->updatePosition((int)(Tools::getValue('way')), (int)(Tools::getValue('position'))))
+			{
+				$category = new Category((int)tools::getValue('id_category'));							
+				if (Validate::isLoadedObject($category))
+					Module::hookExec('categoryUpdate', array('category' => $category));
+				Tools::redirectAdmin($currentIndex.'&'.$this->table.'Orderby=position&'.$this->table.'Orderway=asc&conf=5'.(($id_category = (!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1')) ? ('&id_category='.$id_category) : '').'&token='.Tools::getAdminTokenLite('AdminCatalog'));					
+			}
 			else
-				Tools::redirectAdmin($currentIndex.'&'.$this->table.'Orderby=position&'.$this->table.'Orderway=asc&conf=5'.(($id_category = (!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1')) ? ('&id_category='.$id_category) : '').'&token='.Tools::getAdminTokenLite('AdminCatalog'));
+				$this->_errors[] = Tools::displayError('Failed to update the position.');				
 		}
 		else
 			parent::postProcess(true);
