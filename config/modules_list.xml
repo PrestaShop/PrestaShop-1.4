@@ -2,10 +2,11 @@
 <modules_list>
 	<modules type="native">
 		<module name="autoupgrade"/>
+		<module name="backwardcompatibility"/>
 		<module name="bankwire"/>
 		<module name="birthdaypresent"/>
 		<module name="blockadvertising"/>
-		<module name="blockbestsellers"/>
+		<module name="blockbestsellers"/>	
 		<module name="blockcart"/>
 		<module name="blockcategories"/>
 		<module name="blockcms"/>
