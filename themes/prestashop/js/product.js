@@ -122,7 +122,7 @@ function findCombination(firstTime)
 			//update the display
 			updateDisplay();
 
-			if(typeof(firstTime) != 'undefined' && firstTime && ipa_default != selectedCombination['idCombination'])
+			if(typeof(firstTime) != 'undefined' && firstTime && typeof(ipa_default) != 'undefined' && ipa_default != selectedCombination['idCombination'])
 				refreshProductImages(0);
 			else
 				refreshProductImages(combinations[combination]['idCombination']);
