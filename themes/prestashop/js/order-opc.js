@@ -209,44 +209,44 @@ function updateCarrierSelectionAndGift()
 		idCarrier = $('input[name=id_carrier]:checked').val();
 		checkedCarrier = idCarrier;
 	}
-	
+
 	$('#opc_payment_methods-overlay').fadeIn('slow');
 	$('#opc_delivery_methods-overlay').fadeIn('slow');
 	$.ajax({
-       type: 'POST',
-	   headers: { "cache-control": "no-cache" }       
-       url: orderOpcUrl + '?rand=' + new Date().getTime(),
-       async: false,
-       cache: false,
-       dataType : "json",
-       data: 'ajax=true&method=updateCarrierAndGetPayments&id_carrier=' + idCarrier + '&recyclable=' + recyclablePackage + '&gift=' + gift + '&gift_message=' + giftMessage + '&token=' + static_token ,
-       success: function(jsonData)
-       {
-       		if (jsonData.hasError)
-    		{
-    			var errors = '';
-    			for(error in jsonData.errors)
-    				//IE6 bug fix
-    				if(error != 'indexOf')
-    					errors += jsonData.errors[error] + "\n";
-    			alert(errors);
-    		}
-    		else
-    		{
-    			updateCartSummary(jsonData.summary);
-    			updatePaymentMethods(jsonData);
-    			updateHookShoppingCart(jsonData.summary.HOOK_SHOPPING_CART);
+		type: 'POST',
+		headers: { "cache-control": "no-cache" },       
+ 		url: orderOpcUrl + '?rand=' + new Date().getTime(),
+		async: false,
+		cache: false,
+		dataType : "json",
+		data: 'ajax=true&method=updateCarrierAndGetPayments&id_carrier=' + idCarrier + '&recyclable=' + recyclablePackage + '&gift=' + gift + '&gift_message=' + giftMessage + '&token=' + static_token ,
+		success: function(jsonData)
+		{
+			if (jsonData.hasError)
+			{
+				var errors = '';
+				for(error in jsonData.errors)
+					//IE6 bug fix
+					if(error != 'indexOf')
+						errors += jsonData.errors[error] + "\n";
+				alert(errors);
+			}
+			else
+			{
+				updateCartSummary(jsonData.summary);
+				updatePaymentMethods(jsonData);
+				updateHookShoppingCart(jsonData.summary.HOOK_SHOPPING_CART);
 				updateHookShoppingCartExtra(jsonData.summary.HOOK_SHOPPING_CART_EXTRA);
 				$('#opc_payment_methods-overlay').fadeOut('slow');
 				$('#opc_delivery_methods-overlay').fadeOut('slow');
-    		}
-    	},
+			}
+		},
 		error: function(XMLHttpRequest, textStatus, errorThrown) {
 			alert("TECHNICAL ERROR: unable to save carrier \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);
 			$('#opc_payment_methods-overlay').fadeOut('slow');
 			$('#opc_delivery_methods-overlay').fadeOut('slow');
 		}
-   });
+	});
 }
 
 function confirmFreeOrder()
