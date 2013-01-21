@@ -66,7 +66,7 @@ class AdminRangePrice extends AdminTab
 				$this->_errors[] = Tools::displayError('Invalid range, "From" must be lower than "To"');
 
 			/* Check that a similar range does not exist yet for this carrier */
-			if (!count($this->_errors) && $ranges = RangePrice::getRanges((int)Tools::getValue('id_carrier')))
+			if (!Tools::isSubmit('id_range_price') && !count($this->_errors) && $ranges = RangePrice::getRanges((int)Tools::getValue('id_carrier')))
 				foreach ($ranges as $range)
 					if (!($delimiter2 <= $range['delimiter1'] || $delimiter1 >= $range['delimiter2']))
 					{
