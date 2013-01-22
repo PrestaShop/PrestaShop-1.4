@@ -45,7 +45,6 @@ function updateQty(val)
 		var hidden = $('input[name='+ id +'_hidden]').val();
 		var input = $('input[name='+ id +']').val();
 		var QtyToUp = parseInt(input) - parseInt(hidden);
-
 		if (parseInt(QtyToUp) > 0)
 			upQuantity(id.replace('quantity_', ''),QtyToUp);
 		else if(parseInt(QtyToUp) < 0)
@@ -91,20 +90,18 @@ function deletProductFromSummary(id)
     			{
 	    			$('#center_column').children().each(function() {
 					    if ($(this).attr('id') != 'emptyCartWarning' && $(this).attr('class') != 'breadcrumb' && $(this).attr('id') != 'cart_title')
-					    {
 					         $(this).fadeOut('slow', function () {
 					                $(this).remove();
 					          });
-					    }
 					});
 					$('#summary_products_label').remove();
 					$('#emptyCartWarning').fadeIn('slow');
 				}
 				else
 				{
-					$('#product_'+ id).fadeOut('slow', function() {
-							$(this).remove();
-						});
+					$('#product_'+ id).fadeOut('slow', function(){
+						$(this).remove();
+					});
 
 					var exist = false;
 					for (i=0;i<jsonData.summary.products.length;i++)
@@ -113,7 +110,7 @@ function deletProductFromSummary(id)
 
 					// if all customization remove => delete product line
 					if (!exist)
-						$('#product_'+ productId+'_'+productAttributeId).fadeOut('slow', function() {
+						$('#product_'+ productId+'_'+productAttributeId).fadeOut('slow', function(){
 							$(this).remove();
 						});
 				}
@@ -123,10 +120,12 @@ function deletProductFromSummary(id)
 				updateHookShoppingCartExtra(jsonData.HOOK_SHOPPING_CART_EXTRA);
 				if (jsonData.carriers != null)
 					updateCarrierList(jsonData);
-
     		}
        	},
-       error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to save update quantity \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
+       error: function(XMLHttpRequest, textStatus, errorThrown)
+	   {
+	   		alert("TECHNICAL ERROR: unable to save update quantity \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);
+	   }
    });
 }
 
@@ -170,16 +169,19 @@ function upQuantity(id, qty)
     			updateCustomizedDatas(jsonData.customizedDatas);
     			updateHookShoppingCart(jsonData.HOOK_SHOPPING_CART);
 				updateHookShoppingCartExtra(jsonData.HOOK_SHOPPING_CART_EXTRA);
+	    		if (jsonData.carriers != null)
+					updateCarrierList(jsonData);						
 				// if we are in one page checkout
 				if (typeof(orderProcess) != 'undefined')
 					updateCarrierSelectionAndGift();
 				else
-					updateCartMinQuantity();
-	    		if (jsonData.carriers != null)
-					updateCarrierList(jsonData);
+					updateCartMinQuantity();					
     		}
     	},
-       error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to save update quantity \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
+       error: function(XMLHttpRequest, textStatus, errorThrown)
+	   {
+	   		alert("TECHNICAL ERROR: unable to save update quantity \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);
+	   }
    });
 }
 
@@ -232,23 +234,23 @@ function downQuantity(id, qty)
 	    			updateCustomizedDatas(jsonData.customizedDatas);
 	    			updateHookShoppingCart(jsonData.HOOK_SHOPPING_CART);
 					updateHookShoppingCartExtra(jsonData.HOOK_SHOPPING_CART_EXTRA);
+	    			if (jsonData.carriers != null)
+						updateCarrierList(jsonData);						
 					// if we are in one page checkout
 					if (typeof(orderProcess) != 'undefined')
 						updateCarrierSelectionAndGift();
 					else
-						updateCartMinQuantity();
-	    			if (jsonData.carriers != null)
-						updateCarrierList(jsonData);
+						updateCartMinQuantity();						
 	    		}
 	    	},
-	       error: function(XMLHttpRequest, textStatus, errorThrown) {alert("TECHNICAL ERROR: unable to save update quantity \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);}
+	       error: function(XMLHttpRequest, textStatus, errorThrown)
+		   {
+		   		alert("TECHNICAL ERROR: unable to save update quantity \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);
+		   }
 	   });
-
 	}
 	else
-	{
 		deletProductFromSummary(id);
-	}
 }
 
 function updateCartSummary(json)
@@ -289,9 +291,7 @@ function updateCartSummary(json)
 			$('input[name=quantity_'+json.products[i].id_product+'_'+json.products[i].id_product_attribute+(json.products[i].id_customization != null ? '_'+json.products[i].id_customization : '')+'_hidden]').val(json.products[i].cart_quantity);
 		}
 		else
-		{
 			$('#cart_quantity_custom_'+json.products[i].id_product+'_'+json.products[i].id_product_attribute).html(json.products[i].cart_quantity);
-		}
 
 		// Show / hide quantity button if minimal quantity
 		if (parseInt(json.products[i].minimal_quantity) == parseInt(json.products[i].cart_quantity) && json.products[i].minimal_quantity != 1)
@@ -336,14 +336,15 @@ function updateCartSummary(json)
 				$('#cart_discount_' + idElmt + ', #cart_total_voucher').fadeTo('fast', 0, function(){ $(this).remove(); });
 		});
 	}
-
 	// Block cart
     if (priceDisplayMethod != 0)
 	{
     	$('#cart_block_shipping_cost').html(formatCurrency(json.total_shipping_tax_exc, currencyFormat, currencySign, currencyBlank));
     	$('#cart_block_wrapping_cost').html(formatCurrency(json.total_wrapping_tax_exc, currencyFormat, currencySign, currencyBlank));
     	$('#cart_block_total').html(formatCurrency(json.total_price_without_tax, currencyFormat, currencySign, currencyBlank));
-    } else {
+    }
+	else
+	{
     	$('#cart_block_shipping_cost').html(formatCurrency(json.total_shipping, currencyFormat, currencySign, currencyBlank));
     	$('#cart_block_wrapping_cost').html(formatCurrency(json.total_wrapping, currencyFormat, currencySign, currencyBlank));
     	$('#cart_block_total').html(formatCurrency(json.total_price, currencyFormat, currencySign, currencyBlank));
@@ -368,13 +369,9 @@ function updateCartSummary(json)
 	{
 		$('.cart_total_delivery').fadeIn();
 		if (priceDisplayMethod != 0)
-    	{
 		    $('#total_shipping').html(formatCurrency(json.total_shipping_tax_exc, currencyFormat, currencySign, currencyBlank));
-		}
 		else
-		{
 		    $('#total_shipping').html(formatCurrency(json.total_shipping, currencyFormat, currencySign, currencyBlank));
-		}
 	}
 
 	if (json.free_ship > 0 && !json.is_virtual_cart)
@@ -420,8 +417,6 @@ function updateHookShoppingCartExtra(html)
 	$('#HOOK_SHOPPING_CART_EXTRA').html(html);
 }
 
-
-
 function updateCartMinQuantity()
 {
 	/* Display errors only if necessary */
@@ -460,7 +455,8 @@ function updateCartMinQuantity()
     					$(this).remove();
     				});
     	},
-		error: function(XMLHttpRequest, textStatus, errorThrown) {
+		error: function(XMLHttpRequest, textStatus, errorThrown)
+		{
 			alert("TECHNICAL ERROR: unable to check minimal quantity \n\nDetails:\nError thrown: " + XMLHttpRequest + "\n" + 'Text status: ' + textStatus);
 		}
    });	
