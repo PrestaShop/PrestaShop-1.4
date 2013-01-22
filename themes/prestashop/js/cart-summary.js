@@ -25,14 +25,10 @@
 
 $(document).ready(function()
 {
-	// If block cart isn't used, we don't bind the handle actions
-	if (window.ajaxCart !== undefined)
-	{
 		$('.cart_quantity_up').unbind('click').click(function(){ upQuantity($(this).attr('id').replace('cart_quantity_up_', '')); return false;	});
 		$('.cart_quantity_down').unbind('click').click(function(){ downQuantity($(this).attr('id').replace('cart_quantity_down_', '')); return false; });
 		$('.cart_quantity_delete' ).unbind('click').click(function(){ deletProductFromSummary($(this).attr('id')); return false; });
 		$('.cart_quantity_input').typeWatch({ highlight: true, wait: 600, captureLength: 0, callback: updateQty });
-	}
 });
 
 function updateQty(val)
@@ -337,28 +333,29 @@ function updateCartSummary(json)
 		});
 	}
 	// Block cart
-    if (priceDisplayMethod != 0)
+	var cart_total_dom = '#total_product';
+	if(typeof(ajaxCart) == 'undefined')
+		cart_total_dom += ',.ajax_cart_total';
+	if (priceDisplayMethod != 0)
 	{
-    	$('#cart_block_shipping_cost').html(formatCurrency(json.total_shipping_tax_exc, currencyFormat, currencySign, currencyBlank));
-    	$('#cart_block_wrapping_cost').html(formatCurrency(json.total_wrapping_tax_exc, currencyFormat, currencySign, currencyBlank));
-    	$('#cart_block_total').html(formatCurrency(json.total_price_without_tax, currencyFormat, currencySign, currencyBlank));
-    }
+		$('#cart_block_shipping_cost').html(formatCurrency(json.total_shipping_tax_exc, currencyFormat, currencySign, currencyBlank));
+		$('#cart_block_wrapping_cost').html(formatCurrency(json.total_wrapping_tax_exc, currencyFormat, currencySign, currencyBlank));
+		$('#cart_block_total').html(formatCurrency(json.total_price_without_tax, currencyFormat, currencySign, currencyBlank));
+		$(cart_total_dom).html(formatCurrency(json.total_products, currencyFormat, currencySign, currencyBlank));    	
+	}
 	else
 	{
-    	$('#cart_block_shipping_cost').html(formatCurrency(json.total_shipping, currencyFormat, currencySign, currencyBlank));
-    	$('#cart_block_wrapping_cost').html(formatCurrency(json.total_wrapping, currencyFormat, currencySign, currencyBlank));
-    	$('#cart_block_total').html(formatCurrency(json.total_price, currencyFormat, currencySign, currencyBlank));
-    }
+		$('#cart_block_shipping_cost').html(formatCurrency(json.total_shipping, currencyFormat, currencySign, currencyBlank));
+		$('#cart_block_wrapping_cost').html(formatCurrency(json.total_wrapping, currencyFormat, currencySign, currencyBlank));
+		$('#cart_block_total').html(formatCurrency(json.total_price, currencyFormat, currencySign, currencyBlank));
+		$(cart_total_dom).html(formatCurrency(json.total_products_wt, currencyFormat, currencySign, currencyBlank));    	
+	}
 
 	$('#cart_block_tax_cost').html(formatCurrency(json.total_tax, currencyFormat, currencySign, currencyBlank));
 	$('.ajax_cart_quantity').html(nbrProducts);
 
 	// Cart summary
-	$('#summary_products_quantity').html(nbrProducts+' '+(nbrProducts > 1 ? txtProducts : txtProduct));
-	if (priceDisplayMethod != 0)
-    	$('#total_product').html(formatCurrency(json.total_products, currencyFormat, currencySign, currencyBlank));
-    else
-        $('#total_product').html(formatCurrency(json.total_products_wt, currencyFormat, currencySign, currencyBlank));
+	$('#summary_products_quantity').html(nbrProducts+' '+(nbrProducts > 1 ? txtProducts : txtProduct));       
 	$('#total_price').html(formatCurrency(json.total_price, currencyFormat, currencySign, currencyBlank));
 	$('#total_price_without_tax').html(formatCurrency(json.total_price_without_tax, currencyFormat, currencySign, currencyBlank));
 	$('#total_tax').html(formatCurrency(json.total_tax, currencyFormat, currencySign, currencyBlank));
