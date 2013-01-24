@@ -534,7 +534,7 @@ class ToolsCore
 	{
 		if (is_array($string))
 			return array_map(array('Tools', 'htmlentitiesUTF8'), $string);
-		return htmlentities($string, $type, 'utf-8');
+		return htmlentities((string)$string, $type, 'utf-8');
 	}
 
 	public static function htmlentitiesDecodeUTF8($string)
