@@ -541,7 +541,7 @@ class ToolsCore
 	{
 		if (is_array($string))
 			return array_map(array('Tools', 'htmlentitiesDecodeUTF8'), $string);
-		return html_entity_decode($string, ENT_QUOTES, 'utf-8');
+		return html_entity_decode((string)$string, ENT_QUOTES, 'utf-8');
 	}
 
 	public static function safePostVars()
