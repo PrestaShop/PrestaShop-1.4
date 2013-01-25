@@ -229,6 +229,8 @@ class MySQLCore extends Db
 				Cache::getInstance()->deleteQuery($query);
 			return $result;
 		}
+		if (_PS_DEBUG_SQL_)
+			$this->displayMySQLError($query);
 		return false;
 	}
 	
