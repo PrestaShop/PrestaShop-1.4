@@ -171,7 +171,7 @@ abstract class AdminSelfTab
 		$this->_conf = array(
 		1 => $this->l('Deletion successful'), 2 => $this->l('Selection successfully deleted'),
 		3 => $this->l('Creation successful'), 4 => $this->l('Update successful'),
-		5 => $this->l('Status update successful'), 6 => $this->l('Settings update successful'),
+		5 => $this->l('The new version check has been completed successfully'), 6 => $this->l('Settings update successful'),
 		7 => $this->l('Image successfully deleted'), 8 => $this->l('Module downloaded successfully'),
 		9 => $this->l('Thumbnails successfully regenerated'), 10 => $this->l('Message sent to the customer'),
 		11 => $this->l('Comment added'), 12 => $this->l('Module installed successfully'),
@@ -1339,7 +1339,7 @@ abstract class AdminSelfTab
 		if ($conf = Tools::getValue('conf'))
 			echo '
 			<div class="conf">
-				<img src="../img/admin/ok2.png" alt="" /> '.$this->_conf[(int)($conf)].'
+				'.$this->_conf[(int)($conf)].'
 			</div>';
 	}
 

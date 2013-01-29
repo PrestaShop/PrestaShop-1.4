@@ -62,6 +62,7 @@ $adminObj = new AdminSelfUpgrade();
 
 if (is_object($adminObj))
 {
+	$adminObj->optionDisplayErrors();
 	$adminObj->ajax = 1;
 	if ($adminObj->checkToken())
 	{
@@ -87,6 +88,6 @@ if (is_object($adminObj))
 	{
 		// If this is an XSS attempt, then we should only display a simple, secure page
 		ob_clean();
-		$adminObj->displayInvalidToken();
+		die('{wrong token}');
 	}
 }
