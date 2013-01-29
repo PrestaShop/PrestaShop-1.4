@@ -28,7 +28,7 @@ function updateCarrierList(json)
 	var carriers = json.carriers;
 	
 	/* contains all carrier available for this address */
-	if ((typeof carriers == undefined) || carriers.length == 0)
+	if ((typeof(carriers) == 'undefined') || carriers.length == 0)
 	{
 		checkedCarrier = 0;
 		$('input[name=id_carrier]:checked').attr('checked', false);
