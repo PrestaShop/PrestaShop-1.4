@@ -2207,11 +2207,11 @@ class AdminSelfUpgrade extends AdminSelfTab
 		$this->nextQuickInfo[] = $this->l('Upgrade Db Ok'); // no error !
 
 		# At this point, database upgrade is over.
-		# Now we need to add all previous missing settings items, and reset cache and compile directories
-		$this->writeNewSettings();
-		
+			# Now we need to add all previous missing settings items, and reset cache and compile directories
+			$this->writeNewSettings();
+			
 		if (version_compare(_PS_VERSION_, '1.4.0.0', '>') && version_compare(_PS_VERSION_, '1.5.0.0', '<') && version_compare(INSTALL_VERSION, '1.5.0.0', '>='))
-			$this->rewriteDefaultCustomerGroup();				
+			$this->rewriteDefaultCustomerGroup();			
 
 		// Settings updated, compile and cache directories must be emptied
 		$arrayToClean[] = $this->prodRootDir.'/tools/smarty/cache/';
@@ -2367,7 +2367,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 			return true;
 		}
 		return false;
-	}	
+		
 
 	/**
 	 * getTranslationFileType
@@ -4616,18 +4616,12 @@ function afterUpgradeComplete(res)
 		$("#upgradeResultCheck")
 			.addClass("fail")
 			.removeClass("ok")
-			.html("<p>'.$this->l('Upgrade complete, but warnings has been found. Please restore your shop.', 'AdminSelfUpgrade', true).'</p>")
+			.html("<p>'.$this->l('Upgrade complete, but warnings has been found. Please restore your shop.').'</p>")
 			.show("slow");
 		$("#infoStep").html("<h3>'.$this->l('Upgrade Complete, but warnings has been found.', 'AdminSelfUpgrade', true).'</h3>");
 	}
 	
-	todo_list = [
-		"'.$this->l('Cookies have changed, you will need to log in again once you refreshed the page', 'AdminSelfUpgrade', true).'",
-		"'.$this->l('Javascript and CSS files have changed, please clear your browser cache with CTRL-F5', 'AdminSelfUpgrade', true).'",
-		"'.$this->l('Please check that your front office theme is functionnal (try to create an account, place an order...)', 'AdminSelfUpgrade', true).'",
-		"'.$this->l('Product images does not appear in the front office? Try regenerating the thumbnails in Preferences > Images', 'AdminSelfUpgrade', true).'",
-		"'.$this->l('Do not forget to reactivate your shop once you have checked everything!', 'AdminSelfUpgrade', true).'",
-	];
+	todo_list = ["'.$this->l('Don\'t forget to reactivate your shop !', 'AdminSelfUpgrade', true).'", "'.$this->l('Please check your front-office theme is functionnal (try to make an order, check theme)').'"];
 		
 	todo_ul = "<ul>";
 	$("#upgradeResultToDoList")
