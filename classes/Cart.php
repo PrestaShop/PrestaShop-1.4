@@ -569,9 +569,14 @@ class CartCore extends ObjectModel
 		/* Product is available for order, let's add it to the cart or update the existing quantities */
 		else
 		{
+			if ($id_product_attribute)
+			{
+				$combination = new Combination((int)$id_product_attribute);
+				if ($combination->id_product != $id_product)
+					return false;
+			}
 			/* If we have a product combination, the minimal quantity is set with the one of this combination */
 			$minimalQuantity = !empty($id_product_attribute) ? (int)Attribute::getAttributeMinimalQty((int)$id_product_attribute) : (int)$product['minimal_quantity'];
-		
 			/* Check if the product is already in the cart */
 			$result = $this->containsProduct((int)$id_product, (int)$id_product_attribute, (int)$id_customization);
 
