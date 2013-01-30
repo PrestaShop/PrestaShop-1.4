@@ -41,7 +41,11 @@ class MCachedCore extends Cache
 	
 	public function connect()
 	{
-		$this->_memcacheObj = new Memcache();
+		if (class_exists('Memcache') && extension_loaded('memcache'))		
+			$this->_memcacheObj = new Memcache();
+		else
+			return false;
+		
 		$servers = self::getMemcachedServers();
 		if (!$servers)
 			return false;
