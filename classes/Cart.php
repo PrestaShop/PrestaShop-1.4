@@ -1390,8 +1390,9 @@ class CartCore extends ObjectModel
 			$invoice = (int)$this->id_address_invoice ? new Address((int)$this->id_address_invoice) : new Address();
 
 		// New layout system with personalization fields
+		$formattedAddresses['delivery'] = $this->id_address_delivery ? AddressFormat::getFormattedLayoutData($delivery) : array();		
 		$formattedAddresses['invoice'] = $this->id_address_invoice ? AddressFormat::getFormattedLayoutData($invoice) : array();
-		$formattedAddresses['delivery'] = $this->id_address_delivery ? AddressFormat::getFormattedLayoutData($delivery) : array();
+
 
 		$total_price = $this->getOrderTotal();
 		$total_price_without_tax = $this->getOrderTotal(false);
