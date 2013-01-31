@@ -249,7 +249,7 @@ function setPaymentBoxes(name, module)
 		{
 			if ($(this).attr('name') == module + '_' + name + '[]')
 			{
-				($(this).attr("checked") ? checked++ : '');
+				($(this).is(':checked') ? checked++ : '');
 				total++;
 			}
 		}
@@ -602,8 +602,8 @@ function selectCheckbox(obj)
 
 function toogleShippingCost(obj)
 {
-	generateDiscount = $(obj).parent().find('#generateDiscount').attr("checked");
-	generateCreditSlip = $(obj).parent().find('#generateCreditSlip').attr("checked");
+	generateDiscount = $(obj).parent().find('#generateDiscount').is(':checked');;
+	generateCreditSlip = $(obj).parent().find('#generateCreditSlip').is(':checked');
 	if (generateDiscount != true && generateCreditSlip != true)
 	{
 		$(obj).parent().find('#spanShippingBack input[type=checkbox]').attr("checked", false);
