@@ -1,4 +1,4 @@
-﻿SET NAMES 'utf8';
+SET NAMES 'utf8';
 
 INSERT INTO `PREFIX_hook` (`id_hook`, `name`, `title`, `description`, `position`, `live_edit`) VALUES
 (1, 'payment', 'Payment', NULL, 1, 1),
