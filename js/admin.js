@@ -183,7 +183,7 @@ function displayFlags(languages, defaultLanguageID, employee_cookie)
 					);
 				var languagesFlags = $('<div></div>')
 					.addClass('language_flags')
-					.html(choose_language_trad+'<br /><br />');
+					.html((typeof(choose_language_trad) != 'undefined' ? choose_language_trad : '' ) + '<br /><br />');
 				$.each(languages, function(key, language) {
 					var img = $('<img>')
 						.addClass('pointer')

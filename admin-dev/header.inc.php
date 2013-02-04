@@ -66,7 +66,7 @@ echo '
 			}
 		</style>
 	</head>
-	<body '.((!empty($employee->bo_color)) ? 'style="background:'.Tools::htmlentitiesUTF8($employee->bo_color).'"' : '').'>
+	<body'.((!empty($employee->bo_color)) ? ' style="background:'.Tools::htmlentitiesUTF8($employee->bo_color).'"' : '').'>
 	<script>
 		var choose_language_trad = "'.translate('Choose language:').'";
 	</script>
