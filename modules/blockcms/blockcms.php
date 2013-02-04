@@ -318,7 +318,7 @@ class BlockCms extends Module
 		<script type="text/javascript" src="../modules/blockcms/blockcms.js"></script>
 		<script type="text/javascript">CMSBlocksDnD(\''.$this->secure_key.'\');</script>
 		<fieldset>
-			<legend><img src="'._PS_BASE_URL_.__PS_BASE_URI__.'modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('CMS block configuration').'</legend>
+			<legend><img src="../modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('CMS block configuration').'</legend>
 
 			<p><a href="'.$currentIndex.'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&addBlockCMS"><img src="'._PS_ADMIN_IMG_.'add.gif" alt="" /> '.$this->l('Add a new CMS block').'</a></p>';
 			
@@ -411,7 +411,7 @@ class BlockCms extends Module
 		</fieldset><br />
 		<form method="POST" action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'">
 		<fieldset>
-			<legend><img src="'._PS_BASE_URL_.__PS_BASE_URI__.'modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Footer\'s various links Configuration').'</legend>
+			<legend><img src="../modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Footer\'s various links Configuration').'</legend>
 			<input type="checkbox" name="footer_poweredby_active" id="footer_poweredby_active" '.(((int)Configuration::get('FOOTER_POWEREDBY') === 1 || Configuration::get('FOOTER_POWEREDBY') === false) ? 'checked="checked"' : '').'> <label for="footer_poweredby_active" style="float:none;">'.$this->l('Display "Powered by Prestashop"').'</label><br /><br />
 			<input type="checkbox" name="footer_active" id="footer_active" '.(Configuration::get('FOOTER_BLOCK_ACTIVATION') ? 'checked="checked"' : '').'> <label for="footer_active" style="float:none;">'.$this->l('Display the Footer\'s various links').'</label><br /><br />
 			<table cellspacing="0" cellpadding="0" class="table" width="100%">
@@ -441,7 +441,7 @@ class BlockCms extends Module
 			$cmsBlock = $this->getBlockCMS((int)Tools::getValue('id_cms_block'));
 
 		$this->_html .= '
-		<script type="text/javascript" src="'._PS_BASE_URL_.__PS_BASE_URI__.'modules/'.$this->name.'/'.$this->name.'.js"></script>
+		<script type="text/javascript" src="../modules/'.$this->name.'/'.$this->name.'.js"></script>
 		<script type="text/javascript">id_language = Number('.$defaultLanguage.');</script>
 		<form method="POST" action="'.Tools::htmlentitiesUTF8($_SERVER['REQUEST_URI']).'">
 		';
@@ -453,7 +453,7 @@ class BlockCms extends Module
 		if (Tools::isSubmit('addBlockCMS'))
 			$this->_html .= '<legend><img src="'._PS_ADMIN_IMG_.'add.gif" alt="" /> '.$this->l('New CMS block').'</legend>';
 		elseif (Tools::isSubmit('editBlockCMS'))
-			$this->_html .= '<legend><img src="'._PS_BASE_URL_.__PS_BASE_URI__.'modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Edit CMS block').'</legend>';
+			$this->_html .= '<legend><img src="../modules/'.$this->name.'/logo.gif" alt="" /> '.$this->l('Edit CMS block').'</legend>';
 		
 		$this->_html .= '
 			<label>'.$this->l('Name of block:').'</label>
