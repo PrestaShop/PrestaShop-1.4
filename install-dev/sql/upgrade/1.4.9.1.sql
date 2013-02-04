@@ -2,6 +2,8 @@ SET NAMES 'utf8';
 
 /* PHP:update_module_mailalerts(); */;
 
+/* PHP:update_htaccess(); */;
+
 /* Backward compatibility */
 INSERT INTO `PREFIX_module` (`name`, `active`) VALUES ('backwardcompatibility', 1);
 
