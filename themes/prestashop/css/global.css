@@ -974,7 +974,7 @@ p.price_container { text-align: center }
 #center_column .products_block.accessories_block .block_content li.last_item a.product_image { border: none }
 
 /* discount.tpl */
-td.discount_value { white-space: nowrap }
+td.discount_value, td.price_value { white-space: nowrap }
 
 /* address.tpl */
 p.address_navigation { 

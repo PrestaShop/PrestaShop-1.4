@@ -173,7 +173,7 @@
 							<label for="cb_{$product.id_order_detail|intval}">{$product.product_name|escape:'htmlall':'UTF-8'}</label>
 						</td>
 						<td><input class="order_qte_input"  name="order_qte_input[{$smarty.foreach.products.index}]" type="text" size="2" value="{$product.customizationQuantityTotal|intval}" /><label for="cb_{$product.id_order_detail|intval}"><span class="order_qte_span editable">{$product.customizationQuantityTotal|intval}</span></label></td>
-						<td>
+						<td class="price_value">
 							<label for="cb_{$product.id_order_detail|intval}">
 								{if $group_use_tax}
 									{convertPriceWithCurrency price=$product.product_price_wt currency=$currency convert=0}
@@ -182,7 +182,7 @@
 								{/if}
 							</label>
 						</td>
-						<td>
+						<td class="price_value">
 							<label for="cb_{$product.id_order_detail|intval}">
 								{if isset($customizedDatas.$productId.$productAttributeId)}
 									{if $group_use_tax}
@@ -248,7 +248,7 @@
 							</label>
 						</td>
 						<td><input class="order_qte_input" name="order_qte_input[{$product.id_order_detail|intval}]" type="text" size="2" value="{$productQuantity|intval}" /><label for="cb_{$product.id_order_detail|intval}"><span class="order_qte_span editable">{$productQuantity|intval}</span></label></td>
-						<td>
+						<td class="price_value">
 							<label for="cb_{$product.id_order_detail|intval}">
 							{if $group_use_tax}
 								{convertPriceWithCurrency price=$product.product_price_wt currency=$currency convert=0}
@@ -257,7 +257,7 @@
 							{/if}
 							</label>
 						</td>
-						<td>
+						<td class="price_value">
 							<label for="cb_{$product.id_order_detail|intval}">
 							{if $group_use_tax}
 								{convertPriceWithCurrency price=$product.total_wt currency=$currency convert=0}
