@@ -267,7 +267,10 @@ class AuthControllerCore extends FrontController
 					}
 					// If a logged guest logs in as a customer, the cart secure key was already set and needs to be updated
 					self::$cart->secure_key = $customer->secure_key;
-					self::$cart->update();
+					if(Validate::isLoadedObject(self::$cart))
+						self::$cart->update();
+					else
+						self::$cart->add();
 					Module::hookExec('authentication');
 					if (!Tools::isSubmit('ajax'))
 					{
