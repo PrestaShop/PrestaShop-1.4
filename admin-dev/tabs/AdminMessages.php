@@ -29,9 +29,10 @@ class AdminMessages extends AdminTab
 	public function __construct()
 	{
 	 	global $cookie;
-	 	$this->table = 'order';
-	 	$this->className = 'Order';
+	 	$this->table = 'message';
+	 	$this->className = 'Message';
 	 	$this->view = 'noActionColumn';
+	 	$this->delete = true;	 	
 		$this->colorOnBackground = true;
 
 		$start = 0;
@@ -137,15 +138,20 @@ class AdminMessages extends AdminTab
 
 			die;
 		}
-		elseif (isset($_GET['view'.$this->table]) AND !empty($_GET['id_order']) AND $_GET['id_order'] != '--')
-			Tools::redirectAdmin('index.php?tab=AdminOrders&id_order='.(int)($_GET['id_order']).'&vieworder'.'&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)));
-		else
+		elseif (isset($_GET['view'.$this->table]) AND !empty($_GET['id_message']) AND $_GET['id_message'] != '--')
 		{
-			if (isset($_GET['id_order']) AND (empty($_GET['id_order']) OR $_GET['id_order'] == '--'))
+			$message = New Message((int)Tools::getValue('id_message'));
+			if(Validate::isLoadedObject($message) && $message->id_order > 0)
+				Tools::redirectAdmin('index.php?tab=AdminOrders&id_order='.(int)($message->id_order).'&vieworder'.'&token='.Tools::getAdminToken('AdminOrders'.(int)(Tab::getIdFromClassName('AdminOrders')).(int)($cookie->id_employee)));
+			else
 			{
 				echo '<p class="warning bold"><img src="../img/admin/warning.gif" alt="" class="middle" /> &nbsp;'.
 				Tools::displayError('Cannot display this message because the customer has not finalized their order.').'</p>';
-			}	
+			}					
+		}
+		else
+		{
+
 					
 			foreach ($this->_list AS $k => &$item)
 				if (Tools::strlen($item['last_message']) > 150 + Tools::strlen('...'))
