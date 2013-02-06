@@ -177,7 +177,7 @@ var fieldRequired = '{l s='Please fill in all required fields, then save your cu
 		<!-- usefull links-->
 		<ul id="usefull_link_block">
 			{if $HOOK_EXTRA_LEFT}{$HOOK_EXTRA_LEFT}{/if}
-			<li><a href="javascript:print();">{l s='Print'}</a><br class="clear" /></li>
+			<li><a href="javascript:print();">{l s='Print'}</a></li>
 			{if $have_image && !$jqZoomEnabled}
 			<li><span id="view_full_size" class="span_link">{l s='Maximize'}</span></li>
 			{/if}
