@@ -950,7 +950,7 @@ class AdminModules extends AdminTab
 	
 	public function refresh()
 	{
-		return file_put_contents(_PS_ROOT_DIR_.$this->_moduleCacheFile, Tools::file_get_contents($this->xml_modules_list));
+		return (bool)file_put_contents(_PS_ROOT_DIR_.$this->_moduleCacheFile, Tools::file_get_contents($this->xml_modules_list));
 	}
 	
 	public function displaySelectedFilter()
