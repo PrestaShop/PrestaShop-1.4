@@ -435,6 +435,9 @@ class CustomerCore extends ObjectModel
 	 */
 	public function getStats()
 	{
+		if (!$this->id)
+			return array('nb_orders' => 0, 'total_orders' => 0, 'last_visit' => '--', 'age' => '--');
+
 		// Get Row because we want $result to be an array
 		$result = Db::getInstance()->getRow('
 		SELECT COUNT(`id_order`) nb_orders, SUM(`total_paid` / o.`conversion_rate`) total_orders
