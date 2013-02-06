@@ -1,9 +1,8 @@
 /* product.tpl */
 #primary_block #pb-right-column {
 	float: left;
-	width: 11em;
+	width: 302px;
 }
-
 #primary_block #image-block {
 	border: #d0d1d5 solid 1px;
 	height: 300px;
@@ -151,7 +150,6 @@
 {
 	float: right
 }
-
 .product_accessories_price
 {
 	margin-top: 5px
