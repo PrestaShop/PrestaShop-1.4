@@ -174,7 +174,7 @@ class AttributeCore extends ObjectModel
 	public static function updateQtyProduct(&$arr)
 	{
 		$qty = self::getAttributeQty((int)$arr['id_product']);
-		if ($qty !== false)
+		if ((bool)$qty !== false)
 		{
 			$arr['quantity'] = (int)$qty;
 			return true;
