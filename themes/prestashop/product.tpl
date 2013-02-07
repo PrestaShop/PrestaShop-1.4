@@ -144,14 +144,8 @@ var fieldRequired = '{l s='Please fill in all required fields, then save your cu
 	<div id="pb-right-column">
 		<!-- product img-->
 		<div id="image-block">
-		{if $have_image}
-			<img src="{$link->getImageLink($product->link_rewrite, $cover.id_image, 'large')}"
-				{if $jqZoomEnabled}class="jqzoom" alt="{$link->getImageLink($product->link_rewrite, $cover.id_image, 'thickbox')}"{else} title="{$product->name|escape:'htmlall':'UTF-8'}" alt="{$product->name|escape:'htmlall':'UTF-8'}" {/if} id="bigpic" width="{$largeSize.width}" height="{$largeSize.height}" />
-		{else}
-			<img src="{$img_prod_dir}{$lang_iso}-default-large.jpg" id="bigpic" alt="" title="{$cover.legend|escape:'htmlall':'UTF-8'}" width="{$largeSize.width}" height="{$largeSize.height}" />
-		{/if}
+			<img id="bigpic" src="{if $have_image}{$link->getImageLink($product->link_rewrite, $cover.id_image, 'large')}{else}{$img_prod_dir}{$lang_iso}-default-large.jpg{/if}"{if $jqZoomEnabled && $have_image} class="jqzoom" alt="{$link->getImageLink($product->link_rewrite, $cover.id_image, 'thickbox')}"{else} alt="{$cover.legend|escape:'htmlall':'UTF-8'}"{/if} title="{$cover.legend|escape:'htmlall':'UTF-8'}" width="{$largeSize.width}" height="{$largeSize.height}"/>
 		</div>
-
 		{if isset($images) && count($images) > 0}
 		<!-- thumbnails -->
 		<div id="views_block" {if isset($images) && count($images) < 2}class="hidden"{/if}>

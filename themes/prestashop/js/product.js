@@ -117,7 +117,7 @@ function findCombination(firstTime)
 
 			//show the large image in relation to the selected combination
 			if (combinations[combination]['image'] && combinations[combination]['image'] != -1)
-				displayImage( $('#thumb_'+combinations[combination]['image']).parent() );
+				displayImage($('#thumb_'+combinations[combination]['image']).parent());
 
 			//update the display
 			updateDisplay();
@@ -357,11 +357,11 @@ function displayImage(domAAroundImgThumb)
         var newSrc = domAAroundImgThumb.attr('href').replace('thickbox','large');
         if ($('#bigpic').attr('src') != newSrc)
         {
-            $('#bigpic').fadeOut('fast', function(){
-                $(this).attr('src', newSrc).show();
-                if (typeof(jqZoomEnabled) != 'undefined' && jqZoomEnabled)
-	                $(this).attr('alt', domAAroundImgThumb.attr('href'));
-            });
+            $('#bigpic').attr({'src' : newSrc, 'title' : domAAroundImgThumb.attr('title')});
+			if (typeof(jqZoomEnabled) != 'undefined' && jqZoomEnabled)
+				$('#bigpic').attr('alt', domAAroundImgThumb.attr('href'));
+			else
+				$('#bigpic').attr('alt', domAAroundImgThumb.attr('title'));				
         }
         $('#views_block li a').removeClass('shown');
         $(domAAroundImgThumb).addClass('shown');
@@ -436,19 +436,18 @@ $(document).ready(function()
 	$('#thumbs_list').trigger('goto', 0);
 
 	//hover 'other views' images management
-	$('#views_block li a').hover(
-		function(){displayImage($(this));},
-		function(){}
+	$('#views_block li a').hover(function(){
+		displayImage($(this));
+		}, function(){}
 	);
 
 	//set jqZoom parameters if needed
 	if (typeof(jqZoomEnabled) != 'undefined' && jqZoomEnabled)
 	{
-		$('img.jqzoom').jqueryzoom({
-			xzoom: 200, //zooming div default width(default width value is 200)
-			yzoom: 200, //zooming div default width(default height value is 200)
-			offset: 21 //zooming div default offset(default offset value is 10)
-			//position: "right" //zooming div position(default position value is "right")
+		$('img.jqzoom').jqueryzoom({					
+			xzoom: 231, //zooming div default width(default width value is 200)
+			yzoom: 300, //zooming div default width(default height value is 200)
+			offset: 22 //zooming div default offset(default offset value is 10)
 		});
 	}
 
