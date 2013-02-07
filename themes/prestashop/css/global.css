@@ -1334,9 +1334,15 @@ ul.shop_info li {
 }
 
 /* Customizable product */
-#customization_block { width: 556px }
+.customization_block { width: 556px }
 .customization_block_title { margin: 4px 4px 4px 2px }
-#customization_block ul { margin: 6px 6px 0 6px }
+.customization_block ul { margin: 6px 6px 0 6px }
+.customization_block h2 {
+	background: none!important;
+}
+#customizedDatas .button {
+	margin: 0px auto;
+}
 .customization_block_input { vertical-align: inherit }
 img.customization_delete_icon { margin: 2px }
 li.customizationUploadLine {

@@ -472,16 +472,17 @@ var fieldRequired = '{l s='Please fill in all required fields, then save your cu
 
 <!-- Customizable products -->
 {if $product->customizable}
+	<p>
+		<img src="{$img_dir}icon/infos.gif" alt="Informations" />
+		{l s='After saving your customized product, remember to add it to your cart.'}
+		{if $product->uploadable_files}<br />{l s='Allowed file formats are: GIF, JPG, PNG'}{/if}
+	</p>
 	<ul class="idTabs">
 		<li><a style="cursor: pointer">{l s='Product customization'}</a></li>
 	</ul>
-	<div class="customization_block">
+	<div class="customization_block clear">
+	
 		<form method="post" action="{$customizationFormTarget}" enctype="multipart/form-data" id="customizationForm">
-			<p>
-				<img src="{$img_dir}icon/infos.gif" alt="Informations" />
-				{l s='After saving your customized product, remember to add it to your cart.'}
-				{if $product->uploadable_files}<br />{l s='Allowed file formats are: GIF, JPG, PNG'}{/if}
-			</p>
 			{if $product->uploadable_files|intval}
 			<h2>{l s='Pictures'}</h2>
 			<ul id="uploadable_files">

@@ -37,7 +37,11 @@ h2.productscategory_h2 {
 }
 
 #productscategory_list li a { margin: auto; }
-
+#productscategory_list li a img {
+	width: 80px;
+	height: 80px;
+	display: block;
+}
 #productscategory_scroll_left, #productscategory_scroll_right {
 	background: url('img/thumbs_left.gif') no-repeat center;
 	text-indent: -3000px;
