@@ -44,6 +44,8 @@ class HomeFeatured extends Module
 		
 		$this->displayName = $this->l('Featured Products on the homepage');
 		$this->description = $this->l('Displays Featured Products in the middle of your homepage.');
+		
+		$this->defaultNumberProducts = 8;
 	}
 
 	function install()
@@ -83,7 +85,7 @@ class HomeFeatured extends Module
 				<label>'.$this->l('Number of products displayed').'</label>
 				<div class="margin-form">
 					<input type="text" size="5" name="nbr" value="'.Tools::safeOutput(Tools::getValue('nbr', (int)Configuration::get('HOME_FEATURED_NBR'))).'" />
-					<p class="clear">'.$this->l('The number of products displayed on homepage (default: 10).').'</p>
+					<p class="clear">'.$this->l('The number of products displayed on homepage (default: '.(int)$this->defaultNumberProducts.').').'</p>
 					
 				</div>
 				<center><input type="submit" name="submitHomeFeatured" value="'.$this->l('Save').'" class="button" /></center>
@@ -99,7 +101,7 @@ class HomeFeatured extends Module
 		$nb = (int)Configuration::get('HOME_FEATURED_NBR');
 
 		$smarty->assign(array(
-		'products' => $category->getProducts((int)$params['cookie']->id_lang, 1, ($nb ? $nb : 10)),
+		'products' => $category->getProducts((int)$params['cookie']->id_lang, 1, ($nb ? $nb : (int)$this->defaultNumberProducts)),
 		'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
 		'homeSize' => Image::getSize('home')));
 
