@@ -1655,17 +1655,17 @@ abstract class AdminTabCore
 
 		$defaultLanguage = (int)_PS_LANG_DEFAULT_;
 		$this->_languages = Language::getLanguages(false);
-		$tab = Tab::getTab((int)$cookie->id_lang, Tab::getIdFromClassName($tab));
+		$tabAdmin = Tab::getTab((int)$cookie->id_lang, Tab::getIdFromClassName($tab));
 		echo '<br /><br />';
 		echo (isset($this->optionTitle) ? '<h2>'.$this->optionTitle.'</h2>' : '');
 		echo '
 		<script type="text/javascript">
 			id_language = Number('.$defaultLanguage.');
 		</script>
-		<form action="'.$currentIndex.'" id="'.$tab['name'].'" name="'.$tab['name'].'" method="post">
+		<form action="'.$currentIndex.'" id="'.$tabAdmin['name'].'" name="'.$tabAdmin['name'].'" method="post">
 			<fieldset>';
 				echo (isset($this->optionTitle) ? '<legend>
-					<img src="'.(!empty($tab['module']) && file_exists($_SERVER['DOCUMENT_ROOT']._MODULE_DIR_.$tab['module'].'/'.$tab['class_name'].'.gif') ? _MODULE_DIR_.$tab['module'].'/' : '../img/t/').$tab['class_name'].'.gif" />'
+					<img src="'.(!empty($tabAdmin['module']) && file_exists($_SERVER['DOCUMENT_ROOT']._MODULE_DIR_.$tabAdmin['module'].'/'.$tabAdmin['class_name'].'.gif') ? _MODULE_DIR_.$tabAdmin['module'].'/' : '../img/t/').$tabAdmin['class_name'].'.gif" />'
 					.$this->optionTitle.'</legend>' : '');
 		foreach ($this->_fieldsOptions as $key => $field)
 		{
