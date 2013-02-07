@@ -61,44 +61,57 @@ class AdminCountries extends AdminTab
 	{
 		if (isset($_GET['delete'.$this->table]) || Tools::getValue('submitDel'.$this->table))
 			$this->_errors[] = Tools::displayError('You cannot delete a country. If you do not want it available for customers, please disable it.');
-		else
+		elseif (Tools::getValue('submitAdd'.$this->table))
 		{
-			if (Tools::getValue('submitAdd'.$this->table))
+			if (!Tools::getValue('id_'.$this->table))
 			{
-				$id_country = Tools::getValue('id_country');
-				$tmp_addr_format = new AddressFormat($id_country);
-
-				$save_status = false;
-
-				$is_new = is_null($tmp_addr_format->id_country);
-				if ($is_new)
-				{
-					$tmp_addr_format = new AddressFormat();
-					$tmp_addr_format->id_country = $id_country;
-				}
-				
-				$tmp_addr_format->format = Tools::getValue('address_layout');
-				
-				if (strlen($tmp_addr_format->format) > 0)
-				{
-					if ($tmp_addr_format->checkFormatFields())
-						$save_status = ($is_new) ? $tmp_addr_format->save(): $tmp_addr_format->update();
-					else
-					{
-						$errorList = $tmp_addr_format->getErrorList();
-						foreach($errorList as $numError => $error)
-							$this->_errors[] = $error;
-					}
-						
-
-					if (!$save_status)
-						$this->_errors[] = Tools::displayError('Invalid address layout'.Db::getInstance()->getMsgError());
-				}
-				unset($tmp_addr_format);
+				if (Validate::isLanguageIsoCode(Tools::getValue('iso_code')) && Country::getByIso(Tools::getValue('iso_code')))
+					$this->_errors[] = Tools::displayError('This ISO code already exists, you cannot create two country with the same ISO code');
 			}
-
-			return parent::postProcess();
+			else if (Validate::isLanguageIsoCode(Tools::getValue('iso_code')))
+			{
+				$id_country = Country::getByIso(Tools::getValue('iso_code'));
+				if (!is_null($id_country) && $id_country != Tools::getValue('id_'.$this->table))
+					$this->_errors[] = Tools::displayError('This ISO code already exists, you cannot create two country with the same ISO code');
+			}
+			if (isset($this->_errors) && count($this->_errors))
+				return false;
 		}
+		return parent::postProcess();
+	}
+	
+	public function afterAdd()
+	{
+		return $this->registerAddressFormat();
+	}
+	
+	public function afterUpdate()
+	{
+		return $this->registerAddressFormat();		
+	}	
+	
+	public function registerAddressFormat()
+	{	
+		$id_country = (int)Tools::getValue('id_country');
+		$tmp_addr_format = new AddressFormat($id_country);
+		$tmp_addr_format->id_country = $id_country;
+		$tmp_addr_format->format = Tools::getValue('address_layout');
+		if (strlen($tmp_addr_format->format) > 0)
+		{
+			if ($tmp_addr_format->checkFormatFields())
+				$tmp_addr_format->save();
+			else
+			{
+				$errorList = $tmp_addr_format->getErrorList();
+				foreach($errorList as $numError => $error)
+					$this->_errors[] = $error;
+			}
+			if (!Validate::isLoadedObject($tmp_addr_format))
+				$this->_errors[] = Tools::displayError('Invalid address layout '.Db::getInstance()->getMsgError());
+		}
+		if (isset($this->_errors) && count($this->_errors))
+			return false;
+		return true;			
 	}
 
 	private function _displayValidFields()

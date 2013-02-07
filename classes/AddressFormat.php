@@ -69,6 +69,7 @@ class AddressFormatCore extends ObjectModel
 		'active',
 		'is_guest',
 		'date_upd',
+		'country',		
 		'years',
 		'days',
 		'months',
@@ -82,7 +83,8 @@ class AddressFormatCore extends ObjectModel
 		'need_zip_code',
 		'contains_states',
 		'call_prefixes',
-		'call_prefix');
+		'call_prefix'		
+		);
 		
 	public static $forbiddenClassList = array(
 		'Manufacturer',
