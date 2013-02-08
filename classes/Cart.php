@@ -556,7 +556,7 @@ class CartCore extends ObjectModel
 			WHERE id_product = '.(int)$id_product.' AND active = 1');
 
 		if (!isset($product) || !$product)
-			die(Tools::displayError());
+			return false;
 		if (isset(self::$_nbProducts[$this->id]))
 			unset(self::$_nbProducts[$this->id]);
 		if (isset(self::$_totalWeight[$this->id]))
