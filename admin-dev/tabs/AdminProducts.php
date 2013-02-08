@@ -3330,17 +3330,16 @@ class AdminProducts extends AdminTab
 		  </tr>';
 		if (Configuration::get('PS_USE_ECOTAX'))
 			echo'
-				  <tr>
-					  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Eco-tax:').'</td>
-					  <td style="padding-bottom:5px;">'.($currency->format % 2 != 0 ? $currency->sign.' ' : '').'<input type="text" size="3" name="attribute_ecotax" id="attribute_ecotax" value="0.00" onKeyUp="if (isArrowKey(event)) return ;this.value = this.value.replace(/,/g, \'.\');" />'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').' ('.$this->l('overrides Eco-tax on Information tab').')</td>
-				  </tr>';
+				<tr>
+				  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Eco-tax:').'</td>
+				  <td style="padding-bottom:5px;">'.($currency->format % 2 != 0 ? $currency->sign.' ' : '').'<input type="text" size="3" name="attribute_ecotax" id="attribute_ecotax" value="0.00" onKeyUp="if (isArrowKey(event)) return ;this.value = this.value.replace(/,/g, \'.\');" />'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').' ('.$this->l('overrides Eco-tax on Information tab').')</td>
+				</tr>';
 
 		echo'
-		  <tr id="initial_stock_attribute">
+			<tr id="initial_stock_attribute">
 				<td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;" class="col-left">'.$this->l('Initial stock:').'</td>
 				<td><input type="text" name="attribute_quantity" size="3" maxlength="10" value="0"/></td>
-		  </tr>
-		  </tr>
+			</tr>
 			<tr id="stock_mvt_attribute" style="display:none;">
 				<td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;" class="col-left">'.$this->l('Stock movement:').'</td>
 				<td style="padding-bottom:5px;">
