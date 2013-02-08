@@ -156,11 +156,9 @@ abstract class ModuleCore
 		WHERE `id_module` = '.(int)$this->id);
 		foreach	($result as $row)
 		{
-			Db::getInstance()->Execute('
-			DELETE FROM `'._DB_PREFIX_.'hook_module`
-			WHERE `id_module` = '.(int)$this->id.'
-			AND `id_hook` = '.(int)$row['id_hook']);
+			$this->unregisterHook($row['id_hook']);
 			$this->cleanPositions($row['id_hook']);
+			$this->unregisterExceptions($row['id_hook']);			
 		}
 		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'module` WHERE `id_module` = '.(int)$this->id);
 	}

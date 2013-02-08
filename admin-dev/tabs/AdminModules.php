@@ -254,11 +254,19 @@ class AdminModules extends AdminTab
 			{
 				if (Tools::getValue('module_name') != '')
 				{
+                    $module = Module::getInstanceByName(Tools::getValue('module_name'));
+                    if (Validate::isLoadedObject($module))
+                    {
+                          if ( !$module->uninstall() )
+                                $this->_errors[] = Tools::displayError('Cannot uninstall and delete module');
+                    }					
 					$moduleDir = _PS_MODULE_DIR_.str_replace(array('.', '/', '\\'), array('', '', ''), Tools::getValue('module_name'));
 					$this->recursiveDeleteOnDisk($moduleDir);
-					Tools::redirectAdmin($currentIndex.'&conf=22&token='.$this->token.'&tab_module='.Tools::getValue('tab_module'));
+					if(!count($this->_errors))
+						Tools::redirectAdmin($currentIndex.'&conf=22&token='.$this->token.'&tab_module='.Tools::getValue('tab_module'));
 				}
-				Tools::redirectAdmin($currentIndex.'&token='.$this->token);
+				if(!count($this->_errors))
+					Tools::redirectAdmin($currentIndex.'&token='.$this->token);
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
