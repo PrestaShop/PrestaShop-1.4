@@ -260,11 +260,11 @@ class AdminCountries extends AdminTab
 				<label>'.$this->l('Default currency:').' </label>
 				<div class="margin-form">
 					<select name="id_currency">
-						<option value="0" '.(Tools::getValue('id_currency', $obj->id_currency) == 0 ? 'selected' : '').'>'.$this->l('Default store currency').'</option>
+						<option value="0" '.((int)Tools::getValue('id_currency', $obj->id_currency) == 0 ? 'selected' : '').'>'.$this->l('Default store currency').'</option>
 		';
 		$currencies = Currency::getCurrencies();
 		foreach ($currencies AS $currency)
-			echo '<option value="'.intval($currency['id_currency']).'" '.(Tools::getValue('id_currency', $obj->id_currency) == $currency['id_currency'] ? 'selected' : '').'>'.Tools::htmlentitiesUTF8($currency['name']).'</option>';
+			echo '<option value="'.intval($currency['id_currency']).'" '.((int)Tools::getValue('id_currency', $obj->id_currency) == $currency['id_currency'] ? 'selected' : '').'>'.Tools::htmlentitiesUTF8($currency['name']).'</option>';
 		echo '
 					</select>
 				</div>

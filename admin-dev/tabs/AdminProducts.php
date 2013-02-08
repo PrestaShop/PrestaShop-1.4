@@ -761,7 +761,7 @@ class AdminProducts extends AdminTab
 					if (!$specificPrice->add())
 						$this->_errors = Tools::displayError('An error occurred while updating the specific price.');
 					else
-						Tools::redirectAdmin($currentIndex.(Tools::getValue('id_category') ? '&id_category='.Tools::getValue('id_category') : '').'&id_product='.$id_product.'&add'.$this->table.'&tabs=2&conf=3&token='.($token ? $token : $this->token));
+						Tools::redirectAdmin($currentIndex.((int)Tools::getValue('id_category') ? '&id_category='.(int)Tools::getValue('id_category') : '').'&id_product='.(int)$id_product.'&add'.$this->table.'&tabs=2&conf=3&token='.($token ? $token : $this->token));
 				}
 			}
 			else
@@ -781,7 +781,7 @@ class AdminProducts extends AdminTab
 					if (!$specificPrice->delete())
 						$this->_errors[] = Tools::displayError('An error occurred while deleting the specific price');
 					else
-						Tools::redirectAdmin($currentIndex.(Tools::getValue('id_category') ? '&id_category='.Tools::getValue('id_category') : '').'&id_product='.$obj->id.'&add'.$this->table.'&tabs=2&conf=1&token='.($token ? $token : $this->token));
+						Tools::redirectAdmin($currentIndex.((int)Tools::getValue('id_category') ? '&id_category='.(int)Tools::getValue('id_category') : '').'&id_product='.(int)$obj->id.'&add'.$this->table.'&tabs=2&conf=1&token='.($token ? $token : $this->token));
 				}
 			}
 			else
@@ -803,7 +803,7 @@ class AdminProducts extends AdminTab
 			elseif (!SpecificPrice::setSpecificPriority((int)($obj->id), $priorities))
 				$this->_errors[] = Tools::displayError('An error occurred while setting priorities.');
 			else
-				Tools::redirectAdmin($currentIndex.(Tools::getValue('id_category') ? '&id_category='.Tools::getValue('id_category') : '').'&id_product='.$obj->id.'&add'.$this->table.'&tabs=2&conf=4&token='.($token ? $token : $this->token));
+				Tools::redirectAdmin($currentIndex.((int)Tools::getValue('id_category') ? '&id_category='.(int)Tools::getValue('id_category') : '').'&id_product='.(int)$obj->id.'&add'.$this->table.'&tabs=2&conf=4&token='.($token ? $token : $this->token));
 		}
 		/* Customization management */
 		elseif (Tools::isSubmit('submitCustomizationConfiguration'))
@@ -1772,7 +1772,7 @@ class AdminProducts extends AdminTab
 					<td class="cell border">'.$period.'</td>
 					<td class="cell border">'.$specificPrice['from_quantity'].'</th>
 					<td class="cell border"><b>'.Tools::displayPrice(Tools::ps_round((float)($this->_getFinalPrice($specificPrice, (float)($obj->price), $taxRate)), 2), $current_specific_currency).'</b></td>
-					<td class="cell border"><a href="'.$currentIndex.(Tools::getValue('id_category') ? '&id_category='.(int)Tools::getValue('id_category') : '').'&id_product='.(int)(Tools::getValue('id_product')).'&updateproduct&deleteSpecificPrice&id_specific_price='.(int)($specificPrice['id_specific_price']).'&token='.Tools::getValue('token').'"><img src="../img/admin/delete.gif" alt="'.$this->l('Delete').'" /></a></td>
+					<td class="cell border"><a href="'.$currentIndex.((int)Tools::getValue('id_category') ? '&id_category='.(int)Tools::getValue('id_category') : '').'&id_product='.(int)(Tools::getValue('id_product')).'&updateproduct&deleteSpecificPrice&id_specific_price='.(int)($specificPrice['id_specific_price']).'&token='.Tools::getValue('token').'"><img src="../img/admin/delete.gif" alt="'.$this->l('Delete').'" /></a></td>
 				</tr>';
 				$i++;
 			}
@@ -3024,7 +3024,7 @@ class AdminProducts extends AdminTab
 				<h4 class="tab">2. '.$this->l('Images').' ('.$countImages.')</h4>
 				<table cellpadding="5">
 				<tr>
-					<td><b>'.(Tools::getValue('id_image')?$this->l('Edit this product image'):$this->l('Add a new image to this product')).'</b></td>
+					<td><b>'.((int)Tools::getValue('id_image') ? $this->l('Edit this product image'):$this->l('Add a new image to this product')).'</b></td>
 				</tr>
 				</table>
 				<hr style="width: 100%;" /><br />
