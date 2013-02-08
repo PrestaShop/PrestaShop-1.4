@@ -42,10 +42,9 @@ class AdminOrders extends AdminTab
 			IF((SELECT COUNT(so.id_order) FROM `'._DB_PREFIX_.'orders` so WHERE so.id_customer = a.id_customer) > 1, 0, 1) as new,
 			(SELECT COUNT(od.`id_order`) FROM `'._DB_PREFIX_.'order_detail` od WHERE od.`id_order` = a.`id_order` GROUP BY `id_order`) AS product_number';
 	 	$this->_join = 'LEFT JOIN `'._DB_PREFIX_.'customer` c ON (c.`id_customer` = a.`id_customer`)
-	 	LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON (oh.`id_order` = a.`id_order`)
+	 	LEFT JOIN `'._DB_PREFIX_.'order_history` oh ON (oh.`id_order` = a.`id_order` AND (oh.`id_order_history` = (SELECT MAX(`id_order_history`) FROM `'._DB_PREFIX_.'order_history` moh WHERE moh.`id_order` = a.`id_order` GROUP BY moh.`id_order`)))
 		LEFT JOIN `'._DB_PREFIX_.'order_state` os ON (os.`id_order_state` = oh.`id_order_state`)
 		LEFT JOIN `'._DB_PREFIX_.'order_state_lang` osl ON (os.`id_order_state` = osl.`id_order_state` AND osl.`id_lang` = '.(int)($cookie->id_lang).')';
-		$this->_where = 'AND oh.`id_order_history` = (SELECT MAX(`id_order_history`) FROM `'._DB_PREFIX_.'order_history` moh WHERE moh.`id_order` = a.`id_order` GROUP BY moh.`id_order`)';
 
 		$statesArray = array();
 		$states = OrderState::getOrderStates((int)($cookie->id_lang));
@@ -60,7 +59,8 @@ class AdminOrders extends AdminTab
 		'payment' => array('title' => $this->l('Payment'), 'width' => 100),
 		'osname' => array('title' => $this->l('Status'), 'widthColumn' => 230, 'type' => 'select', 'select' => $statesArray, 'filter_key' => 'os!id_order_state', 'filter_type' => 'int', 'width' => 200),
 		'date_add' => array('title' => $this->l('Date'), 'width' => 35, 'align' => 'right', 'type' => 'datetime', 'filter_key' => 'a!date_add'),
-		'id_pdf' => array('title' => $this->l('PDF'), 'callback' => 'printPDFIcons', 'orderby' => false, 'search' => false));
+		'id_pdf' => array('title' => $this->l('PDF'), 'callback' => 'printPDFIcons', 'orderby' => false, 'search' => false)
+		);
 		parent::__construct();
 	}
 
@@ -523,10 +523,10 @@ class AdminOrders extends AdminTab
 		<h2>'.$prevOrder.' '.(Validate::isLoadedObject($customer) ? Tools::safeOutput($customer->firstname.' '.$customer->lastname).' - ' : '').$this->l('Order #').sprintf('%06d', (int)$order->id).' '.$nextOrder.'</h2>
 		<div style="float:left" style="width:440px">
 			<div style="width:429px">
-				'.((($currentState->invoice || $order->invoice_number) && count($products))
+				'.((((Validate::isLoadedObject($currentState) && $currentState->invoice) || $order->invoice_number) && count($products))
 					? '<a href="pdf.php?id_order='.$order->id.'&pdf"><img src="../img/admin/charged_ok.gif" alt="'.$this->l('View invoice').'" /> '.$this->l('View invoice').'</a>'
 					: '<img src="../img/admin/charged_ko.gif" alt="'.$this->l('No invoice').'" /> '.$this->l('No invoice')).' -
-				'.(($currentState->delivery || $order->delivery_number)
+				'.(((Validate::isLoadedObject($currentState) && $currentState->delivery) || $order->delivery_number)
 					? '<a href="pdf.php?id_delivery='.(int)$order->delivery_number.'"><img src="../img/admin/delivery.gif" alt="'.$this->l('View delivery slip').'" /> '.$this->l('View delivery slip').'</a>'
 					: '<img src="../img/admin/delivery_ko.gif" alt="'.$this->l('No delivery slip').'" /> '.$this->l('No delivery slip')).' -
 				<a href="javascript:window.print()"><img src="../img/admin/printer.gif" alt="'.$this->l('Print order').'" title="'.$this->l('Print order').'" /> '.$this->l('Print page').'</a>
@@ -534,24 +534,26 @@ class AdminOrders extends AdminTab
 			<div class="clear">&nbsp;</div>';
 
 		/* Display current status */
-		echo '
-			<table cellspacing="0" cellpadding="0" class="table" style="width: 429px">
-				<tr>
-					<th>'.Tools::displayDate($row['date_add'], (int)($cookie->id_lang), true).'</th>
-					<th><img src="../img/os/'.(int)$row['id_order_state'].'.gif" /></th>
-					<th>'.Tools::safeOutput(stripslashes($row['ostate_name'])).'</th>
-					<th>'.((!empty($row['employee_lastname'])) ? '('.Tools::safeOutput(stripslashes(Tools::substr($row['employee_firstname'], 0, 1)).'. '.stripslashes($row['employee_lastname'])).')' : '').'</th>
-				</tr>';
+		if(isset($row['id_order_state']))		
+			echo '
+				<table cellspacing="0" cellpadding="0" class="table" style="width: 429px">
+					<tr>
+						<th>'.Tools::displayDate($row['date_add'], (int)($cookie->id_lang), true).'</th>
+						<th><img src="../img/os/'.(int)$row['id_order_state'].'.gif" /></th>
+						<th>'.Tools::safeOutput(stripslashes($row['ostate_name'])).'</th>
+						<th>'.((!empty($row['employee_lastname'])) ? '('.Tools::safeOutput(stripslashes(Tools::substr($row['employee_firstname'], 0, 1)).'. '.stripslashes($row['employee_lastname'])).')' : '').'</th>
+					</tr>';
 			/* Display previous status */
-			foreach ($history AS $row)
-			{
-				echo '
-				<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
-					<td>'.Tools::displayDate($row['date_add'], (int)($cookie->id_lang), true).'</td>
-					<td><img src="../img/os/'.(int)$row['id_order_state'].'.gif" /></td>
-					<td>'.Tools::safeOutput(stripslashes($row['ostate_name'])).'</td>
-					<td>'.((!empty($row['employee_lastname'])) ? '('.Tools::safeOutput(stripslashes(Tools::substr($row['employee_firstname'], 0, 1)).'. '.stripslashes($row['employee_lastname'])).')' : '').'</td>
-				</tr>';
+			if(is_array($history))			
+				foreach ($history AS $row)
+				{
+					echo '
+					<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
+						<td>'.Tools::displayDate($row['date_add'], (int)($cookie->id_lang), true).'</td>
+						<td><img src="../img/os/'.(int)$row['id_order_state'].'.gif" /></td>
+						<td>'.Tools::safeOutput(stripslashes($row['ostate_name'])).'</td>
+						<td>'.((!empty($row['employee_lastname'])) ? '('.Tools::safeOutput(stripslashes(Tools::substr($row['employee_firstname'], 0, 1)).'. '.stripslashes($row['employee_lastname'])).')' : '').'</td>
+					</tr>';
 			}
 		echo '
 			</table>
@@ -626,7 +628,7 @@ class AdminOrders extends AdminTab
 
 		/* Display invoice information */
 		echo '<fieldset style="width: 400px">';
-		if (($currentState->invoice OR $order->invoice_number) AND count($products))
+		if ((Validate::isLoadedObject($currentState) && ($currentState->invoice) OR $order->invoice_number) AND count($products))
 			echo '<legend><a href="pdf.php?id_order='.$order->id.'&pdf"><img src="../img/admin/charged_ok.gif" /> '.$this->l('Invoice').'</a></legend>
 				<a href="pdf.php?id_order='.$order->id.'&pdf">'.$this->l('Invoice #').'<b>'.Configuration::get('PS_INVOICE_PREFIX', (int)($cookie->id_lang)).sprintf('%06d', $order->invoice_number).'</b></a>
 				<br />'.$this->l('Created on:').' '.Tools::displayDate($order->invoice_date, (int)$cookie->id_lang, true);
@@ -641,7 +643,7 @@ class AdminOrders extends AdminTab
 			<legend><img src="../img/admin/delivery.gif" /> '.$this->l('Shipping information').'</legend>
 			'.$this->l('Total weight:').' <b>'.number_format($order->getTotalWeight(), 3).' '.Configuration::get('PS_WEIGHT_UNIT').'</b><br />
 			'.$this->l('Carrier:').' <b>'.($carrier->name == '0' ? Configuration::get('PS_SHOP_NAME') : $carrier->name).'</b><br />
-			'.(($currentState->delivery OR $order->delivery_number) ? '<br /><a href="pdf.php?id_delivery='.$order->delivery_number.'">'.$this->l('Delivery slip #').'<b>'.Configuration::get('PS_DELIVERY_PREFIX', (int)($cookie->id_lang)).sprintf('%06d', $order->delivery_number).'</b></a><br />' : '');
+			'.((Validate::isLoadedObject($currentState) &&($currentState->delivery) OR $order->delivery_number) ? '<br /><a href="pdf.php?id_delivery='.$order->delivery_number.'">'.$this->l('Delivery slip #').'<b>'.Configuration::get('PS_DELIVERY_PREFIX', (int)($cookie->id_lang)).sprintf('%06d', $order->delivery_number).'</b></a><br />' : '');
 			if ($order->shipping_number)
 				echo $this->l('Tracking number:').' <b>'.$order->shipping_number.'</b> '.(!empty($carrier->url) ? '(<a href="'.str_replace('@', $order->shipping_number, $carrier->url).'" target="_blank">'.$this->l('Track the shipment').'</a>)' : '');
 

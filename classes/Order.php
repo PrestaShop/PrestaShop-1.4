@@ -1000,7 +1000,10 @@ class OrderCore extends ObjectModel
 		$order = new Order($id_order);
 		$orderState = OrderHistory::getLastOrderState($id_order);
 		if (!Validate::isLoadedObject($orderState) OR !Validate::isLoadedObject($order))
-			die(Tools::displayError('Invalid objects'));
+		{
+			echo '&nbsp;';
+			return false;
+		}
 		echo '<span style="width:20px; margin-right:5px;">';
 		if (($orderState->invoice AND $order->invoice_number) AND (int)($tr['product_number']))
 			echo '<a href="pdf.php?id_order='.(int)($order->id).'&pdf"><img src="../img/admin/tab-invoice.gif" alt="invoice" /></a>';
