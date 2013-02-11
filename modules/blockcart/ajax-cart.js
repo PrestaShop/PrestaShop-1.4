@@ -358,7 +358,7 @@ var ajaxCart = {
 			}
 			var removeLinks = $('#'+parentId+' #cart_block_product_' + domIdProduct).find('a.ajax_cart_block_remove_link');
 			if (!product.hasCustomizedDatas && !removeLinks.length)
-				$('#'+parentId+' #' + domIdProduct + ' span.remove_link').html('<a class="ajax_cart_block_remove_link" rel="nofollow" href="' + baseDir + 'cart.php?delete&amp;id_product=' + product['id'] + '&amp;ipa=' + product['idCombination'] + '&amp;token=' + static_token + '" title="' + removingLinkText + '"> </a>');
+				$('#'+parentId+' #' + domIdProduct + ' span.remove_link').html('<a class="ajax_cart_block_remove_link" rel="nofollow" href="' + baseDir + 'cart.php?delete=1&amp;id_product=' + product['id'] + '&amp;ipa=' + product['idCombination'] + '&amp;token=' + static_token + '" title="' + removingLinkText + '"> </a>');
 		});
 	},
 
@@ -452,7 +452,7 @@ var ajaxCart = {
 							content += '<span class="quantity-formated"><span class="quantity">' + this.quantity + '</span>x</span>';
 							var name = (this.name.length > 12 ? this.name.substring(0, 10) + '...' : this.name);
 							content += '<a href="' + this.link + '" title="' + this.name + '">' + name + '</a>';
-							content += '<span class="remove_link"><a rel="nofollow" class="ajax_cart_block_remove_link" href="' + baseDir + 'cart.php?delete&amp;id_product=' + productId + '&amp;token=' + static_token + (this.hasAttributes ? '&amp;ipa=' + parseInt(this.idCombination) : '') + '"> </a></span>';
+							content += '<span class="remove_link"><a rel="nofollow" class="ajax_cart_block_remove_link" href="' + baseDir + 'cart.php?delete=1&amp;id_product=' + productId + '&amp;token=' + static_token + (this.hasAttributes ? '&amp;ipa=' + parseInt(this.idCombination) : '') + '"> </a></span>';
 							content += '<span class="price">' + this.priceByLine + '</span>';
 							content += '</dt>';
 						if (this.hasAttributes)
@@ -524,7 +524,7 @@ var ajaxCart = {
 				// If the customization is already displayed on the cart, no update's needed
 				if ($("#deleteCustomizableProduct_" + customizationId + "_" + productId + "_" + productAttributeId).length)
 					return ('');
-				content += '<li name="customization"><div class="deleteCustomizableProduct" id="deleteCustomizableProduct_' + customizationId + '_' + productId + '_' + (productAttributeId ?  productAttributeId : '0') + '"><a  rel="nofollow" class="ajax_cart_block_remove_link" href="' + baseDir + 'cart.php?delete&amp;id_product=' + productId + '&amp;ipa=' + productAttributeId + '&amp;id_customization=' + customizationId + '&amp;token=' + static_token + '"> </a></div><span class="quantity-formated"><span class="quantity">' + parseInt(this.quantity) + '</span>x</span>';
+				content += '<li name="customization"><div class="deleteCustomizableProduct" id="deleteCustomizableProduct_' + customizationId + '_' + productId + '_' + (productAttributeId ?  productAttributeId : '0') + '"><a  rel="nofollow" class="ajax_cart_block_remove_link" href="' + baseDir + 'cart.php?delete=1&amp;id_product=' + productId + '&amp;ipa=' + productAttributeId + '&amp;id_customization=' + customizationId + '&amp;token=' + static_token + '"> </a></div><span class="quantity-formated"><span class="quantity">' + parseInt(this.quantity) + '</span>x</span>';
 
 				// Give to the customized product the first textfield value as name
 				$(this.datas).each(function(){
