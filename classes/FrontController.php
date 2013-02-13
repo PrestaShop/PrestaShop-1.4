@@ -238,7 +238,7 @@ class FrontControllerCore
 		Product::initPricesComputation();
 
 		$display_tax_label = $defaultCountry->display_tax_label;
-		if ($tmp = (int)$cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')})
+		if (Validate::isLoadedObject($cart) && $tmp = (int)$cart->{Configuration::get('PS_TAX_ADDRESS_TYPE')})
 		{
 			$infos = Address::getCountryAndState($tmp);
 			$country = new Country((int)$infos['id_country']);
