@@ -650,10 +650,10 @@ $(\'#avalaratax_state\').html(\'\');
 		if (data != 0)
 		{
 		    $.each(data[iso_code], function(i, item){
-if (default_state == item.iso_code)
-			$(\'#avalaratax_state\').append(\'<option  selected="selected" value="\'+item.iso_code+\'">\'+item.name+\'</option>\');
+if (default_state == item.state_iso_code)
+			$(\'#avalaratax_state\').append(\'<option  selected="selected" value="\'+item.state_iso_code+\'">\'+item.name+\'</option>\');
 else
-			$(\'#avalaratax_state\').append(\'<option  value="\'+item.iso_code+\'">\'+item.name+\'</option>\');
+			$(\'#avalaratax_state\').append(\'<option  value="\'+item.state_iso_code+\'">\'+item.name+\'</option>\');
 			$(\'#avalaratax_state\').show();
 			$(\'#avalaratax_label_state\').show();
 		    });
