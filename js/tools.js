@@ -134,7 +134,8 @@ function writeBookmarkLink(url, title, text, img)
 	if (img)
 		insert = writeBookmarkLinkObject(url, title, '<img src="' + img + '" alt="' + escape(text) + '" title="' + escape(text) + '" />') + '&nbsp';
 	insert += writeBookmarkLinkObject(url, title, text);
-	document.write(insert);
+	if (window.sidebar || window.opera && window.print || (window.external && ('AddFavorite' in window.external)))	
+		document.write(insert);
 }
 
 function writeBookmarkLinkObject(url, title, insert)
