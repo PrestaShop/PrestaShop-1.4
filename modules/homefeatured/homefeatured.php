@@ -85,7 +85,7 @@ class HomeFeatured extends Module
 				<label>'.$this->l('Number of products displayed').'</label>
 				<div class="margin-form">
 					<input type="text" size="5" name="nbr" value="'.Tools::safeOutput(Tools::getValue('nbr', (int)Configuration::get('HOME_FEATURED_NBR'))).'" />
-					<p class="clear">'.$this->l('The number of products displayed on homepage (default: '.(int)$this->defaultNumberProducts.').').'</p>
+					<p class="clear">'.sprintf($this->l('The number of products displayed on homepage (default: "%s").'), (int)$this->defaultNumberProducts).'</p>
 					
 				</div>
 				<center><input type="submit" name="submitHomeFeatured" value="'.$this->l('Save').'" class="button" /></center>
