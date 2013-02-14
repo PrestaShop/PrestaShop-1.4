@@ -30,7 +30,7 @@ $('document').ready(function(){
 reloadProductComparison = function() {
 	$('a.cmp_remove').click(function(){
 	
-		var idProduct = $(this).attr('rel').replace('ajax_id_product_', '');
+		var idProduct = $.trim($(this).attr('rel').replace('nofollow', '').replace('ajax_id_product_', ''));
 		
 		$.ajax({
   			url: 'products-comparison.php?ajax=1&action=remove&id_product=' + idProduct,
