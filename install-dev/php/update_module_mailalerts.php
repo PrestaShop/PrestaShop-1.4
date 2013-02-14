@@ -41,7 +41,7 @@ function update_module_mailalerts()
 		  KEY `id_product` (`id_product`,`id_product_attribute`)
 		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;');
 		
-		$default_language = (int)Configuration::get('PS_LANG_DEFAULT');
+		$default_language = (int)Db::getInstance()->getRow('SELECT value FROM `'._DB_PREFIX_.'configuration` WHERE `name` LIKE "PS_LANG_DEFAULT"');
 		$current_time = date('Y-m-d H:i:s');
 		$existing_alerts = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'mailalert_customer_oos`', false);
 		$result &= (bool)$existing_alerts;
