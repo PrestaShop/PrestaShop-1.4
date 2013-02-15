@@ -51,9 +51,13 @@ define('SETTINGS_FILE', INSTALL_PATH.'/../config/settings.inc.php');
 define('DEFINES_FILE', INSTALL_PATH.'/../config/defines.inc.php');
 define('INSTALLER__PS_BASE_URI', substr($_SERVER['REQUEST_URI'], 0, -1 * (strlen($_SERVER['REQUEST_URI']) - strrpos($_SERVER['REQUEST_URI'], '/')) - strlen(substr(dirname($_SERVER['REQUEST_URI']), strrpos(dirname($_SERVER['REQUEST_URI']), '/')+1))));
 define('INSTALLER__PS_BASE_URI_ABSOLUTE', 'http://'.ToolsInstall::getHttpHost(false, true).INSTALLER__PS_BASE_URI);
+if (isset($_GET['method']) AND in_array($_GET['method'], array('createDB', 'checkDB', 'checkConfig')))
+	define('DONT_LOAD_SETTINGS_FILE', true);
+else
+	define('DONT_LOAD_SETTINGS_FILE', false);
 
 /* Emulate configuration defines, only if we are in the last step of installation */
-if (file_exists(SETTINGS_FILE))
+if (file_exists(SETTINGS_FILE) && !DONT_LOAD_SETTINGS_FILE)
 {
 	/* Keep a backward compatibility for Smarty v2 (will be removed in PrestaShop v1.5) */
 	define('_PS_FORCE_SMARTY_2_', (int)Configuration::get('PS_FORCE_SMARTY_2'));
@@ -128,4 +132,3 @@ if (isset($_GET['method']))
 		break;
 	}
 }
-

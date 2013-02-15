@@ -172,7 +172,7 @@ class GuestCore extends ObjectModel
 		SELECT `id_guest`
 		FROM `'._DB_PREFIX_.'guest`
 		WHERE `id_customer` = '.(int)($id_customer));
-		return $result['id_guest'];
+		return (int)$result['id_guest'];
 	}
 	
 	public function mergeWithCustomer($id_guest, $id_customer)

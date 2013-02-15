@@ -171,7 +171,12 @@ class MySQLCore extends Db
 
 	public function nextRow($result = false)
 	{
-		return mysql_fetch_assoc($result ? $result : $this->_result);
+		$return = false;
+		if(is_resource($result) && $result)
+			$return = mysql_fetch_assoc($result);
+		elseif(is_resource($this->_result) && $this->_result)
+			$return = mysql_fetch_assoc($this->_result);
+		return $return;
 	}
 	
 	public function delete($table, $where = false, $limit = false, $use_cache = 1)
