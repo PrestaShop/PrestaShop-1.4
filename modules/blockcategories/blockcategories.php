@@ -318,6 +318,7 @@ class BlockCategories extends Module
 	private function _clearBlockcategoriesCache()
 	{
 		$this->_clearCache('blockcategories.tpl');
+		$this->_clearCache('blockcategories_footer.tpl');		
 		Tools::restoreCacheSettings();
 	}
 
