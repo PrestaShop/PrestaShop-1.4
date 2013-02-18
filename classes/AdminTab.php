@@ -432,23 +432,23 @@ abstract class AdminTabCore
 		foreach ($rules['required'] as $field)
 			if (($value = Tools::getValue($field)) == false AND (string)$value != '0')
 				if (!Tools::getValue($this->identifier) OR ($field != 'passwd' AND $field != 'no-picture'))
-					$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $field, $className).'</b> '.$this->l('is required');
+					$this->_errors[] = $this->l('the field').' <b>'.Tools::safeOutput(call_user_func(array($className, 'displayFieldName'), $field, $className)).'</b> '.$this->l('is required');
 
 		/* Checking for multilingual required fields */
 		foreach ($rules['requiredLang'] as $fieldLang)
 			if (($empty = Tools::getValue($fieldLang.'_'.$defaultLanguage->id)) === false OR $empty !== '0' AND empty($empty))
-				$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).'</b> '.$this->l('is required at least in').' '.$defaultLanguage->name;
+				$this->_errors[] = $this->l('the field').' <b>'.Tools::safeOutput(call_user_func(array($className, 'displayFieldName'), $fieldLang, $className)).'</b> '.$this->l('is required at least in').' '.$defaultLanguage->name;
 
 		/* Checking for maximum fields sizes */
 		foreach ($rules['size'] as $field => $maxLength)
 			if (Tools::getValue($field) !== false AND Tools::strlen(Tools::getValue($field)) > $maxLength)
-				$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $field, $className).'</b> '.$this->l('is too long').' ('.$maxLength.' '.$this->l('chars max').')';
+				$this->_errors[] = $this->l('the field').' <b>'.Tools::safeOutput(call_user_func(array($className, 'displayFieldName'), $field, $className)).'</b> '.$this->l('is too long').' ('.$maxLength.' '.$this->l('chars max').')';
 
 		/* Checking for maximum multilingual fields size */
 		foreach ($rules['sizeLang'] as $fieldLang => $maxLength)
 			foreach ($languages as $language)
 				if (Tools::getValue($fieldLang.'_'.$language['id_lang']) !== false AND Tools::strlen(Tools::getValue($fieldLang.'_'.$language['id_lang'])) > $maxLength)
-					$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).' ('.$language['name'].')</b> '.$this->l('is too long').' ('.$maxLength.' '.$this->l('chars max, html chars including').')';
+					$this->_errors[] = $this->l('the field').' <b>'.Tools::safeOutput(call_user_func(array($className, 'displayFieldName'), $fieldLang, $className)).' ('.$language['name'].')</b> '.$this->l('is too long').' ('.$maxLength.' '.$this->l('chars max, html chars including').')';
 
 		/* Overload this method for custom checking */
 		$this->_childValidation();
@@ -457,15 +457,15 @@ abstract class AdminTabCore
 		foreach ($rules['validate'] as $field => $function)
 			if (($value = Tools::getValue($field)) !== false AND !empty($value) AND ($field != 'passwd')) 			
 				if (!Validate::$function($value))
-					$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $field, $className).'</b> '.$this->l('is invalid');
+					$this->_errors[] = $this->l('the field').' <b>'.Tools::safeOutput(call_user_func(array($className, 'displayFieldName'), $field, $className)).'</b> '.$this->l('is invalid');
 
 		/* Checking for passwd_old validity */
 		if (($value = Tools::getValue('passwd')) != false)
 		{
 			if ($className == 'Employee' AND !Validate::isPasswdAdmin($value))
-				$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), 'passwd', $className).'</b> '.$this->l('is invalid');
+				$this->_errors[] = $this->l('the field').' <b>'.Tools::safeOutput(call_user_func(array($className, 'displayFieldName'), 'passwd', $className)).'</b> '.$this->l('is invalid');
 			elseif ($className == 'Customer' AND !Validate::isPasswd($value))
-				$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), 'passwd', $className).'</b> '.$this->l('is invalid');
+				$this->_errors[] = $this->l('the field').' <b>'.Tools::safeOutput(call_user_func(array($className, 'displayFieldName'), 'passwd', $className)).'</b> '.$this->l('is invalid');
 		}
 
 		/* Checking for multilingual fields validity */
@@ -473,7 +473,7 @@ abstract class AdminTabCore
 			foreach ($languages as $language)
 				if (($value = Tools::getValue($fieldLang.'_'.$language['id_lang'])) !== false AND !empty($value))
 					if (!Validate::$function($value))
-						$this->_errors[] = $this->l('the field').' <b>'.call_user_func(array($className, 'displayFieldName'), $fieldLang, $className).' ('.$language['name'].')</b> '.$this->l('is invalid');
+						$this->_errors[] = $this->l('the field').' <b>'.Tools::safeOutput(call_user_func(array($className, 'displayFieldName'), $fieldLang, $className)).' ('.$language['name'].')</b> '.$this->l('is invalid');
 	}
 
 	/**
