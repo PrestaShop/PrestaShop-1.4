@@ -166,6 +166,15 @@ class CustomerCore extends ObjectModel
 		$this->birthday = (empty($this->years) ? $this->birthday : (int)$this->years.'-'.(int)$this->months.'-'.(int)$this->days);
 		if ($this->newsletter AND !$this->newsletter_date_add)
 			$this->newsletter_date_add = date('Y-m-d H:i:s');
+		if ($this->deleted)
+		{
+			$addresses = $this->getAddresses((int)Configuration::get('PS_LANG_DEFAULT'));
+			foreach ($addresses as $address)
+			{
+				$obj = new Address((int)$address['id_address']);
+				$obj->delete();
+			}
+		}			
 	 	return parent::update(true);
 	}
 
