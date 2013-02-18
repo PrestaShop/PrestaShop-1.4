@@ -121,7 +121,7 @@ function addBookmark(url, title)
 {
 	if (window.sidebar)
 		return window.sidebar.addPanel(title, url, "");
-	else if ( window.external )
+	else if ( window.external && ('AddFavorite' in window.external))
 		return window.external.AddFavorite( url, title);
 	else if (window.opera && window.print)
 		return true;
