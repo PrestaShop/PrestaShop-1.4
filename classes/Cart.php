@@ -1477,14 +1477,16 @@ class CartCore extends ObjectModel
 
 	public static function lastNoneOrderedCart($id_customer)
 	{
-		if (!$result = Db::getInstance()->getRow('
-			SELECT c.`id_cart`
-			FROM '._DB_PREFIX_.'cart c
-			LEFT JOIN '._DB_PREFIX_.'orders o ON (c.`id_cart` = o.`id_cart`)
-			WHERE c.`id_customer` = '.(int)$id_customer.' AND o.`id_cart` IS NULL
-			ORDER BY c.`date_upd` DESC'))
-	 		return false;
-	 	return $result['id_cart'];
+		$sql = 'SELECT c.`id_cart`
+				FROM '._DB_PREFIX_.'cart c
+				WHERE c.`id_cart` NOT IN (SELECT o.`id_cart` FROM '._DB_PREFIX_.'orders o WHERE o.`id_customer` = '.(int)$id_customer.')
+				AND c.`id_customer` = '.(int)$id_customer.'
+				ORDER BY c.`date_upd` DESC';
+
+		if (!$id_cart = Db::getInstance()->getValue($sql))
+			return false;
+
+		return (int)$id_cart;
 	}
 
 	/**
