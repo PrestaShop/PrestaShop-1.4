@@ -90,36 +90,35 @@ class CountyCore extends ObjectModel
 		ORDER BY `from_zip_code` ASC');
 	}
 
-	public function addZipCodes($zip_codes)
+	public function addZipCodes($from, $to)
 	{
-		list($from, $to) = $this->breakDownZipCode($zip_codes);
-
-		if ($from == 0)
+		if (empty($from))
 			return false;
-
-		return Db::getInstance()->Execute(
-		'INSERT INTO `'._DB_PREFIX_.'county_zip_code` (`id_county`, `from_zip_code`, `to_zip_code`)
-		VALUES ('.(int)$this->id.','.(int)$from.','.(int)$to.')');
+		if (empty($to))
+			$to = $from;			
+		$sql = 'INSERT INTO `'._DB_PREFIX_.'county_zip_code` (`id_county`, `from_zip_code`, `to_zip_code`)
+		VALUES ('.(int)$this->id.',\''.pSQL($from).'\',\''.pSQL($to).'\')';
+		return Db::getInstance()->Execute($sql);
 	}
 
 
-	public function removeZipCodes($zip_codes)
+	public function removeZipCodes($from, $to)
 	{
-		list($from, $to) = $this->breakDownZipCode($zip_codes);
-
-		if ($from == 0)
+		if (empty($from))
 			return false;
+		if (empty($to))
+			$to = $from;			
 
 		return Db::getInstance()->Execute('
 		DELETE FROM `'._DB_PREFIX_.'county_zip_code`
 		WHERE `id_county` = '.(int)$this->id.'
-		AND `from_zip_code` = '.(int)$from.' AND `to_zip_code` = '.(int)$to);
+		AND `from_zip_code` LIKE \''.pSQL($from).'\' AND `to_zip_code` = \''.pSQL($to).'\'');
 	}
 
 
 	public function breakDownZipCode($zip_codes)
 	{
-		$zip_codes = preg_split('/-/', $zip_codes);
+		$zip_codes = preg_split('/->/', $zip_codes);
 
 		if (count($zip_codes) == 2)
 		{
@@ -142,12 +141,6 @@ class CountyCore extends ObjectModel
 			$to = $from;
 		}
 
-		if (!Validate::isInt($from) || !Validate::isInt($to))
-		{
-			$from = 0;
-			$to = 0;
-		}
-
 		return array($from, $to);
 	}
 
@@ -165,15 +158,13 @@ class CountyCore extends ObjectModel
 		return self::$_cache_county_zipcode[$id_state.'-'.$zip_code];
 	}
 
-	public function isZipCodeRangePresent($zip_codes)
+	public function isZipCodeRangePresent($from, $to)
 	{
 		$res = false;
-		list($from, $to) = $this->breakDownZipCode($zip_codes);
-
-		if ($from == 0)
+		if (empty($from))
 			return false;
-
-		if ($to != 0)
+				
+		if (!empty($to))
 		{
 			$res = Db::getInstance()->getValue('
 			SELECT COUNT(*) FROM `'._DB_PREFIX_.'county_zip_code` cz
@@ -192,7 +183,7 @@ class CountyCore extends ObjectModel
 
 	public function isZipCodePresent($zip_code)
 	{
-		if ($zip_code == 0)
+		if (empty($zip_code))
 			return false;
 
 		return (bool) Db::getInstance()->getValue('
@@ -223,4 +214,3 @@ class CountyCore extends ObjectModel
 	}
 
 }
-

@@ -16,3 +16,5 @@ INSERT INTO `PREFIX_hook_module` (`id_module`, `id_hook` , `position`)
 
 UPDATE `PREFIX_order_state` SET `send_email` = 1 WHERE `id_order_state` = (SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PS_OS_WS_PAYMENT' LIMIT 1);
 UPDATE `PREFIX_order_state_lang` SET `template` = 'payment' WHERE `id_order_state` = (SELECT `value` FROM `PREFIX_configuration` WHERE `name` = 'PS_OS_WS_PAYMENT' LIMIT 1);
+
+ALTER TABLE `PREFIX_county_zip_code` CHANGE `from_zip_code` `from_zip_code` VARCHAR( 12 ) NOT NULL , CHANGE `to_zip_code` `to_zip_code` VARCHAR( 12 ) NOT NULL;

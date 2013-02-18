@@ -54,11 +54,12 @@ class AdminCounty extends AdminTab
 		{
 			zipcodes = $("#zipcodes").val();
 			id_county = $("#id_county").val();
-
+			id_state = $("#id_state").val();
+			
 			$.ajax({
 				type: "POST",
 				url: "ajax.php",
-				data: "ajaxAddZipCode=1&zipcodes="+zipcodes+"&id_county="+id_county+"&token='.$this->token.'",
+				data: "ajaxAddZipCode=1&zipcodes=" + zipcodes + "&id_county=" + id_county + "&id_state=" + id_state + "&token='.$this->token.'",
 				async : true,
 				success: function(msg) {
 					res = msg.split(":");
@@ -70,7 +71,8 @@ class AdminCounty extends AdminTab
 						$("#error-msg").html("");
 						$("#zipcodes").val("");
 						$("#zipcodes").css("border", "1px solid #E0D0B1");
-						$("#zipcodes-list").html(msg);
+						if($.trim(msg) != "error" && msg != "")
+							$("#zipcodes-list").html(msg);
 					}
 				}
 			});
@@ -84,6 +86,8 @@ class AdminCounty extends AdminTab
 			  data: "ajaxStates=1&no_empty=false&id_country="+id_country+"&id_state="+id_state,
 			  success: function(html){
 				$("#id_state").html(html);
+				$("#zipcodes").val("");
+				$("#zipcodes").css("border", "1px solid #E0D0B1");				
 			  }
 			});
 		}
@@ -196,7 +200,7 @@ class AdminCounty extends AdminTab
 			'.$this->l('Add Zip Codes:').'<br />
 			<input type="text" id="zipcodes" name="zipcodes" />
 			<a href="#" class="button" onclick="addZipCode()">'.$this->l('Add').'</a>
-			<p>'.$this->l('You can add a zip code range using a dash sign (example: 10001-14975)').'</p>
+			<p>'.$this->l('You can add a zip code range using a dash sign and a greater-than sign (example: 10001->14975)').'</p>
 			<div id="error-msg" style="color: #FF0000"></div>
 		</div>';
 	}
@@ -208,8 +212,8 @@ class AdminCounty extends AdminTab
 		foreach ($zip_codes AS $zip_code)
 		{
 			$full_zip_code = $zip_code['from_zip_code'];
-			if ($zip_code['to_zip_code'] != 0 && $zip_code['from_zip_code'] != $zip_code['to_zip_code'])
-				$full_zip_code .= '-'.$zip_code['to_zip_code'];
+			if (!empty($zip_code['to_zip_code']) && $zip_code['from_zip_code'] != $zip_code['to_zip_code'])
+				$full_zip_code .= '->'.$zip_code['to_zip_code'];
 
 			$html .= '<div>'.Tools::htmlentitiesUTF8($full_zip_code).' <a href="#" onclick="removeZipCodes(\''.Tools::htmlentitiesUTF8($full_zip_code).'\')"><img src="../img/admin/delete.gif" alt="" /></a></div>';
 		}
