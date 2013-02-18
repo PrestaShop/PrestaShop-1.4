@@ -309,7 +309,7 @@
 	</form>
 </div>
 {/if}
-<div id="HOOK_SHOPPING_CART">{$HOOK_SHOPPING_CART}</div>
+{if !empty($HOOK_SHOPPING_CART)}<div id="HOOK_SHOPPING_CART">{$HOOK_SHOPPING_CART}</div>{/if}
 
 {* Define the style if it doesn't exist in the PrestaShop version*}
 {* Will be deleted for 1.5 version and more *}
@@ -370,7 +370,7 @@
 				{/foreach}
 				</ul>
 		{/foreach}
-		<p class="clear" />
+		<br class="clear"/>
 	{/if}
 	{if $carrier->id AND !isset($virtualCart)}
 	<div id="order_carrier">
@@ -383,11 +383,11 @@
 {/if}
 <p class="cart_navigation">
 	{if !$opc}<a href="{$link->getPageLink('order.php', true)}?step=1{if $back}&amp;back={$back}{/if}" class="exclusive" title="{l s='Next'}">{l s='Next'} &raquo;</a>{/if}
-	<a href="{if (isset($smarty.server.HTTP_REFERER) && strstr($smarty.server.HTTP_REFERER, $link->getPageLink('order.php'))) || !isset($smarty.server.HTTP_REFERER)}{$link->getPageLink('index.php')}{else}{$smarty.server.HTTP_REFERER|escape:'htmlall':'UTF-8'|secureReferrer}{/if}" class="button_large" title="{l s='Continue shopping'}">&laquo; {l s='Continue shopping'}</a>
+	<a href="{if (isset($smarty.server.HTTP_REFERER) && strstr($smarty.server.HTTP_REFERER, $link->getPageLink('order.php'))) || !isset($smarty.server.HTTP_REFERER)}{$link->getPageLink('index.php')}{else}{$smarty.server.HTTP_REFERER|escape:'htmlall':'UTF-8'|secureReferrer}{/if}" class="button_large" title="{l s='Continue shopping'}">&laquo; {l s='Continue shopping'}</a><br class="clear"/>
 </p>
-<p class="clear"><br /><br /></p>
-<div class="clear"></div>
-<p class="cart_navigation_extra">
-	<span id="HOOK_SHOPPING_CART_EXTRA">{$HOOK_SHOPPING_CART_EXTRA}</span>
-</p>
+	{if !empty($HOOK_SHOPPING_CART_EXTRA)}
+		<div class="cart_navigation_extra clear">
+			<div id="HOOK_SHOPPING_CART_EXTRA">{$HOOK_SHOPPING_CART_EXTRA}</div>
+		</div>
+	{/if}
 {/if}
