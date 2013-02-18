@@ -35,14 +35,14 @@ class MySQLCore extends Db
 			define('_PS_MYSQL_REAL_ESCAPE_STRING_', function_exists('mysql_real_escape_string'));
 
 		if (!$this->link = mysql_connect($this->server, $this->user, $this->password))
-			throw new PrestaShopDatabaseException(Tools::displayError('Link to database cannot be established.'));
+			throw new PrestaShopDatabaseException(Tools14::displayError('Link to database cannot be established.'));
 
 		if (!$this->set_db($this->database))
-			throw new PrestaShopDatabaseException(Tools::displayError('The database selection cannot be made.'));
+			throw new PrestaShopDatabaseException(Tools14::displayError('The database selection cannot be made.'));
 
 		// UTF-8 support
 		if (!mysql_query('SET NAMES \'utf8\'', $this->link))
-			throw new PrestaShopDatabaseException(Tools::displayError('PrestaShop Fatal error: no utf-8 support. Please check your server configuration.'));
+			throw new PrestaShopDatabaseException(Tools14::displayError('PrestaShop Fatal error: no utf-8 support. Please check your server configuration.'));
 
 		return $this->link;
 	}
@@ -173,6 +173,28 @@ class MySQLCore extends Db
 		}
 		@mysql_close($link);
 		return 0;
+	}
+	
+	public static function checkCreatePrivilege($server, $user, $pwd, $db, $prefix, $engine)
+	{
+		ini_set('mysql.connect_timeout', 5);
+		if (!$link = @mysql_connect($server, $user, $pwd, true))
+			return false;
+		if (!@mysql_select_db($db, $link))
+			return false;
+
+		$sql = '
+			CREATE TABLE `'.$prefix.'test` (
+			`test` tinyint(1) unsigned NOT NULL
+			) ENGINE=MyISAM';
+
+		$result = mysql_query($sql, $link);
+		
+		if (!$result)
+			return mysql_error($link);
+
+		mysql_query('DROP TABLE `'.$prefix.'test`', $link);
+		return true;
 	}
 
 	/**

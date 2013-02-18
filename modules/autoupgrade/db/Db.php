@@ -209,7 +209,7 @@ abstract class DbCore
 	public static function getClass()
 	{
 		$class = 'MySQL';
-		if (extension_loaded('pdo_mysql'))
+		if (PHP_VERSION_ID >= 50200 && extension_loaded('pdo_mysql'))
 			$class = 'DbPDO';
 		else if (extension_loaded('mysqli'))
 			$class = 'DbMySQLi';
@@ -596,7 +596,10 @@ abstract class DbCore
 
 		$errno = $this->getNumberError();
 		if ($webservice_call && $errno)
-			WebserviceRequest::getInstance()->setError(500, '[SQL Error] '.$this->getMsgError().'. Query was : '.$sql, 97);
+		{
+			$dbg = debug_backtrace();
+			WebserviceRequest::getInstance()->setError(500, '[SQL Error] '.$this->getMsgError().'. From '.(isset($dbg[3]['class']) ? $dbg[3]['class'] : '').'->'.$dbg[3]['function'].'() Query was : '.$sql, 97);
+		}
 		else if (_PS_DEBUG_SQL_ && $errno && !defined('PS_INSTALLATION_IN_PROGRESS'))
 		{
 			if ($sql)
@@ -620,7 +623,7 @@ abstract class DbCore
 		{
 			$string = $this->_escape($string);
 			if (!$html_ok)
-				$string = strip_tags($string);
+				$string = strip_tags(Tools14::nl2br($string));
 		}
 
 		return $string;
@@ -670,12 +673,16 @@ abstract class DbCore
 		return call_user_func_array(array(Db::getClass(), 'hasTableWithSamePrefix'), array($server, $user, $pwd, $db, $prefix));
 	}
 
+	public static function checkCreatePrivilege($server, $user, $pwd, $db, $prefix, $engine)
+	{
+		return call_user_func_array(array(Db::getClass(), 'checkCreatePrivilege'), array($server, $user, $pwd, $db, $prefix, $engine));
+	}
+
 	/**
 	 * @deprecated 1.5.0
 	 */
 	public static function s($sql, $use_cache = true)
 	{
-		Tools::displayAsDeprecated();
 		return Db::getInstance()->executeS($sql, true, $use_cache);
 	}
 
@@ -684,7 +691,6 @@ abstract class DbCore
 	 */
 	public static function ps($sql, $use_cache = 1)
 	{
-		Tools::displayAsDeprecated();
 		$ret = Db::s($sql, $use_cache);
 		p($ret);
 		return $ret;
@@ -695,7 +701,6 @@ abstract class DbCore
 	 */
 	public static function ds($sql, $use_cache = 1)
 	{
-		Tools::displayAsDeprecated();
 		Db::s($sql, $use_cache);
 		die();
 	}

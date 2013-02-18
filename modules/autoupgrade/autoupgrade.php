@@ -30,7 +30,8 @@ class Autoupgrade extends Module
 	{
 		$this->name = 'autoupgrade';
 		$this->tab = 'administration';
-		$this->version = '1.0.5';
+		$this->version = '1.0.6';
+		
 		if (version_compare(_PS_VERSION_, '1.5.0.0 ', '>='))
 			$this->multishop_context = Shop::CONTEXT_ALL;
 
@@ -70,7 +71,7 @@ class Autoupgrade extends Module
 			if (!$tab->save())
 				return $this->_abortInstall($this->l('Unable to create the "AdminSelfUpgrade" tab'));
 			if (!@copy(dirname(__FILE__).DIRECTORY_SEPARATOR.'logo.gif', _PS_ROOT_DIR_.DIRECTORY_SEPARATOR.'img'.DIRECTORY_SEPARATOR.'t'.DIRECTORY_SEPARATOR.'AdminSelfUpgrade.gif'))
-				return $this->_abortInstall(sprintf($this->l('Unable to copy logo.gif in %s'), $autoupgrade_dir));
+				return $this->_abortInstall(sprintf($this->l('Unable to copy logo.gif in %s'), _PS_ROOT_DIR_.DIRECTORY_SEPARATOR.'img'.DIRECTORY_SEPARATOR.'t'.DIRECTORY_SEPARATOR));
 		}
 		else
 			$tab = new Tab((int)$id_tab);
