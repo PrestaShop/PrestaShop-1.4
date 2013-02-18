@@ -55,9 +55,10 @@ class FedexCarrier extends CarrierModule
 	{
 		$this->name = 'fedexcarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.2.6';
+		$this->version = '1.2.7';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('us');
+		$this->module_key = 'e690479f7f292afefbef7e55f884527d';
 
 		parent::__construct ();
 
@@ -87,8 +88,8 @@ class FedexCarrier extends CarrierModule
 				Configuration::updateValue('FEDEX_CARRIER_CALCUL_MODE', 'onepackage');
 
 			// Checking Unit
-			$this->_dimensionUnit = $this->_dimensionUnitList[strtoupper(Configuration::get('PS_DIMENSION_UNIT'))];
-			$this->_weightUnit = $this->_weightUnitList[strtoupper(Configuration::get('PS_WEIGHT_UNIT'))];
+			$this->_dimensionUnit = isset($this->_dimensionUnitList[strtoupper(Configuration::get('PS_DIMENSION_UNIT'))]) ? $this->_dimensionUnitList[strtoupper(Configuration::get('PS_DIMENSION_UNIT'))] : false;
+			$this->_weightUnit = isset($this->_weightUnitList[strtoupper(Configuration::get('PS_WEIGHT_UNIT'))]) ? $this->_weightUnitList[strtoupper(Configuration::get('PS_WEIGHT_UNIT'))] : false;
 			if (!$this->_weightUnit || !$this->_weightUnitList[$this->_weightUnit])
 				$warning[] = $this->l('\'Weight Unit (LB or KG).\'').' ';
 			if (!$this->_dimensionUnit || !$this->_dimensionUnitList[$this->_dimensionUnit])
@@ -339,7 +340,7 @@ class FedexCarrier extends CarrierModule
 	private function _displayForm()
 	{
 		$this->_html .= '<fieldset>
-		<legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('Fedex Module Status').'</legend>';
+		<legend><img src="'.$this->_path.'img/delivery.gif" alt="" /> '.$this->l('Fedex Module Status').'</legend>';
 
 		$alert = array();
 		$this->_webserviceTestResult = $this->webserviceTest();
@@ -535,7 +536,7 @@ class FedexCarrier extends CarrierModule
 						<select name="fedex_carrier_country" id="fedex_carrier_country">
 							<option value="0">'.$this->l('Select a country ...').'</option>';
 							$idcountries = array();
-							foreach (Country::getCountries($this->context->language->id, false, false, false) as $v)
+							foreach (Country::getCountries($this->context->language->id) as $v)
 							{
 								$html .= '<option value="'.$v['id_country'].'" '.($v['id_country'] == (int)(Tools::getValue('fedex_carrier_country', Configuration::get('FEDEX_CARRIER_COUNTRY'))) ? 'selected="selected"' : '').'>'.$v['name'].'</option>';
 								$idcountries[] = $v['id_country'];

@@ -2,7 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c0d00fcb670ada42dad4698b865f40cd'] = 'Corriere Fedex';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c0d00fcb670ada42dad4698b865f40cd'] = 'Corriere Fedex ';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_0aad1e954489f441f8824e1f990d4774'] = 'Offri ai tuoi clienti modalità di consegna differenti con Fedex';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_ff86cba2f7fe4a2dec854d107a4d99d2'] = 'Class Soap';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_883fa0069f4b0454e2277dd567ab3991'] = 'Unita \'di peso (LB o KG).\'';
@@ -10,8 +10,8 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_5a3ceec65d417f5d92c26dbf0dccc00
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_4d470fde8487e755a50e9235e3dc13ab'] = 'deve essere configurato per utilizzare questo modulo correttamente';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_a1d8be175eff378884736e1b44da526e'] = 'Account Fedex';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c481cd53864462a87dcb89c33589ff8e'] = 'Fedex meter';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_918356c887962073f010ee06e1395713'] = 'Password Fedex';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_f028d1298ed2c231ec5bbf677f3c6f01'] = 'Chiave di autenticazione Fedex';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_918356c887962073f010ee06e1395713'] = 'Password Fedex ';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_8c2b826b79539fa093a6db05ca5ec9e0'] = 'Chiave API Fedex';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_3ef2f9d666a37f95d963a84c46bae646'] = 'Tipo di ritiro Fedex di default';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_72f18dde0a5c9f75dd487adeacb92b56'] = 'Tipo di confezione Fedex di default';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_20449d3f0b6c6b9265a5cd2a470a6451'] = 'Packaging peso';
@@ -24,7 +24,7 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_394a844cc3d6d99eb45b4e71afde2c9
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_57185ccd597e58ad9e4944f4356222b6'] = 'FedEx Box 10 kg';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_9a8ccd685b767c927bca8501ae80d954'] = 'FedEx Box 25 kg';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_38f14cc3e27cc856e61e3a7f555148d2'] = 'Fedex Box';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_36aba1bfaa5062695e71a6524008dd8a'] = 'Busta Fedex';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_36aba1bfaa5062695e71a6524008dd8a'] = 'Busta Fedex ';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_d0e6a558b4ce274905600856b20b471e'] = 'Pak Fedex';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_5b2953c3343913eee2398c1fe2651be7'] = 'Tubo Fedex';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_451400926783d7a47cd31025717bc97f'] = 'La tua confezione';
@@ -50,7 +50,7 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_e889962a8517669ba4ac839afa6384d
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_0a7bd01967a1874144b1b4fab2ee6a6f'] = 'Standard overnight';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_386aad80d82f8245e9ef80352a2240e8'] = 'Tutti gli articoli in un unico pacchetto';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_f35eb2a913a3fd6fd8e661012cf0ebd8'] = 'Dividere un elemento per ogni pacchetto';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_d999f792aee7c730cdc95f6aff4aa436'] = 'Corriere FEDEX';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_d999f792aee7c730cdc95f6aff4aa436'] = 'Corriere FEDEX ';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_99e509958c21ac35438651547a7bb035'] = 'Status modulo Fedex';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_d23a9177c3c7256ede85643a19335afb'] = 'Corriere FEDEX è ben configurato e online!';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_5bc95bc43c48a735773d4182dcf526fb'] = 'Corriere FEDEX non è ancora configurato, è necessario:';
@@ -58,8 +58,6 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_3e203b9a16f360b88d90bba6eb61ce6
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_8c0987b9315003df7dae7f130e3cf58e'] = 'Seleziona il tuo servizio di consegna disponibile';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_e20f6d6f13fe70e78f6e2ab488493ccf'] = 'Test di connessione webservice';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_807b063fceafae2c51dc6afb45612389'] = 'Soap attivato';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_bcf52f13aae44c82d31e8cfde9695fcd'] = 'URL fopen è abilitato';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_0aa5a377393863e514580a07328b641f'] = 'OpenSSL è abilitato';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_52f4393e1b52ba63e27310ca92ba098c'] = 'Impostazioni generali';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_277d63a9b24a09697e3c64092eaf4353'] = 'Impostazioni categorie';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_098eec2cabe2c39c6dec3fc522b6571a'] = 'Impostazioni prodotti';
@@ -68,11 +66,11 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_d2126da975d5b9a5b846efaf57d3fd5
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_a50bb127f9b307757cf52ab86d70adac'] = 'Il tuo account Fedex';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_9a8b0ebd10992bd1576eccf605a84175'] = 'Il tuo numero di Fedex meter';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c36a272a8778a2e85de52a01675fd521'] = 'La tua password Fedex';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_e0d09aad76588830268528531927fe9c'] = 'La tua chiave di autenticazione Fedex';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_3334b6f8cf02103d9f06a2a034f6eb9f'] = 'Clicca qui per ottenere la tua chiave di autenticazione.';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_5e2cd475470bc7b47bef8d4ecdae2a67'] = 'La tua API Key Fedex';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_cdfa1b01c330bf745f776f6c6c8afffd'] = 'Fare clic qui per ottenere il tuo API Key Fedex';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_db06a2900c66a3a2cb78fe3a470f1b85'] = 'Imballo Peso';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_0274f749472f365e7d48a501e14793e6'] = 'Handling Fee';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_83ad4fdaf06650e6d9d7ca18f82fb975'] = 'Configurazione di localizzazione';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_83ad4fdaf06650e6d9d7ca18f82fb975'] = 'Configurazione di localizzazione ';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_f489118ea95c746d648d36bb50c226f0'] = 'Unità di peso';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_659c95668841b7d6602ead454b28d4ba'] = 'Unità di peso del tuo negozio (es. kg o lb)';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_cc13d156306185fd42a860da3049567c'] = 'Unità di misura';
@@ -94,14 +92,16 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_ce135482b30deedcc0046df41c12de7
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_9a361a1f786db3dfe07aae42752d3446'] = 'Tipo di confezione di default';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_4664d1ae1832bed2246e8a6850365075'] = 'Seleziona un tipo di confezione di default ...';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_8d6bd50f3fe3ee2f4513066c25e5fb4a'] = 'Calcul modalità';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c5238c5f72dee585afdf4bddf6de518e'] = 'Utilizzando la modalità di calcul \"Tutti gli elementi in un unico pacchetto\"  utilizzerà automaticamente imballaggio dimensione predefinita, il tipo di confezionamento e di servizi di consegna. Configurazioni specifiche per le categorie o prodotto non sarà utilizzato.';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c5238c5f72dee585afdf4bddf6de518e'] = 'Utilizzando la modalità di calcul \"Tutti gli elementi in un unico pacchetto\" utilizzerà automaticamente imballaggio dimensione predefinita, il tipo di confezionamento e di servizi di consegna. Configurazioni specifiche per le categorie o prodotto non sarà utilizzato.';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_5cdd307ba6e260beb4801c0c10e22a3a'] = 'Servizio di consegna';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_78945de8de090e90045d299651a68a9b'] = 'Disponibile';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_2d25c72c1b18e562f6654fff8e11711e'] = 'Non disponibile';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_d63e135774e62574e2a1921267dad142'] = 'Scegli il servizio di consegna che sarà disponibile per i clienti.';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_f1206f9fadc5ce41694f69129aecac26'] = 'Configura';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_9b8c4a7116e8c44e4ebc955fafd47586'] = 'Il tuo account Fedex non è specificato';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_b9cc1a101547b3ece6d946dbbe3469d7'] = 'Il tuo Fedex meter non è specificato';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_5ce0f66588bbbbbb3ef0634e5ea7da69'] = 'La tua password Fedex non è specificata';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_fa6fa6bcd947e3b0151e8d6cf7a77221'] = 'La tua chiave FEDEX di autenticazione non è specificata';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_7988c0adb770f0f945814c0fb2b5800b'] = 'La tua Fedex API Key non è specificata';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_5d5ae09e7b6041d3449ef2cbfc39f560'] = 'Il tuo tipo di ritiro non è specificato';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_e794e452ed4d2cfa13083693a2c8810e'] = 'Il tuo tipo di confezione non è specificato';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_805353d2862ea0e658c9ddda871540fa'] = 'Il tuo CAP non è specificato';
@@ -111,7 +111,7 @@ $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_729d4f7143a3de7b0ed18de667fdf4d
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_9d1b485edd50e6fbd288b340b386b07d'] = 'Nessuna descrizione dell\'errore trovata';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_c888438d14855d7d96a2724ee9c306bd'] = 'Impostazioni aggiornate';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_b9284bff13acffdd879ef4ac7fca5234'] = 'Impostazioni non riuscite';
-$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_67e19ffdaa0a11e69349810403a9727e'] = 'È necessario configurare il tab \"Impostazioni generali\"  prima di utilizzare questo tab.';
+$_MODULE['<{fedexcarrier}prestashop>fedexcarrier_67e19ffdaa0a11e69349810403a9727e'] = 'È necessario configurare il tab \"Impostazioni generali\" prima di utilizzare questo tab.';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_a37b48e8684078c0620a997b3baeee9f'] = 'In questo tab è possibile impostare una configurazione specifica per ogni categoria.';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_f421827ff72ef9a61fb27aa0de62f1e4'] = 'Config ID';
 $_MODULE['<{fedexcarrier}prestashop>fedexcarrier_3adbdb3ac060038aa0e6e6c138ef9873'] = 'Categoria';
