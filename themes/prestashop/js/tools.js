@@ -1,5 +1,5 @@
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -82,6 +82,7 @@ function formatCurrency(price, currencyFormat, currencySign, currencyBlank)
 {
 	// if you modified this function, don't forget to modify the PHP function displayPrice (in the Tools.php class)
 	blank = '';
+	price = Number(price);
 	price = parseFloat(price.toFixed(6));
 	price = ps_round(price, priceDisplayPrecision);
 	if (currencyBlank > 0)
@@ -100,6 +101,7 @@ function formatCurrency(price, currencyFormat, currencySign, currencyBlank)
 //return a formatted number
 function formatNumber(value, numberOfDecimal, thousenSeparator, virgule)
 {
+	numberOfDecimal = Number(numberOfDecimal);
 	value = value.toFixed(numberOfDecimal);
 	var val_string = value+'';
 	var tmp = val_string.split('.');

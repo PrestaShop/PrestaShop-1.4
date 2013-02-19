@@ -79,3 +79,6 @@
 [submodule "modules/ebay/backward_compatibility"]
 	path = modules/ebay/backward_compatibility
 	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/payulatam/backward_compatibility"]
+	path = modules/payulatam/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility

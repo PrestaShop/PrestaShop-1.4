@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -42,7 +42,7 @@ class TaxRulesGroupCore extends ObjectModel
     protected static $_taxes = array();
 
 	public static $canada_iso = 'CA';
-	public static $canada_states_iso = array('QC', 'PE');
+	public static $canada_states_iso = array('PE');
 	
 	protected	$webserviceParameters = array(
 		'objectsNodeName' => 'tax_rule_groups',
@@ -161,6 +161,9 @@ class TaxRulesGroupCore extends ObjectModel
 
 	public static function getTaxesRate($id_tax_rules_group, $id_country, $id_state, $id_county)
 	{
+		if (!Configuration::get('PS_TAX'))
+			return 0;
+
 		$state = new State((int)$id_state);
 
 		/* Case 1: We need to multiply the taxes (example: Canadian law) */

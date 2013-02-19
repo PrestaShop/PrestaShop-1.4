@@ -1,5 +1,5 @@
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -121,7 +121,7 @@ function addBookmark(url, title)
 {
 	if (window.sidebar)
 		return window.sidebar.addPanel(title, url, "");
-	else if ( window.external )
+	else if ( window.external && ('AddFavorite' in window.external))
 		return window.external.AddFavorite( url, title);
 	else if (window.opera && window.print)
 		return true;
@@ -134,7 +134,8 @@ function writeBookmarkLink(url, title, text, img)
 	if (img)
 		insert = writeBookmarkLinkObject(url, title, '<img src="' + img + '" alt="' + escape(text) + '" title="' + escape(text) + '" />') + '&nbsp';
 	insert += writeBookmarkLinkObject(url, title, text);
-	document.write(insert);
+	if (window.sidebar || window.opera && window.print || (window.external && ('AddFavorite' in window.external)))	
+		document.write(insert);
 }
 
 function writeBookmarkLinkObject(url, title, insert)
@@ -209,7 +210,8 @@ function setCurrency(id_currency)
 {
 	$.ajax({
 		type: 'POST',
-		url: baseDir + 'changecurrency.php',
+		headers: { "cache-control": "no-cache" },   		
+		url: baseDir + 'changecurrency.php' + '?rand=' + new Date().getTime(),
 		data: 'id_currency='+parseInt(id_currency),
 		success: function(msg)
 		{

@@ -1,5 +1,5 @@
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -265,10 +265,10 @@ function create_attribute_row(id, id_group, name, price, weight)
 {
 	var html = '';
 	html += '<tr id="result_' + id + '">';
-	html += 		'<td><input type="hidden" value="' + id + '" name="options[' + id_group + '][' + id + ']" />' + name + '</td>';
-	html += 		'<td>' + i18n_tax_exc + ' <input id="related_to_price_impact_' + id + '" class="price_impact" style="width:50px" type="text" value="' + price + '" name="price_impact_' + id + '" onkeyup="calcPrice($(this), false)"></td>';
-        html += 		'<td>&nbsp;</td>';
-	html += 		'<td><input style="width:50px" type="text" value="' + weight + '" name="weight_impact[' + id + ']"></td>';
+	html += '<td><input type="hidden" value="' + id + '" name="options[' + id_group + '][' + id + ']" />' + name + '</td>';
+	html += '<td>'+i18n_tax_exc+' <input id="related_to_price_impact_ti_'+id+'" class="price_impact" style="width:50px" type="text" value="'+price+'" name="price_impact_'+id+'" onkeyup="calcPrice($(this), false);"></td>';
+	html += '<td>'+i18n_tax_inc+' <input id="related_to_price_impact_'+id+'" class="price_impact_ti" style="width:50px" type="text" value="0.00" name="price_impact_ti_'+id+'" onkeyup="calcPrice($(this), true);"></td>';
+	html += '<td><input style="width:50px" type="text" value="'+weight+'" name="weight_impact['+id+']"></td>';
 	html += '</tr>';
 
 	return html;

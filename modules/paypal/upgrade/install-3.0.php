@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -38,7 +38,6 @@ function upgrade_module_3_0($object, $install = false)
 		$object->registerHook('paymentReturn');
 		$object->registerHook('shoppingCartExtra');
 		$object->registerHook('backBeforePayment');
-		$object->registerHook('rightColumn');
 		$object->registerHook('cancelProduct');
 		$object->registerHook('productFooter');
 		$object->registerHook('header');
@@ -67,6 +66,17 @@ function upgrade_module_3_0($object, $install = false)
 		foreach ($columns as $column)
 			if (!Db::getInstance()->ExecuteS('SHOW COLUMNS FROM `'._DB_PREFIX_.'paypal_order` LIKE \''.pSQL($column['name']).'\''))
 				Db::getInstance()->Execute('ALTER TABLE `'._DB_PREFIX_.'paypal_order` ADD `'.pSQL($column['name']).'` '.$column['type']);
+	}
+	
+	if (count(Db::getInstance()->ExecuteS('SHOW TABLES FROM `'._DB_NAME_.'` LIKE \''._DB_PREFIX_.'paypal_customer\'')) <= 0)
+	{
+		Db::getInstance()->Execute('
+			CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'paypal_customer` (
+				`id_paypal_customer` int(10) unsigned NOT NULL AUTO_INCREMENT,
+				`id_customer` int(10) unsigned NOT NULL,
+				`paypal_email` varchar(255) NOT NULL,
+				PRIMARY KEY (`id_paypal_customer`)
+			) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1');
 	}
 
 	return true;

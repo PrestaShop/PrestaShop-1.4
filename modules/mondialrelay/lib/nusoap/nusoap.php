@@ -2221,7 +2221,8 @@ class soap_transport_http extends nusoap_base {
 		}
 		$this->use_curl = $use_curl;
 		preg_match('/\$Revisio' . 'n: ([^ ]+)/', $this->revision, $rev);
-		$this->setHeader('User-Agent', $this->title.'/'.$this->version.' ('.$rev[1].')');
+		$revision = isset($rev[1]) ? ' ('.$rev[1].')' : null;
+		$this->setHeader('User-Agent', $this->title.'/'.$this->version.$revision);
 	}
 
 	/**

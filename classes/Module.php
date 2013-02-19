@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -156,11 +156,9 @@ abstract class ModuleCore
 		WHERE `id_module` = '.(int)$this->id);
 		foreach	($result as $row)
 		{
-			Db::getInstance()->Execute('
-			DELETE FROM `'._DB_PREFIX_.'hook_module`
-			WHERE `id_module` = '.(int)$this->id.'
-			AND `id_hook` = '.(int)$row['id_hook']);
+			$this->unregisterHook($row['id_hook']);
 			$this->cleanPositions($row['id_hook']);
+			$this->unregisterExceptions($row['id_hook']);			
 		}
 		return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'module` WHERE `id_module` = '.(int)$this->id);
 	}
@@ -776,7 +774,7 @@ abstract class ModuleCore
 		$hookArgs = array('cookie' => $cookie, 'cart' => $cart);
 		$output = '';
 
-		$result = self::getPaymentModules();
+		$result = Module::getPaymentModules();
 
 		if ($result)
 			foreach ($result as $module)

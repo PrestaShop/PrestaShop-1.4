@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -471,8 +471,8 @@ class AdminCustomers extends AdminTab
 							<td>'.Tools::displayDate($order['date_add'], (int)($cookie->id_lang)).'</td>
 							<td align="right">'.$order['nb_products'].'</td>
 							<td align="right">'.Tools::displayPrice($order['total_paid_real'], new Currency((int)($order['id_currency']))).'</td>
-							<td>'.$order['payment'].'</td>
-							<td>'.$order['order_state'].'</td>
+							<td>'.(isset($order['payment']) ? $order['payment'] : '' ).'</td>
+							<td>'.(isset($order['order_state']) ? $order['order_state'] : '' ).'</td>
 							<td align="center"><a href="?tab=AdminOrders&id_order='.$order['id_order'].'&vieworder&token='.$tokenOrders.'"><img src="../img/admin/details.gif" /></a></td>
 						</tr>';
 				echo $orderFoot.'</div><div class="clear">&nbsp;</div>';

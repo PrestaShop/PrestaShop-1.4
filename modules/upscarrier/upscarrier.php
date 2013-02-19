@@ -54,7 +54,7 @@ class UpsCarrier extends CarrierModule
 	{
 		$this->name = 'upscarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.2.3';
+		$this->version = '1.2.4';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('us');
 		$this->module_key = 'b7e680a4290c977bb35e3b28817b8348';
@@ -342,7 +342,7 @@ class UpsCarrier extends CarrierModule
 	private function _displayForm()
 	{
 		$this->_html .= '<fieldset>
-		<legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('UPS Module Status').'</legend>';
+		<legend><img src="'.$this->_path.'img/delivery.gif" alt="" /> '.$this->l('UPS Module Status').'</legend>';
 
 		$alert = array();
 		if (!Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'))
@@ -525,7 +525,7 @@ class UpsCarrier extends CarrierModule
 						<select name="ups_carrier_country" id="ups_carrier_country">
 							<option value="0">'.$this->l('Select a country ...').'</option>';
 		$idcountries = array();
-		foreach (Country::getCountries($this->context->language->id, false, false, false) as $v)
+		foreach (Country::getCountries($this->context->language->id) as $v)
 		{
 			$html .= '<option value="'.$v['id_country'].'" '.($v['id_country'] == (int)(Tools::getValue('ups_carrier_country', Configuration::get('UPS_CARRIER_COUNTRY'))) ? 'selected="selected"' : '').'>'.$v['name'].'</option>';
 			$idcountries[] = $v['id_country'];
@@ -607,7 +607,7 @@ class UpsCarrier extends CarrierModule
 		foreach($this->_calculModeList as $kcalculmode => $vcalculmode)
 			$html .= '<option value="'.$kcalculmode.'" '.($kcalculmode == (Tools::getValue('ups_carrier_calcul_mode', Configuration::get('UPS_CARRIER_CALCUL_MODE'))) ? 'selected="selected"' : '').'>'.$vcalculmode.'</option>';
 		$html .= '</select>
-					<p>' . $this->l('Using the calculate mode "All items in one package" will automatically use default packaging size, packaging type and delivery services. Specific configurations for categories or product won\'t be used.') . '</p>
+					<p>' . $this->l('Using the calcul mode "All items in one package" will automatically use default packaging size, packaging type and delivery services. Specifics configurations for categories or product won\'t be used.') . '</p>
 					</div>';
 
 		if (Configuration::get('UPS_CARRIER_RATE_SERVICE_GROUP'))
@@ -1780,7 +1780,7 @@ class UpsCarrier extends CarrierModule
 		{
 			if ($p['weight'] < 0.5) $p['weight'] = 0.5;
 			$search = array('[[PackagingTypeCode]]', '[[PackageWeight]]', '[[WeightUnit]]', '[[Width]]', '[[Height]]', '[[Length]]', '[[DimensionUnit]]');
-			$replace = array($p['packaging_type'], $p['weight'], $this->_weightUnit, $p['width'], $p['height'], $p['depth'], $this->_dimensionUnit);
+			$replace = array($p['packaging_type'], $p['weight'], $this->_weightUnit, Tools::ps_round($p['width'],2), Tools::ps_round($p['height'],2), Tools::ps_round($p['depth'],2), $this->_dimensionUnit);
 			$xmlPackageList .= str_replace($search, $replace, $xmlPackageTemplate);
 		}
 

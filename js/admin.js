@@ -1,5 +1,5 @@
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -183,7 +183,7 @@ function displayFlags(languages, defaultLanguageID, employee_cookie)
 					);
 				var languagesFlags = $('<div></div>')
 					.addClass('language_flags')
-					.html(choose_language_trad+'<br /><br />');
+					.html((typeof(choose_language_trad) != 'undefined' ? choose_language_trad : '' ) + '<br /><br />');
 				$.each(languages, function(key, language) {
 					var img = $('<img>')
 						.addClass('pointer')
@@ -249,7 +249,7 @@ function setPaymentBoxes(name, module)
 		{
 			if ($(this).attr('name') == module + '_' + name + '[]')
 			{
-				($(this).attr("checked") ? checked++ : '');
+				($(this).is(':checked') ? checked++ : '');
 				total++;
 			}
 		}
@@ -602,8 +602,8 @@ function selectCheckbox(obj)
 
 function toogleShippingCost(obj)
 {
-	generateDiscount = $(obj).parent().find('#generateDiscount').attr("checked");
-	generateCreditSlip = $(obj).parent().find('#generateCreditSlip').attr("checked");
+	generateDiscount = $(obj).parent().find('#generateDiscount').is(':checked');;
+	generateCreditSlip = $(obj).parent().find('#generateCreditSlip').is(':checked');
 	if (generateDiscount != true && generateCreditSlip != true)
 	{
 		$(obj).parent().find('#spanShippingBack input[type=checkbox]').attr("checked", false);

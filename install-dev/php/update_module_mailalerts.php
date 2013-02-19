@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -41,7 +41,7 @@ function update_module_mailalerts()
 		  KEY `id_product` (`id_product`,`id_product_attribute`)
 		) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;');
 		
-		$default_language = (int)Configuration::get('PS_LANG_DEFAULT');
+		$default_language = (int)Db::getInstance()->getRow('SELECT value FROM `'._DB_PREFIX_.'configuration` WHERE `name` LIKE "PS_LANG_DEFAULT"');
 		$current_time = date('Y-m-d H:i:s');
 		$existing_alerts = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'mailalert_customer_oos`', false);
 		$result &= (bool)$existing_alerts;

@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -227,7 +227,7 @@ class OrderControllerCore extends ParentOrderController
 	public function processAddress()
 	{
 		if (!Customer::customerHasAddress((int)self::$cookie->id_customer, (int)Tools::getValue('id_address_delivery'))
-			|| (Tools::isSubmit('same') && !Customer::customerHasAddress((int)self::$cookie->id_customer, (int)Tools::getValue('id_address_invoice'))))
+			|| (!Tools::isSubmit('same') && !Customer::customerHasAddress((int)self::$cookie->id_customer, (int)Tools::getValue('id_address_invoice'))))
 			$this->errors[] = Tools::displayError('Invalid address');
 		elseif (!Tools::isSubmit('id_address_delivery') || !Address::isCountryActiveById((int)Tools::getValue('id_address_delivery')))
 			$this->errors[] = Tools::displayError('This address is not in a valid area.');

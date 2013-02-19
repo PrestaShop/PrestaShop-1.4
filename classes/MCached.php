@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -41,7 +41,11 @@ class MCachedCore extends Cache
 	
 	public function connect()
 	{
-		$this->_memcacheObj = new Memcache();
+		if (class_exists('Memcache') && extension_loaded('memcache'))		
+			$this->_memcacheObj = new Memcache();
+		else
+			return false;
+		
 		$servers = self::getMemcachedServers();
 		if (!$servers)
 			return false;

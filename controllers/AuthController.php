@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -254,15 +254,23 @@ class AuthControllerCore extends FrontController
 					self::$cookie->is_guest = $customer->isGuest();
 					self::$cookie->passwd = $customer->passwd;
 					self::$cookie->email = $customer->email;
-					if (Configuration::get('PS_CART_FOLLOWING') AND (empty(self::$cookie->id_cart) OR Cart::getNbProducts(self::$cookie->id_cart) == 0))
-						self::$cookie->id_cart = (int)(Cart::lastNoneOrderedCart((int)($customer->id)));
-					/* Update cart address */
-					self::$cart->id_carrier = 0;
-					self::$cart->id_address_delivery = Address::getFirstCustomerAddressId((int)($customer->id));
-					self::$cart->id_address_invoice = Address::getFirstCustomerAddressId((int)($customer->id));
+					if (Configuration::get('PS_CART_FOLLOWING') AND (empty(self::$cookie->id_cart) OR Cart::getNbProducts(self::$cookie->id_cart) == 0) AND $id_cart = (int)(Cart::lastNoneOrderedCart((int)($customer->id))))
+						self::$cart = new Cart($id_cart);
+					else
+					{
+						self::$cart->id_carrier = 0;
+						self::$cart->id_address_delivery = Address::getFirstCustomerAddressId((int)($customer->id));
+						self::$cart->id_address_invoice = Address::getFirstCustomerAddressId((int)($customer->id));
+					}
+					self::$cart->id_customer = (int)$customer->id;
 					// If a logged guest logs in as a customer, the cart secure key was already set and needs to be updated
 					self::$cart->secure_key = $customer->secure_key;
-					self::$cart->update();
+					$id_guest = (int)Guest::getFromCustomer(self::$cart->id_customer);
+					if($id_guest)
+						self::$cart->id_guest = $id_guest;
+					self::$cart->save();
+					self::$cookie->id_cart = (int)self::$cart->id;
+					self::$cookie->update();
 					Module::hookExec('authentication');
 					if (!Tools::isSubmit('ajax'))
 					{

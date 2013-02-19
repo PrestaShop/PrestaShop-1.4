@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -28,26 +28,6 @@ include_once(dirname(__FILE__).'/../../../config/config.inc.php');
 include_once(dirname(__FILE__).'/../../../init.php');
 
 include_once(_PS_MODULE_DIR_.'paypal/paypal.php');
-
-define('TIMEOUT', 15);
-
-define('INVALID', 'INVALID');
-define('VERIFIED', 'VERIFIED');
-
-/*
- * PayPal notification fields
- */
-define('ID_INVOICE', 'invoice');
-define('ID_PAYER', 'payer_id');
-define('ID_TRANSACTION', 'txn_id');
-define('CURRENCY', 'mc_currency');
-define('PAYER_EMAIL', 'payer_email');
-define('PAYMENT_DATE', 'payment_date');
-define('TOTAL_PAID', 'mc_gross');
-define('SHIPPING', 'shipping');
-define('VERIFY_SIGN', 'verify_sign');
-
-define('DEBUG_FILE', 'debug.log');
 
 /*
  * Instant payment notification class.
@@ -66,96 +46,114 @@ class PayPalNotifier extends PayPal
 		$cart = new Cart((int)$custom['id_cart']);
 		$cart_details = $cart->getSummaryDetails(null, true);
 		$cart_hash = sha1(serialize($cart->nbProducts()));
+		
+		$this->context->cart = $cart;
+		$address = new Address((int)$cart->id_address_invoice);
+		$this->context->country = new Country((int)$address->id_country);
+		$this->context->customer = new Customer((int)$cart->id_customer);
+		$this->context->language = new Language((int)$cart->id_lang);
+		$this->context->currency = new Currency((int)$cart->id_currency);
+		
+		if (isset($cart->id_shop))
+			$this->context->shop = new Shop($cart->id_shop);
+		
+		$res = $this->getResult();
 
-		$this->createLog($cart->getProducts(true));
-
-		$mc_gross = Tools::getValue('mc_gross');
-		$total_price = Tools::ps_round($cart_details['total_price'], 2);
-
-		$message = null;
-		$result = $this->verify();
-
-		if (strcmp($result, VERIFIED) == 0)
+		if (strcmp($res, "VERIFIED") == 0)
 		{
+			$message = null;
+			$mc_gross = Tools::getValue('mc_gross');
+			$total_price = Tools::ps_round($cart_details['total_price'], 2);
+		
 			if ($mc_gross != $total_price)
 			{
-				$payment = Configuration::get('PS_OS_ERROR');
-				$message = $this->l('Price payed on paypal is not the same that on PrestaShop.').'<br />';
+				$payment = (int)Configuration::get('PS_OS_ERROR');
+				$message = $this->l('Price paid on paypal is not the same that on PrestaShop.').'<br />';
 			}
 			elseif ($custom['hash'] != $cart_hash)
 			{
-				$payment = Configuration::get('PS_OS_ERROR');
+				$payment = (int)Configuration::get('PS_OS_ERROR');
 				$message = $this->l('Cart changed, please retry.').'<br />';
 			}
 			else
 			{
-				$payment = Configuration::get('PS_OS_PAYMENT');
+				$payment = (int)Configuration::get('PS_OS_PAYMENT');
 				$message = $this->l('Payment accepted.').'<br />';
 			}
 
 			$customer = new Customer((int)$cart->id_customer);
 			$id_order = (int)Order::getOrderByCartId((int)$cart->id);
-			$transaction = array(
-				'currency' => pSQL(Tools::getValue(CURRENCY)),
-				'id_invoice' => pSQL(Tools::getValue(ID_INVOICE)),
-				'id_transaction' => pSQL(Tools::getValue(ID_TRANSACTION)),
-				'payment_date' => pSQL(Tools::getValue(PAYMENT_DATE)),
-				'shipping' => (float)Tools::getValue(SHIPPING),
-				'total_paid' => (float)Tools::getValue(TOTAL_PAID),
-			);
-
-			$this->validateOrder($cart->id, $payment, $total_price, $this->displayName, $message, $transaction, $cart->id_currency, false, $customer->secure_key);
+			$transaction = PayPalOrder::getTransactionDetails(false);
+			
+			if (_PS_VERSION_ < '1.5')
+				$shop = null;
+			else
+			{
+				$shop_id = $this->context->shop->id;
+				$shop = new Shop($shop_id);
+			}
+			
+			$this->validateOrder($cart->id, $payment, $total_price, $this->displayName, $message, $transaction, $cart->id_currency, false, $customer->secure_key, $shop);
 		}
 	}
-
-	public function save($id_cart)
+	
+	public function getRequest()
 	{
+		$raw_post_data = file_get_contents('php://input');
+		$raw_post_array = explode('&', $raw_post_data);
+		$myPost = array();
+		
+		foreach ($raw_post_array as $keyval)
+		{
+			$keyval = explode ('=', $keyval);
+			if (count($keyval) == 2)
+				$myPost[$keyval[0]] = urldecode($keyval[1]);
+		}
+		
+		$req = 'cmd=_notify-validate';
+		
+		if(function_exists('get_magic_quotes_gpc'))
+			$get_magic_quotes_exists = true;
+
+		foreach ($myPost as $key => $value)
+		{
+			if($get_magic_quotes_exists == true && get_magic_quotes_gpc() == 1)
+				$value = urlencode(stripslashes($value));
+			else
+				$value = urlencode($value);
+			$req .= "&$key=$value";
+		}
+		
+		return $req;
 	}
 
-	public function verify()
+	public function getResult()
 	{
 		$url = $this->getPaypalStandardUrl();
-		$array = array_merge(array('cmd' => '_notify-validate'), $_POST);
-		$data = http_build_query($array, '', '&');
-
-		/* Get confirmation from PayPal */
-		return $this->fetchResponse($url, $data);
-	}
-
-	public function fetchResponse($url, $data)
-	{
-		$ch = curl_init();
-
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, TIMEOUT);
-
-		$result = curl_exec($ch);
-
+		$request = $this->getRequest();
+		
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
+		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+		curl_setopt($ch, CURLOPT_FORBID_REUSE, 1);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Connection: Close'));
+		
+		if( !($res = curl_exec($ch)))
+		{
+			curl_close($ch);
+			exit;
+		}
 		curl_close($ch);
-
-		return $result;
-	}
-
-	public function createLog($data, $file = false)
-	{
-		// Integral Evolution log file generation
-		ob_start();
-		var_dump($data);
-		$buff = ob_get_contents();
-		ob_end_clean();
-
-		$file = $file ? $file : 'log.txt';
-		$handle = @fopen($file, 'w+');
-		fwrite($handle, $buff);
-		fclose($handle);
+		
+		return $res;
 	}
 
 }
-
+		
 if ($custom = Tools::getValue('custom'))
 {
 	$notifier = new PayPalNotifier();

@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -33,7 +33,7 @@ class Mobile_Theme extends Module
 	{
 		$this->name = 'mobile_theme';
 		$this->tab = (version_compare(_PS_VERSION_, 1.4) >= 0 ? 'administration' : 'Theme');
-		$this->version = '0.3.11';
+		$this->version = '0.5.2';
 
 		parent::__construct();
 
@@ -48,6 +48,12 @@ class Mobile_Theme extends Module
 
 	public function install()
 	{
+		if (_PS_VERSION_ >= '1.5')
+		{
+			$this->_errors[] = $this->l('This module cannot be installed on this version of PrestaShop.');
+			return false;
+		}
+		
 		return Configuration::updateValue('PS_MOBILE_THEME_HEADINGS', 'b') && Configuration::updateValue('PS_MOBILE_THEME_FILTERING_BAR', 'a')
 		&& Configuration::updateValue('PS_MOBILE_THEME_PROCESS_BAR', 'a') && Configuration::updateValue('PS_MOBILE_THEME_CONF_MSG', 'e')
 		&& Configuration::updateValue('PS_MOBILE_THEME_ERROR_MSG', 'a') && Configuration::updateValue('PS_MOBILE_THEME_LIST_HEADERS', 'b')
@@ -603,11 +609,21 @@ class Mobile_Theme extends Module
 
 		global $smarty, $link;
 
-		$result = Db::getInstance()->ExecuteS('
-		SELECT c.`id_category`, cl.`description` `desc`, cl.`name`, cl.`link_rewrite`
-		FROM `'._DB_PREFIX_.'category` c
-		LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category`)
-		WHERE c.`id_parent` = 1 AND c.`active` = 1 AND cl.`id_lang` = '.(int)$params['cookie']->id_lang);
+		$id_customer = (int)($params['cookie']->id_customer);
+		$id_lang = (int)$params['cookie']->id_lang;
+		$groups = $id_customer ? implode(', ', Customer::getGroupsStatic($id_customer)) : (int)_PS_DEFAULT_CUSTOMER_GROUP_;
+
+		$maxdepth = Configuration::get('BLOCK_CATEG_MAX_DEPTH');
+		$result = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+			SELECT c.`id_parent`, c.`id_category`, cl.`name`, cl.`description` as `desc`, cl.`link_rewrite`
+			FROM `'._DB_PREFIX_.'category` c
+			LEFT JOIN `'._DB_PREFIX_.'category_lang` cl ON (c.`id_category` = cl.`id_category` AND `id_lang` = '.(int)$id_lang.')
+			LEFT JOIN `'._DB_PREFIX_.'category_group` cg ON (cg.`id_category` = c.`id_category`)
+			WHERE (c.`active` = 1 AND c.`id_parent` = 1)
+			'.((int)($maxdepth) != 0 ? ' AND `level_depth` <= '.(int)($maxdepth) : '').'
+			AND cg.`id_group` IN ('.pSQL($groups).')
+			GROUP BY id_category
+			ORDER BY `level_depth` ASC, '.(Configuration::get('BLOCK_CATEG_SORT') ? 'cl.`name`' : 'c.`position`').' '.(Configuration::get('BLOCK_CATEG_SORT_WAY') ? 'DESC' : 'ASC'));
 
 		if ($result)
 		{

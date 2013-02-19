@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,34 +19,34 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
 function fd($var)
 {
-	return (Tools::fd($var));
+	return (Tools14::fd($var));
 }
 
 function p($var)
 {
-	return (Tools::p($var));
+	return (Tools14::p($var));
 }
 
 function d($var)
 {
-	Tools::d($var);
+	Tools14::d($var);
 }
 
 function ppp($var)
 {
-	return (Tools::p($var));
+	return (Tools14::p($var));
 }
 
 function ddd($var)
 {
-	Tools::d($var);
+	Tools14::d($var);
 }
 
 /**
@@ -71,6 +71,5 @@ function bqSQL($string)
  */
 function nl2br2($string)
 {
-	Tools::displayAsDeprecated();
-	return Tools::nl2br($string);
+	return Tools14::nl2br($string);
 }

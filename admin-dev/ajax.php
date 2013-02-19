@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -324,7 +324,12 @@ if (array_key_exists('ajaxProductsPositions', $_POST))
 			{
 				if ($product = new Product((int)$pos[2]))
 					if (isset($position) && $product->updatePosition($way, $position))
-						echo "ok position ".(int)$position." for product ".(int)$pos[2]."\r\n";
+					{
+						$category = new Category((int)$id_category);
+						if (Validate::isLoadedObject($category))
+							Module::hookExec('categoryUpdate', array('category' => $category));
+						echo "ok position ".(int)$position." for product ".(int)$pos[2]."\r\n";							
+					}
 					else
 						echo '{"hasError" : true, "errors" : "Can not update product '. $id_product . ' to position '.(int)$position.' "}';
 				else
@@ -509,22 +514,39 @@ if (Tools::isSubmit('ajaxAddZipCode') OR Tools::isSubmit('ajaxRemoveZipCode'))
 
 	$zipcodes = Tools::getValue('zipcodes');
 	$id_county = (int)Tools::getValue('id_county');
-
-	$county = new County($id_county);
-	if (!Validate::isLoadedObject($county))
-		die('error');
-
+	$id_state = (int)Tools::getValue('id_state');	
+	
+	if (!$county = new County($id_county) OR !Validate::isLoadedObject($county))
+		die('error : This county is invalid.');
+	list($from, $to) = $county->breakDownZipCode($zipcodes);
+		
 	if (Tools::isSubmit('ajaxAddZipCode'))
 	{
-		if ($county->isZipCodeRangePresent($zipcodes))
-			die('error:'.Tools::displayError('This Zip Code is already in use.'));
-		if ($county->addZipCodes($zipcodes))
-			die(AdminCounty::renderZipCodeList($county->getZipCodes()));
+		if (!$state = new State($id_state) OR !Validate::isLoadedObject($state))
+			die(Tools::displayError('error: This requires a state selection.'));	
+		if (!$country = new Country((int)$state->id_country) OR !Validate::isLoadedObject($country))
+			die('error: This requires a country selection.');		
+		$zip_code_format = $country->zip_code_format;
+		if ($zip_code_format)
+		{
+			$zip_regexp = '/^'.$zip_code_format.'$/ui';
+			$zip_regexp = str_replace(' ', '( |)', $zip_regexp);
+			$zip_regexp = str_replace('-', '(-|)', $zip_regexp);
+			$zip_regexp = str_replace('N', '[0-9]', $zip_regexp);
+			$zip_regexp = str_replace('L', '[a-zA-Z]', $zip_regexp);
+			$zip_regexp = str_replace('C', $country->iso_code, $zip_regexp);		
+			if ((empty($from) || $from === $to)  && !preg_match($zip_regexp, $zipcodes))
+				die('error: <strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid.').'<br />'.str_replace(':', '', Tools::displayError('Must be typed as follows:')).' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format))));
+			elseif ($from !== $to && (!preg_match($zip_regexp, $from) ||!preg_match($zip_regexp, $to)))
+				die('error: <strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid.').'<br />'.str_replace(':', '', Tools::displayError('Must be typed as follows:')).' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format))));							
+			if ($county->isZipCodeRangePresent($from, $to))
+				die('error: '.Tools::displayError('This Zip Code is already in use.'));
+			if ($county->addZipCodes($from, $to))
+				die(AdminCounty::renderZipCodeList($county->getZipCodes()));
+		}
 	}
-	elseif (Tools::isSubmit('ajaxRemoveZipCode') AND $county->removeZipCodes($zipcodes))
+	elseif (Tools::isSubmit('ajaxRemoveZipCode') AND $county->removeZipCodes($from, $to))
 			die(AdminCounty::renderZipCodeList($county->getZipCodes()));
-
-	die('error');
 }
 
 if (Tools::isSubmit('helpAccess'))

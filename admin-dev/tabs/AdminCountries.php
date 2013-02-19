@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -61,44 +61,57 @@ class AdminCountries extends AdminTab
 	{
 		if (isset($_GET['delete'.$this->table]) || Tools::getValue('submitDel'.$this->table))
 			$this->_errors[] = Tools::displayError('You cannot delete a country. If you do not want it available for customers, please disable it.');
-		else
+		elseif (Tools::getValue('submitAdd'.$this->table))
 		{
-			if (Tools::getValue('submitAdd'.$this->table))
+			if (!Tools::getValue('id_'.$this->table))
 			{
-				$id_country = Tools::getValue('id_country');
-				$tmp_addr_format = new AddressFormat($id_country);
-
-				$save_status = false;
-
-				$is_new = is_null($tmp_addr_format->id_country);
-				if ($is_new)
-				{
-					$tmp_addr_format = new AddressFormat();
-					$tmp_addr_format->id_country = $id_country;
-				}
-				
-				$tmp_addr_format->format = Tools::getValue('address_layout');
-				
-				if (strlen($tmp_addr_format->format) > 0)
-				{
-					if ($tmp_addr_format->checkFormatFields())
-						$save_status = ($is_new) ? $tmp_addr_format->save(): $tmp_addr_format->update();
-					else
-					{
-						$errorList = $tmp_addr_format->getErrorList();
-						foreach($errorList as $numError => $error)
-							$this->_errors[] = $error;
-					}
-						
-
-					if (!$save_status)
-						$this->_errors[] = Tools::displayError('Invalid address layout'.Db::getInstance()->getMsgError());
-				}
-				unset($tmp_addr_format);
+				if (Validate::isLanguageIsoCode(Tools::getValue('iso_code')) && Country::getByIso(Tools::getValue('iso_code')))
+					$this->_errors[] = Tools::displayError('This ISO code already exists, you cannot create two country with the same ISO code');
 			}
-
-			return parent::postProcess();
+			else if (Validate::isLanguageIsoCode(Tools::getValue('iso_code')))
+			{
+				$id_country = Country::getByIso(Tools::getValue('iso_code'));
+				if (!is_null($id_country) && $id_country != Tools::getValue('id_'.$this->table))
+					$this->_errors[] = Tools::displayError('This ISO code already exists, you cannot create two country with the same ISO code');
+			}
+			if (isset($this->_errors) && count($this->_errors))
+				return false;
 		}
+		return parent::postProcess();
+	}
+	
+	public function afterAdd()
+	{
+		return $this->registerAddressFormat();
+	}
+	
+	public function afterUpdate()
+	{
+		return $this->registerAddressFormat();		
+	}	
+	
+	public function registerAddressFormat()
+	{	
+		$id_country = (int)Tools::getValue('id_country');
+		$tmp_addr_format = new AddressFormat($id_country);
+		$tmp_addr_format->id_country = $id_country;
+		$tmp_addr_format->format = Tools::getValue('address_layout');
+		if (strlen($tmp_addr_format->format) > 0)
+		{
+			if ($tmp_addr_format->checkFormatFields())
+				$tmp_addr_format->save();
+			else
+			{
+				$errorList = $tmp_addr_format->getErrorList();
+				foreach($errorList as $numError => $error)
+					$this->_errors[] = $error;
+			}
+			if (!Validate::isLoadedObject($tmp_addr_format))
+				$this->_errors[] = Tools::displayError('Invalid address layout '.Db::getInstance()->getMsgError());
+		}
+		if (isset($this->_errors) && count($this->_errors))
+			return false;
+		return true;			
 	}
 
 	private function _displayValidFields()
@@ -117,7 +130,7 @@ class AdminCountries extends AdminTab
 			$html .= '<li>
 				<a href="javascript:void(0);" onClick="displayAvailableFields(\''.$className.'\')">'.$className.'</a>';
 			foreach(AddressFormat::getValidateFields($className) as $name)
-				$fields[] = '<a style="color:#4B8;" href="javascript:void(0);" class="addPattern" id="'.$className.':'.$name.'">
+				$fields[] = '<a style="color:#4B8;" href="javascript:void(0);" class="addPattern" id="'.($className == 'Address' ? $name : $className.':'.$name).'">
 					'.$name.'</a>';
 			$html .= '
 				<div class="availableFieldsList" id="availableListFieldsFor_'.$className.'" style="width:300px;">
@@ -247,11 +260,11 @@ class AdminCountries extends AdminTab
 				<label>'.$this->l('Default currency:').' </label>
 				<div class="margin-form">
 					<select name="id_currency">
-						<option value="0" '.(Tools::getValue('id_currency', $obj->id_currency) == 0 ? 'selected' : '').'>'.$this->l('Default store currency').'</option>
+						<option value="0" '.((int)Tools::getValue('id_currency', $obj->id_currency) == 0 ? 'selected' : '').'>'.$this->l('Default store currency').'</option>
 		';
 		$currencies = Currency::getCurrencies();
 		foreach ($currencies AS $currency)
-			echo '<option value="'.intval($currency['id_currency']).'" '.(Tools::getValue('id_currency', $obj->id_currency) == $currency['id_currency'] ? 'selected' : '').'>'.Tools::htmlentitiesUTF8($currency['name']).'</option>';
+			echo '<option value="'.intval($currency['id_currency']).'" '.((int)Tools::getValue('id_currency', $obj->id_currency) == $currency['id_currency'] ? 'selected' : '').'>'.Tools::htmlentitiesUTF8($currency['name']).'</option>';
 		echo '
 					</select>
 				</div>

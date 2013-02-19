@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -166,6 +166,15 @@ class CustomerCore extends ObjectModel
 		$this->birthday = (empty($this->years) ? $this->birthday : (int)$this->years.'-'.(int)$this->months.'-'.(int)$this->days);
 		if ($this->newsletter AND !$this->newsletter_date_add)
 			$this->newsletter_date_add = date('Y-m-d H:i:s');
+		if ($this->deleted)
+		{
+			$addresses = $this->getAddresses((int)Configuration::get('PS_LANG_DEFAULT'));
+			foreach ($addresses as $address)
+			{
+				$obj = new Address((int)$address['id_address']);
+				$obj->delete();
+			}
+		}			
 	 	return parent::update(true);
 	}
 
@@ -293,15 +302,18 @@ class CustomerCore extends ObjectModel
 	  */
 	public static function customerHasAddress($id_customer, $id_address)
 	{
-		if (!array_key_exists($id_customer, self::$_customerHasAddress))
+		$key = (int)$id_customer.'-'.(int)$id_address;		
+		if (!array_key_exists($key, self::$_customerHasAddress))
 		{
-			self::$_customerHasAddress[$id_customer] = (bool)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
+			self::$_customerHasAddress[$key] = (bool)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 			SELECT `id_address`
 			FROM `'._DB_PREFIX_.'address`
-			WHERE `id_customer` = '.(int)$id_customer.' AND `id_address` = '.(int)$id_address.' AND `deleted` = 0');
+			WHERE `id_customer` = '.(int)$id_customer.'
+			AND `id_address` = '.(int)$id_address.'
+			AND `deleted` = 0');
 		}
 
-		return self::$_customerHasAddress[$id_customer];
+		return self::$_customerHasAddress[$key];
 	}
 
 	public static function resetAddressCache($id_customer)
@@ -319,7 +331,7 @@ class CustomerCore extends ObjectModel
 	public function getAddresses($id_lang)
 	{
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-		SELECT a.*, cl.`name` country, s.name state, s.iso_code state_iso
+		SELECT DISTINCT a.*, cl.`name` country, s.name state, s.iso_code state_iso
 		FROM `'._DB_PREFIX_.'address` a
 		LEFT JOIN `'._DB_PREFIX_.'country` c ON (a.`id_country` = c.`id_country`)
 		LEFT JOIN `'._DB_PREFIX_.'country_lang` cl ON (c.`id_country` = cl.`id_country`)
@@ -432,6 +444,9 @@ class CustomerCore extends ObjectModel
 	 */
 	public function getStats()
 	{
+		if (!$this->id)
+			return array('nb_orders' => 0, 'total_orders' => 0, 'last_visit' => '--', 'age' => '--');
+
 		// Get Row because we want $result to be an array
 		$result = Db::getInstance()->getRow('
 		SELECT COUNT(`id_order`) nb_orders, SUM(`total_paid` / o.`conversion_rate`) total_orders

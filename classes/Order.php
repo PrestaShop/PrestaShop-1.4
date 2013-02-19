@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -1000,7 +1000,10 @@ class OrderCore extends ObjectModel
 		$order = new Order($id_order);
 		$orderState = OrderHistory::getLastOrderState($id_order);
 		if (!Validate::isLoadedObject($orderState) OR !Validate::isLoadedObject($order))
-			die(Tools::displayError('Invalid objects'));
+		{
+			echo '&nbsp;';
+			return false;
+		}
 		echo '<span style="width:20px; margin-right:5px;">';
 		if (($orderState->invoice AND $order->invoice_number) AND (int)($tr['product_number']))
 			echo '<a href="pdf.php?id_order='.(int)($order->id).'&pdf"><img src="../img/admin/tab-invoice.gif" alt="invoice" /></a>';

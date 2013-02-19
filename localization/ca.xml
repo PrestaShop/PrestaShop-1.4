@@ -27,7 +27,7 @@
 		<tax id="4" name="HST 15%" rate="15" />
 		<tax id="5" name="PST 7%" rate="7" />
 		<tax id="6" name="PST 10%" rate="10" />
-		<tax id="7" name="PST 9.5%" rate="9.5" />
+		<tax id="7" name="PST 9.975%" rate="9.975" />
 		<tax id="8" name="PST 5%" rate="5" />
 
 		<taxRulesGroup name="CA Standard Rate">
@@ -40,8 +40,8 @@
 			<taxRule iso_code_country="ca" iso_code_state="ns" id_tax="4" state_behavior="1" />
 			<taxRule iso_code_country="ca" iso_code_state="on" id_tax="3" state_behavior="1" />
 			<taxRule iso_code_country="ca" iso_code_state="pe" id_tax="6" state_behavior="2" />
-			<taxRule iso_code_country="ca" iso_code_state="qc" id_tax="7" state_behavior="2" />
-			<taxRule iso_code_country="ca" iso_code_state="sk" id_tax="8" state_behavior="2" />
+			<taxRule iso_code_country="ca" iso_code_state="qc" id_tax="7" state_behavior="1" />
+			<taxRule iso_code_country="ca" iso_code_state="sk" id_tax="8" state_behavior="1" />
 		</taxRulesGroup>
 	</taxes>
 	<units>

@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -223,10 +223,13 @@ class ParentOrderControllerCore extends FrontController
 		if (Validate::isInt(Tools::getValue('id_carrier')) AND sizeof(Carrier::checkCarrierZone((int)(Tools::getValue('id_carrier')), (int)($id_zone))))
 			self::$cart->id_carrier = (int)(Tools::getValue('id_carrier'));
 		elseif (!self::$cart->isVirtualCart() AND (int)(Tools::getValue('id_carrier')) == 0)
+		{	
+			if (Configuration::get('PS_ORDER_PROCESS_TYPE') == 1)
+				self::$cart->id_carrier = 0;
 			$this->errors[] = Tools::displayError('Invalid carrier or no carrier selected');
+		}
 
 		Module::hookExec('processCarrier', array('cart' => self::$cart));
-
 		return self::$cart->update();
 	}
 
@@ -363,7 +366,12 @@ class ParentOrderControllerCore extends FrontController
 		$customer = new Customer((int)(self::$cookie->id_customer));
 		$address = new Address((int)(self::$cart->id_address_delivery));
 		$id_zone = Address::getZoneById((int)($address->id));
-		$carriers = Carrier::getCarriersForOrder($id_zone, $customer->getGroups());
+		$country = new Country($address->id_country);
+		
+		if ((bool)$country->active)
+			$carriers = Carrier::getCarriersForOrder($id_zone, $customer->getGroups());
+		else
+			$carriers = array();
 
 		self::$smarty->assign(array(
 			'checked' => $this->_setDefaultCarrierSelection($carriers),

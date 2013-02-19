@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -66,7 +66,7 @@ echo '
 			}
 		</style>
 	</head>
-	<body '.((!empty($employee->bo_color)) ? 'style="background:'.Tools::htmlentitiesUTF8($employee->bo_color).'"' : '').'>
+	<body'.((!empty($employee->bo_color)) ? ' style="background:'.Tools::htmlentitiesUTF8($employee->bo_color).'"' : '').'>
 	<script>
 		var choose_language_trad = "'.translate('Choose language:').'";
 	</script>

@@ -45,7 +45,7 @@ class Jirafe extends Module
 
         $this->name = 'jirafe';
         $this->tab = 'analytics_stats';
-        $this->version = '1.2';
+        $this->version = '1.2.1';
 
         //The constructor must be called after the name has been set, but before you try to use any functions like $this->l()
         parent::__construct();
@@ -61,6 +61,22 @@ class Jirafe extends Module
 
         // Confirmation of uninstall
         $this->confirmUninstall = $this->l('Are you sure you want to remove Jirafe analytics integration for your site?');
+        
+        $this->checkConfig();
+        
+    }
+
+    public function checkConfig()
+    {
+		// Check configurations
+        $warnings = array();
+		if (!in_array(ini_get('allow_url_fopen'), array('On', 'on', '1')))
+			$warnings[] = $this->l('allow_url_fopen be enabled on your server to use this module.');
+		if (!is_callable('curl_exec'))
+			$warnings[] = $this->l('cURL extension must be enabled on your server to use this module.');
+		if (!empty($warnings))
+        	$this->warning = implode(',<br />', $warnings);
+         return (bool)count($warnings);
     }
 
     public function getPrestashopClient()
@@ -96,12 +112,12 @@ class Jirafe extends Module
 
     public function install()
     {
-		// Check configurations
-		if (!in_array(ini_get('allow_url_fopen'), array('On', 'on', '1')))
-			return false;
-		if (!extension_loaded('curl'))
-			return false;
-
+        if ($this->checkConfig() === true)
+		{
+			echo '<div class="warning">'.Tools::safeOutput($this->warning).'</div>';
+            return false;
+		}
+               
         $ps = $this->getPrestashopClient();
         $jf = $this->getjirafeClient();
 
@@ -109,37 +125,46 @@ class Jirafe extends Module
         $app = $ps->getApplication();
 
         // Check if there is a token (probably not since we are installing) and if not, get one from Jirafe
-        if (empty($app['token'])) {
+        if (isset($app['token']) && empty($app['token'])) {
             try {
                 $app = $jf->applications()->create($app['name'], $app['url'], 'prestashop', _PS_VERSION_, JIRAFE_MODULE_VERSION);
+
+	            // Set the application information in Prestashop
+	            $ps->setApplication($app);
+	            // Set the token in the Jirafe client for later
+	            $jf->setToken($app['token']);
             } catch (Exception $e) {
-                // TODO: display error msg
-                /* $this->_errors[] = $this->l('The Jirafe Web Service is unreachable. Please try again when the connection is restored.'); */
-                return false;
+                $this->_errors[] = $this->l('The Jirafe Web Service is unreachable. Please try again when the connection is restored.').' '.$this->l('token');
             }
-
-            // Set the application information in Prestashop
-            $ps->setApplication($app);
-            // Set the token in the Jirafe client for later
-            $jf->setToken($app['token']);
         }
 
-        // Sync for the first time
-        try {
-            $results = $jf->applications($app['app_id'])->resources()->sync($ps->getSites(), $ps->getUsers(), array(
-                'platform_type' => 'prestashop',
-                'platform_version' => _PS_VERSION_,
-                'plugin_version' => JIRAFE_MODULE_VERSION,
-                'opt_in' => false // @TODO, enable onboarding when ready
-            ));
-        } catch (Exception $e) {
-            /* $this->_errors[] = $this->l('The Jirafe Web Service is unreachable. Please try again when the connection is restored.'); */
-            return false;
-        }
+        if (isset($app['app_id']))
+        {
+	        // Sync for the first time
+	        try {
+	            $results = $jf->applications($app['app_id'])->resources()->sync($ps->getSites(), $ps->getUsers(), array(
+	                'platform_type' => 'prestashop',
+	                'platform_version' => _PS_VERSION_,
+	                'plugin_version' => JIRAFE_MODULE_VERSION,
+	                'opt_in' => false // @TODO, enable onboarding when ready
+	            ));
+	        } catch (Exception $e) {
+	            $this->_errors[] = $this->l('The Jirafe Web Service is unreachable. Please try again when the connection is restored.').' '.$this->l('Sync');
+	        }
+	    }
+	    
+        if (is_array($this->_errors) && (count($this->_errors) > 0))
+		{
+        	$errors = implode(',<br />', $this->_errors);		  
+			echo '<div class="error">'.Tools::safeOutput($errors).'</div>';
+			return false;
+		}        
 
         // Save information back in Prestashop
-        $ps->setUsers($results['users']);
-        $ps->setSites($results['sites']);
+        if(isset($results['users']))
+            $ps->setUsers($results['users']);
+        if(isset($results['sites']))
+            $ps->setSites($results['sites']);
 
         // Add hooks for stats and tags
         return (

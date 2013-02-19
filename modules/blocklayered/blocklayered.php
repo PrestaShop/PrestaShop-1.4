@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registred Trademark & Property of PrestaShop SA
 */
@@ -1552,7 +1552,7 @@ class BlockLayered extends Module
 			'.(version_compare(_PS_VERSION_,'1.5','>') ? '' : '<img src="../img/admin/ok2.png" alt="" />').'<span class="message"></span>
 		</div>
 		<div id="ajax-message-ko" class="error ajax-message" style="display: none">
-			'.(version_compare(_PS_VERSION_,'1.5','>') ? '' : '<img src="../img/admin/errors.png" alt="" />').'<span class="message"></span>
+			'.(version_compare(_PS_VERSION_,'1.5','>') ? '' : '<img src="../img/admin/error.png" alt="" />').'<span class="message"></span>
 		</div>
 		<h2>'.$this->l('Layered navigation').'</h2>
 		<fieldset class="width4">
@@ -2372,14 +2372,14 @@ class BlockLayered extends Module
 				case 'id_attribute_group':
 					$sub_queries = array();
 					
-					
-					foreach ($filter_values as $filter_value)
-					{
-						$filter_value_array = explode('_', $filter_value);
-						if (!isset($sub_queries[$filter_value_array[0]]))
-							$sub_queries[$filter_value_array[0]] = array();
-						$sub_queries[$filter_value_array[0]][] = 'pac.`id_attribute` = '.(int)$filter_value_array[1];
-					}
+					if(isset($filter_values) && is_array($filter_values))
+						foreach ($filter_values as $filter_value)
+						{
+							$filter_value_array = explode('_', $filter_value);
+							if (!isset($sub_queries[$filter_value_array[0]]))
+								$sub_queries[$filter_value_array[0]] = array();
+							$sub_queries[$filter_value_array[0]][] = 'pac.`id_attribute` = '.(int)$filter_value_array[1];
+						}
 					foreach ($sub_queries as $sub_query)
 					{
 						$query_filters_where .= ' AND p.id_product IN (SELECT pa.`id_product`
@@ -2812,26 +2812,28 @@ class BlockLayered extends Module
 					GROUP BY c.id_category ORDER BY c.nleft, c.position';
 			}
 			
-			foreach ($filters as $filter_tmp)
-			{
-				$method_name = 'get'.ucfirst($filter_tmp['type']).'FilterSubQuery';
-				if (method_exists('BlockLayered', $method_name) &&
-				(!in_array($filter['type'], array('price', 'weight')) && $filter['type'] != $filter_tmp['type'] || $filter['type'] == $filter_tmp['type']))
+			if(isset($filters) && is_array($filters))
+				foreach ($filters as $filter_tmp)
 				{
-					if ($filter['type'] == $filter_tmp['type'] && $filter['id_value'] == $filter_tmp['id_value'])
-						$sub_query_filter = self::$method_name(array(), true);
-					else
+					$method_name = 'get'.ucfirst($filter_tmp['type']).'FilterSubQuery';
+					if (method_exists('BlockLayered', $method_name) &&
+					(!in_array($filter['type'], array('price', 'weight')) && $filter['type'] != $filter_tmp['type'] || $filter['type'] == $filter_tmp['type']))
 					{
-						if ($filter_tmp['id_value'])
-							$selected_filters_cleaned = $this->cleanFilterByIdValue(@$selected_filters[$filter_tmp['type']], $filter_tmp['id_value']);
+						if ($filter['type'] == $filter_tmp['type'] && $filter['id_value'] == $filter_tmp['id_value'])
+							$sub_query_filter = self::$method_name(array(), true);
 						else
-							$selected_filters_cleaned = @$selected_filters[$filter_tmp['type']];
-						$sub_query_filter = self::$method_name($selected_filters_cleaned, $filter['type'] == $filter_tmp['type']);
+						{
+							if ($filter_tmp['id_value'])
+								$selected_filters_cleaned = $this->cleanFilterByIdValue(@$selected_filters[$filter_tmp['type']], $filter_tmp['id_value']);
+							else
+								$selected_filters_cleaned = @$selected_filters[$filter_tmp['type']];
+							$sub_query_filter = self::$method_name($selected_filters_cleaned, $filter['type'] == $filter_tmp['type']);
+						}
+						if(isset($sub_query_filter) && is_array($sub_query_filter))
+							foreach ($sub_query_filter as $key => $value)
+								$sql_query[$key] .= $value;
 					}
-					foreach ($sub_query_filter as $key => $value)
-						$sql_query[$key] .= $value;
 				}
-			}
 			
 			$products = false;
 			if (!empty($sql_query['from']))
@@ -2840,17 +2842,18 @@ class BlockLayered extends Module
 					$sql_query['from'] .= Shop::addSqlAssociation('product', 'p');
 				$products = $db->ExecuteS($sql_query['select']."\n".$sql_query['from']."\n".$sql_query['join']."\n".$sql_query['where']."\n".$sql_query['group']);
 			}
-
-			foreach ($filters as $filter_tmp)
-			{
-				$method_name = 'filterProductsBy'.ucfirst($filter_tmp['type']);
-				if (method_exists('BlockLayered', $method_name) &&
-				(!in_array($filter['type'], array('price', 'weight')) && $filter['type'] != $filter_tmp['type'] || $filter['type'] == $filter_tmp['type']))
-					if ($filter['type'] == $filter_tmp['type'])
-						$products = self::$method_name(array(), $products);
-					else
-						$products = self::$method_name(@$selected_filters[$filter_tmp['type']], $products);
-			}
+			
+			if(isset($filters) && is_array($filters))
+				foreach ($filters as $filter_tmp)
+				{
+					$method_name = 'filterProductsBy'.ucfirst($filter_tmp['type']);
+					if (method_exists('BlockLayered', $method_name) &&
+					(!in_array($filter['type'], array('price', 'weight')) && $filter['type'] != $filter_tmp['type'] || $filter['type'] == $filter_tmp['type']))
+						if ($filter['type'] == $filter_tmp['type'])
+							$products = self::$method_name(array(), $products);
+						else
+							$products = self::$method_name(@$selected_filters[$filter_tmp['type']], $products);
+				}
 			
 			if (!empty($sql_query['second_query']))
 			{

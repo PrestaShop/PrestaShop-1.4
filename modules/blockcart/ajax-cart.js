@@ -1,5 +1,5 @@
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -30,7 +30,7 @@ var ajaxCart = {
 	overrideButtonsInThePage : function(){
 		//for every 'add' buttons...
 		$('.ajax_add_to_cart_button').unbind('click').click(function(){
-			var idProduct =  $(this).attr('rel').replace('ajax_id_product_', '');
+			var idProduct =  $.trim($(this).attr('rel').replace('nofollow', '').replace('ajax_id_product_', ''));
 			if ($(this).attr('disabled') != 'disabled')
 				ajaxCart.add(idProduct, null, false, this);
 			return false;
@@ -105,10 +105,12 @@ var ajaxCart = {
 
 				// save the expand statut in the user cookie
 				$.ajax({
-					type: 'GET',
-					url: baseDir + 'modules/blockcart/blockcart-set-collapse.php',
+					type: 'POST',
+					headers: { "cache-control": "no-cache" },
+					url: baseDir + 'modules/blockcart/blockcart-set-collapse.php' + '?rand=' + new Date().getTime(),
 					async: true,
-					data: 'ajax_blockcart_display=expand' + '&rand=' + new Date().getTime()
+					cache: false,					
+					data: 'ajax_blockcart_display=expand'
 				});
 			}
 		});
@@ -118,8 +120,9 @@ var ajaxCart = {
 	refresh : function(){
 		//send the ajax request to the server
 		$.ajax({
-			type: 'GET',
-			url: baseDir + 'cart.php',
+			type: 'POST',
+			headers: { "cache-control": "no-cache" },
+			url: baseDir + 'cart.php' + '?rand=' + new Date().getTime(),
 			async: true,
 			cache: false,
 			dataType : "json",
@@ -152,10 +155,12 @@ var ajaxCart = {
 
 			// save the expand statut in the user cookie
 			$.ajax({
-				type: 'GET',
-				url: baseDir + 'modules/blockcart/blockcart-set-collapse.php',
+				type: 'POST',
+				headers: { "cache-control": "no-cache" },				
+				cache: false,				
+				url: baseDir + 'modules/blockcart/blockcart-set-collapse.php' + '?rand=' + new Date().getTime(),
 				async: true,
-				data: 'ajax_blockcart_display=collapse' + '&rand=' + new Date().getTime()
+				data: 'ajax_blockcart_display=collapse'
 			});
 		}
 	},
@@ -191,10 +196,12 @@ var ajaxCart = {
 
 		if ($('#cart_block #cart_block_list').hasClass('collapsed'))
 			this.expand();
+			var data = 
 		//send the ajax request to the server
 		$.ajax({
 			type: 'POST',
-			url: baseDir + 'cart.php',
+			headers: { "cache-control": "no-cache" },
+			url: baseDir + 'cart.php' + '?rand=' + new Date().getTime(),
 			async: true,
 			cache: false,
 			dataType : "json",
@@ -248,14 +255,15 @@ var ajaxCart = {
 		//send the ajax request to the server
 		$.ajax({
 			type: 'POST',
-			url: baseDir + 'cart.php',
+			headers: { "cache-control": "no-cache" },
+			url: baseDir + 'cart.php' + '?rand=' + new Date().getTime(),
 			async: true,
 			cache: false,
 			dataType : "json",
 			data: 'delete=1&id_product=' + idProduct + '&ipa=' + ((idCombination != null && parseInt(idCombination)) ? idCombination : '') + ((customizationId && customizationId != null) ? '&id_customization=' + customizationId : '') + '&token=' + static_token + '&ajax=true',
 			success: function(jsonData)	{
 				ajaxCart.updateCart(jsonData);
-				if ($('body').attr('id') == 'order' || $('body').attr('id') == 'order-opc')
+				if (($('body').attr('id') == 'order' || $('body').attr('id') == 'order-opc') && typeof(deletProductFromSummary) == 'function')
 					deletProductFromSummary(idProduct+'_'+idCombination);
 			},
 			error: function() {alert('ERROR: unable to delete the product');}
@@ -350,7 +358,7 @@ var ajaxCart = {
 			}
 			var removeLinks = $('#'+parentId+' #cart_block_product_' + domIdProduct).find('a.ajax_cart_block_remove_link');
 			if (!product.hasCustomizedDatas && !removeLinks.length)
-				$('#'+parentId+' #' + domIdProduct + ' span.remove_link').html('<a class="ajax_cart_block_remove_link" rel="nofollow" href="' + baseDir + 'cart.php?delete&amp;id_product=' + product['id'] + '&amp;ipa=' + product['idCombination'] + '&amp;token=' + static_token + '" title="' + removingLinkText + '"> </a>');
+				$('#'+parentId+' #' + domIdProduct + ' span.remove_link').html('<a class="ajax_cart_block_remove_link" rel="nofollow" href="' + baseDir + 'cart.php?delete=1&amp;id_product=' + product['id'] + '&amp;ipa=' + product['idCombination'] + '&amp;token=' + static_token + '" title="' + removingLinkText + '"> </a>');
 		});
 	},
 
@@ -444,7 +452,7 @@ var ajaxCart = {
 							content += '<span class="quantity-formated"><span class="quantity">' + this.quantity + '</span>x</span>';
 							var name = (this.name.length > 12 ? this.name.substring(0, 10) + '...' : this.name);
 							content += '<a href="' + this.link + '" title="' + this.name + '">' + name + '</a>';
-							content += '<span class="remove_link"><a rel="nofollow" class="ajax_cart_block_remove_link" href="' + baseDir + 'cart.php?delete&amp;id_product=' + productId + '&amp;token=' + static_token + (this.hasAttributes ? '&amp;ipa=' + parseInt(this.idCombination) : '') + '"> </a></span>';
+							content += '<span class="remove_link"><a rel="nofollow" class="ajax_cart_block_remove_link" href="' + baseDir + 'cart.php?delete=1&amp;id_product=' + productId + '&amp;token=' + static_token + (this.hasAttributes ? '&amp;ipa=' + parseInt(this.idCombination) : '') + '"> </a></span>';
 							content += '<span class="price">' + this.priceByLine + '</span>';
 							content += '</dt>';
 						if (this.hasAttributes)
@@ -516,7 +524,7 @@ var ajaxCart = {
 				// If the customization is already displayed on the cart, no update's needed
 				if ($("#deleteCustomizableProduct_" + customizationId + "_" + productId + "_" + productAttributeId).length)
 					return ('');
-				content += '<li name="customization"><div class="deleteCustomizableProduct" id="deleteCustomizableProduct_' + customizationId + '_' + productId + '_' + (productAttributeId ?  productAttributeId : '0') + '"><a  rel="nofollow" class="ajax_cart_block_remove_link" href="' + baseDir + 'cart.php?delete&amp;id_product=' + productId + '&amp;ipa=' + productAttributeId + '&amp;id_customization=' + customizationId + '&amp;token=' + static_token + '"> </a></div><span class="quantity-formated"><span class="quantity">' + parseInt(this.quantity) + '</span>x</span>';
+				content += '<li name="customization"><div class="deleteCustomizableProduct" id="deleteCustomizableProduct_' + customizationId + '_' + productId + '_' + (productAttributeId ?  productAttributeId : '0') + '"><a  rel="nofollow" class="ajax_cart_block_remove_link" href="' + baseDir + 'cart.php?delete=1&amp;id_product=' + productId + '&amp;ipa=' + productAttributeId + '&amp;id_customization=' + customizationId + '&amp;token=' + static_token + '"> </a></div><span class="quantity-formated"><span class="quantity">' + parseInt(this.quantity) + '</span>x</span>';
 
 				// Give to the customized product the first textfield value as name
 				$(this.datas).each(function(){

@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -66,7 +66,7 @@ class AdminRangeWeight extends AdminTab
 				$this->_errors[] = Tools::displayError('Invalid range, "From" must be lower than "To"');
 
 			/* Check that a similar range does not exist yet for this carrier */
-			if (!count($this->_errors) && $ranges = RangeWeight::getRanges((int)Tools::getValue('id_carrier')))
+			if (!Tools::isSubmit('id_range_weight') && !count($this->_errors) && $ranges = RangeWeight::getRanges((int)Tools::getValue('id_carrier')))
 				foreach ($ranges as $range)
 					if (!($delimiter2 <= $range['delimiter1'] || $delimiter1 >= $range['delimiter2']))
 					{

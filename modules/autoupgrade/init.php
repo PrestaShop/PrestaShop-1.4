@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -29,13 +29,13 @@
 ob_start();
 $timerStart = microtime(true);
 
-require_once(AUTOUPGRADE_MODULE_DIR.'Tools14.php');
+require_once(AUTOUPGRADE_MODULE_DIR.'classes/Tools14.php');
 require_once(AUTOUPGRADE_MODULE_DIR.'AdminSelfUpgrade.php');
 
 if (!class_exists('Tools',false))
 	eval('class Tools extends Tools14{}');
 
-require_once(_PS_ROOT_DIR_.'/modules/autoupgrade/Upgrader.php');
+require_once(_PS_ROOT_DIR_.'/modules/autoupgrade/classes/Upgrader.php');
 
 if (!class_exists('Upgrader',false))
 {

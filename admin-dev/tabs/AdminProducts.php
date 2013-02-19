@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -761,7 +761,7 @@ class AdminProducts extends AdminTab
 					if (!$specificPrice->add())
 						$this->_errors = Tools::displayError('An error occurred while updating the specific price.');
 					else
-						Tools::redirectAdmin($currentIndex.(Tools::getValue('id_category') ? '&id_category='.Tools::getValue('id_category') : '').'&id_product='.$id_product.'&add'.$this->table.'&tabs=2&conf=3&token='.($token ? $token : $this->token));
+						Tools::redirectAdmin($currentIndex.((int)Tools::getValue('id_category') ? '&id_category='.(int)Tools::getValue('id_category') : '').'&id_product='.(int)$id_product.'&add'.$this->table.'&tabs=2&conf=3&token='.($token ? $token : $this->token));
 				}
 			}
 			else
@@ -781,7 +781,7 @@ class AdminProducts extends AdminTab
 					if (!$specificPrice->delete())
 						$this->_errors[] = Tools::displayError('An error occurred while deleting the specific price');
 					else
-						Tools::redirectAdmin($currentIndex.(Tools::getValue('id_category') ? '&id_category='.Tools::getValue('id_category') : '').'&id_product='.$obj->id.'&add'.$this->table.'&tabs=2&conf=1&token='.($token ? $token : $this->token));
+						Tools::redirectAdmin($currentIndex.((int)Tools::getValue('id_category') ? '&id_category='.(int)Tools::getValue('id_category') : '').'&id_product='.(int)$obj->id.'&add'.$this->table.'&tabs=2&conf=1&token='.($token ? $token : $this->token));
 				}
 			}
 			else
@@ -803,7 +803,7 @@ class AdminProducts extends AdminTab
 			elseif (!SpecificPrice::setSpecificPriority((int)($obj->id), $priorities))
 				$this->_errors[] = Tools::displayError('An error occurred while setting priorities.');
 			else
-				Tools::redirectAdmin($currentIndex.(Tools::getValue('id_category') ? '&id_category='.Tools::getValue('id_category') : '').'&id_product='.$obj->id.'&add'.$this->table.'&tabs=2&conf=4&token='.($token ? $token : $this->token));
+				Tools::redirectAdmin($currentIndex.((int)Tools::getValue('id_category') ? '&id_category='.(int)Tools::getValue('id_category') : '').'&id_product='.(int)$obj->id.'&add'.$this->table.'&tabs=2&conf=4&token='.($token ? $token : $this->token));
 		}
 		/* Customization management */
 		elseif (Tools::isSubmit('submitCustomizationConfiguration'))
@@ -851,15 +851,20 @@ class AdminProducts extends AdminTab
 				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 		}
 		elseif (isset($_GET['position']))
-		{
+		{					
 			if ($this->tabAccess['edit'] !== '1')
 				$this->_errors[] = Tools::displayError('You do not have permission to edit here.');
 			elseif (!Validate::isLoadedObject($object = $this->loadObject()))
 				$this->_errors[] = Tools::displayError('An error occurred while updating status for object.').' <b>'.$this->table.'</b> '.Tools::displayError('(cannot load object)');
-			if (!$object->updatePosition((int)(Tools::getValue('way')), (int)(Tools::getValue('position'))))
+			if (!$object->updatePosition((int)Tools::getValue('way'), (int)Tools::getValue('position')))
 				$this->_errors[] = Tools::displayError('Failed to update the position.');
 			else
-				Tools::redirectAdmin($currentIndex.'&'.$this->table.'Orderby=position&'.$this->table.'Orderway=asc&conf=5'.(($id_category = (!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1')) ? ('&id_category='.$id_category) : '').'&token='.Tools::getAdminTokenLite('AdminCatalog'));
+			{
+				$category = new Category((int)tools::getValue('id_category'));							
+				if (Validate::isLoadedObject($category))
+					Module::hookExec('categoryUpdate', array('category' => $category));
+				Tools::redirectAdmin($currentIndex.'&'.$this->table.'Orderby=position&'.$this->table.'Orderway=asc&conf=5'.(($id_category = (!empty($_REQUEST['id_category'])?$_REQUEST['id_category']:'1')) ? ('&id_category='.$id_category) : '').'&token='.Tools::getAdminTokenLite('AdminCatalog'));					
+			}								
 		}
 		else
 			parent::postProcess(true);
@@ -1767,7 +1772,7 @@ class AdminProducts extends AdminTab
 					<td class="cell border">'.$period.'</td>
 					<td class="cell border">'.$specificPrice['from_quantity'].'</th>
 					<td class="cell border"><b>'.Tools::displayPrice(Tools::ps_round((float)($this->_getFinalPrice($specificPrice, (float)($obj->price), $taxRate)), 2), $current_specific_currency).'</b></td>
-					<td class="cell border"><a href="'.$currentIndex.(Tools::getValue('id_category') ? '&id_category='.(int)Tools::getValue('id_category') : '').'&id_product='.(int)(Tools::getValue('id_product')).'&updateproduct&deleteSpecificPrice&id_specific_price='.(int)($specificPrice['id_specific_price']).'&token='.Tools::getValue('token').'"><img src="../img/admin/delete.gif" alt="'.$this->l('Delete').'" /></a></td>
+					<td class="cell border"><a href="'.$currentIndex.((int)Tools::getValue('id_category') ? '&id_category='.(int)Tools::getValue('id_category') : '').'&id_product='.(int)(Tools::getValue('id_product')).'&updateproduct&deleteSpecificPrice&id_specific_price='.(int)($specificPrice['id_specific_price']).'&token='.Tools::getValue('token').'"><img src="../img/admin/delete.gif" alt="'.$this->l('Delete').'" /></a></td>
 				</tr>';
 				$i++;
 			}
@@ -2121,7 +2126,7 @@ class AdminProducts extends AdminTab
 		$has_attribute = false;
 		$qty_state = 'readonly';
 		$qty = Attribute::getAttributeQty($this->getFieldValue($obj, 'id_product'));
-		if ($qty === false) {
+		if ((bool)$qty === false) {
 			if (Validate::isLoadedObject($obj))
 				$qty = $this->getFieldValue($obj, 'quantity');
 			else
@@ -3019,7 +3024,7 @@ class AdminProducts extends AdminTab
 				<h4 class="tab">2. '.$this->l('Images').' ('.$countImages.')</h4>
 				<table cellpadding="5">
 				<tr>
-					<td><b>'.(Tools::getValue('id_image')?$this->l('Edit this product image'):$this->l('Add a new image to this product')).'</b></td>
+					<td><b>'.((int)Tools::getValue('id_image') ? $this->l('Edit this product image'):$this->l('Add a new image to this product')).'</b></td>
 				</tr>
 				</table>
 				<hr style="width: 100%;" /><br />
@@ -3325,17 +3330,16 @@ class AdminProducts extends AdminTab
 		  </tr>';
 		if (Configuration::get('PS_USE_ECOTAX'))
 			echo'
-				  <tr>
-					  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Eco-tax:').'</td>
-					  <td style="padding-bottom:5px;">'.($currency->format % 2 != 0 ? $currency->sign.' ' : '').'<input type="text" size="3" name="attribute_ecotax" id="attribute_ecotax" value="0.00" onKeyUp="if (isArrowKey(event)) return ;this.value = this.value.replace(/,/g, \'.\');" />'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').' ('.$this->l('overrides Eco-tax on Information tab').')</td>
-				  </tr>';
+				<tr>
+				  <td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Eco-tax:').'</td>
+				  <td style="padding-bottom:5px;">'.($currency->format % 2 != 0 ? $currency->sign.' ' : '').'<input type="text" size="3" name="attribute_ecotax" id="attribute_ecotax" value="0.00" onKeyUp="if (isArrowKey(event)) return ;this.value = this.value.replace(/,/g, \'.\');" />'.($currency->format % 2 == 0 ? ' '.$currency->sign : '').' ('.$this->l('overrides Eco-tax on Information tab').')</td>
+				</tr>';
 
 		echo'
-		  <tr id="initial_stock_attribute">
+			<tr id="initial_stock_attribute">
 				<td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;" class="col-left">'.$this->l('Initial stock:').'</td>
 				<td><input type="text" name="attribute_quantity" size="3" maxlength="10" value="0"/></td>
-		  </tr>
-		  </tr>
+			</tr>
 			<tr id="stock_mvt_attribute" style="display:none;">
 				<td style="width:150px;vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;" class="col-left">'.$this->l('Stock movement:').'</td>
 				<td style="padding-bottom:5px;">

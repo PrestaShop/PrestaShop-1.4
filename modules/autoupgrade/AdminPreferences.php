@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -108,7 +108,7 @@ class AdminPreferences extends AdminTab
 			if (empty($_SERVER['HTTPS']) OR strtolower($_SERVER['HTTPS']) == 'off')
 			{
 				$this->_fieldsGeneral['PS_SSL_ENABLED']['type'] = 'disabled';
-				$this->_fieldsGeneral['PS_SSL_ENABLED']['disabled'] = '<a href="https://'.Tools14::getShopDomainSsl().Tools::safeOutput($_SERVER['REQUEST_URI']).'">'.$this->l('Please click here to use HTTPS protocol before enabling SSL.').'</a>';
+				$this->_fieldsGeneral['PS_SSL_ENABLED']['disabled'] = '<a href="https://'.Tools14::getShopDomainSsl().Tools14::safeOutput($_SERVER['REQUEST_URI']).'">'.$this->l('Please click here to use HTTPS protocol before enabling SSL.').'</a>';
 			}
 
 		parent::__construct();
@@ -506,4 +506,3 @@ class AdminPreferences extends AdminTab
 			echo '<script type="text/javascript">changeCMSActivationAuthorization();</script>';
 	}
 }
-

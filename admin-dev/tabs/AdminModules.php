@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -254,11 +254,19 @@ class AdminModules extends AdminTab
 			{
 				if (Tools::getValue('module_name') != '')
 				{
+                    $module = Module::getInstanceByName(Tools::getValue('module_name'));
+                    if (Validate::isLoadedObject($module))
+                    {
+                          if ( !$module->uninstall() )
+                                $this->_errors[] = Tools::displayError('Cannot uninstall and delete module');
+                    }					
 					$moduleDir = _PS_MODULE_DIR_.str_replace(array('.', '/', '\\'), array('', '', ''), Tools::getValue('module_name'));
 					$this->recursiveDeleteOnDisk($moduleDir);
-					Tools::redirectAdmin($currentIndex.'&conf=22&token='.$this->token.'&tab_module='.Tools::getValue('tab_module'));
+					if(!count($this->_errors))
+						Tools::redirectAdmin($currentIndex.'&conf=22&token='.$this->token.'&tab_module='.Tools::getValue('tab_module'));
 				}
-				Tools::redirectAdmin($currentIndex.'&token='.$this->token);
+				if(!count($this->_errors))
+					Tools::redirectAdmin($currentIndex.'&token='.$this->token);
 			}
 			else
 				$this->_errors[] = Tools::displayError('You do not have permission to delete here.');
@@ -950,7 +958,7 @@ class AdminModules extends AdminTab
 	
 	public function refresh()
 	{
-		return file_put_contents(_PS_ROOT_DIR_.$this->_moduleCacheFile, Tools::file_get_contents($this->xml_modules_list));
+		return (bool)file_put_contents(_PS_ROOT_DIR_.$this->_moduleCacheFile, Tools::file_get_contents($this->xml_modules_list));
 	}
 	
 	public function displaySelectedFilter()

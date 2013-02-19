@@ -1,5 +1,5 @@
 {*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -62,5 +62,5 @@
 
 	<br />
 	<p id="dateofdelivery">{l s='Approximate date of delivery with this carrier is between' mod='dateofdelivery'} <span id="minimal"></span> {l s='and' mod='dateofdelivery'} <span id="maximal"></span> <sup>*</sup></p>
-	<p style="font-size:10px;margin:0padding:0;"><sup>*</sup> {l s='with direct payment methods (e.g: credit card)' mod='dateofdelivery'}</p>
+	<p style="font-size:10px;margin:0;padding:0;"><sup>*</sup> {l s='with direct payment methods (e.g: credit card)' mod='dateofdelivery'}</p>
 {/if}

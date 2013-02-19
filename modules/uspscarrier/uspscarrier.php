@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -52,7 +52,7 @@ class UspsCarrier extends CarrierModule
 	{
 		$this->name = 'uspscarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.2.4';
+		$this->version = '1.2.5';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('us');
 		$this->module_key = '9ac173da9614868dbd15c56cf8ad008a';
@@ -321,7 +321,7 @@ class UspsCarrier extends CarrierModule
 	private function _displayForm()
 	{
 		$this->_html .= '<fieldset>
-		<legend><img src="'.$this->_path.'logo.gif" alt="" /> '.$this->l('USPS Module Status').'</legend>';
+		<legend><img src="'.$this->_path.'img/delivery.gif" alt="" /> '.$this->l('USPS Module Status').'</legend>';
 
 		$alert = array();
 		$this->_webserviceTestResult = $this->webserviceTest();

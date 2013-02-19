@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -28,8 +28,15 @@ class CartControllerCore extends FrontController
 {
 	public $php_self = 'cart.php';
 
-	// This is not a public page, so the canonical redirection is disabled
-	public function canonicalRedirection(){}
+	public function canonicalRedirection()
+	{
+		if (Configuration::get('PS_CANONICAL_REDIRECT') && strtoupper($_SERVER['REQUEST_METHOD']) == 'GET' 
+		&& !Tools::getValue('ajax') && !Tools::getIsset('ps_mobile_site') && !Tools::getIsset('add') && !Tools::getIsset('update') && !Tools::getIsset('delete'))
+		{
+			$this->php_self = ((Configuration::get('PS_ORDER_PROCESS_TYPE') == 1) ? 'order-opc.php' : 'order.php');
+			parent::canonicalRedirection();
+		}	
+	}
 
 	public function run()
 	{
@@ -51,8 +58,13 @@ class CartControllerCore extends FrontController
 					else
 						$groups = array(1);
 					if ((int)self::$cart->id_address_delivery)
+					{					
 						$deliveryAddress = new Address((int)self::$cart->id_address_delivery);
-					$result['carriers'] = Carrier::getCarriersForOrder((int)Country::getIdZone((isset($deliveryAddress) && (int)$deliveryAddress->id) ? (int)$deliveryAddress->id_country : (int)_PS_COUNTRY_DEFAULT_), $groups);
+						$id_zone = Address::getZoneById((int)($deliveryAddress->id)); 
+				 	}		
+					if(!isset($id_zone))
+						$id_zone = (int)Country::getIdZone((isset($deliveryAddress) && (int)$deliveryAddress->id) ? (int)$deliveryAddress->id_country : (int)_PS_COUNTRY_DEFAULT_);		
+					$result['carriers'] = Carrier::getCarriersForOrder($id_zone, $groups);
 					$result['checked'] = Carrier::getDefaultCarrierSelection($result['carriers'], (int)self::$cart->id_carrier);
 					$result['HOOK_EXTRACARRIER'] = Module::hookExec('extraCarrier', array('address' => (isset($deliveryAddress) && (int)$deliveryAddress->id) ? $deliveryAddress : null));
 				}

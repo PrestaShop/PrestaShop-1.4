@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license	http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -165,18 +165,14 @@ class LocalizationPackCore
 					foreach ($xml_county->zipcode as $xml_zipcode)
 					{
 							$zipcode_attributes = $xml_zipcode->attributes();
-
-							$zipcodes = $zipcode_attributes['from'];
-							if (isset($zipcode_attributes['to']))
-								$zipcodes .= '-'.$zipcode_attributes['to'];
-							/* By default, if the user did not add a range, the "to" zip code needs to be equal to the "from" */
-							else
-								$zipcodes .= '-'.$zipcode_attributes['from'];
-
-							if ($county->isZipCodeRangePresent($zipcodes))
+							if (!isset($zipcode_attributes['from']))
+								continue;
+							if (!isset($zipcode_attributes['to']))
+								$zipcode_attributes['to'] = $zipcode_attributes['from'];								
+							if ($county->isZipCodeRangePresent($zipcode_attributes['from'], $zipcode_attributes['to']))
 								continue;
 
-							if (!$county->addZipCodes($zipcodes))
+							if (!$county->addZipCodes($zipcode_attributes['from'], $zipcode_attributes['to']))
 							{
 								$this->_errors[] = Tools::displayError('An error has occurred while adding zipcodes');
 								return false;

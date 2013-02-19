@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -711,13 +711,12 @@ class ProductCore extends ObjectModel
 	*/
 	public function deleteCategories($cleanPositions = false)
 	{
+		if ($cleanPositions === true)		
+			$result = Db::getInstance()->ExecuteS('SELECT `id_category` FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.(int)($this->id));		
 		$return = Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.(int)($this->id));
-		if ($cleanPositions === true)
-		{
-			$result = Db::getInstance()->ExecuteS('SELECT `id_category` FROM `'._DB_PREFIX_.'category_product` WHERE `id_product` = '.(int)($this->id));
+		if ($cleanPositions === true && is_array($result))
 			foreach ($result as $row)
-				$this->cleanPositions((int)($row['id_category']));
-		}
+				$return &= $this->cleanPositions((int)($row['id_category']));
 		return $return;
 	}
 
@@ -2863,7 +2862,8 @@ class ProductCore extends ObjectModel
 			$productAttributeId = (int)(isset($productUpdate['id_product_attribute']) ? $productUpdate['id_product_attribute'] : $productUpdate['product_attribute_id']);
 			$productQuantity = (int)(isset($productUpdate['cart_quantity']) ? $productUpdate['cart_quantity'] : $productUpdate['product_quantity']);
 			$price = isset($productUpdate['price']) ? $productUpdate['price'] : $productUpdate['product_price'];
-			$priceWt = $price * (1 + ((isset($productUpdate['tax_rate']) ? $productUpdate['tax_rate'] : $productUpdate['rate']) * 0.01));
+			$priceWt = isset($productUpdate['price_wt']) ? $productUpdate['price_wt'] : $productUpdate['product_price_wt'];
+
 			if (isset($customizedDatas[$productId][$productAttributeId]))
 				foreach ($customizedDatas[$productId][$productAttributeId] as $customization)
 				{

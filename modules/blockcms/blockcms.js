@@ -1,5 +1,5 @@
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -64,6 +64,7 @@ function CMSBlocksDnD(secure_key)
 				var tableDrag = $('#' + table.id);
 				$.ajax({
 					type: 'POST',
+		   			headers: { "cache-control": "no-cache" },  					
 					async: false,
 					url: '../modules/blockcms/ajax_blockcms.php?' + $.tableDnD.serialize(),
 					data: 'action=dnd&secure_key='+secure_key,
@@ -109,6 +110,7 @@ function CMSBlocksDnD(secure_key)
 				var tableDrag = $('#' + table.id);
 				$.ajax({
 					type: 'POST',
+		   			headers: { "cache-control": "no-cache" },  					
 					async: false,
 					url: '../modules/blockcms/ajax_blockcms.php?' + $.tableDnD.serialize(),
 					data: 'action=dnd&secure_key='+secure_key,

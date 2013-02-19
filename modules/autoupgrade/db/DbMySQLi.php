@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -44,11 +44,11 @@ class DbMySQLiCore extends Db
 
 		// Do not use object way for error because this work bad before PHP 5.2.9
 		if (mysqli_connect_error())
-			throw new PrestaShopDatabaseException(sprintf(Tools::displayError('Link to database cannot be established: %s'), mysqli_connect_error()));
+			throw new PrestaShopDatabaseException(sprintf(Tools14::displayError('Link to database cannot be established: %s'), mysqli_connect_error()));
 
 		// UTF-8 support
 		if (!$this->link->query('SET NAMES \'utf8\''))
-			throw new PrestaShopDatabaseException(Tools::displayError('PrestaShop Fatal error: no utf-8 support. Please check your server configuration.'));
+			throw new PrestaShopDatabaseException(Tools14::displayError('PrestaShop Fatal error: no utf-8 support. Please check your server configuration.'));
 
 		return $this->link;
 	}
@@ -184,6 +184,25 @@ class DbMySQLiCore extends Db
 		}
 		$link->close();
 		return 0;
+	}
+	
+	public static function checkCreatePrivilege($server, $user, $pwd, $db, $prefix, $engine)
+	{
+		$link = @new mysqli($server, $user, $pwd, $db);
+		if (mysqli_connect_error())
+			return false;
+
+		$sql = '
+			CREATE TABLE `'.$prefix.'test` (
+			`test` tinyint(1) unsigned NOT NULL
+			) ENGINE=MyISAM';
+		$result = $link->query($sql);
+
+		if (!$result)
+			return $link->error;
+
+		$link->query('DROP TABLE `'.$prefix.'test`');
+		return true;
 	}
 
 	/**

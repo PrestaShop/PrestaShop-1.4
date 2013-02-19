@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -45,7 +45,7 @@ class WidgetCache
 
 	public function refresh()
 	{
-		return file_put_contents($this->_fileName, file_get_contents('https://www.trustedshops.com/bewertung/widget/widgets/'.$this->_ts_id.'.gif'));
+		return (bool)file_put_contents($this->_fileName, file_get_contents('https://www.trustedshops.com/bewertung/widget/widgets/'.$this->_ts_id.'.gif'));
 	}
 }
 

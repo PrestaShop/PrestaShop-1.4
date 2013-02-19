@@ -1,5 +1,5 @@
 {*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -62,12 +62,12 @@
 					<input type="hidden" id="cart_product_attribute_id_{$product.id_product|intval}" value="{$product.id_product_attribute|intval}"/>
 					{if isset($product.id_address_delivery)}<input type="hidden" id="cart_product_address_delivery_id_{$product.id_product|intval}" value="{$product.id_address_delivery}"/>{/if}
 
-					<img src="{$img_prod_dir}{$product.id_image}-medium.jpg" alt="" />
+					<img src="{$link->getImageLink($product.link_rewrite, $product.id_image, 'medium')}" alt="" />
 					<h2 style="margin-top: 0px;">{$product.name|escape:'htmlall':'UTF-8'}</h2>
-					<input type="number" style="width: 50px; float: left;" data-inline="true" class="qty-field cart_quantity_input" name="product_cart_quantity_{$product.id_product|intval}" rel="{$product.cart_quantity}" value="{$product.cart_quantity}" min="0" data-mini="true" data-initial-quantity="{$product.cart_quantity}" data-id-product="{$product.id_product}" data-id-product-attribute="{$product.id_product_attribute}" onchange="if (this.value > 0) {literal}{{/literal} location.replace('{$link->getPageLink('cart.php', true, NULL)}?add&update&amp;token={$token_cart}&amp;op='+($(this).val() > $(this).attr('rel') ? 'up' : 'down')+'&amp;id_product={$product.id_product}{if $product.id_product_attribute}&amp;id_product_attribute={$product.id_product_attribute}{/if}&amp;qty='+Math.abs($(this).attr('rel') - $(this).val())); {literal}}{/literal}" /><span style="float: left; display: block; line-height: 35px; margin-left: 7px;"> x&nbsp; {displayPrice price=$product.price_wt}</span>
+					<input type="number" style="width: 50px; float: left;" data-inline="true" class="qty-field cart_quantity_input" name="product_cart_quantity_{$product.id_product|intval}" rel="{$product.cart_quantity}" value="{$product.cart_quantity}" min="0" data-mini="true" data-initial-quantity="{$product.cart_quantity}" data-id-product="{$product.id_product}" data-id-product-attribute="{$product.id_product_attribute}" onchange="if (this.value > 0) {literal}{{/literal} location.replace('{$link->getPageLink('cart.php', true, NULL)}?add=1&amp;update=1&amp;token={$token_cart}&amp;op='+($(this).val() > $(this).attr('rel') ? 'up' : 'down')+'&amp;id_product={$product.id_product}{if $product.id_product_attribute}&amp;id_product_attribute={$product.id_product_attribute}{/if}&amp;qty='+Math.abs($(this).attr('rel') - $(this).val())); {literal}}{/literal}" /><span style="float: left; display: block; line-height: 35px; margin-left: 7px;"> x&nbsp; {displayPrice price=$product.price_wt}</span>
 					<br class="clear" />
 				</a>
-				<a rel="nofollow" class="cart_quantity_delete" id="{$product.id_product|intval}_{$product.id_product_attribute|intval}_0_{if isset($product.id_address_delivery)}{$product.id_address_delivery|intval}{else}0{/if}" href="{$link->getPageLink('cart.php', true, NULL)}?delete&amp;id_product={$product.id_product|intval}&amp;ipa={$product.id_product_attribute|intval}{if isset($product.id_address_delivery)}&amp;id_address_delivery={$product.id_address_delivery|intval}{/if}&amp;token={$token_cart}" data-ajax="false">{l s='Delete'}</a>
+				<a rel="nofollow" class="cart_quantity_delete" id="{$product.id_product|intval}_{$product.id_product_attribute|intval}_0_{if isset($product.id_address_delivery)}{$product.id_address_delivery|intval}{else}0{/if}" href="{$link->getPageLink('cart.php', true, NULL)}?delete=1&amp;id_product={$product.id_product|intval}&amp;ipa={$product.id_product_attribute|intval}{if isset($product.id_address_delivery)}&amp;id_address_delivery={$product.id_address_delivery|intval}{/if}&amp;token={$token_cart}" data-ajax="false">{l s='Delete'}</a>
 			</li>
 		{/foreach}
 		{if $discounts|@count}
@@ -141,7 +141,7 @@
 
 	<p style="text-align: center; margin-top: 10px;">
 		<a data-role="button" data-icon="back" data-posicon="left" data-mini="true" data-inline="true" href="{if (isset($smarty.server.HTTP_REFERER) && strstr($smarty.server.HTTP_REFERER, $link->getPageLink('order.php'))) || !isset($smarty.server.HTTP_REFERER)}{$link->getPageLink('index.php')}{else}{$smarty.server.HTTP_REFERER|escape:'htmlall':'UTF-8'|secureReferrer}{/if}" class="button_large" title="{l s='Continue shopping'}">{l s='Continue shopping'}</a>
-		{if !$opc}<a data-role="button" data-icon="check" data-mini="true" data-iconpos="right" data-theme="{$ps_mobile_styles.PS_MOBILE_THEME_BUTTONS}" data-inline="true" href="{$link->getPageLink('order.php', true)}?step=1{if $back}&amp;back={$back}{/if}" class="exclusive" title="{l s='Checkout'}">{l s='Checkout'}</a>{/if}
+		{if !$opc}<a data-role="button" data-icon="check" data-mini="true" data-iconpos="right" data-theme="{$ps_mobile_styles.PS_MOBILE_THEME_BUTTONS}" data-inline="true" data-ajax="false" href="{$link->getPageLink('order.php', true)}?step=1{if $back}&amp;back={$back}{/if}" class="exclusive" title="{l s='Checkout'}">{l s='Checkout'}</a>{/if}
 	</p>
 {/if}
 

@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -273,7 +273,7 @@ class AdminAttributeGenerator extends AdminTab
 			</div>';
 		echo '
 			<script type="text/javascript" src="../js/attributesBack.js"></script>
-			<form enctype="multipart/form-data" method="post" id="generator" action="'.$currentIndex.'&&id_product='.(int)(Tools::getValue('id_product')).'&id_category='.(int)(Tools::getValue('id_category')).'&attributegenerator&token='.Tools::getValue('token').'">
+			<form enctype="multipart/form-data" method="post" id="generator" action="'.$currentIndex.'&id_product='.(int)(Tools::getValue('id_product')).'&id_category='.(int)(Tools::getValue('id_category')).'&attributegenerator&token='.Tools::getValue('token').'">
 				<fieldset style="margin-bottom: 35px;"><legend><img src="../img/admin/asterisk.gif" />'.$this->l('Attributes generator').'</legend>'.
 				$this->l('Add or modify attributes for product:').' <b>'.$this->product->name[$cookie->id_lang].'</b>
 					<br /><br />

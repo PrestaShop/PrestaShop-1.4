@@ -1,5 +1,5 @@
 {*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -87,15 +87,6 @@
 	<div id="opc_delivery_methods-overlay" class="opc-overlay" style="display: none;"></div>
 {/if}
 
-{if $conditions AND $cms_id}
-	<h3 class="condition_title">{l s='Terms of service'}</h3>
-	<p class="checkbox">
-		<input type="checkbox" name="cgv" id="cgv" value="1" {if $checkedTOS}checked="checked"{/if} />
-		<label for="cgv">{l s='I agree to the terms of service and adhere to them unconditionally.'}</label> <a href="{$link_conditions}" class="iframe">{l s='(read)'}</a>
-	</p>
-	<script type="text/javascript">$('a.iframe').fancybox();</script>
-{/if}
-
 {if $virtual_cart}
 	<input id="input_virtual_carrier" class="hidden" type="hidden" name="id_carrier" value="0" />
 {else}
@@ -151,7 +142,6 @@
 		</tbody>
 	</table>
 	<div style="display: none;" id="extra_carrier"></div>
-
 		{if $giftAllowed}
 		<h3 class="gift_title">{l s='Gift'}</h3>
 		<p class="checkbox">
@@ -172,6 +162,13 @@
 			<textarea rows="5" cols="35" id="gift_message" name="gift_message">{$cart->gift_message|escape:'htmlall':'UTF-8'}</textarea>
 		</p>
 		{/if}
+	{/if}
+	{if $conditions AND $cms_id}
+	<h3 class="condition_title">{l s='Terms of service'}</h3>
+	<p class="checkbox">
+		<input type="checkbox" name="cgv" id="cgv" value="1" {if $checkedTOS}checked="checked"{/if} />
+		<label for="cgv">{l s='I agree to the terms of service and adhere to them unconditionally.'}</label> <a href="{$link_conditions}" class="iframe">{l s='(read)'}</a>
+	</p><br /><script type="text/javascript">$('a.iframe').fancybox();</script>
 	{/if}
 {/if}
 

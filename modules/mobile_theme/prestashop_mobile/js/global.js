@@ -1,5 +1,5 @@
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,8 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
+
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -27,7 +28,8 @@ function jqm_change_currency(id_currency, url)
 {
 	$.ajax({
 		type: 'POST',
-		url: baseDir + 'changecurrency.php',
+		headers: { "cache-control": "no-cache" },		
+		url: baseDir + 'changecurrency.php' + '?rand=' + new Date().getTime(),
 		data: 'id_currency=' + parseInt(id_currency),
 		success: function(msg)
 		{

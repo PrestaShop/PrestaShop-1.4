@@ -1,6 +1,6 @@
 <?php
 /*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -316,7 +316,7 @@ abstract class PaymentModuleCore extends Module
 						$customizationQuantity = (int)($product['customizationQuantityTotal']);
 						$productsList .=
 						'<tr style="background-color: '.($key % 2 ? '#DDE2E6' : '#EBECEE').';">
-							<td style="padding: 0.6em 0.4em;">'.$product['reference'].'</td>
+							<td style="padding: 0.6em 0.4em;">'.((isset($product['reference']) && !empty($product['reference'])) ? $product['reference'] : '&nbsp;').'</td>
 							<td style="padding: 0.6em 0.4em;"><strong>'.$product['name'].(isset($product['attributes']) ? ' - '.$product['attributes'] : '').' - '.$this->l('Customized').(!empty($customizationText) ? ' - '.$customizationText : '').'</strong></td>
 							<td style="padding: 0.6em 0.4em; text-align: right;">'.Tools::displayPrice(Product::getTaxCalculationMethod() == PS_TAX_EXC ? Tools::ps_round($price, 2) : $price_wt, $currency, false).'</td>
 							<td style="padding: 0.6em 0.4em; text-align: center;">'.$customizationQuantity.'</td>
@@ -327,7 +327,7 @@ abstract class PaymentModuleCore extends Module
 					if (!$customizationQuantity OR (int)$product['cart_quantity'] > $customizationQuantity)
 						$productsList .=
 						'<tr style="background-color: '.($key % 2 ? '#DDE2E6' : '#EBECEE').';">
-							<td style="padding: 0.6em 0.4em;">'.$product['reference'].'</td>
+							<td style="padding: 0.6em 0.4em;">'.((isset($product['reference']) && !empty($product['reference'])) ? $product['reference'] : '&nbsp;').'</td>
 							<td style="padding: 0.6em 0.4em;"><strong>'.$product['name'].(isset($product['attributes']) ? ' - '.$product['attributes'] : '').'</strong></td>
 							<td style="padding: 0.6em 0.4em; text-align: right;">'.Tools::displayPrice(Product::getTaxCalculationMethod() == PS_TAX_EXC ? Tools::ps_round($price, 2) : $price_wt, $currency, false).'</td>
 							<td style="padding: 0.6em 0.4em; text-align: center;">'.((int)($product['cart_quantity']) - $customizationQuantity).'</td>

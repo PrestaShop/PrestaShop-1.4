@@ -252,7 +252,7 @@ INSERT INTO `PREFIX_category_lang` (`id_category`, `id_lang`, `name`, `descripti
 
 INSERT INTO `PREFIX_order_state` (`id_order_state`, `invoice`, `send_email`, `color`, `unremovable`, `logable`, `delivery`) VALUES
 (1, 0, 1, 'lightblue', 1, 0, 0),(2, 1, 1, '#DDEEFF', 1, 1, 0),(3, 1, 1, '#FFDD99', 1, 1, 1),(4, 1, 1, '#EEDDFF', 1, 1, 1),(5, 1, 0, '#DDFFAA', 1, 1, 1),
-(6, 0, 1, '#DADADA', 1, 0, 0),(7, 1, 1, '#FFFFBB', 1, 0, 0),(8, 0, 1, '#FFDFDF', 1, 0, 0),(9, 1, 1, '#FFD3D3', 1, 0, 0),(10, 0, 1, 'lightblue', 1, 0, 0),(11, 0, 0, 'lightblue', 1, 0, 0),(12, 1, 0, '#DDEEFF', 1, 1, 0);
+(6, 0, 1, '#DADADA', 1, 0, 0),(7, 1, 1, '#FFFFBB', 1, 0, 0),(8, 0, 1, '#FFDFDF', 1, 0, 0),(9, 1, 1, '#FFD3D3', 1, 0, 0),(10, 0, 1, 'lightblue', 1, 0, 0),(11, 0, 0, 'lightblue', 1, 0, 0),(12, 1, 1, '#DDEEFF', 1, 1, 0);
 
 INSERT INTO `PREFIX_order_state_lang` (`id_order_state`, `id_lang`, `name`, `template`) VALUES
 (1, 1, 'Awaiting cheque payment', 'cheque'),
@@ -266,7 +266,7 @@ INSERT INTO `PREFIX_order_state_lang` (`id_order_state`, `id_lang`, `name`, `tem
 (9, 1, 'On backorder', 'outofstock'),
 (10, 1, 'Awaiting bank wire payment', 'bankwire'),
 (11, 1, 'Awaiting PayPal payment', ''),
-(12, 1, 'Payment remotely accepted', ''),
+(12, 1, 'Payment remotely accepted', 'payment'),
 (1, 2, 'En attente du paiement par chèque', 'cheque'),
 (2, 2, 'Paiement accepté', 'payment'),
 (3, 2, 'Préparation en cours', 'preparation'),
@@ -278,7 +278,7 @@ INSERT INTO `PREFIX_order_state_lang` (`id_order_state`, `id_lang`, `name`, `tem
 (9, 2, 'En attente de réapprovisionnement', 'outofstock'),
 (10, 2, 'En attente du paiement par virement bancaire', 'bankwire'),
 (11, 2, 'En attente du paiement par PayPal', ''),
-(12, 2, 'Paiement à distance accepté', ''),
+(12, 2, 'Paiement à distance accepté', 'payment'),
 (1, 3, 'En espera de pago por cheque', 'cheque'),
 (2, 3, 'Pago aceptamos', 'payment'),
 (3, 3, 'Preparación en curso', 'preparation'),
@@ -290,7 +290,7 @@ INSERT INTO `PREFIX_order_state_lang` (`id_order_state`, `id_lang`, `name`, `tem
 (9, 3, 'Productos fuera de línea', 'outofstock'),
 (10, 3, 'En espera de pago por transferencia bancaria', 'bankwire'),
 (11, 3, 'En espera de pago por PayPal', ''),
-(12, 3, 'Payment remotely accepted', ''),
+(12, 3, 'Payment remotely accepted', 'payment'),
 (1, 4, 'Scheckzahlung wird erwartet', 'cheque'),
 (2, 4, 'Zahlung eingegangen', 'payment'),
 (3, 4, 'Bestellung eingegangen', 'preparation'),
@@ -302,7 +302,7 @@ INSERT INTO `PREFIX_order_state_lang` (`id_order_state`, `id_lang`, `name`, `tem
 (9, 4, 'Artikel erwartet', 'outofstock'),
 (10, 4, 'Warten auf Zahlungseingang', 'bankwire'),
 (11, 4, 'Warten auf Zahlungseingang von PayPal', ''),
-(12, 4, 'Payment Anmeldung erfolgreich', ''),
+(12, 4, 'Payment Anmeldung erfolgreich', 'payment'),
 (1, 5, 'In attesa di pagamento con assegno', 'cheque'),
 (2, 5, 'Pagamento accettato', 'payment'),
 (3, 5, 'Preparazione in corso', 'preparation'),
@@ -314,7 +314,7 @@ INSERT INTO `PREFIX_order_state_lang` (`id_order_state`, `id_lang`, `name`, `tem
 (9, 5, 'In attesa di rifornimento', 'outofstock'),
 (10, 5, 'In attesa di pagamento con bonifico bancario', 'bankwire'),
 (11, 5, 'In attesa di pagamento con PayPal', ''),
-(12, 5, 'Payment remotely accepted', '');
+(12, 5, 'Payment remotely accepted', 'payment');
 
 INSERT INTO `PREFIX_zone` (`id_zone`, `name`, `active`) VALUES
 (1, 'Europe', 1),(2, 'North America', 1),(3, 'Asia', 1),(4, 'Africa', 1),

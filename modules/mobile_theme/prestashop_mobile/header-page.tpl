@@ -1,5 +1,5 @@
 {*
-* 2007-2012 PrestaShop
+* 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
 *
@@ -18,7 +18,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
@@ -39,4 +39,7 @@
     <div data-role="content" class="main-content" {if $page_name == 'order-confirmation' || $page_name == 'module-bankwire-payment' || $page_name == 'module-cheque-payment' || $page_name == 'order' || strpos($page_name, 'module-paypal') !== false}style="padding-top: 0; padding-bottom: 0;"{/if}>
 		{include file="$tpl_dir./modules/blocksearch/blocksearch-top.tpl"}
   {/if}
+{/if}
+{if isset($smarty.get.id_product) && $page_name == 'cart' && isset($errors) && $errors}
+	{include file="$tpl_dir./errors.tpl"}
 {/if}

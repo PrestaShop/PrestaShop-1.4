@@ -211,6 +211,11 @@ h4 { font-size: 1em }
 	margin: 0 auto 2px auto;
 	text-align: left
 }
+#header {
+	height: 100%;
+	overflow: hidden;
+	min-height: 90px;
+}
 #header_logo {
 	float: left;
 	width: 264px;
@@ -227,6 +232,10 @@ img.logo {
 	margin-bottom: 15px;
 	width: 73%;
 	text-align: right
+}
+#columns {
+	height: 100%;
+	overflow: hidden;
 }
 #left_column, #center_column, #right_column { float: left }
 #left_column {
@@ -974,7 +983,7 @@ p.price_container { text-align: center }
 #center_column .products_block.accessories_block .block_content li.last_item a.product_image { border: none }
 
 /* discount.tpl */
-td.discount_value { white-space: nowrap }
+td.discount_value, td.price_value { white-space: nowrap }
 
 /* address.tpl */
 p.address_navigation { 
@@ -1325,9 +1334,15 @@ ul.shop_info li {
 }
 
 /* Customizable product */
-#customization_block { width: 556px }
+.customization_block { width: 556px }
 .customization_block_title { margin: 4px 4px 4px 2px }
-#customization_block ul { margin: 6px 6px 0 6px }
+.customization_block ul { margin: 6px 6px 0 6px }
+.customization_block h2 {
+	background: none!important;
+}
+#customizedDatas .button {
+	margin: 0px auto;
+}
 .customization_block_input { vertical-align: inherit }
 img.customization_delete_icon { margin: 2px }
 li.customizationUploadLine {
