@@ -24,13 +24,349 @@ International Registred Trademark & Property of PrestaShop SA
 Release Notes for PrestaShop 1.4
 --------------------------------
 ####################################
+#     v1.4.10.0 - (2013-02-19)     #
+####################################
+
+	Fixed bugs:
+
+	[-] Installer: Fix fatal error Configuration::get not available here
+	[-] Installer : could not createdb or checkdb from form input when settings.inc.php is still present or "John Doe" customer could not login after reinstall
+	[-] Installer : Backport of #PSCFV-6064
+	[-] Installer : Fixed bug : Minor bug fix on JS for displaying partners preactivation
+	[-] INSTALLER : Fixed issue #PSCFI-6543 - Uniformized database schema
+	[-] INSTALLER : Use localhost by default instead of 127.0.0.1
+
+	[-] Fo : Fix #PSCFI-6617 report of svn 17288 fixing $HOOK_SHOPPING_CART_EXTRA in a div
+	[-] FO :  Fix bug #PSCFI-7014 again, could not authenticate when last cart was an order
+	[-] FO : Fix bug #PSCFI-6686 when url param has no value set 1 to value
+	[-] FO : Fix #PSCFI-6588 typo in AdminAttributeGenerator.php
+	[-] FO : Fix bug #PSCFI-6572 send to cart without https
+	[-] FO : Fix bug #PSCFI-5709 title && alt for bigpic
+	[-] FO : Bad line break on product.tpl
+	[-] FO : Fix width  for #pb-right-column
+	[-] FO : Fix bug #PSCFI-7014 could not authenticate
+	[-] FO : Fix Bug #PSCFI-6993 bad product total price for customed product
+	[-] Fo : Fix #PSCFI-6819 warnings in shopping-cart-product-line.tpl
+	[-] FO : Do not insert noredirect in htaccess for categories
+	[-] FO : Correct CategoryController canonicalcanonicalRedirection
+	[-] FO : Fix bug #PSCFI-6864 #PSCFV-6516 Issue with deleted address blocking order process
+	[-] FO : undefined is not defined =)
+	[-] FO : Fix #PSCFV-6356 recall adresses in cart after login
+	[-] FO : Fix bug #PSCFI-6996 good $id_zone for OPC carriers when multi states
+	[-] FO : Fix bug #PSCFI-6968 ajax on shopping cart when no blockcart module
+	[-] FO : Fix bug #PSCFI-6751 Payment method still displayed when cart quantity is changed and no carrier
+	[-] FO : Fix bug #PSCFI-6751
+	[-] FO : Parse error in oreder-opc.js
+	[-] FO : Try to prevent js crashing when old product.tpl like in #PSCFI-6978
+	[-] FO : Bad POST queries cache on Safari IOS
+	[-] FO : Fix bug #PSCFI-6036 bad tax calculation when taxes disabled
+	[-] FO : Fix undefined index ordered in shoppingcart.tpl + small fix
+	[-] Fo : Bug fix #PSCFI-6807 could not delete last custo
+	[-] FO : Fix bad casting from number to boolean
+	[-] FO : fix #PSCFI-6480 canonicalRedirection for cart.php
+	[-] FO: Fix #PSCFV-5259 - bad arg for Carrier::getDeliveredCountries call
+	[-] FO : Added missing header in .js files
+	[-] FO : Fixed typo on the register page
+	[-] FO : fixed bug #PSCFV-3758 -  now you can display working hour on simplified mode in store locator
+
+	[-] BO : Fix bug #PSCFI-7057 Adresses not deduplicate
+	[-] BO : Fix bug #PSCFI-7044 zipcode no more converted to integer
+	[-] BO : Fix bug #PSCFI-6602 no casting in AdminCountries and AdminProducts
+	[-] Bo : Fix #/PSCFI-6601 stray html tag in adminProducts.php
+	[-] BO : Fix bug #PSCFI-6565 can not refund a disabled product
+	[-] BO : Fix bug #PSCFI-6172 could not add more than one country
+	[-] BO: Fix bug #PSCFI-6065 metamorphing $tab thankx to phrasespot
+	[-] BO : fix quantites in getList from AdminProducts
+	[-] BO : Fix Bug #PSCFI-6834 bad tax calculation for attribute generator, thankx to Jérôme Weill
+	[-] BO : fixed huge query in admincarts
+	[-] BO : Prevent javascript from crashing when header.inc.php is not up to date #PSCFI-7010
+	[-] BO : fix bug #PSCFI-6973 regression prevent from refunding shipping
+	[-] BO : Fix bug #PSCFI-6902 fatal error when memcache not installed and Memecached previously activated
+	[-] BO : Fix bug #PSCFI-5694 reorder category when product is delete thankx to Vsemagazin
+	[-] BO : Fix  "this range is overlapping" bug #PSCFI-6810
+	[-] BO : Fix bug #PSCFI-4955 Drag and drop in BO
+	[-] BO : Fix impossibilty to add Address formating
+	[-] BO: Warning fix on AdminDiscounts
+	[-] BO : fix stock declaration when creating a product
+	[-] BO : Bug fix : AdminOrders error fixed
+	[-] BO : Wrong cached image in /tmp/ when image has changed
+	[-] BO : fixed error display for bad queries #PSCFI-6913
+	[-] BO : fix #PSCFV-4813
+	[-] BO: Fix PSCFI-6513 performance optimisation for rand versions of libpcre
+	[-] BO : Fixed issue #PSCFI-6492 - Check that the email is not already used when creating customer from BO
+	[-] BO : Fixed Code standards
+    [-] BO : Fixed issue #PSCFI-6362 - Prevent from creating shipping ranges which overlap other ranges
+    [-] FO : Fixed issue #PSCFI-6408 - Pagination page numbers pushes nb_item selector down
+    [-] BO : Fixed issue #PSCFI-6499 - StockMvt::addMissingMvt() was called with an unused parameters
+    [-] BO : Fixed issue #PSCFI-6494 - Missing <center> in statssales and statscarrier
+    [-] CORE : Fixed issue #PSCFI-6490 - registerHook() was broken
+    [-] CLASSES : Fixed a typo in Category::getUrlRewriteInformations()
+    [-] INSTALLER : Fixed issue #PSCFI-6423 - Added a script to check the integrity of ps_category_product
+    [*] BO : Improved the Catalog Tracking tab (#PSCFI-6340)
+    [+] PROJECT : Preparing v1.4.9.1
+	[-] BO : Fixed issue #PSCFI-6492 - Check that the email is not already used when creating customer from BO
+	[-] BO : Fixed issue #PSCFI-6478 - Combinations were not deleted properly
+    [-] CORE : Removed a "@" before include, to be able to catch module's errors
+    [-] CLASSES : Fixed Code standards
+	[-] BO : Fixed issues #PSCFI-6476, #PSCFI-6463, #PSCFI-6428, #PSCFI-1090 - LiveEdit does not work in v1.4.9
+    [-] BO : Fixed issue #PSCFI-6450 - Disabling a sub-category works, but takes you to the 'Home' category page
+    [-] CLASSES : Fixed issue #PSCFI-6430 - Could not import two states from a localization pack with the same names
+    [-] CLASSES : Fixed issue #PSCFI-6448 - Localization pack import was not working
+    [-] CLASSES : Fixed Code standards
+	[-] BO : Fixed issue #PSCFI-6478 - Undefined index minimal_quantity on Combinations CSV import
+    [-] BO : Fixed Code standards
+	[-] BO : Fixed issues #PSCFI-6476, #PSCFI-6463, #PSCFI-6428, #PSCFI-1090 - LiveEdit does not work in v1.4.9
+    [-] FO : Fixed issue #PSCFI-6481 - Truncate Long product Title on Product Page
+    [-] MO : Fixed issue #PSCFI-6421 - Optimized getOrderTotal() calls when cart is empty
+    [-] MO : Fixed issue #PSCFI-6437 - Column 'id_module' cannot be null (pagesnotfound module's upgrade)
+    [-] FO : Fixed issue #PSCFI-6468 - Do not offer to sort by Qty if stock management is disabled
+    [-] INSTALLER : Fixed issue #PSCFI-6470 - mailalerts errors during upgrade
+    [-] BO : Fixed the sample CSV file for Combinations
+    [-] CORE : Code standards
+	[-] BO : Fixed issue #PSCFI-6426 - Removed undefined and useless variable from the Product Features
+	[-] BO : Fixed issue #PSCFI-6407 - Invalid multibyte sequence in argument in AdminImport.php
+    [-] BO : Fixed issue #PSCFI-6412 - Typo in French translation of  "You must delete the /install folder"
+
+	[-] Classes : Bug fix : Referrer, _DB_PREFIX_ added on delete() - Thanks to @gandalf76fr
+	[-] Classes : fix bug with sql query causing a mysql warning
+	[-] Classes : Modules : getInstanceByName() return false if index does not exists
+	[-] CLASSES : Fixed Code standards
+	[-] CLASSES : Fixed Code standards
+	[-] CLASSES : Fixed the behavior of Configuration::deleteByName() - was returning false on non-existing keys
+    [-] CLASSES : Fixed Code standards
+
+	[-] CORE : Fix #PSCFI-6620 adresses deleted when customer is deleted
+	[-] CORE : Fix #PSCFI-6618 report of svn17289 wrong join for lastNoneOrderedCart
+	[-] CORe : Fix #PSCFI-6615 report of svn17284 adding Tools::safeOutput in validateRules
+	[-] CORE : Fix #PSCFI-6614 report of svn17294 withdraw slashes from translation for email Object
+	[-] CORE: Fix #PSCFI-7058 report of commit 1.5.X e66af263923ddb12972363f98eac5bae0b225866 1 parent 1c7f846
+	[-] CORE : Report bug from 1.5.X #PSCFI-7053 enhance PackJS
+	[-] CORE : Fix #PSCFI-6452, #PSCFV-6753, #PSCFV-7110 delete a module does uninstall it first, and clean execptions when uninstalling
+	[-] CORE :  file_put_contents() returns the number of bytes that were written to the file, or FALSE on failure
+	[-] CORE : Fix warning for htmlentitiesDecodeUTF8
+	[-] CORE : missing displayMySQLError for alias q
+	[-] Core : fixed qc taxes (part 1)
+	[-] CORE : Fixed a warning and removed displayErrors() in MySQL.php (this function needs the DB...)
+
+	[-] MO : Bug fix : Jirafe, installation issue
+	[-] MO : Fix bug #PSCFI-7056 clear footer cache in blockcategories module
+	[-] MO : Bug fix : Removed &amp; from config file (XML parsing issues)
+	[-] MO : can not translate field in homefeatured
+	[-] MO: file_put_contents return length instead of true in trustedshops
+	[-] MO : PayPal, multiple fixes (v3.4.5)
+	[-] MO : AvalaraTax, back-office states choice list
+	[-] MO : Fix css isssue #PSCFI-7035
+	[-] MO : default number of displayed produt to 8
+	[-] MO : Fix css for productscategory display
+	[-] MO : Bug fix : Avalara Tax, Division by zero
+	[-] MO : New version for autoupgrade 1.0.5
+	[-] Mo : Fix bug #PSCFI-6957 bad https enveloppe for blockcms.js and logo.gif
+	[-] MO : Withdraw noredirect from htaccess in 1.4.9.X && new autoupgrade module version 1
+	[-] MO : Fix bug #PSCFI-6946 escaping for blockmanufacturer.tpl thanx to Pixel
+	[-] MO : fix parse error and new version of autoupgrade module
+	[-] MO : Bug fix : Ogone, check html variable is set
+	[-] MO : Delete files for new version of autoupgrade
+	[-] MO : Bad translation in autoupgrade module
+	[-] MO : Fix bug #PSCFV-7357 bad old default customer group when updating
+	[-] MO : new version number for autoupgrade module
+	[-] MO : Bug fix #PNM-959 : PayPal, Redirection after payment using SSL
+	[-] MO : Bug fix : Hipay, Shop domain
+	[-] MO : Bug fix #PNM-963 : PayPal, id order reference
+	[-] MO : Bad parsing of config.xml for mobile_theme
+	[-] MO : Fix css bug on paypal payment div
+	[-] MO : Thumbs centered && withdraw empty scenes.tpl
+	[-] MO : PayPal, Fixed bug about logos
+	[-] MO : Fix strange warnings #PSCFI-6658
+	[-] MO : PayPal, fixed syntax
+	[-] MO : Bug fix #PNM-962 : PayPal, error reporting email language fixed
+	[-] MO : Bug fix #PNM-957 : PayPal, Shipping address complement fixed
+	[-] MO : Fix bug #PSCFI-6950 could not register
+	[-] MO : Fix errors display when maximum quantity available in cart
+	[-] MO : Fix small css bug on authentication
+	[-] MO : Bug fix : PayPal, Integral Evolution notifier fixed
+	[-] MO : Fix medium image on shopping-cart.tpl
+	[-] MO : Fix getting to cart.php with mobile theme regarding fix of bug #PSCFI-6480
+	[-] MO : Fix bug #PSCFI-6660 take groups for categories display
+	[-] MO : Fix bug #PSCFI-6650 && fix installer when cURL not activated
+	[-] MO : PayPal, improved 1.4 compatibility
+	[-] MO : Bug fix #PNM-840 : PayPal, missing check
+	[-] MO : Bug fix #PNM-742 : PayPal, address complement was empty
+	[-] MO : Bug fix : PayPal, JS event on form submit
+	[-] MO : Bug Fix #PNM-676 : PayPal, module disabled and template design
+	[-] MO : Bug fix #PNM-683 : PayPal, Express Checkout Shortcut button & quantities updates
+	[-] MO : Bug fix #PNM-574 : PayPal, Transaction id & order details
+	[-] MO : Bug fix #PNM-567 : PayPal, customer table creation on upgrade
+	[-] MO : Bug fix : PayPal, validateOrder declaration
+	[-] MO : if you cannot see google keywords because of SSL, at least it does not bug anymore
+	[-] MO : Bug fix : Mondial Relay, JS compatibility with PS 1.4
+	[-] MO : Bug fix : Backward compatibility, ignore .git folders
+	[-] MO : Bug fix : PayPal, order history was saved twice
+	[-] MO : Bug fix : PayPal upgrade (v3.4)
+	[-] MO : Bug fix : SoColissimo #PNM-658
+	[-] MO : Bug fix : ebay
+	[-] MO : Bug Fix : PayPal + Mobile theme
+	[-] MO : Bug fix : PayPal, Class tools included
+	[-] MO : Bug fix : SoColissimo #PNM-658
+	[-] MO : Bug fix : PayPal module updated (v3.3 - major fixes)
+	[-] MO : Mobile theme - Make more buttons/menu customizable
+    [-] MO : Mobile theme - Make sure the module is uninstalled before deleting it
+    [*] MO : Mobile theme - Add PayPal button on product page even when logged
+	[-] MO : Bug fix : Ogone payment confirmation compatibility (PS 1.4/1.5)
+	[-] MO : Bug fix : SoColissimo leads form (pre-populate fields)
+	[-] MO : Bug fix : SoColissimo leads form display updated
+	[-] MO : Mobile_theme - Fix issue on OPC
+	[-] MO : Mobile_theme - Fix issue with translation at the install
+    [+] MO : Mobile_theme - Add displayMobileHeader hook
+    [-] MO : Mobile_theme - Fix redirection issue
+	[-] MO : SoColissimo : Preactivation & Premium activation URL changed
+	[-] MO : Fixed bug : Mondial Relay PS 1.5 drop-off display & select (v1.8.7)
+	[-] MO : SoColissimo : Update v2.6.5 (Accentuated chars signature check & JavaScript actions improved for PS 1.5)
+	[-] MO : #PNM-633 : Bug fix (Swift Message.php diff between PS 1.4 & PS 1.5)
+	[-] MO : tntcarrier #PNM-442
+	[-] MO : tntcarrier #PNM-435
+	[-] MO : socolissimo : Update French translation
+	[-] MO : PayPal : Integral Evolution - bug fix - redirection
+	[-] MO : SoColissimo : Bug fix (Web services URL & hook names)
+	[-] MO : SoColissimo : Bug fix accented chars in user last name (v2.6.1)
+	[-] MO : Backward Compatibility module updated (v0.3)
+	[-] MO : PayPal : Module updated (v3.2.3)
+	[-] MO : SoColissimo : Accentuated chars replaced (web service) (v2.6)
+	[-] MO : Update shipwire version
+	[-] MO : Shipwire : Add missing base_uri
+	[-] MO : small fix
+	[-] MO : #PNM-540 : PayPal checks cart currency
+	[-] MO : #PNM-539 : PayPal redirect url fixed
+	[-] MO : Carrier compare fix issue with non numeric zipcodes
+	[-] MO : Mobile theme : PayPal order-summary.tpl added
+	[-] MO : #PNM-545 : PayPal BWDisplay bug fix
+	[-] MO : #PNM-545 : PayPal BWDisplay bug fix
+	[-] MO : CloudCache patched for backward compatibility module
+	[-] MO : Fix issue with French translation and One page checkout
+	[-] MO : Add missing logos on paypal module
+	[-] MO : Add missing files to the Mobile theme
+	[-] MO : Add missing files in mobile theme
+	[-] MO : Fixed issue #PSCFI-6518 - Error uploading multiple images in ZIP file
+	[-] MO : Fixed issue #PSCFI-6502 - Undefined variable in PayPal
+	[-] MO : Fix typo on PayPal module
+	[-] MO : #PNM-411 : JS files was called twice
+	[-] MO : Hipay : Production mode enabled
+	[-] MO : PayPal : update pictures method bug fix
+	[-] MO : PayPal module updated (v3.0.10) : Addresses and confirmations
+	[-] MO : PayPal : Default iso_code values bug fix
+	[-] MO : Fix issue with Avalara causin order status change to fail
+
+	[-] WS : Fixed issue "Undefined index schema" in getFilteredObjectList()
+    [-] CORE : Fixed issue #PSCFI-6467 - Wrong check in Tools::file_get_contents()
+    [-] BO : Fixed cache on the "New version available" check
+    [-] CLASSES : Fixed Code standards
+
+	[-] TR: Fix #PSCFI-6818 increase input vars in french
+	[-] TR : PayULatam, translations added
+	[-] TR : Mondial Relay : Added FR translation
+
+	Improved/changed features:
+
+	[*] Fo : Fix #PSCFI-7054 report followup #PSCFV-7463
+	[*] FO : Adding nofollow to "add to cart link"
+	[*] FO : Report of Fix #PSCFV-7463 No Add to favorite for Chrome
+	[*] FO : Fix feature #PSCFI-6912 terms of service gets down in tpl
+
+	[*] BO : Manage to display orders without history state
+	[*] BO : Fix bug #PSCFI-6954 oreder messages listing had bad behavior
+	[*] BO : Added hook categoryUpdate call when moving a product in BO fix #PSCFI-6225
+	[*] BO : Fix bug #PSCFI-6730 && code norms
+
+	[*] Classes : Allow Module::getPaymentModules() override
+	[*] Classes : Tools::replaceAccentedChars() method improved (lowercase/uppercase chars)
+
+	[*] Mo : New module version 1.0.6 for autoupgrade
+	[*] MO : #PNM-303 : MoneyBookers, Existing account block moved
+	[*] Mo : New version 0.5.2 for mobile_theme
+	[*] MO : #PNM-888 : Hipay, Check presence of Soap library
+	[*] MO : #PNM-688 : Hipay, Added issuer account login information
+	[*] MO : AvalaraTax, module updated
+	[*] MO : #PNM-334 : MondialRelay, description added
+	[*] MO : autoupgrade new minor version
+	[*] MO : New version 0.9.4 of autoupgrade module
+	[*] MO : Add new version for mobile_theme
+	[*] MO : TNT, Documentation updated
+	[*] MO : New version of mobile_theme module
+	[*] MO : PayPal, Default shipping address for Express Checkout Shortcut
+	[*] MO : Improvement : Stripe, module updated 0.9.4
+	[*] MO : Improvement #PNM-684 : PayPal, Cart currency conversion
+	[*] MO : MailJet, module updated v1.3
+	[*] MO : #PNM-465 : PayPal, template overload
+	[*] MO : PAyuLatam, new version of the module
+	[*] MO : PayU Latam, version number changed
+	[*] MO : PayU Latam, improvement
+	[*] MO : Mobile theme, added check if PS >= 1.5
+	[*] MO : Bug fix : Stripe, variable check
+	[*] MO : Compatibility : Fixed Ogone compatibility (PS 1.4/1.5)
+	[*] MO : new version of the module merchant ware
+	[*] MO : Bug fix : SoColissimo iframe display
+	[*] MO : TNT Express : Pictures updated (v1.8)
+	[*] MO : SoColissimo : Module update (v2.7) - Preactivation & Premium activation
+	[*] MO : tntcarrier, product range weigth is precised before creating a ticket
+	[*] MO : Shopping Flux : Module updated (v2.0.2)
+	[*] MO : treepodia, new version with the correct logo for v1.5
+	[*] MO : Theme installator : AFL License (index.php)
+	[*] MO : PayPal - Add Portuguese translation
+	[*] MO : tntcarrier, google map is correctly displayed on order page
+	[*] MO : themeinstallor
+	[*] MO : Theme installator : Backward compatibility added
+	[*] MO : Twenga : back office update + XML export bug fix
+	[*] MO : PayPal module updated (v3.2.4) (HSS )
+	[*] MO : merchantware, new update
+	[*] MO : Backward Compatibility module updated (v0.2)
+	[*] MO : PayPal module upgrade (v3.2.2)
+	[*] MO : SoColissimo web service url changed
+	[*] MO : Synchronize Autoupgrade module
+	[*] MO : Backward compatibility updated (hook processCarrier)
+	[*] MO : PayPal module updated v3.2.1
+	[*] MO : MerchantWare: updated version
+	[*] MO : tntcarrier - new version of the module
+	[*] MO : PayPal updated (v3.1.0) mobile compatibility
+	[*] MO : Upgrade translations on Merchantware module
+	[*] MO : Upgrade MerchantWare landing page
+	[*] MO : PayPal module upgrade (v3.0.12)
+	[*] MO : Ogone module (v2.3.3)
+	[*] MO : Small PayPal update
+	[*] MO : SoColissimo module updated
+	[*] MO : Major update of Avalara
+
+	[*] TR: tradz for themeinstallator
+
+	Added Features:
+
+	[+] Installer : Added backwardcompatibility in natives
+
+	[+] FO : New Mobile Template (compatible w/ iPhone, Android...etc. using jQuery!) - Thanks PayPal for your help :)
+    [*] CORE : Updated jQuery mColorPicker to r39 + minified it
+    [*] MO : Updated PayPal module to v3.2.0
+    [*] CORE : Invoices are now displayed instead to be sent for download
+
+	[+] CORE: add .txt extention to CHANGELOG
+
+	[+] MO : PayU Latam, module added
+	[+] MO : Stripe module added
+	[+] MO : Backward compatility submodule added
+	[+] MO : Shopping Feed : Shopping Flux module dedicated to US
+	[+] MO : PayPal - Add portuguese translation for emails
+	[+] MO : Backward compatibility module installation and upgrade added
+	[+] MO : Backward compatibility module added
+	[+] MO : Add MerchantWare module
+
+	[+] TR : Backward compatibility : FR translation added
+
+
+####################################
 #   v1.4.9.1 - 16999 (2012-08-24)  #
 ####################################
 
 	Fixed bugs:
 
 	[-] FO : fixed bugs on customer messages #PSCFV-3733 #PSCFV-3712
-	[-] FO : fixed undeletable products in cart (when price < 1) #PSCFV-3707
+	[-] FO : fixed undeletable products in cart (when price < 1¤) #PSCFV-3707
 
 	[-] BO : super admins are now added to all shops #PSCFV-3561
 
@@ -99,7 +435,7 @@ Release Notes for PrestaShop 1.4
 	[-] FO : Fixed issue #PSCFI-5420 - Some CSS improvements for the default template (product page)
 	[-] FO : Fixed issue #PSCFI-5501 - Product features are now always sorted alphabetically on Front-office
 	[-] FO : Fixed issue #PSCFI-5685 - W3C compatibility was broken due to "productsSortForm"
-	[-] FO : Fixed issue #PSCFI-5698 #PSCFI-4906 - Cannot search product with Æ, Ø, Å (+ other accents)
+	[-] FO : Fixed issue #PSCFI-5698 #PSCFI-4906 - Cannot search product with ? ? Š(+ other accents)
 	[-] FO : Fixed issue #PSCFI-5710 - Tags selection was not excluding products assigned to an "inactive" categories
 	[-] FO : Fixed issue #PSCFI-5813 - Small CSS fix on the product page
 	[-] FO : Fixed issue #PSCFI-5906 - It was impossible to update its profile information
@@ -2763,8 +3099,8 @@ Release Notes for PrestaShop 1.4
 	[-] FO : fixed bug with CSS missing calls
 
 	[-] BO : fixed bug #8321 - Incorrect translations in mails/fr/lang.php
-	[-] BO : fixed bug #8330 - Always have warning for âURL rewriting
-	[-] BO : fixed bug #8330 - Always have warning for âURL rewriting
+	[-] BO : fixed bug #8330 - Always have warning for URL rewriting
+	[-] BO : fixed bug #8330 - Always have warning for URL rewriting
 	[-] BO : fixed bug #8336 - Missing image
 	[-] BO : fixed bug #8338 - Product chooser for packs is buggy when product name ends with whitespace
 	[-] BO : fixed bug #8342 - missing opening table row tag
@@ -2841,7 +3177,7 @@ Release Notes for PrestaShop 1.4
 	[-] INSTALLER : ISO Code UK was changed to GB
 	[-] Installer : Bug Fixed #8198 Upgrade from 1.1.0.5
 	[-] Installer : Fixed #8143 - url_rewrite corrected in ps_meta_lang
-	[-] Installer : fixed bug #8128 - guest-tracking.php doesnât have friendly URL
+	[-] Installer : fixed bug #8128 - guest-tracking.php doesnt have friendly URL
 	[-] Installer : jqminmax removed - incompatibility between jquery + jqminmax + chrome
 
 	[-] FO : Bug Fixed #8154 - EU VAT module & Shipping taxes
@@ -2851,29 +3187,29 @@ Release Notes for PrestaShop 1.4
 	[-] FO : No taxes when using states & county
 	[-] FO : Price Comparison HTML entities
 	[-] FO : fixed a quantity bug in blockwishlist when a user add a gift to his cart
-	[-] FO : fixed bug #7816 - Error reporting on âone page checkoutâ
+	[-] FO : fixed bug #7816 - Error reporting on one page checkout
 	[-] FO : fixed bug #8020 - Folder /session permission problem
 	[-] FO : fixed bug #8052 - unexpected HOME link on the CGV window popup
 	[-] FO : fixed bug #8053 - Cart errors cause parsererror
 	[-] FO : fixed bug #8072 - Gift-wrapping Price is not added in cart_summary
 	[-] FO : fixed bug #8075 - no carriers available on opc page
 	[-] FO : fixed bug #8082 - Change status of default language
-	[-] FO : fixed bug #8119 - Another grammar issue: âPlease to sign in in order to see payment methodsâ
-	[-] FO : fixed bug #8119 - Another grammar issue: âPlease to sign in in order to see payment methodsâ part 2
-	[-] FO : fixed bug #8164 - Extra â-â characters in the subcategory names when using Chrome
+	[-] FO : fixed bug #8119 - Another grammar issue: Please to sign in in order to see payment methods
+	[-] FO : fixed bug #8119 - Another grammar issue: Please to sign in in order to see payment methods part 2
+	[-] FO : fixed bug #8164 - Extra - characters in the subcategory names when using Chrome
 	[-] FO : fixed bug #8169 - Wronng order assignment in header
 	[-] FO : fixed bug #8194 - Undefined variable tax_cost line 291
 	[-] FO : fixed bug #8237 - Undefined variable tax_cost line Filezilla breaks HTTPS
 	[-] FO : fixed bug #8244 - display not correct if supplier or manufacturer not exist
 	[-] FO : fixed bug #8245 - redirect inexistant category & product
-	[-] FO : fixed bug #8250 - User addresses not displayed with âCompress inline JavaScriptâ
+	[-] FO : fixed bug #8250 - User addresses not displayed with Compress inline JavaScript
 	[-] FO : fixed bug #8263 - Invoice footer align
-	[-] FO : fixed bug #8280 - âYour shopping cart contains # products: message not updated
+	[-] FO : fixed bug #8280 - Your shopping cart contains # products: message not updated
 	[-] FO : fixed bug #8290 - setMedia called twice, JS files doubled
 	[-] FO : fixed bug compared to the map stores.php  with CCC activated
 	[-] FO : fixed bug upload.gif not show when save customized products
 	[-] FO : fixed bug when you close the mode live edit
-	[-] FO : fixed bug with âCompress inline JavaScriptâ
+	[-] FO : fixed bug with Compress inline JavaScript
 	[-] FO : fixed but which display the number of product in stock whatever the number of last quantities chosen in BO
 	[-] FO : fixed but which display the number of product in stock whatever the number of last quantities chosen in BO, fixed bug in the last commit
 	[-] FO : fixed notice in Tools::addJs and addCss
@@ -2881,7 +3217,7 @@ Release Notes for PrestaShop 1.4
 	[-] FO : improvement liveEdit
 	[-] FO :fixed bug #7875 - 1.4 legend icon in optionlist of admintab
 	[-] FO :fixed bug #7962 - same category and EAN13: bad link
-	[-] FO :fixed bug #8050 - DonÂ´t order attribute groups by name
+	[-] FO :fixed bug #8050 - Don´t order attribute groups by name
 	[-] FO :fixed bug #8055 - Stats shop search not work
 	[-] FO :fixed bug #8091 - Typo in french message in fianetfraud module
 
@@ -2997,7 +3333,7 @@ Release Notes for PrestaShop 1.4
 	[-] FO : Fixed #7989 - when ssl is not activated, getlink will not return ssl domain name
 	[-] FO : Taxes by country fixed!
 	[-] FO : fixed bug #7933 - Disable shop for maintenance not work
-	[-] FO : fixed bug #7935 - same category â-â which drags
+	[-] FO : fixed bug #7935 - same category - which drags
 	[-] FO : fixed bug #7944 //Error on Checkout orders step 2
 	[-] FO : fixed bug #7946 //VAT include file
 	[-] FO : fixed bug #7947 //States not showing BO edit address
@@ -3019,14 +3355,14 @@ Release Notes for PrestaShop 1.4
 	[-] BO : ecotax id not found if ecotax is desactivated
 	[-] BO : fixed bug #6448 //No manufacturers in drop down list with creating new product
 	[-] BO : fixed bug #7949 //BO edit product JS errors
-	[-] BO : fixed bug #7981 - Edit Product page always displays âconditionâ as âNewâ
+	[-] BO : fixed bug #7981 - Edit Product page always displays condition as New
 	[-] BO : fixed bug #8023 - Backoffice store locator, state selection issue
 	[-] BO : some sentences are changed.
 
 	[-] Classes : Incorrect test in dieObject
 	[-] Classes : fixed bug #7930 - Add a discount voucher : Fatal error / White page
 	[-] Classes : fixed bug #7994 - Unusefull object instanciation in AdminTab::postprocess()
-	[-] Classes : fixed bug #7999 - deleted language and cookie donât go along very well
+	[-] Classes : fixed bug #7999 - deleted language and cookie dont go along very well
 	[-] Classes : fixed bug #7999 part 2 ;)
 
 	[-] Core : bug fixed on FrontController with the geolocation
@@ -3094,7 +3430,7 @@ Release Notes for PrestaShop 1.4
 	[-] FO : Fixed #7759 - cleaning code
 	[-] FO : Fixed #7761 removed not used variable
 	[-] FO : Fixed #7819 - typo (SLL is now SSL)
-	[-] FO : fixed bug #7780 - âThere is undefined errorâ in one page checkout
+	[-] FO : fixed bug #7780 - There is undefined error in one page checkout
 	[-] FO : fixed bug #7801 - Merchandie return
 	[-] FO : fixed bug #7834
 	[-] FO : fixed bug on compatibilty of theme with smarty v2
@@ -3222,7 +3558,7 @@ Release Notes for PrestaShop 1.4
 	[-] BO : Bug fixed #7640 - Fix on attachment edit
 	[-] BO : Bug Fixed #7642 - Tax rules group name length
 	[-] BO : Bug fixed #7647 - Fix on flag "new" order
-	[-] BO : Bug fixed #7667 - Clicking âBack to productâ on the product combinations generator now returns to "4. Combinations" tab
+	[-] BO : Bug fixed #7667 - Clicking Back to product on the product combinations generator now returns to "4. Combinations" tab
 	[-] BO : Bug fixed #7695 - Search index flag fixed
 	[-] BO : cache on product attributes fixed
 	[-] BO : Can't modify already defined specific prices
@@ -3539,11 +3875,11 @@ Release Notes for PrestaShop 1.4
 	[-] FO : adding missing check for DNI field
 	[-] FO : BUG:7114 Modified css blockmanufacturer.css.
 	[-] FO : Bug fixed #7149 - unnecessary code in blockspecials.tpl
-	[-] FO : fixed bug #6989 - Advanced parametersâ¦ not appear in One page checkout and guest checkout
+	[-] FO : fixed bug #6989 - Advanced parameters… not appear in One page checkout and guest checkout
 	[-] FO : Fixed bug #7095 - Rewrote $_SERVER['REQUEST_URI'] on IIS 6.0 on homepage
 	[-] FO : fixed bug #7108 - Other payment method button raise an error when ssl is used
 	[-] FO : fixed bug #7109 - Carrier default not checked
-	[-] FO : fixed bug #7112 - Canât login on OPC
+	[-] FO : fixed bug #7112 - Cant login on OPC
 	[-] FO : fixed bug #7146 - fixed free order with guest checkout
 	[-] FO : fixed bug #7147 - fixed bug on order-confirmation with redirection and guest account
 	[-] FO : Fixed bug #7187 - Deleted layer.js
@@ -3587,7 +3923,7 @@ Release Notes for PrestaShop 1.4
 	[-] MO : Bug fixed #7139 - Editorial module translations is now working
 	[-] MO : Bug fixed #7159 - Send To Friend can have two hooks at the same time
 	[-] MO : Fixed blockcategories turns off force compile #7128
-	[-] MO : fixed bug #7115 - Paypal 2.1 module - multiple âauthorization accepted from Paypalâ order statuses
+	[-] MO : fixed bug #7115 - Paypal 2.1 module - multiple authorization accepted from Paypal order statuses
 	[-] MO : Fixed bug #7199 - Added 'allow_guests' var in .tpl for productscomments module
 	[-] MO : fixed bug #7208 - Customer Name Transposed in PayPal
 	[-] MO : Fixed bug #7214 - "Your name" couldn't be translated in productcomments module
@@ -3669,7 +4005,7 @@ Release Notes for PrestaShop 1.4
 	[-] FO : Fixed bug #5685 - Minimal amount wasn't using the customer currency
 	[-] FO : fixed bug #6523 #6657 - adding missing fields on One page checkout
 	[-] FO : fixed bug #6575 - No way to provide order comment when creating new account through opc
-	[-] FO : fixed bug #6652 - Possible to skip required field with opc after pussing button â Modify my addressâ
+	[-] FO : fixed bug #6652 - Possible to skip required field with opc after pussing button  Modify my address
 	[-] FO : fixed bug #6766 - Not all errors are mentioned at account creation or instant checkout
 	[-] FO : fixed bug #6954 - Firebug reports an error at checkout
 	[-] FO : fixed bug #6999 - One Page Checkout - Already Registered? Redirect to Authentication
@@ -3965,7 +4301,7 @@ Release Notes for PrestaShop 1.4
 	[-] MO : Fixed bug #6663 - Bad voucher value for referral program module
 	[-] MO : fixed bug #6667 - Error in modules/blockcms/blockcms.php
 	[-] MO : fixed bug #6675 - Moneybookers module error
-	[-] MO : Fixed bug #6731 - Class âLoyaltyStateModuleâ not found in the admin panel
+	[-] MO : Fixed bug #6731 - Class LoyaltyStateModule not found in the admin panel
 	[-] MO : gridextjs has been properly removed and replaced
 	[-] MO : improve security In DIBS module
 	[-] MO : Numerous other bugs on the loyalty state module in the admin panel (customers page)
@@ -4038,7 +4374,7 @@ Release Notes for PrestaShop 1.4
 	[-] FO : Fixed bug #6503 - Missing password_query templates for ES language
 	[-] FO : fixed bug #6524 - States list not showing on opc invoice address
 	[-] FO : Fixed bug #6544
-	[-] FO : fixed bug #6561 - âNo carrier is selectedâ for virtual products in opc
+	[-] FO : fixed bug #6561 - No carrier is selected for virtual products in opc
 	[-] FO : Fixed bug #6572 - Spelling issue "subtract" instead of "substract"
 	[-] FO : Fixed bug #6573 - Clicking quantity +/- on virtual cart causing "remaining amount" to appear
 	[-] FO : fixed bug #6574 - Javascript error when creating account on opc with cart block uninstalled
@@ -4227,7 +4563,7 @@ Release Notes for PrestaShop 1.4
 	[-] Installer : Missing escape characters in database_structure
 	[-] Installer : Taxes removed from SQL / Languages & Configuration loaded during checkInfosStep
 	[-] Installer : Upgrade 1.4.0.5 TaxRulesGroup
-	[-] Installer : Fixed bug #6477 - Field 'ecotax_tax_rate' doesnât had a default value
+	[-] Installer : Fixed bug #6477 - Field 'ecotax_tax_rate' doesnt had a default value
 	
 	[-] FO : A product with combinations still displays price TI when taxes are disabled
 	[-] FO : blockcms module don't display anymore unactive cms categories or cms
@@ -4243,7 +4579,7 @@ Release Notes for PrestaShop 1.4
 	[-] FO : Fixed bug #6115 - Added +/- images sizes (width, height) in the cart tpl for better performances
 	[-] FO : Fixed bug #6146 - Manufacturer page was counting non-active products
 	[-] FO : Fixed bug #6232 (partially) - FancyBox is now working well with IE 6
-	[-] FO : Fixed bug #6332 (error with chars Ã¨,Ã©,Ã ,Ã²,Ã¹,Ã¬ in "Send to a friend" module
+	[-] FO : Fixed bug #6332 (error with chars è,é,à,ò,ù,ì in "Send to a friend" module
 	[-] FO : Fixed bug #6347 - Price was switch from tax incl. to tax excl. while updating qties in cart
 	[-] FO : fixed bug #6382 - Error on Checkout orders
 	[-] FO : Fixed bug #6388 - Categories were not sorted on sitemap page
@@ -4326,7 +4662,7 @@ Release Notes for PrestaShop 1.4
 	[-] Core : Deleted a deprecated method (getAllSubCats() in Category.php & CMSCategory.php)
 	[-] Core : fixed bug #5985
 	[-] Core : Fixed bug #6495 - Error with Smarty PHP filemtime() function call
-	[-] Core : Fixed bugs #6278, #6300, #6360 - Smarty 3 related errors (function call âregister_outputfilterâ is unknown or deprecated.)
+	[-] Core : Fixed bugs #6278, #6300, #6360 - Smarty 3 related errors (function call register_outputfilter is unknown or deprecated.)
 	[-] Core : warning removed in MySQL class which occurred when you call ExecuteS with something else than a SELECT
 	
 	[-] MO : cashondelivery not configurable in config.xml
@@ -5012,7 +5348,7 @@ Release Notes for PrestaShop 1.4
 	
 	[-] BO : active filter is now usable without SQL error. Bug #5666 fixed
 	[-] BO : Added a complementary security on ajax_category_list call
-	[-] BO : added RewriteRule for cms catÃ©gories
+	[-] BO : added RewriteRule for cms catégories
 	[-] BO : AdminDB now list only PrestaShop prefixed tables #5873
 	[-] BO : AdminTab traductions restored
 	[-] BO : ajax call for categories on product page.
@@ -5041,7 +5377,7 @@ Release Notes for PrestaShop 1.4
 	[-] BO : Fixed bug #4370
 	[-] BO : fixed bug #5115 - getE("PS_CONDITIONS_on") is null
 	[-] BO : Fixed bug #5217 - Live feed non https
-	[-] BO : fixed bug #5255 - canât enable/disable zone
+	[-] BO : fixed bug #5255 - cant enable/disable zone
 	[-] BO : fixed bug #5862 limited countries checkbox
 	[-] BO : fixed bug in adminModules
 	[-] BO : Fixed bug sql for CMS
@@ -5078,7 +5414,7 @@ Release Notes for PrestaShop 1.4
 	
 	[-] MO : Blockcategories installation repaired
 	[-] MO : Blocklink installation repaired
-	[-] MO : bug is fixed #5788 - âvoirâ on cross selling graphic
+	[-] MO : bug is fixed #5788 - voir on cross selling graphic
 	[-] MO : CSS for Blockcms module added.
 	[-] MO : Debugued the crossselling module to uninstall correctly
 	[-] MO : fixed bug in Socolissimo
