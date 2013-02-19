@@ -86,6 +86,7 @@ class SearchControllerCore extends FrontController
 		}
 		elseif ($tag = urldecode(Tools::getValue('tag')) AND !is_array($tag))
 		{
+			$this->productSort();
 			$nbProducts = (int)(Search::searchTag((int)(self::$cookie->id_lang), $tag, true));
 			$this->pagination($nbProducts);
 			$result = Search::searchTag((int)(self::$cookie->id_lang), $tag, false, $this->p, $this->n, $this->orderBy, $this->orderWay);
