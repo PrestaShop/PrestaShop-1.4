@@ -168,7 +168,7 @@ class AdminGenerator extends AdminTab
 					fwrite($writeFd, "# GoogleBot specific\n");
 					fwrite($writeFd, "User-agent: Googlebot\n");
 					foreach ($this->_rbData['GB'] as $GB)
-						fwrite($writeFd, 'Disallow: '.__PS_BASE_URI__.$GB."\n");
+						fwrite($writeFd, 'Disallow: /*'.$GB."\n");
 					
 					// User-Agent
 					fwrite($writeFd, "# All bots\n");
@@ -177,12 +177,16 @@ class AdminGenerator extends AdminTab
 					// Directories
 					fwrite($writeFd, "# Directories\n");
 					foreach ($this->_rbData['Directories'] as $dir)
-						fwrite($writeFd, 'Disallow: '.__PS_BASE_URI__.$dir."\n");
+						fwrite($writeFd, 'Disallow: /*'.$dir."\n");
 
 					// Files
 					fwrite($writeFd, "# Files\n");
-					foreach ($this->_rbData['Files'] as $file)
-						fwrite($writeFd, 'Disallow: '.__PS_BASE_URI__.$file."\n");
+					foreach ($this->_rbData['Files'] as $iso_code => $files)
+					if (!is_numeric($iso_code) && is_array($files))
+						foreach ($files as $file)
+							fwrite($writeFd, 'Disallow: /*'.$iso_code.'/'.$file."\n");
+					elseif (is_numeric($iso_code) && !is_array($files))
+						fwrite($writeFd, 'Disallow: /*'.$files."\n");
 
 					// Sitemap
 					fwrite($writeFd, "# Sitemap\n");
@@ -216,16 +220,17 @@ class AdminGenerator extends AdminTab
 		if (Configuration::get('PS_REWRITING_SETTINGS'))
 		{
 			if ($results = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-			SELECT ml.url_rewrite
+			SELECT ml.url_rewrite, l.iso_code
 			FROM '._DB_PREFIX_.'meta m
-			INNER JOIN '._DB_PREFIX_.'meta_lang ml ON (ml.id_meta = m.id_meta)
+			INNER JOIN '._DB_PREFIX_.'meta_lang ml ON ml.id_meta = m.id_meta
+			INNER JOIN '._DB_PREFIX_.'lang l ON l.id_lang = ml.id_lang			
 			WHERE m.page IN (\''.str_replace('.php', '', implode('\', \'', $tab['Files'])).'\')'))
 				foreach ($results as $row)
-					$tab['Files'][] = $row['url_rewrite'];
+					$tab['Files'][$row['iso_code']][] = $row['url_rewrite'];
 		}
 
-		$tab['GB'] = array('*orderby=', '*orderway=', '*tag=', '*id_currency=', '*search_query=',
-		'*id_lang=', '*back=','*utm_source=', '*utm_medium=', '*utm_campaign=', '*n=');
+		$tab['GB'] = array('orderby=', 'orderway=', 'tag=', 'id_currency=', 'search_query=',
+		'id_lang=', 'back=','utm_source=', 'utm_medium=', 'utm_campaign=', 'n=');
 
 		return $tab;
 	}
