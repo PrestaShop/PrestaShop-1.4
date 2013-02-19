@@ -98,8 +98,11 @@ abstract class AdminTabCore
 	/** @var integer Number of results in list */
 	protected $_listTotal = 0;
 
-	/** @var array WHERE clause determined by filter fields */
+	/** @var string WHERE clause determined by filter fields */
 	protected $_filter;
+	
+	/** @var string HAVING clause determined by filter fields */
+	protected $_filterHaving;
 
 	/** @var array Temporary SQL table WHERE clause determinated by filter fields */
 	protected $_tmpTableFilter = '';
@@ -208,7 +211,7 @@ abstract class AdminTabCore
 	 * @param boolean $htmlentities if set to true(default), the return value will pass through htmlentities($string, ENT_QUOTES, 'utf-8')
 	 * @return string the translation if available, or the english default text.
 	 */
-	protected function l($string, $class = 'AdminTab', $addslashes = FALSE, $htmlentities = TRUE)
+	protected function l($string, $class = 'AdminTab', $addslashes = false, $htmlentities = true)
 	{
 		// if the class is extended by a module, use modules/[module_name]/xx.php lang file
 		$currentClass = get_class($this);
@@ -796,7 +799,7 @@ abstract class AdminTabCore
 			foreach ($_POST as $key => $value)
 			{
 				/* Extracting filters from $_POST on key filter_ */
-				if ($value != NULL AND !strncmp($key, $this->table.'Filter_', 7 + Tools::strlen($this->table)))
+				if ($value != null AND !strncmp($key, $this->table.'Filter_', 7 + Tools::strlen($this->table)))
 				{
 					$key = Tools::substr($key, 7 + Tools::strlen($this->table));
 					/* Table alias could be specified using a ! eg. alias!field */
@@ -1275,7 +1278,7 @@ abstract class AdminTabCore
 		/* Choose number of results per page */
 		$selectedPagination = Tools::getValue('pagination', (isset($cookie->{$this->table.'_pagination'}) ? $cookie->{$this->table.'_pagination'} : null));
 		foreach ($this->_pagination as $value)
-			echo '<option value="'.(int)($value).'"'.($selectedPagination == $value ? ' selected="selected"' : (($selectedPagination == NULL && $value == $this->_pagination[1]) ? ' selected="selected2"' : '')).'>'.(int)($value).'</option>';
+			echo '<option value="'.(int)($value).'"'.($selectedPagination == $value ? ' selected="selected"' : (($selectedPagination == null && $value == $this->_pagination[1]) ? ' selected="selected2"' : '')).'>'.(int)($value).'</option>';
 		echo '
 						</select>
 						/ '.(int)($this->_listTotal).' '.$this->l('result(s)').'
@@ -1485,7 +1488,7 @@ abstract class AdminTabCore
 					echo '
 					<td '.(isset($params['position']) ? ' id="td_'.(isset($id_category) AND $id_category ? $id_category : 0).'_'.$id.'"' : '').' class="'.((!isset($this->noLink) OR !$this->noLink) ? 'pointer' : '').((isset($params['position']) AND $this->_orderBy == 'position')? ' dragHandle' : ''). (isset($params['align']) ? ' '.$params['align'] : '').'" ';
 					if (!isset($params['position']) AND (!isset($this->noLink) OR !$this->noLink))
-						echo ' onclick="document.location = \''.$currentIndex.'&'.$this->identifier.'='.$id.($this->view? '&view' : '&update').$this->table.'&token='.($token!=NULL ? $token : $this->token).'\'">'.(isset($params['prefix']) ? $params['prefix'] : '');
+						echo ' onclick="document.location = \''.$currentIndex.'&'.$this->identifier.'='.$id.($this->view? '&view' : '&update').$this->table.'&token='.($token != null ? $token : $this->token).'\'">'.(isset($params['prefix']) ? $params['prefix'] : '');
 					else
 						echo '>';
 					if (isset($params['active']) AND isset($tr[$key]))
@@ -1499,13 +1502,13 @@ abstract class AdminTabCore
 						{
 							echo '<a'.(!($tr[$key] != $positions[sizeof($positions) - 1]) ? ' style="display: none;"' : '').' href="'.$currentIndex.
 									'&'.$keyToGet.'='.(int)($id_category).'&'.$this->identifiersDnd[$this->identifier].'='.$id.'
-									&way=1&position='.(int)($tr['position'] + 1).'&token='.($token!=NULL ? $token : $this->token).'">
+									&way=1&position='.(int)($tr['position'] + 1).'&token='.($token != null ? $token : $this->token).'">
 									<img src="../img/admin/'.($this->_orderWay == 'ASC' ? 'down' : 'up').'.gif"
 									alt="'.$this->l('Down').'" title="'.$this->l('Down').'" /></a>';
 
 							echo '<a'.(!($tr[$key] != $positions[0]) ? ' style="display: none;"' : '').' href="'.$currentIndex.
 									'&'.$keyToGet.'='.(int)($id_category).'&'.$this->identifiersDnd[$this->identifier].'='.$id.'
-									&way=0&position='.(int)($tr['position'] - 1).'&token='.($token!=NULL ? $token : $this->token).'">
+									&way=0&position='.(int)($tr['position'] - 1).'&token='.($token != null ? $token : $this->token).'">
 									<img src="../img/admin/'.($this->_orderWay == 'ASC' ? 'up' : 'down').'.gif"
 									alt="'.$this->l('Up').'" title="'.$this->l('Up').'" /></a>';						}
 						else
@@ -1632,7 +1635,7 @@ abstract class AdminTabCore
 	{
 		echo '</table>';
 		if ($this->delete)
-			echo '<p><input type="submit" class="button" name="submitDel'.$this->table.'" value="'.$this->l('Delete selection').'" onclick="return confirm(\''.$this->l('Delete selected items?', __CLASS__, TRUE, FALSE).'\');" /></p>';
+			echo '<p><input type="submit" class="button" name="submitDel'.$this->table.'" value="'.$this->l('Delete selection').'" onclick="return confirm(\''.$this->l('Delete selected items?', __CLASS__, true, false).'\');" /></p>';
 		echo '
 				</td>
 			</tr>
