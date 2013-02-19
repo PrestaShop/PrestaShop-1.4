@@ -48,7 +48,7 @@ Topic français sur notre forum officiel :
 Si vous ne trouvez pas de solution pour lancer l'installateur, merci de vous rendre à cette adresse :
 	http://www.prestashop.com/forums/viewforum/7/installation_configuration___upgrade
 
-Il ya toujours des solutions pour vos questions ;-)
+Il y a toujours des solutions pour vos questions ;-)
 
 DOCUMENTATION
 =============
