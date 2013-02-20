@@ -210,7 +210,10 @@ class Jirafe_Platform_Prestashop14 extends Jirafe_Platform_Ecommerce
     public function getCurrentSiteId()
     {
         $sites = $this->getSites();
-        return $sites[0]['site_id'];
+        
+        if ($sites[0]['site_id'])
+        	return $sites[0]['site_id'];
+        return false;
     }
 
     /**
