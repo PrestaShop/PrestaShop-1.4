@@ -30,11 +30,23 @@ if (function_exists('date_default_timezone_set'))
 	date_default_timezone_set('Europe/Paris');
 
 /* Redefine REQUEST_URI if empty (on some webservers...) */
+if (!isset($_SERVER['REQUEST_URI']) || empty($_SERVER['REQUEST_URI']))
+{
+	if (!isset($_SERVER['SCRIPT_NAME']) && isset($_SERVER['SCRIPT_FILENAME']))
+		$_SERVER['SCRIPT_NAME'] = $_SERVER['SCRIPT_FILENAME'];
+	if (isset($_SERVER['SCRIPT_NAME']))
+	{
+		if (basename($_SERVER['SCRIPT_NAME']) == 'index.php' && empty($_SERVER['QUERY_STRING']))
+			$_SERVER['REQUEST_URI'] = dirname($_SERVER['SCRIPT_NAME']).'/';
+		else
+		{
+			$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
+			if (isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']))
+				$_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
+		}
+	}
+}
 $_SERVER['REQUEST_URI'] = str_replace('//', '/', $_SERVER['REQUEST_URI']);
-if (!isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '')
-	$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
-if ($tmp = strpos($_SERVER['REQUEST_URI'], '?'))
-	$_SERVER['REQUEST_URI'] = substr($_SERVER['REQUEST_URI'], 0, $tmp);
 
 define('INSTALL_VERSION', '1.4.10.0');
 define('MINIMUM_VERSION_TO_UPDATE', '0.8.5');
