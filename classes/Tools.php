@@ -1212,7 +1212,7 @@ class ToolsCore
 
 	public static function isEmpty($field)
 	{
-		return empty($field) || !$field;
+		return ($field === '' || $field === null);
 	}
 
 	/**
