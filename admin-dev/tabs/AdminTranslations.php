@@ -1006,23 +1006,28 @@ class AdminTranslations extends AdminTab
 
 		$str_output .= '
 		<h2>'.$this->l('Language').' : '.Tools::strtoupper($lang).' - '.$this->l('Front-Office translations').'</h2>
-		'.$this->l('Total expressions').' : <b>'.$count.'</b>. '.$this->l('Click the fieldset title to expand or close the fieldset.').'.<br /><br />';
+		'.$this->l('Total expressions').' : <b>'.$count.'</b>. '.$this->l('Click the fieldset title to expand or close the fieldset.').'<br /><br />';
 		$str_output .= $this->displayLimitPostWarning($count);
 
-		$str_output .= '<form method="get" action="'.$currentIndex.'&token='.$this->token.'" class="form">';		
-		$str_output .= '<fieldset>
+		$themes = $this->getThemesList();
+		if (count($themes) > 1)
+		{
+			$str_output .= '<form method="get" action="'.$currentIndex.'&token='.$this->token.'" class="form">';		
+			$str_output .= '<fieldset>
 			<input type="hidden" name="lang" value="'.$lang.'">
 			<input type="hidden" name="tab" value="'.get_class($this).'">
 			<input type="hidden" name="token" value="'.$this->token.'">
-			<input type="hidden" name="type" value="front">
-			<h2 style="display:inline;">&gt;'.$this->l('Theme:').' </h2><select onchange="this.form.submit();" name="theme_name">';
-		
-		$options = '';
-		foreach ($this->getThemesList() as $theme)
-			$options .= 	'<option value="'.addslashes($theme['name']).'"'.($theme['name'] === $this->theme_name? ' selected="selected"' : '').'>'.Tools::safeOutput($theme['name']).'</option>';			
-		$str_output .= $options;
-		$str_output .= '</select></fieldset></form><br /><br />';
-		
+			<input type="hidden" name="type" value="front">';		
+			$str_output .='<h2 style="display:inline;">&gt;'.$this->l('Theme:').' </h2>
+			<select onchange="this.form.submit();" name="theme_name">';		
+			$options = '';
+			foreach ($this->getThemesList() as $theme)
+				$options .= 	'<option value="'.addslashes($theme['name']).'"'.($theme['name'] === $this->theme_name? ' selected="selected"' : '').'>'.Tools::safeOutput($theme['name']).'</option>';			
+			$str_output .= $options;
+			$str_output .= '</select>';
+			$str_output .= '</fieldset></form><br /><br />';			
+		}
+
 		if (!$this->suhosin_limit_exceed)
 		{
 			$str_output .= '
