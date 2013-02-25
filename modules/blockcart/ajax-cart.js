@@ -196,7 +196,7 @@ var ajaxCart = {
 
 		if ($('#cart_block #cart_block_list').hasClass('collapsed'))
 			this.expand();
-			var data = 
+			
 		//send the ajax request to the server
 		$.ajax({
 			type: 'POST',
