@@ -161,7 +161,7 @@ class AttributeCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'product_attribute` 
 		WHERE `id_product` = '.(int)$id_product);
 		
-		return $quantity !== false ? (int)$quantity : false;
+		return !is_null($quantity) ? (int)$quantity : false;
 	}
 
 	/**
@@ -174,7 +174,7 @@ class AttributeCore extends ObjectModel
 	public static function updateQtyProduct(&$arr)
 	{
 		$qty = self::getAttributeQty((int)$arr['id_product']);
-		if ((bool)$qty !== false)
+		if ($qty !== false)
 		{
 			$arr['quantity'] = (int)$qty;
 			return true;
