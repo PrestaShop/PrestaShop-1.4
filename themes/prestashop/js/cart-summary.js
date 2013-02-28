@@ -56,7 +56,7 @@ function deletProductFromSummary(id)
 	var productId = 0;
 	var productAttributeId = 0;
 	var ids = 0;
-	ids = id.split('_');
+	ids = id.replace(/^_/, '').split('_');
 	productId = parseInt(ids[0]);
 	if (typeof(ids[1]) != 'undefined')
 		productAttributeId = parseInt(ids[1]);
@@ -133,7 +133,7 @@ function upQuantity(id, qty)
 	var productId = 0;
 	var productAttributeId = 0;
 	var ids = 0;
-	ids = id.split('_');
+	ids = id.replace(/^_/, '').split('_');
 	productId = parseInt(ids[0]);
 	if (typeof(ids[1]) != 'undefined')
 		productAttributeId = parseInt(ids[1]);
@@ -198,7 +198,7 @@ function downQuantity(id, qty)
 	var ids = 0;
 	if (newVal > 0)
 	{
-		ids = id.split('_');
+		ids = id.replace(/^_/, '').split('_');
 		productId = parseInt(ids[0]);
 		if (typeof(ids[1]) != 'undefined')
 			productAttributeId = parseInt(ids[1]);
