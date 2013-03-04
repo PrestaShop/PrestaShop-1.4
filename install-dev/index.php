@@ -46,6 +46,8 @@ if (!isset($_SERVER['REQUEST_URI']) || empty($_SERVER['REQUEST_URI']))
 		}
 	}
 }
+if ($tmp = strpos($_SERVER['REQUEST_URI'], '?'))
+	$_SERVER['REQUEST_URI'] = substr($_SERVER['REQUEST_URI'], 0, $tmp);
 $_SERVER['REQUEST_URI'] = str_replace('//', '/', $_SERVER['REQUEST_URI']);
 
 define('INSTALL_VERSION', '1.4.10.0');
