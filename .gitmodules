@@ -82,3 +82,6 @@
 [submodule "modules/payulatam/backward_compatibility"]
 	path = modules/payulatam/backward_compatibility
 	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/trustly/backward_compatibility"]
+	path = modules/trustly/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility.git
