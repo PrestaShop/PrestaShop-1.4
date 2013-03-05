@@ -122,7 +122,7 @@
 					{/if}
 					</td>
 				</tr>
-				<tr class="cart_total_voucher" {if $total_wrapping == 0}style="display: none;"{/if}>
+				<tr{if $total_wrapping == 0} style="display: none;"{/if}>
 					<td colspan="6">
 					{if $use_taxes}
 						{if $priceDisplay}

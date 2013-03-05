@@ -45,7 +45,11 @@
 	margin-bottom: 0.3em
 }
 
-#order-opc textarea#message { width: 42em }
+#order-opc textarea#gift_message, #order-opc textarea#message { 
+	width: 542px;
+	height: 86px;
+	margin: 0px;
+}
 
 #order-opc sup { color: red }
 

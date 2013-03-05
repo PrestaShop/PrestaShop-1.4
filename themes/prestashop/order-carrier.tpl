@@ -163,6 +163,14 @@
 		</p>
 		{/if}
 	{/if}
+	{if $opc}
+		<h3>{l s='Leave a message'}</h3>
+		<div>
+			<p>{l s='If you would like to add a comment about your order, please write it below.'}</p>
+			<p><textarea cols="120" rows="3" name="message" id="message">{if isset($oldMessage)}{$oldMessage}{/if}</textarea></p>
+		</div>
+	</div>
+	{/if}
 	{if $conditions AND $cms_id}
 	<h3 class="condition_title">{l s='Terms of service'}</h3>
 	<p class="checkbox">
@@ -180,11 +188,4 @@
 		<input type="submit" name="processCarrier" value="{l s='Next'} &raquo;" class="exclusive" />
 	</p>
 </form>
-{else}
-	<h3>{l s='Leave a message'}</h3>
-	<div>
-		<p>{l s='If you would like to add a comment about your order, please write it below.'}</p>
-		<p><textarea cols="120" rows="3" name="message" id="message">{if isset($oldMessage)}{$oldMessage}{/if}</textarea></p>
-	</div>
-</div>
 {/if}
