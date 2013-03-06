@@ -265,8 +265,7 @@ class AuthControllerCore extends FrontController
 					self::$cart->id_customer = (int)$customer->id;
 					// If a logged guest logs in as a customer, the cart secure key was already set and needs to be updated
 					self::$cart->secure_key = $customer->secure_key;
-					$id_guest = (int)Guest::getFromCustomer(self::$cart->id_customer);
-					if($id_guest)
+					if ($id_guest = (int)Guest::getFromCustomer(self::$cart->id_customer))
 						self::$cart->id_guest = $id_guest;
 					self::$cart->save();
 					self::$cookie->id_cart = (int)self::$cart->id;
