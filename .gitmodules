@@ -22,14 +22,8 @@
 [submodule "modules/fedexcarrier/backward_compatibility"]
 	path = modules/fedexcarrier/backward_compatibility
 	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
-[submodule "modules/gadsense/backward_compatibility"]
-	path = modules/gadsense/backward_compatibility
-	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
 [submodule "modules/ganalytics/backward_compatibility"]
 	path = modules/ganalytics/backward_compatibility
-	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
-[submodule "modules/gcheckout/backward_compatibility"]
-	path = modules/gcheckout/backward_compatibility
 	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
 [submodule "modules/hipay/backward_compatibility"]
 	path = modules/hipay/backward_compatibility
