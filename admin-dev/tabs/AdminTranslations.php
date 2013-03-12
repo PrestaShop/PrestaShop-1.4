@@ -1191,7 +1191,7 @@ class AdminTranslations extends AdminTab
 					$filesize = filesize($fn);
 					if (!$filesize)
 						continue;
-					preg_match_all('/Tools::displayError\(\''._PS_TRANS_PATTERN_.'\'(, ?(true|false))?\)/U', fread(fopen($fn, 'r'), $filesize), $matches);
+					preg_match_all('/Tools::displayError\(\''._PS_TRANS_PATTERN_.'\'(, ?(.+))?\)/U', fread(fopen($fn, 'r'), $filesize), $matches);
 					foreach($matches[1] AS $key)
 						$stringToTranslate[$key] = (key_exists(md5($key), $_ERRORS)) ? html_entity_decode($_ERRORS[md5($key)], ENT_COMPAT, 'UTF-8') : '';
 				}
