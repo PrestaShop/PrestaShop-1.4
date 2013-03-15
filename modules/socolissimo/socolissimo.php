@@ -60,7 +60,7 @@ class Socolissimo extends CarrierModule
 	{
 		$this->name = 'socolissimo';
 		$this->tab = 'shipping_logistics';
-		$this->version = '2.7.2';
+		$this->version = '2.7.4';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 		$this->module_key = 'faa857ecf7579947c8eee2d9b3d1fb04';
@@ -107,9 +107,9 @@ class Socolissimo extends CarrierModule
 	public function install()
 	{
 		if (!parent::install() OR !Configuration::updateValue('SOCOLISSIMO_ID', NULL) OR !Configuration::updateValue('SOCOLISSIMO_KEY', NULL) ||
-				!Configuration::updateValue('SOCOLISSIMO_URL', 'https://ws.colissimo.fr/pudo-fo-frame/storeCall.do') OR !Configuration::updateValue('SOCOLISSIMO_PREPARATION_TIME', 1) ||
+				!Configuration::updateValue('SOCOLISSIMO_URL', 'http://ws.colissimo.fr/pudo-fo-frame/storeCall.do') OR !Configuration::updateValue('SOCOLISSIMO_PREPARATION_TIME', 1) ||
 				!Configuration::updateValue('SOCOLISSIMO_OVERCOST', 3.6) OR !$this->registerHook('extraCarrier') OR !$this->registerHook('AdminOrder') OR !$this->registerHook('updateCarrier') ||
-				!$this->registerHook('newOrder') OR !$this->registerHook('paymentTop') OR !$this->registerHook('backOfficeHeader') OR !Configuration::updateValue('SOCOLISSIMO_SUP_URL', 'https://ws.colissimo.fr/supervision-pudo-frame/supervision.jsp') ||
+				!$this->registerHook('newOrder') OR !$this->registerHook('paymentTop') OR !$this->registerHook('backOfficeHeader') OR !Configuration::updateValue('SOCOLISSIMO_SUP_URL', 'http://ws.colissimo.fr/supervision-pudo-frame/supervision.jsp') ||
 				!Configuration::updateValue('SOCOLISSIMO_SUP', true) OR !Configuration::updateValue('SOCOLISSIMO_USE_FANCYBOX', true))
 			return false;
 
@@ -600,6 +600,7 @@ class Socolissimo extends CarrierModule
 			'trReturnUrlKo' => htmlentities($this->url, ENT_NOQUOTES, 'UTF-8'),
 			'trReturnUrlOk' => htmlentities($this->url ,ENT_NOQUOTES, 'UTF-8')
 		);
+		$inputs['signature'] = $this->generateKey($inputs);
 
 		$this->context->smarty->assign(array(
 			'select_label' => $this->l('Select delivery mode'),
@@ -766,11 +767,16 @@ class Socolissimo extends CarrierModule
 		$carrier->need_range = $config['need_range'];
 
 		$languages = Language::getLanguages(true);
-		foreach ($languages as $language) {
+		foreach ($languages as $language)
+		{
 			if ($language['iso_code'] == 'fr')
-				$carrier->delay[$language['id_lang']] = $config['delay'][$language['iso_code']];
-			if ($language['iso_code'] == 'en')
-				$carrier->delay[$language['id_lang']] = $config['delay'][$language['iso_code']];
+				$carrier->delay[(int)$language['id_lang']] = $config['delay'][$language['iso_code']];
+			elseif ($language['iso_code'] == 'en')
+				$carrier->delay[(int)$language['id_lang']] = $config['delay'][$language['iso_code']];
+			elseif ($language['iso_code'] == 'es')
+				$carrier->delay[(int)$language['id_lang']] = $config['delay'][$language['iso_code']];
+			elseif (!isset($config['delay'][$language['iso_code']]))
+				$carrier->delay[(int)$language['id_lang']] = $config['delay']['en'];
 		}
 
 		if($carrier->add())
@@ -990,7 +996,7 @@ class Socolissimo extends CarrierModule
 		}
 		else
 		{
-			$gender = new Gender($customer->id_gender);
+			$gender = new Gender($customer->id_gender, $this->context->language->id);
 			return $gender->name;
 		}
 		return $title;

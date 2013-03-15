@@ -66,7 +66,7 @@ class Kiala extends Module
 		$this->name		= 'kiala';
 		$this->author = 'PrestaShop';
 		$this->tab		= 'shipping_logistics';
-		$this->version	= '1.3.1';
+		$this->version	= '1.3.3';
 		$this->module_key = '9d77262bd27f8a9340855def9c137832';
 		$this->compatibility_mode = version_compare(_PS_VERSION_, '1.5.0.0', '<');
 		$this->limited_countries = array('es', 'fr');
@@ -297,25 +297,25 @@ class Kiala extends Module
 				
 				$this->_html .= '
 						<div style="margin-top: 10px;">
-							<label for="lastname">'.$this->l('Lastname:').'</label><input type="text" value="'.Tools::getValue('lastname').'" name="lastname" id="lastname" />
+							<label for="lastname">'.$this->l('Lastname:').'</label><input type="text" value="'.Tools::safeOutput(Tools::getValue('lastname')).'" name="lastname" id="lastname" />
 						</div>
 						<div style="margin-top: 10px;">
-							<label for="firstname">'.$this->l('Firstname:').'</label><input type="text" value="'.Tools::getValue('firstname').'" name="firstname" id="firstname" />
+							<label for="firstname">'.$this->l('Firstname:').'</label><input type="text" value="'.Tools::safeOutput(Tools::getValue('firstname')).'" name="firstname" id="firstname" />
 						</div>
 						<div style="margin-top: 10px;">
-							<label for="email">'.$this->l('E-mail:').'</label><input type="text" value="'.Tools::getValue('email').'" name="email" id="email" />
+							<label for="email">'.$this->l('E-mail:').'</label><input type="text" value="'.Tools::safeOutput(Tools::getValue('email')).'" name="email" id="email" />
 						</div>
 						<div style="margin-top: 10px;">
-							<label for="phone">'.$this->l('Phone number:').'</label><input type="text" value="'.Tools::getValue('phone').'" name="phone" id="phone" />
+							<label for="phone">'.$this->l('Phone number:').'</label><input type="text" value="'.Tools::safeOutput(Tools::getValue('phone')).'" name="phone" id="phone" />
 						</div>
 						<div style="margin-top: 10px;">
-							<label for="shop_name">'.$this->l('Shop name:').'</label><input type="text" value="'.Tools::getValue('shop_name').'" name="shop_name" id="shop_name" />
+							<label for="shop_name">'.$this->l('Shop name:').'</label><input type="text" value="'.Tools::safeOutput(Tools::getValue('shop_name')).'" name="shop_name" id="shop_name" />
 						</div>
 						<div style="margin-top: 10px;">
-							<label for="packages_per_year">'.$this->l('Number of packages per year:').'</label><input type="text" value="'.Tools::getValue('packages_per_year').'" name="packages_per_year" id="packages_per_year" />
+							<label for="packages_per_year">'.$this->l('Number of packages per year:').'</label><input type="text" value="'.Tools::safeOutput(Tools::getValue('packages_per_year')).'" name="packages_per_year" id="packages_per_year" />
 						</div>
 						<div style="margin-top: 10px;">
-							<label for="package_weight">'.$this->l('Average weight of a package:').'</label><input type="text" value="'.Tools::getValue('package_weight').'" name="package_weight" id="package_weight" />
+							<label for="package_weight">'.$this->l('Average weight of a package:').'</label><input type="text" value="'.Tools::safeOutput(Tools::getValue('package_weight')).'" name="package_weight" id="package_weight" />
 						</div>
 						<div style="margin-top: 15px; margin-left: 200px;">
 							<input type="submit" name="submit_account_request" value="'.$this->l('Send the request').'" />
@@ -452,10 +452,12 @@ class Kiala extends Module
 		{
 			if ($language['iso_code'] == 'fr')
 				$carrier->delay[(int)$language['id_lang']] = $config['delay'][$language['iso_code']];
-			if ($language['iso_code'] == 'en')
+			elseif ($language['iso_code'] == 'en')
 				$carrier->delay[(int)$language['id_lang']] = $config['delay'][$language['iso_code']];
-			if ($language['iso_code'] == 'es')
+			elseif ($language['iso_code'] == 'es')
 				$carrier->delay[(int)$language['id_lang']] = $config['delay'][$language['iso_code']];
+			elseif (!isset($config['delay'][$language['iso_code']]))
+				$carrier->delay[(int)$language['id_lang']] = $config['delay']['en'];
 		}
 
 		if($carrier->add())
@@ -850,7 +852,7 @@ class Kiala extends Module
 		<tbody>';
 
 		$irow = 0;
-		$base_url = 'index.php?tab='.Tools::getValue('tab').'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::getValue('module_name');
+		$base_url = 'index.php?tab='.Tools::getValue('tab').'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&tab_module='.Tools::safeOutput(Tools::getValue('tab_module')).'&module_name='.Tools::safeOutput(Tools::getValue('module_name'));
 		foreach ($countries as $country)
 		{
 			$country_name = Country::getNameById($id_lang, $country['id_country']);
@@ -873,7 +875,7 @@ class Kiala extends Module
 	        			</a>
 					</td>
 					<td class="center">
-						<a href="index.php?tab='.Tools::safeOutput(Tools::getValue('tab').'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::getValue('module_name').'&editCountry&id_kiala_country='.(int)$country['id_kiala_country']).'" title="'.$this->l('Edit').'"><img src="'._PS_ADMIN_IMG_.'edit.gif" alt="" /></a>
+						<a href="index.php?tab='.Tools::safeOutput(Tools::getValue('tab').'&configure='.$this->name.'&token='.Tools::getAdminTokenLite('AdminModules').'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::safeOutput(Tools::getValue('module_name')).'&editCountry&id_kiala_country='.(int)$country['id_kiala_country']).'" title="'.$this->l('Edit').'"><img src="'._PS_ADMIN_IMG_.'edit.gif" alt="" /></a>
 					</td>
 				</tr>';
 		}
@@ -925,7 +927,7 @@ class Kiala extends Module
 		global $cookie;
 		$kiala_country = new KialaCountry($id_kiala_country);
 		return '
-		<form action="index.php?tab='.htmlentities(Tools::getValue('tab')).'&configure='.Tools::getValue('configure').'&token='.Tools::getValue('token').'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::getValue('module_name').'" method="post">
+		<form action="index.php?tab='.htmlentities(Tools::getValue('tab')).'&configure='.Tools::getValue('configure').'&token='.Tools::getValue('token').'&tab_module='.Tools::getValue('tab_module').'&module_name='.Tools::safeOutput(Tools::getValue('module_name')).'" method="post">
 			<fieldset>
 				<legend><img src="../img/admin/picture.gif" />'.Country::getNameById($cookie->id_lang, $kiala_country->id_country).'</legend><br />
 				<label>'.$this->l('Kiala User ID:').' </label>
