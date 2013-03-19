@@ -245,6 +245,9 @@ class PaypalExpressCheckout extends Paypal
 		$address = new Address($id_address);
 
 		$fields['ADDROVERRIDE'] = '1';
+		$fields['EMAIL'] = $this->context->customer->email;
+		$fields['PAYMENTREQUEST_0_SHIPTONAME'] = $address->firstname.' '.$address->lastname;
+		$fields['PAYMENTREQUEST_0_SHIPTOPHONENUM'] = (empty($address->phone)) ? $address->phone_mobile : $address->phone;
 		$fields['PAYMENTREQUEST_0_SHIPTOSTREET'] = $address->address1;
 		$fields['PAYMENTREQUEST_0_SHIPTOSTREET2'] = $address->address2;
 		$fields['PAYMENTREQUEST_0_SHIPTOCITY'] = $address->city;
@@ -286,7 +289,8 @@ class PaypalExpressCheckout extends Paypal
 				$fields['L_PAYMENTREQUEST_0_NUMBER'.++$index] = $discount['id_discount'];
 
 				$fields['L_PAYMENTREQUEST_0_NAME'.$index] = $discount['name'];
-				$fields['L_PAYMENTREQUEST_0_DESC'.$index] = substr(strip_tags($discount['description']), 0, 120).'...';
+				if (isset($discount['description']) && !empty($discount['description']))
+					$fields['L_PAYMENTREQUEST_0_DESC'.$index] = substr(strip_tags($discount['description']), 0, 120).'...';
 
 				/* It is a discount so we store a negative value */
 				$fields['L_PAYMENTREQUEST_0_AMT'.$index] = -1 * Tools::ps_round($discount['value_real'], $this->decimals);
@@ -300,7 +304,7 @@ class PaypalExpressCheckout extends Paypal
 	{
 		if ($this->context->cart->gift == 1)
 		{
-			$gift_wrapping_price = (float)Configuration::get('PS_GIFT_WRAPPING_PRICE');
+			$gift_wrapping_price = $this->getGiftWrappingPrice();
 
 			$fields['L_PAYMENTREQUEST_0_NAME'.++$index]	= $this->l('Gift wrapping');
 
@@ -375,7 +379,7 @@ class PaypalExpressCheckout extends Paypal
 		}
 
 		if ($this->context->cart->gift == 1)
-			$total += Configuration::get('PS_GIFT_WRAPPING_PRICE');
+			$total = Tools::ps_round($total + $this->getGiftWrappingPrice(), $this->decimals);
 		
 		if (_PS_VERSION_ < '1.5')
 		{

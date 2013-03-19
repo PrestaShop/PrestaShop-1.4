@@ -73,7 +73,7 @@ class PayPal extends PaymentModule
 	{
 		$this->name = 'paypal';
 		$this->tab = 'payments_gateways';
-		$this->version = '3.4.5';
+		$this->version = '3.4.6';
 
 		$this->currencies = true;
 		$this->currencies_mode = 'radio';
@@ -119,9 +119,10 @@ class PayPal extends PaymentModule
 			return false;
 
 		include_once(_PS_MODULE_DIR_.'/'.$this->name.'/paypal_install.php');
-		PayPalInstall::createTables();
-		PayPalInstall::updateConfiguration($this->version);
-		PayPalInstall::createOrderState();
+		$paypal_install = new PayPalInstall();
+		$paypal_install->createTables();
+		$paypal_install->updateConfiguration($this->version);
+		$paypal_install->createOrderState();
 
 		$paypal_tools = new PayPalTools($this->name);
 		$paypal_tools->moveTopPayments(1);
@@ -135,7 +136,8 @@ class PayPal extends PaymentModule
 	public function uninstall()
 	{
 		include_once(_PS_MODULE_DIR_.'/'.$this->name.'/paypal_install.php');
-		PayPalInstall::deleteConfiguration();
+		$paypal_install = new PayPalInstall();
+		$paypal_install->deleteConfiguration();
 		return parent::uninstall();
 	}
 
@@ -425,12 +427,6 @@ class PayPal extends PaymentModule
 			$cart = $this->context->cart;
 			$cart_details = $cart->getSummaryDetails(null, true);
 
-			// Backward compatibility
-			if (_PS_VERSION_ < '1.5')
-				$shipping = $this->context->cart->getOrderShippingCost();
-			else
-				$shipping = $this->context->cart->getTotalShippingCost();
-
 			if ((int)Configuration::get('PAYPAL_SANDBOX') == 1)
 				$action_url = 'https://securepayments.sandbox.paypal.com/acquiringweb';
 			else
@@ -444,11 +440,11 @@ class PayPal extends PaymentModule
 				'customer' => $this->context->customer,
 				'business_account' => Configuration::get('PAYPAL_BUSINESS_ACCOUNT'),
 				'custom' => Tools::jsonEncode(array('id_cart' => $cart->id, 'hash' => sha1(serialize($cart->nbProducts())))),
-				'gift_price' => (float)Configuration::get('PS_GIFT_WRAPPING_PRICE'),
+				'gift_price' => (float)$this->getGiftWrappingPrice(),
 				'billing_address' => $billing_address,
 				'delivery_address' => $delivery_address,
-				'shipping' => $shipping,
-				'subtotal' => $cart_details['total_price_without_tax'] - $shipping,
+				'shipping' => $cart_details['total_shipping_tax_exc'],
+				'subtotal' => $cart_details['total_price_without_tax'] - $cart_details['total_shipping_tax_exc'],
 				'time' => time(),
 				'cancel_return' => $this->context->link->getPageLink('order.php'),
 				'notify_url' => $shop_url._MODULE_DIR_.$this->name.'/integral_evolution/notifier.php',
@@ -1243,5 +1239,19 @@ class PayPal extends PaymentModule
 			if (count($transaction) > 0)
 				PayPalOrder::saveOrder((int)$this->currentOrder, $transaction);
 		}
+	}
+
+	protected function getGiftWrappingPrice()
+	{
+		if (_PS_VERSION_ >= '1.5')
+			$wrapping_fees_tax_inc = $this->context->cart->getGiftWrappingPrice();
+		else
+		{
+			$wrapping_fees = (float)(Configuration::get('PS_GIFT_WRAPPING_PRICE'));
+			$wrapping_fees_tax = new Tax((int)(Configuration::get('PS_GIFT_WRAPPING_TAX')));
+			$wrapping_fees_tax_inc = $wrapping_fees * (1 + (((float)($wrapping_fees_tax->rate) / 100)));
+		}
+
+		return (float)Tools::convertPrice($wrapping_fees_tax_inc, $this->context->currency);
 	}
 }
