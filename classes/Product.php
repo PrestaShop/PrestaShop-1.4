@@ -2862,7 +2862,11 @@ class ProductCore extends ObjectModel
 			$productAttributeId = (int)(isset($productUpdate['id_product_attribute']) ? $productUpdate['id_product_attribute'] : $productUpdate['product_attribute_id']);
 			$productQuantity = (int)(isset($productUpdate['cart_quantity']) ? $productUpdate['cart_quantity'] : $productUpdate['product_quantity']);
 			$price = isset($productUpdate['price']) ? $productUpdate['price'] : $productUpdate['product_price'];
-			$priceWt = isset($productUpdate['price_wt']) ? $productUpdate['price_wt'] : $productUpdate['product_price_wt'];
+
+			if (isset($productUpdate['price_wt']) && $productUpdate['price_wt'])
+				$priceWt = $productUpdate['price_wt'];
+			else
+				$priceWt = isset($productUpdate['price_wt']) ? $productUpdate['price_wt'] : $productUpdate['product_price_wt'];
 
 			if (isset($customizedDatas[$productId][$productAttributeId]))
 				foreach ($customizedDatas[$productId][$productAttributeId] as $customization)
