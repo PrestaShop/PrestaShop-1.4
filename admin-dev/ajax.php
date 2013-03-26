@@ -528,16 +528,10 @@ if (Tools::isSubmit('ajaxAddZipCode') OR Tools::isSubmit('ajaxRemoveZipCode'))
 			die('error: This requires a country selection.');		
 		$zip_code_format = $country->zip_code_format;
 		if ($zip_code_format)
-		{
-			$zip_regexp = '/^'.$zip_code_format.'$/ui';
-			$zip_regexp = str_replace(' ', '( |)', $zip_regexp);
-			$zip_regexp = str_replace('-', '(-|)', $zip_regexp);
-			$zip_regexp = str_replace('N', '[0-9]', $zip_regexp);
-			$zip_regexp = str_replace('L', '[a-zA-Z]', $zip_regexp);
-			$zip_regexp = str_replace('C', $country->iso_code, $zip_regexp);		
-			if ((empty($from) || $from === $to)  && !preg_match($zip_regexp, $zipcodes))
+		{	
+			if ((empty($from) || $from === $to)  && !$country->checkZipCode($zipcodes))
 				die('error: <strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid.').'<br />'.str_replace(':', '', Tools::displayError('Must be typed as follows:')).' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format))));
-			elseif ($from !== $to && (!preg_match($zip_regexp, $from) ||!preg_match($zip_regexp, $to)))
+			elseif ($from !== $to && (!$country->checkZipCode($from) || !$country->checkZipCode($to)))
 				die('error: <strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid.').'<br />'.str_replace(':', '', Tools::displayError('Must be typed as follows:')).' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format))));							
 			if ($county->isZipCodeRangePresent($from, $to))
 				die('error: '.Tools::displayError('This Zip Code is already in use.'));

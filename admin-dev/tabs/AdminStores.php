@@ -115,27 +115,15 @@ class AdminStores extends AdminTab
 
 			if(empty($latitude) OR empty($longitude))
 			   $this->_errors[] = Tools::displayError('Latitude and longitude are required.');
-
-			/* Check zip code */
-			if ($country->need_zip_code)
-			{
-				$zip_code_format = $country->zip_code_format;
-				if (($postcode = Tools::getValue('postcode')) AND $zip_code_format)
-				{
-					$zip_regexp = '/^'.$zip_code_format.'$/ui';
-					$zip_regexp = str_replace(' ', '( |)', $zip_regexp);
-					$zip_regexp = str_replace('-', '(-|)', $zip_regexp);
-					$zip_regexp = str_replace('N', '[0-9]', $zip_regexp);
-					$zip_regexp = str_replace('L', '[a-zA-Z]', $zip_regexp);
-					$zip_regexp = str_replace('C', $country->iso_code, $zip_regexp);
-					if (!preg_match($zip_regexp, $postcode))
-						$this->_errors[] = Tools::displayError('Your zip/postal code is incorrect.').'<br />'.Tools::displayError('Must be typed as follows:').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
-				}
-				elseif ($zip_code_format)
-					$this->_errors[] = Tools::displayError('Postcode required.');
-				elseif ($postcode AND !preg_match('/^[0-9a-zA-Z -]{4,9}$/ui', $postcode))
-					$this->_errors[] = Tools::displayError('Your zip/postal code is incorrect.');
-			}
+			
+			$postcode = Tools::getValue('postcode');		
+			/* Check zip code format */
+			if ($country->zip_code_format && !$country->checkZipCode($postcode))
+				$this->_errors[] = Tools::displayError('Your zip/postal code is incorrect.').'<br />'.Tools::displayError('Must be typed as follows:').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $country->zip_code_format)));
+			elseif(empty($postcode) && $country->need_zip_code)
+				$this->_errors[] = Tools::displayError('Postcode required.');
+			elseif ($postcode && !Validate::isPostCode($postcode))
+				$this->_errors[] = Tools::displayError('Your zip/postal code is incorrect.');
 
 			/* Store hours */
 			$_POST['hours'] = array();
