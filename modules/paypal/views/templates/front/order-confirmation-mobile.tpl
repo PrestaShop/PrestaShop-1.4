@@ -20,7 +20,7 @@
 	
 	<br />
 	
-	{if $opc && $isLogged && !$isGuest}
+	{if !$is_guest}
 		<a href="{$link->getPageLink('index', true)}" data-role="button" data-theme="a" data-icon="back" data-ajax="false">{l s='Continue shopping'}</a>
 	{else}
 		<ul data-role="listview" data-inset="true" id="list_myaccount">
