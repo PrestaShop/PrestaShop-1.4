@@ -28,7 +28,7 @@
 				<a href="{$link->getPageLink('index', true)}" data-ajax="false">{l s='Continue shopping'}</a>
 			</li>
 			<li data-theme="b" data-icon="back">
-				<a href="{if $back}{$link->getPageLink('history.php', true, NULL, 'step=1&amp;back={$back}')}{else}{$link->getPageLink('order', true, NULL, 'step=1')}{/if}" data-ajax="false">{l s='Back to orders' mod='paypal'}</a>
+				<a href="{$link->getPageLink('history.php', true, NULL, 'step=1&amp;back={$back}')}" data-ajax="false">{l s='Back to orders' mod='paypal'}</a>
 			</li>
 		</ul>
 	{/if}
