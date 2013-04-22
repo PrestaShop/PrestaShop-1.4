@@ -44,7 +44,7 @@
 		{$dlv_all_fields.8 = 'state'}
 {/if}
 
-{capture name=path}{l s='Login'}{/capture}
+{capture name=path}{if !isset($email_create)}{l s='Login'}{else}<a rel="nofollow" href="{$link->getPageLink('authentication.php', true)}">{l s='Login'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='Create your account'}{/if}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
 <script type="text/javascript">

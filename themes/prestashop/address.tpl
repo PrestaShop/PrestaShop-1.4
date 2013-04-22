@@ -94,7 +94,7 @@ $(function(){ldelim}
 //]]>
 </script>
 
-{capture name=path}{l s='Your addresses'}{/capture}
+{capture name=path}<a rel="nofollow" href="{$link->getPageLink('my-account.php', true)}">{l s='My account'}</a><span class="navigation-pipe">{$navigationPipe}</span><a rel="nofollow" href="{$link->getPageLink('addresses.php', true)}">{l s='My addresses'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='Your addresses'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
 <h1>{l s='Your addresses'}</h1>

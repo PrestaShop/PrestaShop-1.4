@@ -43,6 +43,8 @@
 		{$cms->content}
 	</div>
 {elseif isset($category)}
+{capture name=path}{$category->name}{/capture}
+{include file="$tpl_dir./breadcrumb.tpl"}
 	<div class="block-cms">
 		<h1><a href="{if $category->id eq 1}{$base_dir}{else}{$link->getCategoryLink($category->id, $category->link_rewrite)}{/if}">{$category->name|escape:'htmlall':'UTF-8'}</a></h1>
 		{if isset($sub_category) & !empty($sub_category)}	
