@@ -99,7 +99,7 @@ class SupplierControllerCore extends FrontController
 				self::$smarty->assign(array(
 					'pages_nb' => ceil($nbProducts / (int)$this->n),
 					'nbSuppliers' => $nbProducts,
-					'mediumSize' => Image::getSize('medium'),					
+					'mediumSize' => Image::getSize('medium'),
 					'suppliers' => $suppliers,
 					'add_prod_display' => Configuration::get('PS_ATTRIBUTE_CATEGORY_DISPLAY'),
 				));
