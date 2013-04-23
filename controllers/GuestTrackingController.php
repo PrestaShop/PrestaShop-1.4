@@ -133,8 +133,8 @@ class GuestTrackingControllerCore extends FrontController
 		/* Handle brute force attacks */
 		if (sizeof($this->errors))			
 			sleep(1);
-		
-		self::$smarty->assign(array('action' => $link->getPageLink('guest-tracking.php'), 'errors' => $this->errors));
+
+		self::$smarty->assign(array('action' => $link->getPageLink('guest-tracking.php', true), 'errors' => $this->errors));
 	}
 	
 	public function setMedia()
