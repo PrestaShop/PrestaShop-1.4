@@ -81,6 +81,7 @@ class ManufacturerControllerCore extends FrontController
 				'nb_products' => $nbProducts,
 				'products' => $this->manufacturer->getProducts($this->manufacturer->id, (int)self::$cookie->id_lang, (int)$this->p, (int)$this->n, $this->orderBy, $this->orderWay),
 				'path' => ($this->manufacturer->active ? Tools::safeOutput($this->manufacturer->name) : ''),
+				'homeSize' => Image::getSize('home'),
 				'manufacturer' => $this->manufacturer));
 		}
 		elseif (!Tools::getValue('id_manufacturer'))
