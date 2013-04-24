@@ -56,28 +56,28 @@ class AdminGenerator extends AdminTab
 		if ($this->_checkConfiguration($this->_htFile))
 			echo '
 			<div class="clear">&nbsp;</div>
-			<label for="imageCacheControl">'.$this->l('Optimization').'</label>
+			<label for="PS_HTACCESS_CACHE_CONTROL">'.$this->l('Optimization').'</label>
 			<div class="margin-form">
 				<input type="checkbox" name="PS_HTACCESS_CACHE_CONTROL" id="PS_HTACCESS_CACHE_CONTROL" value="1" '.(Configuration::get('PS_HTACCESS_CACHE_CONTROL') == 1 ? 'checked="checked"' : '').' />
 				<p>'.$this->l('Checking this box will enable Gzip compression, tune ETags and add cache directives on CSS, JS and images.').'<br />
 				<b>'.$this->l('Warning: You must enable mod_expires, mod_deflate and mod_filter in Apache before checking this box.').'</b></p>
 			</div>
 			<div class="clear">&nbsp;</div>
-			<label for="imageCacheControl">'.$this->l('Friendly URL').'</label>
+			<label for="PS_REWRITING_SETTINGS">'.$this->l('Friendly URL').'</label>
 			<div class="margin-form">
 				<input type="checkbox" name="PS_REWRITING_SETTINGS" id="PS_REWRITING_SETTINGS" value="1" '.(Configuration::get('PS_REWRITING_SETTINGS') ? 'checked="checked"' : '').' />
 				<p>'.$this->l('Enable only if your server allows URL rewriting.').'</p>
 			</div>
 			<div class="clear">&nbsp;</div>
-			<label for="imageCacheControl">'.$this->l('Disable apache multiviews').'</label>
+			<label for="PS_HTACCESS_DISABLE_MULTIVIEWS">'.$this->l('Disable apache multiviews').'</label>
 			<div class="margin-form">
-				<input type="checkbox" name="PS_HTACCESS_DISABLE_MULTIVIEWS" id="PS_HTACCESS_CACHE_CONTROL" value="1" '.(Configuration::get('PS_HTACCESS_DISABLE_MULTIVIEWS') == 1 ? 'checked="checked"' : '').' />
+				<input type="checkbox" name="PS_HTACCESS_DISABLE_MULTIVIEWS" id="PS_HTACCESS_DISABLE_MULTIVIEWS" value="1" '.(Configuration::get('PS_HTACCESS_DISABLE_MULTIVIEWS') == 1 ? 'checked="checked"' : '').' />
 				<p>'.$this->l('Enable this option only if you encounter problems with the redirection of certain URL pages.').'</p>
 			</div>
 			<div class="clear">&nbsp;</div>
 			<label for="specific_configuration">'.$this->l('Specific configuration').'</label>
 			<div class="margin-form">
-				<textarea rows="10" class="width3" id="specific_configuration" name="ps_htaccess_specific">'.Configuration::get('PS_HTACCESS_SPECIFIC').'</textarea>
+				<textarea rows="10" class="width3" id="specific_configuration" name="PS_HTACCESS_SPECIFIC">'.Configuration::get('PS_HTACCESS_SPECIFIC').'</textarea>
 				<p>'.$this->l('Add here the specific directives of your hosting provider (SetEnv PHP_VER 5, AddType x-mapp-php5 .php...).').'</p>
 			</div>
 			<p class="clear" style="font-weight:bold;">'.$this->l('Generate your ".htaccess" file by clicking on the following button:').' 
@@ -137,8 +137,8 @@ class AdminGenerator extends AdminTab
 				Configuration::updateValue('PS_HTACCESS_CACHE_CONTROL', (int)Tools::getValue('PS_HTACCESS_CACHE_CONTROL'));
 				Configuration::updateValue('PS_REWRITING_SETTINGS', (int)Tools::getValue('PS_REWRITING_SETTINGS'));
 				Configuration::updateValue('PS_HTACCESS_DISABLE_MULTIVIEWS', (int)Tools::getValue('PS_HTACCESS_DISABLE_MULTIVIEWS'));
-				Configuration::updateValue('PS_HTACCESS_SPECIFIC',  Tools::getValue('ps_htaccess_specific'), true);
-				if (Tools::generateHtaccess($this->_htFile, Configuration::get('PS_REWRITING_SETTINGS'), Configuration::get('PS_HTACCESS_CACHE_CONTROL'), Tools::getValue('ps_htaccess_specific'), Tools::getValue('PS_HTACCESS_DISABLE_MULTIVIEWS')))
+				Configuration::updateValue('PS_HTACCESS_SPECIFIC',  pSQL(Tools::getValue('PS_HTACCESS_SPECIFIC')), true);
+				if (Tools::generateHtaccess($this->_htFile, Configuration::get('PS_REWRITING_SETTINGS'), Configuration::get('PS_HTACCESS_CACHE_CONTROL'), Tools::getValue('PS_HTACCESS_SPECIFIC'), Tools::getValue('PS_HTACCESS_DISABLE_MULTIVIEWS')))
 					Tools::redirectAdmin($currentIndex.'&conf=4&token='.$this->token);
 				$this->_errors[] = $this->l('Cannot write to file:').' <b>'.$this->_htFile.'</b><br />'.$this->l('Please check write permissions.');
 			}
