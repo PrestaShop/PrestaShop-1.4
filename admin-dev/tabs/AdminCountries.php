@@ -80,12 +80,12 @@ class AdminCountries extends AdminTab
 		return parent::postProcess();
 	}
 	
-	public function afterAdd()
+	public function afterAdd($object)
 	{
 		return $this->registerAddressFormat();
 	}
 	
-	public function afterUpdate()
+	public function afterUpdate($object)
 	{
 		return $this->registerAddressFormat();		
 	}	
