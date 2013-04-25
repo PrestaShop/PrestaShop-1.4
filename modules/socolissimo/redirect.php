@@ -53,7 +53,6 @@ $onload_script = 'parent.$.fancybox.close();';
 if (Tools::isSubmit('first_call'))
 	$onload_script = 'document.getElementById(\'socoForm\').submit();';
 ?>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr">
 	<head>
