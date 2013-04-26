@@ -154,34 +154,37 @@ class AddressCore extends ObjectModel
 	
 	public function update($nullValues = false)
 	{
-		return parent::update($nullValues) && self::_cleanCart($this->id);
+		return parent::update($nullValues);
 	}
 	
-	protected static function _cleanCart($id_address)
+	public static function _cleanCart($new_address = null, $id_address_old, $id_customer = 0)
 	{
-		if ((int)$id_address)
-			return Db::getInstance()->Execute('
-			UPDATE `'._DB_PREFIX_.'cart` SET id_address_delivery = 0
-			WHERE id_address_delivery = '.(int)$id_address.' AND id_cart NOT IN (SELECT id_cart FROM '._DB_PREFIX_.'orders)') &&
-			Db::getInstance()->Execute('
-			UPDATE `'._DB_PREFIX_.'cart` SET id_address_invoice = 0
-			WHERE id_address_invoice = '.(int)$id_address.' AND id_cart NOT IN (SELECT id_cart FROM '._DB_PREFIX_.'orders)');
+		$validAddress = Validate::isLoadedObject($new_address);
+		$result = Db::getInstance()->Execute('
+		UPDATE `'._DB_PREFIX_.'cart` SET id_address_delivery = '.($validAddress ? (int)$new_address->id : '0').' 
+		WHERE id_address_delivery = '.(int)$id_address_old.' 
+		AND id_cart NOT IN (SELECT id_cart FROM '._DB_PREFIX_.'orders'.($id_customer ? ' WHERE id_customer = '.(int)$id_customer : '').')');
 
-		return false;
+		$result &= Db::getInstance()->Execute('
+		UPDATE `'._DB_PREFIX_.'cart` SET id_address_invoice = '.($validAddress ? (int)$new_address->id : '0').' 
+		WHERE id_address_invoice = '.(int)$id_address_old.' 
+		AND id_cart NOT IN (SELECT id_cart FROM '._DB_PREFIX_.'orders'.($id_customer ? ' WHERE id_customer = '.(int)$id_customer : '').')');
+		return $result;
 	}
 
 	public function delete()
 	{
 		if (Validate::isUnsignedId($this->id_customer))
 			Customer::resetAddressCache($this->id_customer);
-
+		$return &= self::_cleanCart(null, (int)$this->id, (int)$this->id_customer);
 		if (!$this->isUsed())
-			return parent::delete() && self::_cleanCart((int)$this->id);
+			$return = parent::delete();
 		else
 		{
 			$this->deleted = true;
-			return $this->update();
+			$return = $this->update();
 		}
+		return $return;
 	}
 
 	/**
