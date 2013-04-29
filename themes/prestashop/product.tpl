@@ -144,7 +144,7 @@ var fieldRequired = '{l s='Please fill in all required fields, then save your cu
 	<div id="pb-right-column">
 		<!-- product img-->
 		<div id="image-block">
-			<img id="bigpic" src="{if $have_image}{$link->getImageLink($product->link_rewrite, $cover.id_image, 'large')}{else}{$img_prod_dir}{$lang_iso}-default-large.jpg{/if}"{if $jqZoomEnabled && $have_image} class="jqzoom" alt="{$link->getImageLink($product->link_rewrite, $cover.id_image, 'thickbox')}"{else} alt="{$cover.legend|escape:'htmlall':'UTF-8'}"{/if} title="{$cover.legend|escape:'htmlall':'UTF-8'}" width="{$largeSize.width}" height="{$largeSize.height}"/>
+			<img src="{if $have_image}{$link->getImageLink($product->link_rewrite, $cover.id_image, 'large')}{else}{$img_prod_dir}{$lang_iso}-default-large.jpg{/if}"{if $jqZoomEnabled && $have_image} class="jqzoom"{/if} alt="{$cover.legend|escape:'htmlall':'UTF-8'}" title="{$cover.legend|escape:'htmlall':'UTF-8'}"  id="bigpic" width="{$largeSize.width}" height="{$largeSize.height}"/>
 		</div>
 		{if isset($images) && count($images) > 0}
 		<!-- thumbnails -->
