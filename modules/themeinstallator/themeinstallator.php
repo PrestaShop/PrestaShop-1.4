@@ -73,7 +73,7 @@ class ThemeInstallator extends Module
 		@ini_set('memory_limit', '2G');
 
 		$this->name = 'themeinstallator';
-		$this->version = '2.1';
+		$this->version = '2.4';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 		if (version_compare(_PS_VERSION_, 1.4) >= 0)
@@ -107,6 +107,14 @@ class ThemeInstallator extends Module
 
 			$this->action_form = $this->current_index.'&configure='.$this->name.'&token='.Tools::htmlentitiesUTF8(Tools::getValue('token'));
 		}
+	}
+	
+	public function install()
+	{
+		if ($this->id)
+			return true;
+		else
+			return parent::install();
 	}
 
 	/* Check status of backward compatibility module*/
@@ -403,18 +411,11 @@ class ThemeInstallator extends Module
 		if (Tools::isSubmit('submitExport') && $this->error === false && $this->checkPostedDatas() == true)
 		{
 			self::getThemeVariations();
-
-			// Check variations exists
-			if (empty($this->variations))
-				$this->_html .= parent::displayError($this->l('You must select at least one theme'));
-			else
-			{
-				self::getDocumentation();
-				self::getHookState();
-				self::getImageState();
-				self::generateXML();
-				self::generateArchive();
-			}
+			self::getDocumentation();
+			self::getHookState();
+			self::getImageState();
+			self::generateXML();
+			self::generateArchive();
 		}
 		self::authorInformationForm();
 		self::modulesInformationForm();
@@ -786,7 +787,7 @@ class ThemeInstallator extends Module
 					continue;
 
 				if ($variation != $theme_directory)
-					$theme_directory .= $variation;
+					$theme_directory = $variation;
 
 				if (empty($theme_directory))
 					$theme_directory = str_replace(' ', '', (string)$this->xml['name']);
@@ -919,30 +920,7 @@ class ThemeInstallator extends Module
 			<input type="submit" class="button" name="prevThemes" value="'.$this->l('Previous').'" />
 			<input type="submit" class="button" name="submitModules" value="'.$this->l('Next').'" />
 		</fieldset>
-		</form>
-		<script type="text/javascript">
-			$(document).ready(function() {
-					$.ajax({
-						type : "POST",
-						url : "'.str_replace('index', 'ajax-tab', $this->current_index).'",
-						data :	{
-							"theme_list" : '.Tools::jsonEncode(array((string)$this->xml->theme_key)).',
-							"controller" : "AdminModules",
-							"action" : "wsThemeCall",
-							"token" : "'.Tools::getAdminToken('AdminModules'.(int)Tab::getIdFromClassName('AdminModules').(int)$this->context->employee->id).'"
-						},
-						dataType: "json",
-						success: function(json)
-						{
-							//console.log(json);
-						},
-						error: function(xhr, ajaxOptions, thrownError)
-						{
-							//jAlert("TECHNICAL ERROR"+res);
-						}
-					});
-				});
-		</script>';
+		</form>';
 	}
 
 	private function displayForm2()
@@ -1204,7 +1182,8 @@ class ThemeInstallator extends Module
 			$zip->close();
 			if ($this->error === false)
 			{
-				ob_end_clean();
+				if (ob_get_length() > 0)
+					ob_end_clean();
 				header('Content-Type: multipart/x-zip');
 				header('Content-Disposition:attachment;filename="'.$zip_file_name.'"');
 				readfile(_EXPORT_FOLDER_.$zip_file_name);
@@ -1239,6 +1218,7 @@ class ThemeInstallator extends Module
 		}
 
 		$variations = $theme->addChild('variations');
+		if (count($this->variations))
 		foreach ($this->variations as $row)
 		{
 			$array = explode('¤', $row);
@@ -1441,6 +1421,7 @@ class ThemeInstallator extends Module
 	{
 		// @todo check theme variation pertinence
 		$count = 0;
+		$this->variations[] = Tools::getValue('theme_name').'¤'.Tools::getValue('theme_directory').'¤'.Tools::getValue('compa_from').'¤'.Tools::getValue('compa_to');
 		while (Tools::isSubmit('myvar_'.++$count))
 		{
 			if ((int)Tools::getValue('myvar_'.$count) == -1)
