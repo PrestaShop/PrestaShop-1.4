@@ -302,7 +302,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 	 * value = the next step you want instead
 	 *	example : public static $skipAction = array();
 	 *	initial order upgrade:
-	 *		download, unzip, removeSamples, backupFiles, backupDb, upgradeFiles, upgradeDb, upgradeModules, upgradeComplete
+	 *		download, unzip, removeSamples, backupFiles, backupDb, upgradeFiles, upgradeDb, upgradeModules, cleanDatabase, upgradeComplete
 	 * initial order rollback: rollback, restoreFiles, restoreDb, rollbackComplete
 	 */
 	public static $skipAction = array();
@@ -636,7 +636,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 		// test writable recursively
 		if(version_compare(_PS_VERSION_,'1.4.6.0','<') || !class_exists('ConfigurationTest', false))
 		{
-			require_once('classes/ConfigurationTest.php');
+			require_once(dirname(__FILE__).'/classes/ConfigurationTest.php');
 			if(!class_exists('ConfigurationTest', false) AND class_exists('ConfigurationTestCore'))
 				eval('class ConfigurationTest extends ConfigurationTestCore{}');
 		}
@@ -901,6 +901,40 @@ class AdminSelfUpgrade extends AdminSelfTab
 	 */
 	public function ajaxProcessUpgradeComplete()
 	{
+		if (version_compare($this->install_version, '1.5.4.0', '>='))
+		{
+			// Upgrade languages
+			if (!defined('_PS_TOOL_DIR_'))
+				define('_PS_TOOL_DIR_', _PS_ROOT_DIR_.'/tools/');
+			if (!defined('_PS_TRANSLATIONS_DIR_'))
+				define('_PS_TRANSLATIONS_DIR_', _PS_ROOT_DIR_.'/translations/');
+			if (!defined('_PS_MODULES_DIR_'))
+				define('_PS_MODULES_DIR_', _PS_ROOT_DIR_.'/modules/');
+			if (!defined('_PS_MAILS_DIR_'))
+				define('_PS_MAILS_DIR_', _PS_ROOT_DIR_.'/mails/');
+			$langs = Db::getInstance()->executeS('SELECT * FROM '._DB_PREFIX_.'lang WHERE active=1');
+			require_once(_PS_TOOL_DIR_.'tar/Archive_Tar.php');
+			foreach ($langs as $lang)
+			{
+				$lang_pack = Tools14::jsonDecode(Tools::file_get_contents('http://www.prestashop.com/download/lang_packs/get_language_pack.php?version='.$this->install_version.'&iso_lang='.$lang['iso_code']));
+				if (!$lang_pack)
+					continue;
+				elseif ($content = Tools14::file_get_contents('http://translations.prestashop.com/download/lang_packs/gzip/'.$lang_pack->version.'/'.$lang['iso_code'].'.gzip'))
+				{
+					$file = _PS_TRANSLATIONS_DIR_.$lang['iso_code'].'.gzip';
+					if ((bool)@file_put_contents($file, $content))
+					{
+						$gz = new Archive_Tar($file, true);
+						$files_list = $gz->listContent();
+						if (!$gz->extract(_PS_TRANSLATIONS_DIR_.'../', false))
+							continue;
+					}
+				}
+			}
+			// Remove class_index Autoload cache
+			@unlink(_PS_ROOT_DIR_.'/cache/class_index.php');
+		}
+		
 		if (!$this->warning_exists)
 			$this->next_desc = $this->l('Upgrade process done. Congratulations ! You can now reactive your shop.');
 		else
@@ -1042,7 +1076,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 	 */
 	public function resetConfig($new_config)
 	{
-		return file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->configFilename, serialize($new_config));
+		return (bool)@file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->configFilename, serialize($new_config));
 	}
 
 	/**
@@ -1061,7 +1095,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 		foreach($new_config as $key => $val)
 			$config[$key] = $val;
 		$this->next_desc = $this->l('Configuration successfully updated,').' <strong>'.$this->l('this page will now be reloaded and the module will check if a new version is available').'</strong>';
-		return file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->configFilename, serialize($config));
+		return (bool)@file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->configFilename, serialize($config));
 	}
 
 	/**
@@ -1244,7 +1278,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 		}
 		else
 		{
-			file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->diffFileList, serialize($diffFileList));
+			@file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->diffFileList, serialize($diffFileList));
 			if (count($diffFileList) > 0)
 				$this->nextParams['msg'] = sprintf($this->l('%1$s files will be modified, %2$s files will be deleted (if they are found).'),
 																	 count($diffFileList['modified']), count($diffFileList['deleted']));
@@ -1291,11 +1325,11 @@ class AdminSelfUpgrade extends AdminSelfTab
 
 			if (!isset($changedFileList['translation']))
 				$changedFileList['translation'] = array();
-			file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->tradCustomList,serialize($changedFileList['translation']));
+			@file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->tradCustomList,serialize($changedFileList['translation']));
 
 			if (!isset($changedFileList['mail']))
 				$changedFileList['mail'] = array();
-			file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->mailCustomList,serialize($changedFileList['mail']));
+			@file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->mailCustomList,serialize($changedFileList['mail']));
 
 
 			if ($changedFileList === false)
@@ -1572,7 +1606,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 			// also add files to remove
 			$list_files_to_upgrade = array_merge($list_files_diff, $list_files_to_upgrade);
 			// save in a serialized array in $this->toUpgradeFileList
-			file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toUpgradeFileList,serialize($list_files_to_upgrade));
+			@file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toUpgradeFileList,serialize($list_files_to_upgrade));
 			$this->nextParams['filesToUpgrade'] = $this->toUpgradeFileList;
 			$total_files_to_upgrade = count($list_files_to_upgrade);
 
@@ -1630,7 +1664,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 				break;
 			}
 		}
-		file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->nextParams['filesToUpgrade'], serialize($filesToUpgrade));
+		@file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->nextParams['filesToUpgrade'], serialize($filesToUpgrade));
 		if (count($filesToUpgrade) > 0)
 		{
 			$this->next_desc = sprintf($this->l('%1$s files left to upgrade.'), count($filesToUpgrade));
@@ -1690,10 +1724,11 @@ class AdminSelfUpgrade extends AdminSelfTab
 				if(is_array($this->modules_addons))
 					$id_addons = array_search($module_name, $this->modules_addons);
 				if (isset($id_addons) && $id_addons)
-					$list[] = array('id' => $id_addons, 'name' => $module_name);
+					if ($module_name != 'autoupgrade')
+						$list[] = array('id' => $id_addons, 'name' => $module_name);
 			}
 		}
-		file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toUpgradeModuleList,serialize($list));
+		@file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toUpgradeModuleList,serialize($list));
 		$this->nextParams['modulesToUpgrade'] = $this->toUpgradeModuleList;
 		return count($list);
 	}
@@ -1749,8 +1784,20 @@ class AdminSelfUpgrade extends AdminSelfTab
 			while (($time_elapsed < self::$loopUpgradeModulesTime) && count($listModules) > 0);
 
 			$modules_left = count($listModules);
-			file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toUpgradeModuleList, serialize($listModules));
+			@file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toUpgradeModuleList, serialize($listModules));
 			unset($listModules);
+			
+			//deactivate backward_compatibility, not used in 1.5.X			
+			if (version_compare($this->install_version, '1.5.0.0', '>='))
+			{
+				Db::getInstance()->execute('DELETE ms.*, hm.*
+				FROM `'._DB_PREFIX_.'module_shop` ms
+				INNER JOIN `'._DB_PREFIX_.'hook_module` hm USING (`id_module`)
+				INNER JOIN `'._DB_PREFIX_.'module` m USING (`id_module`)				
+				WHERE m.`name` LIKE \'backwardcompatibility\'');
+				Db::getInstance()->execute('UPDATE `'._DB_PREFIX_.'module` SET `active` = 0 WHERE `name` LIKE \'backwardcompatibility\'');
+				$res = $this->writeConfig(array('PS_AUTOUP_MANUAL_MODE' => '0'));				
+			}
 
 			$this->next = 'upgradeModules';
 			$this->next_desc = sprintf($this->l('%s modules left to upgrade'), $modules_left);
@@ -1799,12 +1846,12 @@ class AdminSelfUpgrade extends AdminSelfTab
 		foreach ($protocolsList as $protocol => $port)
 		{
 			// file_get_contents can return false if https is not supported (or warning)
-			$content = @file_get_contents($protocol.$addons_url, false, $context);
+			$content = @Tools14::file_get_contents($protocol.$addons_url, false, $context);
 			if ($content == false)
 				continue;
 			if ($content !== null)
 			{
-				if (file_put_contents($zip_fullpath, $content))
+				if ((bool)@file_put_contents($zip_fullpath, $content))
 				{
 					// unzip in modules/[mod name] old files will be conserved
 					if ($this->ZipExtract($zip_fullpath, $dest_extract))
@@ -2666,7 +2713,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 			$fromArchive = $this->_listArchivedFiles($this->backupPath.DIRECTORY_SEPARATOR.$this->restoreFilesFilename);
 			foreach($fromArchive as $k => $v)
 				$fromArchive[$k] = '/'.$v;
-			file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->fromArchiveFileList, serialize($fromArchive));
+			@file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->fromArchiveFileList, serialize($fromArchive));
 			// get list of files to remove
 			$toRemove = $this->_listFilesToRemove();
 			// let's reverse the array in order to make possible to rmdir
@@ -2676,7 +2723,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 				$toRemove[$k] = str_replace($this->prodRootDir, '', $v);
 
 			$this->nextQuickInfo[] = sprintf($this->l('%s file(s) will be removed before restoring backup files'), count($toRemove));
-			file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toRemoveFileList, serialize($toRemove));
+			@file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toRemoveFileList, serialize($toRemove));
 
 			if ($fromArchive === false || $toRemove === false)
 			{
@@ -2711,7 +2758,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 					$this->next = 'restoreFiles';
 					$this->next_desc = $this->l('Files from upgrade has been removed.');
 					$this->nextQuickInfo[] = $this->l('files from upgrade has been removed.');
-					file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toRemoveFileList, serialize($toRemove));
+					@file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toRemoveFileList, serialize($toRemove));
 					return true;
 				}
 				else
@@ -2745,7 +2792,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 						$this->nextQuickInfo[] = sprintf('[NOTICE] %s does not exists', $filename);
 				}
 			}
-			file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toRemoveFileList, serialize($toRemove));
+			@file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toRemoveFileList, serialize($toRemove));
 			$this->next_desc = sprintf($this->l('%s left to remove'), count($toRemove));
 			$this->next = 'restoreFiles';
 			return true;
@@ -2904,7 +2951,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 				unset($all_tables);
 				$listQuery = array_merge($drops, $listQuery);
 			}
-			file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toRestoreQueryList, serialize($listQuery));
+			@file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toRestoreQueryList, serialize($listQuery));
 		}
 
 		// handle current backup file
@@ -2971,7 +3018,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 			unset($query);
 			$queries_left = count($listQuery);
 
-			file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toRestoreQueryList, serialize($listQuery));
+			@file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toRestoreQueryList, serialize($listQuery));
 			unset($listQuery);
 			$this->next = 'restoreDb';
 			$this->next_desc = sprintf($this->l('%1$s queries left for file %2$s...'), $queries_left, $this->nextParams['dbStep']);
@@ -3040,7 +3087,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 				mkdir($this->backupPath.DIRECTORY_SEPARATOR.$this->backupName, 0755);
 			$this->nextParams['dbStep'] = 0;
 			$tablesToBackup = $this->db->executeS('SHOW TABLES LIKE "'._DB_PREFIX_.'%"', true, false);
-			file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toBackupDbList, serialize($tablesToBackup));
+			@file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toBackupDbList, serialize($tablesToBackup));
 		}
 
 		if (!isset($tablesToBackup))
@@ -3236,7 +3283,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 			fclose($fp);
 			unset($fp);
 		}
-		file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toBackupDbList, serialize($tablesToBackup));
+		@file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toBackupDbList, serialize($tablesToBackup));
 		if (count($tablesToBackup) > 0){
 			$this->nextQuickInfo[] = sprintf($this->l('%1$s tables has been saved.'), $found);
 			$this->next = 'backupDb';
@@ -3300,7 +3347,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 		{
 			// @todo : only add files and dir listed in "originalPrestashopVersion" list
 			$filesToBackup = $this->_listFilesInDir($this->prodRootDir, 'backup', false);
-			file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toBackupFileList, serialize($filesToBackup));
+			@file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toBackupFileList, serialize($filesToBackup));
 
 			$this->nextQuickInfo[] = sprintf($this->l('%s Files to backup.'), count($this->toBackupFileList));
 			$this->nextParams['filesForBackup'] = $this->toBackupFileList;
@@ -3388,7 +3435,7 @@ class AdminSelfUpgrade extends AdminSelfTab
 					}
 				}
 
-				file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toBackupFileList,serialize($filesToBackup));
+				@file_put_contents($this->autoupgradePath.DIRECTORY_SEPARATOR.$this->toBackupFileList,serialize($filesToBackup));
 				return true;
 			}
 			else{
@@ -3793,26 +3840,26 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 
 		// root : getRootWritable()
 
-		$this->_html .= '<th>'.$this->l('Your store root directory is writeable (appropriate CHMOD permissions)').'</th>
+		$this->_html .= '<th>'.$this->l('Your store root directory must be writeable (appropriate CHMOD permissions)').'</th>
 			<td>'.($current_ps_config['root_writable'] ? $pic_ok : $pic_nok.' '.$this->root_writable_report).'</td></tr>';
 
 		//check safe_mod
-		$this->_html .= '<th>'.$this->l('The PHP "Safe mode" option is turned off').'</th>
+		$this->_html .= '<th>'.$this->l('The PHP "Safe mode" option must be turned off').'</th>
 			<td>'.(!ini_get('safe_mode') ? $pic_ok : $pic_warn).'</td></tr>';
 
-		$this->_html .= '<th>'.$this->l('The PHP "allow_url_fopen" option is turned on or CURL is installed').'</th>
+		$this->_html .= '<th>'.$this->l('The PHP "allow_url_fopen" option must be turned on or CURL must be installed').'</th>
 			<td>'.((ConfigurationTest::test_fopen() || ConfigurationTest::test_curl()) ? $pic_ok : $pic_nok).'</td></tr>';
 
 		// shop enabled
-		$this->_html .= '<th>'.$this->l('You put your store under maintenance').' '.(!$current_ps_config['shop_deactivated'] ? '<br><form method="post" action="'.$currentIndex.'&token='.$this->token.'"><input type="submit" class="button" name="putUnderMaintenance" value="'.$this->l('Click here to put your shop under maintenance').'"></form>' : '').'</th>
+		$this->_html .= '<th>'.$this->l('You must put your store under maintenance').' '.(!$current_ps_config['shop_deactivated'] ? '<br><form method="post" action="'.$currentIndex.'&token='.$this->token.'"><input type="submit" class="button" name="putUnderMaintenance" value="'.$this->l('Click here to put your shop under maintenance').'"></form>' : '').'</th>
 			<td>'.($current_ps_config['shop_deactivated'] ? $pic_ok : $pic_nok).'</td></tr>';
 
-		$this->_html .= '<th>'.$this->l('You de-activated or are not using the Caching features of PrestaShop').'</th>
+		$this->_html .= '<th>'.$this->l('You must disable the Caching features of PrestaShop').'</th>
 			<td>'.($current_ps_config['cache_deactivated'] ? $pic_ok : $pic_nok).'</td></tr>';
 
 		// for informaiton, display time limit
 		$max_exec_time = ini_get('max_execution_time');
-		$this->_html .= '<th>'.sprintf($this->l('The PHP time limit is high or disabled (Current value: %s)'), ($max_exec_time == 0 ? $this->l('unlimited') : $max_exec_time.' '.$this->l('seconds'))).'</th>
+		$this->_html .= '<th>'.sprintf($this->l('The PHP time limit must be either high or disabled (Current value: %s)'), ($max_exec_time == 0 ? $this->l('unlimited') : $max_exec_time.' '.$this->l('seconds'))).'</th>
 			<td>'.($max_exec_time == 0 ? $pic_ok : $pic_warn).'</td></tr>
 				</table>
 				<p>'.$this->l('Please also make sure you proceeded to a full manual backup of your files and database.').'</p>
@@ -4003,6 +4050,7 @@ txtError[37] = "'.$this->l('The config/defines.inc.php file was not found. Where
 		$content .= '<a href="" id="upgradeFiles" class="button upgradestep" >upgradeFiles</a>';
 		$content .= '<a href="" id="upgradeDb" class="button upgradestep" >upgradeDb</a>';
 		$content .= '<a href="" id="upgradeModules" class="button upgradestep" >upgradeModules</a>';
+		$content .= '<a href="" id="cleanDatabase" class="button upgradestep" >cleanDb</a>';		
 		$content .= '<a href="" id="upgradeComplete" class="button upgradestep" >upgradeComplete</a>';
 		$content .= '</div>';
 
