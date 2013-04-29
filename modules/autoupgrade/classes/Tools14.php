@@ -1283,7 +1283,7 @@ class Tools14
 
 	public static function simplexml_load_file($url, $class_name = null)
 	{
-		return @simplexml_load_string(Tools14::file_get_contents($url), $class_name);
+		return @simplexml_load_string(self::file_get_contents($url), $class_name);
 	}
 
 	public static function minifyHTML($html_content)
