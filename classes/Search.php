@@ -99,6 +99,19 @@ class SearchCore
 		$string = html_entity_decode($string, ENT_NOQUOTES, 'utf-8');
 
 		$string = preg_replace('/(['.PREG_CLASS_NUMBERS.']+)['.PREG_CLASS_PUNCTUATION.']+(?=['.PREG_CLASS_NUMBERS.'])/u', '\1', $string);
+
+		$words = explode(' ', $string);
+		$processed_words = array();
+		foreach ($words as &$word)
+		{
+			$alias = new Alias(null, $word);
+			if (Validate::isLoadedObject($alias))
+			{
+				$word = $alias->search;
+				$processed_words[] = $word;
+			}
+		}
+
 		$string = preg_replace('/['.PREG_CLASS_SEARCH_EXCLUDE.']+/u', ' ', $string);
 
 		if ($indexation)
@@ -122,16 +135,17 @@ class SearchCore
 
 		if (!$indexation)
 		{
-			$words = explode(' ', $string);
-			$processed_words = array();
 			// search for aliases for each word of the query
 			foreach ($words as $word)
 			{
-				$alias = new Alias(null, $word);
-				if (Validate::isLoadedObject($alias))
-					$processed_words[] = $alias->search;
-				else
-					$processed_words[] = $word;
+				if (!in_array($word, $processed_words))
+				{
+					$alias = new Alias(null, $word);
+					if (Validate::isLoadedObject($alias))
+						$processed_words[] = $alias->search;
+					else
+						$processed_words[] = $word;
+				}
 			}
 			$string = implode(' ', $processed_words);
 		}
