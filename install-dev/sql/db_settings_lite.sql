@@ -1092,8 +1092,8 @@ INSERT INTO `PREFIX_meta_lang` (`id_meta`, `id_lang`, `title`, `description`, `k
 (25, 5, 'Ospite di monitoraggio', '', '', 'ospite-monitoraggio');
 
 /* Stats */
-INSERT INTO `PREFIX_operating_system` (`name`) VALUES ('Windows XP'),('Windows Vista'),('MacOsX'),('Linux');
-INSERT INTO `PREFIX_web_browser` (`name`) VALUES ('Safari'),('Firefox 2.x'),('Firefox 3.x'),('Opera'),('IE 6.x'),('IE 7.x'),('IE 8.x'),('Google Chrome');
+INSERT INTO `PREFIX_operating_system` (`name`) VALUES ('Windows XP'),('Windows Vista'),('Windows 7'),('Windows 8'),('MacOsX'),('Linux'),('Android');
+INSERT INTO `PREFIX_web_browser` (`name`) VALUES ('Safari'),('Safari iPad'),('Firefox'),('Opera'),('IE 6'),('IE 7'),('IE 8'),('IE 9'),('IE 10'),('Chrome');
 INSERT INTO `PREFIX_page_type` (`id_page_type`, `name`) VALUES
 (13, 'authentication.php'),(11, 'best-sales.php'),(2, 'category.php'),(7, 'cms.php'),(12, 'contact-form.php'),(5, 'index.php'),(4, 'manufacturer.php'),
 (3, 'order.php'),(10, 'prices-drop.php'),(1, 'product.php'),(8, 'search.php'),(14, 'sitemap.php'),(9, 'stores.php'),(6, 'supplier.php');
