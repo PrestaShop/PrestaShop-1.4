@@ -174,6 +174,7 @@ class OrderHistoryCore extends ObjectModel
 				}
 				$smarty->assign('virtualProducts', $assign);
 				$smarty->assign('id_order', $order->id);
+				$smarty->assign('order_name', $data['{order_name}']);				
 				$iso = Language::getIsoById((int)($order->id_lang));
 				$links = $smarty->fetch(_PS_MAIL_DIR_.$iso.'/download-product.tpl');
 				$tmpArray = array('{nbProducts}' => count($virtualProducts), '{virtualProducts}' => $links);

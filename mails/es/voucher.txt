@@ -1,6 +1,6 @@
 Hola {firstname} {lastname},
 
-Te informamos de la creación de un vale de descuento para ti como resultado de tu pedido #{id_order}.
+Te informamos de la creación de un vale de descuento para ti como resultado de tu pedido {order_name}.
 
 Aquí tienes tu código del vale:{voucher_num}, por la cantidad de:{voucher_amount}.
 

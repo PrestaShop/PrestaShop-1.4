@@ -1,6 +1,6 @@
 	Hi {firstname} {lastname},
 		
-	Your order #{id_order} history
+	Your order {order_name} history
 	
 	Payment for your order was successfully processed.
 

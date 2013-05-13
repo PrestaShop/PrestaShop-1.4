@@ -80,6 +80,7 @@ class OrderDetailControllerCore extends FrontController
 						'{firstname}' => $customer->firstname,
 						'{email}' => $customer->email,
 						'{id_order}' => (int)($message->id_order),
+						'{order_name}' => sprintf("#%06d", (int)($message->id_order)),
 						'{message}' => $message->message),
 						$to, $toName, $customer->email, $customer->firstname.' '.$customer->lastname);
 					if (Tools::getValue('ajax') != 'true')

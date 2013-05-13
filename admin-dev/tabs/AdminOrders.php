@@ -94,6 +94,7 @@ class AdminOrders extends AdminTab
 						'{followup}' => str_replace('@', $order->shipping_number, $carrier->url),
 						'{firstname}' => $customer->firstname,
 						'{lastname}' => $customer->lastname,
+						'{order_name}' => sprintf("#%06d", (int)($order->id)),
 						'{id_order}' => (int)($order->id)
 					);
 					@Mail::Send((int)$order->id_lang, 'in_transit', Mail::l('Package in transit', (int)$order->id_lang), $templateVars,
@@ -183,7 +184,7 @@ class AdminOrders extends AdminTab
 							$order = new Order((int)($message->id_order));
 							if (Validate::isLoadedObject($order))
 							{
-								$varsTpl = array('{lastname}' => $customer->lastname, '{firstname}' => $customer->firstname, '{id_order}' => $message->id_order, '{message}' => (Configuration::get('PS_MAIL_TYPE') == 2 ? $message->message : nl2br2($message->message)));
+								$varsTpl = array('{lastname}' => $customer->lastname, '{firstname}' => $customer->firstname, '{id_order}' => $message->id_order, '{order_name}' => sprintf("#%06d", (int)$message->id_order), '{message}' => (Configuration::get('PS_MAIL_TYPE') == 2 ? $message->message : nl2br2($message->message)));
 								if (@Mail::Send((int)($order->id_lang), 'order_merchant_comment',
 									Mail::l('New message regarding your order', (int)($order->id_lang)), $varsTpl, $customer->email,
 									$customer->firstname.' '.$customer->lastname, null, null, null, null, _PS_MAIL_DIR_, true))
@@ -335,6 +336,7 @@ class AdminOrders extends AdminTab
 						$params['{lastname}'] = $customer->lastname;
 						$params['{firstname}'] = $customer->firstname;
 						$params['{id_order}'] = $order->id;
+						$params['{order_name}'] = sprintf("#%06d", (int)($order->id));						
 					}
 
 					// Generate credit slip

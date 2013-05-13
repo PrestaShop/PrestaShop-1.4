@@ -1,6 +1,6 @@
 Hi {firstname} {lastname},
 
-Concerning your order #{id_order}:
+Concerning your order {order_name}:
 
 Your order has been cancelled.
 

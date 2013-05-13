@@ -1,6 +1,6 @@
 Hi {firstname} {lastname},
 
-There is a problem with your payment for order #{id_order}. Please contact us at your earliest convenience.
+There is a problem with your payment for order {order_name}. Please contact us at your earliest convenience.
 
 Your order will not be shipped until we have resolved this problem. 
 

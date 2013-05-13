@@ -1,6 +1,6 @@
 Hi {firstname} {lastname},
 
-This is to inform you about the creation of a voucher in your name as a result of your order #{id_order}.
+This is to inform you about the creation of a voucher in your name as a result of your order {order_name}.
 
 Here is the code of your voucher : {voucher_num}, to the amount of {voucher_amount}.
 
