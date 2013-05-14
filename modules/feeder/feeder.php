@@ -60,9 +60,10 @@ class Feeder extends Module
 		global $smarty, $cookie;
 		
 		$id_category = (int)(Tools::getValue('id_category'));
+		
 		if (!$id_category)
 		{
-			if (isset($_SERVER['HTTP_REFERER']) AND preg_match('!^(.*)\/([0-9]+)\-(.*[^\.])|(.*)id_category=([0-9]+)(.*)$!', $_SERVER['HTTP_REFERER'], $regs) AND !strstr($_SERVER['HTTP_REFERER'], '.html'))
+			if (isset($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'], Tools::getHttpHost()) && preg_match('!^(.*)\/([0-9]+)\-(.*[^\.])|(.*)id_category=([0-9]+)(.*)$!', $_SERVER['HTTP_REFERER'], $regs))
 			{
 				if (isset($regs[2]) AND is_numeric($regs[2]))
 					$id_category = (int)($regs[2]);
