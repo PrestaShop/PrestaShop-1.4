@@ -2182,11 +2182,11 @@ class AdminProducts extends AdminTab
 
 					});
 					if ($(\'#available_for_order\').is(\':checked\')){
-						$(\'#show_price\').attr(\'checked\', \'checked\');
-						$(\'#show_price\').attr(\'disabled\', \'disabled\');
+						$(\'#show_price\').prop(\'disabled\', \'disabled\');					
+						$(\'#show_price\').prop(\'checked\', \'checked\');
 					}
 					else {
-						$(\'#show_price\').attr(\'disabled\', \'\');
+						$(\'#show_price\').prop(\'disabled\', \'\');
 					}
 				});
 			</script>
@@ -2299,7 +2299,7 @@ class AdminProducts extends AdminTab
 					<tr id="product_options" '.(!$obj->active ? 'style="display:none"' : '').'>
 						<td style="vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Options:').'</td>
 						<td style="padding-bottom:5px;">
-							<input style="float: left;" type="checkbox" name="available_for_order" id="available_for_order" value="1" '.($this->getFieldValue($obj, 'available_for_order') ? 'checked="checked" ' : '').' onclick="if ($(this).is(\':checked\')){$(\'#show_price\').attr(\'checked\', \'checked\');$(\'#show_price\').attr(\'disabled\', \'disabled\');}else{$(\'#show_price\').attr(\'disabled\', \'\');}"/>
+							<input style="float: left;" type="checkbox" name="available_for_order" id="available_for_order" value="1" '.($this->getFieldValue($obj, 'available_for_order') ? 'checked="checked" ' : '').' onclick="if ($(this).is(\':checked\')){$(\'#show_price\').prop(\'checked\', \'checked\');$(\'#show_price\').prop(\'disabled\', \'disabled\');}else{$(\'#show_price\').prop(\'disabled\', \'\');}"/>
 							<label for="available_for_order" class="t"><img src="../img/admin/products.gif" alt="'.$this->l('available for order').'" title="'.$this->l('available for order').'" style="float:left; padding:0px 5px 0px 5px" />'.$this->l('available for order').'</label>
 							<br class="clear" />
 							<input style="float: left;" type="checkbox" name="show_price" id="show_price" value="1" '.($this->getFieldValue($obj, 'show_price') ? 'checked="checked" ' : '').' />
