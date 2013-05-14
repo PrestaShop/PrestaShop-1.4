@@ -106,7 +106,7 @@ class	CookieCore
 	  *
 	  * @param integer $expire Expiration time from now
 	  */
-	function setExpire($expire)
+	protected function setExpire($expire)
 	{
 		$this->_expire = (int)($expire);
 	}
@@ -230,7 +230,7 @@ class	CookieCore
 		$this->write();
 	}
 	
-	function makeNewLog()
+	protected function makeNewLog()
 	{
 		unset($this->_content['id_customer']);
 		unset($this->_content['id_guest']);
@@ -241,7 +241,7 @@ class	CookieCore
 	/**
 	  * Get cookie content
 	  */
-	function update($nullValues = false)
+	public function update($nullValues = false)
 	{
 		if (isset($_COOKIE[$this->_name]))
 		{
