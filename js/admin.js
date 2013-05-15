@@ -602,11 +602,11 @@ function selectCheckbox(obj)
 
 function toogleShippingCost(obj)
 {
-	generateDiscount = $(obj).parent().find('#generateDiscount').is(':checked');;
+	generateDiscount = $(obj).parent().find('#generateDiscount').is(':checked');
 	generateCreditSlip = $(obj).parent().find('#generateCreditSlip').is(':checked');
 	if (generateDiscount != true && generateCreditSlip != true)
 	{
-		$(obj).parent().find('#spanShippingBack input[type=checkbox]').attr("checked", false);
+		$(obj).parent().find('#spanShippingBack input[type=checkbox]').prop("checked", false);
 		$(obj).parent().find('#spanShippingBack').css('display', 'none');
 	}
 	else
