@@ -93,7 +93,7 @@ class AdminCategories extends AdminTab
 
 		$this->tabAccess = Profile::getProfileAccess($cookie->profile, $this->id);
 
-		if (Tools::isSubmit('submitAdd'.$this->table))
+		if ($this->tabAccess['add'] === '1' AND Tools::isSubmit('submitAdd'.$this->table))
 		{
 			if ($id_category = (int)(Tools::getValue('id_category')))
 			{

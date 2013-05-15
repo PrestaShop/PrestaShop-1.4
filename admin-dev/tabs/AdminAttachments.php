@@ -57,8 +57,9 @@ class AdminAttachments extends AdminTab
 			$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
 			return;
 		}
-		/* PrestaShop demo mode*/
-		if (Tools::isSubmit('submitAdd'.$this->table))
+		
+		$this->tabAccess = Profile::getProfileAccess($cookie->profile, $this->id);
+		if ($this->tabAccess['add'] === '1' AND Tools::isSubmit('submitAdd'.$this->table))
 		{
 			if ($id = (int)(Tools::getValue('id_attachment')) AND $a = new Attachment($id))
 			{
