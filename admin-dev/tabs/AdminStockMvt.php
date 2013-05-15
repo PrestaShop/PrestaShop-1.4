@@ -88,10 +88,10 @@ class AdminStockMvt extends AdminTab
 				<div class="clear space">&nbsp;</div>
 				<label>'.$this->l('Action:').'</label>
 				<div class="margin-form">
-					<select name="sign">
-						<option value="1">'.$this->l('Increase stock').'</option>
-						<option value="-1">'.$this->l('Decrease stock').'</option>
-					</select>
+				<select name="sign">
+					<option value="1"'.($obj->sign == 1 ? ' selected="selected"' : '').'>Increase stock</option>
+					<option value="-1"'.($obj->sign == -1 ? ' selected="selected"' : '').'>Decrease stock</option>
+				</select>
 				</div>
 				<div class="clear space">&nbsp;</div>';
 		echo 	'<div class="margin-form">
