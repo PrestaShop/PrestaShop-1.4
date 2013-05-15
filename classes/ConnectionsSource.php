@@ -31,6 +31,7 @@ class ConnectionsSourceCore extends ObjectModel
 	public $request_uri;
 	public $keywords;
 	public $date_add;
+	public static $uri_max_size = 255;
 
 	protected	$fieldsRequired = array('id_connections', 'date_add');
 	protected	$fieldsValidate = array('id_connections' => 'isUnsignedId', 'http_referer' => 'isAbsoluteUrl', 'request_uri' => 'isUrl', 'keywords' => 'isMessage');
@@ -74,7 +75,7 @@ class ConnectionsSourceCore extends ObjectModel
 				return false;
 			if (Validate::isAbsoluteUrl(strval($_SERVER['HTTP_REFERER'])))
 			{
-				$source->http_referer = strval($_SERVER['HTTP_REFERER']);
+				$source->http_referer = substr(strval($_SERVER['HTTP_REFERER']), 0, ConnectionsSource::$uri_max_size);
 				$source->keywords = trim(SearchEngine::getKeywords(strval($_SERVER['HTTP_REFERER'])));
 				if (!Validate::isMessage($source->keywords))
 					return false;
@@ -89,6 +90,7 @@ class ConnectionsSourceCore extends ObjectModel
 			$source->request_uri .= strval($_SERVER['REQUEST_URI']);
 		if (!Validate::isUrl($source->request_uri))
 			$source->request_uri = '';
+		$source->request_uri = substr($source->request_uri, 0, ConnectionsSource::$uri_max_size);			
 		return $source->add();
 	}
 	
