@@ -93,7 +93,10 @@ class StatsData extends Module
 
 	public function hookFooter($params)
 	{
+		global $link;	
 		$html = '';
+		$protocol_link = (_PS_SSL_ENABLED_ && Tools::usingSecureMode()) ? 'https://' : 'http://';
+		
 		if (!isset($params['cookie']->id_guest))
 		{
 			Guest::setNewGuest($params['cookie']);
@@ -123,13 +126,13 @@ class StatsData extends Module
 							navinfo.type = "navinfo";
 							navinfo.id_guest = "'.(int)$params['cookie']->id_guest.'";
 							navinfo.token = "'.$token.'";
-							$.post("'._PS_BASE_URL_.__PS_BASE_URI__.'statistics.php", navinfo);
+							$.post("'.$link->getPageLink('statistics.php', (bool)($protocol_link == 'https://')).'", navinfo);
 						}
 					);
 				</script>';
 			}
 		}
-		
+
 		// Record the guest path then increment the visit counter of the page
 		$tokenArray = Connection::setPageConnection($params['cookie']);
 		ConnectionsSource::logHttpReferer();
@@ -158,7 +161,7 @@ class StatsData extends Module
 						pagetime.time_start = "'.$tokenArray['time_start'].'";
 						pagetime.token = "'.$token.'";
 						pagetime.time = time_end-time_start;
-						$.post("'._PS_BASE_URL_.__PS_BASE_URI__.'statistics.php", pagetime);
+						$.post("'.$link->getPageLink('statistics.php', (bool)($protocol_link == 'https://')).'", pagetime);
 					}
 				);
 			</script>';
