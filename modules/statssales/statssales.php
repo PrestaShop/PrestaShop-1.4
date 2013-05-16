@@ -35,7 +35,7 @@ class StatsSales extends ModuleGraph
 	private $_option = '';
 	private $id_country = '';
 
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'statssales';
 		$this->tab = 'analytics_stats';

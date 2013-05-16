@@ -29,7 +29,7 @@ if (!defined('_PS_VERSION_'))
 
 class sendToAFriend extends Module
 {
-	function __construct($dontTranslate = false)
+	public function __construct($dontTranslate = false)
 	{
 		$this->name = 'sendtoafriend';
 		$this->version = '1.1';
@@ -46,12 +46,12 @@ class sendToAFriend extends Module
 		}
 	}
 
-	function install()
+	public function install()
 	{
 		return (parent::install() AND $this->registerHook('extraLeft'));
 	}
 
-	function hookExtraLeft($params)
+	public function hookExtraLeft($params)
 	{
 		global $smarty;
 		$smarty->assign('this_path', $this->_path);

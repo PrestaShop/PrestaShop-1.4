@@ -33,7 +33,7 @@ class StatsSearch extends ModuleGraph
 	private $_query = '';
 	private $_query2 = '';
 
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'statssearch';
 		$this->tab = 'analytics_stats';
@@ -56,7 +56,7 @@ class StatsSearch extends ModuleGraph
 		$this->description = $this->l('Display which keywords have been searched by your visitors.');
 	}
 
-	function install()
+	public function install()
 	{
 		if (!parent::install() OR !$this->registerHook('search') OR !$this->registerHook('AdminStatsModules'))
 			return false;
@@ -77,12 +77,12 @@ class StatsSearch extends ModuleGraph
 		return (Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'statssearch`'));
     }
 	
-	function hookSearch($params)
+	public function hookSearch($params)
 	{
 		Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'statssearch` (`keywords`,`results`,`date_add`) VALUES (\''.pSQL($params['expr']).'\', '.(int)($params['total']).', \''.date('Y-m-d H:i:s').'\')');
 	}
 	
-	function hookAdminStatsModules()
+	public function hookAdminStatsModules()
 	{
 		if (Tools::getValue('export'))
 			$this->csvExport(array('type' => 'pie'));

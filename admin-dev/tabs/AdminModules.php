@@ -350,7 +350,7 @@ class AdminModules extends AdminTab
 		}
 	}
 
-	function extractArchive($file)
+	public function extractArchive($file)
 	{
 		global $currentIndex;
 		$success = false;

@@ -210,7 +210,7 @@ class AdminCMS extends AdminTab
 		$this->displayListFooter($token);
 	}
 
-	function postProcess()
+	public function postProcess()
 	{
 		global $cookie, $link, $currentIndex;
 		
@@ -328,5 +328,3 @@ class AdminCMS extends AdminTab
 			parent::postProcess(true);
 	}
 }
-
-

@@ -91,7 +91,7 @@ class GuestCore extends ObjectModel
 		return $fields;
 	}
 	
-	function userAgent()
+	public function userAgent()
 	{
 		$userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '';
 		$acceptLanguage = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : '';

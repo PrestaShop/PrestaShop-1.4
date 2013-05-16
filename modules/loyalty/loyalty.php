@@ -36,7 +36,7 @@ if (!defined('_PS_VERSION_'))
 	
 class Loyalty extends Module
 {
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'loyalty';
 		$this->tab = 'pricing_promotion';
@@ -63,7 +63,7 @@ class Loyalty extends Module
 		$this->loyaltyStateNoneAward = new LoyaltyStateModule(LoyaltyStateModule::getNoneAwardId());
 	}
 
-	function install()
+	public function install()
 	{
 		include_once(dirname(__FILE__).'/LoyaltyStateModule.php');
 		
@@ -95,7 +95,7 @@ class Loyalty extends Module
 		return true;
 	}
 
-	function installDB()
+	public function installDB()
 	{
 		Db::getInstance()->Execute('
 		CREATE TABLE `'._DB_PREFIX_.'loyalty` (
@@ -145,7 +145,7 @@ class Loyalty extends Module
 		return true;
 	}
 	
-	function uninstall()
+	public function uninstall()
 	{
 		if (!parent::uninstall() OR !$this->uninstallDB() OR !Configuration::deleteByName('PS_LOYALTY_POINT_VALUE')	OR !Configuration::deleteByName('PS_LOYALTY_POINT_RATE')
 		OR !Configuration::deleteByName('PS_LOYALTY_NONE_AWARD') OR !Configuration::deleteByName('PS_LOYALTY_MINIMAL') OR !Configuration::deleteByName('PS_LOYALTY_VOUCHER_CATEGORY')
@@ -154,7 +154,7 @@ class Loyalty extends Module
 		return true;
 	}
 
-	function uninstallDB()
+	public function uninstallDB()
 	{
 		Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'loyalty`;');
 		Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'loyalty_state`;');

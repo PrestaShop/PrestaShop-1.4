@@ -53,7 +53,7 @@ class CustomerMessageCore extends ObjectModel
 			),
 	);
 	
-	public	function getFields()
+	public function getFields()
 	{
 	 	parent::validateFields();
 		$fields['id_customer_thread'] = (int)($this->id_customer_thread);

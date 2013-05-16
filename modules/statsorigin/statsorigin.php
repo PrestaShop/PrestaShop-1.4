@@ -31,7 +31,7 @@ class StatsOrigin extends ModuleGraph
 {
 	private $_html;
 	
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'statsorigin';
 		$this->tab = 'analytics_stats';
@@ -45,7 +45,7 @@ class StatsOrigin extends ModuleGraph
 		$this->description = $this->l('Display the websites your visitors come from.');
 	}
 
-	function install()
+	public function install()
 	{
 		return (parent::install() AND $this->registerHook('AdminStatsModules'));
 	}
@@ -75,7 +75,7 @@ class StatsOrigin extends ModuleGraph
 		return $websites;
 	}
 
-	function hookAdminStatsModules()
+	public function hookAdminStatsModules()
 	{
 		$websites = $this->getOrigins(ModuleGraph::getDateBetween());
 		if (Tools::getValue('export'))

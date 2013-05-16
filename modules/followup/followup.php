@@ -29,7 +29,7 @@ if (!defined('_PS_VERSION_'))
 
 class Followup extends Module
 {
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'followup';
 		$this->tab = 'advertising_marketing';

@@ -177,7 +177,7 @@ class ToolsCore
 	 *
 	 * @return string server name
 	 */
-	static function getServerName()
+	public static function getServerName()
 	{
 		if (isset($_SERVER['HTTP_X_FORWARDED_SERVER']) && $_SERVER['HTTP_X_FORWARDED_SERVER'])
 			return $_SERVER['HTTP_X_FORWARDED_SERVER'];
@@ -189,7 +189,7 @@ class ToolsCore
 	 *
 	 * @return string $remote_addr ip of client
 	 */
-	static function getRemoteAddr()
+	public static function getRemoteAddr()
 	{
 		// This condition is necessary when using CDN, don't remove it.
 		if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR'] &&
@@ -1143,7 +1143,7 @@ class ToolsCore
 		return time() + microtime();
 	}
 
-	static function strtolower($str)
+	public static function strtolower($str)
 	{
 		if (is_array($str))
 			return false;
@@ -1152,7 +1152,7 @@ class ToolsCore
 		return strtolower($str);
 	}
 
-	static function strlen($str, $encoding = 'UTF-8')
+	public static function strlen($str, $encoding = 'UTF-8')
 	{
 		if (is_array($str))
 			return false;
@@ -1162,14 +1162,14 @@ class ToolsCore
 		return strlen($str);
 	}
 
-	static function stripslashes($string)
+	public static function stripslashes($string)
 	{
 		if (_PS_MAGIC_QUOTES_GPC_)
 			$string = stripslashes($string);
 		return $string;
 	}
 
-	static function strtoupper($str)
+	public static function strtoupper($str)
 	{
 		if (is_array($str))
 			return false;
@@ -1178,7 +1178,7 @@ class ToolsCore
 		return strtoupper($str);
 	}
 
-	static function substr($str, $start, $length = false, $encoding = 'utf-8')
+	public static function substr($str, $start, $length = false, $encoding = 'utf-8')
 	{
 		if (is_array($str))
 			return false;
@@ -1187,7 +1187,7 @@ class ToolsCore
 		return substr($str, $start, ($length === false ? self::strlen($str) : (int)($length)));
 	}
 
-	static function ucfirst($str)
+	public static function ucfirst($str)
 	{
 		return self::strtoupper(self::substr($str, 0, 1)).self::substr($str, 1);
 	}

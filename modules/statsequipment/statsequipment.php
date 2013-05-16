@@ -33,7 +33,7 @@ class StatsEquipment extends ModuleGraph
 	private $_query = '';
 	private $_query2 = '';
 
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'statsequipment';
 		$this->tab = 'analytics_stats';

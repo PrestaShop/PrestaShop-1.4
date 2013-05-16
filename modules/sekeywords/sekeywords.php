@@ -33,7 +33,7 @@ class SEKeywords extends ModuleGraph
 	private $_query = '';
 	private $_query2 = '';
 
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'sekeywords';
 		$this->tab = 'analytics_stats';
@@ -58,7 +58,7 @@ class SEKeywords extends ModuleGraph
 		$this->description = $this->l('Display which keywords have led visitors to your website.');
 	}
 
-	function install()
+	public function install()
 	{
 		if (!parent::install() || !$this->registerHook('top') || !$this->registerHook('AdminStatsModules'))
 			return false;
@@ -80,7 +80,7 @@ class SEKeywords extends ModuleGraph
 		return (Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'sekeyword`'));
     }
 	
-	function hookTop($params)
+	public function hookTop($params)
 	{
 		if (!isset($_SERVER['HTTP_REFERER']) || strstr($_SERVER['HTTP_REFERER'], Tools::getHttpHost(false, false)))
 			return;
@@ -91,7 +91,7 @@ class SEKeywords extends ModuleGraph
 			VALUES (\''.pSQL(Tools::strtolower(trim($keywords))).'\', NOW())');
 	}
 	
-	function hookAdminStatsModules()
+	public function hookAdminStatsModules()
 	{
 		if (Tools::isSubmit('submitSEK'))
 		{
@@ -144,7 +144,7 @@ class SEKeywords extends ModuleGraph
 		return $this->_html;
 	}
 	
-	function getKeywords($url)
+	public function getKeywords($url)
 	{
 		if (!Validate::isAbsoluteUrl($url))
 			return false;

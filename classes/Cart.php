@@ -809,7 +809,7 @@ class CartCore extends ObjectModel
 	 * @param integer $id_customization
 	 * @return boolean result
 	 */
-	protected	function _deleteCustomization($id_customization, $id_product, $id_product_attribute)
+	protected function _deleteCustomization($id_customization, $id_product, $id_product_attribute)
 	{
 		$result = true;
 		$customization = Db::getInstance()->getRow('SELECT *
@@ -1279,7 +1279,7 @@ class CartCore extends ObjectModel
 	*
 	* @return mixed Return a string if an error occurred and false otherwise
 	*/
-	function checkDiscountValidity($discountObj, $discounts, $order_total, $products, $checkCartDiscount = false)
+	public function checkDiscountValidity($discountObj, $discounts, $order_total, $products, $checkCartDiscount = false)
 	{
 		global $cookie;
 
@@ -1379,7 +1379,7 @@ class CartCore extends ObjectModel
 	*
 	* @return array Cart details
 	*/
-	function getSummaryDetails()
+	public function getSummaryDetails()
 	{
 		global $cookie;
 
@@ -1445,7 +1445,7 @@ class CartCore extends ObjectModel
 	* @return array Carts
 	* @deprecated
 	*/
-	static function getNonOrderedCarts($dateFrom, $dateTo)
+	public static function getNonOrderedCarts($dateFrom, $dateTo)
 	{
 		Tools::displayAsDeprecated();
 		if (!Validate::isDate($dateFrom) OR !Validate::isDate($dateTo))

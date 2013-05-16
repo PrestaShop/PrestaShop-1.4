@@ -1666,7 +1666,7 @@ class AdminProducts extends AdminTab
 		}
 	}
 
-	function displayFormPrices($obj, $languages, $defaultLanguage)
+	public function displayFormPrices($obj, $languages, $defaultLanguage)
 	{
 		global $cookie, $currentIndex;
 
@@ -1971,7 +1971,7 @@ class AdminProducts extends AdminTab
 				$this->_displayLabelField($label, $languages, $defaultLanguage, $type, $fieldIds, (int)($id_customization_field));
 	}
 
-	function displayFormCustomization($obj, $languages, $defaultLanguage)
+	public function displayFormCustomization($obj, $languages, $defaultLanguage)
 	{
 		parent::displayForm();
 		$labels = $obj->getCustomizationFields();
@@ -2045,7 +2045,7 @@ class AdminProducts extends AdminTab
 			</table>';
 	}
 
-	function displayFormAttachments($obj, $languages, $defaultLanguage)
+	public function displayFormAttachments($obj, $languages, $defaultLanguage)
 	{
 		global $currentIndex, $cookie;
 		if (!($obj = $this->loadObject(true)))
@@ -2116,7 +2116,7 @@ class AdminProducts extends AdminTab
 		<input type="submit" name="submitAttachments" id="submitAttachments" value="'.$this->l('Update attachments').'" class="button" />';
 	}
 
-	function displayFormInformations($obj, $currency)
+	public function displayFormInformations($obj, $currency)
 	{
 		parent::displayForm(false);
 		global $currentIndex, $cookie, $link;
@@ -3014,7 +3014,7 @@ class AdminProducts extends AdminTab
 
 	}
 
-	function displayFormImages($obj, $token = NULL)
+	public function displayFormImages($obj, $token = NULL)
 	{
 		global $cookie, $currentIndex, $attributeJs, $images;
 
@@ -3204,7 +3204,7 @@ class AdminProducts extends AdminTab
 		return $content;
 	}
 
-	function displayFormAttributes($obj, $languages, $defaultLanguage)
+	public function displayFormAttributes($obj, $languages, $defaultLanguage)
 	{
 		global $currentIndex, $cookie;
 
@@ -3533,7 +3533,7 @@ class AdminProducts extends AdminTab
 					echo '<b>'.$this->l('You must save this product before adding combinations').'.</b>';
 	}
 
-	function displayFormFeatures($obj)
+	public function displayFormFeatures($obj)
 	{
 		global $cookie, $currentIndex;
 		parent::displayForm();

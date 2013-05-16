@@ -32,7 +32,7 @@ class StatsRegistrations extends ModuleGraph
 	private $_html = '';
 	private $_query = '';
 
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'statsregistrations';
 		$this->tab = 'analytics_stats';

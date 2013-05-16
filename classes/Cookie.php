@@ -24,7 +24,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-class	CookieCore
+class CookieCore
 {
 	/** @var array Contain cookie content in a key => value format */
 	protected $_content;

@@ -32,7 +32,7 @@ class StatsGeoLocation extends Module
 	private $_map_path = 'img/map.png';
 	private $_cross_path = 'img/cross.png';
 
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'statsgeolocation';
 		$this->tab = 'analytics_stats';
@@ -46,7 +46,7 @@ class StatsGeoLocation extends Module
 		$this->description = $this->l('Display your customers\' origin');
 	}
 
-	function install()
+	public function install()
 	{
 		$countries = array('AT' => array('x' => 294, 'y' => 68),
 					'AU' => array('x' => 534, 'y' => 228),
@@ -111,14 +111,14 @@ class StatsGeoLocation extends Module
 		return Db::getInstance()->Execute($query.';');
 	}
 	
-	function uninstall()
+	public function uninstall()
 	{
 		if (!parent::uninstall())
 			return false;
 		return (Db::getInstance()->Execute('DROP TABLE `'._DB_PREFIX_.'location_coords`'));
 	}
 
-	function hookAdminStatsModules()
+	public function hookAdminStatsModules()
 	{
 		$this->_html = '
 		<fieldset class="width3"><legend><img src="'.$this->_path.'logo.gif" alt="" title="" /> '.$this->displayName.'</legend>

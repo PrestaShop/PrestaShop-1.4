@@ -24,7 +24,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-class	LoggerCore extends ObjectModel
+class LoggerCore extends ObjectModel
 {
 	/** @var integer Log id */
 	public		$id_log;

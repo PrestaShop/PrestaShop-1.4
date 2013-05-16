@@ -32,7 +32,7 @@ class BlockSpecials extends Module
 	private $_html = '';
 	private $_postErrors = array();
 
-    	function __construct()
+	public function __construct()
 	{
 		$this->name = 'blockspecials';
 		$this->tab = 'pricing_promotion';

@@ -37,7 +37,7 @@ class StatsBestVouchers extends ModuleGrid
 	private $_emptyMessage;
 	private $_pagingMessage;
 	
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'statsbestvouchers';
 		$this->tab = 'analytics_stats';

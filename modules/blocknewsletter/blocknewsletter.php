@@ -202,12 +202,12 @@ class Blocknewsletter extends Module
 		return false;
 	}
 
-	function hookRightColumn($params)
+	public function hookRightColumn($params)
 	{
 		return $this->hookLeftColumn($params);
 	}
  	
- 	function hookLeftColumn($params)
+ 	public function hookLeftColumn($params)
  	{
 		global $smarty;
 
@@ -247,7 +247,7 @@ class Blocknewsletter extends Module
 		return $this->hookLeftColumn($params);
 	}
 	
-	function hookHeader($params)
+	public function hookHeader($params)
 	{
 		Tools::addCSS(($this->_path).'blocknewsletter.css', 'all');
 	}

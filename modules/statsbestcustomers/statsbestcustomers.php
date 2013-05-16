@@ -37,7 +37,7 @@ class StatsBestCustomers extends ModuleGrid
 	private $_emptyMessage;
 	private $_pagingMessage;
 	
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'statsbestcustomers';
 		$this->tab = 'analytics_stats';

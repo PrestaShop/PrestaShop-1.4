@@ -32,7 +32,7 @@ class GridHtml extends ModuleGridEngine
 	private $_values;
 	private static $_columns;
 
-	function __construct($type = null)
+	public function __construct($type = null)
 	{
 		if ($type != null)
 			parent::__construct($type);
@@ -51,7 +51,7 @@ class GridHtml extends ModuleGridEngine
 		}
 	}
 	
-	function install()
+	public function install()
 	{
 		return (parent::install() AND $this->registerHook('GridEngine'));
 	}

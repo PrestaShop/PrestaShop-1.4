@@ -377,7 +377,7 @@ class AdminCarriers extends AdminTab
 	}
 
 
-	function changeZones($id)
+	public function changeZones($id)
 	{
 		$carrier = new $this->className($id);
 		if (!Validate::isLoadedObject($carrier))

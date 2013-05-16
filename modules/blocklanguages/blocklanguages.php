@@ -29,7 +29,7 @@ if (!defined('_PS_VERSION_'))
 
 class BlockLanguages extends Module
 {
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'blocklanguages';
 		$this->tab = 'front_office_features';
@@ -43,7 +43,7 @@ class BlockLanguages extends Module
 		$this->description = $this->l('Adds a block for selecting a language.');
 	}
 
-	function install()
+	public function install()
 	{
 		return (parent::install() AND $this->registerHook('top') AND $this->registerHook('header'));
 	}
@@ -54,7 +54,7 @@ class BlockLanguages extends Module
 	* @param array $params Parameters
 	* @return string Content
 	*/
-	function hookTop($params)
+	public function hookTop($params)
 	{
 		global $smarty;
 		
@@ -100,7 +100,7 @@ class BlockLanguages extends Module
 		return $this->display(__FILE__, 'blocklanguages.tpl');
 	}
 	
-	function hookHeader($params)
+	public function hookHeader($params)
 	{
 		Tools::addCSS($this->_path.'blocklanguages.css', 'all');
 	}

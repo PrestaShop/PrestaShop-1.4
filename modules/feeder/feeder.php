@@ -46,7 +46,7 @@ class Feeder extends Module
 		$this->description = $this->l('Generate a RSS products feed');
 	}
 	
-	function install()
+	public function install()
 	{
 		if (!parent::install())
 			return false;
@@ -55,7 +55,7 @@ class Feeder extends Module
 		return true;
 	}
 	
-	function hookHeader($params)
+	public function hookHeader($params)
 	{
 		global $smarty, $cookie;
 		

@@ -57,7 +57,7 @@ class	ConfigurationTestCore
 		return !get_magic_quotes_gpc();
 	}
 
-	static	function test_upload()
+	static function test_upload()
 	{
 		return  ini_get('file_uploads');
 	}

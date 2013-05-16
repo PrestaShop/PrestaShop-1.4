@@ -613,7 +613,7 @@ class CloudCache extends Module
 	/******************************************************************/
 	/** Tools methods *************************************************/
 	/******************************************************************/
-	function getCurrentURL($htmlEntities = false)
+	public function getCurrentURL($htmlEntities = false)
 	{
 		$url = $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
 		return (!empty($_SERVER['HTTPS']) ? 'https' : 'http').

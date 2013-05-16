@@ -118,7 +118,7 @@ class AdminGenerator extends AdminTab
 		return is_writable(dirname($file));
 	}
 
-	function postProcess()
+	public function postProcess()
 	{
 		global $currentIndex;
 		

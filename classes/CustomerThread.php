@@ -59,7 +59,7 @@ class CustomerThreadCore extends ObjectModel
 			),
 	);
 	
-	public	function getFields()
+	public function getFields()
 	{
 	 	parent::validateFields();
 		$fields['id_lang'] = (int)($this->id_lang);

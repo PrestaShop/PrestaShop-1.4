@@ -33,24 +33,24 @@ class PDF_PageGroupCore extends FPDF
 	var $CurrPageGroup;  // variable containing the alias of the current page group
 
 	// create a new page group; call this before calling AddPage()
-	function StartPageGroup()
+	public function StartPageGroup()
 	{
 		$this->NewPageGroup=true;
 	}
 
 	// current page in the group
-	function GroupPageNo()
+	public function GroupPageNo()
 	{
 		return $this->PageGroups[$this->CurrPageGroup];
 	}
 
 	// alias of the current page group -- will be replaced by the total number of pages in this group
-	function PageGroupAlias()
+	public function PageGroupAlias()
 	{
 		return $this->CurrPageGroup;
 	}
 
-	function _beginpage($orientation, $arg2)
+	public function _beginpage($orientation, $arg2)
 	{
 		parent::_beginpage($orientation, $arg2);
 		if ($this->NewPageGroup)
@@ -66,7 +66,7 @@ class PDF_PageGroupCore extends FPDF
 			$this->PageGroups[$this->CurrPageGroup]++;
 	}
 
-	function _putpages()
+	public function _putpages()
 	{
 		$nb = $this->page;
 		if (!empty($this->PageGroups))
