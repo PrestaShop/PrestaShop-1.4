@@ -326,7 +326,7 @@ function add_attr()
 		return alert('Please choose an attribute');
 	
 	if (attr_group.val() in storeUsedGroups)
-		return alert('You can only add one type of group per combination');
+		return alert('You can select only one attribute from each group, per combination');
 
 	storeUsedGroups[attr_group.val()] = true;
 	$('<option></option>')
