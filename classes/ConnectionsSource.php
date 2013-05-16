@@ -76,7 +76,7 @@ class ConnectionsSourceCore extends ObjectModel
 			if (Validate::isAbsoluteUrl(strval($_SERVER['HTTP_REFERER'])))
 			{
 				$source->http_referer = substr(strval($_SERVER['HTTP_REFERER']), 0, ConnectionsSource::$uri_max_size);
-				$source->keywords = trim(SearchEngine::getKeywords($source->http_referer));
+				$source->keywords = substr(trim(SearchEngine::getKeywords(strval($_SERVER['HTTP_REFERER']))), 0, ConnectionsSource::$uri_max_size);
 				if (!Validate::isMessage($source->keywords))
 					return false;
 			}
