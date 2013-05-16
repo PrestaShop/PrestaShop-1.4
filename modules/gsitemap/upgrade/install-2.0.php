@@ -1,4 +1,5 @@
 <?php
+
 /*
 * 2007-2013 PrestaShop
 *
@@ -20,45 +21,29 @@
 *
 *  @author PrestaShop SA <contact@prestashop.com>
 *  @copyright  2007-2013 PrestaShop SA
+*  @version  Release: $Revision: 14390 $
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-class PackageTnt
+if (!defined('_PS_VERSION_'))
+	exit;
+
+function upgrade_module_2_0($object, $install = false)
 {
-	private $_idOrder;
-	private $_order;
-	
-	public	function __construct($id_order)
+	if ($object->active || $install)
 	{
-		$this->_idOrder = $id_order;
-		$this->_order = new Order((int)($this->_idOrder));
+		Configuration::updateValue('GSITEMAP_PRIORITY_HOME', 1.0);
+		Configuration::updateValue('GSITEMAP_PRIORITY_PRODUCT', 0.9);
+		Configuration::updateValue('GSITEMAP_PRIORITY_CATEGORY', 0.8);
+		Configuration::updateValue('GSITEMAP_PRIORITY_MANUFACTURER', 0.7);
+		Configuration::updateValue('GSITEMAP_PRIORITY_SUPPLIER', 0.6);
+		Configuration::updateValue('GSITEMAP_PRIORITY_CMS', 0.5);
+		Configuration::updateValue('GSITEMAP_FREQUENCY', 'weekly');
+		Configuration::updateValue('GSITEMAP_LAST_EXPORT', false);
+
+		return Db::getInstance()->Execute('CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'gsitemap_sitemap` (`link` varchar(255) DEFAULT NULL) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8;');
 	}
-	
-	public function setShippingNumber($number)
-	{
-		if ($this->_order->shipping_number == '')
-		{
-			$this->_order->shipping_number = $number;
-			$this->_order->update();
-		}
-		$this->insertSql($number);	
-	}
-	
-	public function getShippingNumber()
-	{
-		$tab = Db::getInstance()->ExecuteS('SELECT `shipping_number` FROM `'._DB_PREFIX_.'tnt_carrier_shipping_number` WHERE `id_order` = "'.(int)($this->_idOrder).'"');
-		return ($tab);
-	}
-	
-	public function insertSql($number)
-	{
-		Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'tnt_carrier_shipping_number` (`id_order`, `shipping_number`) 
-			VALUES ("'.(int)($this->_idOrder).'", "'.pSQL($number).'")');
-	}
-	
-	public function getOrder()
-	{
-		return ($this->_order);
-	}
+	$object->upgrade_detail['2.0'][] = 'GSitemap upgrade error !';
+	return false;
 }

@@ -1,4 +1,5 @@
-{*
+<?php
+/*
 * 2007-2013 PrestaShop
 *
 * NOTICE OF LICENSE
@@ -21,17 +22,14 @@
 *  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
-*}
-
-<br/>
-<fieldset style="width:400px">
-  <legend><img src="../img/admin/delivery.gif" />{l s='Shipping information'}</legend>
-  <form action="{$var.currentIndex}&view{$var.table}&token={$var.token}" method="post" style="margin-top:10px;">
-{l s='Your package must be over 0.1 KG and' mod='tntcarrier'} {$weight} {l s='KG' mod='tntcarrier'}<br/><br/>
-{foreach from=$productWeight item=product}
-{$product.name} {l s='Weight (KG)' mod='tntcarrier'}: <input type="text" name="product_weight_{$product.id}"/><br/>
-{/foreach}
-<br/>
-<input type="submit" value="{l s='Modify' mod='tntcarrier'}" class="button" />
-  </form>
-</fieldset>
+*/
+				    	
+header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+						
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+						
+header("Location: ../");
+exit;
