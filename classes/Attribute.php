@@ -88,6 +88,8 @@ class AttributeCore extends ObjectModel
 			if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product_attribute` IN ('.implode(', ', $combinationIds).')') === false)
 				return false;
 		}
+		if(!$this->deleteImage())
+			return false;		
 		$return = parent::delete();
 		if ($return)
 			Module::hookExec('afterDeleteAttribute', array('id_attribute' => $this->id));
