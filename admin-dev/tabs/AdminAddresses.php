@@ -237,9 +237,9 @@ class AdminAddresses extends AdminTab
 				$manufacturers = Manufacturer::getManufacturers();
 				echo '<select name="id_manufacturer">';
 				if (!sizeof($manufacturers))
-					echo '<option value="0">'.$this->l('No manufacturer available').'&nbsp</option>';
+					echo '<option value="0">'.$this->l('No manufacturer available').'&nbsp;</option>';
 				foreach ($manufacturers as $manufacturer)
-					echo '<option value="'.(int)($manufacturer['id_manufacturer']).'"'.($this->getFieldValue($obj, 'id_manufacturer') == $manufacturer['id_manufacturer'] ? ' selected="selected"' : '').'>'.$manufacturer['name'].'&nbsp</option>';
+					echo '<option value="'.(int)($manufacturer['id_manufacturer']).'"'.($this->getFieldValue($obj, 'id_manufacturer') == $manufacturer['id_manufacturer'] ? ' selected="selected"' : '').'>'.$manufacturer['name'].'&nbsp;</option>';
 				echo	'</select>';
 				echo '</div>';
 				echo '<input type="hidden" name="alias" value="manufacturer">';
