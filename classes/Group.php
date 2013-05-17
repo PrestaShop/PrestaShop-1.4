@@ -161,6 +161,8 @@ class GroupCore extends ObjectModel
 			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_group` WHERE `id_group` = '.(int)$this->id);
 			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'group_reduction` WHERE `id_group` = '.(int)$this->id);
 			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_group_reduction_cache` WHERE `id_group` = '.(int)$this->id);
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'module_group` WHERE `id_group` = '.(int)$this->id);
+			Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'carrier_group` WHERE `id_group` = '.(int)$this->id);
 			
 			// Add default group (id 1) to customers without groups
 			Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'customer_group` (
