@@ -24,7 +24,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-class	ConfigurationTestCore
+class ConfigurationTestCore
 {
 	static function check($tests)
 	{
@@ -57,7 +57,7 @@ class	ConfigurationTestCore
 		return !get_magic_quotes_gpc();
 	}
 
-	static function test_upload()
+	static	function test_upload()
 	{
 		return  ini_get('file_uploads');
 	}
