@@ -161,7 +161,7 @@ class MetaCore extends ObjectModel
 			$result &= $this->delete();
 		}
 		
-		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
+		return $result && Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 									(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
 									(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
 									Configuration::get('PS_HTACCESS_SPECIFIC'),
