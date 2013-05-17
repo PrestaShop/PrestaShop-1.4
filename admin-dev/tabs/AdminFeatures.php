@@ -140,7 +140,7 @@ class AdminFeatures extends AdminTab
 
 		echo '
 		<h2>'.$this->l('Add a new feature').'</h2>
-		<form action="'.$currentIndex.'&token='.$this->token.'"" method="post">
+		<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset class="width2">
 				<legend><img src="../img/t/AdminFeatures.gif" />'.$this->l('Add a new feature').'</legend>

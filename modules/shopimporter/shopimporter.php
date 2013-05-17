@@ -325,7 +325,7 @@ class shopimporter extends ImportModule
 				<fieldset><legend><img src="'.$this->_path.'logo.gif" alt="" />'.$this->l('Import from another system').'</legend>
 				<div class="warn" ><img src="../img/admin/warn2.png">
 					'.$this->l('Before starting the import please backup your database. ').'
-						<a href="index.php?tab=AdminBackup&token='.Tools::getAdminToken('AdminBackup'.intval(Tab::getIdFromClassName('AdminBackup')).intval($cookie->id_employee)).'"">'.$this->l(' Click here to backup').'</a>
+						<a href="index.php?tab=AdminBackup&token='.Tools::getAdminToken('AdminBackup'.intval(Tab::getIdFromClassName('AdminBackup')).intval($cookie->id_employee)).'">'.$this->l(' Click here to backup').'</a>
 				</div>
 				<br>
 				<div style="float:right;width:450px" id="steps"></div>';
