@@ -64,7 +64,7 @@ class Followup extends Module
 		`date_add` DATETIME NOT NULL,
 		 INDEX `date_add`(`date_add`),
 		 INDEX `id_cart`(`id_cart`)
-		) ENGINE='._MYSQL_ENGINE_);
+		) ENGINE='._MYSQL_ENGINE_.' default CHARSET=utf8');
 		
 		foreach ($this->confKeys AS $key)
 			Configuration::updateValue($key, 0);
@@ -506,4 +506,3 @@ class Followup extends Module
 		}
 	}
 }
-
