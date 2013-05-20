@@ -33,24 +33,24 @@ class PDF_PageGroupCore extends FPDF
 	var $CurrPageGroup;  // variable containing the alias of the current page group
 
 	// create a new page group; call this before calling AddPage()
-	public function StartPageGroup()
+	function StartPageGroup()
 	{
 		$this->NewPageGroup=true;
 	}
 
 	// current page in the group
-	public function GroupPageNo()
+	function GroupPageNo()
 	{
 		return $this->PageGroups[$this->CurrPageGroup];
 	}
 
 	// alias of the current page group -- will be replaced by the total number of pages in this group
-	public function PageGroupAlias()
+	function PageGroupAlias()
 	{
 		return $this->CurrPageGroup;
 	}
 
-	public function _beginpage($orientation, $arg2)
+	function _beginpage($orientation, $arg2)
 	{
 		parent::_beginpage($orientation, $arg2);
 		if ($this->NewPageGroup)
@@ -66,7 +66,7 @@ class PDF_PageGroupCore extends FPDF
 			$this->PageGroups[$this->CurrPageGroup]++;
 	}
 
-	public function _putpages()
+	function _putpages()
 	{
 		$nb = $this->page;
 		if (!empty($this->PageGroups))
@@ -468,8 +468,9 @@ class PDFCore extends PDF_PageGroupCore
 		$products = OrderReturn::getOrdersReturnProducts(self::$orderReturn->id, self::$order);
 		foreach ($products as $product)
 		{
+			$product['product_name'] = str_replace(array('&cent;', '&pound;', '&yen;', '&euro;'), array(chr(162), chr(163), chr(165), chr(128)), Tools::iconv('utf-8', self::encoding(), $product['product_name']));
 			$before = $this->GetY();
-			$this->MultiCell($w[0], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']), 'B');
+			$this->MultiCell($w[0], 5, $product['product_name'], 'B');
 			$lineSize = $this->GetY() - $before;
 			$this->SetXY($this->GetX() + $w[0], $this->GetY() - $lineSize);
 			$this->Cell($w[1], $lineSize, ($product['product_reference'] != '' ? Tools::iconv('utf-8', self::encoding(), $product['product_reference']) : '---'), 'B');
@@ -930,6 +931,8 @@ class PDFCore extends PDF_PageGroupCore
 					$final_price = &$total_with_tax;
 				// End Spec
 
+				$product['product_name'] = str_replace(array('&cent;', '&pound;', '&yen;', '&euro;'), array(chr(162), chr(163), chr(165), chr(128)), Tools::iconv('utf-8', self::encoding(), $product['product_name']));
+					
 				if (isset($customizedDatas[$product['product_id']][$product['product_attribute_id']]))
 				{
 					$custoLabel = '';
@@ -959,7 +962,7 @@ class PDFCore extends PDF_PageGroupCore
 					if ($delivery)
 						$this->SetX(25);
 					$before = $this->GetY();
-					$this->MultiCell($w[++$i], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']).' - '.self::l('Customized')." \n".Tools::iconv('utf-8', self::encoding(), $custoLabel), 'B');
+					$this->MultiCell($w[++$i], 5, $product['product_name'].' - '.self::l('Customized')." \n".Tools::iconv('utf-8', self::encoding(), $custoLabel), 'B');
 					$lineSize = $this->GetY() - $before;
 					$this->SetXY($this->GetX() + $w[0] + ($delivery ? 15 : 0), $this->GetY() - $lineSize);
 					$this->Cell($w[++$i], $lineSize, $product['product_reference'], 'B');
@@ -977,8 +980,8 @@ class PDFCore extends PDF_PageGroupCore
 					$this->SetX(25);
 				if ($productQuantity)
 				{
-					$before = $this->GetY();
-					$this->MultiCell($w[++$i], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']), 'B');
+					$before = $this->GetY();					
+					$this->MultiCell($w[++$i], 5, $product['product_name'], 'B');
 					$lineSize = $this->GetY() - $before;
 					$this->SetXY($this->GetX() + $w[0] + ($delivery ? 15 : 0), $this->GetY() - $lineSize);
 					$this->Cell($w[++$i], $lineSize, ($product['product_reference'] ? Tools::iconv('utf-8', self::encoding(), $product['product_reference']) : '--'), 'B');
@@ -1311,4 +1314,3 @@ class PDFCore extends PDF_PageGroupCore
  	}
 
 }
-
