@@ -115,7 +115,12 @@ function deletProductFromSummary(id)
 				updateHookShoppingCart(jsonData.HOOK_SHOPPING_CART);
 				updateHookShoppingCartExtra(jsonData.HOOK_SHOPPING_CART_EXTRA);
 				if (jsonData.carriers != null)
-					updateCarrierList(jsonData);
+				{
+					if (typeof(orderProcess) != 'undefined')					
+						updateCarrierSelectionAndGift();
+					else				
+						updateCarrierList(jsonData);
+				}
     		}
        	},
        error: function(XMLHttpRequest, textStatus, errorThrown)
