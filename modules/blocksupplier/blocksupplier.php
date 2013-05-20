@@ -90,7 +90,7 @@ class BlockSupplier extends Module
 		return $output.$this->displayForm();
 	}
 	
-	public public function displayForm()
+	public function displayForm()
 	{
 		$output = '
 		<form action="'.Tools::safeOutput($_SERVER['REQUEST_URI']).'" method="post">
