@@ -30,3 +30,5 @@ INSERT INTO `PREFIX_operating_system` (`id_operating_system` , `name`) VALUES (N
 
 ALTER TABLE `PREFIX_webservice_account` CHANGE `class_name` `class_name` VARCHAR(64) NOT NULL DEFAULT 'WebserviceRequest',
 CHANGE `module_name` `module_name` VARCHAR(64) NULL DEFAULT NULL;
+
+/* PHP:p1411_add_missing_columns(); */;
