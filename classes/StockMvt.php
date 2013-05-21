@@ -108,7 +108,7 @@ class StockMvtCore extends ObjectModel
 		LEFT JOIN `'._DB_PREFIX_.'stock_mvt` sm ON (sm.`id_product` = p.`id_product` and sm.id_product_attribute = coalesce (pa.id_product_attribute,0))
 		WHERE p.`active` = 1
 		GROUP BY p.`id_product`, pa.`id_product_attribute`
-		HAVING quantity > 0', false);
+		HAVING quantity != 0', false);
 
 		while ($product = Db::getInstance()->nextRow($products_attributes))
 		{
