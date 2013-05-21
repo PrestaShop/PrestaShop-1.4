@@ -1523,7 +1523,6 @@ CREATE TABLE `PREFIX_stock_mvt_reason` (
   PRIMARY KEY  (`id_stock_mvt_reason`)
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
 
-
 CREATE TABLE `PREFIX_stock_mvt_reason_lang` (
   `id_stock_mvt_reason` int(10) NOT NULL,
   `id_lang` int(10) NOT NULL,
@@ -1678,4 +1677,3 @@ CREATE TABLE `PREFIX_address_format` (
   `format` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id_country`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
-
