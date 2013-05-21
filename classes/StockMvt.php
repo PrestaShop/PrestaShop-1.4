@@ -101,34 +101,25 @@ class StockMvtCore extends ObjectModel
 	
 	public static function addMissingMvt($id_employee)
 	{
-		$products_without_attributes = Db::getInstance()->ExecuteS('
-		SELECT p.`id_product`, pa.`id_product_attribute`, (p.`quantity` - SUM(IFNULL(sm.`quantity`, 0))) quantity
-		FROM `'._DB_PREFIX_.'product` p
-		LEFT JOIN `'._DB_PREFIX_.'stock_mvt` sm ON (sm.`id_product` = p.`id_product`)
-		LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pa.`id_product` = p.`id_product`)
-		WHERE pa.`id_product_attribute` IS NULL
-		GROUP BY p.`id_product`');
-		
-		$products_with_attributes = Db::getInstance()->ExecuteS('
-		SELECT p.`id_product`, pa.`id_product_attribute`, (pa.`quantity` - SUM(IFNULL(sm.`quantity`, 0))) quantity
+		$products_attributes = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
+		SELECT p.`id_product`, coalesce(pa.`id_product_attribute`, 0) as id_product_attribute, (coalesce(pa.quantity,p.quantity) - SUM(coalesce(sm.`quantity`, 0))) as quantity
 		FROM `'._DB_PREFIX_.'product` p
 		LEFT JOIN `'._DB_PREFIX_.'product_attribute` pa ON (pa.`id_product` = p.`id_product`)
-		LEFT JOIN `'._DB_PREFIX_.'stock_mvt` sm ON (sm.`id_product` = pa.`id_product` AND sm.`id_product_attribute` = pa.`id_product_attribute`)
-		WHERE pa.`id_product_attribute` IS NOT NULL
-		GROUP BY pa.`id_product_attribute`');
+		LEFT JOIN `'._DB_PREFIX_.'stock_mvt` sm ON (sm.`id_product` = p.`id_product` and sm.id_product_attribute = coalesce (pa.id_product_attribute,0))
+		WHERE p.`active` = 1
+		GROUP BY p.`id_product`, pa.`id_product_attribute`
+		HAVING quantity > 0', false);
 
-		$products = array_merge($products_without_attributes, $products_with_attributes);
-		if ($products)
-			foreach ($products as $product)
-			{
-				if (!$product['quantity'])
-					continue;
-				$mvt = new StockMvt();
-				foreach ($product as $k => $row)
-					$mvt->{$k} = $row;
-				$mvt->id_employee = (int)$id_employee;
-				$mvt->id_stock_mvt_reason = _STOCK_MOVEMENT_MISSING_REASON_;
-				$mvt->add(true, false, false);
-			}
-	}	
+		while ($product = Db::getInstance()->nextRow($products_attributes))
+		{
+			if (!isset($product) || !is_array($product) || !isset($product['quantity'])  || !$product['quantity'])
+				continue;
+			$mvt = new StockMvt();
+			foreach ($product as $k => $row)
+				$mvt->{$k} = $row;
+			$mvt->id_employee = (int)$id_employee;
+			$mvt->id_stock_mvt_reason = _STOCK_MOVEMENT_MISSING_REASON_;
+			$mvt->add(true, false, false);
+		}
+	}
 }
