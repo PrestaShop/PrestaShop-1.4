@@ -176,13 +176,13 @@ class AddressCore extends ObjectModel
 	{
 		if (Validate::isUnsignedId($this->id_customer))
 			Customer::resetAddressCache($this->id_customer);
-		$return &= self::_cleanCart(null, (int)$this->id, (int)$this->id_customer);
+		$return = self::_cleanCart(null, (int)$this->id, (int)$this->id_customer);
 		if (!$this->isUsed())
-			$return = parent::delete();
+			$return &= parent::delete();
 		else
 		{
 			$this->deleted = true;
-			$return = $this->update();
+			$return &= $this->update();
 		}
 		return $return;
 	}
