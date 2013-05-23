@@ -171,15 +171,14 @@
 		</div>
 	</div>
 	{/if}
-	{if $conditions AND $cms_id}
-	<h3 class="condition_title">{l s='Terms of service'}</h3>
-	<p class="checkbox">
-		<input type="checkbox" name="cgv" id="cgv" value="1" {if $checkedTOS}checked="checked"{/if} />
-		<label for="cgv">{l s='I agree to the terms of service and adhere to them unconditionally.'}</label> <a href="{$link_conditions}" class="iframe">{l s='(read)'}</a>
-	</p><br /><script type="text/javascript">$('a.iframe').fancybox();</script>
-	{/if}
 {/if}
-
+{if $conditions AND $cms_id}
+<h3 class="condition_title">{l s='Terms of service'}</h3>
+<p class="checkbox">
+	<input type="checkbox" name="cgv" id="cgv" value="1" {if $checkedTOS}checked="checked"{/if} />
+	<label for="cgv">{l s='I agree to the terms of service and adhere to them unconditionally.'}</label> <a href="{$link_conditions}" class="iframe">{l s='(read)'}</a>
+</p><br /><script type="text/javascript">$('a.iframe').fancybox();</script>
+{/if}
 {if !$opc}
 	<p class="cart_navigation submit">
 		<input type="hidden" name="step" value="3" />
