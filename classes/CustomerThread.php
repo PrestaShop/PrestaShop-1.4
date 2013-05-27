@@ -79,8 +79,26 @@ class CustomerThreadCore extends ObjectModel
 	{
 		if (!Validate::isUnsignedId($this->id))
 			return false;
-		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'customer_message` WHERE `id_customer_thread` = '.(int)($this->id));
-		return (parent::delete());
+ 		
+		$return = true;			
+		$result = Db::getInstance()->execute('
+			SELECT `id_customer_message` FROM `'._DB_PREFIX_.'customer_message`
+			WHERE `id_customer_thread` = '.(int)$this->id
+		);
+
+		if( count($result) )
+		{
+			foreach ($result AS $res)
+			{
+			    $message = new CustomerMessage((int)$res['id_customer_message']);
+			    if (!Validate::isLoadedObject($message))
+					$return = false;
+			    else
+			        $return &= $message->delete();
+			}
+		}
+		$return &= parent::delete();
+		return $return;
 	}
 	
 	public static function getCustomerMessages($id_customer)
@@ -91,4 +109,3 @@ class CustomerThreadCore extends ObjectModel
 		WHERE id_customer = '.(int)($id_customer));
 	}
 }
-
