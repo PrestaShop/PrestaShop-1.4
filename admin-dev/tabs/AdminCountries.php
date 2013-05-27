@@ -74,9 +74,13 @@ class AdminCountries extends AdminTab
 				if (!is_null($id_country) && $id_country != Tools::getValue('id_'.$this->table))
 					$this->_errors[] = Tools::displayError('This ISO code already exists, you cannot create two country with the same ISO code');
 			}
+			
+			if (Tools::isSubmit('standardization'))
+				Configuration::updateValue('_PS_TAASC_', (bool)Tools::getValue('standardization', false));
+			
 			if (isset($this->_errors) && count($this->_errors))
 				return false;
-		}
+		}						
 		return parent::postProcess();
 	}
 	
@@ -249,7 +253,7 @@ class AdminCountries extends AdminTab
 				</div>
 				<label>'.$this->l('ISO code:').' </label>
 				<div class="margin-form">
-					<input type="text" size="4" maxlength="3" name="iso_code" value="'.htmlentities($this->getFieldValue($obj, 'iso_code'), ENT_COMPAT, 'UTF-8').'" style="text-transform: uppercase;" /> <sup>*</sup>
+					<input type="text" size="4" maxlength="3" name="iso_code" id="iso_code" value="'.htmlentities($this->getFieldValue($obj, 'iso_code'), ENT_COMPAT, 'UTF-8').'" style="text-transform: uppercase;" onchange="disableTAASC();" /> <sup>*</sup>
 					<p>'.$this->l('2- or 3-letter ISO code, e.g., FR for France').'. <a href="http://www.iso.org/iso/en/prods-services/iso3166ma/02iso-3166-code-lists/list-en1.html" target="_blank">'.$this->l('Official list here').'</a>.</p>
 				</div>
 				<label>'.$this->l('Call prefix:').' </label>
@@ -313,8 +317,18 @@ class AdminCountries extends AdminTab
 							$this->l('Empty all').'</a>
 						<div style="margin-top:10px; padding-top:5px; height:10px;" id="explanationText"></div>
 					</div>
-				</div>
-				<label>'.$this->l('Status:').' </label>
+				</div>';
+				
+				$standardization = Configuration::get('_PS_TAASC_');
+				if ($this->getFieldValue($obj, 'iso_code') == 'US')								
+					echo '<div id="TAASC" style="display: none;"><label>'.$this->l('Address Standardization:').' </label>
+					<div class="margin-form">
+						<input type="radio" name="standardization" id="standardization_on" value="1" '.($standardization ? 'checked="checked" ' : '').'/>
+						<label class="t" for="standardization_on"> <img src="../img/admin/enabled.gif" alt="" title="'.$this->l('Enabled').'" /></label>
+						<input type="radio" name="standardization" id="standardization_off" value="0" '.(!$standardization ? 'checked="checked" ' : '').'/>
+						<label class="t" for="standardization_off"> <img src="../img/admin/disabled.gif" alt="" title="'.$this->l('Disabled').'" /></label>
+					</div></div>';
+				echo '<label>'.$this->l('Status:').' </label>
 				<div class="margin-form">
 					<input type="radio" name="active" id="active_on" value="1" '.((!$obj->id OR $this->getFieldValue($obj, 'active')) ? 'checked="checked" ' : '').'/>
 					<label class="t" for="active_on"> <img src="../img/admin/enabled.gif" alt="" title="'.$this->l('Enabled').'" /></label>
@@ -350,7 +364,6 @@ class AdminCountries extends AdminTab
 				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
 			</fieldset>
 		</form>
-		<script type="text/javascript">disableZipFormat();</script>';
+		<script type="text/javascript">disableZipFormat(); disableTAASC();</script>';
 	}
 }
-
