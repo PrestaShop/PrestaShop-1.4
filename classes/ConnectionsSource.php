@@ -65,7 +65,7 @@ class ConnectionsSourceCore extends ObjectModel
 			return false;
 		
 		// If the referrer is not correct, we drop the connection
-		if (isset($_SERVER['HTTP_REFERER']) && !Validate::isAbsoluteUrl($_SERVER['HTTP_REFERER']))
+		if (isset($_SERVER['HTTP_REFERER']) AND !Validate::isAbsoluteUrl($_SERVER['HTTP_REFERER']))
 			return false;
 		// If there is no referrer and we do not want to save direct traffic (as opposed to referral traffic), we drop the connection
 		if (!isset($_SERVER['HTTP_REFERER']) AND !Configuration::get('TRACKING_DIRECT_TRAFFIC'))
@@ -83,10 +83,10 @@ class ConnectionsSourceCore extends ObjectModel
 				return false;
 
 			$source->http_referer = substr($_SERVER['HTTP_REFERER'], 0, ConnectionsSource::$uri_max_size);
-			$source->keywords = substr(trim(SearchEngine::getKeywords(strval($_SERVER['HTTP_REFERER']))), 0, ConnectionsSource::$uri_max_size);
+			$source->keywords = substr(trim(SearchEngine::getKeywords($_SERVER['HTTP_REFERER'])), 0, ConnectionsSource::$uri_max_size);
 		}
 		
-		$source->id_connections = (int)($cookie->id_connections);
+		$source->id_connections = (int)$cookie->id_connections;
 		$source->request_uri = Tools::getHttpHost(false, false);
 		if (isset($_SERVER['REDIRECT_URL']))
 			$source->request_uri .= $_SERVER['REDIRECT_URL'];
