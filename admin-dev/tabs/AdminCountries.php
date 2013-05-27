@@ -76,7 +76,7 @@ class AdminCountries extends AdminTab
 			}
 			
 			if (Tools::isSubmit('standardization'))
-				Configuration::updateValue('_PS_TAASC_', (bool)Tools::getValue('standardization', false));
+				Configuration::updateValue('PS_TAASC', (bool)Tools::getValue('standardization', false));
 			
 			if (isset($this->_errors) && count($this->_errors))
 				return false;
@@ -319,7 +319,7 @@ class AdminCountries extends AdminTab
 					</div>
 				</div>';
 				
-				$standardization = Configuration::get('_PS_TAASC_');
+				$standardization = Configuration::get('PS_TAASC');
 				if ($this->getFieldValue($obj, 'iso_code') == 'US')								
 					echo '<div id="TAASC" style="display: none;"><label>'.$this->l('Address Standardization:').' </label>
 					<div class="margin-form">

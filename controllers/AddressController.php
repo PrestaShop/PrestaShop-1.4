@@ -92,7 +92,7 @@ class AddressControllerCore extends FrontController
 				die(Tools::displayError());
 
 			/* US customer: normalize the address */
-			if ($address->id_country == Country::getByIso('US') && Configuration::get('_PS_TAASC_'))
+			if ($address->id_country == Country::getByIso('US') && Configuration::get('PS_TAASC'))
 			{
 				include_once(_PS_TAASC_PATH_.'AddressStandardizationSolution.php');
 				$normalize = new AddressStandardizationSolution;
