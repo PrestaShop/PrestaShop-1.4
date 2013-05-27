@@ -80,7 +80,7 @@ class AdminCountries extends AdminTab
 			
 			if (isset($this->_errors) && count($this->_errors))
 				return false;
-		}						
+		}
 		return parent::postProcess();
 	}
 	
