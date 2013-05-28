@@ -3479,11 +3479,16 @@ class ProductCore extends ObjectModel
 	 * @return boolean
 	 */
 	protected function isDeletable()
-	{
-		return !(bool)Db::getInstance()->getValue('
-		SELECT COUNT(*)
+	{	
+		$sql = 'SELECT COUNT(*)
 		FROM `'._DB_PREFIX_.'order_detail` od
 		LEFT JOIN `'._DB_PREFIX_.'orders` o	ON (o.`id_order` = od.`id_order`)
-		WHERE `valid` = 0 AND `product_id` = '.(int)$this->id);
+		LEFT JOIN `'._DB_PREFIX_.'order_history` oh	ON (o.`id_order` = oh.`id_order`)		
+		WHERE `product_id` = '.(int)$this->id.' 
+		AND (oh.id_order_history IN (SELECT MAX(id_order_history) 
+			FROM `'._DB_PREFIX_.'order_history`						
+			HAVING id_order_state NOT IN ('.(int)_PS_OS_CANCELED_.', '.(int)_PS_OS_REFUND_.') AND `valid` = 0 
+			ORDER BY id_order_history DESC))';					
+		return (!(bool)Db::getInstance()->getValue($sql));					
 	}
 }

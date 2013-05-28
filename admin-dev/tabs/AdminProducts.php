@@ -420,7 +420,7 @@ class AdminProducts extends AdminTab
 
 							Tools::redirectAdmin($currentIndex.'&conf=2&token='.$token.$category_url);
 						}
-						$this->_errors[] = Tools::displayError('An error occurred while deleting selection.');
+						$this->_errors[] = Tools::displayError('An error occurred while deleting selection. A product contained in an order.');
 					}
 				}
 				else
