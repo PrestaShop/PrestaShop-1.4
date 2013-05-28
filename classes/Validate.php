@@ -1089,7 +1089,7 @@ class ValidateCore
 	*/
 	public static function isLangIsoCode($iso_code)
 	{
-		return (bool)self::isLanguageIsoCode();
+		return (bool)self::isLanguageIsoCode($iso_code);
 	}
 	
 	/**
