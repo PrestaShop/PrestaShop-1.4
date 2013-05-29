@@ -130,17 +130,21 @@ if (isset($_GET['ajaxDiscountCustomers']))
 	if (Validate::isBool_Id($filter))
 		$filterArray = explode('_', $filter);
 
-	$customers = Db::getInstance()->ExecuteS('
-	SELECT `id_customer`, `email`, CONCAT(`lastname`, \' \', `firstname`) as name
-	FROM `'._DB_PREFIX_.'customer`
-	WHERE `deleted` = 0 AND is_guest = 0
-	AND '.(Validate::isUnsignedInt($filter) ? '`id_customer` = '.(int)($filter) : '(`email` LIKE "%'.pSQL($filter).'%"
-	'.((Validate::isBool_Id($filter) AND $filterArray[0] == 0) ? 'OR `id_customer` = '.(int)($filterArray[1]) : '').'
-	'.(Validate::isUnsignedInt($filter) ? '`id_customer` = '.(int)($filter) : '').'
-	OR CONCAT(`firstname`, \' \', `lastname`) LIKE "%'.pSQL($filter).'%"
-	OR CONCAT(`lastname`, \' \', `firstname`) LIKE "%'.pSQL($filter).'%")').'
-	ORDER BY CONCAT(`lastname`, \' \', `firstname`) ASC
-	LIMIT 50');
+	if (is_numeric($filter) AND Validate::isUnsignedId($filter))
+		$customers = Db::getInstance()->ExecuteS('
+		SELECT `id_customer`, `email`, CONCAT(`lastname`, \' \', `firstname`) as name
+		FROM `'._DB_PREFIX_.'customer`
+		WHERE id_customer = '.intval($filter).'
+		LIMIT 1');	
+	else
+		$customers = Db::getInstance()->ExecuteS('
+		SELECT `id_customer`, `email`, CONCAT(`lastname`, \' \', `firstname`) as name
+		FROM `'._DB_PREFIX_.'customer`
+		WHERE email LIKE "%'.pSQL($filter).'%"
+		OR CONCAT(`firstname`, \' \', `lastname`) LIKE "%'.pSQL($filter).'%"
+		OR CONCAT(`lastname`, \' \', `firstname`) LIKE "%'.pSQL($filter).'%"
+		ORDER BY CONCAT(`lastname`, \' \', `firstname`) ASC
+		LIMIT 50');
 
 	$groups = Db::getInstance()->ExecuteS('
 	SELECT g.`id_group`, gl.`name`

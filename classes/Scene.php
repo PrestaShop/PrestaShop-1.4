@@ -107,15 +107,12 @@ class SceneCore extends ObjectModel
 	}
 	
 	public function deleteImage()
-	{
-		if (parent::deleteImage())
-		{
-			if (file_exists($this->image_dir.'thumbs/'.$this->id.'-thumb_scene.'.$this->image_format) 
-				&& !unlink($this->image_dir.'thumbs/'.$this->id.'-thumb_scene.'.$this->image_format))
-				return false;
-		}
-		else
+	{	
+		if (file_exists($this->image_dir.'thumbs/'.$this->id.'-thumb_scene.'.$this->image_format) 
+			&& !unlink($this->image_dir.'thumbs/'.$this->id.'-thumb_scene.'.$this->image_format))
 			return false;
+		if (!(isset($_FILES) && count($_FILES)))
+			return parent::deleteImage();		
 		return true;
 	}
 	

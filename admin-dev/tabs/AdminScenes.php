@@ -59,19 +59,19 @@ class AdminScenes extends AdminTab
 		{
 			$imagesTypes = ImageType::getImagesTypes('scenes');
 			foreach ($imagesTypes AS $k => $imageType)
-			{
-				if ($imageType['name'] == 'large_scene' AND isset($_FILES['image']))
+			{						
+				if ($imageType['name'] == 'large_scene' AND isset($_FILES['image']) AND isset($_FILES['image']['tmp_name']) AND !$_FILES['image']['error'])								
 					imageResize($_FILES['image']['tmp_name'], _PS_SCENE_IMG_DIR_.$obj->id.'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height']));
 				elseif ($imageType['name'] == 'thumb_scene')
 				{
-					if (isset($_FILES['thumb'])  AND !$_FILES['thumb']['error'])
+					if (isset($_FILES['thumb']) AND !$_FILES['thumb']['error'])
 						$tmpName = $_FILES['thumb']['tmp_name'];
 					else
 						$tmpName = $_FILES['image']['tmp_name'];
 					imageResize($tmpName, _PS_SCENE_THUMB_IMG_DIR_.$obj->id.'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height']));
 				}
 			}
-		}
+		}				
 		return true;
 	}
 
@@ -91,8 +91,8 @@ class AdminScenes extends AdminTab
 			echo 'startingData = new Array();'."\n";
 			foreach ($obj->getProducts() as $key => $product)
 			{
-				$productObj = new Product((int)($product['id_product']), true, (int)($cookie->id_lang));
-				echo 'startingData['.$key.'] = new Array(\''.$productObj->name.'\', '.$product['id_product'].', '.$product['x_axis'].', '.$product['y_axis'].', '.$product['zone_width'].', '.$product['zone_height'].');';
+				$productObj = new Product(intval($product['id_product']), true, intval($cookie->id_lang));
+				echo 'startingData['.$key.'] = new Array(\''.pSQL($productObj->name).'\', '.intval($product['id_product']).', '.$product['x_axis'].', '.$product['y_axis'].', '.$product['zone_width'].', '.$product['zone_height'].', \''.(isset($product['color_reference'])? pSQL($product['color_reference']): '').'\');';
 			}
 
 		echo
@@ -153,7 +153,7 @@ class AdminScenes extends AdminTab
 
 			echo '
 						<div id="ajax_choose_product" style="display:none; padding:6px; padding-top:2px; width:600px;">
-							'.$this->l('Begin typing the first letters of the product name, then select the product from the drop-down list:').'<br /><input type="text" value="" id="product_autocomplete_input" /> <input type="button" class="button" value="'.$this->l('OK').'" onclick="$(this).prev().search();" /><input type="button" class="button" value="'.$this->l('Delete').'" onclick="undoEdit();" />
+							'.$this->l('Begin typing the first letters of the product name, then select the product from the drop-down list:').'<br /><input type="text" value="" id="product_autocomplete_input" style="width: 450px"/> <input type="button" class="button" value="'.$this->l('OK').'" onclick="$(this).prev().search();"/><input type="button" class="button" value="'.$this->l('Delete').'" onclick="undoEdit();" />
 						</div>
 				';
 
@@ -226,6 +226,13 @@ class AdminScenes extends AdminTab
 			if (!Tools::isSubmit('zones') || !sizeof(Tools::getValue('zones')))
 				$this->_errors[] = Tools::displayError('You should make at least one zone');
 		}
+		if (Tools::isSubmit('delete'.$this->table))
+		{
+			if (Validate::isLoadedObject($object = $this->loadObject()))
+				$object->deleteImage();
+			else
+				return false;
+		}		
 		parent::postProcess();
 	}
 }
