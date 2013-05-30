@@ -945,7 +945,7 @@ abstract class ModuleCore
 		for ($i = 0; $i < $sizeof; ++$i)
 			Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'hook_module`
-			SET `position` = '.(int)($i + 1).'
+			SET `position` = '.(int)($i).'
 			WHERE `id_hook` = '.(int)$id_hook.'
 			AND `id_module` = '.(int)$result[$i]['id_module']);
 		return true;
