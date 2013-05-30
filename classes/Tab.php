@@ -52,6 +52,7 @@ class TabCore extends ObjectModel
 	protected 	$identifier = 'id_tab';
 
 	protected static $_getIdFromClassName = null;
+	protected static $_cache_tabs = array();	
 
 	public function getFields()
 	{
@@ -170,7 +171,6 @@ class TabCore extends ObjectModel
 	 *
 	 * @return array tabs
 	 */
-	static $_cache_tabs = array();
 	public static function getTabs($id_lang, $id_parent = null)
 	{
 		if (!isset(self::$_cache_tabs[$id_lang]))
@@ -247,7 +247,9 @@ class TabCore extends ObjectModel
 
 	public function move($direction)
 	{
+		$return = true;
 		$nbTabs = self::getNbTabs($this->id_parent);
+
 		if ($direction != 'l' AND $direction != 'r')
 			return false;
 		if ($nbTabs <= 1)
@@ -258,9 +260,39 @@ class TabCore extends ObjectModel
 			return false;
 
 		$newPosition = ($direction == 'l') ? $this->position - 1 : $this->position + 1;
-		Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'tab` t SET position = '.(int)($this->position).' WHERE id_parent = '.(int)($this->id_parent).' AND position = '.(int)($newPosition));
 		$this->position = $newPosition;
-		return $this->update();
+		$return &= $this->update();
+		if ($direction == 'l')		
+			$return &= Db::getInstance()->Execute('
+			UPDATE `'._DB_PREFIX_.'tab` t 
+			SET position = position + 1 
+			WHERE id_parent = '.(int)($this->id_parent).' 
+			AND position = '.(int)($this->position).'
+			AND id_tab != '.(int)($this->id));
+		else
+			$return &= Db::getInstance()->Execute('
+			UPDATE `'._DB_PREFIX_.'tab` t 
+			SET position = position - 1 
+			WHERE id_parent = '.(int)($this->id_parent).' 
+			AND position = '.(int)($this->position).'
+			AND id_tab != '.(int)($this->id));	
+		return (bool)$return;		
+	}
+	
+	public function update($nullValues = false)
+	{
+		$return = true;
+		$current_tab = new Tab($this->id);
+		$id_parent = (int)$current_tab->id_parent;				
+		if ($id_parent && $id_parent != $this->id_parent)
+		{
+			$this->position = self::getNewLastPosition($this->id_parent);
+			$return &= parent::update($null_values);
+			$return &= $this->cleanPositions((int)$id_parent);
+		}
+		else
+			$return &= parent::update($null_values);
+		return (bool)$return;
 	}
 
 	public function cleanPositions($id_parent)
@@ -274,7 +306,7 @@ class TabCore extends ObjectModel
 		for ($i = 0; $i < $sizeof; ++$i)
 			Db::getInstance()->Execute('
 			UPDATE `'._DB_PREFIX_.'tab`
-			SET `position` = '.($i + 1).'
+			SET `position` = '.$i.'
 			WHERE `id_tab` = '.(int)$result[$i]['id_tab']);
 		return true;
 	}
