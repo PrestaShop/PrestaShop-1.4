@@ -1688,7 +1688,6 @@ class AdminImport extends AdminTab
 				foreach ($products as $product)
 				{
 					$p = new Product((int)$product['id_product']);
-					$p->deleteAttributesImpacts();
 					$p->deleteProductAttributes();
 				}
 				break;

@@ -560,9 +560,9 @@ class ProductCore extends ObjectModel
 		Hook::deleteProduct($this);
 		if (!parent::delete() || !$this->deleteCategories(true) || !$this->deleteProductAttributes() ||
 			!$this->deleteProductFeatures() || !$this->deleteTags() || !$this->deleteCartProducts() ||
-			!$this->deleteAttributesImpacts() || !$this->deleteAttachments() || !$this->deleteCustomization() ||
-			!SpecificPrice::deleteByProductId((int)($this->id)) || !$this->deletePack() || !$this->deleteProductSale() ||
-			!$this->deleteSceneProducts() || !$this->deleteSearchIndexes() || !$this->deleteAccessories() || !$this->deleteFromAccessories())
+			!$this->deleteAttachments() || !$this->deleteCustomization() || !SpecificPrice::deleteByProductId((int)($this->id)) || 
+			!$this->deletePack() || !$this->deleteProductSale() || !$this->deleteSceneProducts() || 
+			!$this->deleteSearchIndexes() || !$this->deleteAccessories() || !$this->deleteFromAccessories())
 			return false;
 
 		if (!_PS_MODE_DEMO_ && !$this->deleteImages())
@@ -1085,6 +1085,8 @@ class ProductCore extends ObjectModel
 		WHERE `id_product_attribute` IN (SELECT `id_product_attribute` FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product` = '.(int)$this->id.')');
 		
 		$result &= Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product` = '.(int)$this->id);
+		
+		$result &= Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'attribute_impact` WHERE `id_product` = '.(int)$this->id);
 
 		return $result;
 	}
@@ -1096,6 +1098,7 @@ class ProductCore extends ObjectModel
 	*/
     public function deleteAttributesImpacts()
     {
+    	Tools::displayasdeprecated();
         return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'attribute_impact` WHERE `id_product` = '.(int)$this->id);
     }
 
