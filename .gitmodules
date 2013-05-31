@@ -84,4 +84,4 @@
 	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
 [submodule "modules/nqgatewayneteven/backward_compatibility"]
 	path = modules/nqgatewayneteven/backward_compatibility
-	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility.git
