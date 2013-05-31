@@ -81,12 +81,12 @@ class CustomerThreadCore extends ObjectModel
 			return false;
  		
 		$return = true;			
-		$result = Db::getInstance()->execute('
+		$result = Db::getInstance()->executeS('
 			SELECT `id_customer_message` FROM `'._DB_PREFIX_.'customer_message`
 			WHERE `id_customer_thread` = '.(int)$this->id
 		);
 
-		if( count($result) )
+		if( count($result))
 		{
 			foreach ($result AS $res)
 			{
