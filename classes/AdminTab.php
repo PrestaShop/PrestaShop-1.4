@@ -576,7 +576,7 @@ abstract class AdminTabCore
 						}
 						elseif ($object->delete())
 							Tools::redirectAdmin($currentIndex.'&conf=1&token='.$token);
-						$this->_errors[] = Tools::displayError('An error occurred during deletion.');
+						$this->_errors[] = Tools::displayError('An error occurred during deletion of ').$this->table.'.';
 					}
 				}
 				else
@@ -653,7 +653,7 @@ abstract class AdminTabCore
 
 						if ($result)
 							Tools::redirectAdmin($currentIndex.'&conf=2&token='.$token);
-						$this->_errors[] = Tools::displayError('An error occurred while deleting selection.');
+						$this->_errors[] = Tools::displayError('An error occurred while deleting selection of ').$this->table.'.';
 					}
 				}
 				else
