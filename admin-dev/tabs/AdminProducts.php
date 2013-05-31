@@ -707,7 +707,7 @@ class AdminProducts extends AdminTab
 				$tos = Tools::getValue('spm_to');
 
 				foreach ($id_specific_prices as $key => $id_specific_price)
-					if ($reduction_types[$key] == 'percentage' && ((float)$reduction[$key] <= 0 || (float)$reductions[$key] > 100))
+					if ($reduction_types[$key] == 'percentage' && ((float)$reductions[$key] <= 0 || (float)$reductions[$key] > 100))
 						$this->_errors[] = Tools::displayError('Submitted reduction value (0-100) is out-of-range');
 
 					elseif ($this->_validateSpecificPrice($id_shops[$key], $id_currencies[$key], $id_countries[$key], $id_groups[$key], $prices[$key], $from_quantities[$key], $reductions[$key], $reduction_types[$key], $froms[$key], $tos[$key]))
