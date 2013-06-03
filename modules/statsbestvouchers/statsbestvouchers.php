@@ -127,6 +127,6 @@ class StatsBestVouchers extends ModuleGrid
 		if (($this->_start === 0 OR Validate::IsUnsignedInt($this->_start)) AND Validate::IsUnsignedInt($this->_limit))
 			$this->_query .= ' LIMIT '.$this->_start.', '.($this->_limit);
 		$this->_values = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS($this->_query);
-		$this->_totalCount = Db::getInstance(_PS_USE_SQL_SLAVE_)->NumRows();
+		$this->_totalCount = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('SELECT FOUND_ROWS() AS `'.md5($this->_query).'`');
 	}
 }
