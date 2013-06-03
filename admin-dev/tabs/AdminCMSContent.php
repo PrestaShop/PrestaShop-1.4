@@ -96,33 +96,29 @@ class AdminCMSContent extends AdminTab
 		{
 			$this->adminCMSCategories->displayForm($this->token);
 			echo '<br /><br /><a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to list').'</a><br />';
-			
 		}
 		elseif (((Tools::isSubmit('submitAddcms') OR Tools::isSubmit('submitAddcmsAndStay')) AND sizeof($this->adminCMS->_errors)) OR isset($_GET['updatecms']) OR isset($_GET['addcms']))
 		{
 			$this->adminCMS->displayForm($this->token);
 			echo '<br /><br /><a href="'.$currentIndex.'&token='.$this->token.'"><img src="../img/admin/arrow2.gif" /> '.$this->l('Back to list').'</a><br />';
-		
 		}
 		else
 		{
-		$id_cms_category = (int)(Tools::getValue('id_cms_category'));
-		if (!$id_cms_category)
-			$id_cms_category = 1;
-		$cms_tabs = array('cms_category', 'cms');
-		// Cleaning links
-		$catBarIndex = $currentIndex;
-		foreach ($cms_tabs AS $tab)
-			if (Tools::getValue($tab.'Orderby') && Tools::getValue($tab.'Orderway')) 
-				$catBarIndex = preg_replace('/&'.$tab.'Orderby=([a-z _]*)&'.$tab.'Orderway=([a-z]*)/i', '', $currentIndex);
-		echo '<div class="cat_bar"><span style="color: #3C8534;">'.$this->l('Current category').' :</span>&nbsp;&nbsp;&nbsp;'.getPath($catBarIndex, $id_cms_category,'','','cms').'</div>';
-		echo '<h2>'.$this->l('Categories').'</h2>';
-		$this->adminCMSCategories->display($this->token);
-		echo '<div style="margin:10px">&nbsp;</div>';
-		echo '<h2>'.$this->l('Pages in this category').'</h2>';
-		$this->adminCMS->display($this->token);
+			$id_cms_category = (int)Tools::getValue('id_cms_category');
+			if (!$id_cms_category)
+				$id_cms_category = 1;
+			$cms_tabs = array('cms_category', 'cms');
+			// Cleaning links
+			$catBarIndex = $currentIndex;
+			foreach ($cms_tabs AS $tab)
+				if (Tools::getValue($tab.'Orderby') && Tools::getValue($tab.'Orderway')) 
+					$catBarIndex = preg_replace('/&'.$tab.'Orderby=([a-z _]*)&'.$tab.'Orderway=([a-z]*)/i', '', $currentIndex);
+			echo '<div class="cat_bar"><span style="color: #3C8534;">'.$this->l('Current category').' :</span>&nbsp;&nbsp;&nbsp;'.getPath($catBarIndex, $id_cms_category, '', '', 'cms').'</div>';
+			echo '<h2>'.$this->l('Categories').'</h2>';
+			$this->adminCMSCategories->display($this->token);
+			echo '<div style="margin:10px">&nbsp;</div>';
+			echo '<h2>'.$this->l('Pages in this category').'</h2>';
+			$this->adminCMS->display($this->token);
 		}
-		
 	}
 }
-
