@@ -1179,7 +1179,7 @@ abstract class AdminTabCore
 		$sqlTable = $this->table == 'order' ? 'orders' : $this->table;
 
 		/* Query in order to get results with all fields */
-		$sql = 'SELECT SQL_CALC_FOUND_ROWS
+		$sql = 'SELECT
 			'.($this->_tmpTableFilter ? ' * FROM (SELECT ' : '').'
 			'.($this->lang ? 'b.*, ' : '').'a.*'.(isset($this->_select) ? ', '.$this->_select.' ' : '').'
 			FROM `'._DB_PREFIX_.$sqlTable.'` a
@@ -1195,8 +1195,7 @@ abstract class AdminTabCore
 		if (!($this->_list = Db::getInstance()->ExecuteS($sql)))
 			$this->_list_error = Db::getInstance()->getMsgError();
 		else
-			$this->_listTotal = Db::getInstance()->getValue('SELECT FOUND_ROWS() AS `'._DB_PREFIX_.$this->table.'`');
-
+			$this->_listTotal = Db::getInstance()->NumRows();
 	}
 
 	/**

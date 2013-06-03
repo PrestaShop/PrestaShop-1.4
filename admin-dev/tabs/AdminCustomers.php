@@ -288,8 +288,9 @@ class AdminCustomers extends AdminTab
 		$referrers = Referrer::getReferrers((int)$customer->id);
 		if ($totalCustomer = Db::getInstance()->getValue('SELECT SUM(total_paid_real) FROM '._DB_PREFIX_.'orders WHERE id_customer = '.$customer->id.' AND valid = 1'))
 		{
-			Db::getInstance()->getValue('SELECT SQL_CALC_FOUND_ROWS COUNT(*) FROM '._DB_PREFIX_.'orders WHERE valid = 1 GROUP BY id_customer HAVING SUM(total_paid_real) > '.$totalCustomer);
-			$countBetterCustomers = (int)Db::getInstance()->getValue('SELECT FOUND_ROWS()') + 1;
+			$sql = 'SELECT COUNT(*) FROM '._DB_PREFIX_.'orders WHERE valid = 1 GROUP BY id_customer HAVING SUM(total_paid_real) >= '.$totalCustomer;		
+			Db::getInstance()->ExecuteS($sql);								
+			$countBetterCustomers = (int)Db::getInstance()->NumRows($sql);
 		}
 		else
 			$countBetterCustomers = '-';

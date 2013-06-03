@@ -55,6 +55,7 @@ class CacheFSCore extends Cache {
 	
 	public function setNumRows($key, $value, $expire = 0)
 	{
+		$key = md5($key);	
 		$this->_setKeys();
 		if (isset($this->_keysCached[$key.'_nrows']))
 			return true;
@@ -65,16 +66,18 @@ class CacheFSCore extends Cache {
 	
 	public function getNumRows($key)
 	{
+		$key = md5($key);	
 		return $this->get($key.'_nrows');
 	}
 
 	public function get($key)
 	{
+		$key = md5($key);
 		if (!isset($this->_keysCached[$key]))
 			return false;
 		$path = _PS_CACHEFS_DIRECTORY_;
 		for ($i = 0; $i < $this->_depth; $i++)
-			$path.=$key[$i].'/';
+			$path .= $key[$i].'/';
 		if (!file_exists($path.$key))
 		{
 			unset($this->_keysCached[$key]);
@@ -129,6 +132,12 @@ class CacheFSCore extends Cache {
 		unset($this->_keysCached[$key]);
 		return true;
 	}
+	
+	public function checkQuery($query)
+	{
+		if (preg_match('/INSERT|UPDATE|DELETE|DROP|REPLACE/im', $query, $qtype))
+			$this->deleteQuery($query);	
+	}			
 
 	public function deleteQuery($query)
 	{

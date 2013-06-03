@@ -28,11 +28,13 @@ class MCachedCore extends Cache
 {
 	protected $_memcacheObj;
 	protected $_isConnected = false;
+	protected $_prefix;
 
 	protected function __construct()
 	{
 		parent::__construct();
 		$this->connect();
+		$this->_prefix = _COOKIE_IV_.'_';
 	}
 	public function __destruct()
 	{
@@ -53,63 +55,48 @@ class MCachedCore extends Cache
 			$this->_memcacheObj->addServer($server['ip'], $server['port'], $server['weight']);
 
 		$this->_isConnected = true;
-		return $this->_setKeys();
 	}
+	
+	private function memcacheGet($key)
+	{
+		return $this->_memcacheObj->get($key);
+	}	
 
 	public function set($key, $value, $expire = 0)
 	{
 		if (!$this->_isConnected)
 			return false;
-		if ($this->_memcacheObj->set($key, $value, 0, $expire))
-		{
-			$this->_keysCached[$key] = true;
-			return $key;
-		}
+		$this->_memcacheObj->add($key, $value, 0, $expire);
 	}
 	
-	public function setNumRows($key, $value, $expire = 0)
+	public function get($query)
 	{
+		$key = $this->getKey($query);
+		return $this->memcacheGet($key);		
+	}	
+	
+	public function setNumRows($query, $value, $expire = 0)
+	{
+		$key = $this->getKey($query);	
 		return $this->set($key.'_nrows', $value, $expire);
 	}
 	
-	public function getNumRows($key)
+	public function getNumRows($query)
 	{
-		return $this->get($key.'_nrows');
-	}
+		$key = $this->getKey($query);
+		return $this->memcacheGet($key.'_nrows');		
+	}	
 
-	public function get($key)
-	{
-		if (!isset($this->_keysCached[$key]))
-			return false;
-		return $this->_memcacheObj->get($key);
-	}
-	
-	protected function _setKeys()
-	{
-		if (!$this->_isConnected)
-			return false;
-		$this->_keysCached = $this->_memcacheObj->get('keysCached');
-		$this->_tablesCached = $this->_memcacheObj->get('tablesCached');
-		
-		return true;
-	}
-	
 	public function setQuery($query, $result)
 	{
 		if (!$this->_isConnected)
 			return false;
+		
 		if ($this->isBlacklist($query))
 			return true;
-		$md5_query = md5($query);
-		$this->_setKeys();
-		if (isset($this->_keysCached[$md5_query]))
-			return true;
-		$key = $this->set($md5_query, $result);
-		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/i', $query, $res))
-			foreach ($res[1] as $table)
-				if (!isset($this->_tablesCached[$table][$key]))
-					$this->_tablesCached[$table][$key] = true;
-		$this->_writeKeys();
+		
+		$key = $this->getKey($query);
+		$key = $this->set($key, $result);
 	}
 	
 	public function delete($key, $timeout = 0)
@@ -117,26 +104,65 @@ class MCachedCore extends Cache
 		if (!$this->_isConnected)
 			return false;
 		if (!empty($key) AND $this->_memcacheObj->delete($key, $timeout))
-			unset($this->_keysCached[$key]);
+			return true;
 	}
 
 	public function deleteQuery($query)
 	{
 		if (!$this->_isConnected)
 			return false;
-		$this->_setKeys();
-		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/i', $query, $res))
-			foreach ($res[1] as $table)
-				if (isset($this->_tablesCached[$table]))
-				{
-					foreach ($this->_tablesCached[$table] as $memcachedKey => $foo)
-					{
-						$this->delete($memcachedKey);
-						$this->delete($memcachedKey.'_nrows');
-					}
-					unset($this->_tablesCached[$table]);
-				}
-		$this->_writeKeys();
+		$tables = $this->getTables($query);
+		foreach($tables AS $table)
+			$this->invalidateNamespace($table);
+	}
+	
+	private function getKey($query)
+	{
+		$key = '';
+		$tables = $this->getTables($query);
+		if (is_array($tables))
+			foreach($tables AS $table)
+				$key .= $this->getTableNamespacePrefix($table);
+		else
+			$key .= 'nok'.$tables;
+
+		$key .= $query;
+		return md5($key);
+	}
+	
+	private function invalidateNamespace($table)
+	{
+		$key = $this->_prefix.$table;
+		if (!$this->_memcacheObj->increment($key))
+			$this->_memcacheObj->add($key, time());
+	}
+
+	private function getTableNamespacePrefix($table)
+	{
+		$key = $this->_prefix.$table;
+		$namespace = $this->_memcacheObj->get($key);
+		if (!$namespace)
+		{
+			$namespace = time();
+			if ($this->_memcacheObj->add($key, $namespace))
+				$this->_memcacheObj->get($key); //Lost the race. Need to refetch namespace
+		}
+		return $namespace;
+	}
+
+	private function getTables($query)
+	{
+		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/im', $query, $res))
+		{
+			return $res[1];
+		}
+		return false;
+	}
+	
+	public function checkQuery($query)
+	{
+		if (preg_match('/INSERT|UPDATE|DELETE|DROP|REPLACE/im', $query, $qtype))
+			$this->deleteQuery($query);
 	}
 
 	protected function close()
@@ -151,16 +177,8 @@ class MCachedCore extends Cache
 		if (!$this->_isConnected)
 			return false;
 		if ($this->_memcacheObj->flush())
-			return $this->_setKeys();
+			return true;
 		return false;
-	}
-	
-	private function _writeKeys()
-	{
-		if (!$this->_isConnected)
-			return false;
-		$this->_memcacheObj->set('keysCached', $this->_keysCached, 0, 0);
-		$this->_memcacheObj->set('tablesCached', $this->_tablesCached, 0, 0);
 	}
 	
 	public static function addServer($ip, $port, $weight)

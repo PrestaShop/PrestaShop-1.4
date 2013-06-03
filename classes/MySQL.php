@@ -68,7 +68,7 @@ class MySQLCore extends Db
 		$this->_result = false;
 		$this->_lastQuery = $query;
 		if ($use_cache && _PS_CACHE_ENABLED_)
-			if ($result = Cache::getInstance()->get(md5($query)))
+			if ($result = Cache::getInstance()->get($query))
 			{
 				$this->_lastCached = true;
 				return $result;
@@ -81,7 +81,10 @@ class MySQLCore extends Db
 					$this->displayMySQLError($query);
 				$result = mysql_fetch_assoc($this->_result);
 				if ($use_cache = 1 && _PS_CACHE_ENABLED_)
+				{				
 					Cache::getInstance()->setQuery($query, $result);
+					Cache::getInstance()->checkQuery($query, $result);
+				}					
 				return $result;
 			}
 		if (_PS_DEBUG_SQL_)
@@ -95,7 +98,7 @@ class MySQLCore extends Db
 		$this->_result = false;
 		$this->_lastQuery = $query;
 		if ($use_cache && _PS_CACHE_ENABLED_)
-			if ($result = Cache::getInstance()->get(md5($query)))
+			if ($result = Cache::getInstance()->get($query))
 			{
 				$this->_lastCached = true;
 				return $result;
@@ -106,7 +109,10 @@ class MySQLCore extends Db
 			{
 				$this->_lastCached = false;
 				if ($use_cache && _PS_CACHE_ENABLED_)
+				{				
 					Cache::getInstance()->setQuery($query, $tmpArray[0]);
+					Cache::getInstance()->checkQuery($query);
+				}										
 				return $tmpArray[0];
 			}
 		}
@@ -122,7 +128,7 @@ class MySQLCore extends Db
 			if (_PS_DEBUG_SQL_)
 				$this->displayMySQLError($query);
 			if ($use_cache AND _PS_CACHE_ENABLED_)
-				Cache::getInstance()->deleteQuery($query);
+				Cache::getInstance()->checkQuery($query);
 			return $this->_result;
 		}
 		if (_PS_DEBUG_SQL_)
@@ -140,11 +146,11 @@ class MySQLCore extends Db
 	 * @return array or result object 
 	 */
 	public function ExecuteS($query, $array = true, $use_cache = 1)
-	{
+	{	
 		$this->_result = false;
-		$this->_lastQuery = $query;
-		if ($use_cache && _PS_CACHE_ENABLED_ && $array && ($result = Cache::getInstance()->get(md5($query))))
-		{
+		$this->_lastQuery = $query;						
+		if ($use_cache && _PS_CACHE_ENABLED_ && $array && ($result = Cache::getInstance()->get($query)))
+		{				
 			$this->_lastCached = true;
 			return $result;
 		}
@@ -160,8 +166,11 @@ class MySQLCore extends Db
 			if ($this->_result !== true)
 				while ($row = mysql_fetch_assoc($this->_result))
 					$resultArray[] = $row;
-			if ($use_cache && _PS_CACHE_ENABLED_)	
+			if ($use_cache && _PS_CACHE_ENABLED_)
+			{	
 				Cache::getInstance()->setQuery($query, $resultArray);
+				Cache::getInstance()->checkQuery($query);
+			}				
 			return $resultArray;
 		}
 		if (_PS_DEBUG_SQL_)
@@ -200,11 +209,11 @@ class MySQLCore extends Db
 		{
 			$nrows = mysql_num_rows($this->_result);
 			if (_PS_CACHE_ENABLED_)
-				Cache::getInstance()->setNumRows(md5($this->_lastQuery), $nrows);
+				Cache::getInstance()->setNumRows($this->_lastQuery, $nrows);
 			return $nrows;
 		}
 		elseif (_PS_CACHE_ENABLED_ && $this->_lastCached)
-			return Cache::getInstance()->getNumRows(md5($this->_lastQuery));
+			return Cache::getInstance()->getNumRows($this->_lastQuery);
 	}
 	
 	public function Insert_ID()
@@ -231,7 +240,7 @@ class MySQLCore extends Db
 			if ($webservice_call)
 				$this->displayMySQLError($query);
 			if ($use_cache && _PS_CACHE_ENABLED_)
-				Cache::getInstance()->deleteQuery($query);
+				Cache::getInstance()->checkQuery($query);
 			return $result;
 		}
 		if (_PS_DEBUG_SQL_)

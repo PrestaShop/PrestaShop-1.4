@@ -30,18 +30,20 @@ abstract class CacheCore
 	protected static $_instance;
 	protected $_keysCached = array();
 	protected $_tablesCached = array();
-	protected $_blackList = array('cart',
-												'cart_discount',
-												'cart_product',
-												'connections',
-												'connections_source',
-												'connections_page',
-												'customer',
-												'customer_group',
-												'customized_data',
-												'guest',
-												'pagenotfound',
-												'page_viewed');
+	protected $_blackList = array(
+		'cart',
+		'cart_discount',
+		'cart_product',
+		'connections',
+		'connections_source',
+		'connections_page',
+		'customer',
+		'customer_group',
+		'customized_data',
+		'guest',
+		'pagenotfound',
+		'page_viewed'
+	);
 	public static function getInstance()
 	{	
 		if (!isset(self::$_instance))
@@ -71,4 +73,5 @@ abstract class CacheCore
 	abstract public function flush();
 	abstract public function setQuery($query, $result);
 	abstract public function deleteQuery($query);
+	abstract public function checkQuery($query);
 }
