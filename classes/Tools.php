@@ -886,9 +886,9 @@ class ToolsCore
 				return $fullPath.$path;
 			}
 		}
-		elseif ($categoryType == 'CMS')
+		elseif (strtoupper($categoryType) == 'CMS')
 		{
-			$category = new CMSCategory((int)($id_category), (int)($cookie->id_lang));
+			$category = new CMSCategory((int)$id_category, (int)$cookie->id_lang);
 			if (!Validate::isLoadedObject($category))
 				die(self::displayError());
 			$categoryLink = $link->getCMSCategoryLink($category);
