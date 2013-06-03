@@ -34,7 +34,7 @@ function update_web_browser()
 	for($i = 0; $i < $nb_loop; $i++)
 	{
 		$sql = 'SELECT id_guest, id_web_browser FROM `'._DB_PREFIX_.'guest` WHERE id_web_browser IN (2, 8) LIMIT '.(int)$start.', '.(int)$step;
-		if ($guests = Db::getInstance()->query($sql))
+		if ($guests = Db::getInstance()->executeS($sql))
 			while ($guest = Db::getInstance()->nextRow($guests))
 			{
 				if(is_array($guest))
@@ -53,7 +53,7 @@ function update_web_browser()
 	for($i = 0; $i < $nb_loop; $i++)
 	{
 		$sql = 'SELECT id_guest, id_operating_system FROM `'._DB_PREFIX_.'guest` WHERE id_operating_system IN (3, 4) LIMIT '.(int)$start.', '.(int)$step;
-		if ($guests = Db::getInstance()->query($sql))
+		if ($guests = Db::getInstance()->executeS($sql))
 			while ($guest = Db::getInstance()->nextRow($guests))
 			{
 				if(is_array($guest))
