@@ -626,7 +626,7 @@ class Loyalty extends Module
 		$html = '
 		<br /><h2>'.$this->l('Loyalty points').' ('.(int)$points.' '.$this->l('points').')</h2>';
 		
-		if (!$points)
+		if (!isset($points))
 			return $html.' '.$this->l('This customer has no points');
 		
 		$html .= '
