@@ -2137,12 +2137,12 @@ class ProductCore extends ObjectModel
 		if ($this->isAvailableWhenOutOfStock($this->out_of_stock))
 			return true;
 
-		$result = Db::getInstance()->getRow('
+		$result = (int)Db::getInstance()->getValue('
 		SELECT `quantity`
 		FROM `'._DB_PREFIX_.'product`
 		WHERE `id_product` = '.(int)($this->id));
 
-		return ($result AND $qty <= $result['quantity']);
+		return ($result AND $qty <= $result);
 	}
 
 	/**
