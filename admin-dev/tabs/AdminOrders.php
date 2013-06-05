@@ -300,7 +300,9 @@ class AdminOrders extends AdminTab
 							// Delete product
 							if (!$order->deleteProduct($order, $orderDetail, $qtyCancelProduct))
 								$this->_errors[] = Tools::displayError('An error occurred during deletion of the product.').' <span class="bold">'.Tools::safeOutput($orderDetail->product_name).'</span>';
-							Module::hookExec('cancelProduct', array('order' => $order, 'id_order_detail' => (int)$id_order_detail));
+
+							// id_order_detail is kept for retro-compatibility
+							Module::hookExec('cancelProduct', array('order' => $order, 'id_order_detail' => (int)$orderDetail->id, 'order_detail' => $orderDetail));
 						}
 
 					if (!count($this->_errors) && $customizationList)

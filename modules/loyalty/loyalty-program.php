@@ -40,6 +40,7 @@ Tools::addCSS(_PS_CSS_DIR_.'jquery.cluetip.css', 'all');
 Tools::addJS(array(_PS_JS_DIR_.'jquery/jquery.dimensions.js',_PS_JS_DIR_.'jquery/jquery.cluetip.js'));
 
 $customerPoints = (int)(LoyaltyModule::getPointsByCustomer((int)($cookie->id_customer)));
+$customerPoints = $customerPoints < 0 ? 0 : $customerPoints;
 
 /* transform point into voucher if needed */
 if (Tools::getValue('transform-points') == 'true' AND $customerPoints > 0)
