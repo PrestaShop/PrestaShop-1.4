@@ -652,7 +652,7 @@ class ThemeInstallator extends Module
 			{
 				$flag = 0;
 				// Disable native modules
-				if ($val == 2 && (($this->to_disable && count($this->to_disable)) || ($this->selected_disable_modules && count($this->selected_disable_modules)))&& _PS_VERSION_ > '1.5')
+				if ($val == 2 && ($this->to_disable && count($this->to_disable)) || ($this->selected_disable_modules && count($this->selected_disable_modules)))
 					foreach (array_merge($this->to_disable, $this->selected_disable_modules) as $row)
 					{
 						$obj = Module::getInstanceByName($row);
@@ -660,14 +660,23 @@ class ThemeInstallator extends Module
 						{
 							if ($flag++ == 0)
 								$msg .= '<b>'.$this->l('The following modules have been disabled:').'</b><br />';
-
-							// Delete all native module which are in the front office feature category and in selected shops
-							$sql = 'DELETE FROM `'._DB_PREFIX_.'module_shop` WHERE `id_module` = '.pSQL($obj->id).' AND `id_shop` = '.(int)$id_shop;
-							$sql1 = 'DELETE FROM `'._DB_PREFIX_.'hook_module` WHERE `id_module` = '.pSQL($obj->id).' AND `id_shop` = '.(int)$id_shop;
+							if ( _PS_VERSION_ > '1.5')
+							{
+								// Delete all native module which are in the front office feature category and in selected shops
+								$sql = 'DELETE FROM `'._DB_PREFIX_.'module_shop` WHERE `id_module` = '.pSQL($obj->id).' AND `id_shop` = '.(int)$id_shop;
+								$sql1 = 'DELETE FROM `'._DB_PREFIX_.'hook_module` WHERE `id_module` = '.pSQL($obj->id).' AND `id_shop` = '.(int)$id_shop;
+							}
+							elseif (_PS_VERSION_ < '1.5')
+							{
+								$sql = 'UPDATE `'._DB_PREFIX_.'module` SET active = 0 WHERE `id_module` = '.pSQL($obj->id);
+								$sql1 = 'DELETE FROM `'._DB_PREFIX_.'hook_module` WHERE `id_module` = '.pSQL($obj->id);
+							}
 							if (Db::getInstance()->execute($sql) && Db::getInstance()->execute($sql1))
-								$msg .= '<i>- '.pSQL($row).'</i><br />';
+								$msg .= '<i>- '.pSQL($row).'</i><br />';							
 						}
 					}
+					
+					
 
 				$flag = 0;
 				if ($this->to_enable && count($this->to_enable))
