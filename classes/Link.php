@@ -230,7 +230,7 @@ class LinkCore
 	
 	public function getMediaLink($filepath)
 	{
-		return Tools::getProtocol(Tools::usingSecureMode()).Tools::getMediaServer($filepath).$filepath;
+		return Tools::getProtocol(Tools::usingSecureMode() && _PS_SSL_ENABLED_).Tools::getMediaServer($filepath).$filepath;
 	}
 
 	public function preloadPageLinks()
