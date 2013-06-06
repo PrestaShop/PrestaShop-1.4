@@ -1869,11 +1869,12 @@ class ProductCore extends ObjectModel
 				$reduc = Tools::ps_round(!$use_tax ? $reduction_amount / (1 + $tax_rate / 100) : $reduction_amount, $decimals);
 			}
 			else
-				$reduc = Tools::ps_round($price * $specific_price['reduction'], $decimals);
+				$reduc = $price * $specific_price['reduction'];
 		}
 
 		if ($only_reduc)
-			return $reduc;
+			return Tools::ps_round($reduc, $decimals);
+
 		if ($use_reduc)
 			$price -= $reduc;
 
@@ -1887,7 +1888,6 @@ class ProductCore extends ObjectModel
 				$price *= ((100 - Group::getReductionByIdGroup($id_group)) / 100);
 		}
 
-		$price = Tools::ps_round($price, $decimals);
 		// Eco Tax
 		if (($result['ecotax'] OR isset($result['attribute_ecotax'])) AND $with_ecotax)
 		{
