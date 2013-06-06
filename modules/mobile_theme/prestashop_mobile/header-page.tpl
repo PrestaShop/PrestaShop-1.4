@@ -22,7 +22,6 @@
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 *}
-
 {if !isset($no_header) || !$no_header}
 <div id="{if isset($forcepage)}{$forcepage|escape:'html':'UTF-8'}{else}jqm_page_{if $page_name == '404'}p{/if}{$page_name|escape:'htmlall':'UTF-8'}{if isset($page) && $page}_{$page}{/if}{/if}" data-role="page" data-title="{$meta_title|escape:'htmlall':'UTF-8'}" {if !isset($smarty.capture.forceback)}data-add-back-btn="true" data-back-btn-text="{l s='Back'}"{/if}> <!-- Start of data-role="page" div for jQuery Mobile -->
   {if !$content_only}
@@ -40,6 +39,7 @@
 		{include file="$tpl_dir./modules/blocksearch/blocksearch-top.tpl"}
   {/if}
 {/if}
-{if isset($smarty.get.id_product) && $page_name == 'cart' && isset($errors) && $errors}
+
+{if (isset($smarty.get.id_product) || isset($smarty.post.id_product)) && $page_name == 'cart' && isset($errors) && $errors}
 	{include file="$tpl_dir./errors.tpl"}
 {/if}
