@@ -1113,7 +1113,7 @@ class PDFCore extends PDF_PageGroupCore
 				$total_ecotax = ($product['priceEcotax'] * $product['product_quantity']);
 				$priceBreakDown['totalsProductsWithTax'][$product['tax_rate']] += Tools::ps_round((($product['priceWithoutTax'] - $total_ecotax) * (1 + $product['tax_rate'] / 100)) + $total_ecotax, 2);
 
-	 			$price_tax_excl_with_reduction = Tools::ps_round($product['priceWithoutTax'] - (float)$discountAmountWithoutTax, 2);
+	 			$price_tax_excl_with_reduction = $product['priceWithoutTax'] - (float)$discountAmountWithoutTax;
 				$priceBreakDown['totalsProductsWithoutTaxAndReduction'][$product['tax_rate']] += $price_tax_excl_with_reduction;
                 $priceBreakDown['totalsProductsWithTaxAndReduction'][$product['tax_rate']] += Tools::ps_round(($price_tax_excl_with_reduction - $total_ecotax) * (1 + $product['tax_rate'] / 100) + $total_ecotax, 2);
 			}
