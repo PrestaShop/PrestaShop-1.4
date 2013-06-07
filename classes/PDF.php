@@ -680,26 +680,29 @@ class PDFCore extends PDF_PageGroupCore
 					}
 				}
 
-				// fetch taxes for carrier
-				$allTaxes = TaxRulesGroup::getTaxes((int)Carrier::getIdTaxRulesGroupByIdCarrier((int)self::$order->id_carrier), $id_country, $id_state, $id_county);
-				$nTax = 0;
-
-				foreach ($allTaxes as $tax)
+				if (self::$orderSlip->shipping_cost)
 				{
-					if (!isset($tax->id))
-						continue;
+					// fetch taxes for carrier
+					$allTaxes = TaxRulesGroup::getTaxes((int)Carrier::getIdTaxRulesGroupByIdCarrier((int)self::$order->id_carrier), $id_country, $id_state, $id_county);
+					$nTax = 0;
 
-					if (!isset($store_all_taxes[$tax->id]))
-						$store_all_taxes[$tax->id] = array();
-					if (!isset($store_all_taxes[$tax->id]['amount']))
-						$store_all_taxes[$tax->id]['amount'] = 0;
-					$store_all_taxes[$tax->id]['name'] = $tax->name[(int)self::$order->id_lang];
-					$store_all_taxes[$tax->id]['rate'] = $tax->rate;
+					foreach ($allTaxes as $tax)
+					{
+						if (!isset($tax->id))
+							continue;
 
-					if (!$nTax++)
-						$store_all_taxes[$tax->id]['amount'] += ($priceBreakDown['shippingCostWithoutTax'] * (1 + ($tax->rate * 0.01))) - $priceBreakDown['shippingCostWithoutTax'];
-					else
-						$store_all_taxes[$tax->id]['amount'] += self::$order->total_shipping - (self::$order->total_shipping / (1 + ($tax->rate * 0.01)));
+						if (!isset($store_all_taxes[$tax->id]))
+							$store_all_taxes[$tax->id] = array();
+						if (!isset($store_all_taxes[$tax->id]['amount']))
+							$store_all_taxes[$tax->id]['amount'] = 0;
+						$store_all_taxes[$tax->id]['name'] = $tax->name[(int)self::$order->id_lang];
+						$store_all_taxes[$tax->id]['rate'] = $tax->rate;
+
+						if (!$nTax++)
+							$store_all_taxes[$tax->id]['amount'] += ($priceBreakDown['shippingCostWithoutTax'] * (1 + ($tax->rate * 0.01))) - $priceBreakDown['shippingCostWithoutTax'];
+						else
+							$store_all_taxes[$tax->id]['amount'] += self::$order->total_shipping - (self::$order->total_shipping / (1 + ($tax->rate * 0.01)));
+					}
 				}
 
 				foreach ($store_all_taxes as $tax)
@@ -1048,9 +1051,8 @@ class PDFCore extends PDF_PageGroupCore
 				$products = self::$order->getProducts();
 		}
 		else
-		{
 			$products = self::$orderSlip->getOrdersSlipProducts(self::$orderSlip->id, self::$order);
-		}
+
 		$amountWithoutTax = 0;
 		$taxes = array();
 		/* Firstly calculate all prices */
