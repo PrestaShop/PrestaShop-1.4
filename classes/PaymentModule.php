@@ -341,32 +341,29 @@ abstract class PaymentModuleCore extends Module
 				$allTaxes = TaxRulesGroup::getTaxes((int)Carrier::getIdTaxRulesGroupByIdCarrier((int)$order->id_carrier), $id_country, $id_state, $id_county);
 				$nTax = 0;
 
-				foreach ($allTaxes as $res)
+				foreach ($allTaxes as $tax)
 				{
-					if (!isset($res->id))
+					if (!isset($tax->id))
 						continue;
 
-					if (!isset($store_all_taxes[$res->id]))
-						$store_all_taxes[$res->id] = array();
-					if (!isset($store_all_taxes[$res->id]['amount']))
-						$store_all_taxes[$res->id]['amount'] = 0;
-					$store_all_taxes[$res->id]['name'] = $res->name[(int)$order->id_lang];
-					$store_all_taxes[$res->id]['rate'] = $res->rate;
+					if (!isset($store_all_taxes[$tax->id]))
+						$store_all_taxes[$tax->id] = array();
+					if (!isset($store_all_taxes[$tax->id]['amount']))
+						$store_all_taxes[$tax->id]['amount'] = 0;
+					$store_all_taxes[$tax->id]['name'] = $tax->name[(int)$order->id_lang];
+					$store_all_taxes[$tax->id]['rate'] = $tax->rate;
 
 					if (!$nTax++)
-						$store_all_taxes[$res->id]['amount'] += ($shippingCostTaxExcl * (1 + ($res->rate * 0.01))) - $shippingCostTaxExcl;
+						$store_all_taxes[$tax->id]['amount'] += ($shippingCostTaxExcl * (1 + ($tax->rate * 0.01))) - $shippingCostTaxExcl;
 					else
-					{
-						$priceTmp = $order->total_shipping / (1 + ($res->rate * 0.01));
-						$store_all_taxes[$res->id]['amount'] += $order->total_shipping - $priceTmp;
-					}
+						$store_all_taxes[$tax->id]['amount'] += $order->total_shipping - ($order->total_shipping / (1 + ($tax->rate * 0.01)));
 				}
 
 				/* Store taxes */
-				foreach ($store_all_taxes as $t)
+				foreach ($store_all_taxes as $tax)
 					Db::getInstance()->Execute('
 					INSERT INTO `'._DB_PREFIX_.'order_tax` (`id_order`, `tax_name`, `tax_rate`, `amount`)
-					VALUES ('.(int)$order->id.', \''.pSQL($t['name']).'\', '.(float)($t['rate']).', '.(float)$t['amount'].')');
+					VALUES ('.(int)$order->id.', \''.pSQL($tax['name']).'\', '.(float)$tax['rate'].', '.(float)$tax['amount'].')');
 
 				// Insert discounts from cart into order_discount table
 				$discounts = $cart->getDiscounts();
