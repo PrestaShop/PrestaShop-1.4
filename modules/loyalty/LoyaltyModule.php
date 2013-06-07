@@ -216,6 +216,7 @@ class LoyaltyModule extends ObjectModel
 		if (!Validate::isLoadedObject($discount))
 			die(Tools::displayError('Incorrect object Discount.'));
 		$items = self::getAllByIdCustomer((int)$discount->id_customer, NULL, true);
+		$associated = false;
 		foreach ($items AS $item)
 		{
 			$f = new LoyaltyModule((int)$item['id_loyalty']);
@@ -229,7 +230,9 @@ class LoyaltyModule extends ObjectModel
 			$f->id_discount = (int)$discount->id;
 			$f->id_loyalty_state = (int)LoyaltyStateModule::getConvertId();
 			$f->save();
+			$associated = true;
 		}
+		return $associated;
 	}
 
 	public static function getOrdersByIdDiscount($id_discount)
