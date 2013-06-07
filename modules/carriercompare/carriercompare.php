@@ -39,14 +39,14 @@ class CarrierCompare extends Module
 	{
 		$this->name = 'carriercompare';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.2';
+		$this->version = '1.3';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 
 		parent::__construct();
 
-		$this->displayName = $this->l('Shipping Estimation');
-		$this->description = $this->l('Module to compare carrier possibilities before using  the checkout process');
+		$this->displayName = $this->l('Shipping Estimate');
+		$this->description = $this->l('Compares carrier choices before checkout.');
 		$this->template_directory = dirname(__FILE__).'/template/';
 		$this->initRetroCompatibilityVar();
 	}
@@ -160,7 +160,7 @@ class CarrierCompare extends Module
 	 */
 	public function hookShoppingCart($params)
 	{
-		global $cookie, $smarty, $currency;
+		global $cookie, $smarty, $currency, $defaultCountry;
 
 		if (!$this->isModuleAvailable())
 			return '';
@@ -190,7 +190,7 @@ class CarrierCompare extends Module
 			'new_base_dir' => $moduleURL,
 			'refresh_method' => ($refresh_method === false) ? 0 : $refresh_method
 		));
-
+												
 		return $this->smarty->fetch($this->template_directory.'carriercompare.tpl');
 	}
 
@@ -251,18 +251,18 @@ class CarrierCompare extends Module
 
 	public function saveSelection($id_country, $id_state, $zipcode, $id_carrier)
 	{
-		global $cart, $cookie;
+		global $cart, $cookie, $defaultCountry;
 
 		$errors = array();
 
 		if (!Validate::isInt($id_state))
-			$errors[] = $this->l('Invalid state ID');
+			$errors[] = $this->l('Invalid State ID');
 		if ($id_state != 0 && !Validate::isLoadedObject(new State($id_state)))
 			$errors[] = $this->l('Please select a state');
 		if (!Validate::isInt($id_country) || !Validate::isLoadedObject(new Country($id_country)))
 			$errors[] = $this->l('Please select a country');
 		if (!$this->checkZipcode($zipcode, $id_country))
-			$errors[] = $this->l('Please use a valid zip/postal code depending on your country selection');
+			$errors[] = $this->l('Depending on your country selection, please use a valid zip/postal code');
 		if (!Validate::isInt($id_carrier) || !Validate::isLoadedObject(new Carrier($id_carrier)))
 			$errors[] = $this->l('Please select a carrier');
 
@@ -273,7 +273,7 @@ class CarrierCompare extends Module
 		foreach (self::getCarriersListByIdZone($id_country, $id_state, $zipcode) as $carrier)
 			$ids_carrier[] = $carrier['id_carrier'];
 		if (!in_array($id_carrier, $ids_carrier))
-			$errors[] = $this->l('This carrier ID isn\'t available for your selection');
+			$errors[] = $this->l('The carrier ID isn\'t available for your selection');
 
 		if (sizeof($errors))
 			return $errors;
@@ -282,8 +282,9 @@ class CarrierCompare extends Module
 		$cookie->id_state = $id_state;
 		$cookie->postcode = $zipcode;
 		$cart->id_carrier = $id_carrier;
+		$cookie->iso_code_country = Country::getIsoById($id_country);		
 		if (!$cart->update())
-			return array($this->l('Cannot update the cart'));
+			return array($this->l('Cannot update the cart'));			
 		return array();
 	}
 
@@ -295,10 +296,10 @@ class CarrierCompare extends Module
 		$zipcodeFormat = Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
 				SELECT `zip_code_format`
 				FROM `'._DB_PREFIX_.'country`
-				WHERE `id_country` = '.(int)$id_country);
+				WHERE need_zip_code = 1 AND `id_country` = '.(int)$id_country);
 
 		if (!$zipcodeFormat)
-			return false;
+			return true;
 
 		$regxMask = str_replace(
 			array('N', 'C', 'L'),
@@ -335,5 +336,9 @@ class CarrierCompare extends Module
 			return false;
 		return true;
 	}
+	
+	public function getZipcodes($id_country)
+	{
+		return (bool)Country::getNeedZipCode((int)$id_country);
+	}
 }
-

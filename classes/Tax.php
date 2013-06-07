@@ -350,7 +350,19 @@ class TaxCore extends ObjectModel
 
 	public static function getCarrierTaxRate($id_carrier, $id_address = null)
 	{
+		global $cookie, $defaultCountry;
         $id_country = (int)Country::getDefaultCountryId();
+
+        if ($id_country == _PS_COUNTRY_DEFAULT_ && isset($cookie->id_country) && $cookie->id_country != (int)_PS_COUNTRY_DEFAULT_)
+		{
+			$country = new Country((int)$cookie->id_country, $cookie->id_lang);
+			if (ValidaTe::isLoadedObject($country) && $country->active)
+			{
+				$id_country = (int)$country->id;
+				$defaultCountry = $country;
+			}
+		}
+       	
         $id_state = 0;
         $id_county = 0;
         if (!empty($id_address))
