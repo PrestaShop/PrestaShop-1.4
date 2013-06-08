@@ -67,6 +67,8 @@ class AdminPerformance extends AdminTab
 						Configuration::updateValue('PS_CACHEFS_DIRECTORY_DEPTH', (int)$depth);
 					}
 				}
+				elseif ($caching_system == 'CacheFS' && !$cache_active && _PS_CACHE_ENABLED_ && _PS_CACHING_SYSTEM_ == 'CacheFS')
+					CacheFS::deleteCacheDirectory();
 				elseif($caching_system == 'MCached' && $cache_active && !_PS_CACHE_ENABLED_ && _PS_CACHING_SYSTEM_ == 'MCached')
 					Cache::getInstance()->flush();
 				if (!sizeof($this->_errors))
