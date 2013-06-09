@@ -449,13 +449,13 @@ class AdminOrders extends AdminTab
 						<input type="hidden" name="productName" id="productName" value="'.$product['product_name'].'" />';
 				if ((!$order->hasBeenDelivered() || Configuration::get('PS_ORDER_RETURN')) && (int)($customization['quantity_returned'] < (int)$customization['quantity']))
 					echo '
-						<input type="checkbox" name="id_customization['.$customizationId.']" id="id_customization['.$customizationId.']" value="'.$id_order_detail.'" onchange="setCancelQuantity(this, \''.$customizationId.'\', \''.(int)($customization['quantity'] - $customization['quantity_refunded']).'\')" '.(((int) ($customization['quantity_returned'] + $customization['quantity_refunded']) >= (int)($customization['quantity'])) ? 'disabled="disabled" ' : '').'/>';
+						<input type="checkbox" name="id_customization['.$customizationId.']" id="id_customization['.$customizationId.']" value="'.$id_order_detail.'" onchange="setCancelQuantity(this, \''.$customizationId.'\', \''.(int)($customization['quantity'] - $customization['quantity_refunded'] - $customization['quantity_returned']).'\', true)"'.(((int)($customization['quantity_returned'] + $customization['quantity_refunded']) >= (int)($customization['quantity'])) ? ' disabled="disabled" ' : '').'/>';
 
 				if ((int)($customization['quantity_returned'] + $customization['quantity_refunded']) >= (int)($customization['quantity']))
 					echo '<input type="hidden" name="cancelCustomizationQuantity['.$customizationId.']" value="0" />';
 				elseif (!$order->hasBeenDelivered() || Configuration::get('PS_ORDER_RETURN'))
 					echo '
-						<input type="text" id="cancelQuantity_'.$customizationId.'" name="cancelCustomizationQuantity['.$customizationId.']" size="2" onclick="selectCheckbox(this);" value="" /> ';
+						<input type="text" id="cancelCustomizationQuantity_'.$customizationId.'" name="cancelCustomizationQuantity['.$customizationId.']" size="2" onclick="selectCheckbox(this);" value="" /> ';
 				echo ($order->hasBeenDelivered() ? (int)($customization['quantity_returned']).'/'.((int)($customization['quantity']) - (int)($customization['quantity_refunded'])) : ($order->hasBeenPaid() ? (int)($customization['quantity_refunded']).'/'.(int)($customization['quantity']) : '')).'
 					</td>';
 				echo '
@@ -809,7 +809,7 @@ class AdminOrders extends AdminTab
 										<input type="hidden" name="totalQty" id="totalQty" value="'.(int)($product['product_quantity']).'" />
 										<input type="hidden" name="productName" id="productName" value="'.$product['product_name'].'" />';
 								if ((!$has_been_delivered || Configuration::get('PS_ORDER_RETURN')) && (int)$product['product_quantity_return'] < (int)$product['product_quantity'])
-									echo '<input type="checkbox" name="id_order_detail['.$k.']" id="id_order_detail['.$k.']" value="'.$product['id_order_detail'].'" onchange="setCancelQuantity(this, '.(int)($product['id_order_detail']).', '.(int)($product['product_quantity_in_stock'] - $product['customizationQuantityTotal'] - $product['product_quantity_reinjected']).')" '.(((int)($product['product_quantity_return'] + $product['product_quantity_refunded']) >= (int)($product['product_quantity'])) ? 'disabled="disabled" ' : '').'/>';
+									echo '<input type="checkbox" name="id_order_detail['.$k.']" id="id_order_detail['.$k.']" value="'.$product['id_order_detail'].'" onchange="setCancelQuantity(this, '.(int)($product['id_order_detail']).', '.(int)($product['product_quantity'] - $product['customizationQuantityTotal'] - $product['product_quantity_refunded'] - $product['product_quantity_return']).')"'.(((int)($product['product_quantity_return'] + $product['product_quantity_refunded']) >= (int)($product['product_quantity'])) ? ' disabled="disabled" ' : '').'/>';
 
 								if ((int)($product['product_quantity_return'] + $product['product_quantity_refunded']) >= (int)($product['product_quantity']))
 									echo '<input type="hidden" name="cancelQuantity['.$k.']" value="0" />';

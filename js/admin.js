@@ -718,9 +718,9 @@ function orderOverwriteMessage(sl, text)
 	}
 }
 
-function setCancelQuantity(itself, id_order_detail, quantity)
+function setCancelQuantity(itself, id_order_detail, quantity, customization)
 {
-	$('#cancelQuantity_' + id_order_detail).val($(itself).attr('checked') ? quantity : '');
+	$('#cancel' + (customization ? 'Customization' : '' ) + 'Quantity_' + id_order_detail).val($(itself).attr('checked') ? quantity : '');
 }
 
 function stockManagementActivationAuthorization()
