@@ -196,6 +196,7 @@ class AdminGenerator extends AdminTab
 					fwrite($writeFd, "\n");
 
 					fclose($writeFd);
+					@chmod($this->_rbFile, 0775);
 					Tools::redirectAdmin($currentIndex.'&conf=4&token='.$this->token);
 				}
 			} else

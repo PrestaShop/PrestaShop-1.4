@@ -1907,7 +1907,7 @@ FileETag INode MTime Size
 </IfModule>'."\n");
 		}
 		fclose($writeFd);
-
+		@chmod($path, 0775);
 		Module::hookExec('afterCreateHtaccess');
 
 		return true;
