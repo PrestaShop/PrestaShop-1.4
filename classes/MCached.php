@@ -43,7 +43,7 @@ class MCachedCore extends Cache
 	
 	public function connect()
 	{
-		if (class_exists('Memcache') && extension_loaded('memcache'))		
+		if (class_exists('Memcache') && extension_loaded('memcache'))
 			$this->_memcacheObj = new Memcache();
 		else
 			return false;
@@ -56,11 +56,6 @@ class MCachedCore extends Cache
 
 		$this->_isConnected = true;
 	}
-	
-	private function memcacheGet($key)
-	{
-		return $this->_memcacheObj->get($key);
-	}	
 
 	public function set($key, $value, $expire = 0)
 	{
@@ -72,20 +67,20 @@ class MCachedCore extends Cache
 	public function get($query)
 	{
 		$key = $this->getKey($query);
-		return $this->memcacheGet($key);		
+		return $this->_memcacheObj->get($key);
 	}	
 	
 	public function setNumRows($query, $value, $expire = 0)
 	{
-		$key = $this->getKey($query);	
+		$key = $this->getKey($query);
 		return $this->set($key.'_nrows', $value, $expire);
 	}
 	
 	public function getNumRows($query)
 	{
 		$key = $this->getKey($query);
-		return $this->memcacheGet($key.'_nrows');		
-	}	
+		return $this->_memcacheObj->get($key.'_nrows');
+	}
 
 	public function setQuery($query, $result)
 	{
@@ -116,7 +111,7 @@ class MCachedCore extends Cache
 			$this->invalidateNamespace($table);
 	}
 	
-	private function getKey($query)
+	protected function getKey($query)
 	{
 		$key = '';
 		$tables = $this->getTables($query);
@@ -130,14 +125,14 @@ class MCachedCore extends Cache
 		return md5($key);
 	}
 	
-	private function invalidateNamespace($table)
+	protected function invalidateNamespace($table)
 	{
 		$key = $this->_prefix.$table;
 		if (!$this->_memcacheObj->increment($key))
 			$this->_memcacheObj->add($key, time());
 	}
 
-	private function getTableNamespacePrefix($table)
+	protected function getTableNamespacePrefix($table)
 	{
 		$key = $this->_prefix.$table;
 		$namespace = $this->_memcacheObj->get($key);
@@ -150,18 +145,16 @@ class MCachedCore extends Cache
 		return $namespace;
 	}
 
-	private function getTables($query)
+	protected function getTables($query)
 	{
 		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/im', $query, $res))
-		{
 			return $res[1];
-		}
 		return false;
 	}
 	
 	public function checkQuery($query)
 	{
-		if (preg_match('/INSERT|UPDATE|DELETE|DROP|REPLACE/im', $query, $qtype))
+		if (preg_match('/INSERT |UPDATE |DELETE |DROP |REPLACE/ im', $query, $qtype))
 			$this->deleteQuery($query);
 	}
 

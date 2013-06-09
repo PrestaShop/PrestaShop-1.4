@@ -25,145 +25,162 @@
 */
 
 class CacheFSCore extends Cache {
-	
+
 	protected $_depth;
-	
+	protected $_prefix;
+
 	protected function __construct()
 	{
 		parent::__construct();
 		$this->_init();
+		$this->_prefix = _COOKIE_IV_.'_';
 	}
-	
+
 	protected function _init()
 	{
-		$this->_depth = Db::getInstance()->getValue('SELECT value FROM '._DB_PREFIX_.'configuration WHERE name=\'PS_CACHEFS_DIRECTORY_DEPTH\'', false);
-		return $this->_setKeys();
+		$this->_depth = Configuration::get('PS_CACHEFS_DIRECTORY_DEPTH');
 	}
 
 	public function set($key, $value, $expire = 0)
 	{
-		$path = _PS_CACHEFS_DIRECTORY_;
-		for ($i = 0; $i < $this->_depth; $i++)
-			$path .= $key[$i].'/';
-		if (@file_put_contents($path.$key, serialize($value)))
-		{
-			$this->_keysCached[$key] = true;
+		if ($this->_add($this->_getPath($key), $value, $expire = 0))
 			return $key;
+		return false;
+	}
+
+	protected function _add($path, $value, $expire = 0)
+	{
+		return (!file_exists($path) && (bool)@file_put_contents($path, serialize($value)));
+	}
+
+	public function get($query)
+	{
+		$key = $this->getKey($query);
+		return $this->_get($this->_getPath($key));
+	}
+
+	protected function _get($path)
+	{
+		if (file_exists($path))
+		{
+			$file = file_get_contents($path);
+			if ($file !== false)
+				return unserialize($file);
 		}
 		return false;
 	}
-	
-	public function setNumRows($key, $value, $expire = 0)
-	{
-		$key = md5($key);	
-		$this->_setKeys();
-		if (isset($this->_keysCached[$key.'_nrows']))
-			return true;
-		$return = $this->set($key.'_nrows', $value, $expire);
-		$this->_writeKeys();
-		return $return;
-	}
-	
-	public function getNumRows($key)
-	{
-		$key = md5($key);	
-		return $this->get($key.'_nrows');
-	}
 
-	public function get($key)
+	protected function _getPath($key)
 	{
-		$key = md5($key);
-		if (!isset($this->_keysCached[$key]))
-			return false;
 		$path = _PS_CACHEFS_DIRECTORY_;
 		for ($i = 0; $i < $this->_depth; $i++)
-			$path .= $key[$i].'/';
-		if (!file_exists($path.$key))
-		{
-			unset($this->_keysCached[$key]);
-			return false;
-		}
-		$file = file_get_contents($path.$key);
-		return unserialize($file);
+			$path .= $key[$i].DIRECTORY_SEPARATOR;
+		if (!file_exists($path))
+			$path = _PS_CACHEFS_DIRECTORY_.DIRECTORY_SEPARATOR;
+		return $path.$key;
 	}
 
-	protected function _setKeys()
+	public function setNumRows($query, $value, $expire = 0)
 	{
-		if (file_exists(_PS_CACHEFS_DIRECTORY_.'keysCached'))
-		{
-			$file = file_get_contents(_PS_CACHEFS_DIRECTORY_.'keysCached');
-			$this->_keysCached = unserialize($file);
-		}
-		if (file_exists(_PS_CACHEFS_DIRECTORY_.'tablesCached'))
-		{
-			$file = file_get_contents(_PS_CACHEFS_DIRECTORY_.'tablesCached');
-			$this->_tablesCached = unserialize($file);
-		}
-		return true;
+		$key = $this->getKey($query);
+		$return = $this->set($key.'_nrows', $value, $expire);
+		return $return;
+	}
+
+	public function getNumRows($query)
+	{
+		$key = $this->getKey($query);
+		return $this->get($key.'_nrows');
 	}
 
 	public function setQuery($query, $result)
 	{
-		$md5_query = md5($query);
+		$key = $this->getKey($query);
 		if ($this->isBlacklist($query))
 			return true;
-		$this->_setKeys();
-		if (isset($this->_keysCached[$md5_query]))
-			return true;
-		$key = $this->set($md5_query, $result);
-		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/i', $query, $res))
-			foreach ($res[1] as $table)
-				if (!isset($this->_tablesCached[$table][$key]))
-					$this->_tablesCached[$table][$key] = true;
-		$this->_writeKeys();
+		$key = $this->set($key, $result);
+		return $key;
 	}
 
 	public function delete($key, $timeout = 0)
 	{
-		$path = _PS_CACHEFS_DIRECTORY_;
-		if (!isset($this->_keysCached[$key]))
-			return;
-		for ($i = 0; $i < $this->_depth; $i++)
-			$path.=$key[$i].'/';
-		if (!file_exists($path.$key))
+		$path = $this->_getPath($key);
+		if (!file_exists($path))
 			return true;
-		if (!unlink($path.$key))
+		if (!unlink($path))
 			return false;
-		unset($this->_keysCached[$key]);
 		return true;
 	}
-	
-	public function checkQuery($query)
-	{
-		if (preg_match('/INSERT|UPDATE|DELETE|DROP|REPLACE/im', $query, $qtype))
-			$this->deleteQuery($query);	
-	}			
 
 	public function deleteQuery($query)
 	{
-		$this->_setKeys();
-		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/i', $query, $res))
-			foreach ($res[1] as $table)
-				if (isset($this->_tablesCached[$table]))
-				{
-					foreach (array_keys($this->_tablesCached[$table]) as $fsKey)
-					{
-						$this->delete($fsKey);
-						$this->delete($fsKey.'_nrows');
-					}
-					unset($this->_tablesCached[$table]);
-				}
-		$this->_writeKeys();
+		$tables = $this->getTables($query);
+		if (is_array($tables))
+			foreach($tables AS $table)
+			{
+				$this->invalidateNamespace($table);
+				$this->delete(md5($this->_prefix.$table));
+			}
+	}
+
+	protected function getKey($query)
+	{
+		$key = '';
+		$tables = $this->getTables($query);
+		if (is_array($tables))
+			foreach($tables AS $table)
+				$key .= $this->getTableNamespacePrefix($table);
+		else
+			$key .= 'nok'.$tables;
+
+		$key .= $query;
+		return md5($key);
+	}
+
+	protected function _increment($key)
+	{
+		$count = $this->_get($this->_getPath($key));
+		if ($count !== false)
+			return (int)((int)$count + 1);
+		return false;
+	}
+
+	protected function invalidateNamespace($table)
+	{
+		$key = md5($this->_prefix.$table);
+		if (!$this->_increment($key))
+			$this->_add($this->_getPath($key), time());
+	}
+
+	protected function getTableNamespacePrefix($table)
+	{
+		$key = md5($this->_prefix.$table);
+		$path = $this->_getPath($key);
+		$namespace = $this->_get($path);
+		if (!$namespace)
+		{
+			$namespace = time();
+			if ($this->_add($path, $namespace))
+				$this->_get($path); //Lost the race. Need to refetch namespace
+		}
+		return $namespace;
+	}
+
+	protected function getTables($query)
+	{
+		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/im', $query, $res))
+			return $res[1];
+		return false;
+	}
+
+	public function checkQuery($query)
+	{
+		if (preg_match('/INSERT |UPDATE |DELETE |DROP |REPLACE /im', $query, $qtype))
+			$this->deleteQuery($query);
 	}
 
 	public function flush()
 	{
-	}
-
-	private function _writeKeys()
-	{
-		@file_put_contents(_PS_CACHEFS_DIRECTORY_.'keysCached', serialize($this->_keysCached));
-		@file_put_contents(_PS_CACHEFS_DIRECTORY_.'tablesCached', serialize($this->_tablesCached));
 	}
 
 	public static function deleteCacheDirectory()
@@ -178,9 +195,9 @@ class CacheFSCore extends Cache {
 		$chars = '0123456789abcdef';
 		for ($i = 0; $i < strlen($chars); $i++)
 		{
-			$new_dir = $directory.$chars[$i].'/';
+			$new_dir = $directory.$chars[$i].DIRECTORY_SEPARATOR;
 			if (mkdir($new_dir))
-				if (chmod($new_dir, 0777))
+				if (@chmod($new_dir, 0775))
 					if ($level_depth - 1 > 0)
 						self::createCacheDirectories($level_depth - 1, $new_dir);
 		}
