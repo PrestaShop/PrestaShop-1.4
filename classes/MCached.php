@@ -154,7 +154,7 @@ class MCachedCore extends Cache
 	
 	public function checkQuery($query)
 	{
-		if (preg_match('/INSERT |UPDATE |DELETE |DROP |REPLACE/ im', $query, $qtype))
+		if (preg_match('/INSERT |UPDATE |DELETE |DROP |REPLACE /im', $query, $qtype))
 			$this->deleteQuery($query);
 	}
 
