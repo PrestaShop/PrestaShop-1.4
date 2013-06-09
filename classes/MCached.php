@@ -111,20 +111,6 @@ class MCachedCore extends Cache
 			$this->invalidateNamespace($table);
 	}
 	
-	protected function getKey($query)
-	{
-		$key = '';
-		$tables = $this->getTables($query);
-		if (is_array($tables))
-			foreach($tables AS $table)
-				$key .= $this->getTableNamespacePrefix($table);
-		else
-			$key .= 'nok'.$tables;
-
-		$key .= $query;
-		return md5($key);
-	}
-	
 	protected function invalidateNamespace($table)
 	{
 		$key = $this->_prefix.$table;
@@ -143,19 +129,6 @@ class MCachedCore extends Cache
 				$this->_memcacheObj->get($key); //Lost the race. Need to refetch namespace
 		}
 		return $namespace;
-	}
-
-	protected function getTables($query)
-	{
-		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/im', $query, $res))
-			return $res[1];
-		return false;
-	}
-	
-	public function checkQuery($query)
-	{
-		if (preg_match('/INSERT |UPDATE |DELETE |DROP |REPLACE /im', $query, $qtype))
-			$this->deleteQuery($query);
 	}
 
 	protected function close()

@@ -123,20 +123,6 @@ class CacheFSCore extends Cache {
 			}
 	}
 
-	protected function getKey($query)
-	{
-		$key = '';
-		$tables = $this->getTables($query);
-		if (is_array($tables))
-			foreach($tables AS $table)
-				$key .= $this->getTableNamespacePrefix($table);
-		else
-			$key .= 'nok'.$tables;
-
-		$key .= $query;
-		return md5($key);
-	}
-
 	protected function _increment($key)
 	{
 		$count = $this->_get($this->_getPath($key));
@@ -164,19 +150,6 @@ class CacheFSCore extends Cache {
 				$this->_get($path); //Lost the race. Need to refetch namespace
 		}
 		return $namespace;
-	}
-
-	protected function getTables($query)
-	{
-		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/im', $query, $res))
-			return $res[1];
-		return false;
-	}
-
-	public function checkQuery($query)
-	{
-		if (preg_match('/INSERT |UPDATE |DELETE |DROP |REPLACE /im', $query, $qtype))
-			$this->deleteQuery($query);
 	}
 
 	public function flush()
