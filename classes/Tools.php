@@ -1646,7 +1646,7 @@ class ToolsCore
 				else
 					$content = $compressed_css_files[$media];
 				file_put_contents($cache_filename, $content);
-				chmod($cache_filename, 0777);
+				chmod($cache_filename, 0775);
 			}
 			$compressed_css_files[$media] = $cache_filename;
 		}
@@ -1722,7 +1722,7 @@ class ToolsCore
 					'" */'."\n".$content;
 
 			file_put_contents($compressed_js_path, $content);
-			chmod($compressed_js_path, 0777);
+			chmod($compressed_js_path, 0775);
 		}
 
 		// rebuild the original js_files array
@@ -2127,6 +2127,29 @@ FileETag INode MTime Size
 			return true;
 		}
 	}
+
+	public static function chmodr($path, $filemode)
+	{
+	    if (!is_dir($path))
+	        return @chmod($path, $filemode);
+	    $dh = opendir($path);
+	    while (($file = readdir($dh)) !== false) {
+	        if($file != '.' && $file != '..') {
+	            $fullpath = $path.'/'.$file;
+	            if(is_link($fullpath))
+	                return false;
+	            elseif(!is_dir($fullpath) && !@chmod($fullpath, $filemode))
+	                    return false;
+	            elseif(!self::chmodr($fullpath, $filemode))
+	                return false;
+	        }
+	    }
+	    closedir($dh);
+	    if(@chmod($path, $filemode))
+	        return true;
+	    else
+	        return false;
+	}	
 
 	/**
 	 * Get products order field name for queries.

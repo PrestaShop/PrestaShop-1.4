@@ -370,9 +370,15 @@ class AdminModules extends AdminTab
 				$this->_errors[] = Tools::displayError('Error while extracting module (file may be corrupted).');
 		}
 		
-		@unlink($file);
+		$path_parts = pathinfo($file);
+		if (isset($path_parts['filename']) && file_exists(_PS_MODULE_DIR_.$path_parts['filename']))
+			Tools::chmodr(_PS_MODULE_DIR_.$path_parts['filename'], 0775);
+
 		if ($success)
+		{
+			@unlink($file);
 			Tools::redirectAdmin($currentIndex.'&conf=8'.'&token='.$this->token);
+		}
 	}
 	
 	public function display()
