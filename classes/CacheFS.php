@@ -95,9 +95,9 @@ class CacheFSCore extends Cache {
 
 	public function setQuery($query, $result)
 	{
-		$key = $this->getKey($query);
 		if ($this->isBlacklist($query))
 			return true;
+		$key = $this->getKey($query);
 		$key = $this->set($key, $result);
 		return $key;
 	}
