@@ -200,7 +200,7 @@ class AdminScenes extends AdminTab
 			echo Helper::renderAdminCategorieTree($trads, $selectedCat, 'categories');
 			echo '
 				</div>
-				<div id="save_scene" class="margin-form" '.(($obj->id && file_exists(_PS_SCENE_IMG_DIR_.$obj->id.'-large_scene.jpg')) ? '' : 'style="display:none;"') .'>
+				<div id="save_scene" class="margin-form">
 					<input type="submit" name="save_image_map" value="'.$this->l('Save Image Map(s)').'" class="button" />
 				</div>
 			';
