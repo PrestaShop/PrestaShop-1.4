@@ -2963,7 +2963,7 @@ class AdminProducts extends AdminTab
 							<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/jquery.autocomplete.js"></script>
 							<div id="ajax_choose_product" style="padding:6px; padding-top:2px; width:600px;">
 								<p class="clear">'.$this->l('Begin typing the first letters of the product name, then select the product from the drop-down list:').'</p>
-								<input type="text" value="" id="product_autocomplete_input" />
+								<input type="text" value="" size="80" id="product_autocomplete_input" />
 								<img onclick="$(this).prev().search();" style="cursor: pointer;" src="../img/admin/add.gif" alt="'.$this->l('Add an accessory').'" title="'.$this->l('Add an accessory').'" />
 							</div>
 							<script type="text/javascript">
@@ -3688,11 +3688,11 @@ class AdminProducts extends AdminTab
 					foreach ($packItems as $packItem)
 						echo $packItem->pack_quantity.' x '.$packItem->name.'¤';
 					echo '" />
-					<input type="hidden" size="2" id="curPackItemId" />
+					<input type="hidden" id="curPackItemId" />
 
 					<p class="clear">'.$this->l('Begin typing the first letters of the product name, then select the product from the drop-down list:').'
 					<br />'.$this->l('You cannot add downloadable products to a pack.').'</p>
-					<input type="text" size="25" id="curPackItemName" />
+					<input type="text" size="80" id="curPackItemName" />
 					<input type="text" name="curPackItemQty" id="curPackItemQty" value="1" size="1" />
 					<script language="javascript">
 					'.$this->addPackItem().'
