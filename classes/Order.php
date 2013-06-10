@@ -173,6 +173,9 @@ class OrderCore extends ObjectModel
 					'product_quantity' => array('required' => true),
 					'product_name' => array('setter' => false),
 					'product_price' => array('setter' => false),
+					'original_price' => array('setter' => false),
+					'reduction_amount' => array('setter' => false),
+					'reduction_percent' => array('setter' => false),
 			)),
 		),
 
@@ -1075,10 +1078,15 @@ class OrderCore extends ObjectModel
 
 	public function getWsOrderRows()
 	{
-		$query = 'SELECT id_order_detail as `id`, `product_id`, `product_price`, `id_order`, `product_attribute_id`, `product_quantity`, `product_name`
+		$query = 'SELECT id_order_detail as `id`, `product_id`, `product_price`, `id_order`, `product_attribute_id`, `product_quantity`, `product_name`, reduction_percent, reduction_amount
 		FROM `'._DB_PREFIX_.'order_detail`
 		WHERE id_order = '.(int)$this->id;
 		$result = Db::getInstance()->executeS($query);
+		foreach ($result as &$row)
+		{
+			$row['original_price'] = $row['product_price'];
+			$this->setProductPrices($row);
+		}
 		return $result;
 	}
 
@@ -1121,4 +1129,3 @@ class OrderCore extends ObjectModel
 				WHERE `id_order` = '.(int)($this->id)) !== false);
 	}
 }
-
