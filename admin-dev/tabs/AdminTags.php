@@ -39,7 +39,7 @@ class AdminTags extends AdminTab
 		'id_tag' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
 		'lang' => array('title' => $this->l('Language'), 'filter_key' => 'l!name'),
 		'name' => array('title' => $this->l('Name'), 'width' => 200, 'filter_key' => 'a!name'),
-		'products' => array('title' => $this->l('Products'), 'align' => 'right', 'havingFilter' => true));
+		'products' => array('title' => $this->l('# Products'), 'align' => 'right', 'havingFilter' => true, 'width' => 20));
 
 		$this->_select = 'l.name as lang, COUNT(pt.id_product) as products';
 		$this->_join = '
