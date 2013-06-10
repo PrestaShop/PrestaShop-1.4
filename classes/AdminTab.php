@@ -319,6 +319,7 @@ abstract class AdminTabCore
 		$table_fields = Db::getInstance()->ExecuteS('SHOW COLUMNS FROM '.pSQL(_DB_PREFIX_.$this->table));
 		$irow = 0;
 		$customerNotRequiredFields = array('note', 'active', 'is_guest', 'deleted', 'date_add', 'date_upd', 'id_default_group', 'last_passwd_gen', 'ip_registration_newsletter', 'secure_key', 'newsletter_date_add');
+		$manufacturerNotRequiredFields = array('id_state', 'id_customer', 'id_manufacturer', 'id_supplier', 'date_add', 'date_upd', 'active', 'deleted');		
 		foreach ($table_fields as $field)
 		{
 			if ($this->className == 'Customer' && in_array($field['Field'], $customerNotRequiredFields))
