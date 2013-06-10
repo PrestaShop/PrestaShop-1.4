@@ -1606,11 +1606,11 @@ class AdminProducts extends AdminTab
 		$countAttachments = (int)Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'product_attachment WHERE id_product = '.(int)$obj->id);
 		if ($obj->id)
 			echo '
-			<div class="tab-page" id="step3"><h4 class="tab">3. '.$this->l('Prices').'</h4></div>
-			<div class="tab-page" id="step4"><h4 class="tab">4. '.$this->l('Combinations').' ('.$countAttributes.')</h4></div>
-			<div class="tab-page" id="step5"><h4 class="tab">5. '.$this->l('Features').'</h4></div>
-			<div class="tab-page" id="step6"><h4 class="tab">6. '.$this->l('Customization').'</h4></div>
-			<div class="tab-page" id="step7"><h4 class="tab">7. '.$this->l('Attachments').' ('.$countAttachments.')</h4></div>';
+			<div class="tab-page" id="step3"><h4 class="tab">'.$this->l('Prices').'</h4></div>
+			<div class="tab-page" id="step4"><h4 class="tab">'.$this->l('Combinations').' ('.$countAttributes.')</h4></div>
+			<div class="tab-page" id="step5"><h4 class="tab">'.$this->l('Features').'</h4></div>
+			<div class="tab-page" id="step6"><h4 class="tab">'.$this->l('Customization').'</h4></div>
+			<div class="tab-page" id="step7"><h4 class="tab">'.$this->l('Attachments').' ('.$countAttachments.')</h4></div>';
 		echo '<script type="text/javascript">
 					var toload = new Array();
 					toload[3] = true;
@@ -2146,7 +2146,7 @@ class AdminProducts extends AdminTab
 
 		echo '
 		<div class="tab-page" id="step1">
-			<h4 class="tab">1. '.$this->l('Info.').'</h4>
+			<h4 class="tab">'.$this->l('Info.').'</h4>
 			<script type="text/javascript">
 				$(document).ready(function() {
 					updateCurrentText();
@@ -3027,7 +3027,7 @@ class AdminProducts extends AdminTab
 		$countImages = (int)Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'image WHERE id_product = '.(int)$obj->id);
 		echo '
 		<div class="tab-page" id="step2">
-				<h4 class="tab">2. '.$this->l('Images').' ('.$countImages.')</h4>
+				<h4 class="tab">'.$this->l('Images').' ('.$countImages.')</h4>
 				<table cellpadding="5">
 				<tr>
 					<td><b>'.((int)Tools::getValue('id_image') ? $this->l('Edit this product image'):$this->l('Add a new image to this product')).'</b></td>
