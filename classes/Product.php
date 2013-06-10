@@ -285,6 +285,7 @@ class ProductCore extends ObjectModel
 				'fields' => array(
 					'id' => array('required' => true),
 					'id_feature_value' => array('required' => true, 'xlink_resource' => 'product_feature_values'),
+					'custom' => array('required' => false),
 			)),
 			'tags' => array('resource' => 'tag',
 				'fields' => array(
@@ -2322,8 +2323,9 @@ class ProductCore extends ObjectModel
 	{
 		if (!isset(self::$_cacheFeatures[$id_product]))
 			self::$_cacheFeatures[$id_product] = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-			SELECT id_feature, id_product, id_feature_value
-			FROM `'._DB_PREFIX_.'feature_product`
+			SELECT fp.id_feature, fp.id_product, fp.id_feature_value, custom
+			FROM `'._DB_PREFIX_.'feature_product` fp
+			LEFT JOIN `'._DB_PREFIX_.'feature_value` fv ON (fp.id_feature_value = fv.id_feature_value)
 			WHERE `id_product` = '.(int)$id_product);
 
 		return self::$_cacheFeatures[$id_product];
@@ -3191,12 +3193,50 @@ class ProductCore extends ObjectModel
 	* @param $productFeatures Product Feature ids
 	* @return boolean
 	*/
-	public function setWsProductFeatures($productFeatures)
+	public function setWsProductFeatures($product_features)
 	{
-		$this->deleteProductFeatures();
-		foreach ($productFeatures as $productFeature)
-			$this->addFeaturesToDB($productFeature['id'], $productFeature['id_feature_value']);
-		return true;
+		$db_features = Db::getInstance()->executeS('
+								SELECT p.*, f.`custom`
+								FROM `'._DB_PREFIX_.'feature_product` p
+								LEFT JOIN `'._DB_PREFIX_.'feature_value` f ON (f.`id_feature_value` = p.`id_feature_value`)
+								WHERE `id_product` = '.(int)$this->id
+							);
+
+
+		$pfa = array();
+		foreach ($product_features as $product_feature)
+			$pfa[$product_feature['id']] = 1;
+
+		foreach ($db_features as $db_feature)
+		{
+			// test if feature should stay in db (if it is part of updated product)
+			if (!isset($pfa[$db_feature['id_feature']]))
+			{
+					// delete only custom features
+					if ($db_feature['custom'])
+					{
+						Db::getInstance()->execute('
+							DELETE FROM `'._DB_PREFIX_.'feature_value_lang`
+							WHERE `id_feature_value` = '.(int)$db_feature['id_feature_value']
+						);
+						Db::getInstance()->execute('
+							DELETE FROM `'._DB_PREFIX_.'feature_value`
+							WHERE `id_feature_value` = '.(int)$db_feature['id_feature_value']
+						);
+
+					}
+			}
+		}
+
+		Db::getInstance()->execute('
+			DELETE FROM `'._DB_PREFIX_.'feature_product`
+			WHERE `id_product` = '.(int)$this->id
+		);
+
+ 		foreach ($product_features as $product_feature)
+ 			$this->addFeaturesToDB($product_feature['id'], $product_feature['id_feature_value'], $product_feature['custom']);
+
+ 		return true;
 	}
 
 	/**
