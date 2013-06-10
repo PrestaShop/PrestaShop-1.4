@@ -318,15 +318,16 @@ abstract class AdminTabCore
 
 		$table_fields = Db::getInstance()->ExecuteS('SHOW COLUMNS FROM '.pSQL(_DB_PREFIX_.$this->table));
 		$irow = 0;
+		$customerNotRequiredFields = array('note', 'active', 'is_guest', 'deleted', 'date_add', 'date_upd', 'id_default_group', 'last_passwd_gen', 'ip_registration_newsletter', 'secure_key', 'newsletter_date_add');
 		foreach ($table_fields as $field)
 		{
-			if ($this->className == 'Customer' && $field['Field'] == 'note')
+			if ($this->className == 'Customer' && in_array($field['Field'], $customerNotRequiredFields))
 				continue;
 			if (in_array($field['Field'], $required_class_fields))
 				continue;
 			echo '<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
 						<td class="noborder"><input type="checkbox" name="fieldsBox[]" value="'.$field['Field'].'" '.(in_array($field['Field'], $required_fields) ? 'checked="checked"' : '').' /></td>
-						<td>'.$field['Field'].'</td>
+						<td>'.str_replace('id_', '', $field['Field']).'</td>
 					</tr>';
 		}
 		echo '</table><br />
