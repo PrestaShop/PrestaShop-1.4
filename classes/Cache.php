@@ -99,5 +99,4 @@ abstract class CacheCore
 	abstract public function flush();
 	abstract public function setQuery($query, $result);
 	abstract public function deleteQuery($query);
-	abstract public function checkQuery($query);
 }
