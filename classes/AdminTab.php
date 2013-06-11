@@ -324,6 +324,8 @@ abstract class AdminTabCore
 		{
 			if ($this->className == 'Customer' && in_array($field['Field'], $customerNotRequiredFields))
 				continue;
+			elseif ($this->className == 'Manufacturer' && in_array($field['Field'], $manufacturerNotRequiredFields))
+				continue;				
 			if (in_array($field['Field'], $required_class_fields))
 				continue;
 			echo '<tr class="'.($irow++ % 2 ? 'alt_row' : '').'">
