@@ -105,27 +105,28 @@ class OrderSlipCore extends ObjectModel
 		$tmp = array();
 		foreach ($productsRet as $slip_detail)
 			$tmp[$slip_detail['id_order_detail']] = $slip_detail['product_quantity'];
-		$resTab = array();
-		foreach ($products as $key => $product)
+		foreach ($products as $key => &$product)
+		{	
 			if (isset($tmp[$product['id_order_detail']]))
-			{
-				$resTab[$key] = $product;
-				$resTab[$key]['product_quantity'] = $tmp[$product['id_order_detail']];
+			{		
+				$product['product_quantity'] = $tmp[$product['id_order_detail']];
+				$realProductPrice = $product['product_price'];
+				$order->setProductPrices($product);
 				if (count($discounts))
 				{
-					$order->setProductPrices($product);
-					$realProductPrice = $resTab[$key]['product_price'];
 					foreach ($discounts as $discount)
 					{
 						if ($discount['id_discount_type'] == 1)
-							$resTab[$key]['product_price'] -= $realProductPrice * ($discount['value'] / 100);
+							$product['product_price'] = $product['product_price'] - ($realProductPrice * ($discount['value'] / 100));
 						elseif ($discount['id_discount_type'] == 2)
-							$resTab[$key]['product_price'] -= (($discount['value'] * ($product['product_price_wt'] / $order->total_products_wt)) / (1.00 + ($product['tax_rate'] / 100)));
+							$product['product_price'] = $product['product_price'] - (($discount['value'] * ($product['product_price_wt'] / $order->total_products_wt)) / (1.00 + ($product['tax_rate'] / 100)));
 					}
-
 				}
 			}
-		return $order->getProducts($resTab);
+			else
+				unset($products[$key]);
+		}
+		return $products;
 	}
 
 	public function getProducts()
