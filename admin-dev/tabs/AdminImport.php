@@ -441,7 +441,9 @@ class AdminImport extends AdminTab
 			break;
 		}
 		$url_source_file = str_replace(' ', '%20', trim($url));
-		if (@copy($url_source_file, $tmpfile))
+		$url_source_file = Tools::file_get_contents($url_source_file);
+
+		if (@file_put_contents($tmpfile, $url_source_file) && file_exists($tmpfile))
 		{
 			imageResize($tmpfile, $path.'.jpg');
 			$imagesTypes = ImageType::getImagesTypes($entity);
@@ -452,10 +454,10 @@ class AdminImport extends AdminTab
 		}
 		else
 		{
-			unlink($tmpfile);
+			@unlink($tmpfile);
 			return false;
 		}
-		unlink($tmpfile);
+		@unlink($tmpfile);
 		return true;
 	}
 
