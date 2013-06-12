@@ -473,16 +473,11 @@ class OrderCore extends ObjectModel
 			$row['product_price'] = Tools::ps_round($row['product_price'], 2);
 
 		if ($this->_taxCalculationMethod == PS_TAX_EXC)
-		{
 			$row['product_price_wt'] = Tools::ps_round($row['product_price'] * (1 + ($row['tax_rate'] * 0.01)), 2) + Tools::ps_round($row['ecotax'] * (1 + $row['ecotax_tax_rate'] / 100), 2);
-			$row['product_price_wt_but_ecotax'] = $row['product_price_wt'];
-		}
 		else
-		{
-			$row['product_price_wt_but_ecotax'] = $row['product_price_wt'];
 			$row['product_price_wt'] = Tools::ps_round($row['product_price_wt'] + $row['ecotax'] * (1 + $row['ecotax_tax_rate'] / 100), 2);
-		}
 
+		$row['product_price_wt_but_ecotax'] = $row['product_price_wt'];
 		$row['total_wt'] = $row['product_quantity'] * $row['product_price_wt'];
 		$row['total_price'] = $row['product_quantity'] * $row['product_price'];
 	}
