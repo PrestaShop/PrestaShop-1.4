@@ -263,14 +263,26 @@ class AdminPreferences extends AdminTab
 		{
 			if (Tools::isSubmit('submitAppearanceconfiguration'))
 			{
+				if ((isset($_FILES['PS_LOGO']['error']) && $_FILES['PS_LOGO']['error'] == 1) ||
+				(isset($_FILES['PS_LOGO_MAIL']['error']) && $_FILES['PS_LOGO_MAIL']['error'] == 1) ||
+				(isset($_FILES['PS_LOGO_INVOICE']['error']) && $_FILES['PS_LOGO_INVOICE']['error'] == 1) ||
+				(isset($_FILES['PS_FAVICON']['error']) && $_FILES['PS_FAVICON']['error'] == 1) ||
+				(isset($_FILES['PS_STORES_ICON']['error']) && $_FILES['PS_STORES_ICON']['error'] == 1))
+				{
+					$uploadMaxSize = (int)str_replace('M', '',ini_get('upload_max_filesize'));
+					$postMaxSize = (int)str_replace('M', '', ini_get('post_max_size'));
+					$maxSize = $uploadMaxSize < $postMaxSize ? $uploadMaxSize : $postMaxSize;					
+					$this->_errors[] = Tools::displayError('An error occurred during logo copy. Image size must be below').' '.$maxSize. 'M.';
+				}
 				if (isset($_FILES['PS_LOGO']['tmp_name']) AND $_FILES['PS_LOGO']['tmp_name'])
 				{
+
 					if ($error = checkImage($_FILES['PS_LOGO'], 300000))
 						$this->_errors[] = $error;
 					if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['PS_LOGO']['tmp_name'], $tmpName))
 						return false;
 					elseif (!@imageResize($tmpName, _PS_IMG_DIR_.'logo.jpg'))
-						$this->_errors[] = 'an error occurred during logo copy';
+						$this->_errors[] = Tools::displayError('an error occurred during logo copy');
 					unlink($tmpName);
 				}
 				if (isset($_FILES['PS_LOGO_MAIL']['tmp_name']) AND $_FILES['PS_LOGO_MAIL']['tmp_name'])
@@ -280,7 +292,7 @@ class AdminPreferences extends AdminTab
 					if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS_MAIL') OR !move_uploaded_file($_FILES['PS_LOGO_MAIL']['tmp_name'], $tmpName))
 						return false;
 					elseif (!@imageResize($tmpName, _PS_IMG_DIR_.'logo_mail.jpg'))
-						$this->_errors[] = 'an error occurred during logo copy';
+						$this->_errors[] = Tools::displayError('an error occurred during logo copy');
 					unlink($tmpName);
 				}
 				if (isset($_FILES['PS_LOGO_INVOICE']['tmp_name']) AND $_FILES['PS_LOGO_INVOICE']['tmp_name'])
@@ -290,7 +302,7 @@ class AdminPreferences extends AdminTab
 					if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS_INVOICE') OR !move_uploaded_file($_FILES['PS_LOGO_INVOICE']['tmp_name'], $tmpName))
 						return false;
 					elseif (!@imageResize($tmpName, _PS_IMG_DIR_.'logo_invoice.jpg'))
-						$this->_errors[] = 'an error occurred during logo copy';
+						$this->_errors[] = Tools::displayError('an error occurred during logo copy');
 					unlink($tmpName);
 				}
 				if (isset($_FILES['PS_STORES_ICON']['tmp_name']) AND $_FILES['PS_STORES_ICON']['tmp_name'])
@@ -300,7 +312,7 @@ class AdminPreferences extends AdminTab
 					if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS_STORES_ICON') OR !move_uploaded_file($_FILES['PS_STORES_ICON']['tmp_name'], $tmpName))
 						return false;
 					elseif (!@imageResize($tmpName, _PS_IMG_DIR_.'logo_stores.gif'))
-						$this->_errors[] = 'an error occurred during logo copy';
+						$this->_errors[] = Tools::displayError('an error occurred during logo copy');
 					unlink($tmpName);
 				}
 				$this->uploadIco('PS_FAVICON', _PS_IMG_DIR_.'favicon.ico');
