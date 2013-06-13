@@ -316,7 +316,14 @@ class ThemeInstallator extends Module
 	{
 		if (Tools::isSubmit('submitImport1'))
 		{
-			if ($_FILES['themearchive']['error'] || !file_exists($_FILES['themearchive']['tmp_name']))
+			if (isset($_FILES['themearchive']['error']) && $_FILES['themearchive']['error'] == 1)
+			{
+				$uploadMaxSize = (int)str_replace('M', '',ini_get('upload_max_filesize'));
+				$postMaxSize = (int)str_replace('M', '', ini_get('post_max_size'));
+				$maxSize = $uploadMaxSize < $postMaxSize ? $uploadMaxSize : $postMaxSize;					
+				$this->errors[] = parent::displayError($this->l('An error occurred during logo copy. Image size must be below').' '.$maxSize. 'M.');
+			}		
+			elseif ($_FILES['themearchive']['error'] || !file_exists($_FILES['themearchive']['tmp_name']))
 				$this->errors[] = parent::displayError($this->l('An error has occurred during the file upload.'));
 			elseif (substr($_FILES['themearchive']['name'], -4) != '.zip')
 				$this->errors[] = parent::displayError($this->l('Only zip files are allowed'));
