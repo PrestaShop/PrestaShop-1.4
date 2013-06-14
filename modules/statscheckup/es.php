@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{statscheckup}prestashop>statscheckup_e7a908d79d3758c911692ba791da9c70'] = 'Evaluación del catálogo';
 $_MODULE['<{statscheckup}prestashop>statscheckup_24f870376156be0e8e22cfb94d29df6d'] = 'Calidad de su catálogo de inmediato';
 $_MODULE['<{statscheckup}prestashop>statscheckup_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Configuración actualizada';
@@ -18,7 +19,7 @@ $_MODULE['<{statscheckup}prestashop>statscheckup_27ce7f8b5623b2e2df568d64cf05160
 $_MODULE['<{statscheckup}prestashop>statscheckup_691d502cfd0e0626cd3b058e5682ad1c'] = 'artículos';
 $_MODULE['<{statscheckup}prestashop>statscheckup_dc270bcf468689b19074a5eef7581b52'] = 'Insuficiente';
 $_MODULE['<{statscheckup}prestashop>statscheckup_f4abc77d498c89880f67331609406774'] = 'Perfecto';
-$_MODULE['<{statscheckup}prestashop>statscheckup_eb37cbc42e2338eec3de04db470d689a'] = 'inferior a ';
+$_MODULE['<{statscheckup}prestashop>statscheckup_eb37cbc42e2338eec3de04db470d689a'] = 'inferior a';
 $_MODULE['<{statscheckup}prestashop>statscheckup_bde3207d6920ce65500670d7eaf77af9'] = 'superior a';
 $_MODULE['<{statscheckup}prestashop>statscheckup_38fb7d24e0d60a048f540ecb18e13376'] = 'Guardar';
 $_MODULE['<{statscheckup}prestashop>statscheckup_01fda57aa6c7e9f07f5aa36b108e95cb'] = 'Seleccionar por';

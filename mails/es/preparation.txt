@@ -1,6 +1,6 @@
 Hola {firstname} {lastname},
 	
-Sobre tu pedido {order_name}:
+Sobre tu pedido #{id_order}:
 
 Estamos preparando tu pedido.
 

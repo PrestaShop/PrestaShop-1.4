@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{ogone}prestashop>hookorderconfirmation_2e2117b7c81aa9ea6931641ea2c6499f'] = 'Su pedido en';
 $_MODULE['<{ogone}prestashop>hookorderconfirmation_75fbf512d744977d62599cc3f0ae2bb4'] = 'está terminado.';
 $_MODULE['<{ogone}prestashop>hookorderconfirmation_30163d8fc3068e8297e7ab5bf32aec87'] = 'Su pedido le será enviado lo antes posible.';
@@ -18,6 +19,8 @@ $_MODULE['<{ogone}prestashop>ogone_650be61892bf690026089544abbd9d26'] = 'Modo';
 $_MODULE['<{ogone}prestashop>ogone_0cbc6611f5540bd0809a388dc95a615b'] = 'Test';
 $_MODULE['<{ogone}prestashop>ogone_756d97bb256b8580d4d71ee0c547804e'] = 'Producción';
 $_MODULE['<{ogone}prestashop>ogone_b17f3f4dcf653a5776792498a9b44d6a'] = 'Actualizar';
+$_MODULE['<{ogone}prestashop>ogone_48c7c41b72e1d678923ce3571aa65b2d'] = 'Paso';
+$_MODULE['<{ogone}prestashop>ogone_3afbd9828e011526955ca93b48b57524'] = 'Pantallazo';
 $_MODULE['<{ogone}prestashop>ogone_75310bf8b7cf2ca4e09332871f98c271'] = 'Pagar con Ogone';
 $_MODULE['<{ogone}prestashop>ogone_51e550f8a0e9e127a566c21e9a15538b'] = 'Logo Ogone';
 $_MODULE['<{ogone}prestashop>ogone_15ee0c3bac84f0ff0a2af1e6cdc1a048'] = 'Pagar rápidamente con toda seguridad en la siguiente página con IDEAL / Mastercard / Visa / PayPal / Mister Cash / Bancontact';

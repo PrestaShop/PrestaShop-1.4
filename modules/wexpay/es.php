@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{wexpay}prestashop>wexpay_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = '¿Está seguro de querer borrar los detalles?';
 $_MODULE['<{wexpay}prestashop>wexpay_444bcb3a3fcf8389296c49467f27e1d6'] = 'ok';
 $_MODULE['<{wexpay}prestashop>wexpay_c888438d14855d7d96a2724ee9c306bd'] = 'Ajustes actualizados';

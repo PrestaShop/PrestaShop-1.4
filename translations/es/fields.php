@@ -2,6 +2,7 @@
 
 global $_FIELDS;
 $_FIELDS = array();
+
 $_FIELDS['Address_71581233bcc121fcc409ecce9317fbde'] = 'customer ID';
 $_FIELDS['Address_98305bfa557ba2547e7de1fb77053c93'] = 'manufacturer ID';
 $_FIELDS['Address_ad8a1593fb8fbba0eb0f9dba0e51e7f1'] = 'supplier ID';
@@ -469,7 +470,7 @@ $_FIELDS['SpecificPrice_5a0971a207e75dd040db8b6a3425a8bf'] = 'shop ID';
 $_FIELDS['SpecificPrice_e42112710fe4f0cf86411aabc028e7d9'] = 'country ID';
 $_FIELDS['SpecificPrice_6d03c13d90dae15f3dafe865b0fbfded'] = 'group ID';
 $_FIELDS['SpecificPrice_78a5eb43deef9a7b5b9ce157b9d52ac4'] = 'precio';
-$_FIELDS['SpecificPrice_dc99776458b68786a9e903854e23a483'] = 'cantidad de ';
+$_FIELDS['SpecificPrice_dc99776458b68786a9e903854e23a483'] = 'cantidad de';
 $_FIELDS['SpecificPrice_9477e24c78f1ca8ee9b03111f6227fc2'] = 'descuento';
 $_FIELDS['SpecificPrice_06d76e815de4d1c0f6d1919068ad54ca'] = 'descuento tipo';
 $_FIELDS['SpecificPrice_d98a07f84921b24ee30f86fd8cd85c3c'] = 'de';

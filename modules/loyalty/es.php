@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{loyalty}prestashop>loyalty_30146a132c2aa28808a8411ed74c12ed'] = 'La fidelidad de los clientes y las recompensas';
 $_MODULE['<{loyalty}prestashop>loyalty_f8763c754ba455aa6e8ddf0e62911eb7'] = 'Propone un programa de fidelización a sus clientes';
 $_MODULE['<{loyalty}prestashop>loyalty_f0338d5a7bbd642cc188ca69c8a97b12'] = 'Esta acción suprimirá todos los puntos de fidelidad y el historial de los puntos de todos sus clientes, ¿está seguro de que desea continuar?';

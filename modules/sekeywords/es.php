@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{sekeywords}prestashop>sekeywords_65b0b42febc8ea16db4652eab6f420a4'] = 'Palabras clave en el motor de búsqueda';
 $_MODULE['<{sekeywords}prestashop>sekeywords_de13be6263895a5efe4d51e15ab1535e'] = 'Mostrar qué palabras claves han llevado visitantes a su tienda';
 $_MODULE['<{sekeywords}prestashop>sekeywords_a6a5cc2d3979e54597c79a68448adee2'] = 'palabra clave encontrada para su búsqueda.';

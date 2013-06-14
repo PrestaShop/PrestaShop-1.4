@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{carriercompare}prestashop>carriercompare_115484428c82f859100c07ae1170d9e0'] = 'Estimación de la entrega';
 $_MODULE['<{carriercompare}prestashop>carriercompare_68e114c207a6820a8f14d0eceacf17d7'] = 'Módulo que permite hacer una estimación de los gastos de envío antes de comenzar el proceso de compra.';
 $_MODULE['<{carriercompare}prestashop>carriercompare_ed70a57a190d596171cf324c16a2277d'] = 'El identificante State no es válido';

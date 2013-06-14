@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{referralprogram}prestashop>authentication_6b31baf25848e7a6563ecc3946626c80'] = 'Programa de patrocinio';
 $_MODULE['<{referralprogram}prestashop>authentication_8fdb2298a0db461ac64e71192a562ca1'] = 'Email de su patrocinador';
 $_MODULE['<{referralprogram}prestashop>my-account_6b31baf25848e7a6563ecc3946626c80'] = 'Programa de patrocinio';
@@ -32,10 +33,10 @@ $_MODULE['<{referralprogram}prestashop>referralprogram-program_8d3ae82bfa996855c
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_9cee6c57b3003b3068177fa913f56468'] = 'Cuando uno de ellos haga por lo menos';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_12c500ed0b7879105fb46af0f246be87'] = 'pedidos';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_70a17ffa722a3985b86d30b034ad06d7'] = 'un pedido';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_08b002301ef588d9cb9d7b009df2d1e1'] = 'recibirá un vale de descuanto de ';
+$_MODULE['<{referralprogram}prestashop>referralprogram-program_08b002301ef588d9cb9d7b009df2d1e1'] = 'recibirá un vale de descuanto de';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_d05ec51899c256dea704ae4c5e9c6f2a'] = 'y usted también';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_8d3f5eff9c40ee315d452392bed5309b'] = 'Apellidos';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_20db0bfeecd8fe60533206a2b5e9891a'] = 'Nombre ';
+$_MODULE['<{referralprogram}prestashop>referralprogram-program_20db0bfeecd8fe60533206a2b5e9891a'] = 'Nombre';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_1e884e3078d9978e216a027ecd57fb34'] = 'Email';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_9386de858384e7f790a28beecdb986dd'] = 'Importante: las direcciones de correo electrónico de sus amigos  sólo serán utilizadas en el programa de patrocinio. Nunca se utilizarán para otros fines.';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_605eef3cad421619ce034ab48415190f'] = 'He leido las condiciones de uso y las acepto sin reservas.';
@@ -43,7 +44,7 @@ $_MODULE['<{referralprogram}prestashop>referralprogram-program_6b719c160f9b08dad
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_868ca5fe643791c23b47c75fb833c9b8'] = 'Leer condiciones.';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_31fde7b05ac8952dacf4af8a704074ec'] = 'Vista previa';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_8e8dc296c6bf3876468aa028974bfebe'] = 'Invitación por email';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_a86073a0c3b0bebf11bd807caf8e505a'] = 'Email por defecto ';
+$_MODULE['<{referralprogram}prestashop>referralprogram-program_a86073a0c3b0bebf11bd807caf8e505a'] = 'Email por defecto';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_7532696b81dfc0b94a37e876677152c5'] = 'que se enviará a su amigo o amigos.';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_ad3d06d03d94223fa652babc913de686'] = 'Validar';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_59352cd5314a67c0fb10c964831920f3'] = 'Para ser un patrocinador, es necesario que usted tenga por lo menos';
@@ -51,7 +52,7 @@ $_MODULE['<{referralprogram}prestashop>referralprogram-program_ec7342814444c667a
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_3e717a04ff77cd5fa068d8ad9d3facc8'] = 'Última invitación';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_9c9d4ed270f02c72124702edb192ff19'] = 'Contactar a mi(s) amigo (s)';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_8b9f390369560635a2ba5ba271d953df'] = 'Usted no ha patrocinado a ningún amigo.';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_193f3d8bbaceba40499cab1a3545e9e8'] = ' Aquí­ están los amigos patrocinados que han aceptado su invitación:';
+$_MODULE['<{referralprogram}prestashop>referralprogram-program_193f3d8bbaceba40499cab1a3545e9e8'] = 'Aquí­ están los amigos patrocinados que han aceptado su invitación:';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_3c648ba41cfb45f13b083a9cbbacdfdf'] = 'Fecha de inscripción';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_8d4e5c2bc4c3cf67d2b59b263a707cb6'] = 'Aún no hay amigos Patrocinados que hayan aceptado su invitación.';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_0b3db27bc15f682e92ff250ebb167d4b'] = 'Volver a su cuenta';

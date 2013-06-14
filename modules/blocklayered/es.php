@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{blocklayered}prestashop>blocklayered-no-products_5c9838becf9bbce28ba90a7426daf171'] = 'No hay productos.';
 $_MODULE['<{blocklayered}prestashop>blocklayered_84241e458cdd5162745500a59a3680f3'] = 'Bloque navegación por facetas';
 $_MODULE['<{blocklayered}prestashop>blocklayered_2d08fa8e157fe3f1875402cbd98aee1b'] = 'Muestra un bloque con los filtros de la navegación por facetas';
@@ -10,7 +11,7 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_6252c0f2c2ed83b7b06dfca86d4650b
 $_MODULE['<{blocklayered}prestashop>blocklayered_f39f64ad2722b269d9b6cb2ec97ba4ad'] = 'Formato de dirección URL específica en la generación de bloque de capas';
 $_MODULE['<{blocklayered}prestashop>blocklayered_7b250cb374c12c42a75227ba75df7779'] = 'Meta título:';
 $_MODULE['<{blocklayered}prestashop>blocklayered_a4020753b3e63fd8a1d0c0b2b33fc999'] = 'Especificar formato del meta título';
-$_MODULE['<{blocklayered}prestashop>blocklayered_b3786b970611c1a3809dd51b630812a7'] = '\"%\" no es una url válida';
+$_MODULE['<{blocklayered}prestashop>blocklayered_b3786b970611c1a3809dd51b630812a7'] = '\"%s\" no es una url válida';
 $_MODULE['<{blocklayered}prestashop>blocklayered_c3ef60194d18cf4026d22051b3a19428'] = 'Indexable:';
 $_MODULE['<{blocklayered}prestashop>blocklayered_a075d40d1a15460220cbf564b7b9b591'] = 'Utilice este atributo en la URL generada por el módulo de navegación por capas';
 $_MODULE['<{blocklayered}prestashop>blocklayered_ccc12c5568381293a27db0232877937b'] = 'Nombre del filtro de template requerido (no puede estar vacio)';
@@ -79,7 +80,7 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_74a6a547d86659933a210680efb6e6d
 $_MODULE['<{blocklayered}prestashop>blocklayered_f8263d99054a4cdb3428196f078fa212'] = 'Nombre de la plantilla:';
 $_MODULE['<{blocklayered}prestashop>blocklayered_32d2e6cd4bb1719c572ef470a3a525b6'] = 'Mi plantilla %s';
 $_MODULE['<{blocklayered}prestashop>blocklayered_5f514b580ea1b6bdb681916bc1deb207'] = 'sólo como un recordatorio';
-$_MODULE['<{blocklayered}prestashop>blocklayered_188185ae335eb523e53d6d31ede21f1c'] = 'No se han seleccionado filtros, el bloque de navegación se desactivara para las categorías seleccionadas.';
+$_MODULE['<{blocklayered}prestashop>blocklayered_5487c1b875efa718581006b6e6c8395e'] = 'Ningún filtro seleccionado, el  blocklayered se deshabilitará para las categorías seleccionadas.';
 $_MODULE['<{blocklayered}prestashop>blocklayered_ef1094d9826e98f5417e0a37f1742133'] = 'Guardar esta plantilla de filtro';
 $_MODULE['<{blocklayered}prestashop>blocklayered_254f642527b45bc260048e30704edb39'] = 'Configuración';
 $_MODULE['<{blocklayered}prestashop>blocklayered_054b4f3ea543c990f6b125f41af6ebf7'] = 'Opción';
@@ -94,6 +95,7 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_3e652bd299bb3ee3d458c0dcc7fd706
 $_MODULE['<{blocklayered}prestashop>blocklayered_cc787af9edec8ce947ada8ab5bbff6e5'] = 'Permita que los robots de indexación (Google, Yahoo, Bing, ...) usen el filtro de condición';
 $_MODULE['<{blocklayered}prestashop>blocklayered_ab28e5086d1dcb1474a4bd4951b148b9'] = 'Permita que los robots de indexación (Google, Yahoo, Bing, ...) para usar filtro de la disponibilidad';
 $_MODULE['<{blocklayered}prestashop>blocklayered_1218da2abb1e88e7fe8855995def9fef'] = 'Permita que los robots de indexación (Google, Yahoo, Bing, ...) para usar filtro de fabricante';
+$_MODULE['<{blocklayered}prestashop>blocklayered_c41e97692bc79531a51dfca4b7f6bee0'] = 'Autoriza los \"robots\" de clasificación (google, yahoo, bing, ...) a usar los filtros de categorías';
 $_MODULE['<{blocklayered}prestashop>blocklayered_cf565402d32b79d33f626252949a6941'] = 'Guardar la configuración';
 $_MODULE['<{blocklayered}prestashop>blocklayered_3601146c4e948c32b6424d2c0a7f0118'] = 'Precio';
 $_MODULE['<{blocklayered}prestashop>blocklayered_8c489d0946f66d17d73f26366a4bf620'] = 'Peso';
@@ -106,7 +108,7 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_fcebe56087b9373f15514831184fa57
 $_MODULE['<{blocklayered}prestashop>blocklayered_faeaec9eda6bc4c8cb6e1a9156a858be'] = 'Disponibilidad';
 $_MODULE['<{blocklayered}prestashop>blocklayered_c0bd7654d5b278e65f21cf4e9153fdb4'] = 'Fabricante';
 $_MODULE['<{blocklayered}prestashop>blocklayered_308edffd52afae39cc6277e246ec5df8'] = 'Filtros disponibles';
-$_MODULE['<{blocklayered}prestashop>blocklayered_cfbc982f8fb7a0cc3abb3c85c795ab41'] = 'Filtro de Subcategorías ';
+$_MODULE['<{blocklayered}prestashop>blocklayered_cfbc982f8fb7a0cc3abb3c85c795ab41'] = 'Filtro de Subcategorías';
 $_MODULE['<{blocklayered}prestashop>blocklayered_af605ea55ee39e54c444f217e346048f'] = 'Sín limite';
 $_MODULE['<{blocklayered}prestashop>blocklayered_4f8222964f9a317cef99dddc23a121bd'] = 'Checkbox';
 $_MODULE['<{blocklayered}prestashop>blocklayered_07a9ca8c8228dd3399141e228034fedf'] = 'Botón de radio';

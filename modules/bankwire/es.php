@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{bankwire}prestashop>bankwire_85ee0d0492a4e37e6c183520f5d59c40'] = 'Trasferencia bancaria';
 $_MODULE['<{bankwire}prestashop>bankwire_f652b92eefd4ecfe61ef5fb118157a05'] = 'Se aceptan pagos por trasferencia bancaria';
 $_MODULE['<{bankwire}prestashop>bankwire_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = '¿Está seguro de querer borrar los detalles?';

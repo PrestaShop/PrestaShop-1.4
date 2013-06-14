@@ -1,6 +1,6 @@
 Hola {firstname} {lastname},
 	
-En referencia a tu pedido {order_name}: 
+En referencia a tu pedido #{id_order}: 
 
 El pago de tu pedido fue recibido CORRECTAMENTE .
 

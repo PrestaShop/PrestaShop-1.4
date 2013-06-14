@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{blockcms}prestashop>blockcms_cd275312651aebf8cbbb8d3bb1c086ae'] = 'Bloque CMS';
 $_MODULE['<{blockcms}prestashop>blockcms_cdca12007979fc49008fd125cdb775fc'] = 'Añadir un bloque con varios links hacia sus CMS';
 $_MODULE['<{blockcms}prestashop>blockcms_97390dd0b5ba7867120aee2ff22bfa38'] = 'Configuración de los bloques CMS';
@@ -11,7 +12,7 @@ $_MODULE['<{blockcms}prestashop>blockcms_b718adec73e04ce3ec720dd11a06a308'] = 'I
 $_MODULE['<{blockcms}prestashop>blockcms_aae551ce0c29dfe39b0ff20139abdef3'] = 'Nombre del bloque';
 $_MODULE['<{blockcms}prestashop>blockcms_99121ab27aaa7472cfada9071c5ba434'] = 'Nombre de la categoría CMS';
 $_MODULE['<{blockcms}prestashop>blockcms_52f5e0bc3859bc5f5e25130b6c7e8881'] = 'Posición';
-$_MODULE['<{blockcms}prestashop>blockcms_06df33001c1d7187fdd81ea1f5b277aa'] = 'Acciones ';
+$_MODULE['<{blockcms}prestashop>blockcms_06df33001c1d7187fdd81ea1f5b277aa'] = 'Acciones';
 $_MODULE['<{blockcms}prestashop>blockcms_08a38277b0309070706f6652eeae9a53'] = 'Bajar';
 $_MODULE['<{blockcms}prestashop>blockcms_258f49887ef8d14ac268c92b02503aaa'] = 'Subir';
 $_MODULE['<{blockcms}prestashop>blockcms_7dce122004969d56ae2e0245cb754d35'] = 'Editar';
@@ -41,7 +42,7 @@ $_MODULE['<{blockcms}prestashop>blockcms_903d12e7aa8c380c290b78c1898e01b7'] = 'U
 $_MODULE['<{blockcms}prestashop>blockcms_92fc29650a0f9dd3fca4e5de1845f78b'] = 'Debe elegir al menos una página o subcategoría para crear un bloque CMS';
 $_MODULE['<{blockcms}prestashop>blockcms_5e75cbfbfd02a7b2fab0ed21505e811b'] = 'Página CMS o subcategoría no válidos';
 $_MODULE['<{blockcms}prestashop>blockcms_420d575844f77db5299065080d9c237f'] = 'Nombre del bloque demasiado largo';
-$_MODULE['<{blockcms}prestashop>blockcms_ede67d50014846cb8bb1b00d5fde77be'] = ' id_cms_block no válido';
+$_MODULE['<{blockcms}prestashop>blockcms_ede67d50014846cb8bb1b00d5fde77be'] = 'id_cms_block no válido';
 $_MODULE['<{blockcms}prestashop>blockcms_05b51791a83d3cef29ad68b70d48d131'] = 'Activación footer no válida';
 $_MODULE['<{blockcms}prestashop>blockcms_5dab5acc3c6a2a7e87e8d8926a2c763e'] = 'Está tratando de suprimir un bloque cms que no existe';
 $_MODULE['<{blockcms}prestashop>blockcms_138218281781fd0d938a140892d7386c'] = 'Edición de links CMS a pie de página con éxito';

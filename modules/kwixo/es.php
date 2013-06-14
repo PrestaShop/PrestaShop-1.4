@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{kwixo}prestashop>kwixo_0981c28797684ede5114ae410997ffc5'] = 'Kwixo';
 $_MODULE['<{kwixo}prestashop>kwixo_0c70853cdce55048ea5a9d3ace56b5dd'] = 'Se puede pagar con \"Kwixo\"';
 $_MODULE['<{kwixo}prestashop>kwixo_41ef095800141e52c62fa58b93a16640'] = 'MerchID, CryptKey y una categoría debe estar configurado para utilizar este módulo correctamente';
@@ -20,7 +21,7 @@ $_MODULE['<{kwixo}prestashop>kwixo_080d3ce779d939f18af2ca1e499c2d4d'] = 'URL de 
 $_MODULE['<{kwixo}prestashop>kwixo_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Confirmación';
 $_MODULE['<{kwixo}prestashop>kwixo_c888438d14855d7d96a2724ee9c306bd'] = 'Ajustes actualizados';
 $_MODULE['<{kwixo}prestashop>kwixo_6357d3551190ec7e79371a8570121d3a'] = 'Hay';
-$_MODULE['<{kwixo}prestashop>kwixo_4ce81305b7edb043d0a7a5c75cab17d0'] = 'Hay ';
+$_MODULE['<{kwixo}prestashop>kwixo_4ce81305b7edb043d0a7a5c75cab17d0'] = 'Hay';
 $_MODULE['<{kwixo}prestashop>kwixo_07213a0161f52846ab198be103b5ab43'] = 'errores';
 $_MODULE['<{kwixo}prestashop>kwixo_cb5e100e5a9a3e7f6d1fd97512215282'] = 'error';
 $_MODULE['<{kwixo}prestashop>kwixo_3879149292f9af4469cec013785d6dfd'] = 'advertencias';
@@ -61,7 +62,7 @@ $_MODULE['<{kwixo}prestashop>payment_return_1dd3e36a8d7f1303d784c25146ebe8f6'] =
 $_MODULE['<{kwixo}prestashop>payment_return_e0ec80d2e2a1ce2d8711435b7d1d9023'] = 'clave \"custom\" no se especifica, no se puede confíar a la cesta';
 $_MODULE['<{kwixo}prestashop>payment_return_2d368e198925a0ef2203fb07368432e8'] = 'clave \"module\" no se especifica, no se puede confiar en el módulo de pago';
 $_MODULE['<{kwixo}prestashop>payment_return_f114c5e68fcac9c1856a3fcf7a583081'] = '\"cantidad\" no se especifica, no se puede controlar la cantidad pagada';
-$_MODULE['<{kwixo}prestashop>payment_return_b2c11986785ba57c993ef44104768368'] = ' No se puede encontrar el carro de la compra';
+$_MODULE['<{kwixo}prestashop>payment_return_b2c11986785ba57c993ef44104768368'] = 'No se puede encontrar el carro de la compra';
 $_MODULE['<{kwixo}prestashop>payment_return_e3bb978b9d6eba040eb299aafe5d93b1'] = 'Su pago ha sido \'. ($tag == 0 cancelado \'?\' \':\' denegado';
 $_MODULE['<{kwixo}prestashop>payment_return_219747f2d5260e7d31f63bcd21414a1e'] = 'Transacción OK:';
 $_MODULE['<{kwixo}prestashop>payment_return_3a881a13316876a92c642cede0dd9c44'] = 'Uno o más error durante la validación';

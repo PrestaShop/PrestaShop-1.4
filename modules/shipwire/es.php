@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{shipwire}prestashop>shipwire_e912562384b72ccc478a47019c553dc7'] = 'Shipwire';
 $_MODULE['<{shipwire}prestashop>shipwire_387ef38ac0cb1704e465d537ab8d690d'] = 'Logística empresarial para todos.';
 $_MODULE['<{shipwire}prestashop>shipwire_621db7652ee0cb6a53c8ca4ec683bae5'] = 'No se envió a Shipwire.';

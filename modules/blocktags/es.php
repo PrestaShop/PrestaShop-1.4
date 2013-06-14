@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{blocktags}prestashop>blocktags_f2568a62d4ac8d1d5b532556379772ba'] = 'Bloque etiquetas';
 $_MODULE['<{blocktags}prestashop>blocktags_a332910d45d955dad6c84817fe478e95'] = 'Añadir un bloque que contenga una nube de etiquetas';
 $_MODULE['<{blocktags}prestashop>blocktags_4c1ef2cab0e711084a14f3d367a13c54'] = 'Debe completar el campo \"tags mostrados\"';

@@ -1,6 +1,6 @@
 Hola {firstname} {lastname},
 
-Has recibido un nuevo mensaje sobre el pedido {order_name}:
+Has recibido un nuevo mensaje sobre el pedido #{id_order}:
 
 {message}
 

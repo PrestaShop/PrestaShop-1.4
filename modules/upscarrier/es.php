@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{upscarrier}prestashop>upscarrier_ada23a988e5bab7c573cc51ec8a62ba2'] = 'Transportista UPS';
 $_MODULE['<{upscarrier}prestashop>upscarrier_2b0b9fe2cf477c3e8c78cc5fd59fb77e'] = 'Proponer a sus clientes el transportista UPS';
 $_MODULE['<{upscarrier}prestashop>upscarrier_883fa0069f4b0454e2277dd567ab3991'] = '\'Unidad de peso (LB o KG)\'';
@@ -51,7 +52,6 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_3184c79dd129c671b26afaefd7614488'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_40840f8672ee1391fa005409a46475db'] = 'Rellenar el formulario \"Configuración general\" y elegir su zona de tarifas';
 $_MODULE['<{upscarrier}prestashop>upscarrier_e20f6d6f13fe70e78f6e2ab488493ccf'] = 'Test de conexión al webservicio';
 $_MODULE['<{upscarrier}prestashop>upscarrier_5bcac5de5a4e77f92b02f00b88cae456'] = 'Seleccione los servicios de entrega dsiponibles (antes debe elegir su zona de tarifas)';
-$_MODULE['<{upscarrier}prestashop>upscarrier_6a79bb09adada5dc085e16148996425a'] = 'La extensión cURL no está activada, el módulo UPS puede funcionar sin cURL pero es conveniente activarlo. ';
 $_MODULE['<{upscarrier}prestashop>upscarrier_52f4393e1b52ba63e27310ca92ba098c'] = 'Configuración general';
 $_MODULE['<{upscarrier}prestashop>upscarrier_277d63a9b24a09697e3c64092eaf4353'] = 'Configuración por catálogo';
 $_MODULE['<{upscarrier}prestashop>upscarrier_098eec2cabe2c39c6dec3fc522b6571a'] = 'Configuración por producto';
@@ -93,7 +93,7 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_795de10b1bdcb843b3703c63ad577fc6'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_8d6bd50f3fe3ee2f4513066c25e5fb4a'] = 'Modo de cálculo';
 $_MODULE['<{upscarrier}prestashop>upscarrier_3169c5057093f8e6c2750f1949a0900d'] = 'Utilizando el modo de cálculo \"Todos los artículos en un solo paquete\" utilizará automáticamente el tamaño por defecto de embalaje, tipo de embalaje y entrega. No se utilizarán las configuraciones específicas de las categorías y de los productos.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_5cdd307ba6e260beb4801c0c10e22a3a'] = 'Servicio de entrega';
-$_MODULE['<{upscarrier}prestashop>upscarrier_78945de8de090e90045d299651a68a9b'] = 'Disponible ';
+$_MODULE['<{upscarrier}prestashop>upscarrier_78945de8de090e90045d299651a68a9b'] = 'Disponible';
 $_MODULE['<{upscarrier}prestashop>upscarrier_2d25c72c1b18e562f6654fff8e11711e'] = 'No disponible';
 $_MODULE['<{upscarrier}prestashop>upscarrier_d63e135774e62574e2a1921267dad142'] = 'Elija los servicios de entrega que sus clientes activarán por defecto.';
 $_MODULE['<{upscarrier}prestashop>upscarrier_1f045d1181f0066f43b177f8916af0e4'] = 'No ha introducido su login UPS';
@@ -147,6 +147,5 @@ $_MODULE['<{upscarrier}prestashop>upscarrier_b9bba478eb4348e49e672e944b072b68'] 
 $_MODULE['<{upscarrier}prestashop>upscarrier_90dc39cb4d212ee6e6e8c1ea45453019'] = 'Esta sección le permite definir las configuraciones UPS específicas para cada categoría ( tales como tipo de paquete y gastos adicionales).';
 $_MODULE['<{upscarrier}prestashop>upscarrier_2ce756272bcdd41712b4de841a3bd370'] = 'Esta sección le permite definir configuraciones UPS específicas para cada producto (tales como tipo de paquete y gastos adicionales).';
 $_MODULE['<{upscarrier}prestashop>upscarrier_902b0d55fddef6f8d651fe1035b7d4bd'] = 'Error';
-$_MODULE['<{upscarrier}prestashop>upscarrier_bbb1730944c8f495534aa125411687af'] = 'Los webservicios aparecen como inaccesibles. Espere unos minutos e inténtelo de nuevo.';
-$_MODULE['<{upscarrier}prestashop>upscarrier_da603f01f9ef4785e2aed2b3a2619e99'] = 'UPS timed out !';
-$_MODULE['<{upscarrier}prestashop>upscarrier_755549828deba234f771ea065e24c115'] = 'No ha podido conectarse a UPS.com';
+$_MODULE['<{upscarrier}prestashop>upscarrier_bbb1730944c8f495534aa125411687af'] = 'Los webservices parecen inaccesibles, por favor espere unos minutos e inténtelo de nuevo';
+$_MODULE['<{upscarrier}prestashop>upscarrier_755549828deba234f771ea065e24c115'] = 'No se puede conectar a UPS.com';

@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_9e31b08a00c1ed653bcaa517dee84714'] = 'Bloque newsletter';
 $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_ba457fab18d697d978befb95e827eb91'] = 'Añadir un bloque para suscribirse a la newsletter';
 $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_179bbcbd2e1104cdf9dcecd91264a961'] = '¿Está seguro de querer eliminar todos sus contactos?';
@@ -17,7 +18,7 @@ $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_de3bd7faad12c79178b1b22bf
 $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_06933067aafd48425d67bcb01bba5cb6'] = 'Actualizar';
 $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_6e659c47c94d1e1dc7121859f43fb2b0'] = 'email incorrecto';
 $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_9e6df6e72be5be5b8ff962ee3406907e'] = 'Email no registrado';
-$_MODULE['<{blocknewsletter}prestashop>blocknewsletter_29003419c075963848f1907174bdc224'] = 'Error al borrarse ';
+$_MODULE['<{blocknewsletter}prestashop>blocknewsletter_29003419c075963848f1907174bdc224'] = 'Error al borrarse';
 $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_f7dc297e2a139ab4f5a771825b46df43'] = 'Se ha borrado con éxito';
 $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_8dc3b88902df97bb96930282e56ed381'] = 'Email ya registrado';
 $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_b7d9eb38dd2e375648ab08e224e22e43'] = 'Error durante la suscripción';

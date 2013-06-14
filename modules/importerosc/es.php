@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{importerosc}prestashop>importerosc_e273168c3697c35b8c737d14b1a5fb26'] = 'Importer osCommerce';
 $_MODULE['<{importerosc}prestashop>importerosc_f4a344f88bab7b04a73077bafc8a0187'] = 'Este módulo permite importar su tienda OsCommerce en PrestaShop';
 $_MODULE['<{importerosc}prestashop>importerosc_a410107bacc21de421c07f0162f40878'] = 'Idioma por defecto de osCommerce:';

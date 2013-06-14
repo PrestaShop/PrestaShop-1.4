@@ -2,8 +2,12 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{cloudcache}prestashop>cloudcache_f86d8910fee395bdb3d9e0165763235d'] = 'CloudCache';
 $_MODULE['<{cloudcache}prestashop>cloudcache_04a5752fc2ed63bac60e8e819fb37a8a'] = 'Acelera tu tienda con la red de distribución de contenido de CloudCache.com';
+$_MODULE['<{cloudcache}prestashop>cloudcache_ea5eb3f904bf42377277255cbd0e2251'] = 'Para trabajar adecuadamente el módulo requiere que el módulo de compatibilidad hacia atrás esté activo';
+$_MODULE['<{cloudcache}prestashop>cloudcache_48878e69ef59b9e9d2d9a8c18e4de520'] = 'Para trabajar adecuadamente el módulo requiere al menos el módulo de compatibilidad hacia atrás v';
+$_MODULE['<{cloudcache}prestashop>cloudcache_c9d8a8d3c76c69e9a5ba6387acb8655a'] = 'Para poder usar el módulo necesita instalar la compatibilidad hacia atrás.';
 $_MODULE['<{cloudcache}prestashop>cloudcache_3d31c37e7b674b0882fd6eb636b9f883'] = 'El módulo se ha instalado correctamente (';
 $_MODULE['<{cloudcache}prestashop>cloudcache_e2d5a00791bce9a01f99bc6fd613a39d'] = 'configurar';
 $_MODULE['<{cloudcache}prestashop>cloudcache_7171d1fc720355ddfb40537f566d8775'] = ') pero el siguiente archivo ya existe. Por favor, combine los archivos manualmente.';
@@ -20,10 +24,10 @@ $_MODULE['<{cloudcache}prestashop>cloudcache_58f9c3960361509cf1d68bf643941ca1'] 
 $_MODULE['<{cloudcache}prestashop>cloudcache_d94adc30711fa8a860d1da817844312a'] = 'Error sincronizando zonas.';
 $_MODULE['<{cloudcache}prestashop>cloudcache_3d015f6519d6a4266d58735cbb0646aa'] = 'Se limpió el cache para todas las zonas.';
 $_MODULE['<{cloudcache}prestashop>cloudcache_927a80bfb795058dd0d56b910ce75182'] = 'Error limpiando el cache para todas las zonas.';
-$_MODULE['<{cloudcache}prestashop>cloudcache_0784546200bf0e0b692ce92fca030051'] = 'Se limpió el cache de la zona: ';
-$_MODULE['<{cloudcache}prestashop>cloudcache_677b9ce0ce1753890cfeb9d88b8b6a2d'] = 'Error limpiando el cache de la zona: ';
+$_MODULE['<{cloudcache}prestashop>cloudcache_0784546200bf0e0b692ce92fca030051'] = 'Se limpió el cache de la zona:';
+$_MODULE['<{cloudcache}prestashop>cloudcache_677b9ce0ce1753890cfeb9d88b8b6a2d'] = 'Error limpiando el cache de la zona:';
 $_MODULE['<{cloudcache}prestashop>cloudcache_5ea453e070eec6c0d81206b66e7b47bb'] = 'La siguiente zona fue actualizada:';
-$_MODULE['<{cloudcache}prestashop>cloudcache_7e185a7cd33a7ec22abaff3f1faa8d28'] = 'Error actualizando la zona: ';
+$_MODULE['<{cloudcache}prestashop>cloudcache_7e185a7cd33a7ec22abaff3f1faa8d28'] = 'Error actualizando la zona:';
 $_MODULE['<{cloudcache}prestashop>cloudcache_d5a735d3395d8928332af64d25479273'] = 'Se han encontrado problemas de compatibilidad, por favor corrija los errores antes de usar el modulo.';
 $_MODULE['<{cloudcache}prestashop>cloudcache_63a77eaf9f310dc5def6709c2887dcc4'] = 'Conexión de prueba fallida.';
 $_MODULE['<{cloudcache}prestashop>cloudcache_4dee17e319890f92a2595a308752a1c3'] = 'prestashop';
@@ -94,7 +98,7 @@ $_MODULE['<{cloudcache}prestashop>content2_3114114e2cdf0892739ee4ca557e8da5'] = 
 $_MODULE['<{cloudcache}prestashop>content2_93604834836f885a26ad3c780a490841'] = 'ID de la zona';
 $_MODULE['<{cloudcache}prestashop>content2_fa018acf009f5435d50578357f449ed3'] = 'Nombre del Pull Zone';
 $_MODULE['<{cloudcache}prestashop>content2_5e50936ee3316f28363a8de993cb07e8'] = 'URL del servidor de origen';
-$_MODULE['<{cloudcache}prestashop>content2_ae9980aee84bd689e09532a927049f2c'] = 'Dominio CDN personalizado ';
+$_MODULE['<{cloudcache}prestashop>content2_ae9980aee84bd689e09532a927049f2c'] = 'Dominio CDN personalizado';
 $_MODULE['<{cloudcache}prestashop>content2_b021df6aac4654c454f46c77646e745f'] = 'Etiqueta';
 $_MODULE['<{cloudcache}prestashop>content2_82af841589057aa8922b1ac3bb4a28a4'] = 'Compresión';
 $_MODULE['<{cloudcache}prestashop>content2_e539fd665e202f536325140d87d7bf72'] = 'Tipo de Archivo';

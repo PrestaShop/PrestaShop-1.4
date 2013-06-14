@@ -2,16 +2,18 @@
 
 global $_LANGPDF;
 $_LANGPDF = array();
-$_LANGPDF['PDF_invoicee0036b67b754e9f6442f9f9e6b200c33'] = 'Devolución nº ';
-$_LANGPDF['PDF_invoice77c3e447f60541a1c346a08134078c7f'] = 'Vale de compra nº ';
-$_LANGPDF['PDF_invoicecb5efbba6a6babef9082ca6976928ca7'] = 'Albarán nº ';
-$_LANGPDF['PDF_invoicefe4da50838bb10dcbf1bf8dcd9b12ab5'] = 'Factura nº ';
+
+$_LANGPDF['PDF_invoicee0036b67b754e9f6442f9f9e6b200c33'] = 'Devolución nº';
+$_LANGPDF['PDF_invoice77c3e447f60541a1c346a08134078c7f'] = 'Vale de compra nº';
+$_LANGPDF['PDF_invoicecb5efbba6a6babef9082ca6976928ca7'] = 'Albarán nº';
+$_LANGPDF['PDF_invoicefe4da50838bb10dcbf1bf8dcd9b12ab5'] = 'Factura nº';
 $_LANGPDF['PDF_invoiceba160acb58001c904c57507da3689265'] = 'Pedido n°';
 $_LANGPDF['PDF_invoice808a04117534f9dfb63b9accd7efc609'] = 'Oficinas:';
 $_LANGPDF['PDF_invoicea54cedc1e053a70d4a6319feccf531ca'] = 'TELÉFONO:';
 $_LANGPDF['PDF_invoice2babe53026309ed1bc4d26626dbaf9b3'] = 'Detalles:';
-$_LANGPDF['PDF_invoice15b57bef332e7e0327d89fe93711a954'] = 'La versión electrónica de esta factura está disponible en su cuenta. Para acceder a ella, identifíquese en';
-$_LANGPDF['PDF_invoiceb1fb57b55075a4a51cf83e44d0440358'] = 'nuestra Web usando su dirección de correo electrónico y contraseña (que creó cuando realizó su primer pedido).';
+$_LANGPDF['PDF_invoice5bbca5da334d07a677e71b113ca54677'] = 'P.';
+$_LANGPDF['PDF_invoice15b57bef332e7e0327d89fe93711a954'] = 'La versión electrónica de esta factura está disponible en su cuenta. Para acceder a ella, inicie sesión en';
+$_LANGPDF['PDF_invoiceb1fb57b55075a4a51cf83e44d0440358'] = 'nuestra Web usando su email y contraseña (que creó cuando realizó su primer pedido).';
 $_LANGPDF['PDF_invoiced98a07f84921b24ee30f86fd8cd85c3c'] = 'de';
 $_LANGPDF['PDF_invoice88be9ea838e21273267409d76af3b284'] = 'Hemos accedido a su solicitud de devolución.';
 $_LANGPDF['PDF_invoicedd0b8feb4eb6c389c284518f5683017c'] = 'Le recordamos que debemos recibir su devolución antes de';
@@ -36,7 +38,7 @@ $_LANGPDF['PDF_invoice065ab3a28ca4f16f55f103adc7d0226f'] = 'Entrega';
 $_LANGPDF['PDF_invoice6bdf2efe1a99072849d4e87baee37dbe'] = 'Facturación';
 $_LANGPDF['PDF_invoice60da3bd6867e3952ef0057a0772ea885'] = 'id del impuesto';
 $_LANGPDF['PDF_invoice7b13afd12d6d91d52aa9f857d23f96ef'] = 'Proyecto de factura';
-$_LANGPDF['PDF_invoiced1228f5476d15142b1358ae4b5fa2454'] = 'Pedido nº ';
+$_LANGPDF['PDF_invoiced1228f5476d15142b1358ae4b5fa2454'] = 'Pedido nº';
 $_LANGPDF['PDF_invoicef8617a92ba0a0a4eabee724eab7c9f48'] = 'Transportista:';
 $_LANGPDF['PDF_invoicec1f6368d15f7c13c4e5e8f70c68c747f'] = 'Modo de pago:';
 $_LANGPDF['PDF_invoicea3a79b28bc45b7fd393effd056b917e1'] = 'Fecha de envío:';

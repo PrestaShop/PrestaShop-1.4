@@ -1,6 +1,6 @@
 Hola {firstname} {lastname},
 
-Respecto al pedido {order_name}:
+Respecto al pedido #{id_order}:
 		
 Tu pedido ha sido cancelado.
 

@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{productscategory}prestashop>productscategory_db33983df8ef521000b0ab60dcb5a83f'] = 'Categoría de productos';
 $_MODULE['<{productscategory}prestashop>productscategory_0157084bddd8b408e1cdaba00f54a009'] = 'Mostrar productos de la misma categoría en la página producto';
 $_MODULE['<{productscategory}prestashop>productscategory_462390017ab0938911d2d4e964c0cab7'] = 'Parámetros actualizados con éxito';

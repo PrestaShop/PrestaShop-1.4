@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{statssearch}prestashop>statssearch_8c3c245232744602822902b97e65d6f9'] = 'Búsqueda de la tienda';
 $_MODULE['<{statssearch}prestashop>statssearch_5393c969e2fb0e630e03b993fee091e7'] = 'Mostrar las palabras clave que han sido utilizadas por sus visitantes';
 $_MODULE['<{statssearch}prestashop>statssearch_867343577fa1f33caa632a19543bd252'] = 'Palabras clave';

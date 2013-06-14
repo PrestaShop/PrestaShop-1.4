@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{mailalerts}prestashop>mailalerts_fd30254803e8db32521d3390131a44da'] = 'Alertas por correo';
 $_MODULE['<{mailalerts}prestashop>mailalerts_2d51f4a7ab8a12c4f35b507019523b8c'] = 'Enviar correos de notificación a los clientes y comerciantes.';
 $_MODULE['<{mailalerts}prestashop>mailalerts_8fd3b84964bd6dfec8095f658d200b29'] = '¿Está seguro de querer suprimir todas las notificaciones de los clientes?';
@@ -36,7 +37,8 @@ $_MODULE['<{mailalerts}prestashop>myalerts_f2a6c498fb90ee345d997f888fce3b18'] = 
 $_MODULE['<{mailalerts}prestashop>myalerts_074c07016d3e5a9f011aa8e62abe4517'] = 'No está inscrito a ninguna alerta.';
 $_MODULE['<{mailalerts}prestashop>myalerts_0b3db27bc15f682e92ff250ebb167d4b'] = 'Volver a mi cuenta';
 $_MODULE['<{mailalerts}prestashop>myalerts_8cf04a9734132302f96da8e113e80ce5'] = 'Inicio';
-$_MODULE['<{mailalerts}prestashop>product_67135a14d3ac4f1369633dd006d6efec'] = 'su@email.com';
+$_MODULE['<{mailalerts}prestashop>product_67135a14d3ac4f1369633dd006d6efec'] = 'tu@email.com';
+$_MODULE['<{mailalerts}prestashop>product_c6bc91d0fc376aa030d087ae43ca8696'] = 'Ya configuraste una alerta para este producto';
 $_MODULE['<{mailalerts}prestashop>product_61172eb93737ebf095d3fa02119ce1df'] = 'Notificación de la petición registrada';
-$_MODULE['<{mailalerts}prestashop>product_900f8551b29793ecb604a545b2059cc1'] = 'Su dirección de correo electrónico no es válida.';
+$_MODULE['<{mailalerts}prestashop>product_900f8551b29793ecb604a545b2059cc1'] = 'Tu dirección de email no es válida';
 $_MODULE['<{mailalerts}prestashop>product_546e02eaa9a986c83cc347e273269f2c'] = 'Indicarme cuando esté disponible';

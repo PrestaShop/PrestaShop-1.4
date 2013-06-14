@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{vatnumber}prestashop>vatnumber_b0b9a606a1c251323825ca45d40964dc'] = 'No ha seleccionado un país por defecto.';
 $_MODULE['<{vatnumber}prestashop>vatnumber_cee549912e318726d2c4989bb507665f'] = 'Número de IVA europeo';
 $_MODULE['<{vatnumber}prestashop>vatnumber_a6d69adb6cb6aafd65871bde8fd51847'] = 'Permite proporcionar el número de IVA intracomunitario enel momento de crear una dirección (Rellenar previamente el campo \"Empresa\" para poder introducir el número de IVA)';
