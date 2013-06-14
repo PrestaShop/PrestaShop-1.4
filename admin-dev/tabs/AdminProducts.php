@@ -375,7 +375,7 @@ class AdminProducts extends AdminTab
 						}
 						elseif ($object->delete())
 							Tools::redirectAdmin($currentIndex.'&conf=1&token='.($token ? $token : $this->token).$category_url);
-						$this->_errors[] = Tools::displayError('An error occurred during deletion: this product is contained in an order.');
+						$this->_errors[] = Tools::displayError('An error occurred during deletion: this product may be contained in an order.');
 					}
 				}
 				else
@@ -420,7 +420,7 @@ class AdminProducts extends AdminTab
 
 							Tools::redirectAdmin($currentIndex.'&conf=2&token='.$token.$category_url);
 						}
-						$this->_errors[] = Tools::displayError('An error occurred while deleting selection. A product contained in an order.');
+						$this->_errors[] = Tools::displayError('An error occurred while deleting selection. A product may be contained in an order.');
 					}
 				}
 				else

@@ -932,14 +932,22 @@ class ProductCore extends ObjectModel
 
 	public function addCombinationEntity($wholesale_price, $price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL, $upc = NULL, $minimal_quantity = 1)
 	{
-		if (
-			!$id_product_attribute = $this->addProductAttribute($price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location, $upc, $minimal_quantity)
+		if (!$id_product_attribute = $this->addProductAttribute($price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location, $upc, $minimal_quantity)
 			OR !Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product_attribute` SET `wholesale_price` = '.(float)($wholesale_price).' WHERE `id_product_attribute` = '.(int)($id_product_attribute))
 		)
 			return false;
 		return (int)($id_product_attribute);
 	}
 
+	public function updateCombinationEntity($id_product_attribute, $wholesale_price, $price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL, $upc = NULL, $minimal_quantity = 1)
+	{
+		if (!$id_product_attribute = $this->updateProductAttribute($id_product_attribute, '', $price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location, $upc, $minimal_quantity)
+			OR !Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product_attribute` SET `wholesale_price` = '.(float)($wholesale_price).' WHERE `id_product_attribute` = '.(int)($id_product_attribute))
+		)
+			return false;
+		return (int)($id_product_attribute);
+	}
+	
 	public function addProductAttributeMultiple($attributes, $setDefault = true)
 	{
 		$values = array();
