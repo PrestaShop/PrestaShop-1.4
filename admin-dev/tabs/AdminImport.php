@@ -442,7 +442,7 @@ class AdminImport extends AdminTab
 		}
 		$url_source_file = str_replace(' ', '%20', trim($url));
 		$url_source_file = Tools::file_get_contents($url_source_file);
-
+				
 		if (@file_put_contents($tmpfile, $url_source_file) && file_exists($tmpfile))
 		{
 			imageResize($tmpfile, $path.'.jpg');
@@ -894,12 +894,35 @@ class AdminImport extends AdminTab
 
 				$features = get_object_vars($product);
 				foreach ($features as $feature => $value)
-					if (!strncmp($feature, '#F_', 3) AND Tools::strlen($product->{$feature}))
+					if (Tools::strlen($product->{$feature}) && strncmp($feature, '#F_', 3) === 0)
 					{
 						$feature_name = str_replace('#F_', '', $feature);
 						$id_feature = Feature::addFeatureImport($feature_name);
-						$id_feature_value = FeatureValue::addFeatureValueImport($id_feature, $product->{$feature});
-						Product::addFeatureProductImport($product->id, $id_feature, $id_feature_value);
+						$feature_tmp = new Feature($id_feature);
+						$flag = true;												
+						if (Validate::isLoadedObject($feature_tmp))
+						{
+							$id_lang = (int)Language::getIdByIso(trim(Tools::getValue('iso_lang')));
+							$ProductFeatures = $product->getFeatures();
+							foreach($ProductFeatures as $ProductFeature)
+							{
+								if (is_array($ProductFeature) && isset($ProductFeature['id_feature']) && $ProductFeature['id_feature'] == $id_feature)
+								{
+									$featureValue = new FeatureValue((int)$ProductFeature['id_feature_value']);
+									if(Validate::isLoadedObject($featureValue))
+									{
+										$featureValue->value[$id_lang] = $value;
+										$featureValue->update();
+										$flag = false;
+									}
+								}
+							}
+						}
+						if ($flag)
+						{
+							$id_feature_value = FeatureValue::addFeatureValueImport($id_feature, $product->{$feature});	
+							Product::addFeatureProductImport($product->id, $id_feature, $id_feature_value);
+						}
 					}
 			}
 		}
