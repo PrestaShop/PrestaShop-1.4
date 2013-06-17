@@ -659,6 +659,9 @@ class AdminImport extends AdminTab
 					}
 				}
 			}
+			
+			$product->ecotax = (float)str_replace(',', '.', $product->ecotax);
+			$product->weight = (float)str_replace(',', '.', $product->weight);									
 
 			if (isset($product->supplier) && is_numeric($product->supplier) && Supplier::supplierExists((int)$product->supplier))
 				$product->id_supplier = (int)($product->supplier);
@@ -995,6 +998,9 @@ class AdminImport extends AdminTab
 				if (!$id_image)
 					$this->_warnings[] = sprintf(Tools::displayError('No image found for combination with id_product = %s and image position = %s.'), $product->id, (int)$info['image_position']);
 			}
+			
+			$info['ecotax'] = str_replace(',', '.', $info['ecotax']);
+			$info['weight'] = str_replace(',', '.', $info['weight']);
 			
 			$id_product_attribute = Combination::getCombinationbyRef($info['reference']);
 			if (Validate::isUnsignedId($id_product_attribute) && ((int)$id_product_attribute > 0))
