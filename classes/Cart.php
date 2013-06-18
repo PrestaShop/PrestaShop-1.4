@@ -1649,7 +1649,7 @@ class CartCore extends ObjectModel
 		$success = true;
 		$products = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'cart_product` WHERE `id_cart` = '.(int)$this->id);
 		foreach ($products as $product)
-			$success &= $cart->updateQty($product['quantity'], (int)$product['id_product'], (int)$product['id_product_attribute'], null, 'up');
+			$cart->updateQty($product['quantity'], (int)$product['id_product'], (int)$product['id_product_attribute'], null, 'up');
 
 		// Customized products
 		$customs = Db::getInstance()->ExecuteS('
@@ -1693,7 +1693,7 @@ class CartCore extends ObjectModel
 			Db::getInstance()->Execute($sql_custom_data);
 		}
 
-		return array('cart' => $cart, 'success' => $success);
+		return array('cart' => $cart, 'success' => (bool)Cart::getNbProducts($cart->id));
 	}
 
 	public function getWsCartRows()
