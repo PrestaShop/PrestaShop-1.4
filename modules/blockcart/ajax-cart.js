@@ -524,8 +524,7 @@ var ajaxCart = {
 				// If the customization is already displayed on the cart, no update's needed
 				if ($("#deleteCustomizableProduct_" + customizationId + "_" + productId + "_" + productAttributeId).length)
 					return ('');
-				content += '<li name="customization"><div class="deleteCustomizableProduct" id="deleteCustomizableProduct_' + customizationId + '_' + productId + '_' + (productAttributeId ?  productAttributeId : '0') + '"><a  rel="nofollow" class="ajax_cart_block_remove_link" href="' + baseDir + 'cart.php?delete=1&amp;id_product=' + productId + '&amp;ipa=' + productAttributeId + '&amp;id_customization=' + customizationId + '&amp;token=' + static_token + '"> </a></div><span class="quantity-formated"><span class="quantity">' + parseInt(this.quantity) + '</span>x</span>';
-
+				content += '<li name="customization"><div class="deleteCustomizableProduct" id="deleteCustomizableProduct_' + customizationId + '_' + productId + '_' + (productAttributeId ?  productAttributeId : '0') + '"><a  rel="nofollow" class="ajax_cart_block_remove_link" href="' + baseDir + 'cart.php?delete=1&amp;id_product=' + productId + '&amp;ipa=' + productAttributeId + '&amp;id_customization=' + customizationId + '&amp;token=' + static_token + '"> </a></div><span class="quantity-formated"><span class="quantity">' + parseInt(this.quantity) + '</span>x</span>&nbsp;';
 				// Give to the customized product the first textfield value as name
 				$(this.datas).each(function(){
 					if (this['type'] == CUSTOMIZE_TEXTFIELD)
@@ -548,8 +547,8 @@ var ajaxCart = {
 				// Field cleaning
 				if (customizationId)
 				{
-					$(this).children('#uploadable_files li div.customizationUploadBrowse img').remove();
-					$(this).children('#text_fields li input').attr('value', '');
+					$('#uploadable_files li div.customizationUploadBrowse img').remove();
+					$('#text_fields li input').attr('value', '');
 				}
 			});
 
