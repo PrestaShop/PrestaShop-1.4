@@ -427,7 +427,7 @@ class AdminPreferences extends AdminTab
 			$val = $this->getVal($confValues, $key);
 
 			if (!in_array($field['type'], array('image', 'radio', 'container', 'container_end')) OR isset($field['show']))
-				echo '<div style="clear: both; padding-top:15px;">'.($field['title'] ? '<label >'.$field['title'].'</label>' : '').'<div class="margin-form" style="padding-top:5px;">';
+				echo '<div style="clear: both; padding-top:15px;">'.($field['title'] ? '<label >'.str_replace(' :', '&nbsp;:', $field['title']).'</label>' : '').'<div class="margin-form" style="padding-top:5px;">';
 
 			/* Display the appropriate input type for each field */
 			switch ($field['type'])
