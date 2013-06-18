@@ -943,30 +943,71 @@ class PDFCore extends PDF_PageGroupCore
 
 						if (array_key_exists(_CUSTOMIZE_TEXTFIELD_, $customizationGroup))
 							foreach ($customizationGroup[_CUSTOMIZE_TEXTFIELD_] as $customization)
-								if (!empty($customization['name'])) $custoLabel .= '- '.$customization['name'].': '.$customization['value']."\n";
-
+							{
+								if (!empty($customization['name'])) $custoLabel .= '- '.$customization['name'];
+								if (!empty($customization['value'])) 
+									$custoLabel .= ': '.$customization['value']."\n\n";
+								else
+									$custoLabel .= "\n\n";
+							}
 
 						if ($nb_images > 0)
+						{						
 							$custoLabel .= '- '.$nb_images. ' '. self::l('image(s)')."\n";
-
-						$custoLabel .= "---\n";
+							$custoLabel .= "---\n";
+						}						
 					}
-
-					$custoLabel = rtrim($custoLabel, "---\n");
+		
+					$custoLabel = rtrim($custoLabel, "---\n");					
 
 					$productQuantity = (int)($product['product_quantity']) - (int)($product['customizationQuantityTotal']);
 					if ($delivery)
 						$this->SetX(25);
 					$before = $this->GetY();
-					$this->MultiCell($w[++$i], 5, self::convertSign(Tools::iconv('utf-8', self::encoding(), $product['product_name'])).' - '.self::l('Customized')." \n".Tools::iconv('utf-8', self::encoding(), $custoLabel), 'B');
+					$this->MultiCell($w[++$i], 5, self::convertSign(Tools::iconv('utf-8', self::encoding(), $product['product_name'])).' - '.self::l('Customized')." \n".Tools::iconv('utf-8', self::encoding(), $custoLabel), 'B');								
 					$lineSize = $this->GetY() - $before;
 					$this->SetXY($this->GetX() + $w[0] + ($delivery ? 15 : 0), $this->GetY() - $lineSize);
 					$this->Cell($w[++$i], $lineSize, $product['product_reference'], 'B');
 					if (!$delivery)
 						$this->Cell($w[++$i], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($unit_price, self::$currency, true)), 'B', 0, 'R');
-					$this->Cell($w[++$i], $lineSize, (int)($product['customizationQuantityTotal']), 'B', 0, 'C');
+					else
+						$this->Cell($w[++$i], $lineSize, (int)($product['customizationQuantityTotal']), 'B', 0, 'C');
+					$j = 0;
+					$custoLabel = '';
+					$before = $this->GetY();
+					$beforeX = $this->GetX();									
+					foreach ($customizedDatas[$product['product_id']][$product['product_attribute_id']] as $customizedData)
+					{					
+						if ($j == 0 && count($customizedDatas[$product['product_id']][$product['product_attribute_id']]) > 1)												
+							$custoLabel .= (int)($product['customizationQuantityTotal']);
+						if ($j == 0)
+							$custoLabel .= "\n";									
+						$custoLabel .= (int)($customizedData['quantity'])."\n";
+						if ($j+1 != count($customizedDatas[$product['product_id']][$product['product_attribute_id']]))
+							$custoLabel .= "\n";												
+						$j++;						
+					}
+					if (!$delivery)							
+						$this->MultiCell($w[++$i], 5, Tools::iconv('utf-8', self::encoding(), $custoLabel), 'B', 'C');
+					$this->SetXY($beforeX + $w[$i], $before);
+					$j = 0;
+					$custoLabel = '';
+					$before = $this->GetY();
 					if (!$delivery)
-						$this->Cell($w[++$i], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($unit_price * (int)($product['customizationQuantityTotal']), self::$currency, true)), 'B', 0, 'R');
+						foreach ($customizedDatas[$product['product_id']][$product['product_attribute_id']] as $customizedData)
+						{					
+							if ($j == 0 && count($customizedDatas[$product['product_id']][$product['product_attribute_id']]) > 1)												
+								$custoLabel .= 	(self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($unit_price * (int)($product['customizationQuantityTotal']), self::$currency, true));				
+							if ($j == 0)
+								$custoLabel .= "\n";															
+							$custoLabel .= 	(self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($unit_price * (int)($customizedData['quantity']), self::$currency, true))."\n";	
+							if ($j+1 != count($customizedDatas[$product['product_id']][$product['product_attribute_id']]))
+								$custoLabel .= "\n";												
+							$j++;						
+						}
+					if (!$delivery)							
+						$this->MultiCell($w[count($w) - 1], count($w), $custoLabel, 'B', 'R');
+						
 					$this->Ln();
 					$i = -1;
 					$total_with_tax = $unit_with_tax * $productQuantity;
@@ -977,7 +1018,7 @@ class PDFCore extends PDF_PageGroupCore
 				if ($productQuantity)
 				{
 					$before = $this->GetY();
-					$this->MultiCell($w[++$i], 5, self::convertSign(Tools::iconv('utf-8', self::encoding(), $product['product_name'])), 'B');
+					$this->MultiCell($w[++$i], count($w), self::convertSign(Tools::iconv('utf-8', self::encoding(), $product['product_name'])), 'B');
 					$lineSize = $this->GetY() - $before;
 					$this->SetXY($this->GetX() + $w[0] + ($delivery ? 15 : 0), $this->GetY() - $lineSize);
 					$this->Cell($w[++$i], $lineSize, ($product['product_reference'] ? Tools::iconv('utf-8', self::encoding(), $product['product_reference']) : '--'), 'B');
