@@ -2,11 +2,7 @@
 <module>
 	<name>tntcarrier</name>
 	<displayName><![CDATA[TNT Express]]></displayName>
-<<<<<<< Updated upstream
-	<version><![CDATA[1.9.2]]></version>
-=======
 	<version><![CDATA[1.9.3]]></version>
->>>>>>> Stashed changes
 	<description><![CDATA[Offer your customers, different delivery methods with TNT]]></description>
 	<author><![CDATA[PrestaShop]]></author>
 	<tab><![CDATA[shipping_logistics]]></tab>
