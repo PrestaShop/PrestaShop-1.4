@@ -3166,6 +3166,11 @@ class AdminProducts extends AdminTab
 				</table>
 			</div>';
 			echo '
+			<script type="text/javascript">
+			var noGroup = "'.$this->l('Please choose a group', 'AdminProducts', true, false).'";
+			var noAttribute = "'.$this->l('Please choose an attribute', 'AdminProducts', true, false).'";
+			var oneAttribute = "'.$this->l('You can select only one attribute from each group, per combination', 'AdminProducts', true, false).'";
+			</script>			
 			<script type="text/javascript" src="../js/attributesBack.js"></script>
 			<script type="text/javascript">
 				var attrs = new Array();

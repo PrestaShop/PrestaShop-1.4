@@ -272,6 +272,11 @@ class AdminAttributeGenerator extends AdminTab
 				'.sizeof($this->combinations).' '.$this->l('product(s) successfully created.').'
 			</div>';
 		echo '
+			<script type="text/javascript">
+			var noGroup = "'.$this->l('Please choose a group', 'AdminAttributeGenerator', true, false).'";
+			var noAttribute = "'.$this->l('Please choose an attribute', 'AdminAttributeGenerator', true, false).'";
+			var oneAttribute = "'.$this->l('You can select only one attribute from each group, per combination', 'AdminAttributeGenerator', true, false).'";
+			</script>
 			<script type="text/javascript" src="../js/attributesBack.js"></script>
 			<form enctype="multipart/form-data" method="post" id="generator" action="'.$currentIndex.'&id_product='.(int)(Tools::getValue('id_product')).'&id_category='.(int)(Tools::getValue('id_category')).'&attributegenerator&token='.Tools::getValue('token').'">
 				<fieldset style="margin-bottom: 35px;"><legend><img src="../img/admin/asterisk.gif" />'.$this->l('Attributes generator').'</legend>'.
