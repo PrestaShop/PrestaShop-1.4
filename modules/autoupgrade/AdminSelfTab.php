@@ -172,19 +172,19 @@ abstract class AdminSelfTab
 		global $cookie;
 		$this->id = Tab::getCurrentTabId();
 		$this->_conf = array(
-		1 => Tools::displayError('Deletion successful'), 2 => Tools::displayError('Selection successfully deleted'),
-		3 => Tools::displayError('Creation successful'), 4 => Tools::displayError('Update successful'),
-		5 => Tools::displayError('The new version check has been completed successfully'), 6 => Tools::displayError('Settings update successful'),
-		7 => Tools::displayError('Image successfully deleted'), 8 => Tools::displayError('Module downloaded successfully'),
-		9 => Tools::displayError('Thumbnails successfully regenerated'), 10 => Tools::displayError('Message sent to the customer'),
-		11 => Tools::displayError('Comment added'), 12 => Tools::displayError('Module installed successfully'),
-		13 => Tools::displayError('Module uninstalled successfully'), 14 => Tools::displayError('Language successfully copied'),
-		15 => Tools::displayError('Translations successfully added'), 16 => Tools::displayError('Module transplanted successfully to hook'),
-		17 => Tools::displayError('Module removed successfully from hook'), 18 => Tools::displayError('Upload successful'),
-		19 => Tools::displayError('Duplication completed successfully'), 20 => Tools::displayError('Translation added successfully but the language has not been created'),
-		21 => Tools::displayError('Module reset successfully'), 22 => Tools::displayError('Module deleted successfully'),
-		23 => Tools::displayError('Localization pack imported successfully'), 24 => Tools::displayError('Refund Successful'),
-		25 => Tools::displayError('Images successfully moved'));
+		1 => $this->l('Deletion successful'), 2 => $this->l('Selection successfully deleted'),
+		3 => $this->l('Creation successful'), 4 => $this->l('Update successful'),
+		5 => $this->l('The new version check has been completed successfully'), 6 => $this->l('Settings update successful'),
+		7 => $this->l('Image successfully deleted'), 8 => $this->l('Module downloaded successfully'),
+		9 => $this->l('Thumbnails successfully regenerated'), 10 => $this->l('Message sent to the customer'),
+		11 => $this->l('Comment added'), 12 => $this->l('Module installed successfully'),
+		13 => $this->l('Module uninstalled successfully'), 14 => $this->l('Language successfully copied'),
+		15 => $this->l('Translations successfully added'), 16 => $this->l('Module transplanted successfully to hook'),
+		17 => $this->l('Module removed successfully from hook'), 18 => $this->l('Upload successful'),
+		19 => $this->l('Duplication completed successfully'), 20 => $this->l('Translation added successfully but the language has not been created'),
+		21 => $this->l('Module reset successfully'), 22 => $this->l('Module deleted successfully'),
+		23 => $this->l('Localization pack imported successfully'), 24 => $this->l('Refund Successful'),
+		25 => $this->l('Images successfully moved'));
 		if (!$this->identifier) $this->identifier = 'id_'.$this->table;
 		if (!$this->_defaultOrderBy) $this->_defaultOrderBy = $this->identifier;
 		$className = get_class($this);
