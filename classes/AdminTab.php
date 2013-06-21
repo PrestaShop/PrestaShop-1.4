@@ -938,7 +938,14 @@ abstract class AdminTabCore
 
 	protected function uploadImage($id, $name, $dir, $ext = false)
 	{
-		if (isset($_FILES[$name]['tmp_name']) AND !empty($_FILES[$name]['tmp_name']))
+		if (isset($_FILES[$name]) && (int)$_FILES[$name]['error'] === 1)
+		{
+			$max_upload = (int)ini_get('upload_max_filesize');
+			$max_post = (int)ini_get('post_max_size');
+			$upload_mb = min($max_upload, $max_post);
+			$this->_errors[] = $this->l('The file').' <b>'.$_FILES[$name]['name'].'</b> '.$this->l('exceeds the size allowed by the server, this limit is set to').' <b>'.$upload_mb.$this->l('Mb').'</b>';
+		}	
+		elseif (isset($_FILES[$name]['tmp_name']) AND !empty($_FILES[$name]['tmp_name']))
 		{
 			// Delete old image
 			if (Validate::isLoadedObject($object = $this->loadObject()))
@@ -967,7 +974,7 @@ abstract class AdminTabCore
 				return false;
 			}
 		}
-		return true;
+		return false;
 	}
 
 
@@ -999,9 +1006,11 @@ abstract class AdminTabCore
 		if (isset($this->fieldImageSettings['name']) AND isset($this->fieldImageSettings['dir']))
 			return $this->uploadImage($id, $this->fieldImageSettings['name'], $this->fieldImageSettings['dir'].'/');
 		elseif (!empty($this->fieldImageSettings))
+		{
 			foreach ($this->fieldImageSettings as $image)
 				if (isset($image['name']) AND isset($image['dir']))
 					$this->uploadImage($id, $image['name'], $image['dir'].'/');
+		}
 		return !sizeof($this->_errors) ? true : false;
 	}
 

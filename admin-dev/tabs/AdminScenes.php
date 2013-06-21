@@ -26,7 +26,7 @@
 
 class AdminScenes extends AdminTab
 {
-	protected $maxImageSize = 1000000;
+	protected $maxImageSize = 4000000;
 
 	public function __construct()
 	{
@@ -61,18 +61,17 @@ class AdminScenes extends AdminTab
 			foreach ($imagesTypes AS $k => $imageType)
 			{						
 				if ($imageType['name'] == 'large_scene' AND isset($_FILES['image']) AND isset($_FILES['image']['tmp_name']) AND !$_FILES['image']['error'])								
-					imageResize($_FILES['image']['tmp_name'], _PS_SCENE_IMG_DIR_.$obj->id.'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height']));
+					return imageResize($_FILES['image']['tmp_name'], _PS_SCENE_IMG_DIR_.$obj->id.'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height']));
 				elseif ($imageType['name'] == 'thumb_scene')
 				{
 					if (isset($_FILES['thumb']) AND !$_FILES['thumb']['error'])
 						$tmpName = $_FILES['thumb']['tmp_name'];
 					else
 						$tmpName = $_FILES['image']['tmp_name'];
-					imageResize($tmpName, _PS_SCENE_THUMB_IMG_DIR_.$obj->id.'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height']));
+					return imageResize($tmpName, _PS_SCENE_THUMB_IMG_DIR_.$obj->id.'-'.stripslashes($imageType['name']).'.jpg', (int)($imageType['width']), (int)($imageType['height']));
 				}
 			}
-		}				
-		return true;
+		}
 	}
 
 	public function displayForm($isMainTab = true)
