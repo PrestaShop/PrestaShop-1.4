@@ -693,9 +693,9 @@ if ($lm->getIncludeTradFilename())
 					<div class="field">
 						<label for="catalogMode" class="aligned"><?php echo lang('Catalog mode only:'); ?></label>
 						<span class="contentinput">
-							<input type="radio" name="catalogMode" id="catalogMode_1" value="1" />
+							<input type="radio" name="catalogMode" id="catalogMode_1" value="1" autocomplete="off" />
 							<label for="catalogMode_1" class="radiolabel"><?php echo lang('Yes'); ?></label>&nbsp; &nbsp;
-							<input type="radio" name="catalogMode" id="catalogMode_0" value="0" checked="checked"/>
+							<input type="radio" name="catalogMode" id="catalogMode_0" value="0" autocomplete="off" checked="checked"/>
 							<label for="catalogMode_0" class="radiolabel"><?php echo lang('No'); ?></label>
 						</span>
 						<p class="userInfos aligned"><?php echo lang('If you activate this feature, all purchasing will be disabled. However, you will be able to enable purchasing later in your Back Office.'); ?></p>
