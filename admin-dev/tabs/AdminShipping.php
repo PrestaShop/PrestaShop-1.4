@@ -270,7 +270,7 @@ class AdminShipping extends AdminTab
 						if (isset($deliveryArray[$zone['id_zone']][$id_carrier][$range[$rangeIdentifier]]))
 							$price = $deliveryArray[$zone['id_zone']][$id_carrier][$range[$rangeIdentifier]];
 						else
-							$price = '0.00';
+							$price = '';
 						echo '<td class="center">'.$currency->getSign('left').'<input type="text" class="fees_'.$range[$rangeIdentifier].'" onchange="this.value = this.value.replace(/,/g, \'.\');" name="fees_'.$zone['id_zone'].'_'.$range[$rangeIdentifier].'" onkeyup="clearAllFees('.$range[$rangeIdentifier].')" value="'.$price.'" style="width: 45px;" />'.$currency->getSign('right').'</td>';
 					}
 					echo '
