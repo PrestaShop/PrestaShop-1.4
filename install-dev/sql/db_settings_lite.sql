@@ -187,7 +187,7 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (97, 'PS_GEOLOCATION_BEHAVIOR', '0', NOW(), NOW()),
 (98, 'PS_LOCALE_LANGUAGE', '', NOW(), NOW()),
 (99, 'PS_LOCALE_COUNTRY', '', NOW(), NOW()),
-(100, 'PS_ATTACHMENT_MAXIMUM_SIZE', '2', NOW(), NOW()),
+(100, 'PS_ATTACHMENT_MAXIMUM_SIZE', '4', NOW(), NOW()),
 (101, 'PS_SMARTY_CACHE', '1', NOW(), NOW()),
 (102, 'PS_DIMENSION_UNIT', 'cm', NOW(), NOW()),
 (103, 'PS_FORCE_SMARTY_2', '0', NOW(), NOW()),
@@ -223,8 +223,8 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (133, 'PS_COOKIE_LIFETIME_FO', '480', NOW(), NOW()),
 (134, 'PS_COOKIE_LIFETIME_BO', '480', NOW(), NOW()),
 (135, 'PS_RESTRICT_DELIVERED_COUNTRIES', '0', NOW(), NOW()),
-(136, 'PS_LIMIT_UPLOAD_IMAGE_VALUE', '2', NOW(), NOW()),
-(137, 'PS_LIMIT_UPLOAD_FILE_VALUE', '2', NOW(), NOW()),
+(136, 'PS_LIMIT_UPLOAD_IMAGE_VALUE', '4', NOW(), NOW()),
+(137, 'PS_LIMIT_UPLOAD_FILE_VALUE', '4', NOW(), NOW()),
 (138, 'PS_CART_FOLLOWING', 1, NOW(), NOW()),
 (139, 'PS_TAX_DISPLAY_ALL', 0, NOW(), NOW());
 
