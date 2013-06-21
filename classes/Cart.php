@@ -1269,7 +1269,7 @@ class CartCore extends ObjectModel
 			LEFT JOIN `'._DB_PREFIX_.'product` p ON cp.`id_product` = p.`id_product`
 			WHERE (cp.`id_product_attribute` IS NULL OR cp.`id_product_attribute` = 0)
 			AND cp.`id_cart` = '.(int)($this->id));
-			self::$_totalWeight[$this->id] = round((float)($result['nb']) + (float)($result2['nb']), 3);
+			self::$_totalWeight[$this->id] = round((float)($result['nb']) + (float)($result2['nb']), 4);
 		}
 		return self::$_totalWeight[$this->id];
 	}
