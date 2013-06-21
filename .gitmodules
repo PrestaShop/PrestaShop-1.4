@@ -10,9 +10,6 @@
 [submodule "modules/backwardcompatibility/backward_compatibility"]
 	path = modules/backwardcompatibility/backward_compatibility
 	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
-[submodule "modules/canadapost/backward_compatibility"]
-	path = modules/canadapost/backward_compatibility
-	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
 [submodule "modules/cloudcache/backward_compatibility"]
 	path = modules/cloudcache/backward_compatibility
 	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
