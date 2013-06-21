@@ -361,7 +361,7 @@ if ($lm->getIncludeTradFilename())
 			<?php
 
 				$isoForLink = (in_array($lm->getIsoCodeSelectedLang(), array('fr', 'it', 'de', 'en', 'es')) ? $lm->getIsoCodeSelectedLang() : 'en');
-				echo lang('Prestashop and its community offers over 40 different languages for free download at');
+				echo lang('Prestashop and its community offers over 60 different languages for free download at');
 
 			?><br /><a href="http://www.prestashop.com/<?php echo $isoForLink; ?>/<?php echo lang('translations'); ?>" target="_blank">http://www.prestashop.com/<?php echo $isoForLink; ?>/<?php echo lang('translations'); ?></a>
 		</p>
