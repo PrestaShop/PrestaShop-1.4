@@ -435,7 +435,7 @@ var fieldRequired = '{l s='Please fill in all required fields, then save your cu
 	{/if}
 	{if isset($accessories) AND $accessories}
 		<!-- accessories -->
-		<ul id="idTab4" class="bullet">
+		<div id="idTab4" class="bullet">
 			<div class="block products_block accessories_block clearfix">
 				<div class="block_content">
 					<ul>
@@ -458,12 +458,11 @@ var fieldRequired = '{l s='Please fill in all required fields, then save your cu
 								{/if}
 							</p>
 						</li>
-
 					{/foreach}
 					</ul>
 				</div>
 			</div>
-		</ul>
+		</div>
 	{/if}
 	{$HOOK_PRODUCT_TAB_CONTENT}
 	</div>
