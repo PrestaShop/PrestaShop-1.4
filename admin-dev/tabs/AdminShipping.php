@@ -196,7 +196,7 @@ class AdminShipping extends AdminTab
 		global $currentIndex;
 		
 		$carrierArray = array();
-		$id_carrier = Tools::getValue('id_carrier');
+		$id_carrier = (int)Tools::getValue('id_carrier');
 		$carriers = Carrier::getCarriers((int)_PS_LANG_DEFAULT_, true, false, false, null, Carrier::PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
 		foreach ($carriers AS $carrier)
 			if (!$carrier['is_free'])

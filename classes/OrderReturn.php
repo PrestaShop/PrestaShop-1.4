@@ -50,7 +50,7 @@ class OrderReturnCore extends ObjectModel
 	protected $tables = array ('order_return');
 
 	protected	$fieldsRequired = array ('id_customer', 'id_order');
-	protected	$fieldsValidate = array('id_customer' => 'isUnsignedId', 'id_order' => 'isUnsignedId', 'question' => 'isCleanHtml');
+	protected	$fieldsValidate = array('id_customer' => 'isUnsignedId', 'id_order' => 'isUnsignedId', 'question' => 'isMessage');
 
 	protected 	$table = 'order_return';
 	protected 	$identifier = 'id_order_return';

@@ -27,20 +27,24 @@
 	elseif (empty($_GET['folder']) || !isUnderRoot($_GET['folder']))
 	{
 		$error = ERR_FOLDER_PATH_NOT_ALLOWED;
-	}else	if (!$upload->isFileUploaded('file'))
+	}
+	else	if (!$upload->isFileUploaded('file'))
 	{
 		$error = ERR_FILE_NOT_UPLOADED;
-	}elseif (!$upload->moveUploadedFile($_GET['folder']))
-	{
-		$error = ERR_FILE_MOVE_FAILED;
-	}	
+	}
 	elseif (!$upload->isPermittedFileExt(explode(",", CONFIG_UPLOAD_VALID_EXTS)))
 	{		
 		$error = ERR_FILE_TYPE_NOT_ALLOWED;
-	}elseif (defined('CONFIG_UPLOAD_MAXSIZE') && CONFIG_UPLOAD_MAXSIZE && $upload->isSizeTooBig(CONFIG_UPLOAD_MAXSIZE))
+	}
+	elseif (defined('CONFIG_UPLOAD_MAXSIZE') && CONFIG_UPLOAD_MAXSIZE && $upload->isSizeTooBig(CONFIG_UPLOAD_MAXSIZE))
 	{		
 		 $error = sprintf(ERROR_FILE_TOO_BID, transformFileSize(CONFIG_UPLOAD_MAXSIZE));
-	}else
+	}
+	elseif (!$upload->moveUploadedFile($_GET['folder']))
+	{
+		$error = ERR_FILE_MOVE_FAILED;
+	}
+	else
 	{
 							include_once(CLASS_FILE);
 							$path = $upload->getFilePath();

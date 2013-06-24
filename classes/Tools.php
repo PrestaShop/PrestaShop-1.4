@@ -584,7 +584,7 @@ class ToolsCore
 		@include_once(_PS_TRANSLATIONS_DIR_.$iso.'/errors.php');
 
 		if (defined('_PS_MODE_DEV_') && _PS_MODE_DEV_ && $string == 'Fatal error')
-			return ('<pre>'.print_r(debug_backtrace(), true).'</pre>');
+			return ('<pre>'.Tools::safeOutput(print_r(debug_backtrace(), true)).'</pre>');
 		if (!is_array($_ERRORS))
 			return str_replace('"', '&quot;', $string);
 		$key = md5(str_replace('\'', '\\\'', $string));
