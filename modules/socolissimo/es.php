@@ -2,9 +2,6 @@
 
 global $_MODULE;
 $_MODULE = array();
-
-$_MODULE['<{socolissimo}prestashop>ajax_607e1d854783c8229998ac2b5b6923d3'] = 'ficha no válida';
-$_MODULE['<{socolissimo}prestashop>error_0557fa923dcee4d0f86b1409f5c2167f'] = 'Atrás';
 $_MODULE['<{socolissimo}prestashop>socolissimo_42ab10dea7d96b9c353e0f5bae43ec20'] = 'La Poste';
 $_MODULE['<{socolissimo}prestashop>socolissimo_9e13e80360ceb625672531275f01ec1f'] = 'Proponga a sus clientes cinco modos de entraga a través de la Poste.';
 $_MODULE['<{socolissimo}prestashop>socolissimo_f8e355b97fa1be7a8d8c206aa66f0077'] = 'Zona(s) transportista';
@@ -15,10 +12,6 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_798547c41ec3e64e2322df678e939344'
 $_MODULE['<{socolissimo}prestashop>socolissimo_ac08649aa09ff3b879525627bf086dd1'] = 'Clave de encriptación\'';
 $_MODULE['<{socolissimo}prestashop>socolissimo_a3a53f075adf77334cc34d0f7497ff44'] = 'URL de la administración de SoColissimo\'';
 $_MODULE['<{socolissimo}prestashop>socolissimo_4d470fde8487e755a50e9235e3dc13ab'] = 'deben indicarse para funcionar correctamente';
-$_MODULE['<{socolissimo}prestashop>socolissimo_1f8261d17452a959e013666c5df45e07'] = 'Número de teléfono';
-$_MODULE['<{socolissimo}prestashop>socolissimo_642d3ba5db8b57e006584b544e490ec7'] = 'Código postal';
-$_MODULE['<{socolissimo}prestashop>socolissimo_70d9be9b139893aa6c69b5e77e614311'] = 'Confirmar';
-$_MODULE['<{socolissimo}prestashop>socolissimo_ea4788705e6873b424c65e91c2846b19'] = 'Suprimir';
 $_MODULE['<{socolissimo}prestashop>socolissimo_b5a7adde1af5c87d7fd797b6245c2a39'] = 'Descripción';
 $_MODULE['<{socolissimo}prestashop>socolissimo_d0b34d3e1cb0cc1150ae6bf650e9b569'] = 'SoColissimo es un servicio propuesto Por La Poste, que le permite proponer a sus compradores cinco modos de entrega:';
 $_MODULE['<{socolissimo}prestashop>socolissimo_6cefaa978ccec960693d10cefeb2c2bf'] = 'Entrega a domicilio';
@@ -52,7 +45,7 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_678f3f992afdb9f6e90cd36497ea76a1'
 $_MODULE['<{socolissimo}prestashop>socolissimo_85068ddf0b9bcbb6913008356fe328a0'] = 'Supervisión';
 $_MODULE['<{socolissimo}prestashop>socolissimo_fdd526b84abc0b8fc17060e62d022b84'] = 'Autorizar o no la comprobación de la disponiblidad de los servicios SoColissimo';
 $_MODULE['<{socolissimo}prestashop>socolissimo_32996bdf4214d6cb8bf7fa02273813c8'] = 'Dirección de comprobación';
-$_MODULE['<{socolissimo}prestashop>socolissimo_af688489282270bcd9e3399db85e30df'] = 'La dirección URL de supervisión asegura la disponibilidad del servicio  socolissimo. No se recomienda desactivarla:';
+$_MODULE['<{socolissimo}prestashop>socolissimo_af688489282270bcd9e3399db85e30df'] = 'La dirección URL de supervisión asegura la disponibilidad del servicio  socolissimo. No se recomienda desactivarla: ';
 $_MODULE['<{socolissimo}prestashop>socolissimo_c9cc8cce247e49bae79f15173ce97354'] = 'Guardar';
 $_MODULE['<{socolissimo}prestashop>socolissimo_a82be0f551b8708bc08eb33cd9ded0cf'] = 'Información';
 $_MODULE['<{socolissimo}prestashop>socolissimo_3e387f5ebd657c6372f0594c8226863e'] = 'Aquí tiene las dos direcciones que debe indicar en su Back-Office Coliposte';
@@ -82,6 +75,3 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_e937c6393ce858786bd31a279b50572d'
 $_MODULE['<{socolissimo}prestashop>socolissimo_f109a88feec5ad3aeb82580c7a20ec31'] = 'Punto de entrega';
 $_MODULE['<{socolissimo}prestashop>socolissimo_021944549c2795a6e4db23b92f198a5e'] = 'Dirección del punto de entrega';
 $_MODULE['<{socolissimo}prestashop>socolissimo_ce8ae9da5b7cd6c3df2929543a9af92d'] = 'Email';
-$_MODULE['<{socolissimo}prestashop>validation_befec70964837a08794ca1b092471d83'] = 'Error código';
-$_MODULE['<{socolissimo}prestashop>scerror_fa419073252af9d022afe65dccbb34a2'] = 'Falta firma';
-$_MODULE['<{socolissimo}prestashop>scerror_90a5cb3d07bb39bbd4b76f7f9a0d7947'] = 'Se ha producido un error en la etapa \'transportista\'';

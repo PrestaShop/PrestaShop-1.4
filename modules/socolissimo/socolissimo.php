@@ -60,7 +60,7 @@ class Socolissimo extends CarrierModule
 	{
 		$this->name = 'socolissimo';
 		$this->tab = 'shipping_logistics';
-		$this->version = '2.7.5';
+		$this->version = '2.7.6';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 		$this->module_key = 'faa857ecf7579947c8eee2d9b3d1fb04';
@@ -997,7 +997,7 @@ class Socolissimo extends CarrierModule
 		else
 		{
 			$gender = new Gender($customer->id_gender, $this->context->language->id);
-			
+
 			if ($gender->name == "M.")
 				return "MR";
 			return $gender->name;
