@@ -83,7 +83,7 @@ class BlockCategories extends Module
 			{
 				Configuration::updateValue('BLOCK_CATEG_MAX_DEPTH', (int)($maxDepth));
 				Configuration::updateValue('BLOCK_CATEG_DHTML', (int)($dhtml));
-				Configuration::updateValue('BLOCK_CATEG_NBR_COLUMN_FOOTER', $nbrColumns);
+				Configuration::updateValue('BLOCK_CATEG_NBR_COLUMN_FOOTER', (int)$nbrColumns);
 				Configuration::updateValue('BLOCK_CATEG_SORT_WAY', Tools::getValue('BLOCK_CATEG_SORT_WAY'));
 				Configuration::updateValue('BLOCK_CATEG_SORT', Tools::getValue('BLOCK_CATEG_SORT'));
 				

@@ -136,14 +136,19 @@ class AdminTranslations extends AdminTab
 	{
 		global $currentIndex;
 
-		if (!($fromLang = strval(Tools::getValue('fromLang'))) OR !($toLang = strval(Tools::getValue('toLang'))))
+		if (!($fromLang = Tools::getValue('fromLang')) OR !($toLang = Tools::getValue('toLang')))
 			$this->_errors[] = $this->l('you must select 2 languages in order to copy data from one to another');
-		elseif (!($fromTheme = strval(Tools::getValue('fromTheme'))) OR !($toTheme = strval(Tools::getValue('toTheme'))))
+		elseif (!($fromTheme = Tools::getValue('fromTheme')) OR !($toTheme = Tools::getValue('toTheme')))
 			$this->_errors[] = $this->l('you must select 2 themes in order to copy data from one to another');
 		elseif (!Language::copyLanguageData(Language::getIdByIso($fromLang), Language::getIdByIso($toLang)))
 			$this->_errors[] = $this->l('an error occurred while copying data');
 		elseif ($fromLang == $toLang AND $fromTheme == $toTheme)
 			$this->_errors[] = $this->l('nothing to copy! (same language and theme)');
+		else
+		{
+			if (!is_dir(_PS_ALL_THEMES_DIR_.$fromTheme) || !is_dir(_PS_ALL_THEMES_DIR_.$toTheme))
+				$this->errors[] = $this->l('Theme(s) not found');
+		}
 		if (sizeof($this->_errors))
 			return;
 
