@@ -47,11 +47,8 @@ var ajaxCart = {
 			var customizationId = 0;
 			var productId = 0;
 			var productAttributeId = 0;
-			if ($($(this).parent().parent()).attr('name') == 'customization')
-				// Reverse two levels: a >> div >> li
-				var customizableProductDiv = $($(this).parent().parent()).find("div[id^=deleteCustomizableProduct_]");
-			else
-				var customizableProductDiv = $($(this).parent()).find("div[id^=deleteCustomizableProduct_]");
+            var customizableProductDiv = $($(this).parent().parent()).find("div[id^=deleteCustomizableProduct_]");
+
 			if (customizableProductDiv && $(customizableProductDiv).length)
 			{
 				$(customizableProductDiv).each(function(){
@@ -444,7 +441,7 @@ var ajaxCart = {
 					//if product is not in the displayed cart, add a new product's line
 					var domIdProduct = this.id + (this.idCombination ? '_' + this.idCombination : '');
 					var domIdProductAttribute = this.id + '_' + (this.idCombination ? this.idCombination : '0');
-					if($('#'+parentId+' #cart_block dt#cart_block_product_'+ domIdProduct ).length == 0)
+					if($('#'+parentId+' #cart_block dt#cart_block_product_'+ domIdProduct).length == 0)
 					{
 						var productId = parseInt(this.id);
 						var productAttributeId = (this.hasAttributes ? parseInt(this.attributes) : 0);
@@ -465,9 +462,9 @@ var ajaxCart = {
 					//else update the product's line
 					else
 					{
-						var jsonProduct = this;
-						if($('#'+parentId+' dt#cart_block_product_' + domIdProduct + ' .quantity').text() != jsonProduct.quantity || $('dt#cart_block_product_' + domIdProduct + ' .price').text() != jsonProduct.priceByLine)
-						{
+						var jsonProduct = this;                        
+                        if($.trim($('#cart_block_product_' + domIdProduct + ' .quantity').html()) != jsonProduct.quantity || $.trim($('#cart_block_product_' + domIdProduct + ' .price').html()) != jsonProduct.priceByLine)
+						{					  						  
 							// Usual product
 							$('#'+parentId+' dt#cart_block_product_' + domIdProduct + ' .price').text(jsonProduct.priceByLine);
 							ajaxCart.updateProductQuantity(jsonProduct, jsonProduct.quantity);
@@ -596,7 +593,7 @@ var ajaxCart = {
 
 	//update general cart informations everywhere in the page
 	updateCartEverywhere : function(jsonData) {
-		$('.ajax_cart_total').text(jsonData.productTotal);
+		$('.ajax_cart_total').text($.trim(jsonData.productTotal));
 		$('.ajax_cart_shipping_cost').text(jsonData.shippingCost);
 		$('.ajax_cart_tax_cost').text(jsonData.taxCost);
 		$('.cart_block_wrapping_cost').text(jsonData.wrappingCost);

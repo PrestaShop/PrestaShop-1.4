@@ -1348,7 +1348,10 @@ ul.shop_info li {
 #customizedDatas .button {
 	margin: 0px auto;
 }
-.customization_block_input { vertical-align: inherit }
+.customization_block_input {
+    vertical-align: inherit;
+    display: block;
+}
 img.customization_delete_icon { margin: 2px }
 li.customizationUploadLine {
 	text-align: right;
