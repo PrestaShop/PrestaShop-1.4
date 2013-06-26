@@ -474,7 +474,7 @@ class AdminPreferences extends AdminTab
 
 				case 'image':
 					echo '
-					<table cellspacing="0" cellpadding="0">
+					<table cellspacing="0" cellpadding="0" width="100%" style="text-align:left;">
 						<tr>';
 					if ($name == 'themes')
 						echo '

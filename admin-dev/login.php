@@ -176,7 +176,7 @@ else
 					</script>
 				</form>
 			</div>
-			<h2><a href="http://www.prestashop.com">Copyright &copy; 2012 PrestaShop. all rights reserved.</a></h2>
+			<h2><a href="http://www.prestashop.com">Copyright &copy; 2013 PrestaShop. all rights reserved.</a></h2>
 		</div>
 	</body>
 </html>

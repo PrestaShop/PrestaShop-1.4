@@ -1451,7 +1451,8 @@ class AdminImport extends AdminTab
 					echo '
 					<div class="warn">
 						'.$this->l('No CSV file is available, please upload one above.').'<br /><br />
-						'.$this->l('You can get a great deal of information about CSV import at:').' <a href="http://www.prestashop.com/wiki/Troubleshooting_6/" target="_blank">http://www.prestashop.com/wiki/Troubleshooting_6/</a><br /><br />
+						'.$this->l('You can get a great deal of information about CSV import at:').' <a href="http://doc.prestashop.com/display/PS15/Understanding+The+Advanced+Parameters#UnderstandingTheAdvancedParameters-CSVImport
+" target="_blank">http://www.prestashop.com/wiki/Troubleshooting_6/</a><br /><br />
 						'.$this->l('For more information about the CSV format please go to: ').' <a href="http://en.wikipedia.org/wiki/Comma-separated_values" target="_blank">http://en.wikipedia.org/wiki/Comma-separated_values</a>
 					</div>';
 					echo '
