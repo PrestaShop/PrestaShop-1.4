@@ -312,21 +312,10 @@ function updateCartSummary(json)
 			$('input[name=quantity_' + json.products[i].id_product + '_' + json.products[i].id_product_attribute +' ]').val(json.products[i].cart_quantity);
 			$('input[name=quantity_' + json.products[i].id_product+'_' + json.products[i].id_product_attribute + '_hidden]').val(json.products[i].cart_quantity);
 		}
-		else
+		else // TODO : need elseif(is a custom product without custom) here or must have correct customization_quantity (and total) from json and not only first customization quantity
 		{
-			json.products[i].customizationQuantityTotal = 0; 
-			$('.product_customization_for_'+ json.products[i].id_product + '_' + json.products[i].id_product_attribute + ' input[name^=quantity_' + json.products[i].id_product + '_' + json.products[i].id_product_attribute + '].cart_quantity_input').each(function(){	
-				if ($(this).attr('name') == 'quantity_' + json.products[i].id_product + '_' + json.products[i].id_product_attribute + '_' + json.products[i].id_customization)
-					json.products[i].customizationQuantityTotal += parseInt(json.products[i].customization_quantity);										
-				else
-					json.products[i].customizationQuantityTotal += parseInt($(this).val());
-			});
-			
-			$('input[name=quantity_' + json.products[i].id_product + '_'+ json.products[i].id_product_attribute + ((json.products[i].customizationQuantityTotal != json.products[i].cart_quantity)? '_nocustom' : '') + ']').val(parseInt(json.products[i].cart_quantity) - parseInt(json.products[i].customizationQuantityTotal));
-			$('input[name=quantity_' + json.products[i].id_product + '_'+ json.products[i].id_product_attribute + ((json.products[i].customizationQuantityTotal != json.products[i].cart_quantity)? '_nocustom' : '') + '_hidden]').val(parseInt(json.products[i].cart_quantity) - parseInt(json.products[i].customizationQuantityTotal));
-		
-			if (typeof(json.products[i].customizationQuantityTotal) !== 'undefined' && json.products[i].customizationQuantityTotal > 0)
-				$('#cart_quantity_custom_' + json.products[i].id_product + '_' + json.products[i].id_product_attribute).html(parseInt(json.products[i].customizationQuantityTotal));
+            $('input[name=quantity_' + json.products[i].id_product + '_' + json.products[i].id_product_attribute + ((json.products[i].customizationQuantityTotal != json.products[i].cart_quantity)? '_nocustom' : '')  + ']').val(parseInt(json.products[i].cart_quantity) - parseInt($('#cart_quantity_custom_' + json.products[i].id_product + '_' + + json.products[i].id_product_attribute).html()));
+            $('input[name=quantity_' + json.products[i].id_product + '_' + json.products[i].id_product_attribute + ((json.products[i].customizationQuantityTotal != json.products[i].cart_quantity)? '_nocustom' : '')  + '_hidden]').val(parseInt(json.products[i].cart_quantity) - parseInt($('#cart_quantity_custom_' + json.products[i].id_product + '_' + + json.products[i].id_product_attribute).html()));
 		}
 
 		// Show / hide quantity button if minimal quantity
@@ -437,11 +426,17 @@ function updateCustomizedDatas(json)
 {
 	for(i in json)
 		for(j in json[i])
+        {
+            var total = 0;
 			for(k in json[i][j])
 			{
 				$('input[name=quantity_'+i+'_'+j+'_'+k+'_hidden]').val(json[i][j][k]['quantity']);
 				$('input[name=quantity_'+i+'_'+j+'_'+k+']').val(json[i][j][k]['quantity']);
+                total += parseInt(json[i][j][k]['quantity']);
 			}
+            if (total > 0)
+                $('#cart_quantity_custom_' + i + '_' + j).html(parseInt(total));
+        }
 }
 
 function updateHookShoppingCart(html)
