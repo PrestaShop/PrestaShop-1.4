@@ -398,13 +398,13 @@ class MailAlerts extends Module
 				</div>
 				<label>'.$this->l('Alert threshold:').'</label>
 				<div class="margin-form">
-					<input type="text" name="MA_LAST_QTIES" value="'.(Tools::getValue('MA_LAST_QTIES') != null ? (int)(Tools::getValue('MA_LAST_QTIES')) : Configuration::get('MA_LAST_QTIES')).'" size="3" />
+					<input type="text" name="MA_LAST_QTIES" value="'.(Tools::getValue('MA_LAST_QTIES') != null ? (int)(Tools::getValue('MA_LAST_QTIES')) : (int)Configuration::get('MA_LAST_QTIES')).'" size="3" />
 					<p>'.$this->l('Quantity for which a product is regarded as out of stock').'</p>
 				</div>
 				<label>'.$this->l('Send to these e-mail addresses:').' </label>
 				<div class="margin-form">
 					<div style="float:left; margin-right:10px;">
-						<textarea name="ma_merchant_mails" rows="10" cols="30">'.Tools::getValue('ma_merchant_mails', str_replace(self::__MA_MAIL_DELIMITOR__, "\n", $this->_merchant_mails)).'</textarea>
+						<textarea name="ma_merchant_mails" rows="10" cols="30">'.Tools::safeOutput(Tools::getValue('ma_merchant_mails', str_replace(self::__MA_MAIL_DELIMITOR__, "\n", $this->_merchant_mails))).'</textarea>
 					</div>
 					<div style="float:left;">
 						'.$this->l('One e-mail address per line').'<br />
@@ -440,7 +440,7 @@ class MailAlerts extends Module
 				{
 					$email = trim($email);
 					if (!empty($email) && !Validate::isEmail($email))
-						return ($this->_html .= '<div class="alert error">'.$this->l('Invalid e-mail:').' '.$email.'</div>');
+						return ($this->_html .= '<div class="alert error">'.$this->l('Invalid e-mail:').' '.Tools::safeOutput($email).'</div>');
 					if (!empty($email) && count($email))
 						$emails[$k] = $email;
 					else

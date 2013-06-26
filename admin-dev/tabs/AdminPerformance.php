@@ -47,7 +47,7 @@ class AdminPerformance extends AdminTab
 					$cache_active = 0;
 				else
 					$cache_active = 1;
-				if (!$caching_system = Tools::getValue('caching_system'))
+				if ((!$caching_system = Tools::getValue('caching_system')) || !in_array($caching_system, array('MCached', 'CacheFS')))
 					$this->_errors[] = Tools::displayError('Caching system is missing');
 				else
 					$settings = preg_replace('/define\(\'_PS_CACHING_SYSTEM_\', \'([a-z0-9=\/+-_]+)\'\);/Ui', 'define(\'_PS_CACHING_SYSTEM_\', \''.$caching_system.'\');', $settings);
