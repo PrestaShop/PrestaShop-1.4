@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{kwixo}prestashop>kwixo_740e53a0ed1b643f69c4aaa8ad4ae8d2'] = 'Ungültige Lieferanten-Code';
 $_MODULE['<{kwixo}prestashop>kwixo_080d3ce779d939f18af2ca1e499c2d4d'] = 'Rückgabe-URL';
 $_MODULE['<{kwixo}prestashop>kwixo_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Bestätigung';

@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{followup}prestashop>followup_9c34e90380dac7b56fdd19192a99d531'] = 'Follow-up clienti';
 $_MODULE['<{followup}prestashop>followup_57476355fcd04050bff196ae9aa4673c'] = 'Segui i tuoi clienti con e-mail quotidiane personalizzate';
 $_MODULE['<{followup}prestashop>followup_f71a41841c80c2ef0ec02a6ad5449c65'] = 'Sei sicuro di voler eliminare tutte le impostazioni ed i registri?';

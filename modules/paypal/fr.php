@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{paypal}prestashop>paypal_ad69e733ebae8d264bccaa38d68830e8'] = 'PayPal';
 $_MODULE['<{paypal}prestashop>paypal_6e7012516038a096b9f6bb71ba2cc5a3'] = 'Acceptez le paiements par cartes de crédits  (CB, Visa, MasterCard, Amex, Aurore, Cofinoga, 4 stars)  avec PayPal.';
 $_MODULE['<{paypal}prestashop>paypal_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = 'Êtes-vous certain de vouloir supprimer vos informations ?';
@@ -45,6 +46,7 @@ $_MODULE['<{paypal}prestashop>payment_bcf08b34ab427cb871635151c6976eb0'] = 'Impo
 $_MODULE['<{paypal}prestashop>payment_ca5cecfc8fd8e585ba1e684757168158'] = 'Impossible de mettre à jour le panier';
 $_MODULE['<{paypal}prestashop>payment_ada2b5d5bbf3065de283d61526141780'] = 'En attente de capture du paiement.';
 $_MODULE['<{paypal}prestashop>payment_36ec50c0e914dd2fb48a1b27540512ce'] = 'Paiement accepté.';
+$_MODULE['<{paypal}prestashop>payment_c8a31175ee6991be6a0d7a6d32ca4268'] = 'En attente de la confirmation du paiement.';
 $_MODULE['<{paypal}prestashop>payment_8a34d4a5b0c3928059f6f92ead9e8aa6'] = 'Le prix payé sur PayPal est différent du prix renseigné sur la boutique.';
 $_MODULE['<{paypal}prestashop>payment_98825385aadb1d0dd0fd133ef8acd23d'] = 'Impossible de créer la commande';
 $_MODULE['<{paypal}prestashop>payment_085b78e060c3ef4cc37bd25abd06ff66'] = 'Le panier a changé depuis la dernière tentative de paiement. Veuillez recommencer le processus de paiement s\'il vous plait.';
@@ -85,6 +87,12 @@ $_MODULE['<{paypal}prestashop>error_f47106270a2928f350f357e255a2c2ac'] = 'Veuill
 $_MODULE['<{paypal}prestashop>error_d5860edcd3078f86ee963c27654bc6cf'] = 'Montant total de la transaction (taxes incl) :';
 $_MODULE['<{paypal}prestashop>error_a378cd7a0839cbd4ec3e45bbdeeb69be'] = 'L\'ID de votre commande est :';
 $_MODULE['<{paypal}prestashop>error_0557fa923dcee4d0f86b1409f5c2167f'] = 'Précédent';
+$_MODULE['<{paypal}prestashop>order-confirmation-mobile_fb077ecba55e5552916bde26d8b9e794'] = 'Confirmation de commande';
+$_MODULE['<{paypal}prestashop>order-confirmation-mobile_d5860edcd3078f86ee963c27654bc6cf'] = 'Total de la transaction (TTC) :';
+$_MODULE['<{paypal}prestashop>order-confirmation-mobile_a378cd7a0839cbd4ec3e45bbdeeb69be'] = 'Votre numéro de commande est le :';
+$_MODULE['<{paypal}prestashop>order-confirmation-mobile_6e860dc1cf94ca08b3fd99993aa2dc68'] = 'Votre numéro de transaction PayPal est :';
+$_MODULE['<{paypal}prestashop>order-confirmation-mobile_300225ee958b6350abc51805dab83c24'] = 'Continuer mes achats';
+$_MODULE['<{paypal}prestashop>order-confirmation-mobile_9390390581f54c65d6acfc8da4e17362'] = 'Retour aux commandes';
 $_MODULE['<{paypal}prestashop>order-confirmation_fb077ecba55e5552916bde26d8b9e794'] = 'Confirmation de commande';
 $_MODULE['<{paypal}prestashop>order-confirmation_d5860edcd3078f86ee963c27654bc6cf'] = 'Total de la transaction (TTC) :';
 $_MODULE['<{paypal}prestashop>order-confirmation_a378cd7a0839cbd4ec3e45bbdeeb69be'] = 'Votre numéro de commande est le :';

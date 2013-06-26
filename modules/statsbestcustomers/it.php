@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_4f29d8c727dcf2022ac241cb96c31083'] = 'recordset vuoto restituito';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_eab2b4237a7cd89c309119e35f62d168'] = 'Visualizzazione';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_8bf8854bebe108183caeb845c7676ae4'] = 'di';
@@ -14,7 +15,7 @@ $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_8b83489bd116cb60e2f
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_cdc31cfb8cc370e79d854a2f82849dd2'] = 'Elenco dei migliori clienti';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_998e4c5c80f27dec552e99dfed34889a'] = 'Esporta CSV';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_6602bbeb2956c035fb4cb5e844a4861b'] = 'Guida';
-$_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_cb21e843b037359d0fb5b793fccf964f'] = 'Sviluppa la fedeltà dei clienti ';
+$_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_cb21e843b037359d0fb5b793fccf964f'] = 'Sviluppa la fedeltà dei clienti';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_83e2cc1dd0205949c98f041a939b1e6a'] = 'Mantenere un cliente è più redditizio che catturarne uno nuovo. Pertanto, è necessario sviluppare la loro fedeltà, in altre parole, devi farli tornare al tuo negozio online.';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_0c2ccbf300070c80e642a4924e4468cb'] = 'Il passaparola è anche un mezzo per ottenere nuovi clienti soddisfatti; un cliente non soddisfatto non attirerà nuovi clienti.';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_40436d8f0cc9466c7b6c8304e156b427'] = 'Al fine di raggiungere questo obiettivo è possibile organizzare:';

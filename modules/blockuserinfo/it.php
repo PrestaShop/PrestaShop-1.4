@@ -2,7 +2,8 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{blockuserinfo}prestashop>blockuserinfo_a2e9cd952cda8ba167e62b25a496c6c1'] = 'Blocco info utente ';
+
+$_MODULE['<{blockuserinfo}prestashop>blockuserinfo_a2e9cd952cda8ba167e62b25a496c6c1'] = 'Blocco info utente';
 $_MODULE['<{blockuserinfo}prestashop>blockuserinfo_970a31aa19d205f92ccfd1913ca04dc0'] = 'Aggiungi un blocco che visualizza le informazioni sul cliente';
 $_MODULE['<{blockuserinfo}prestashop>blockuserinfo_83218ac34c1834c26781fe4bde918ee4'] = 'Benvenuti';
 $_MODULE['<{blockuserinfo}prestashop>blockuserinfo_4b877ba8588b19f1b278510bf2b57ebb'] = 'Fammi uscire';

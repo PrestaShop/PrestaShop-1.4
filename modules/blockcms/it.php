@@ -2,7 +2,8 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{blockcms}prestashop>blockcms_cd275312651aebf8cbbb8d3bb1c086ae'] = 'Blocco CMS ';
+
+$_MODULE['<{blockcms}prestashop>blockcms_cd275312651aebf8cbbb8d3bb1c086ae'] = 'Blocco CMS';
 $_MODULE['<{blockcms}prestashop>blockcms_cdca12007979fc49008fd125cdb775fc'] = 'Aggiungi un blocco con diversi link CMS';
 $_MODULE['<{blockcms}prestashop>blockcms_97390dd0b5ba7867120aee2ff22bfa38'] = 'Blocchi di configurazione CMS';
 $_MODULE['<{blockcms}prestashop>blockcms_1cd127158cfd245511751206f4b3c6f0'] = 'Aggiungi un nuovo blocco cms';
@@ -20,7 +21,7 @@ $_MODULE['<{blockcms}prestashop>blockcms_8f08c1af47e3e9611289c1882befc3a8'] = 'N
 $_MODULE['<{blockcms}prestashop>blockcms_0a40c06f34e5c794a7f0d3085d17d63a'] = 'Elenco di blocchi CMS di destra';
 $_MODULE['<{blockcms}prestashop>blockcms_965be994da393e5aa15bd3a2444c6ccf'] = 'Configurazione dei link  a piè di pagina';
 $_MODULE['<{blockcms}prestashop>blockcms_32c532e462a1f85b1b103ed9989a1aba'] = 'Display \"Powered by Prestashop\"';
-$_MODULE['<{blockcms}prestashop>blockcms_fab8ca8250236ed20b96f9750e1eacc7'] = 'Visualizzare i vari link a piè di pagina ';
+$_MODULE['<{blockcms}prestashop>blockcms_fab8ca8250236ed20b96f9750e1eacc7'] = 'Visualizzare i vari link a piè di pagina';
 $_MODULE['<{blockcms}prestashop>blockcms_49ee3087348e8d44e1feda1917443987'] = 'Nome';
 $_MODULE['<{blockcms}prestashop>blockcms_c9cc8cce247e49bae79f15173ce97354'] = 'Salva';
 $_MODULE['<{blockcms}prestashop>blockcms_5aa1602194579edb6f91d7dd53eadb32'] = 'Nuovo blocco CMS';
@@ -45,7 +46,7 @@ $_MODULE['<{blockcms}prestashop>blockcms_ede67d50014846cb8bb1b00d5fde77be'] = 'I
 $_MODULE['<{blockcms}prestashop>blockcms_05b51791a83d3cef29ad68b70d48d131'] = 'Attivazione piè di pagina non valido';
 $_MODULE['<{blockcms}prestashop>blockcms_5dab5acc3c6a2a7e87e8d8926a2c763e'] = 'Stai cercando di eliminare un blocco cms inesistente';
 $_MODULE['<{blockcms}prestashop>blockcms_138218281781fd0d938a140892d7386c'] = 'Piè di pagine CMS aggiornato con successo';
-$_MODULE['<{blockcms}prestashop>blockcms_ddd7d8a072783afaf23e5e6843398fc9'] = 'Aggiunta del blocco CMS riuscito ';
+$_MODULE['<{blockcms}prestashop>blockcms_ddd7d8a072783afaf23e5e6843398fc9'] = 'Aggiunta del blocco CMS riuscito';
 $_MODULE['<{blockcms}prestashop>blockcms_31a22821c66edf7e3aa33ef1c8109f4c'] = 'Modifica del blocco CMS riuscito';
 $_MODULE['<{blockcms}prestashop>blockcms_87a2663d841b78f01c27c0edb4f50b76'] = 'Cancellazione di successo';
 $_MODULE['<{blockcms}prestashop>blockcms_be58fccb15fb119b8c3d485e3a8561c4'] = 'Configurazione del blocco CMS';

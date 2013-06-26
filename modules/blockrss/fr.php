@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{blockrss}prestashop>blockrss_2516c13a12d3dbaf4efa88d9fce2e7da'] = 'Bloc flux RSS';
 $_MODULE['<{blockrss}prestashop>blockrss_04396664ce529aa4204b0f7ad753fad1'] = 'Ajoute un bloc avec les messages d\'un flux RSS.';
 $_MODULE['<{blockrss}prestashop>blockrss_9680162225162baf2a085dfdc2814deb'] = 'Flux RSS';

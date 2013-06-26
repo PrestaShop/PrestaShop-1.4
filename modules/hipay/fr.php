@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{hipay}prestashop>hipay_50089d40ef4536271e8b16dbe5763c01'] = 'Hipay';
 $_MODULE['<{hipay}prestashop>hipay_035ab5edb2d8af86d51f6a92e65b4c0f'] = 'Paiement sécurisé Visa Mastercard et solutions européennes.';
 $_MODULE['<{hipay}prestashop>hipay_9d72404f720479faa0684f13d753ee06'] = 'Pour fonctionner correctement la librairie SOAP doit être installée.';
@@ -24,11 +25,11 @@ $_MODULE['<{hipay}prestashop>hipay_67446b8dbb67e3bc5d7dffc93eb54d47'] = 'La solu
 $_MODULE['<{hipay}prestashop>hipay_f6f26dd813e62c21df052803bfe54e5e'] = 'La souplesse et la performance d\'Hipay ont déjà convaincu 12 000 marchands et 1 million d\'utilisateurs. Une sélection de 15 méthodes de paiement parmi les plus pertinentes d’Europe, assure à vos clients sécurité, confort et simplicité dans leurs transactions en ligne.';
 $_MODULE['<{hipay}prestashop>hipay_47c4a16c7d291988859e09b9b70bf482'] = 'Une fois votre compte activé vous recevrez plus de détails par email.';
 $_MODULE['<{hipay}prestashop>hipay_a0186b7260c92016ec7000ae73099852'] = 'Tous les marchands utilisant Prestashop peuvent bénéficier de tarifs préférentiels en nous contactant sur :';
-$_MODULE['<{hipay}prestashop>hipay_c21f22cda787436117c0414ed66c1580'] = 'N’hésitez pas à nous contacter. Dans certains cas nous offrons une réduction de plus de 50% par rapport aux frais publics. ';
+$_MODULE['<{hipay}prestashop>hipay_c21f22cda787436117c0414ed66c1580'] = 'N’hésitez pas à nous contacter. Dans certains cas nous offrons une réduction de plus de 50% par rapport aux frais publics.';
 $_MODULE['<{hipay}prestashop>hipay_92c1bf869a86b76d878e356976954948'] = 'Avec simplicité et efficacité, Hipay booste votre chiffre d’affaires partout en Europe grâce à :';
-$_MODULE['<{hipay}prestashop>hipay_6022f8df59810e811923f93c5ccd1df8'] = 'Des solutions de paiement propres à de nombreux pays européens ; ';
+$_MODULE['<{hipay}prestashop>hipay_6022f8df59810e811923f93c5ccd1df8'] = 'Des solutions de paiement propres à de nombreux pays européens ;';
 $_MODULE['<{hipay}prestashop>hipay_00c73592d291d0436059c671342a4381'] = 'Des tarifs attractifs, aucun frais d’abonnement ou d’installation ;';
-$_MODULE['<{hipay}prestashop>hipay_470bdbbb630bea0c16bfe54995199e82'] = 'Des interlocuteurs expérimentés sur les questions techniques et financières ; ';
+$_MODULE['<{hipay}prestashop>hipay_470bdbbb630bea0c16bfe54995199e82'] = 'Des interlocuteurs expérimentés sur les questions techniques et financières ;';
 $_MODULE['<{hipay}prestashop>hipay_4b7d2fe7b1fd51743339baecf698d7e5'] = 'Un service client dédié ;';
 $_MODULE['<{hipay}prestashop>hipay_5d0f085c7daf9e1c05e4b4eb0ef928a3'] = 'Un système anti-fraude et contrôle permanent des comportements à risque.';
 $_MODULE['<{hipay}prestashop>hipay_e196e94726a3f1086d5ab95858517dba'] = 'Hipay fait partie du groupe Hi-Media (Allopass)';

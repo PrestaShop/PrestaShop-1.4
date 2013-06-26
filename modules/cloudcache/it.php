@@ -2,8 +2,12 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{cloudcache}prestashop>cloudcache_f86d8910fee395bdb3d9e0165763235d'] = 'CloudCache';
 $_MODULE['<{cloudcache}prestashop>cloudcache_04a5752fc2ed63bac60e8e819fb37a8a'] = 'Accelera il tuo negozio con il CDN (netword di contenuti condivisi) CloudCache.com';
+$_MODULE['<{cloudcache}prestashop>cloudcache_ea5eb3f904bf42377277255cbd0e2251'] = 'Per funzionare correttamente il modulo richiede il modulo di retrocompatibilità abilitato';
+$_MODULE['<{cloudcache}prestashop>cloudcache_48878e69ef59b9e9d2d9a8c18e4de520'] = 'Per funzionare correttamente il modulo richiede il modulo di retrocompatibilità almeno della versione';
+$_MODULE['<{cloudcache}prestashop>cloudcache_c9d8a8d3c76c69e9a5ba6387acb8655a'] = 'Per usare questo modulo è necessario il modulo di retrocompatibilità abilitato.';
 $_MODULE['<{cloudcache}prestashop>cloudcache_3d31c37e7b674b0882fd6eb636b9f883'] = 'Il modulo è stato installato con successo (';
 $_MODULE['<{cloudcache}prestashop>cloudcache_e2d5a00791bce9a01f99bc6fd613a39d'] = 'Configura';
 $_MODULE['<{cloudcache}prestashop>cloudcache_7171d1fc720355ddfb40537f566d8775'] = ') mu i seguenti file esistono già, per favore inseriscili manualmente';

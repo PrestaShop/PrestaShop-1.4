@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{sendtoafriend}prestashop>product_page_2107f6398c37b4b9ee1e1b5afb5d3b2a'] = 'An einen Freund senden';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_2074615eb70699e55b1f9289c6c77c25'] = 'An einen Freund senden-Modul';
 $_MODULE['<{sendtoafriend}prestashop>sendtoafriend_3234e2609dd694d8763c390fe97eba04'] = 'Ermöglicht den Kunden, einen Produktlink an einen Freund zu senden';

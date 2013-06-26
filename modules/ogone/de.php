@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{ogone}prestashop>hookorderconfirmation_2e2117b7c81aa9ea6931641ea2c6499f'] = 'Ihre Bestellung vom';
 $_MODULE['<{ogone}prestashop>hookorderconfirmation_75fbf512d744977d62599cc3f0ae2bb4'] = 'ist abgeschlossen.';
 $_MODULE['<{ogone}prestashop>hookorderconfirmation_30163d8fc3068e8297e7ab5bf32aec87'] = 'Ihre Bestellung wird so schnell wie möglich zugeschickt.';
@@ -12,11 +13,8 @@ $_MODULE['<{ogone}prestashop>ogone_40904c61c99a28a3acc110767753fade'] = 'Mit üb
 $_MODULE['<{ogone}prestashop>ogone_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Konfiguration aktualisiert';
 $_MODULE['<{ogone}prestashop>ogone_6a26f548831e6a8c26bfbbd9f6ec61e0'] = 'Hilfe';
 $_MODULE['<{ogone}prestashop>ogone_879dd0a17cb07d91581b85fa6ade410b'] = 'Ogone ist ein führender europäischer Anbieter von Payment Services mit internationaler Ausrichtung.';
-$_MODULE['<{ogone}prestashop>ogone_1e7bcd8050c5264ba8ea688bdb1d999b'] = 'Für mehr als %1$s35.000 Kunden weltweit%2$s übernimmt Ogone die Steuerung und Sicherung des Online-Zahlungsverkehrs. Das Unternehmen mit Hauptsitz in Brüssel bietet dank zertifizierter Schnittstellen zu mehr als %1$s200 Banken und Finanzdienstleistern über 80 internationale, alternative und national populäre Zahlmethoden%2$s in Europa, Asien, Lateinamerika und dem Mittleren Osten an.';
-$_MODULE['<{ogone}prestashop>ogone_3936e6f93396b090fa269b25ebcffeac'] = 'Um Ihr Konto zu aktivieren, brauchen Sie einen Vertrag mit einem Akzeptanzpartner. Gerne unterstützen wir Sie dabei!';
 $_MODULE['<{ogone}prestashop>ogone_b68664b2bd671c41f46e2ea168895e8a'] = 'Um Ihr kostenloses Testkonto einzurichten, klicken Sie bitte auf nachfolgenden Link:';
 $_MODULE['<{ogone}prestashop>ogone_199ab4d0550e412b6dc34cb277a8f4de'] = 'Erstellen Sie ein kostenloses Testkonto';
-$_MODULE['<{ogone}prestashop>ogone_a276e4a057c509f54db29bcaabb089ad'] = 'Dieses Testkonto ermöglicht es Ihnen, Ihre eigene PSPID (Ogone Identifikation) zu vergeben , Informationen zu erfragen , die gewünschten Zahlmethoden zu aktivieren und die SHA-in und SHA-out Signaturen zu vergeben, welche für die Konfiguration Ihres Prestashops benötigt werden.';
 $_MODULE['<{ogone}prestashop>ogone_5849c2f3cca6a24cb438d8c6614729e0'] = 'Ebenso können Sie Testtransaktionen durchführen.';
 $_MODULE['<{ogone}prestashop>ogone_ff1a5bf357135289df7454e19e068b30'] = 'Kopieren Sie Ihr Ogone Testkonto in die Produktivumgebung.';
 $_MODULE['<{ogone}prestashop>ogone_263354849869cfad12ab9d6a53c4f629'] = 'Dieser 2. Teil gibt Ihnen die Möglichkeit, Ihre Rechnungsinformationen zu vervollständigen, Ihre Vertragspartner-Nr., die Ihnen Ihr Akzeptanzpartner mitgeteilt hat einzutragen und Ihren Ogone Vertrag zu erhalten.';

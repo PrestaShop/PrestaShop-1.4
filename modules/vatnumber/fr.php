@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{vatnumber}prestashop>vatnumber_b0b9a606a1c251323825ca45d40964dc'] = 'Aucun pays par défaut n\'a été défini.';
 $_MODULE['<{vatnumber}prestashop>vatnumber_cee549912e318726d2c4989bb507665f'] = 'Numéro de TVA Europeen';
 $_MODULE['<{vatnumber}prestashop>vatnumber_a6d69adb6cb6aafd65871bde8fd51847'] = 'Permet de renseigner son numéro de TVA intra-communautaire lors de la création d\'une adresse (Renseigner auparavant le champ \"société\" pour pouvoir saisir votre numéro de TVA)\"';

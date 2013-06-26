@@ -2,10 +2,11 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{blocklayered}prestashop>blocklayered-no-products_5c9838becf9bbce28ba90a7426daf171'] = 'Il n\'y a pas de produit.';
 $_MODULE['<{blocklayered}prestashop>blocklayered_84241e458cdd5162745500a59a3680f3'] = 'Bloc navigation à facettes';
 $_MODULE['<{blocklayered}prestashop>blocklayered_2d08fa8e157fe3f1875402cbd98aee1b'] = 'Affiche un bloc avec les filtres de la navigation à facettes';
-$_MODULE['<{blocklayered}prestashop>blocklayered_3b3d06023f6353f8fd05f859b298573e'] = 'URL ';
+$_MODULE['<{blocklayered}prestashop>blocklayered_3b3d06023f6353f8fd05f859b298573e'] = 'URL';
 $_MODULE['<{blocklayered}prestashop>blocklayered_6252c0f2c2ed83b7b06dfca86d4650bb'] = 'Les caractères invalides :';
 $_MODULE['<{blocklayered}prestashop>blocklayered_f39f64ad2722b269d9b6cb2ec97ba4ad'] = 'Format spécifique pour la génération des URL pour la navigation à facettes';
 $_MODULE['<{blocklayered}prestashop>blocklayered_7b250cb374c12c42a75227ba75df7779'] = 'Titre Méta :';
@@ -128,7 +129,7 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_57d6fd5e5b9c215d6edac66b67e6577
 $_MODULE['<{blocklayered}prestashop>blocklayered_c32516babc5b6c47eb8ce1bfc223253c'] = 'Catalogue';
 $_MODULE['<{blocklayered}prestashop>blocklayered_1262d1b9fbffb3a8e85ac9e4b449e989'] = 'Filtres actifs :';
 $_MODULE['<{blocklayered}prestashop>blocklayered_ea4788705e6873b424c65e91c2846b19'] = 'Annuler';
-$_MODULE['<{blocklayered}prestashop>blocklayered_853ae90f0351324bd73ea615e6487517'] = ' :';
+$_MODULE['<{blocklayered}prestashop>blocklayered_853ae90f0351324bd73ea615e6487517'] = ':';
 $_MODULE['<{blocklayered}prestashop>blocklayered_b47b72ddf8a3fa1949a7fb6bb5dbc60c'] = 'Aucun filtre';
 $_MODULE['<{blocklayered}prestashop>blocklayered_75954a3c6f2ea54cb9dff249b6b5e8e6'] = 'Tranche :';
 $_MODULE['<{blocklayered}prestashop>blocklayered_5da618e8e4b89c66fe86e32cdafde142'] = 'De';

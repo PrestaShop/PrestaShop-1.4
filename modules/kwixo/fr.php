@@ -2,12 +2,13 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{kwixo}prestashop>kwixo_0981c28797684ede5114ae410997ffc5'] = 'Kwixo';
 $_MODULE['<{kwixo}prestashop>kwixo_0c70853cdce55048ea5a9d3ace56b5dd'] = 'Accepte les paiements par \"Kwixo\"';
 $_MODULE['<{kwixo}prestashop>kwixo_41ef095800141e52c62fa58b93a16640'] = 'ID marchant, la clé de cryptage et la catégorie doivent être configurer pour que le module fonctionne correctement.';
 $_MODULE['<{kwixo}prestashop>kwixo_47e13d684c88d911f4cee0f589fdd349'] = 'L\'ID marchand Kwixo est requis';
 $_MODULE['<{kwixo}prestashop>kwixo_d2633fbd326a2dde82a0556be3a78529'] = 'L\'ID marchand Kwixo doit être positif';
-$_MODULE['<{kwixo}prestashop>kwixo_7ecf63c7d5bcc0efdfdc53bf96518be1'] = 'La clée de cryptage Kwixo est requise ';
+$_MODULE['<{kwixo}prestashop>kwixo_7ecf63c7d5bcc0efdfdc53bf96518be1'] = 'La clée de cryptage Kwixo est requise';
 $_MODULE['<{kwixo}prestashop>kwixo_25e21a75f506069d0ac0bac80a657c05'] = 'La catégorie Kwixo est requise';
 $_MODULE['<{kwixo}prestashop>kwixo_9ae3d6d5a5a9761b552ba1d228a83fa9'] = 'Kwixo \"le nombre de jours de livraison\" est nécessaire et doit être un nombre.\"';
 $_MODULE['<{kwixo}prestashop>kwixo_740e53a0ed1b643f69c4aaa8ad4ae8d2'] = 'Code transporteur invalide';
@@ -66,9 +67,9 @@ $_MODULE['<{kwixo}prestashop>payment_return_e3bb978b9d6eba040eb299aafe5d93b1'] =
 $_MODULE['<{kwixo}prestashop>payment_return_219747f2d5260e7d31f63bcd21414a1e'] = 'Transaction OK:';
 $_MODULE['<{kwixo}prestashop>payment_return_3a881a13316876a92c642cede0dd9c44'] = 'Une ou plusieurs erreurs sont survenues au moment de la validation';
 $_MODULE['<{kwixo}prestashop>payment_return_b49fdc62aa3a6a643e77c062f2608c7e'] = 'Votre commande a été enregistrée.';
-$_MODULE['<{kwixo}prestashop>payment_return_af7399efb8b4e98c81139c259f3ec2e2'] = 'Pour toute question merci de contacter notre ';
+$_MODULE['<{kwixo}prestashop>payment_return_af7399efb8b4e98c81139c259f3ec2e2'] = 'Pour toute question merci de contacter notre';
 $_MODULE['<{kwixo}prestashop>payment_return_c2a587cdaedbfe855dc3155b58854bd7'] = 'service client';
-$_MODULE['<{kwixo}prestashop>payment_return_e5ae7bac23ddbba6d772e8a795a2c4fd'] = 'Un probème a été rencontré. Si vous pensez qu\'il s\'agit d\'une erreur merci de contacter notre ';
+$_MODULE['<{kwixo}prestashop>payment_return_e5ae7bac23ddbba6d772e8a795a2c4fd'] = 'Un probème a été rencontré. Si vous pensez qu\'il s\'agit d\'une erreur merci de contacter notre';
 $_MODULE['<{kwixo}prestashop>payment_return_9111088477c2ccb90268ad8131177d88'] = 'service client.';
 $_MODULE['<{kwixo}prestashop>payment_return_12e46619c6b52977f628c4ed4e6c5193'] = 'Retour au panier';
 $_MODULE['<{kwixo}prestashop>payment_return_1c190a8a3964e8cb1f3e43dc0379ab0e'] = 'Retour aux commandes';

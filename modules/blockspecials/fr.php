@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{blockspecials}prestashop>blockspecials_c19ed4ea98cbf319735f6d09bde6c757'] = 'Bloc promotions';
 $_MODULE['<{blockspecials}prestashop>blockspecials_c2fb79a6eca86e519f938a1ef15c3e69'] = 'Ajoute un bloc proposant les produits en promotion actuellement';
 $_MODULE['<{blockspecials}prestashop>blockspecials_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Confirmation';

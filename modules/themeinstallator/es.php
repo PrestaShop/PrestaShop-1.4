@@ -9,6 +9,7 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_ea5eb3f904bf42377277255
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_48878e69ef59b9e9d2d9a8c18e4de520'] = 'Para trabajar adecuadamente el módulo requiere al menos el módulo de compatibilidad hacia atrás v';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_c9d8a8d3c76c69e9a5ba6387acb8655a'] = 'Para poder usar el módulo necesita instalar la compatibilidad hacia atrás.';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_625752b5671445388af8f5e1ea3176c0'] = '%s no es un tema válido para exportar';
+$_MODULE['<{themeinstallator}prestashop>themeinstallator_8e032a9d7e6c989f867df6ef4f40a3cb'] = 'Se ha producido un error al copiar logotipo. El tamaño de la imagen debe ser menor';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_25b9e1d82d8200d70be2b22a1a283957'] = 'Se ha producido un error durante el envío del archivo.';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_050991b5b76aad0be75563b7cb93a33e'] = 'Solo están autorizados los archivos zip';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_57c1ed81b02e5d3361323c7930897295'] = 'Se ha producido un error durante la copia del archivo.';
@@ -16,7 +17,6 @@ $_MODULE['<{themeinstallator}prestashop>themeinstallator_5fd13c2b89a6eaaa4614bfe
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_0dea6caeb83e5c11d3678284e64ebed8'] = 'Se ha producido un error durante el envío del archivo';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_c186217583219f4cd040d9ee8d388ffb'] = 'Se ha producido un error durante la extracción del archivo zip';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_0210b6456cdccad569cb56026bb0f689'] = 'Configuración de archivo errónea';
-$_MODULE['<{themeinstallator}prestashop>themeinstallator_416fa810b877005364d8dc1f61a2b7f0'] = 'Debes seleccionar un tema al menos';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_a7eca295291f53a23ab7ba0a9c7fd9de'] = 'Esta característica ha sido deshabilitada.';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_5b6cf869265c13af8566f192b4ab3d2a'] = 'Documentación';
 $_MODULE['<{themeinstallator}prestashop>themeinstallator_6bdbe5a8a9f446d4d758ee4c22648771'] = 'Puede consultar la documentación';

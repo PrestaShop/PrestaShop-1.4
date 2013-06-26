@@ -2,6 +2,7 @@
 
 global $_FIELDS;
 $_FIELDS = array();
+
 $_FIELDS['Address_71581233bcc121fcc409ecce9317fbde'] = 'customer ID';
 $_FIELDS['Address_98305bfa557ba2547e7de1fb77053c93'] = 'manufacturer ID';
 $_FIELDS['Address_ad8a1593fb8fbba0eb0f9dba0e51e7f1'] = 'supplier ID';
@@ -489,8 +490,8 @@ $_FIELDS['StockMvtReason_b068931cc450442b63f5b3d276ea4297'] = 'Cognome';
 $_FIELDS['Store_e42112710fe4f0cf86411aabc028e7d9'] = 'country ID';
 $_FIELDS['Store_c4da098c369f77a70643fa52972677be'] = 'state ID';
 $_FIELDS['Store_b068931cc450442b63f5b3d276ea4297'] = 'Cognome';
-$_FIELDS['Store_81e70cb16ec45f5ab19bb6638e8e6c2d'] = 'Indirizzo 1 ';
-$_FIELDS['Store_f669f8e9f6599d0dfcd613bc6e2f347e'] = 'Indirizzo 2 ';
+$_FIELDS['Store_81e70cb16ec45f5ab19bb6638e8e6c2d'] = 'Indirizzo 1';
+$_FIELDS['Store_f669f8e9f6599d0dfcd613bc6e2f347e'] = 'Indirizzo 2';
 $_FIELDS['Store_4ed5d2eaed1a1fadcc41ad1d58ed603e'] = 'Città';
 $_FIELDS['Store_28c1e37e317b935a387dbe232bc9f803'] = 'Latitudine';
 $_FIELDS['Store_ba569b80f7bb7762f073f1be57cc36aa'] = 'Longitudine';
@@ -498,7 +499,7 @@ $_FIELDS['Store_73cdddd7730abfc13a55efb9f5685a3b'] = 'ore';
 $_FIELDS['Store_f7a42fe7211f98ac7a60a285ac3a9e87'] = 'telefono';
 $_FIELDS['Store_236c3b7f761221f195b428aca2f06c4b'] = 'fax';
 $_FIELDS['Store_aad653ca3ee669635f2938b73098b6d7'] = 'nota';
-$_FIELDS['Store_0c83f57c786a0b4a39efab23731c7ebc'] = 'E-mail ';
+$_FIELDS['Store_0c83f57c786a0b4a39efab23731c7ebc'] = 'E-mail';
 $_FIELDS['Store_c76a5e84e4bdee527e274ea30c680d79'] = 'attivazione';
 $_FIELDS['SubDomain_b068931cc450442b63f5b3d276ea4297'] = 'cognome';
 $_FIELDS['Supplier_b068931cc450442b63f5b3d276ea4297'] = 'cognome';

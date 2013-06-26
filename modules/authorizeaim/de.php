@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_cb313e911b15b21b57f4fc7b53058e4f'] = 'Zahlung mit Authorize.net erhalten';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_9d5b40ff49295ac0b4a5a13a88ccd285'] = 'cURL muss aktiviert sein, um dieses Modul nutzen zu können.';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Konfiguration aktualisiert';

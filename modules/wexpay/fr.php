@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{wexpay}prestashop>payment_5805928fa133f0fb2fac14cecd73a6b5'] = 'Payer avec weXpay';
 $_MODULE['<{wexpay}prestashop>payment_4d3220c7e70d278cece5139995a29237'] = 'Logo weXpay';
 $_MODULE['<{wexpay}prestashop>wexpay_8778298c8e187d72ec77eb2a6634812f'] = 'weXpay e-money';

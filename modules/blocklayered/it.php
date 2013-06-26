@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{blocklayered}prestashop>blocklayered-no-products_5c9838becf9bbce28ba90a7426daf171'] = 'Non ci sono prodotti.';
 $_MODULE['<{blocklayered}prestashop>blocklayered_84241e458cdd5162745500a59a3680f3'] = 'Blocco di navigazione a strati';
 $_MODULE['<{blocklayered}prestashop>blocklayered_2d08fa8e157fe3f1875402cbd98aee1b'] = 'Visualizza un blocco con i filtri di navigazione a strati';
@@ -79,7 +80,7 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_74a6a547d86659933a210680efb6e6d
 $_MODULE['<{blocklayered}prestashop>blocklayered_f8263d99054a4cdb3428196f078fa212'] = 'Nome modello:';
 $_MODULE['<{blocklayered}prestashop>blocklayered_32d2e6cd4bb1719c572ef470a3a525b6'] = 'Il mio template %s';
 $_MODULE['<{blocklayered}prestashop>blocklayered_5f514b580ea1b6bdb681916bc1deb207'] = 'solo come un promemoria';
-$_MODULE['<{blocklayered}prestashop>blocklayered_188185ae335eb523e53d6d31ede21f1c'] = 'Nessun filtro selezionato, il blocco filtro sarà disabilitato per le categorie selezionate.';
+$_MODULE['<{blocklayered}prestashop>blocklayered_5487c1b875efa718581006b6e6c8395e'] = 'Nessun filtro selezionato, il blocklayered sarà disabilitato per le categorie selezionate.';
 $_MODULE['<{blocklayered}prestashop>blocklayered_ef1094d9826e98f5417e0a37f1742133'] = 'Salva questo modello filtro';
 $_MODULE['<{blocklayered}prestashop>blocklayered_254f642527b45bc260048e30704edb39'] = 'Configurazione';
 $_MODULE['<{blocklayered}prestashop>blocklayered_054b4f3ea543c990f6b125f41af6ebf7'] = 'Opzione';
@@ -94,6 +95,7 @@ $_MODULE['<{blocklayered}prestashop>blocklayered_3e652bd299bb3ee3d458c0dcc7fd706
 $_MODULE['<{blocklayered}prestashop>blocklayered_cc787af9edec8ce947ada8ab5bbff6e5'] = 'Permetti ai robots (google, yahoo, bing, ...) di usare i filtri di condizione';
 $_MODULE['<{blocklayered}prestashop>blocklayered_ab28e5086d1dcb1474a4bd4951b148b9'] = 'Permetti ai robots (google, yahoo, bing, ...) di usare i filtri di disponibilità';
 $_MODULE['<{blocklayered}prestashop>blocklayered_1218da2abb1e88e7fe8855995def9fef'] = 'Permetti ai robots (google, yahoo, bing, ...) di usare i filtri di produttori';
+$_MODULE['<{blocklayered}prestashop>blocklayered_c41e97692bc79531a51dfca4b7f6bee0'] = 'Autorizza i robot di indicizzazione (google, yahoo, bing,..) a usare filtri di categorie';
 $_MODULE['<{blocklayered}prestashop>blocklayered_cf565402d32b79d33f626252949a6941'] = 'Salva la configurazione';
 $_MODULE['<{blocklayered}prestashop>blocklayered_3601146c4e948c32b6424d2c0a7f0118'] = 'Prezzo';
 $_MODULE['<{blocklayered}prestashop>blocklayered_8c489d0946f66d17d73f26366a4bf620'] = 'Peso';

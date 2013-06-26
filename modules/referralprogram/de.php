@@ -2,9 +2,10 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{referralprogram}prestashop>authentication_6b31baf25848e7a6563ecc3946626c80'] = 'Referral Programm';
+
+$_MODULE['<{referralprogram}prestashop>authentication_6b31baf25848e7a6563ecc3946626c80'] = 'Kundenempfehlungsprogramm';
 $_MODULE['<{referralprogram}prestashop>authentication_8fdb2298a0db461ac64e71192a562ca1'] = 'E-Mail-Adresse Ihres Sponsors';
-$_MODULE['<{referralprogram}prestashop>my-account_6b31baf25848e7a6563ecc3946626c80'] = 'Referral Programm';
+$_MODULE['<{referralprogram}prestashop>my-account_6b31baf25848e7a6563ecc3946626c80'] = 'Kundenempfehlungsprogramm';
 $_MODULE['<{referralprogram}prestashop>order-confirmation_6a1fc5f99c944639b4005366d393a1ee'] = 'Danke für Ihre Bestellung, Ihr Sponsor';
 $_MODULE['<{referralprogram}prestashop>order-confirmation_864c28de218ef6242d7adc51af5c68b2'] = 'verdient einen Gutschein im Wert von';
 $_MODULE['<{referralprogram}prestashop>order-confirmation_c07ebd8a57cb1b1da631b8499a8c1e69'] = 'wenn diese Bestellung bestätigt ist.';
@@ -18,12 +19,12 @@ $_MODULE['<{referralprogram}prestashop>referralprogram-program_83fc792f687bc45d7
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_1019072b9e450c8652590cda2db45e49'] = 'Mindestens ein Vorname oder Nachname ist ungültig!';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_ff2d2e45b90b4426c3bb14bd56b95a2d'] = 'Jemand mit dieser E-Mail-Adresse ist bereits gesponsert worden!';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_3f8a4c7f93945fea0d951fa402ee4272'] = 'Bitte kreuzen Sie mindestens ein Kontrollkästchen an';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_dcc99d8715486f570db3ec5ee469a828'] = 'Kann  keine Freunde zur Datenbank hinzufügen ';
+$_MODULE['<{referralprogram}prestashop>referralprogram-program_dcc99d8715486f570db3ec5ee469a828'] = 'Kann  keine Freunde zur Datenbank hinzufügen';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_f6cb78f0afcf7c3a06048a7a5855d6a1'] = 'Es wurden E-Mails an Ihre Freunde gesendet!';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_79cd362fc64832faa0a2079f1142aa12'] = 'Eine E-Mail wurde an Ihren Freund geschickt!';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_2b90ca4a7b1c83e0a3bb65899725cd65'] = 'Erinnerungs-E-Mails wurden an Ihre Freunde verschickt!';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_819e52b3c6ca4db131dcfea19188a0c3'] = 'Eine Erinnerungs-E-Mail wurde an Ihren Freund verschickt!';
-$_MODULE['<{referralprogram}prestashop>referralprogram-program_46ee2fe8845962d24bf5178a26e109f3'] = 'Meine Freunde sponsern ';
+$_MODULE['<{referralprogram}prestashop>referralprogram-program_46ee2fe8845962d24bf5178a26e109f3'] = 'Meine Freunde sponsern';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_c56567bc42584de1a7ac430039b3a87e'] = 'Anhängige Freunde';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_58c7f2542ab2e2c3e4e39e851ea0f225'] = 'Freunde, die ich gesponsert habe';
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_00c2fab6945aadad3e822d8f38e18ce7'] = 'Einen Rabatt erhalten von';
@@ -58,9 +59,9 @@ $_MODULE['<{referralprogram}prestashop>referralprogram-program_0b3db27bc15f682e9
 $_MODULE['<{referralprogram}prestashop>referralprogram-program_8cf04a9734132302f96da8e113e80ce5'] = 'Startseite';
 $_MODULE['<{referralprogram}prestashop>referralprogram-rules_01705c0177ebf5fbcbf4e882bc454405'] = 'Regeln des Referral Programms';
 $_MODULE['<{referralprogram}prestashop>referralprogram_40604a195d001353d697b0fd26f5d8fe'] = 'Alle Sponsoren und Freunde werden gelöscht. Wollen Sie dieses Modul wirklich deinstallieren?';
-$_MODULE['<{referralprogram}prestashop>referralprogram_83090230d3c11aa76851030eba008a71'] = 'Kunden Referral-Programm';
-$_MODULE['<{referralprogram}prestashop>referralprogram_46a3a666d8823b972af8018a5242a3ac'] = 'Integrieren Sie ein Referral-Programm-System in Ihrem Shop.';
-$_MODULE['<{referralprogram}prestashop>referralprogram_d59ce2e96c0c2362a0a4269e0d874e32'] = 'Sie müssen einen Betrag für Referral-Programm Gutscheine angeben';
+$_MODULE['<{referralprogram}prestashop>referralprogram_83090230d3c11aa76851030eba008a71'] = 'Kundenempfehlungsprogramm';
+$_MODULE['<{referralprogram}prestashop>referralprogram_46a3a666d8823b972af8018a5242a3ac'] = 'Integrieren Sie ein Kundenempfehlungsprogramm in Ihrem Shop.';
+$_MODULE['<{referralprogram}prestashop>referralprogram_d59ce2e96c0c2362a0a4269e0d874e32'] = 'Sie müssen einen Betrag für den Gutschein des Kundenempfehlungsprogramms angeben';
 $_MODULE['<{referralprogram}prestashop>referralprogram_284033830e0eaf55340844305bf34fdd'] = 'Referral-Belohnung';
 $_MODULE['<{referralprogram}prestashop>referralprogram_3c5db6c207f700f4f209b43bed966e96'] = 'Kann diese Datei nicht löschen:';
 $_MODULE['<{referralprogram}prestashop>referralprogram_6c58031e7824c3cd6febc2f2107b0652'] = 'Konfiguration aktualisiert.';
@@ -69,7 +70,7 @@ $_MODULE['<{referralprogram}prestashop>referralprogram_ceb0ce9b627fb9a962543f327
 $_MODULE['<{referralprogram}prestashop>referralprogram_c96c84a1a64878d4d742daf52e359e36'] = 'Rabatt-Wert für die Währung Nr.';
 $_MODULE['<{referralprogram}prestashop>referralprogram_4218c2cb615fbc2870f6b1e8d283ab8d'] = 'ist leer.';
 $_MODULE['<{referralprogram}prestashop>referralprogram_bb7476567f5e12e60b01436dad77a533'] = 'ist ungültig.';
-$_MODULE['<{referralprogram}prestashop>referralprogram_addae886b20a06e2954461706c90cd7d'] = 'Rabatt-Typ ist erforderlich / ungültig.';
+$_MODULE['<{referralprogram}prestashop>referralprogram_addae886b20a06e2954461706c90cd7d'] = 'Rabatt-Art ist erforderlich / ungültig.';
 $_MODULE['<{referralprogram}prestashop>referralprogram_ac3357de2dec8d74d89dd378962ec621'] = 'Anzahl der Freunde ist erforderlich / ungültig.';
 $_MODULE['<{referralprogram}prestashop>referralprogram_18d0d79eb088abb4357e3666eec35660'] = 'Rabatt Prozentsatz erforderlich ist / ungültig.';
 $_MODULE['<{referralprogram}prestashop>referralprogram_3d31dd445991f35b1ee6491eec7ac71c'] = 'Kann die XML-Datei nicht schreiben.';
@@ -77,8 +78,8 @@ $_MODULE['<{referralprogram}prestashop>referralprogram_96191c1f54bb6311624210333
 $_MODULE['<{referralprogram}prestashop>referralprogram_21cc1fccae3b04bb8cd2719cc5269e1e'] = 'Kann die XML-Datei nicht aktualisieren. Bitte überprüfen Sie die Schreibrechte der XML-Datei.';
 $_MODULE['<{referralprogram}prestashop>referralprogram_5be920293db3e38c81330fd0798336b1'] = 'Ungültiges html Feld, Javascript ist verboten';
 $_MODULE['<{referralprogram}prestashop>referralprogram_f4f70727dc34561dfde1a3c529b6205c'] = 'Einstellungen';
-$_MODULE['<{referralprogram}prestashop>referralprogram_7ca3288a38b048b0df25394ccc22ad46'] = 'Minimale Bestellungsanzahl eines gesponserten Freund, damit dieser einen Gutschein erhält:';
-$_MODULE['<{referralprogram}prestashop>referralprogram_624f983eb0713e10faf35ff3889e8d68'] = 'Anzahl der Freunde in dem Einladungsformular des Referral-Programms (Kundenkonto, Referral-Programm-Abschnitt):';
+$_MODULE['<{referralprogram}prestashop>referralprogram_7ca3288a38b048b0df25394ccc22ad46'] = 'Mindestanzahl von Bestellungen eines gesponserten Freund, damit ein Gutschein fällig wird:';
+$_MODULE['<{referralprogram}prestashop>referralprogram_624f983eb0713e10faf35ff3889e8d68'] = 'Anzahl der Freunde im Einladungsformular Kundenempfehlungsprogramms  (Kundenkonto, Abschnitt Kundenempfehlung):';
 $_MODULE['<{referralprogram}prestashop>referralprogram_9ad4f790c8bb9be21a2fa388c7730353'] = 'Gutschein-Typ:';
 $_MODULE['<{referralprogram}prestashop>referralprogram_46da7ad7d01e209241016d308f9fafce'] = 'Gutschein mit einem Prozentsatz';
 $_MODULE['<{referralprogram}prestashop>referralprogram_97839379a0f447599405341b852e2e24'] = 'Gutschein mit einem festen Betrag (nach Währung)';
@@ -88,13 +89,13 @@ $_MODULE['<{referralprogram}prestashop>referralprogram_edf7f0a17b8a8f1732f12856f
 $_MODULE['<{referralprogram}prestashop>referralprogram_8465d83b5c1b569299af284c14d957bb'] = 'Gutscheinbeschreibung:';
 $_MODULE['<{referralprogram}prestashop>referralprogram_b17f3f4dcf653a5776792498a9b44d6a'] = 'Einstellungen aktualisieren';
 $_MODULE['<{referralprogram}prestashop>referralprogram_562ad64cf21ac2da656134355115133d'] = 'Ihr Text ist leer.';
-$_MODULE['<{referralprogram}prestashop>referralprogram_6b719c160f9b08dad4760bcc4b52ed48'] = 'Geschäftsbedingungen des Referral-Programm';
+$_MODULE['<{referralprogram}prestashop>referralprogram_6b719c160f9b08dad4760bcc4b52ed48'] = 'Voraussetzungen des Kundenempfehlungsprogramms';
 $_MODULE['<{referralprogram}prestashop>referralprogram_c5afb9c76a7880978cba32872d01f068'] = 'Aktualisieren Sie den Text';
-$_MODULE['<{referralprogram}prestashop>referralprogram_6b31baf25848e7a6563ecc3946626c80'] = 'Referral Programm';
+$_MODULE['<{referralprogram}prestashop>referralprogram_6b31baf25848e7a6563ecc3946626c80'] = 'Kundenempfehlungsprogramm';
 $_MODULE['<{referralprogram}prestashop>referralprogram_7790d51a3d62c85aae65464dee12ee8b'] = 'Kundensponsor:';
 $_MODULE['<{referralprogram}prestashop>referralprogram_f964f762284ede747ed9f6428a5469b8'] = 'Niemand hat diesen Kunden gesponsert.';
-$_MODULE['<{referralprogram}prestashop>referralprogram_53d0d7aba39ee971f7f179e6e1092708'] = 'gesponserte Kunden:';
-$_MODULE['<{referralprogram}prestashop>referralprogram_58dc82d3e2e17ced0225064a9b496ee9'] = 'gesponserter Kunde:';
+$_MODULE['<{referralprogram}prestashop>referralprogram_53d0d7aba39ee971f7f179e6e1092708'] = 'Gesponserte Kunden:';
+$_MODULE['<{referralprogram}prestashop>referralprogram_58dc82d3e2e17ced0225064a9b496ee9'] = 'Gesponserter Kunde:';
 $_MODULE['<{referralprogram}prestashop>referralprogram_b718adec73e04ce3ec720dd11a06a308'] = 'ID';
 $_MODULE['<{referralprogram}prestashop>referralprogram_49ee3087348e8d44e1feda1917443987'] = 'Name';
 $_MODULE['<{referralprogram}prestashop>referralprogram_ce8ae9da5b7cd6c3df2929543a9af92d'] = 'E-Mail';
@@ -103,7 +104,7 @@ $_MODULE['<{referralprogram}prestashop>referralprogram_325c8bbd07033a39d25b5c445
 $_MODULE['<{referralprogram}prestashop>referralprogram_fc6e0920b914b164802d44220e6163f3'] = 'abgesandte Bestellungen';
 $_MODULE['<{referralprogram}prestashop>referralprogram_970ad4e4787cc75cd63dbf8d5c757513'] = 'Kunden-Konto erstellt';
 $_MODULE['<{referralprogram}prestashop>referralprogram_5b541747d46b39c37f0e100ddfe44472'] = 'hat noch keine Freunde gesponsert.';
-$_MODULE['<{referralprogram}prestashop>shopping-cart_6b31baf25848e7a6563ecc3946626c80'] = 'Referral Programm';
+$_MODULE['<{referralprogram}prestashop>shopping-cart_6b31baf25848e7a6563ecc3946626c80'] = 'Kundenempfehlungsprogramm';
 $_MODULE['<{referralprogram}prestashop>shopping-cart_50b12ad08d38a2b00a790304bbe851be'] = 'Sie haben einen Gutschein verdient im Wert von';
 $_MODULE['<{referralprogram}prestashop>shopping-cart_6c8352dbdb1fa1433bd5974c603dced4'] = 'Dank Ihrem Sponsor!';
 $_MODULE['<{referralprogram}prestashop>shopping-cart_764a957fffea7861310082f57445c83a'] = 'Geben Sie den Gutscheinnamen ein';

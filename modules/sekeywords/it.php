@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{sekeywords}prestashop>sekeywords_65b0b42febc8ea16db4652eab6f420a4'] = 'parole chiave dei motori di ricerca';
 $_MODULE['<{sekeywords}prestashop>sekeywords_de13be6263895a5efe4d51e15ab1535e'] = 'Visualizza le parole chiave che hanno portato i visitatori del tuo sito web';
 $_MODULE['<{sekeywords}prestashop>sekeywords_a6a5cc2d3979e54597c79a68448adee2'] = 'parola chiave corrisponde alla tua ricerca.';
@@ -20,5 +21,5 @@ $_MODULE['<{sekeywords}prestashop>sekeywords_359f9e79e746fa9f684e5cda9e60ca2e'] 
 $_MODULE['<{sekeywords}prestashop>sekeywords_ac8123ffbef766c92bed58647a3812ca'] = 'Quando un visitatore arriva al tuo sito web, il server conosce la sua posizione precedente. Questo modulo analizza l\'URL e trova le parole chiave in esso. Attualmente, gestisce i seguenti motori di ricerca:';
 $_MODULE['<{sekeywords}prestashop>sekeywords_be5d5d37542d75f93a87094459f76678'] = 'e';
 $_MODULE['<{sekeywords}prestashop>sekeywords_474c03326cba5cb2ce6c07ddf3e1e656'] = 'Presto sarà possibile aggiungere dinamicamente un nuovo motore di ricerca e contribuire a questo modulo!';
-$_MODULE['<{sekeywords}prestashop>sekeywords_8d01ac22a68176ddd7067da99508751d'] = 'Le prime 10 parole chiave ';
-$_MODULE['<{sekeywords}prestashop>sekeywords_52ef9633d88a7480b3a938ff9eaa2a25'] = 'Altri';
+$_MODULE['<{sekeywords}prestashop>sekeywords_8d01ac22a68176ddd7067da99508751d'] = 'Le prime 10 parole chiave';
+$_MODULE['<{sekeywords}prestashop>sekeywords_52ef9633d88a7480b3a938ff9eaa2a25'] = 'AltriErrori';

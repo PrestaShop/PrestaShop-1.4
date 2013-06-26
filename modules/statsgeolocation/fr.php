@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{statsgeolocation}prestashop>statsgeolocation_323d4eb70b252acb4a04eaf9e0882597'] = 'Géolocalisation';
 $_MODULE['<{statsgeolocation}prestashop>statsgeolocation_621bd20bc26d0f67bacffc7785616372'] = 'Affiche la provenance de vos clients';
 $_MODULE['<{statsgeolocation}prestashop>statsgeolocation_62d043b80de9ab4b2fde9adc6597da04'] = 'Ce module montre la répartition de vos clients par un point plus ou moins gros sur la carte ci-dessous. Constatez la popularité qu\'a votre boutique à l\'échelle du monde et sachez quels continents vous n\'avez pas encore conquis.';

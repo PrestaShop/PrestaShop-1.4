@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{fianetsceau}prestashop>fianetsceau_21d574c0b27fc6bebc399be75502d84d'] = 'FIA-NET Sceau de Confiance';
 $_MODULE['<{fianetsceau}prestashop>fianetsceau_76c3b678f626c3858c3c98baac90c7ac'] = 'Transformez vos visiteurs en acheteurs en créant la confiance sur votre site';
 $_MODULE['<{fianetsceau}prestashop>fianetsceau_32c355617b8730b1603e31d144513890'] = 'Veuillez renseigner votre clé privée';

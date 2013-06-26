@@ -2,7 +2,11 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{fianetfraud}prestashop>admincertissim_c70b641f029c8bd0bbe5f124f17b79cf'] = 'Evaluation Certissim';
+$_MODULE['<{fianetfraud}prestashop>admincertissim_490c59186c5e3b2e7223bf29d4503863'] = 'Récupérer les évaluations en attente';
+$_MODULE['<{fianetfraud}prestashop>admincertissim_50d9a5fb00acea22c71d6bd7f316e710'] = 'Récupérer les réévaluations';
+$_MODULE['<{fianetfraud}prestashop>admincertissim_55f3a0f4e9394161252cff812dfb632e'] = 'Retour à la page de configuration';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_ab5027ece6c724ae52cd5d26c860367b'] = 'Fia-Net - Certissim';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_91100c8826e6f2eb7c1292616f6573f5'] = 'Sécurisez vos ventes et maîtrisez vos impayés !';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_60215cf79519116365bb100d179aab3f'] = 'Afin de fonctionner correctement sur Prestashop 1.4, le module Certissim de Fia-Net nécessite le module Backward Compatibility dans sa version v0.4 au minimum.';
@@ -27,13 +31,10 @@ $_MODULE['<{fianetfraud}prestashop>fianetfraud_29e32764941c30d1bb41c601014fbdbd'
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_127469a6b4253ebb77adccc0dd48461e'] = 'Monsieur';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_e7ddb7cd777b59610b220bcfa80bd95f'] = 'Madame';
 $_MODULE['<{fianetfraud}prestashop>fianetfraud_c4f448df316abb13eb7eada722c57902'] = 'Monsieur';
-$_MODULE['<{fianetfraud}prestashop>admincertissim_490c59186c5e3b2e7223bf29d4503863'] = 'Récupérer les évaluations en attente';
-$_MODULE['<{fianetfraud}prestashop>admincertissim_50d9a5fb00acea22c71d6bd7f316e710'] = 'Récupérer les réévaluations';
-$_MODULE['<{fianetfraud}prestashop>admincertissim_55f3a0f4e9394161252cff812dfb632e'] = 'Retour à la page de configuration';
 $_MODULE['<{fianetfraud}prestashop>admincertissimcontroller_84ae0dfc28c87c137175447754506552'] = 'Récupérer les évaluations en attente';
 $_MODULE['<{fianetfraud}prestashop>admincertissimcontroller_8360e0cb0a39464f904a0b4136efd38b'] = 'Récupérer les réévaluations';
 $_MODULE['<{fianetfraud}prestashop>admincertissimcontroller_55f3a0f4e9394161252cff812dfb632e'] = 'Retour à la page de configuration';
-$_MODULE['<{fianetfraud}prestashop>admin_d86976c626d8911560edf3166466925f'] = ' FIA-NET - Certissim';
+$_MODULE['<{fianetfraud}prestashop>admin_d86976c626d8911560edf3166466925f'] = 'FIA-NET - Certissim';
 $_MODULE['<{fianetfraud}prestashop>admin_d976a4d72775090f2b096fa9c74a6174'] = 'FIA-NET, le leader français de la lutte contre la fraude à la carte bancaire sur internet !';
 $_MODULE['<{fianetfraud}prestashop>admin_b44a8949e0bb2f21d8263db121c0365d'] = 'Avec son réseau mutualisé de plus de 1 700 sites marchands, et sa base de données de 14 millions de cyber-acheteurs, Certissim vous offre une protection complète et unique contre le risque d\'impayé.';
 $_MODULE['<{fianetfraud}prestashop>admin_f69c3361928d4c2045ba0c600016db6e'] = 'Le logiciel expert score vos transactions en quasi temps réel à partir de plus de 200 critères pour valider plus de 92% de vos transactions.';

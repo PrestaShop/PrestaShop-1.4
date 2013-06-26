@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{blockviewed}prestashop>blockviewed_859e85774d372c6084d62d02324a1cc3'] = 'Blocco prodotti visti';
 $_MODULE['<{blockviewed}prestashop>blockviewed_fad87bb9a90d9e42854af13633aac252'] = 'Aggiunge un blocco che visualizza i prodotti visti recentemente';
 $_MODULE['<{blockviewed}prestashop>blockviewed_2e57399079951d84b435700493b8a8c1'] = 'È necessario compilare il campo \"prodotti esposti\"';

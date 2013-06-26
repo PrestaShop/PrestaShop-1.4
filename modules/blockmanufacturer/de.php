@@ -2,11 +2,12 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_bc3e73cfa718a3237fb1d7e1da491395'] = 'Herstellerblock';
+
+$_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_bc3e73cfa718a3237fb1d7e1da491395'] = 'Block Hersteller';
 $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_9859921e6d3733788e09599adb681dcd'] = 'Zeigt einen Hersteller-/ Markenblock an';
 $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_cf64d2d0bc5de5ce3d309d0e899d36fb'] = 'Ungültige Elementezahl';
 $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_bb30aac3161f999a357af767ce2fd7ec'] = 'Bitte aktivieren Sie mindestens eine Systemliste';
-$_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_c888438d14855d7d96a2724ee9c306bd'] = 'Aktualisierte Einstellungen';
+$_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_c888438d14855d7d96a2724ee9c306bd'] = 'Einstellungen aktualisiert';
 $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_f4f70727dc34561dfde1a3c529b6205c'] = 'Einstellungen';
 $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_bfdff752293014f11f17122c92909ad5'] = 'Benutzen Sie eine Nur-Text-Liste';
 $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Aktiviert';
@@ -18,6 +19,6 @@ $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_b0fa976774d2acf72f9c6
 $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_f68d82d608d94a571e0984a0288595e0'] = 'So zeigen Sie Hersteller in einem Dropdown-Liste';
 $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_c9cc8cce247e49bae79f15173ce97354'] = 'Speichern';
 $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_2377be3c2ad9b435ba277a73f0f1ca76'] = 'Hersteller';
-$_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_49fa2426b7903b3d4c89e2c1874d9346'] = 'Mehr darüber';
+$_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_49fa2426b7903b3d4c89e2c1874d9346'] = 'Nähere Infos';
 $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_bf24faeb13210b5a703f3ccef792b000'] = 'Alle Hersteller';
 $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_1c407c118b89fa6feaae6b0af5fc0970'] = 'Kein Hersteller';

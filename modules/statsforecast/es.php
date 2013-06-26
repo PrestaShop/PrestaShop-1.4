@@ -3,9 +3,9 @@
 global $_MODULE;
 $_MODULE = array();
 
-$_MODULE['<{statsforecast}prestashop>statsforecast_240c994d8b61c7bd68ac1c5182bbdb2e'] = 'Panel de control de estadísticas';
+$_MODULE['<{statsforecast}prestashop>statsforecast_240c994d8b61c7bd68ac1c5182bbdb2e'] = 'Tabla de mando de estadísticas';
 $_MODULE['<{statsforecast}prestashop>statsforecast_8cfe257ea14b80e50c5d36d62be3757f'] = 'Todas las cantidades son sin impuestos. Las fechas se refieren a las fechas de las facturas.';
-$_MODULE['<{statsforecast}prestashop>statsforecast_1ee1c44c2dc81681f961235604247b81'] = 'Modo:';
+$_MODULE['<{statsforecast}prestashop>statsforecast_1ee1c44c2dc81681f961235604247b81'] = 'Modo';
 $_MODULE['<{statsforecast}prestashop>statsforecast_03727ac48595a24daed975559c944a44'] = 'Día';
 $_MODULE['<{statsforecast}prestashop>statsforecast_d2ce009594dcc60befa6a4e6cbeb71fc'] = 'Semana';
 $_MODULE['<{statsforecast}prestashop>statsforecast_7cbb885aa1164b390a0bc050a64e1812'] = 'Mes';

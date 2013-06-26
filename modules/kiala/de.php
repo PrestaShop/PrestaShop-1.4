@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{kiala}prestashop>adminkiala_b718adec73e04ce3ec720dd11a06a308'] = 'ID';
 $_MODULE['<{kiala}prestashop>adminkiala_ce26601dac0dea138b7295f02b7620a7'] = 'Kunde';
 $_MODULE['<{kiala}prestashop>adminkiala_59716c97497eb9694541f7c3d37b1a4d'] = 'Land';
@@ -25,6 +26,8 @@ $_MODULE['<{kiala}prestashop>kiala_8acabcc788c316f92b7850c76265b49b'] = 'Auf Ihr
 $_MODULE['<{kiala}prestashop>kiala_d591cbc447d01e5a6165096ebfdf804e'] = 'Sie müssen cURL-Erweiterung aktivieren, um dieses Modul nutzen zu können.';
 $_MODULE['<{kiala}prestashop>kiala_1b18bd5d9d85f4f667614345ee20e3b2'] = 'Sie müssen allow_url_fopen aktivieren, um dieses Modul nutzen zu können.';
 $_MODULE['<{kiala}prestashop>kiala_9371d7a2e3ae86a00aab4771e39d255d'] = ')';
+$_MODULE['<{kiala}prestashop>kiala_f09ea5dca3d187c50a634239778a5a3c'] = 'Lassen url fopen';
+$_MODULE['<{kiala}prestashop>kiala_c7760f2c36d4e647e8a254cef51cbae8'] = 'Aktivieren cURL';
 $_MODULE['<{kiala}prestashop>kiala_c603497d224d00e921618e0ae1651cac'] = 'Nachname';
 $_MODULE['<{kiala}prestashop>kiala_d2cacc542d8dd31bd89f8defed1b55ad'] = 'Vorname:';
 $_MODULE['<{kiala}prestashop>kiala_df1555fe48479f594280a2e03f9a8186'] = 'Geben Sie Ihre E-Mail-Adresse ein:';

@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{backwardcompatibility}prestashop>backwardcompatibility_17fe55c7ae5b1908d141b09516d018ff'] = 'Rétro compatibilité';
 $_MODULE['<{backwardcompatibility}prestashop>backwardcompatibility_529f879366286c3b40292a9fed1fb8f4'] = 'Améliore la compatibilité des modules';
 $_MODULE['<{backwardcompatibility}prestashop>backwardcompatibility_254f642527b45bc260048e30704edb39'] = 'Configuration';

@@ -2,6 +2,7 @@
 
 global $_LANGPDF;
 $_LANGPDF = array();
+
 $_LANGPDF['PDF_invoicee0036b67b754e9f6442f9f9e6b200c33'] = 'Retour n°';
 $_LANGPDF['PDF_invoice77c3e447f60541a1c346a08134078c7f'] = 'Avoir n°';
 $_LANGPDF['PDF_invoicecb5efbba6a6babef9082ca6976928ca7'] = 'Bon de livraison n°';
@@ -56,7 +57,7 @@ $_LANGPDF['PDF_invoiceafd42dfebce46ec93972b2e0cbb8b83f'] = 'Prix unitaire';
 $_LANGPDF['PDF_invoice1d744a9ad1dac20645cfc4a36b77323b'] = 'image(s)';
 $_LANGPDF['PDF_invoicec2808546f3e14d267d798f4e0e6f102e'] = 'Personnalisé';
 $_LANGPDF['PDF_invoicea1e7379abfdbc3b8e03506e5489c6110'] = 'Réduction :';
-$_LANGPDF['PDF_invoicee7bbf027179f23c92bec649fa6ae78e4'] = 'Exonéré de la TVA selon l\'article 259B du Code Général des Impôts. ';
+$_LANGPDF['PDF_invoicee7bbf027179f23c92bec649fa6ae78e4'] = 'Exonéré de la TVA selon l\'article 259B du Code Général des Impôts.';
 $_LANGPDF['PDF_invoice42c26bf38ece1dcd27aca8c6f8c076ed'] = 'Détails de taxe';
 $_LANGPDF['PDF_invoice4b78ac8eb158840e9638a3aeb26c4a9d'] = 'Taxe';
 $_LANGPDF['PDF_invoicecd6576cc33506a6c44e2debbde5c14d9'] = 'Total HT';
@@ -67,5 +68,3 @@ $_LANGPDF['PDF_invoice068f80c7519d0528fb08e82137a72131'] = 'Produits';
 $_LANGPDF['PDF_invoice914419aa32f04011357d3b604a86d7eb'] = 'Transporteur';
 $_LANGPDF['PDF_invoice41c1d61bfff3fc9b1fd8f195061b8caa'] = 'Emballage cadeau';
 $_LANGPDF['PDF_invoice6f3455d187a23443796efdcbe044096b'] = 'Aucune taxe';
-
-?>

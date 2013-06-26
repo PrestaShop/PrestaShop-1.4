@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{mobile_theme}prestashop>mobile_theme_a10d5204af6fb9c02499381176ce3fd4'] = 'Thème mobile';
 $_MODULE['<{mobile_theme}prestashop>mobile_theme_04fdc8a662f53173f4c2aed47a3d16fa'] = 'Offre un thème mobile compatible avec iPhone, Android...etc.';
 $_MODULE['<{mobile_theme}prestashop>mobile_theme_df353db31f655278ffa608d683cd5639'] = 'Désinstaller ce module supprimera votre thème mobile et toutes les modifications que vous y avez apporté, êtes vous sûr ?';

@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{bankwire}prestashop>bankwire_85ee0d0492a4e37e6c183520f5d59c40'] = 'Virement Bancaire';
 $_MODULE['<{bankwire}prestashop>bankwire_f652b92eefd4ecfe61ef5fb118157a05'] = 'Accepter les paiements par virement';
 $_MODULE['<{bankwire}prestashop>bankwire_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = 'Êtes-vous certain de vouloir effacer vos données ?';

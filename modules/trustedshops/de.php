@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{trustedshops}prestashop>display_products_02ecb4a4709d9bcc590f1a25fc82c0e2'] = 'Trusted Shops Käuferschutz (empfohlen)';
 $_MODULE['<{trustedshops}prestashop>display_products_1107bf75ac50728edbeb497ab803a104'] = 'Käuferschutz bis';
 $_MODULE['<{trustedshops}prestashop>display_products_69db1ddc2a15253abb0a11beb1eae734'] = 'inkl. MwSt.';
@@ -79,7 +80,6 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_109715467b74bd66639faa5673
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_d4eb1e83b0ea3af3e2b8a6e7b7984d9c'] = 'Das Feld %s ist ungültig, bitte korrekt ausfüllen';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_c230eb5eefd15fa219ff97d42e461a7d'] = 'Einige Parameter für die Methode \"requestForProtectionV2\" fehlen oder sind ungültig.';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_b656f5f53cf7ee9bbfe7452685f71e30'] = 'Trusted Shops API lieferent einen Anwendungsfehler unter:';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_fdf1d399a4b88e3c62ff925295a4bb0c'] = 'Trusted Shops Antrag % 1 $ d wurde erfolgreich verarbeitet. Die vorlfäufige Registrierungs-Nr. lautet:% 2 $ d';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_fd511061055fcb2d10d31a51be3539d0'] = 'Registrierungslink';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_de5536f42490f11e92ad1c20d999fd15'] = 'Registrierungslink anklicken';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_58e9c4050ed75489c2108a1b316f1251'] = 'Registrierungslink wurde erfolgreich erstellt. Bitte klicken Sie diesen Link, falls Sie nicht weitergeleitet werden:';

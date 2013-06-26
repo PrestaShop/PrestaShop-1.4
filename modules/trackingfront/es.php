@@ -3,7 +3,7 @@
 global $_MODULE;
 $_MODULE = array();
 
-$_MODULE['<{trackingfront}prestashop>account_8954e140059f7b2544469f40161ba507'] = 'Espacio de afiliados';
+$_MODULE['<{trackingfront}prestashop>account_8954e140059f7b2544469f40161ba507'] = 'espacio afiliados';
 $_MODULE['<{trackingfront}prestashop>account_0323de4f66a1700e2173e9bcdce02715'] = 'Identificarse';
 $_MODULE['<{trackingfront}prestashop>account_1dd1c5fb7f25cd41b291d43a89e3aefd'] = 'Hoy';
 $_MODULE['<{trackingfront}prestashop>account_7cbb885aa1164b390a0bc050a64e1812'] = 'Mes';

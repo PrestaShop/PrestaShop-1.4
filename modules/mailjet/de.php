@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{mailjet}prestashop>ajax_64b88c69849c8b362e7f97c6eaab574d'] = 'Mailjet Test-Mail';
 $_MODULE['<{mailjet}prestashop>ajax_8b1a9953c4611296a827abf8c47804d7'] = 'Hallo';
 $_MODULE['<{mailjet}prestashop>ajax_c38b28d6adf75b2b2936de1f2168b6e6'] = 'Diese E-Mail bestätigt, dass Mailjet erfolgreich in Ihrem Shop installiert wurde.';
@@ -12,7 +13,12 @@ $_MODULE['<{mailjet}prestashop>mailjet_64b88c69849c8b362e7f97c6eaab574d'] = 'Mai
 $_MODULE['<{mailjet}prestashop>mailjet_8b1a9953c4611296a827abf8c47804d7'] = 'Hallo';
 $_MODULE['<{mailjet}prestashop>mailjet_c38b28d6adf75b2b2936de1f2168b6e6'] = 'Diese E-Mail bestätigt, dass Mailjet erfolgreich in Ihrem Shop installiert wurde.';
 $_MODULE['<{mailjet}prestashop>mailjet_cfc9dca01a0503813a5f9585ba6780d1'] = 'Die Mail konnte nicht erfolgreich gesandt werden';
+$_MODULE['<{mailjet}prestashop>mailjet_8acabcc788c316f92b7850c76265b49b'] = 'Auf Ihrem Server muss die cURL-Erweiterung installiert sein, sowie auch die Einstellungen allow_url_fopen aktiviert sein.';
+$_MODULE['<{mailjet}prestashop>mailjet_d591cbc447d01e5a6165096ebfdf804e'] = 'Sie müssen cURL-Erweiterung aktivieren, um dieses Modul nutzen zu können.';
+$_MODULE['<{mailjet}prestashop>mailjet_1b18bd5d9d85f4f667614345ee20e3b2'] = 'Sie müssen allow_url_fopen aktivieren, um dieses Modul nutzen zu können.';
 $_MODULE['<{mailjet}prestashop>mailjet_c888438d14855d7d96a2724ee9c306bd'] = 'Einstellungen aktualisiert';
+$_MODULE['<{mailjet}prestashop>mailjet_b9284bff13acffdd879ef4ac7fca5234'] = 'Einstellungen fehlgeschlagen';
+$_MODULE['<{mailjet}prestashop>mailjet_936ccdb97115e9f35a11d35e3d5b5cad'] = 'Klicken Sie hier';
 $_MODULE['<{mailjet}prestashop>mailjet_9e3f29ea93d121e237085def4ee29f74'] = 'Dieses Modul sendet über Mailjet alle E-Mail aus Ihrer PrestaShop-Installation (und die der meisten Third Party Modules)';
 $_MODULE['<{mailjet}prestashop>mailjet_f4f70727dc34561dfde1a3c529b6205c'] = 'Einstellungen';
 $_MODULE['<{mailjet}prestashop>mailjet_6ad7efc596f5720291e748ff2185733f'] = 'Mailjet API-Schlüssel:';

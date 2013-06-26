@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_d7897df448ce113a0205078a9255f7b7'] = 'Transporteur USPS';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_660e7e160b8b390f9d36f6886cbeaa9d'] = 'Calculer les frais de transport pour USPS (United States Postal Service)';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_883fa0069f4b0454e2277dd567ab3991'] = '\'Unité de poids (LB ou KG)\'';
@@ -36,7 +37,6 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_82d36b7a513a66cfdcede4d0b56ba36e'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_15507d23c7b911b14ebd95a9a0e12560'] = 'Remplir le champs User ID et zip code d\'origine sur le formulaire \"Configuration Générale\"';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_5ea70d7b669a7e15e6d402bd423aa56e'] = 'Selectionnez vos services de livraison';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_e20f6d6f13fe70e78f6e2ab488493ccf'] = 'Test de connection webservices';
-$_MODULE['<{uspscarrier}prestashop>uspscarrier_d5377c8cc8c83b501472660c69f694e8'] = 'cURL extension n\'est pas activée, le module USPS peut fonctionner sans cURL mais il serait préférable de l\'activer.';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_52f4393e1b52ba63e27310ca92ba098c'] = 'Configuration générale';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_277d63a9b24a09697e3c64092eaf4353'] = 'Configuration par catégorie';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_098eec2cabe2c39c6dec3fc522b6571a'] = 'Configuration par produit';
@@ -125,5 +125,4 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_0fa89de654af3ca488d7aa942bbc271a'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_f1e8dbea2e6af679d6503a5756345fce'] = 'Cette section vous permettre de définir des configurations USPS spécifiques pour chaque produit (tels que le type de colis et les frais additionnels).';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_902b0d55fddef6f8d651fe1035b7d4bd'] = 'Erreur';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_ad20d10621babf619967b16f690a05f2'] = 'Les webservices USPS semblent inaccessibles, veuillez patientez quelques minutes et réessayez';
-$_MODULE['<{uspscarrier}prestashop>uspscarrier_a4692f93340d1d8c0c01e94baa56b8b9'] = 'USPS timed out';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_ef87d840de42d54364089d1d45f8d08c'] = 'N\'a pas pu se connecter à USPS.com';

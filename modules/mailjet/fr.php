@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{mailjet}prestashop>ajax_64b88c69849c8b362e7f97c6eaab574d'] = 'E-mail de test';
 $_MODULE['<{mailjet}prestashop>ajax_8b1a9953c4611296a827abf8c47804d7'] = 'Bonjour';
 $_MODULE['<{mailjet}prestashop>ajax_c38b28d6adf75b2b2936de1f2168b6e6'] = 'Cet e-mail vous confirme que Mailjet a été correctement installé sur votre boutique.';
@@ -59,7 +60,7 @@ $_MODULE['<{mailjet}prestashop>mailjet_bafd7322c6e97d25b6299b5d6fe8920b'] = 'Non
 $_MODULE['<{mailjet}prestashop>mailjet_63ade95d66cda885393aab6f5f5e4e76'] = 'Authentification réussie ! Votre configuration est correcte.';
 $_MODULE['<{mailjet}prestashop>mailjet_424ab525513861737da68b0700b5cd20'] = 'Une erreur est survenue :';
 $_MODULE['<{mailjet}prestashop>mailjet_79dfc1f365ed194bb9fc0da20f1a3857'] = 'Si vous ne comprenez pas cette erreur, veuillez contacter';
-$_MODULE['<{mailjet}prestashop>mailjet_d496cec7c628e4438ee719315942e2d6'] = ' E-mail de / à :';
+$_MODULE['<{mailjet}prestashop>mailjet_d496cec7c628e4438ee719315942e2d6'] = 'E-mail de / à :';
 $_MODULE['<{mailjet}prestashop>mailjet_94966d90747b97d1f0f206c98a8b1ac3'] = 'Envoyer';
 $_MODULE['<{mailjet}prestashop>mailjet_540caa299a719ee320cf416ffae7adca'] = 'Test de configuration';
 $_MODULE['<{mailjet}prestashop>mailjet_d4dccb8ca2dac4e53c01bd9954755332'] = 'Sauvegarder la configuration';

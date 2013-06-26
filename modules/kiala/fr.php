@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{kiala}prestashop>adminkiala_b718adec73e04ce3ec720dd11a06a308'] = 'Identifiant';
 $_MODULE['<{kiala}prestashop>adminkiala_0001316ad0c7eb0f1a8e298fd6e5d070'] = 'Exporté';
 $_MODULE['<{kiala}prestashop>adminkiala_ce26601dac0dea138b7295f02b7620a7'] = 'Client';
@@ -85,9 +86,9 @@ $_MODULE['<{kiala}prestashop>kiala_b36e95a5971bcaadd6f1058eb2656867'] = 'Le tran
 $_MODULE['<{kiala}prestashop>kiala_b282520e8dc7f64744de30d58deb0eaa'] = 'Avantages de l\'utilisation de Kiala';
 $_MODULE['<{kiala}prestashop>kiala_2f54697e42636058ba48d27d284fc3b7'] = 'Cliquez ici pour en savoir plus';
 $_MODULE['<{kiala}prestashop>kiala_839e391bcf6534783828d7281ff85372'] = 'Le module Kiala avancé vous permet de proposer l’option de livraison de colis en point relais Kiala comme alternative à la livraison à domicile. Ainsi, vous pouvez offrir un choix de livraison supplémentaire à vos clients.';
-$_MODULE['<{kiala}prestashop>kiala_8737c3cdca1590b1a28313f3bed10bf1'] = ' En outre, la livraison de colis via Kiala est généralement 10 à 20% moins cher qu\'une livraison à domicile.';
+$_MODULE['<{kiala}prestashop>kiala_8737c3cdca1590b1a28313f3bed10bf1'] = 'En outre, la livraison de colis via Kiala est généralement 10 à 20% moins cher qu\'une livraison à domicile.';
 $_MODULE['<{kiala}prestashop>kiala_5865ab831c00ddcc3bb068b3fd6884aa'] = 'Kiala est le leader en Europe des réseaux de points relais, ces derniers étant gérés par une plate-forme technologique dédiée, pour la livraison de colis aux consommateurs finaux et aux professionnels nomades. Les 7 000 points de collecte Kiala sont des commerces de proximité (marchands de journaux, stations essence etc.) où les gens peuvent récupérer, payer et/ou retourner leurs colis rapidement, lorsque cela leur convient au mieux.';
-$_MODULE['<{kiala}prestashop>kiala_9b4be0084a0657f91204a785f10b7cb8'] = ' La plate-forme technologique Kiala automatise toutes les activités de transport et de livraison (Tracking des colis, notification automatique à l\'arrivée des colis, rappel, paiement à la livraison, etc.)';
+$_MODULE['<{kiala}prestashop>kiala_9b4be0084a0657f91204a785f10b7cb8'] = 'La plate-forme technologique Kiala automatise toutes les activités de transport et de livraison (Tracking des colis, notification automatique à l\'arrivée des colis, rappel, paiement à la livraison, etc.)';
 $_MODULE['<{kiala}prestashop>kiala_2a9d4295be05c1a71e2ff12d5818853c'] = 'Kiala est disponible sur la majorité des pure players leaders tels que AchatVIP, Amazon, Bol, BuyVIP, CDiscount, Privalia, Sarenza etc., mais aussi pour les boutiques multi-canal comme Esprit, Etam, H&M, Nespresso, Promod etc. et les entreprises de vente à distance traditionnelles telles que Bertelsmann, Neckermann, Yves Rocher etc.';
 $_MODULE['<{kiala}prestashop>kiala_735b8902dc253661900aa1b0e5e9c793'] = 'Ce module peut être utilisé pour la Belgique, la France, le Luxembourg, les Pays-Bas et l’Espagne.';
 $_MODULE['<{kiala}prestashop>kiala_318b4b55c7ca8be6e1129b5237e85d57'] = 'Ce module comprend une intégration très complète de Kiala, nécessitant un nombre d\'expédition d\'au moins 10 colis par jour. Vous devrez signer un contrat de Kiala et obtenir un numéro d\'identification de Kiala afin d\'exploiter ce module.  Dans le cas contraire, vous pouvez utiliser l\'autre Addon Kiala «Kiala Light\".';

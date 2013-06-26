@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{blockbestsellers}prestashop>blockbestsellers-home_3cb29f0ccc5fd220a97df89dafe46290'] = 'Meilleures ventes';
 $_MODULE['<{blockbestsellers}prestashop>blockbestsellers-home_d3da97e2d9aee5c8fbe03156ad051c99'] = 'Plus d\'infos';
 $_MODULE['<{blockbestsellers}prestashop>blockbestsellers-home_4351cfebe4b61d8aa5efa1d020710005'] = 'Voir';

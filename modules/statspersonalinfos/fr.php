@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_8063f7c341dbe2cadc294a530cb1cad2'] = 'Informations clients';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_ff9c34d2829b95a0936b22b409640143'] = 'Affiche la répartition de vos clients par âge, sexe ou pays';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_0df28a79b0b6ee5f2a91da83bb07117c'] = 'La répartition par genre vous permet de déterminer le pourcentage d\'hommes et de femmes parmis vos clients.';
@@ -17,7 +18,7 @@ $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_c8eb1ba430d9ae8fe45
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_5beafb6329f9718aa46293a7433697e5'] = 'S\'adresser au bon public est primordial afin de choisir les bons outils pour convaincre chacun des publics cibles.';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_e7f94ccd67cb072f87473491d409fe4c'] = 'Il est préférable de limiter son action à un ou plusieurs groupes de clients';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_f94c9050d83dfc68894175207b330785'] = 'Les informations personnelles relatives aux clients vous permettent de mieux définir le profil du client type afin d\'adapter les promotions sur votre site en fonction des différents critères.';
-$_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_72d2596650eeec0e4f630dd8841eb21e'] = 'Nous vous conseillons d\'utiliser cette information pour faire accroitre vos ventes : ';
+$_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_72d2596650eeec0e4f630dd8841eb21e'] = 'Nous vous conseillons d\'utiliser cette information pour faire accroitre vos ventes :';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_325004e2f6f72a36519c6a79bd59de74'] = 'Préparez une campagne de publicité destinée à un groupe de clients susceptible d\'être intéressé par une offre en particulier, puis diffusez la à des heures précises.';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_7878438ad0cb68d43646e19bf8cda504'] = 'Contactez ces groupes de clients par e-mail ou avec une liste de diffusion';
 $_MODULE['<{statspersonalinfos}prestashop>statspersonalinfos_8dc514f6da8c696c4a522efc145ad28a'] = 'Répartition par sexe';

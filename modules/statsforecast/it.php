@@ -2,7 +2,9 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{statsforecast}prestashop>statsforecast_240c994d8b61c7bd68ac1c5182bbdb2e'] = 'Statistiche Dashboard';
+$_MODULE['<{statsforecast}prestashop>statsforecast_8cfe257ea14b80e50c5d36d62be3757f'] = 'Tutti gli ammontari sono tasse escluse. Le date si riferiscono alle date fattura.';
 $_MODULE['<{statsforecast}prestashop>statsforecast_1ee1c44c2dc81681f961235604247b81'] = 'Modalità:';
 $_MODULE['<{statsforecast}prestashop>statsforecast_03727ac48595a24daed975559c944a44'] = 'Giorno';
 $_MODULE['<{statsforecast}prestashop>statsforecast_d2ce009594dcc60befa6a4e6cbeb71fc'] = 'Settimana';

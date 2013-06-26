@@ -2,8 +2,10 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{hipay}prestashop>hipay_50089d40ef4536271e8b16dbe5763c01'] = 'Hipay';
 $_MODULE['<{hipay}prestashop>hipay_035ab5edb2d8af86d51f6a92e65b4c0f'] = 'Pagamento sicuro con Visa, Mastercard e soluzioni europee.';
+$_MODULE['<{hipay}prestashop>hipay_9d72404f720479faa0684f13d753ee06'] = 'Per funzionare correttamente il modulo necessita dell\'installazione della libreria Soap';
 $_MODULE['<{hipay}prestashop>hipay_5063b1c7402ff93d09defb875fa0085b'] = '[Hipay] Errore: non è possibile creare PaymentParams';
 $_MODULE['<{hipay}prestashop>hipay_a85eba4c6c699122b2bb1387ea4813ad'] = 'Carrello';
 $_MODULE['<{hipay}prestashop>hipay_d4126d0b64579211d37151ef9b5af754'] = '[Hipay] Errore: non è possibile creare prodotti \"Carrello\"';
@@ -86,7 +88,6 @@ $_MODULE['<{hipay}prestashop>hipay_ca75dc95767c2d020aba7b02bb2837c8'] = 'nome de
 $_MODULE['<{hipay}prestashop>hipay_eab5fd4c5144c24cb4494684dd15e952'] = 'url del website';
 $_MODULE['<{hipay}prestashop>hipay_fa4aaa6b8b3825e2cad3ad8c44086207'] = 'password mercante del website';
 $_MODULE['<{hipay}prestashop>hipay_6a8d50e3e8fb5a4c990e0b6175cc6b0d'] = 'Alcuni campi non sono esatti. Si prega di verificare i campi: %s';
-$_MODULE['<{hipay}prestashop>hipay_581d72b595ff53d07c0ab6894f388733'] = 'Un errore si è verificato durante la creazione dell\'account';
 $_MODULE['<{hipay}prestashop>hipay_d9ad794fc993784fa7442cce33384535'] = 'Errore sconosciuto.';
 $_MODULE['<{hipay}prestashop>payment_cb047ebd77ec02c36fbac405f8c9922c'] = 'Paga con Hipay';
 $_MODULE['<{hipay}prestashop>payment_35d5d65e0fb908f81b8c36820ddd7cc6'] = 'importo minimo richiesto per pagare con Hipay:';

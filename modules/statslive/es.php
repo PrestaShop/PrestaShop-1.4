@@ -4,7 +4,7 @@ global $_MODULE;
 $_MODULE = array();
 
 $_MODULE['<{statslive}prestashop>statslive_fa55230e9791f2b71322869318a5f00f'] = 'Visitantes en línea';
-$_MODULE['<{statslive}prestashop>statslive_b8a5ea9b6e7f2d0b56fbb18e5b6b9246'] = 'Mostrar la lista de clientes y visitantes conectados.';
+$_MODULE['<{statslive}prestashop>statslive_b8a5ea9b6e7f2d0b56fbb18e5b6b9246'] = 'Mostrar la lista de clientes y visitantes conectados';
 $_MODULE['<{statslive}prestashop>statslive_279a974c9c9a0d109698bb069202ae90'] = 'Debes activar la opción \"páginas vistas por cada cliente\" en el módulo \"minería de datos de estadísticas\" para visualizar las páginas consultadas actualmente por sus clientes.';
 $_MODULE['<{statslive}prestashop>statslive_b6d2d306cc29f272be3eb7a432865ea2'] = 'Clientes conectados (últimos 15 minutos)';
 $_MODULE['<{statslive}prestashop>statslive_66c4c5112f455a19afde47829df363fa'] = 'Total:';

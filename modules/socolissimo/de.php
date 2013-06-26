@@ -2,7 +2,9 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{socolissimo}prestashop>ajax_607e1d854783c8229998ac2b5b6923d3'] = 'Token ungültig';
+$_MODULE['<{socolissimo}prestashop>error_0557fa923dcee4d0f86b1409f5c2167f'] = 'Zurück';
 $_MODULE['<{socolissimo}prestashop>socolissimo_42ab10dea7d96b9c353e0f5bae43ec20'] = 'So Colissimo';
 $_MODULE['<{socolissimo}prestashop>socolissimo_9e13e80360ceb625672531275f01ec1f'] = 'Bieten Sie Ihren Kunden unterschiedliche Liefermethoden mit LaPoste an.';
 $_MODULE['<{socolissimo}prestashop>socolissimo_f8e355b97fa1be7a8d8c206aa66f0077'] = '\'Versandzone(n)\'';
@@ -13,20 +15,10 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_798547c41ec3e64e2322df678e939344'
 $_MODULE['<{socolissimo}prestashop>socolissimo_ac08649aa09ff3b879525627bf086dd1'] = '\'Schlüssel\'';
 $_MODULE['<{socolissimo}prestashop>socolissimo_a3a53f075adf77334cc34d0f7497ff44'] = '\'URL So\'';
 $_MODULE['<{socolissimo}prestashop>socolissimo_4d470fde8487e755a50e9235e3dc13ab'] = 'muss konfiguriert sein, um dieses Modul richtig zu nutzen';
-$_MODULE['<{socolissimo}prestashop>socolissimo_94c614a9df45ea1fcd27b15b7d6f3e67'] = 'Ungültiger Schlüssel';
-$_MODULE['<{socolissimo}prestashop>socolissimo_90a5cb3d07bb39bbd4b76f7f9a0d7947'] = 'Ein Fehler ist beim Abschnitt Versand aufgetreten';
-$_MODULE['<{socolissimo}prestashop>socolissimo_70b2e65f0f2aabf3e2c58d70cf1e1e9a'] = 'Login FO fehlt';
-$_MODULE['<{socolissimo}prestashop>socolissimo_2b639b851983a24bc12358523861c7ff'] = 'Login FO falsch';
-$_MODULE['<{socolissimo}prestashop>socolissimo_7ca12228b5ad636c637425a086fe0092'] = 'Kunden unberechtigt';
-$_MODULE['<{socolissimo}prestashop>socolissimo_0b1d0c0a00cc2727fcd77902867e3641'] = 'Pflichtfeld fehlt';
-$_MODULE['<{socolissimo}prestashop>socolissimo_fa419073252af9d022afe65dccbb34a2'] = 'Fehlende Signatur';
-$_MODULE['<{socolissimo}prestashop>socolissimo_fca3fbced675f75182786525bf4706dc'] = 'Ungültige Signatur';
-$_MODULE['<{socolissimo}prestashop>socolissimo_d14afc3f67d2457d29f0aa0db98e2c9d'] = 'Postleitzahl ungültig';
-$_MODULE['<{socolissimo}prestashop>socolissimo_f9733e52e8841f1e45d015d5af5e8655'] = 'Falsches URL-Format zurück Bestätigung';
-$_MODULE['<{socolissimo}prestashop>socolissimo_417434a4e55adbc67c9c391902cea7f3'] = 'Falsches URL-Format zurück Fehler';
-$_MODULE['<{socolissimo}prestashop>socolissimo_140c34f0b21b932e34d11575509d093b'] = 'Ungültige Transaktions-ID';
-$_MODULE['<{socolissimo}prestashop>socolissimo_28ee1015b475a3a70613ea9c98d712b6'] = 'Format falsch Versandkosten';
-$_MODULE['<{socolissimo}prestashop>socolissimo_afa50e8b2fc14bf578331b2b8e98179d'] = 'Socolissimo Server nicht verfügbar';
+$_MODULE['<{socolissimo}prestashop>socolissimo_1f8261d17452a959e013666c5df45e07'] = 'Telefon-Nr.';
+$_MODULE['<{socolissimo}prestashop>socolissimo_642d3ba5db8b57e006584b544e490ec7'] = 'Postleitzahl';
+$_MODULE['<{socolissimo}prestashop>socolissimo_70d9be9b139893aa6c69b5e77e614311'] = 'Bestätigen';
+$_MODULE['<{socolissimo}prestashop>socolissimo_ea4788705e6873b424c65e91c2846b19'] = 'Abbrechen';
 $_MODULE['<{socolissimo}prestashop>socolissimo_b5a7adde1af5c87d7fd797b6245c2a39'] = 'Beschreibung';
 $_MODULE['<{socolissimo}prestashop>socolissimo_d0b34d3e1cb0cc1150ae6bf650e9b569'] = 'SoColissimo ist ein Service von La Poste, der Ihren Käufern 5 Zustellungsarten anbietet';
 $_MODULE['<{socolissimo}prestashop>socolissimo_6cefaa978ccec960693d10cefeb2c2bf'] = 'Nach Hause';
@@ -90,3 +82,6 @@ $_MODULE['<{socolissimo}prestashop>socolissimo_e937c6393ce858786bd31a279b50572d'
 $_MODULE['<{socolissimo}prestashop>socolissimo_f109a88feec5ad3aeb82580c7a20ec31'] = 'Abholstützpunkt';
 $_MODULE['<{socolissimo}prestashop>socolissimo_021944549c2795a6e4db23b92f198a5e'] = 'Adresse Abholstützpunkt';
 $_MODULE['<{socolissimo}prestashop>socolissimo_ce8ae9da5b7cd6c3df2929543a9af92d'] = 'E-Mail';
+$_MODULE['<{socolissimo}prestashop>validation_befec70964837a08794ca1b092471d83'] = 'Fehler-Code:';
+$_MODULE['<{socolissimo}prestashop>scerror_fa419073252af9d022afe65dccbb34a2'] = 'Fehlende Signatur';
+$_MODULE['<{socolissimo}prestashop>scerror_90a5cb3d07bb39bbd4b76f7f9a0d7947'] = 'Ein Fehler ist beim Abschnitt Versand aufgetreten';

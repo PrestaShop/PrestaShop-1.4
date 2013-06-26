@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{ogone}prestashop>hookorderconfirmation_2e2117b7c81aa9ea6931641ea2c6499f'] = 'Votre commande sur';
 $_MODULE['<{ogone}prestashop>hookorderconfirmation_75fbf512d744977d62599cc3f0ae2bb4'] = 'est terminée.';
 $_MODULE['<{ogone}prestashop>hookorderconfirmation_30163d8fc3068e8297e7ab5bf32aec87'] = 'Votre commande vous sera expédiée dès que possible.';
@@ -12,9 +13,7 @@ $_MODULE['<{ogone}prestashop>ogone_40904c61c99a28a3acc110767753fade'] = 'Avec 80
 $_MODULE['<{ogone}prestashop>ogone_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Configuration enregistrée';
 $_MODULE['<{ogone}prestashop>ogone_6a26f548831e6a8c26bfbbd9f6ec61e0'] = 'Aide';
 $_MODULE['<{ogone}prestashop>ogone_879dd0a17cb07d91581b85fa6ade410b'] = 'Ogone Payment Services est le service de paiement leader en Europe, avec une couverture mondiale.';
-$_MODULE['<{ogone}prestashop>ogone_1e7bcd8050c5264ba8ea688bdb1d999b'] = 'Ogone est l’un des acteurs majeurs du paiement en ligne en Europe avec plus de %1$s35 000 clients%2$s, répartis dans %1$s45 pays%2$s.';
 $_MODULE['<{ogone}prestashop>ogone_96c968b4187bdfd7fdf213816aa20998'] = 'Grâce à ses partenariats avec plus de %1$s200 banques et acquéreurs répartis%2$s sur les cinq continents, Ogone propose aux e-commerçants une plateforme capable de consolider la gestion plus de %1$s80 moyens de paiement internationaux et locaux%2$s.';
-$_MODULE['<{ogone}prestashop>ogone_3936e6f93396b090fa269b25ebcffeac'] = 'Pour activer votre compte, il vous suffit de disposer d’un contrat de VAD (Vente à Distance) auprès d’une banque.';
 $_MODULE['<{ogone}prestashop>ogone_b68664b2bd671c41f46e2ea168895e8a'] = 'Créez votre compte Test GRATUIT en cliquant sur le lien ci-dessous :';
 $_MODULE['<{ogone}prestashop>ogone_199ab4d0550e412b6dc34cb277a8f4de'] = 'Créer votre compte de test gratuit';
 $_MODULE['<{ogone}prestashop>ogone_a276e4a057c509f54db29bcaabb089ad'] = 'Ce compte de Test va vous permettre de créer votre %1$sPSPID (identifiant Ogone)%2$s, de renseigner vos informations administratives, les moyens de paiement souhaités et de paramétrer %1$sles signatures SHA-in et SHA-out%2$s qui vous sont demandées pour la configuration de votre compte PrestaShop ci-dessous.';

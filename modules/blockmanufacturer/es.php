@@ -7,7 +7,7 @@ $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_bc3e73cfa718a3237fb1d
 $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_9859921e6d3733788e09599adb681dcd'] = 'Mostrar bloque de marcas';
 $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_cf64d2d0bc5de5ce3d309d0e899d36fb'] = 'Número de elementos incorrecto';
 $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_bb30aac3161f999a357af767ce2fd7ec'] = 'Por favor, active al menos uno de la lista';
-$_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_c888438d14855d7d96a2724ee9c306bd'] = 'Configuración actualizada';
+$_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_c888438d14855d7d96a2724ee9c306bd'] = 'Actualización realizada con éxito';
 $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_f4f70727dc34561dfde1a3c529b6205c'] = 'Configuración';
 $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_bfdff752293014f11f17122c92909ad5'] = 'Use una lista de texto plano';
 $_MODULE['<{blockmanufacturer}prestashop>blockmanufacturer_00d23a76e43b46dae9ec7aa9dcbebb32'] = 'Activado';

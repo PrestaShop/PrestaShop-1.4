@@ -2,6 +2,7 @@
 
 global $_LANGPDF;
 $_LANGPDF = array();
+
 $_LANGPDF['PDF_invoicee0036b67b754e9f6442f9f9e6b200c33'] = 'Restituzione n.';
 $_LANGPDF['PDF_invoice77c3e447f60541a1c346a08134078c7f'] = 'Nota di credito n.';
 $_LANGPDF['PDF_invoicecb5efbba6a6babef9082ca6976928ca7'] = 'Buono di consegna n.';
@@ -10,6 +11,7 @@ $_LANGPDF['PDF_invoiceba160acb58001c904c57507da3689265'] = 'Ordine n.';
 $_LANGPDF['PDF_invoice808a04117534f9dfb63b9accd7efc609'] = 'Sede sociale';
 $_LANGPDF['PDF_invoicea54cedc1e053a70d4a6319feccf531ca'] = 'Telefono:';
 $_LANGPDF['PDF_invoice2babe53026309ed1bc4d26626dbaf9b3'] = 'Dati:';
+$_LANGPDF['PDF_invoice5bbca5da334d07a677e71b113ca54677'] = 'P.';
 $_LANGPDF['PDF_invoice15b57bef332e7e0327d89fe93711a954'] = 'Una versione elettronica è conservata nel tuo conto. Per accedervi, identificati nel sito';
 $_LANGPDF['PDF_invoiceb1fb57b55075a4a51cf83e44d0440358'] = 'con i tuoi dati identificativi (creati al momento del tuo primo ordine).';
 $_LANGPDF['PDF_invoiced98a07f84921b24ee30f86fd8cd85c3c'] = 'da';
@@ -55,7 +57,7 @@ $_LANGPDF['PDF_invoiceafd42dfebce46ec93972b2e0cbb8b83f'] = 'Prezzo unitario';
 $_LANGPDF['PDF_invoice1d744a9ad1dac20645cfc4a36b77323b'] = 'immagine/i';
 $_LANGPDF['PDF_invoicec2808546f3e14d267d798f4e0e6f102e'] = 'Personalizzato';
 $_LANGPDF['PDF_invoicea1e7379abfdbc3b8e03506e5489c6110'] = 'Sconto:';
-$_LANGPDF['PDF_invoicee7bbf027179f23c92bec649fa6ae78e4'] = 'Esente da IVA secondo l\'art. 259B del Codice Generale delle Imposte. ';
+$_LANGPDF['PDF_invoicee7bbf027179f23c92bec649fa6ae78e4'] = 'Esente da IVA secondo l\'art. 259B del Codice Generale delle Imposte.';
 $_LANGPDF['PDF_invoice42c26bf38ece1dcd27aca8c6f8c076ed'] = 'Dettagli fiscali';
 $_LANGPDF['PDF_invoice4b78ac8eb158840e9638a3aeb26c4a9d'] = 'Tassa';
 $_LANGPDF['PDF_invoicecd6576cc33506a6c44e2debbde5c14d9'] = 'Totale tasse escl.';

@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{cheque}prestashop>cheque_060bf2d587991d8f090a1309b285291c'] = 'Assegno';
 $_MODULE['<{cheque}prestashop>cheque_44cd16893a0a7731735c02999cc81adc'] = 'Modulo per accettare pagamenti con assegno';
 $_MODULE['<{cheque}prestashop>cheque_fa214007826415a21a8456e3e09f999d'] = 'Sei sicuro di voler cancellare i tuoi dati?';
@@ -40,7 +41,7 @@ $_MODULE['<{cheque}prestashop>payment_return_2e2117b7c81aa9ea6931641ea2c6499f'] 
 $_MODULE['<{cheque}prestashop>payment_return_75fbf512d744977d62599cc3f0ae2bb4'] = 'è completo.';
 $_MODULE['<{cheque}prestashop>payment_return_e4ee6e0eac588fe2611cc6fd195828af'] = 'Vi preghiamo di inviarci un assegno con:';
 $_MODULE['<{cheque}prestashop>payment_return_a35abd2d31d9e1da82599bc67e166506'] = 'un importo di';
-$_MODULE['<{cheque}prestashop>payment_return_84cca8efe379645790938f55b701a1a4'] = 'pagabile all\'ordine di ';
+$_MODULE['<{cheque}prestashop>payment_return_84cca8efe379645790938f55b701a1a4'] = 'pagabile all\'ordine di';
 $_MODULE['<{cheque}prestashop>payment_return_c5a6826dd3b059e32a3fa1ae029179de'] = 'mail a';
 $_MODULE['<{cheque}prestashop>payment_return_13f4ac6dc75b5829499cb9cf8b733071'] = 'Ti è stata inviata una e-mail con queste informazioni.';
 $_MODULE['<{cheque}prestashop>payment_return_ffd2478830ca2f519f7fe7ee259d4b96'] = 'Il tuo ordine verrà inviato non appena avremo ricevuto il pagamento.';

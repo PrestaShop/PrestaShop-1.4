@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{ebay}prestashop>ebay_282539987a2276dd5259f8e745d668a1'] = 'eBay';
 $_MODULE['<{ebay}prestashop>ebay_fe4139533f9589aed248d4210bf2137e'] = 'Esporta con la massima facilità i tuoi prodotti da PrestaShop a eBay, il mercato più vasto, per acquisire nuovi clienti e aumentare le vendite.';
 $_MODULE['<{ebay}prestashop>ebay_8acabcc788c316f92b7850c76265b49b'] = 'Per utilizzare questo modulo devi abilitare l\'estensione cURL e l\'opzione allow_url_fopen sul tuo server.';
@@ -91,7 +92,7 @@ $_MODULE['<{ebay}prestashop>ebay_97855df0367fedf5648d745bfb57412b'] = 'Opzione A
 $_MODULE['<{ebay}prestashop>ebay_54ddae5296edbde1d28aa3dc0c775155'] = 'Metti in vendita tutti i prodotti su eBay';
 $_MODULE['<{ebay}prestashop>ebay_8890755ccd5ac4f777efdd0a6c16c4ab'] = 'Opzione B';
 $_MODULE['<{ebay}prestashop>ebay_f7987cf59e51ae3c4fca651a871e55b9'] = 'Sincronizza solo i prodotti delle categorie selezionate';
-$_MODULE['<{ebay}prestashop>ebay_054b4f3ea543c990f6b125f41af6ebf7'] = 'Opzione ';
+$_MODULE['<{ebay}prestashop>ebay_054b4f3ea543c990f6b125f41af6ebf7'] = 'Opzione';
 $_MODULE['<{ebay}prestashop>ebay_6c16b6d6fbbf43912a314a4279534abb'] = 'Quando modifichi i prodotti su eBay, modifica solo il prezzo e la quantità';
 $_MODULE['<{ebay}prestashop>ebay_e0626222614bdee31951d84c64e5e9ff'] = 'Seleziona';
 $_MODULE['<{ebay}prestashop>ebay_3adbdb3ac060038aa0e6e6c138ef9873'] = 'Categoria';
@@ -186,10 +187,10 @@ $_MODULE['<{ebay}prestashop>shipping_714544c2a41e2c08450a88f97ed02013'] = 'Aggiu
 $_MODULE['<{ebay}prestashop>shipping_7046ce891a343b3dd3a6ccf47fc0131e'] = 'Mostra tutti i paesi';
 $_MODULE['<{ebay}prestashop>shipping_1a3ce8a5dda08b820bde898b60e969ff'] = 'I corrieri Prestashop aggiunti attraverso il modulo non sono compatibili con l’integrazione eBay.';
 $_MODULE['<{ebay}prestashop>shipping_f479b64fe17a91891d0de451a1a0269c'] = 'Per risolvere tale problematica, puoi aggiungere un nuovo corriere nelle impostazioni di Prestashop e disabilitarne la visualizzazione nella parte di front office';
-$_MODULE['<{ebay}prestashop>shipping_d3d2e617335f08df83599665eef8a418'] = 'chiudere ';
+$_MODULE['<{ebay}prestashop>shipping_d3d2e617335f08df83599665eef8a418'] = 'chiudere';
 $_MODULE['<{ebay}prestashop>shipping_e22c0b2d9fed838d208819010bbbc089'] = 'Metodo di spedizione per la spedizione all\'interno del paese';
 $_MODULE['<{ebay}prestashop>shipping_c4fa21d84f1b360db82566a654839f5a'] = 'Zone PrestaShop utilisée pour calculer les frais de livraisons';
-$_MODULE['<{ebay}prestashop>shipping_9d73306e345eec2164c3fa7165882de8'] = 'Vous ne pouvez pas voir tout vos transporteurs ? ';
+$_MODULE['<{ebay}prestashop>shipping_9d73306e345eec2164c3fa7165882de8'] = 'Vous ne pouvez pas voir tout vos transporteurs ?';
 $_MODULE['<{ebay}prestashop>shipping_9a983d430dd96573b02ee03a175c2726'] = 'Aggiungi nuovo spedizioniere';
 $_MODULE['<{ebay}prestashop>shipping_324e87e314f7b4d49b1a378de8009fbe'] = 'Metodo di spedizione per la spedizione internazionale';
 $_MODULE['<{ebay}prestashop>shipping_b2c0215fa3f2832ed5ff14ebafc0351f'] = 'Zone PrestaShop utilisée pour les livraisons internationales';

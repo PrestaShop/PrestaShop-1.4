@@ -2,8 +2,9 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{statscheckup}prestashop>statscheckup_e7a908d79d3758c911692ba791da9c70'] = 'Katalogbewertung';
-$_MODULE['<{statscheckup}prestashop>statscheckup_24f870376156be0e8e22cfb94d29df6d'] = 'Katalogqualität im Handumdrehen';
+$_MODULE['<{statscheckup}prestashop>statscheckup_24f870376156be0e8e22cfb94d29df6d'] = 'Schnellprüfung der Katalogqualität';
 $_MODULE['<{statscheckup}prestashop>statscheckup_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Konfiguration aktualisiert';
 $_MODULE['<{statscheckup}prestashop>statscheckup_bae60998ffe4923b131e3d6e4c19993e'] = 'schlecht';
 $_MODULE['<{statscheckup}prestashop>statscheckup_6927a3a7218a3195858411433ec20a21'] = 'Durchschnitt';

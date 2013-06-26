@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{mailalerts}prestashop>mailalerts_fd30254803e8db32521d3390131a44da'] = 'Mail di notifica';
 $_MODULE['<{mailalerts}prestashop>mailalerts_2d51f4a7ab8a12c4f35b507019523b8c'] = 'Invia notifiche via e-mail a clienti e commercianti.';
 $_MODULE['<{mailalerts}prestashop>mailalerts_8fd3b84964bd6dfec8095f658d200b29'] = 'Sei sicuro di voler eliminare tutte le notifiche ai clienti?';
@@ -14,7 +15,7 @@ $_MODULE['<{mailalerts}prestashop>mailalerts_86e8d61297942b00e9937299735df971'] 
 $_MODULE['<{mailalerts}prestashop>mailalerts_38fb7d24e0d60a048f540ecb18e13376'] = 'Salva';
 $_MODULE['<{mailalerts}prestashop>mailalerts_d9b64868bb5b490c5c0627abe835acf6'] = 'Notifica commerciante';
 $_MODULE['<{mailalerts}prestashop>mailalerts_9204d21640382a89a95ec42f44f9051c'] = 'Nuovo ordine:';
-$_MODULE['<{mailalerts}prestashop>mailalerts_fd5dc19a70d21e130f2e4ab5eb205e66'] = 'Ricevere una notifica se viene fatto un nuovo ordine ';
+$_MODULE['<{mailalerts}prestashop>mailalerts_fd5dc19a70d21e130f2e4ab5eb205e66'] = 'Ricevere una notifica se viene fatto un nuovo ordine';
 $_MODULE['<{mailalerts}prestashop>mailalerts_ebc3ccf8441dba3c1615afa6acb3282a'] = 'Esaurito:';
 $_MODULE['<{mailalerts}prestashop>mailalerts_c009546071b59092716ba006f307c6af'] = 'Ricevere una notifica se la quantità di un prodotto è al di sotto della soglia di allarme';
 $_MODULE['<{mailalerts}prestashop>mailalerts_af097c4096dc45754451f6f656dd1ee0'] = 'Soglia di allarme:';
@@ -37,6 +38,7 @@ $_MODULE['<{mailalerts}prestashop>myalerts_074c07016d3e5a9f011aa8e62abe4517'] = 
 $_MODULE['<{mailalerts}prestashop>myalerts_0b3db27bc15f682e92ff250ebb167d4b'] = 'Torna al tuo account';
 $_MODULE['<{mailalerts}prestashop>myalerts_8cf04a9734132302f96da8e113e80ce5'] = 'Home';
 $_MODULE['<{mailalerts}prestashop>product_67135a14d3ac4f1369633dd006d6efec'] = 'your@email.com';
+$_MODULE['<{mailalerts}prestashop>product_c6bc91d0fc376aa030d087ae43ca8696'] = 'Hai già impostato un alert per questo prodotto';
 $_MODULE['<{mailalerts}prestashop>product_61172eb93737ebf095d3fa02119ce1df'] = 'Richiesta di notifica registrata';
 $_MODULE['<{mailalerts}prestashop>product_900f8551b29793ecb604a545b2059cc1'] = 'Il tuo indirizzo e-mail non è valido';
 $_MODULE['<{mailalerts}prestashop>product_546e02eaa9a986c83cc347e273269f2c'] = 'Avvisami quando disponibile';

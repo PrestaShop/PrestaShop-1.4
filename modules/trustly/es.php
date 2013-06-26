@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{trustly}prestashop>trustly_f4b80249fd3be1e9ec861742046935cf'] = 'Permita a sus clientes pagar por transferencia bancaria directa online desde su banca en internet y sin salir de su comercio online. Único en España con el 90% de cobertura bancaria.';
 $_MODULE['<{trustly}prestashop>trustly_aea29018bc59f84cbbc679ccdfd71552'] = 'No está autorizado a abrir URLs externas';
 $_MODULE['<{trustly}prestashop>trustly_f8b94463fa8b5591e5edbbb8021e8038'] = 'OpenSSL no está activado';
@@ -27,12 +28,12 @@ $_MODULE['<{trustly}prestashop>trustly_0d24a7443bb428f848d10d4787eac899'] = 'Su 
 $_MODULE['<{trustly}prestashop>trustly_1af0cde861633d02d0d2ada4de931ada'] = 'Su clave pública';
 $_MODULE['<{trustly}prestashop>trustly_b17f3f4dcf653a5776792498a9b44d6a'] = 'Actualización de la configuración';
 $_MODULE['<{trustly}prestashop>trustly_498cd895eb5a102c5aeb977e2b928dee'] = '¡Gracias!';
-$_MODULE['<{trustly}prestashop>trustly_6e2399c0e0a66d0bb1a237715ce1e557'] = '¡Su pago se ha realizado correctamente! ';
+$_MODULE['<{trustly}prestashop>trustly_6e2399c0e0a66d0bb1a237715ce1e557'] = '¡Su pago se ha realizado correctamente!';
 $_MODULE['<{trustly}prestashop>trustly_76ff948cad1c754b8912afbe493affeb'] = 'Elige siempre Trustly para garantizar la máxima seguridad en tus pagos online.';
 $_MODULE['<{trustly}prestashop>trustly_6c8a2332f8897456b58006549dfbaa1c'] = 'No puede conectar con el servidor Trustly';
 $_MODULE['<{trustly}prestashop>trustly_28a05164445d49449e5dbb163c043908'] = 'No es posible leer la respuesta del servidor Trustly';
 $_MODULE['<{trustly}prestashop>trustly_902b0d55fddef6f8d651fe1035b7d4bd'] = 'Error';
-$_MODULE['<{trustly}prestashop>trustly_f4c1185d5f110631122d32f6ccc2eb85'] = 'Hubo un error durante la comunicación con el web service Trustly ';
+$_MODULE['<{trustly}prestashop>trustly_f4c1185d5f110631122d32f6ccc2eb85'] = 'Hubo un error durante la comunicación con el web service Trustly';
 $_MODULE['<{trustly}prestashop>trustly_8fc777a79f353e6396ccdaba8049270f'] = 'La respuesta del servidor Trustly no puede ser verificada';
 $_MODULE['<{trustly}prestashop>trustly_e36a7f7f5fed13131e7e82f2337235a6'] = 'Método no asistido';
 $_MODULE['<{trustly}prestashop>iframe_167b5df3306ea63916e87764ccd40e02'] = 'Transferencia bancaria directa online con Trustly';

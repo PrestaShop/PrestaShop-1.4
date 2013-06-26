@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{watermark}prestashop>watermark_ee20bb60493f049175fc10c35acd2272'] = 'Filigrana';
 $_MODULE['<{watermark}prestashop>watermark_8d7c07bcea7e80d072308e4bd4cc37b0'] = 'Proteggi immagine con la filigrana';
 $_MODULE['<{watermark}prestashop>watermark_fa214007826415a21a8456e3e09f999d'] = 'Sei sicuro di voler cancellare i tuoi dati?';
