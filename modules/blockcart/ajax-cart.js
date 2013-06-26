@@ -464,7 +464,7 @@ var ajaxCart = {
 					{
 						var jsonProduct = this;                        
                         if($.trim($('#cart_block_product_' + domIdProduct + ' .quantity').html()) != jsonProduct.quantity || $.trim($('#cart_block_product_' + domIdProduct + ' .price').html()) != jsonProduct.priceByLine)
-						{					  						  
+						{
 							// Usual product
 							$('#'+parentId+' dt#cart_block_product_' + domIdProduct + ' .price').text(jsonProduct.priceByLine);
 							ajaxCart.updateProductQuantity(jsonProduct, jsonProduct.quantity);
@@ -504,11 +504,11 @@ var ajaxCart = {
 		{
 			var productId = parseInt(product.id);
 			var productAttributeId = typeof(product.idCombination) == 'undefined' ? 0 : parseInt(product.idCombination);
-			var hasAlreadyCustomizations = $(this).children('ul#customization_' + productId + '_' + productAttributeId).length;
+			var hasAlreadyCustomizations = $('ul#customization_' + productId + '_' + productAttributeId).length;
 
 			if (!hasAlreadyCustomizations)
 			{
-				if (!product.hasAttributes)
+				if (!product.hasAttributes && $('#customization_' + productId + '_' + productAttributeId).val() == undefined)
 					content += '<dd id="cart_block_combination_of_' + productId + '" class="hidden">';
 				if ($('#customization_' + productId + '_' + productAttributeId).val() == undefined)
 					content += '<ul class="cart_block_customizations" id="customization_' + productId + '_' + productAttributeId + '">';
