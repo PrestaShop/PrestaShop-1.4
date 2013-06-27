@@ -405,7 +405,7 @@ class AdminOrders extends AdminTab
 					.($product['product_supplier_reference'] ? $this->l('Ref Supplier:').' '.$product['product_supplier_reference'] : '')
 					.'</a></td>
 				<td align="center">'.Tools::displayPrice($product['product_price_wt'], $currency, false).'</td>
-				<td align="center" class="productQuantity">'.$product['customizationQuantityTotal'].'</td>
+				<td align="center" class="productQuantity"'.($product['customizationQuantityTotal'] > 0 ? ' style="font-weight:700;font-size:1.1em;color:red"' : '').'>'.$product['customizationQuantityTotal'].'</td>
 				'.($order->hasBeenPaid() ? '<td align="center" class="productQuantity">'.$product['customizationQuantityRefunded'].'</td>' : '').'
 				'.($order->hasBeenDelivered() ? '<td align="center" class="productQuantity">'.$product['customizationQuantityReturned'].'</td>' : '').'
 				<td align="center" class="productQuantity">'.(isset($product['stock_quantity']) ? (int)$product['stock_quantity'] : '--').'</td>
@@ -799,7 +799,7 @@ class AdminOrders extends AdminTab
 										.($product['product_supplier_reference'] ? $this->l('Ref Supplier:').' '.$product['product_supplier_reference'] : '')
 										.'</a></td>
 									<td align="center">'.Tools::displayPrice($product_price, $currency, false).'</td>
-									<td align="center" class="productQuantity" '.($quantity > 1 || $product['customizationQuantityTotal'] > 0 ? 'style="font-weight:700;font-size:1.1em;color:red"' : '').'>'.(int)$quantity.'</td>
+									<td align="center" class="productQuantity" '.($quantity > 1 ? 'style="font-weight:700;font-size:1.1em;color:red"' : '').'>'.(int)$quantity.'</td>
 									'.($has_been_paid ? '<td align="center" class="productQuantity">'.(int)($product['product_quantity_refunded']).'</td>' : '').'
 									'.($has_been_delivered ? '<td align="center" class="productQuantity">'.(int)($product['product_quantity_return']).'</td>' : '').'
 									<td align="center" class="productQuantity">'.(int)$stock_quantity.'</td>
