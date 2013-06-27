@@ -4,7 +4,9 @@
 	- aNiassy
 	- bLeveque
 	- bMancone
+	- Bruno42
 	- Damien Metzger
+	- djfm
 	- dJorge
 	- dKiyindou
 	- dMetzger
@@ -12,6 +14,7 @@
 	- fBrignoli
 	- fGaillard
 	- fOlivier
+	- Francois Gaillard
 	- François Gaillard
 	- fSerny
 	- gBrunier

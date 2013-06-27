@@ -24,6 +24,267 @@ International Registred Trademark & Property of PrestaShop SA
 Release Notes for PrestaShop 1.4
 --------------------------------
 ####################################
+#   v1.4.11.0 - (2013-06-27)  #
+####################################
+
+	Fixed bugs:
+
+	[-] Installer : Autocomplete set to off (catalog mode)
+	[-] INSTALLER : Fatal error in update_web_browser
+	[-] INSTALLER : Fix bug #PSCFV-8813  missing file PHP:setAllGroupsOnHomeCategory();
+	[-] INSTALLER : Indexes optimization for stock_mvt regarding #PSCFI-7174
+	[-] INSTALLER : Fix bug #PSCFI-7075 too short column in PREFIX_webservice_account
+
+	[-] FO : Fix wrong indent when adding customized product
+	[-] FO : Customization quantity on shopping cart
+	[-] FO : Refacto customisation
+	[-] Fo : W3C ul with no li
+	[-] FO : Remove custom image if added to cart
+	[-] FO : #PSCFI-6995 Do not stop reorder when a product is oos
+	[-] FO : Bad urls for payment when only one language active
+	[-] FO : Fix bug #PSCFI-6926 respect add_prod_display in accessories
+	[-] FO : Using https on home with getMediaLink()
+	[-] FO : Fix #PSCFI-7240 typos in cms.tpl
+	[-] FO : remove warning when checkQty
+	[-] FO : Fix bug #PSCFI-6777 bad $page_name for payment modules
+	[-] FO : cleaned referrers logging #PSCFI-7165
+	[-] FO : Fix #PSCFV-9189 No conditions check with virtual products
+	[-] FO : Fix bug #PSCFI-7055 do not relay on ".html" in referer to find previous category
+	[-] Fo : Back port of 6cdf8babcaef141521174682808fe2874d2922d2 jqzoom with rel
+	[-] Fo : Fix bug on address alias display again, sorry about that
+	[-] FO : Fix bug #PSCFI-6556 no image size for manufacturers and suppliers
+	[-] FO : Fix bug #PSCFI-6472 ssl with guest-tracking
+	[-] FO : Fix bug #PSCFI-7188 warning in search with no results
+	[-] FO : Address alias lost
+	[-] Fo : Fix bug #PSCFV-7883 bad display of 1.4 default theme on 1.5. X engine
+	[-] FO : Fix bug #PSCFV-8415 report of 1.5.X, zipcode is required without zip code format for too
+	[-] FO : remove "Invalid address warning" when not "same" an no invoice address
+	[-] FO : Fix case for some excluded searched chars
+	[-] FO : Fix bug #PSCFV-7880 display wrapping in OPC
+	[-] FO : w3C validation on product 8 and shopping cart
+	[-] FO : Fix bug #PSCFI-7080 fix typo
+
+	[-] BO : Bug in carrier to zone associations when no image uploaded
+	[-] BO : customizationQuantityTotal in red if > 1
+	[-] BO : Fix typos
+	[-] BO : Remove warning when Apache can not write image
+	[-] BO : No value for shipping price where not set
+	[-] BO : Detect too big image for server conf in scenes upload
+	[-] BO : Translations when errors on creating attributes
+	[-] Bo : Fi x bug #PSCFI-6011 dot / comma in weight field
+	[-] BO : inversion of firstname and lastname in displayform
+	[-] BO : Fix bug #PSCFI-4708 updating combination via import
+	[-] BO : Fix bug #PSCFI-6635 could not import translated existing feature
+	[-] BO : Fix bug #PSCFI-7045, too large logo upload
+	[-] BO : Fix #PSCFI-5646 feature loaded back in import
+	[-] BO : Fix improvement #PSCFI-7100 less choice in required fields for manufacturers
+	[-] BO : Fix imporvement #PSCFI-7101 less choice in required fields for cutomer
+	[-] BO : Fix bug #PSCFI-7103 additionnal check removed
+	[-] Bo : Fix improvment #PSCFI-7114 remove count on product tab
+	[-] BO : Fix bug #PSCFI-7086 pack input size
+	[-] BO : Fix #PSCFI-7112 delete messages
+	[-] BO : Missing cache key for messages
+	[-] BO : Remove various bugs with checkboxes at cancel refund return
+	[-] BO : Report from commit https://github.com/PrestaShop/PrestaShop/commit/b62c8a3aedf6d457415ef858f36895c327b0f955
+	[-] BO : Fix bug #PNM-788 Loyalty points in adminCustomers when only one order
+	[-] BO :Fix bug #PSCFI-5402, bad total count for admin tabs
+	[-] Bo : Remove typo execute instead executeS
+	[-] BO : Follow up #PSCFI-7115, typo in var name
+	[-] BO : Follow up #PSCFI-6982, re include not active product
+	[-] BO : Fix bug #PSCFI-7152 bad attribute and attribute group deletion
+	[-] BO : remove additional incrementation for module position
+	[-] BO : Fix bug #PSCFI-7172 deleteProductAttributes integrates deleteAttributesImpacts()
+	[-] BO : Fix bug #PSCFI-7081 reordering tab positions
+	[-] BO : Fix bug #PSCFI-7115 Add a new specific price = faulty validation
+	[-] BO : Fix bug #PSCFI-6982 thumbs submit deletes large scene
+	[-] BO : Fix bug #PSCFI-7088 unlinking attachements
+	[-] BO : Fix bug #PSCFI-7181 delivery number is unsigned int
+	[-] BO : Fix bug #PSCFI-6600 remove a product when valid = 1 or order state in refund or canceled
+	[-] BO : Fix bug #PSCFI-6790 REQUEST_URI badly recorded
+	[-] BO : Bad config value
+	[-] BO : Fix bug #PSCFI-6020 quaity above 1 in red bold
+	[-] BO : Fix bug #PSCFI-5839 delete attached file from curstomer thread deletion
+	[-] BO : Fix #PSCFI-6755 "+" in email
+	[-] BO : Fix #PSCFI-7219 alignement
+	[-] BO : Fix bug #PSCFI-6775 bad state iso code lentgh
+	[-] Bo : Delta on stock_mvt could be negative
+	[-] BO : Refacto for #PSCFI-7174
+	[-] BO : Fix bug #PSCFI-7134 refresh payments after deleting product
+	[-] BO : Fix typos #PSCFI-7225
+	[-] BO : Fix bug #PSCFI-7186 incorrect return in Meta->deleteSelection()incorrect return in Meta->deleteSelection()incorrect return in Meta->deleteSelection()incorrect return in Meta->deleteSelection()incorrect return in Meta->deleteSelection()
+	[-] Bo : Fix typos #PSCFI-7135
+	[-] BO : Fix bug #PSCFI-7125 Group deletion method must cleanup module_group & carrier_group tables
+	[-] BO : Fix typos #PSCFI-7222
+	[-] BO : Partially fix bug #PSCFI-7176 incorrect error message
+	[-] BO : Fix typo #PSCFI-7109
+	[-] BO : Fix bug #PSCFI-7099 ordering of manufacturers
+	[-] Bo : Fix bug #PSCFI-7094 delete attribute texture image
+	[-] BO : Fix bug #PSCFI-7092 delete category / scene associations
+	[-] BO : Fix bug #PSCFI-7090 remove extra quotes
+	[-] BO : Fix bug #PSCFI-7083 quickie followup to PSCFI-6973
+	[-] BO : Fix bug #PSCFI-7079 AdminStockMvt ~~ selectbox incorrectly displays "increase price" when editing any "reason" item, thankx to Ludvig
+	[-] BO : Fix bug #PSCFI-7078 user could not filter properly
+	[-] BO : Fix bug #PSCFI-7077 bad tabAccess checks on several tabs
+	[-] BO : Fix bug #PSCFI-6558 show_price available when unavailable_for_order
+	[-] BO : Fix bug #PSCFI-7141, wrong quantity and sales number in Product Sales, thankx to @Tuan Tran
+	[-] BO : Fix bug #PSCFI-7174 bad calculation of stock mouvement missing inventory with attributes
+	[-] BO : Fix bug #PSCFI-7185 issues in generator form
+	[-] BO : Fix bug #PSCFI-7151 bad range for zip code search
+	[-] BO : translations for errors without html with other argument than true|false
+	[-] BO : get rid of quantity bug in BO again
+
+	[-] CORE : Report of https://github.com/PrestaShop/PrestaShop/pull/504
+	[-] CORE : Fix PSCFI-7249 again reduction in %
+	[-] CORE: Fix #PSCFI-7249 again
+	[-] CORE : Fix bug #PSCFI-7249 reduction on order with specific price OrderSlip generation
+	[-] CORE: Factoring cache classes
+	[-] CORE :Fix bug #PSCFI-7244, not forcing ssl from url
+	[-] Core: Fix #PSCFI-5882 reduction price was rounded too early
+	[-] CORE : Fix bug #PSCFI-5402, refactoring Memcache class according https://github.com/csupnig/Prestashop-Memcached-Fix, thankx to @csupnig
+	[-] CORE : Fix warning in Address class
+	[-] CORE : Fix bug #PSCFI-7168 cast and truncate POST values for statistics.php
+	[-] CORE : Fix bug #PSCFI-7108 Norms for methods declaration fix
+	[-] CORE : TRACKING_DIRECT_TRAFFIC not respected
+	[-] CORE : try to fix #PSCFI-7165 again, non truncated referer
+	[-] CORe : Fix bug #PSCFI-7073 getmypid() is blocked on some hosting, report of https://github.com/PrestaShop/PrestaShop/commit/27ae42b0864830c6a9f97be17929cf3bf811cf51
+	[-] CORE : Fix bug #PSCFI-7072 redundant configuration get
+	[-] CORE : Fix bug first part of #PSCFI-7165 max size before insertion
+	[-] CORE : Fix bug #PSCFI-7051 reporting commit for fixing warning in #PSCFV-7805
+	[-] CORE : Fix bug #PSCFI-6731 do not remove 10 years in dateYears
+	[-] CORE : Fix bug #PSCFI-6721 missing declarations in cookie class
+	[-] CORE : Fix bug #PSCFI-6319 inconsistent mail var #{id_order} should be {order_name} instead
+	[-] CORE : Fix bug #PSCFI-5918 oredering specifice prices correctly
+	[-] CORE : Fix bug #PSCFI-6661 special cars in alias for searching
+	[-] CORE : Fix bug #PSCFI-7157 bad addresses update
+	[-] CORE : Fix #PSCFI-7159 no line before <!DOCTYPE
+	[-] Core: don't compute again price_wt in Product::addCustomizationPrice if already computed
+	[-] CORE : Bad regex for creating $stream_context if null
+	[-] CORE : do not verify ssl certificate when using CURL
+	[-] CORE : Fix bug #PSCFI-6698 Undefined $_SERVER['SCRIPT_NAME'] or undefined $_SERVER['REQUEST_URI']
+
+	[-] MO : Merchantware : Bug fix ($id_cart)
+	[-] MO : Fia-Net Certissim : Fixed logo in BO
+	[-] MO : New version for autoupgrade
+	[-] MO : NetEven : Added country limitation
+	[-] MO : TNT Carrier : Fixed merge message
+	[-] MO : Bad syntax in config.xml
+	[-] MO : Autoupgrade new version
+	[-] MO : Mondial Relay : Fixed city regex validation
+	[-] MO : Mondial Relay : Fixed default value for deleted carrier
+	[-] MO : TNT Carrier : Bug fix PS 1.4 & context
+	[-] MO : PayPal : Bug fix cancel URL generation
+	[-] MO : PayPal : Current page URL fixed
+	[-] MO : ShoppingFlux : Module updated (v2.0.5)
+	[-] MO : PayPal : Selected language fixed
+	[-] MO : SoColissimo : Gender translation fixed
+	[-] MO : Max upload size error
+	[-] MO : Fix bug #PNM-1179 updating cart + zipcodes not required
+	[-] MO : fixed double creation of voucher in loyalty #PNM-1317
+	[-] MO : Fix bug #PNM-1120 display error message when not enough stock
+	[-] MO : Fix bug #PNM-1441 disable modules in 1.4 import
+	[-] MO : Fix bug #PNM-1413 when alert already set on default combination
+	[-] MO : Fix bug #PNM-1329 bad loyalty points calculation when cancelling or returning products
+	[-] MO : Fid'Bag : New module added
+	[-] MO : Paypal: Missing smarty PayPal_current_page keyword definition
+	[-] MO : Fia-Net Certissim : Fixed payment module list PS < 1.4.5.1
+	[-] MO : Fix bug #PSCFI-6777, bad canonical url for payment.php for modules
+	[-] MO : Fix bug #PSCFI-6508, Do not display inactive CMS categories
+	[-] MO : Stripe : hookOrderConfirmation check
+	[-] MO : Fix bug #PSCFI-7122 no charset for table creation
+	[-] MO : TNT Carrier : module updated (v1.9.1)
+	[-] MO : eBay : Fix old fr_FR with correct language in ErrorLanguage xml node
+	[-] MO : ebay : Module updated (v1.4.1)
+	[-] MO : TrustedShops : Improved jQuery compatibility
+	[-] MO : Fix bug #PSCFI-7071 statistics.php called without ssl when needed
+	[-] MO : Theme installator : variations fixed
+	[-] MO : #PNM-1308 : allow_url_fopen & safe_mode check fixed
+	[-] MO : PayPal : Cancel URL fixed & Logos updates without openssl
+	[-] MO : PayPal : Cancel & redirection, SSL links, etc.
+	[-] MO : Bug fix : SoColissimo, Form validation
+	[-] MO : Trustly, text changed
+	[-] MO : Jirafe, Check configuration
+	[-] MO : PayPal, Unused data removed
+	[-] MO : Bug fix #PNM-1204 : Jirafe, Tab name & languages
+	[-] MO : Bug fix #PNM-1116 : PayPal, refund fixed
+	[-] MO : PayPal, pending status verification
+	[-] MO : Bug fix : TNT Carrier, mutliple inclusion of Google Maps script
+	[-] MO : Bug fix : Fia-Net Certissim, product categories listing
+	[-] MO : Bug fix : PayPal, gift wrapping price fixed
+	[-] MO : Bug fix : Jirafe, undefined variable (warnings)
+	[-] MO : Bug fix : Jirafe, file inclusion fixed
+	[-] MO : Modules updated for russian translations compatibility
+	[-] MO : Bug fix : Fia-Net Certissim, autoload & includes
+	[-] MO : Fix bug #PSCFV-8160 iframe in editor
+	[-] MO : TNT carrier, many fixes (v1.8.3)
+	[-] MO : Bug fix : AvalaraTax, 1.4/1.5 compatibility
+	[-] MO : New autoupgrade version 1.0.9
+
+	[-] WS : fixed performance issue with ?schema=blank
+	[-] WS: Fix #PSCFI-7009 product prices on orders with specific prices
+	[-] WS: Fix deletion of product_features on product update #PSCFI-6740
+	[-] WS: Fix PHP notice #PSCFI-6597
+
+	[-] PDF : Refactoring customization detail in Pdf
+	[-] PDF : #PSCFI-5741 Customization amounts dont show in pdf invoice
+	[-] PDF : Credit Note taxes on shipping cost fixed for Canada #PSCFI-5620
+	[-] PDF : fixed rounding in price breakdown (display only)
+	[-] PDF : Fix bug #PSCFI-6734 again (refacto) currency symbols in product name
+	[-] PDF : Fix bug #PSCFI-6734 currency symbols in product name
+
+	[-] TR: Missing translations for FR
+
+	Improved/changed features:
+
+	[*] Fo : Fix bug #PSCFI-5791, fix breadcrumbs for address, authentication and password
+
+	[*] BO : Double Image upload limit value
+	[*] BO : Enabling CURL for image download during import
+	[*] BO : Follow up #PSCFI-6670
+	[*] BO : #PSCFI-7087 less results from ajax_products_list.php
+	[*] BO : #PSCFI-7102 order by sign in adminMvt reasons
+	[*] BO : Fix Improvement #PSCFI-7111 AdminTags products count column
+	[*] BO : Fix Improvements #PSCFI-7132 && #PSCFI-7120
+	[*] BO : Uploaded module to chmod -R 775
+	[*] BO : Unable cacheFS deletes cache directory content
+	[*] BO : added the possibility to edit the meta data of the main CMS category #PSCFI-5718
+	[*] BO : Fix bug #PSCFI-6497 Disabling US address normalisation in US country config
+	[*] BO : Do not display themes select for one theme
+
+	[*] CORE : FPDF new version
+	[*] CORE: Follow up #PSCFI-5402 reworked cacheFS, [-] : do not match 'deleted' field in checkQuery
+	[*] CORE : Fix bug #PSCFI-5820 update browsers and operating systems for stats
+	[*] CORE: Dissasemble CURLOPT_CONNECTTIMEOUT and CURLOPT_TIMEOUT in Tools::file_get_contents
+
+	[*] MO : Kwixo : New module added
+	[*] MO : TNT Carrier : Fixed account number & spaces
+	[*] MO : FidBag : Module updated (v1.2)
+	[*] MO : Remove "process" button (still in default template though)
+	[*] MO : Trustly : Version updated
+	[*] MO : Trustly : ES translations fixed
+	[*] MO : New autoupgrade module version 1.0.20
+	[*] MO : Google Sitemap Url rewriting + meta_lang, license headers updated
+	[*] MO : Yotpo module updated (v1.2.5)
+	[*] MO : Autoupgrade moduel version 1.0.17
+	[*] MO : Bug fix : Twenga, Empty feeds
+	[*] MO : PayPal, Order confirmation page added for mobile template
+	[*] MO : New version 1.0.7 for autoupgrade, use CURL if allow_url_fopen disabled
+
+	[*] TR: New lang packs
+	[*] TR : New Spanish lang pack
+	[*] TR: Tradz for adminSelfTab of autoupgrade
+	[*] TR : Add Bo string
+	[*] TR: Missing trans in BO
+	[*] TR : Updated localization packs (from v1.5.4.1)    [-] TR : Fix bug #PSCFI-6729, Missing a state of China
+	[*] TR : Trustly module updated
+
+	Added Features:
+
+	[+] MO : Google Adwords : New module added
+	[+] MO : NetEven module added
+	[+] MO : Yotpo module added
+
+
+####################################
 #     v1.4.10.0 - (2013-02-19)     #
 ####################################
 
