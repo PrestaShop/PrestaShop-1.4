@@ -2,8 +2,9 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{statsforecast}prestashop>statsforecast_240c994d8b61c7bd68ac1c5182bbdb2e'] = 'Statistik Startseite';
-$_MODULE['<{statsforecast}prestashop>statsforecast_1ee1c44c2dc81681f961235604247b81'] = 'Modus:';
+$_MODULE['<{statsforecast}prestashop>statsforecast_1ee1c44c2dc81681f961235604247b81'] = 'Modus';
 $_MODULE['<{statsforecast}prestashop>statsforecast_03727ac48595a24daed975559c944a44'] = 'Tag';
 $_MODULE['<{statsforecast}prestashop>statsforecast_d2ce009594dcc60befa6a4e6cbeb71fc'] = 'Woche';
 $_MODULE['<{statsforecast}prestashop>statsforecast_7cbb885aa1164b390a0bc050a64e1812'] = 'Monat';
@@ -28,9 +29,9 @@ $_MODULE['<{statsforecast}prestashop>statsforecast_87cac5a0b60008003ccf46dc1d49e
 $_MODULE['<{statsforecast}prestashop>statsforecast_5a9e532b24379dca2ab0e973172a78e1'] = 'Registrierte Besucher';
 $_MODULE['<{statsforecast}prestashop>statsforecast_b4aec469184819e8369588e5d84b38fb'] = 'Wandeln Sie Ihre Besucher in bares Geld um:';
 $_MODULE['<{statsforecast}prestashop>statsforecast_38f2d5f34a773b7c0668f03e6b8eb6dc'] = 'Ertrag aus jedem Besucher';
-$_MODULE['<{statsforecast}prestashop>statsforecast_8ca76c564cccfd5a2ff4d2e08f46db5a'] = 'Ertrag aus jedem registrierten Besucher';
+$_MODULE['<{statsforecast}prestashop>statsforecast_8ca76c564cccfd5a2ff4d2e08f46db5a'] = 'Gewinn pro registriertem Besucher';
 $_MODULE['<{statsforecast}prestashop>statsforecast_0faa470ff0741ece6c8346b66e0e459c'] = 'Zahlungsverteilung';
-$_MODULE['<{statsforecast}prestashop>statsforecast_e6e42855066e7a3ae050b2c698021b14'] = 'Zone:';
+$_MODULE['<{statsforecast}prestashop>statsforecast_e6e42855066e7a3ae050b2c698021b14'] = 'Zone';
 $_MODULE['<{statsforecast}prestashop>statsforecast_5ed26836c96d7dcae8a40307e8e250c3'] = '- Kein Filter -';
 $_MODULE['<{statsforecast}prestashop>statsforecast_e55f75a29310d7b60f7ac1d390c8ae42'] = 'Modul';
 $_MODULE['<{statsforecast}prestashop>statsforecast_e93f994f01c537c4e2f7d8528c3eb5e9'] = 'Zählung';
@@ -48,10 +49,10 @@ $_MODULE['<{statsforecast}prestashop>statsforecast_0bcef9c45bd8a48eda1b26eb0c61c
 $_MODULE['<{statsforecast}prestashop>statsforecast_699aed86dada6ca01ef74013a4464066'] = 'Wachstum';
 $_MODULE['<{statsforecast}prestashop>statsforecast_07aa83862ec591697b4325b66d36a78b'] = 'Zonenverteilung';
 $_MODULE['<{statsforecast}prestashop>statsforecast_b3ff996fe5c77610359114835baf9b38'] = 'Zone';
-$_MODULE['<{statsforecast}prestashop>statsforecast_ec0fc0100c4fc1ce4eea230c3dc10360'] = 'Undefiniert';
+$_MODULE['<{statsforecast}prestashop>statsforecast_ec0fc0100c4fc1ce4eea230c3dc10360'] = 'Keine Angabe';
 $_MODULE['<{statsforecast}prestashop>statsforecast_28e81c8343702f6c813cc31a7f90616a'] = 'Währungsverteilung';
 $_MODULE['<{statsforecast}prestashop>statsforecast_386c339d37e737a436499d423a77df0c'] = 'Währung';
 $_MODULE['<{statsforecast}prestashop>statsforecast_61569923d8075889a162c4e603258e6e'] = 'Verkäufe (umgewandelt)';
 $_MODULE['<{statsforecast}prestashop>statsforecast_8471eed257db7258f935588a664ba4f3'] = 'Attributverteilung';
 $_MODULE['<{statsforecast}prestashop>statsforecast_03937134cedab9078be39a77ee3a48a0'] = 'Gruppe';
-$_MODULE['<{statsforecast}prestashop>statsforecast_f2bbdf9f72c085adc4d0404e370f0f4c'] = 'Attribute';
+$_MODULE['<{statsforecast}prestashop>statsforecast_f2bbdf9f72c085adc4d0404e370f0f4c'] = 'Attribut';

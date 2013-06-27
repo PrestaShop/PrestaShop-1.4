@@ -1129,12 +1129,18 @@ tr.cart_total_price { font-weight: bold }
 #order #order_carrier img { vertical-align: middle }
 #order #order_carrier span { margin: 0 0.2em }
 #order #gift_div { display: none }
-#order #gift_div label, #order #gift_div textarea {
+#order #gift_div label, #order-opc #gift_div label {
 	display: block;
 	width: 100%;
 	margin: 1em 0
 }
-
+#order #gift_message {
+	width: 539px;
+	margin: 1em 0;	
+}
+#order #ordermsg textarea {
+	width: 504px;
+}
 #order-opc tfoot p {
 	margin: 0;
 	float: left;
@@ -1179,12 +1185,11 @@ tr.cart_total_price { font-weight: bold }
 }
 #order-opc #order_carrier img { vertical-align: middle }
 #order-opc #order_carrier span { margin: 0 0.2em }
-#order-opc #gift_div label, #order #gift_div textarea {
+ {
 	display: block;
 	width: 100%;
-	margin: 1em 0
+	margin: 1em 0;
 }
-
 #guest-tracking p.center { width: 100%; text-align: center; }
 #guest-tracking p.center input.exclusive_large { display: inline; }
 
@@ -1343,7 +1348,10 @@ ul.shop_info li {
 #customizedDatas .button {
 	margin: 0px auto;
 }
-.customization_block_input { vertical-align: inherit }
+.customization_block_input {
+    vertical-align: inherit;
+    display: block;
+}
 img.customization_delete_icon { margin: 2px }
 li.customizationUploadLine {
 	text-align: right;

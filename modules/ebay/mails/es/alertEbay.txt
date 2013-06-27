@@ -1,0 +1,8 @@
+Hola 
+
+Has vendido {cart_qty} de {name_product} en la tienda de eBay.
+Pero tienes una mínima cantidad de {min_qty} de este producto.
+
+Puedes modificar esta cantidad en el formulario del producto para que puedas recuperar el pedido del stock de PrestaShop.
+
+{shop_name}

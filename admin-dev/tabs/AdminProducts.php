@@ -375,7 +375,7 @@ class AdminProducts extends AdminTab
 						}
 						elseif ($object->delete())
 							Tools::redirectAdmin($currentIndex.'&conf=1&token='.($token ? $token : $this->token).$category_url);
-						$this->_errors[] = Tools::displayError('An error occurred during deletion: this product is contained in an order.');
+						$this->_errors[] = Tools::displayError('An error occurred during deletion: this product may be contained in an order.');
 					}
 				}
 				else
@@ -420,7 +420,7 @@ class AdminProducts extends AdminTab
 
 							Tools::redirectAdmin($currentIndex.'&conf=2&token='.$token.$category_url);
 						}
-						$this->_errors[] = Tools::displayError('An error occurred while deleting selection.');
+						$this->_errors[] = Tools::displayError('An error occurred while deleting selection. A product may be contained in an order.');
 					}
 				}
 				else
@@ -707,7 +707,10 @@ class AdminProducts extends AdminTab
 				$tos = Tools::getValue('spm_to');
 
 				foreach ($id_specific_prices as $key => $id_specific_price)
-					if ($this->_validateSpecificPrice($id_shops[$key], $id_currencies[$key], $id_countries[$key], $id_groups[$key], $prices[$key], $from_quantities[$key], $reductions[$key], $reduction_types[$key], $froms[$key], $tos[$key]))
+					if ($reduction_types[$key] == 'percentage' && ((float)$reductions[$key] <= 0 || (float)$reductions[$key] > 100))
+						$this->_errors[] = Tools::displayError('Submitted reduction value (0-100) is out-of-range');
+
+					elseif ($this->_validateSpecificPrice($id_shops[$key], $id_currencies[$key], $id_countries[$key], $id_groups[$key], $prices[$key], $from_quantities[$key], $reductions[$key], $reduction_types[$key], $froms[$key], $tos[$key]))
 					{
 						$specificPrice = new SpecificPrice((int)($id_specific_price));
 						$specificPrice->id_shop = (int)($id_shops[$key]);
@@ -744,7 +747,10 @@ class AdminProducts extends AdminTab
 				$reduction_type = !$reduction ? 'amount' : Tools::getValue('sp_reduction_type');
 				$from = Tools::getValue('sp_from');
 				$to = Tools::getValue('sp_to');
-				if ($this->_validateSpecificPrice($id_shop, $id_currency, $id_country, $id_group, $price, $from_quantity, $reduction, $reduction_type, $from, $to))
+												
+				if ($reduction_type == 'percentage' && ((float)$reduction <= 0 || (float)$reduction > 100))
+					$this->_errors[] = Tools::displayError('Submitted reduction value (0-100) is out-of-range');
+				elseif ($this->_validateSpecificPrice($id_shop, $id_currency, $id_country, $id_group, $price, $from_quantity, $reduction, $reduction_type, $from, $to))
 				{
 					$specificPrice = new SpecificPrice();
 					$specificPrice->id_product = $id_product;
@@ -1600,11 +1606,11 @@ class AdminProducts extends AdminTab
 		$countAttachments = (int)Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'product_attachment WHERE id_product = '.(int)$obj->id);
 		if ($obj->id)
 			echo '
-			<div class="tab-page" id="step3"><h4 class="tab">3. '.$this->l('Prices').'</h4></div>
-			<div class="tab-page" id="step4"><h4 class="tab">4. '.$this->l('Combinations').' ('.$countAttributes.')</h4></div>
-			<div class="tab-page" id="step5"><h4 class="tab">5. '.$this->l('Features').'</h4></div>
-			<div class="tab-page" id="step6"><h4 class="tab">6. '.$this->l('Customization').'</h4></div>
-			<div class="tab-page" id="step7"><h4 class="tab">7. '.$this->l('Attachments').' ('.$countAttachments.')</h4></div>';
+			<div class="tab-page" id="step3"><h4 class="tab">'.$this->l('Prices').'</h4></div>
+			<div class="tab-page" id="step4"><h4 class="tab">'.$this->l('Combinations').' ('.$countAttributes.')</h4></div>
+			<div class="tab-page" id="step5"><h4 class="tab">'.$this->l('Features').'</h4></div>
+			<div class="tab-page" id="step6"><h4 class="tab">'.$this->l('Customization').'</h4></div>
+			<div class="tab-page" id="step7"><h4 class="tab">'.$this->l('Attachments').' ('.$countAttachments.')</h4></div>';
 		echo '<script type="text/javascript">
 					var toload = new Array();
 					toload[3] = true;
@@ -1666,7 +1672,7 @@ class AdminProducts extends AdminTab
 		}
 	}
 
-	function displayFormPrices($obj, $languages, $defaultLanguage)
+	public function displayFormPrices($obj, $languages, $defaultLanguage)
 	{
 		global $cookie, $currentIndex;
 
@@ -1971,7 +1977,7 @@ class AdminProducts extends AdminTab
 				$this->_displayLabelField($label, $languages, $defaultLanguage, $type, $fieldIds, (int)($id_customization_field));
 	}
 
-	function displayFormCustomization($obj, $languages, $defaultLanguage)
+	public function displayFormCustomization($obj, $languages, $defaultLanguage)
 	{
 		parent::displayForm();
 		$labels = $obj->getCustomizationFields();
@@ -2045,7 +2051,7 @@ class AdminProducts extends AdminTab
 			</table>';
 	}
 
-	function displayFormAttachments($obj, $languages, $defaultLanguage)
+	public function displayFormAttachments($obj, $languages, $defaultLanguage)
 	{
 		global $currentIndex, $cookie;
 		if (!($obj = $this->loadObject(true)))
@@ -2116,7 +2122,7 @@ class AdminProducts extends AdminTab
 		<input type="submit" name="submitAttachments" id="submitAttachments" value="'.$this->l('Update attachments').'" class="button" />';
 	}
 
-	function displayFormInformations($obj, $currency)
+	public function displayFormInformations($obj, $currency)
 	{
 		parent::displayForm(false);
 		global $currentIndex, $cookie, $link;
@@ -2126,7 +2132,7 @@ class AdminProducts extends AdminTab
 		$has_attribute = false;
 		$qty_state = 'readonly';
 		$qty = Attribute::getAttributeQty($this->getFieldValue($obj, 'id_product'));
-		if ((bool)$qty === false) {
+		if ($qty === false) {
 			if (Validate::isLoadedObject($obj))
 				$qty = $this->getFieldValue($obj, 'quantity');
 			else
@@ -2140,7 +2146,7 @@ class AdminProducts extends AdminTab
 
 		echo '
 		<div class="tab-page" id="step1">
-			<h4 class="tab">1. '.$this->l('Info.').'</h4>
+			<h4 class="tab">'.$this->l('Info.').'</h4>
 			<script type="text/javascript">
 				$(document).ready(function() {
 					updateCurrentText();
@@ -2182,11 +2188,11 @@ class AdminProducts extends AdminTab
 
 					});
 					if ($(\'#available_for_order\').is(\':checked\')){
-						$(\'#show_price\').attr(\'checked\', \'checked\');
-						$(\'#show_price\').attr(\'disabled\', \'disabled\');
+						$(\'#show_price\').prop(\'disabled\', \'disabled\');					
+						$(\'#show_price\').prop(\'checked\', \'checked\');
 					}
 					else {
-						$(\'#show_price\').attr(\'disabled\', \'\');
+						$(\'#show_price\').prop(\'disabled\', \'\');
 					}
 				});
 			</script>
@@ -2299,7 +2305,7 @@ class AdminProducts extends AdminTab
 					<tr id="product_options" '.(!$obj->active ? 'style="display:none"' : '').'>
 						<td style="vertical-align:top;text-align:right;padding-right:10px;font-weight:bold;">'.$this->l('Options:').'</td>
 						<td style="padding-bottom:5px;">
-							<input style="float: left;" type="checkbox" name="available_for_order" id="available_for_order" value="1" '.($this->getFieldValue($obj, 'available_for_order') ? 'checked="checked" ' : '').' onclick="if ($(this).is(\':checked\')){$(\'#show_price\').attr(\'checked\', \'checked\');$(\'#show_price\').attr(\'disabled\', \'disabled\');}else{$(\'#show_price\').attr(\'disabled\', \'\');}"/>
+							<input style="float: left;" type="checkbox" name="available_for_order" id="available_for_order" value="1" '.($this->getFieldValue($obj, 'available_for_order') ? 'checked="checked" ' : '').' onclick="if ($(this).is(\':checked\')){$(\'#show_price\').prop(\'checked\', \'checked\');$(\'#show_price\').prop(\'disabled\', \'disabled\');}else{$(\'#show_price\').prop(\'disabled\', \'\');}"/>
 							<label for="available_for_order" class="t"><img src="../img/admin/products.gif" alt="'.$this->l('available for order').'" title="'.$this->l('available for order').'" style="float:left; padding:0px 5px 0px 5px" />'.$this->l('available for order').'</label>
 							<br class="clear" />
 							<input style="float: left;" type="checkbox" name="show_price" id="show_price" value="1" '.($this->getFieldValue($obj, 'show_price') ? 'checked="checked" ' : '').' />
@@ -2957,7 +2963,7 @@ class AdminProducts extends AdminTab
 							<script type="text/javascript" src="'.__PS_BASE_URI__.'js/jquery/jquery.autocomplete.js"></script>
 							<div id="ajax_choose_product" style="padding:6px; padding-top:2px; width:600px;">
 								<p class="clear">'.$this->l('Begin typing the first letters of the product name, then select the product from the drop-down list:').'</p>
-								<input type="text" value="" id="product_autocomplete_input" />
+								<input type="text" value="" size="80" id="product_autocomplete_input" />
 								<img onclick="$(this).prev().search();" style="cursor: pointer;" src="../img/admin/add.gif" alt="'.$this->l('Add an accessory').'" title="'.$this->l('Add an accessory').'" />
 							</div>
 							<script type="text/javascript">
@@ -3014,14 +3020,14 @@ class AdminProducts extends AdminTab
 
 	}
 
-	function displayFormImages($obj, $token = NULL)
+	public function displayFormImages($obj, $token = NULL)
 	{
 		global $cookie, $currentIndex, $attributeJs, $images;
 
 		$countImages = (int)Db::getInstance()->getValue('SELECT COUNT(*) FROM '._DB_PREFIX_.'image WHERE id_product = '.(int)$obj->id);
 		echo '
 		<div class="tab-page" id="step2">
-				<h4 class="tab">2. '.$this->l('Images').' ('.$countImages.')</h4>
+				<h4 class="tab">'.$this->l('Images').' ('.$countImages.')</h4>
 				<table cellpadding="5">
 				<tr>
 					<td><b>'.((int)Tools::getValue('id_image') ? $this->l('Edit this product image'):$this->l('Add a new image to this product')).'</b></td>
@@ -3160,6 +3166,11 @@ class AdminProducts extends AdminTab
 				</table>
 			</div>';
 			echo '
+			<script type="text/javascript">
+			var noGroup = "'.$this->l('Please choose a group', 'AdminProducts', true, false).'";
+			var noAttribute = "'.$this->l('Please choose an attribute', 'AdminProducts', true, false).'";
+			var oneAttribute = "'.$this->l('You can select only one attribute from each group, per combination', 'AdminProducts', true, false).'";
+			</script>			
 			<script type="text/javascript" src="../js/attributesBack.js"></script>
 			<script type="text/javascript">
 				var attrs = new Array();
@@ -3204,7 +3215,7 @@ class AdminProducts extends AdminTab
 		return $content;
 	}
 
-	function displayFormAttributes($obj, $languages, $defaultLanguage)
+	public function displayFormAttributes($obj, $languages, $defaultLanguage)
 	{
 		global $currentIndex, $cookie;
 
@@ -3483,7 +3494,7 @@ class AdminProducts extends AdminTab
 							<img src="../img/admin/delete.gif" alt="'.$this->l('Delete this combination').'" /></a></td>
 						</tr>';
 					}
-					echo '<tr><td colspan="7" align="center"><a href="'.$currentIndex.'&deleteAllProductAttributes&id_product='.$obj->id.'&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');"><img src="../img/admin/delete.gif" alt="'.$this->l('Delete this combination').'" /> '.$this->l('Delete all combinations').'</a></td></tr>';
+					echo '<tr><td colspan="7" align="center"><a href="'.$currentIndex.'&deleteAllProductAttributes&id_product='.$obj->id.'&token='.Tools::getAdminToken('AdminCatalog'.(int)(Tab::getIdFromClassName('AdminCatalog')).(int)($cookie->id_employee)).'" onclick="return confirm(\''.$this->l('Are you sure?', __CLASS__, true, false).'\');"><img src="../img/admin/delete.gif" alt="'.$this->l('Delete all combination').'" /> '.$this->l('Delete all combinations').'</a></td></tr>';
 				}
 				else
 					echo '<tr><td colspan="7" align="center"><i>'.$this->l('No combination yet').'.</i></td></tr>';
@@ -3533,7 +3544,7 @@ class AdminProducts extends AdminTab
 					echo '<b>'.$this->l('You must save this product before adding combinations').'.</b>';
 	}
 
-	function displayFormFeatures($obj)
+	public function displayFormFeatures($obj)
 	{
 		global $cookie, $currentIndex;
 		parent::displayForm();
@@ -3682,11 +3693,11 @@ class AdminProducts extends AdminTab
 					foreach ($packItems as $packItem)
 						echo $packItem->pack_quantity.' x '.$packItem->name.'¤';
 					echo '" />
-					<input type="hidden" size="2" id="curPackItemId" />
+					<input type="hidden" id="curPackItemId" />
 
 					<p class="clear">'.$this->l('Begin typing the first letters of the product name, then select the product from the drop-down list:').'
 					<br />'.$this->l('You cannot add downloadable products to a pack.').'</p>
-					<input type="text" size="25" id="curPackItemName" />
+					<input type="text" size="80" id="curPackItemName" />
 					<input type="text" name="curPackItemQty" id="curPackItemQty" value="1" size="1" />
 					<script language="javascript">
 					'.$this->addPackItem().'

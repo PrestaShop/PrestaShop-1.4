@@ -72,7 +72,7 @@ class ProductComments extends Module
 		return true;
 	}
 
-	function uninstall()
+	public function uninstall()
 	{
 		if (!parent::uninstall() OR !Configuration::deleteByName('PRODUCT_COMMENTS_MODERATE') OR !Configuration::deleteByName('PRODUCT_COMMENTS_ALLOW_GUESTS') OR !Configuration::deleteByName('PRODUCT_COMMENTS_MINIMAL_TIME'))
 			return false;

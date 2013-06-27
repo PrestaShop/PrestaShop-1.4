@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{cashondelivery}prestashop>cashondelivery_1f9497d3e8bac9b50151416f04119cec'] = 'Comptant à la livraison';
 $_MODULE['<{cashondelivery}prestashop>cashondelivery_7a3ef27eb0b1895ebf263ad7dd949fb6'] = 'Accepte le paiement lors de la livraison';
 $_MODULE['<{cashondelivery}prestashop>confirmation_2e2117b7c81aa9ea6931641ea2c6499f'] = 'Votre commande sur';

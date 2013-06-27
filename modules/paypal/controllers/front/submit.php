@@ -69,7 +69,7 @@ class PayPalSubmitModuleFrontController extends ModuleFrontController
 		
 		$this->context->smarty->assign(
 			array(
-				'is_guest' => $this->context->customer->is_guest,
+				'is_guest' => (($this->context->customer->is_guest) || $this->context->customer->id == false),
 				'order' => $paypal_order,
 				'price' => Tools::displayPrice($price, $this->context->currency->id),
 				'HOOK_ORDER_CONFIRMATION' => $this->displayOrderConfirmation(),
@@ -77,19 +77,23 @@ class PayPalSubmitModuleFrontController extends ModuleFrontController
 			)
 		);
 
-		if ($this->context->customer->is_guest)
+		if (($this->context->customer->is_guest) || $this->context->customer->id == false)
 		{
 			$this->context->smarty->assign(
 				array(
 					'id_order' => (int)$this->id_order,
-					'id_order_formatted' => sprintf('#%06d', (int)$this->id_order)
+					'id_order_formatted' => sprintf('#%06d', (int)$this->id_order),
+					'order_reference' => $order->reference,
 				)
 			);
 
 			/* If guest we clear the cookie for security reason */
 			$this->context->customer->mylogout();
 		}
-		$this->setTemplate('order-confirmation.tpl');
+		if ($this->context->getMobileDevice() == true)
+			$this->setTemplate('order-confirmation-mobile.tpl');
+		else
+			$this->setTemplate('order-confirmation.tpl');
 	}
 
 	private function displayHook()

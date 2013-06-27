@@ -29,7 +29,7 @@ if (!defined('_PS_VERSION_'))
 
 class GAnalytics extends Module
 {
-	function __construct()
+	public function __construct()
 	{
 	 	$this->name = 'ganalytics';
 	 	$this->tab = 'analytics_stats';
@@ -49,7 +49,7 @@ class GAnalytics extends Module
 		require(_PS_MODULE_DIR_.$this->name.'/backward_compatibility/backward.php');
 	}
 
-	function install()
+	public function install()
 	{
 		if (!parent::install() ||
 				!$this->registerHook('header') ||
@@ -58,7 +58,7 @@ class GAnalytics extends Module
 		return true;
 	}
 
-	function uninstall()
+	public function uninstall()
 	{
 		if (!Configuration::deleteByName('GANALYTICS_ID') || !parent::uninstall())
 			return false;
@@ -154,7 +154,7 @@ class GAnalytics extends Module
 		return $output;
 	}
 
-	function hookHeader($params)
+	public function hookHeader($params)
 	{
 		// Better way to check which file / controller name is loaded
 		if (!($file = basename(Tools::getValue('controller'))))
@@ -175,7 +175,7 @@ class GAnalytics extends Module
 		return $this->display(__FILE__, 'header.tpl');
 	}
 
-	function hookFooter($params)
+	public function hookFooter($params)
 	{
 		// for retrocompatibility
 		if (!$this->isRegisteredInHook('header'))
@@ -183,7 +183,7 @@ class GAnalytics extends Module
 		return ;
 	}
 
-	function hookOrderConfirmation($params)
+	public function hookOrderConfirmation($params)
 	{
 		// Setting parameters
 		$parameters = Configuration::getMultiple(array('PS_LANG_DEFAULT'));

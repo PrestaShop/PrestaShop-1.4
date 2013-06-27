@@ -95,7 +95,7 @@ class AdminImport extends AdminTab
 					'weight' => array('label' => $this->l('Weight')),
 					'default_on' => array('label' => $this->l('Default')),
 					'image_position' => array('label' => $this->l('Image position'),
-						'help' => $this->l('Position of the product image to use for this combination. If you use this field, leave image URL empty.')),
+					'help' => $this->l('Position of the product image to use for this combination. If you use this field, leave image URL empty.')),
 					'image_url' => array('label' => $this->l('Image URL')),
 				);
 
@@ -441,7 +441,9 @@ class AdminImport extends AdminTab
 			break;
 		}
 		$url_source_file = str_replace(' ', '%20', trim($url));
-		if (@copy($url_source_file, $tmpfile))
+		$url_source_file = Tools::file_get_contents($url_source_file);
+				
+		if (@file_put_contents($tmpfile, $url_source_file) && file_exists($tmpfile))
 		{
 			imageResize($tmpfile, $path.'.jpg');
 			$imagesTypes = ImageType::getImagesTypes($entity);
@@ -452,10 +454,10 @@ class AdminImport extends AdminTab
 		}
 		else
 		{
-			unlink($tmpfile);
+			@unlink($tmpfile);
 			return false;
 		}
-		unlink($tmpfile);
+		@unlink($tmpfile);
 		return true;
 	}
 
@@ -657,6 +659,9 @@ class AdminImport extends AdminTab
 					}
 				}
 			}
+			
+			$product->ecotax = (float)str_replace(',', '.', $product->ecotax);
+			$product->weight = (float)str_replace(',', '.', $product->weight);									
 
 			if (isset($product->supplier) && is_numeric($product->supplier) && Supplier::supplierExists((int)$product->supplier))
 				$product->id_supplier = (int)($product->supplier);
@@ -892,12 +897,35 @@ class AdminImport extends AdminTab
 
 				$features = get_object_vars($product);
 				foreach ($features as $feature => $value)
-					if (!strncmp($feature, '#F_', 3) AND Tools::strlen($product->{$feature}))
+					if (Tools::strlen($product->{$feature}) && strncmp($feature, '#F_', 3) === 0)
 					{
 						$feature_name = str_replace('#F_', '', $feature);
 						$id_feature = Feature::addFeatureImport($feature_name);
-						$id_feature_value = FeatureValue::addFeatureValueImport($id_feature, $product->{$feature});
-						Product::addFeatureProductImport($product->id, $id_feature, $id_feature_value);
+						$feature_tmp = new Feature($id_feature);
+						$flag = true;												
+						if (Validate::isLoadedObject($feature_tmp))
+						{
+							$id_lang = (int)Language::getIdByIso(trim(Tools::getValue('iso_lang')));
+							$ProductFeatures = $product->getFeatures();
+							foreach($ProductFeatures as $ProductFeature)
+							{
+								if (is_array($ProductFeature) && isset($ProductFeature['id_feature']) && $ProductFeature['id_feature'] == $id_feature)
+								{
+									$featureValue = new FeatureValue((int)$ProductFeature['id_feature_value']);
+									if(Validate::isLoadedObject($featureValue))
+									{
+										$featureValue->value[$id_lang] = $value;
+										$featureValue->update();
+										$flag = false;
+									}
+								}
+							}
+						}
+						if ($flag)
+						{
+							$id_feature_value = FeatureValue::addFeatureValueImport($id_feature, $product->{$feature});	
+							Product::addFeatureProductImport($product->id, $id_feature, $id_feature_value);
+						}
 					}
 			}
 		}
@@ -970,9 +998,16 @@ class AdminImport extends AdminTab
 				if (!$id_image)
 					$this->_warnings[] = sprintf(Tools::displayError('No image found for combination with id_product = %s and image position = %s.'), $product->id, (int)$info['image_position']);
 			}
+			
+			$info['ecotax'] = str_replace(',', '.', $info['ecotax']);
+			$info['weight'] = str_replace(',', '.', $info['weight']);
+			
+			$id_product_attribute = Combination::getCombinationbyRef($info['reference']);
+			if (Validate::isUnsignedId($id_product_attribute) && ((int)$id_product_attribute > 0))
+				$product->updateCombinationEntity($id_product_attribute, (float)$info['wholesale_price'], (float)$info['price'], (float)$info['weight'], 0, (float)$info['ecotax'], (int)$info['quantity'], $id_image, $info['reference'], 0, $info['ean13'], (int)$info['default_on'], 0, $info['upc'], (int)$info['minimal_quantity']);
+			else
+				$id_product_attribute = $product->addCombinationEntity((float)$info['wholesale_price'], (float)$info['price'], (float)$info['weight'], 0, (float)$info['ecotax'], (int)$info['quantity'], $id_image, $info['reference'], 0, $info['ean13'], (int)$info['default_on'], 0, $info['upc'], (int)$info['minimal_quantity']);
 
-			$id_product_attribute = $product->addCombinationEntity((float)$info['wholesale_price'], (float)$info['price'], (float)$info['weight'], 0, (float)$info['ecotax'], (int)$info['quantity'],
-			$id_image, strval($info['reference']), 0, strval($info['ean13']), (int)$info['default_on'], 0, strval($info['upc']), (int)$info['minimal_quantity']);
 			if ($id_product_attribute)
 				$lines_ok++;
 
@@ -988,8 +1023,7 @@ class AdminImport extends AdminTab
 					if (($fieldError = $obj->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $obj->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true)
 					{
 						$obj->add();
-
-				$groups[$group] = $obj->id;
+						$groups[$group] = $obj->id;
 					}
 					else
 						$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '');
@@ -998,7 +1032,7 @@ class AdminImport extends AdminTab
 				{
 					$obj = new Attribute();
 					$obj->id_attribute_group = $groups[$group];
-					$obj->name[$defaultLanguage] = str_replace('\n', '', str_replace('\r', '', $attribute));
+					$obj->name[$defaultLanguage] = str_replace(array('\n','\r') , '', $attribute);
 					if (($fieldError = $obj->validateFields(UNFRIENDLY_ERROR, true)) === true AND ($langFieldError = $obj->validateFieldsLang(UNFRIENDLY_ERROR, true)) === true)
 					{
 						$obj->add();
@@ -1008,7 +1042,8 @@ class AdminImport extends AdminTab
 						$this->_errors[] = ($fieldError !== true ? $fieldError : '').($langFieldError !== true ? $langFieldError : '');
 				}
 				Db::getInstance()->Execute('INSERT INTO '._DB_PREFIX_.'product_attribute_combination (id_attribute, id_product_attribute) VALUES ('.(int)$attributes[$group.'_'.$attribute].','.(int)$id_product_attribute.')');
-			}
+
+			}				
 		}
 		$this->closeCsvFile($handle);
 
@@ -1416,7 +1451,8 @@ class AdminImport extends AdminTab
 					echo '
 					<div class="warn">
 						'.$this->l('No CSV file is available, please upload one above.').'<br /><br />
-						'.$this->l('You can get a great deal of information about CSV import at:').' <a href="http://www.prestashop.com/wiki/Troubleshooting_6/" target="_blank">http://www.prestashop.com/wiki/Troubleshooting_6/</a><br /><br />
+						'.$this->l('You can get a great deal of information about CSV import at:').' <a href="http://doc.prestashop.com/display/PS15/Understanding+The+Advanced+Parameters#UnderstandingTheAdvancedParameters-CSVImport
+" target="_blank">http://www.prestashop.com/wiki/Troubleshooting_6/</a><br /><br />
 						'.$this->l('For more information about the CSV format please go to: ').' <a href="http://en.wikipedia.org/wiki/Comma-separated_values" target="_blank">http://en.wikipedia.org/wiki/Comma-separated_values</a>
 					</div>';
 					echo '
@@ -1494,8 +1530,7 @@ class AdminImport extends AdminTab
 
 	private function openCsvFile()
 	{
-		$handle = fopen(dirname(__FILE__).'/../import/'.strval(preg_replace('/\.{2,}/', '.',Tools::getValue('csv'))), 'r');
-
+		$handle = fopen(dirname(__FILE__).'/../import/'.preg_replace('/\.{2,}/', '.',Tools::getValue('csv')), 'r');
 
 		if (!$handle)
 			die(Tools::displayError('Cannot read the CSV file'));
@@ -1602,8 +1637,8 @@ class AdminImport extends AdminTab
 		if (Tools::getValue('match_ref'))
 			echo '<input type="hidden" name="match_ref" value="1" />';
 		echo '
-			<input type="hidden" name="separator" value="'.strval(trim(Tools::getValue('separator'))).'">
-			<input type="hidden" name="multiple_value_separator" value="'.strval(trim(Tools::getValue('multiple_value_separator'))).'">
+			<input type="hidden" name="separator" value="'.trim(Tools::getValue('separator')).'">
+			<input type="hidden" name="multiple_value_separator" value="'.trim(Tools::getValue('multiple_value_separator')).'">
 			<script type="text/javascript">
 				var current = 0;
 				function showTable(nb)
@@ -1688,7 +1723,6 @@ class AdminImport extends AdminTab
 				foreach ($products as $product)
 				{
 					$p = new Product((int)$product['id_product']);
-					$p->deleteAttributesImpacts();
 					$p->deleteProductAttributes();
 				}
 				break;

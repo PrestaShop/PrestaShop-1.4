@@ -2,8 +2,9 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_cb313e911b15b21b57f4fc7b53058e4f'] = 'Recibir pagos con Authorize.net';
-$_MODULE['<{authorizeaim}prestashop>authorizeaim_9d5b40ff49295ac0b4a5a13a88ccd285'] = 'La extención cURL debe estar habilitada en su servidor para habilitar este modulo. ';
+$_MODULE['<{authorizeaim}prestashop>authorizeaim_9d5b40ff49295ac0b4a5a13a88ccd285'] = 'La extensión cURL debe estar habilitada en tu servidor para habilitar este modulo.';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Configuración actualizada';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_6a26f548831e6a8c26bfbbd9f6ec61e0'] = 'Ayuda';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_11a4b229c0e206b831f729572618553f'] = 'En su panel de PrestaShop admin';
@@ -17,14 +18,15 @@ $_MODULE['<{authorizeaim}prestashop>authorizeaim_1ee1c44c2dc81681f961235604247b8
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_756d97bb256b8580d4d71ee0c547804e'] = 'Producción';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_0cbc6611f5540bd0809a388dc95a615b'] = 'Prueba';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_291cdb0a8abb42484f5d44dc20540ce6'] = 'Tarjetas:';
-$_MODULE['<{authorizeaim}prestashop>authorizeaim_bd80f7c7727e488952c160cf6b3ca59a'] = 'Mantener para la revisión \"estado de orden\"';
-$_MODULE['<{authorizeaim}prestashop>authorizeaim_b17f3f4dcf653a5776792498a9b44d6a'] = 'Actualizar la configuración';
-$_MODULE['<{authorizeaim}prestashop>authorizeaim_f745351b1387473d3d2de5bfe18d3562'] = 'Error, por favor compruebe sus datos bancarios';
-$_MODULE['<{authorizeaim}prestashop>authorizeaim_f4ddb8bc0f6457fe6cbe0a7255e7b542'] = 'Pagar con authorizeaim';
+$_MODULE['<{authorizeaim}prestashop>authorizeaim_bd80f7c7727e488952c160cf6b3ca59a'] = 'Estado de la orden: \"Esperando revisión\"';
+$_MODULE['<{authorizeaim}prestashop>authorizeaim_b17f3f4dcf653a5776792498a9b44d6a'] = 'Actualizar configuración';
+$_MODULE['<{authorizeaim}prestashop>authorizeaim_a78492add38b055001c29c9b085c3a38'] = 'Detalle del error de AuthorizeAIM :';
+$_MODULE['<{authorizeaim}prestashop>authorizeaim_f745351b1387473d3d2de5bfe18d3562'] = 'Error, por favor comprueba tus datos bancarios';
+$_MODULE['<{authorizeaim}prestashop>authorizeaim_f4ddb8bc0f6457fe6cbe0a7255e7b542'] = 'Pagar con AuthorizeAIM';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_5e9cf585e909dce58db79b2db422c4c8'] = 'visa logo';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_c067faec4ede09735d5a28db24dc4a1d'] = 'logotipo de MasterCard';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_5e7002c4aa4512cd912b5a96c94fe6c7'] = 'descubrir logotipo';
-$_MODULE['<{authorizeaim}prestashop>authorizeaim_bb6a57b575e061e397b2d86ccc261f47'] = 'Logo American Express ';
+$_MODULE['<{authorizeaim}prestashop>authorizeaim_bb6a57b575e061e397b2d86ccc261f47'] = 'Logo American Express';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_1edaf23879c3b52a8df80069d2af3cef'] = 'Pago seguro con Authorize.net';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_f11b368cddfe37c47af9b9d91c6ba4f0'] = 'Nombre y apellidos';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_379c80c789f0f3e0165b5e6d5df839ca'] = 'Tipo de tarjeta';

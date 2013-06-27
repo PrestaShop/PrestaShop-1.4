@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{blockcustomerprivacy}prestashop>blockcustomerprivacy_0cec62d1bea02fbb1484d55d14f493dd'] = 'Blocco dei dati dei clienti della privacy';
 $_MODULE['<{blockcustomerprivacy}prestashop>blockcustomerprivacy_3a32ec2dbd8d955f6240d95d6004557c'] = 'Aggiunge un blocco per visualizzare un messaggio circa la privacy dei dati dei clienti.';
 $_MODULE['<{blockcustomerprivacy}prestashop>blockcustomerprivacy_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Configurazione aggiornata';

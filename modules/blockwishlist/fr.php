@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{blockwishlist}prestashop>blockwishlist-ajax_4a84e5921e203aede886d04fc41a414b'] = 'Supprimer ce produit de ma liste';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist-ajax_f2a6c498fb90ee345d997f888fce3b18'] = 'Supprimer';
 $_MODULE['<{blockwishlist}prestashop>blockwishlist-ajax_4b7d496eedb665d0b5f589f2f874e7cb'] = 'Détail du produit';
@@ -70,7 +71,7 @@ $_MODULE['<{blockwishlist}prestashop>mywishlist_0b3db27bc15f682e92ff250ebb167d4b
 $_MODULE['<{blockwishlist}prestashop>mywishlist_8cf04a9734132302f96da8e113e80ce5'] = 'Accueil';
 $_MODULE['<{blockwishlist}prestashop>view_641254d77e7a473aa5910574f3f9453c'] = 'Liste de cadeaux';
 $_MODULE['<{blockwishlist}prestashop>view_9862d189193590487b2686b1c9043714'] = 'Autres listes de';
-$_MODULE['<{blockwishlist}prestashop>view_3d01e7d8174b6a9b088b44870714cf07'] = 'Bienvenue sur la liste de ';
+$_MODULE['<{blockwishlist}prestashop>view_3d01e7d8174b6a9b088b44870714cf07'] = 'Bienvenue sur la liste de';
 $_MODULE['<{blockwishlist}prestashop>view_4351cfebe4b61d8aa5efa1d020710005'] = 'Voir';
 $_MODULE['<{blockwishlist}prestashop>view_4b7d496eedb665d0b5f589f2f874e7cb'] = 'Détail produit';
 $_MODULE['<{blockwishlist}prestashop>view_3d0d1f906e27800531e054a3b6787b7c'] = 'Quantité :';

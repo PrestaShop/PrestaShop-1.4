@@ -101,7 +101,7 @@ class AdminFeatures extends AdminTab
 						<a href="'.$currentIndex.'&id_feature_value='.$feature['id_feature_value'].'&updatefeature_value&token='.$this->token.'">
 						<img src="../img/admin/edit.gif" border="0" alt="'.$this->l('Edit').'" title="'.$this->l('Edit').'" /></a>&nbsp;
 						<a href="'.$currentIndex.'&id_feature_value='.$feature['id_feature_value'].'&deletefeature_value&token='.$this->token.'"
-						onclick="return confirm(\''.$this->l('Delete value', __CLASS__, true, false).' #'.$feature['id_feature_value'].'?\');">
+						onclick="return confirm(\''.$this->l('Delete feature value : ', __CLASS__, true, false).htmlentities($feature['value']).' ?\');">
 						<img src="../img/admin/delete.gif" border="0" alt="'.$this->l('Delete').'" title="'.$this->l('Delete').'" /></a>
 					</td>
 				</tr>';
@@ -120,7 +120,7 @@ class AdminFeatures extends AdminTab
 				<td style="vertical-align: top; padding: 4px 0 4px 0" class="center">
 					<a href="'.$currentIndex.'&id_'.$this->table.'='.$id.'&update'.$this->table.'&token='.$this->token.'">
 					<img src="../img/admin/edit.gif" border="0" alt="'.$this->l('Edit').'" title="'.$this->l('Edit').'" /></a>&nbsp;
-					<a href="'.$currentIndex.'&id_'.$this->table.'='.$id.'&delete'.$this->table.'&token='.$this->token.'" onclick="return confirm(\''.$this->l('Delete item', __CLASS__, true, false).' #'.$id.'?\');">
+					<a href="'.$currentIndex.'&id_'.$this->table.'='.$id.'&delete'.$this->table.'&token='.$this->token.'" onclick="return confirm(\''.$this->l('Delete feature : ', __CLASS__, true, false).htmlentities($tr['name']).' ?\');">
 					<img src="../img/admin/delete.gif" border="0" alt="'.$this->l('Delete').'" title="'.$this->l('Delete').'" /></a>
 				</td>
 			</tr>';
@@ -140,7 +140,7 @@ class AdminFeatures extends AdminTab
 
 		echo '
 		<h2>'.$this->l('Add a new feature').'</h2>
-		<form action="'.$currentIndex.'&token='.$this->token.'"" method="post">
+		<form action="'.$currentIndex.'&token='.$this->token.'" method="post">
 		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
 			<fieldset class="width2">
 				<legend><img src="../img/t/AdminFeatures.gif" />'.$this->l('Add a new feature').'</legend>

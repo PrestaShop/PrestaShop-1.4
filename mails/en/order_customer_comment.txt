@@ -1,6 +1,6 @@
 Hi {firstname} {lastname},
 
-You have received a new message regarding order #{id_order}:
+You have received a new message regarding order {order_name}:
 
 {message}
 

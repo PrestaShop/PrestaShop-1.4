@@ -48,7 +48,7 @@ class AdminManufacturers extends AdminTab
 		
 		$this->fieldsDisplayAddresses = array(
 		'id_address' => array('title' => $this->l('ID'), 'align' => 'center', 'width' => 25),
-		'm!manufacturer_name' => array('title' => $this->l('Manufacturer'), 'width' => 100),
+		'manufacturer_name' => array('title' => $this->l('Manufacturer'), 'width' => 100),
 		'firstname' => array('title' => $this->l('First name'), 'width' => 80),
 		'lastname' => array('title' => $this->l('Last name'), 'width' => 100, 'filter_key' => 'a!lastname'),
 		'postcode' => array('title' => $this->l('Postcode/ Zip Code'), 'align' => 'right', 'width' => 50),

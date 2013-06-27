@@ -32,7 +32,7 @@ class HomeFeatured extends Module
 	private $_html = '';
 	private $_postErrors = array();
 
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'homefeatured';
 		$this->tab = 'front_office_features';
@@ -48,12 +48,12 @@ class HomeFeatured extends Module
 		$this->defaultNumberProducts = 8;
 	}
 
-	function install()
+	public function install()
 	{
 		return parent::install() && Configuration::updateValue('HOME_FEATURED_NBR', 8) && $this->registerHook('home');
 	}
 	
-	function uninstall()
+	public function uninstall()
 	{
 		return Configuration::deleteByName('HOME_FEATURED_NBR') && parent::uninstall();
 	}
@@ -93,7 +93,7 @@ class HomeFeatured extends Module
 		</form>';
 	}
 
-	function hookHome($params)
+	public function hookHome($params)
 	{
 		global $smarty;
 

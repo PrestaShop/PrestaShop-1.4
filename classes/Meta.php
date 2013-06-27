@@ -108,8 +108,8 @@ class MetaCore extends ObjectModel
 		return Db::getInstance(_PS_USE_SQL_SLAVE_)->getRow('
 		SELECT *
 		FROM '._DB_PREFIX_.'meta m
-		LEFT JOIN '._DB_PREFIX_.'meta_lang ml on (m.id_meta = ml.id_meta)
-		WHERE m.page = \''.pSQL($page).'\' AND ml.id_lang = '.(int)$id_lang);
+		LEFT JOIN '._DB_PREFIX_.'meta_lang ml on (m.id_meta = ml.id_meta AND ml.id_lang = '.(int)$id_lang.')
+		WHERE (m.page LIKE \''.pSQL($page).'\' OR m.page LIKE \''.pSQL(str_replace('-', '', strtolower($page))).'\')') ;
 	}
 
 	public function update($nullValues = false)
@@ -161,7 +161,7 @@ class MetaCore extends ObjectModel
 			$result &= $this->delete();
 		}
 		
-		return Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
+		return $result && Tools::generateHtaccess(dirname(__FILE__).'/../.htaccess',
 									(int)(Configuration::get('PS_REWRITING_SETTINGS')),		
 									(int)(Configuration::get('PS_HTACCESS_CACHE_CONTROL')), 
 									Configuration::get('PS_HTACCESS_SPECIFIC'),

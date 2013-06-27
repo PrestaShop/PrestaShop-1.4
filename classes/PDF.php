@@ -33,24 +33,24 @@ class PDF_PageGroupCore extends FPDF
 	var $CurrPageGroup;  // variable containing the alias of the current page group
 
 	// create a new page group; call this before calling AddPage()
-	function StartPageGroup()
+	public function StartPageGroup()
 	{
 		$this->NewPageGroup=true;
 	}
 
 	// current page in the group
-	function GroupPageNo()
+	public function GroupPageNo()
 	{
 		return $this->PageGroups[$this->CurrPageGroup];
 	}
 
 	// alias of the current page group -- will be replaced by the total number of pages in this group
-	function PageGroupAlias()
+	public function PageGroupAlias()
 	{
 		return $this->CurrPageGroup;
 	}
 
-	function _beginpage($orientation, $arg2)
+	public function _beginpage($orientation, $arg2)
 	{
 		parent::_beginpage($orientation, $arg2);
 		if ($this->NewPageGroup)
@@ -66,7 +66,7 @@ class PDF_PageGroupCore extends FPDF
 			$this->PageGroups[$this->CurrPageGroup]++;
 	}
 
-	function _putpages()
+	public function _putpages()
 	{
 		$nb = $this->page;
 		if (!empty($this->PageGroups))
@@ -469,7 +469,7 @@ class PDFCore extends PDF_PageGroupCore
 		foreach ($products as $product)
 		{
 			$before = $this->GetY();
-			$this->MultiCell($w[0], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']), 'B');
+			$this->MultiCell($w[0], 5, self::convertSign(Tools::iconv('utf-8', self::encoding(), $product['product_name']), 'B'));
 			$lineSize = $this->GetY() - $before;
 			$this->SetXY($this->GetX() + $w[0], $this->GetY() - $lineSize);
 			$this->Cell($w[1], $lineSize, ($product['product_reference'] != '' ? Tools::iconv('utf-8', self::encoding(), $product['product_reference']) : '---'), 'B');
@@ -663,61 +663,60 @@ class PDFCore extends PDF_PageGroupCore
 				$products = self::$orderSlip->getOrdersSlipProducts(self::$orderSlip->id, self::$order);
 				foreach ($products as $product)
 				{
-					$tmp_price = $product['product_price'];
-
 					$allTaxes = TaxRulesGroup::getTaxes((int)Product::getIdTaxRulesGroupByIdProduct((int)$product['product_id']), $id_country, $id_state, $id_county);
-					foreach ($allTaxes as $res)
+					foreach ($allTaxes as $tax)
 					{
-						if (!isset($store_all_taxes[$res->id]))
+						if (!isset($store_all_taxes[$tax->id]))
 						{
-							$store_all_taxes[$res->id] = array();
-							$store_all_taxes[$res->id]['amount'] = 0;
+							$store_all_taxes[$tax->id] = array();
+							$store_all_taxes[$tax->id]['amount'] = 0;
 						}
 
-						$store_all_taxes[$res->id]['name'] = $res->name[(int)self::$order->id_lang];
-						$store_all_taxes[$res->id]['rate'] = $res->rate;
+						$store_all_taxes[$tax->id]['name'] = $tax->name[(int)self::$order->id_lang];
+						$store_all_taxes[$tax->id]['rate'] = $tax->rate;
 
-						$unit_tax_amount = $tmp_price * ($res->rate * 0.01);
-						$tmp_price = $tmp_price + $unit_tax_amount;
-						$store_all_taxes[$res->id]['amount'] += $unit_tax_amount * $product['product_quantity'];
+						$unit_tax_amount = $product['product_price'] * ($tax->rate * 0.01);
+						$store_all_taxes[$tax->id]['amount'] += $unit_tax_amount * $product['product_quantity'];
 					}
 				}
 
-				// fetch taxes for carrier
-				$allTaxes = TaxRulesGroup::getTaxes((int)Carrier::getIdTaxRulesGroupByIdCarrier((int)self::$order->id_carrier), $id_country, $id_state, $id_county);
-				$nTax = 0;
-
-				foreach ($allTaxes as $res)
+				if (self::$orderSlip->shipping_cost)
 				{
-					if (!isset($res->id))
-						continue;
+					// fetch taxes for carrier
+					$allTaxes = TaxRulesGroup::getTaxes((int)Carrier::getIdTaxRulesGroupByIdCarrier((int)self::$order->id_carrier), $id_country, $id_state, $id_county);
+					$nTax = 0;
 
-					if (!isset($store_all_taxes[$res->id]))
-						$store_all_taxes[$res->id] = array();
-					if (!isset($store_all_taxes[$res->id]['amount']))
-						$store_all_taxes[$res->id]['amount'] = 0;
-					$store_all_taxes[$res->id]['name'] = $res->name[(int)self::$order->id_lang];
-					$store_all_taxes[$res->id]['rate'] = $res->rate;
-
-					if (!$nTax++)
-						$store_all_taxes[$res->id]['amount'] += ($priceBreakDown['shippingCostWithoutTax'] * (1 + ($res->rate * 0.01))) - $priceBreakDown['shippingCostWithoutTax'];
-					else
+					foreach ($allTaxes as $tax)
 					{
-						$priceTmp = self::$order->total_shipping / (1 + ($res->rate * 0.01));
-						$store_all_taxes[$res->id]['amount'] += self::$order->total_shipping - $priceTmp;
+						if (!isset($tax->id))
+							continue;
+
+						if (!isset($store_all_taxes[$tax->id]))
+							$store_all_taxes[$tax->id] = array();
+						if (!isset($store_all_taxes[$tax->id]['amount']))
+							$store_all_taxes[$tax->id]['amount'] = 0;
+						$store_all_taxes[$tax->id]['name'] = $tax->name[(int)self::$order->id_lang];
+						$store_all_taxes[$tax->id]['rate'] = $tax->rate;
+
+						if (!$nTax++)
+							$store_all_taxes[$tax->id]['amount'] += ($priceBreakDown['shippingCostWithoutTax'] * (1 + ($tax->rate * 0.01))) - $priceBreakDown['shippingCostWithoutTax'];
+						else
+							$store_all_taxes[$tax->id]['amount'] += self::$order->total_shipping - (self::$order->total_shipping / (1 + ($tax->rate * 0.01)));
 					}
 				}
 
-				foreach ($store_all_taxes as $t)
+				foreach ($store_all_taxes as $tax)
 				{
-					$pdf->Cell(0, 6, utf8_decode($t['name']).' ('.number_format($t['rate'], 2, '.', '').'%)      '.self::convertSign(Tools::displayPrice($t['amount'], self::$currency, true)), 0, 0, 'R');
+					$pdf->Cell(0, 6, utf8_decode($tax['name']).' ('.number_format($tax['rate'], 2, '.', '').'%)      '.self::convertSign(Tools::displayPrice($tax['amount'], self::$currency, true)), 0, 0, 'R');
 					$pdf->Ln(5);
 				}
-			} else {
-				$taxToDisplay = Db::getInstance()->ExecuteS('SELECT * FROM '._DB_PREFIX_.'order_tax WHERE id_order = '.(int)self::$order->id);
-				foreach ($taxToDisplay as $t)
+			}
+			else
+			{
+				$taxes = Db::getInstance()->ExecuteS('SELECT * FROM '._DB_PREFIX_.'order_tax WHERE id_order = '.(int)self::$order->id);
+				foreach ($taxes as $tax)
 				{
-					$pdf->Cell(0, 6, utf8_decode($t['tax_name']).' ('.number_format($t['tax_rate'], 2, '.', '').'%)      '.self::convertSign(Tools::displayPrice($t['amount'], self::$currency, true)), 0, 0, 'R');
+					$pdf->Cell(0, 6, utf8_decode($tax['tax_name']).' ('.number_format($tax['tax_rate'], 2, '.', '').'%)      '.self::convertSign(Tools::displayPrice($tax['amount'], self::$currency, true)), 0, 0, 'R');
 					$pdf->Ln(5);
 				}
 			}
@@ -915,7 +914,7 @@ class PDFCore extends PDF_PageGroupCore
 					$unit_price = &$unit_without_tax;
 				else
 					$unit_price = &$unit_with_tax;
-				$productQuantity = $delivery ? ((int)($product['product_quantity']) - (int)($product['product_quantity_refunded'])) : (int)($product['product_quantity']);
+				$productQuantity = $delivery ? ((int)$product['product_quantity'] - (int)$product['product_quantity_refunded']) : (int)$product['product_quantity'];
 
 				if ($productQuantity <= 0)
 					continue ;
@@ -933,7 +932,6 @@ class PDFCore extends PDF_PageGroupCore
 				if (isset($customizedDatas[$product['product_id']][$product['product_attribute_id']]))
 				{
 					$custoLabel = '';
-
 					foreach ($customizedDatas[$product['product_id']][$product['product_attribute_id']] as $customizedData)
 					{
 						$customizationGroup = $customizedData['datas'];
@@ -944,31 +942,93 @@ class PDFCore extends PDF_PageGroupCore
 
 						if (array_key_exists(_CUSTOMIZE_TEXTFIELD_, $customizationGroup))
 							foreach ($customizationGroup[_CUSTOMIZE_TEXTFIELD_] as $customization)
-								if (!empty($customization['name'])) $custoLabel .= '- '.$customization['name'].': '.$customization['value']."\n";
-
-
+							{
+								if (!empty($customization['name'])) $custoLabel .= '- '.$customization['name'];
+								if (!empty($customization['name']) && !empty($customization['value'])) 
+									$custoLabel .= ': ';								
+								if (!empty($customization['value'])) 
+									$custoLabel .= $customization['value']."\n\n";
+								else
+									$custoLabel .= "\n\n";
+							}
 						if ($nb_images > 0)
+						{						
 							$custoLabel .= '- '.$nb_images. ' '. self::l('image(s)')."\n";
-
-						$custoLabel .= "---\n";
+							$custoLabel .= "---\n";
+						}						
 					}
-
-					$custoLabel = rtrim($custoLabel, "---\n");
+		
+					$custoLabel = rtrim($custoLabel, "---\n");					
 
 					$productQuantity = (int)($product['product_quantity']) - (int)($product['customizationQuantityTotal']);
 					if ($delivery)
 						$this->SetX(25);
 					$before = $this->GetY();
-					$this->MultiCell($w[++$i], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']).' - '.self::l('Customized')." \n".Tools::iconv('utf-8', self::encoding(), $custoLabel), 'B');
+							
+					$this->MultiCell($w[++$i], 5, self::convertSign(Tools::iconv('utf-8', self::encoding(), $product['product_name']).' - '.self::l('Customized')." \n"));
+					$beforeY = $this->GetY();
+					
+					$this->MultiCell($w[$i], 5, Tools::iconv('utf-8', self::encoding(), $custoLabel), 'B');
+													
 					$lineSize = $this->GetY() - $before;
+					
 					$this->SetXY($this->GetX() + $w[0] + ($delivery ? 15 : 0), $this->GetY() - $lineSize);
 					$this->Cell($w[++$i], $lineSize, $product['product_reference'], 'B');
+					
 					if (!$delivery)
 						$this->Cell($w[++$i], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($unit_price, self::$currency, true)), 'B', 0, 'R');
-					$this->Cell($w[++$i], $lineSize, (int)($product['customizationQuantityTotal']), 'B', 0, 'C');
+					else
+						$this->Cell($w[++$i], $lineSize, (int)($product['customizationQuantityTotal']), 'B', 0, 'C');
+
+					$before = $this->GetY();
+					$beforeX = $this->GetX();
+					$j = 0;
+					$x = ++$i;
+					if (!$delivery)	
+						if (count($customizedDatas[$product['product_id']][$product['product_attribute_id']]) == 1)
+							$this->MultiCell($w[$x], $lineSize, Tools::iconv('utf-8', self::encoding(), (int)$product['customizationQuantityTotal']), 'B', 'C');
+						else												
+							foreach ($customizedDatas[$product['product_id']][$product['product_attribute_id']] as $k => $customizedData)
+							{
+								if ($j == 0 && count($customizedDatas[$product['product_id']][$product['product_attribute_id']]) > 1)
+								{						
+									$this->MultiCell($w[$x], 5, Tools::iconv('utf-8', self::encoding(), (int)$product['customizationQuantityTotal']), '0',  'C');
+									$this->SetXY($beforeX, $beforeY);	
+								}
+								if (count($customizedDatas[$product['product_id']][$product['product_attribute_id']]) == ($j + 1))
+									$this->MultiCell($w[$x], 5, Tools::iconv('utf-8', self::encoding(), (int)$customizedData['quantity']), 'B', 'C');
+								else												
+									$this->MultiCell($w[$x], 5, Tools::iconv('utf-8', self::encoding(), (int)$customizedData['quantity'])."\n\n", '0', 'C');
+								$this->SetX($beforeX);				
+								$j++;						
+							}					
+
+					$this->SetXY($beforeX + $w[$i], $before);
+					$j = 0;
+					$x = count($w) - 1;
+					$before = $this->GetY();
+					$beforeX = $this->GetX();
 					if (!$delivery)
-						$this->Cell($w[++$i], $lineSize, (self::$orderSlip ? '-' : '').self::convertSign(Tools::displayPrice($unit_price * (int)($product['customizationQuantityTotal']), self::$currency, true)), 'B', 0, 'R');
-					$this->Ln();
+						if (count($customizedDatas[$product['product_id']][$product['product_attribute_id']]) == 1)
+							$this->MultiCell($w[$x], $lineSize, self::$orderSlip ? '-' : ''.self::convertSign(Tools::displayPrice($unit_price * (int)($product['customizationQuantityTotal']), self::$currency, true)), 'B', 'R');
+						else
+							foreach ($customizedDatas[$product['product_id']][$product['product_attribute_id']] as $customizedData)
+							{	
+			
+								if ($j == 0 && count($customizedDatas[$product['product_id']][$product['product_attribute_id']]) > 1)
+								{												
+									$this->MultiCell($w[$x], 5, self::$orderSlip ? '-' : ''.self::convertSign(Tools::displayPrice($unit_price * (int)($product['customizationQuantityTotal']), self::$currency, true)), '0',  'R');
+									$this->SetXY($beforeX, $beforeY);
+								}
+								if (count($customizedDatas[$product['product_id']][$product['product_attribute_id']]) == ($j + 1))		
+									$this->MultiCell($w[$x], 5, self::$orderSlip ? '-' : ''.self::convertSign(Tools::displayPrice($unit_price * (int)($customizedData['quantity']), self::$currency, true)), 'B',  'R');
+								else
+									$this->MultiCell($w[$x], 5, self::$orderSlip ? '-' : ''.self::convertSign(Tools::displayPrice($unit_price * (int)($customizedData['quantity']), self::$currency, true))."\n\n", '0',  'R');									
+								$this->SetX($beforeX);
+								$j++;						
+							}
+				//	$this->SetX(10);
+					$this->Ln(0);
 					$i = -1;
 					$total_with_tax = $unit_with_tax * $productQuantity;
 					$total_without_tax = $unit_without_tax * $productQuantity;
@@ -978,7 +1038,7 @@ class PDFCore extends PDF_PageGroupCore
 				if ($productQuantity)
 				{
 					$before = $this->GetY();
-					$this->MultiCell($w[++$i], 5, Tools::iconv('utf-8', self::encoding(), $product['product_name']), 'B');
+					$this->MultiCell($w[++$i], count($w), self::convertSign(Tools::iconv('utf-8', self::encoding(), $product['product_name'])), 'B');
 					$lineSize = $this->GetY() - $before;
 					$this->SetXY($this->GetX() + $w[0] + ($delivery ? 15 : 0), $this->GetY() - $lineSize);
 					$this->Cell($w[++$i], $lineSize, ($product['product_reference'] ? Tools::iconv('utf-8', self::encoding(), $product['product_reference']) : '--'), 'B');
@@ -1052,9 +1112,8 @@ class PDFCore extends PDF_PageGroupCore
 				$products = self::$order->getProducts();
 		}
 		else
-		{
 			$products = self::$orderSlip->getOrdersSlipProducts(self::$orderSlip->id, self::$order);
-		}
+
 		$amountWithoutTax = 0;
 		$taxes = array();
 		/* Firstly calculate all prices */
@@ -1113,7 +1172,7 @@ class PDFCore extends PDF_PageGroupCore
 				$total_ecotax = ($product['priceEcotax'] * $product['product_quantity']);
 				$priceBreakDown['totalsProductsWithTax'][$product['tax_rate']] += Tools::ps_round((($product['priceWithoutTax'] - $total_ecotax) * (1 + $product['tax_rate'] / 100)) + $total_ecotax, 2);
 
-	 			$price_tax_excl_with_reduction = Tools::ps_round($product['priceWithoutTax'] - (float)$discountAmountWithoutTax, 2);
+	 			$price_tax_excl_with_reduction = $product['priceWithoutTax'] - (float)$discountAmountWithoutTax;
 				$priceBreakDown['totalsProductsWithoutTaxAndReduction'][$product['tax_rate']] += $price_tax_excl_with_reduction;
                 $priceBreakDown['totalsProductsWithTaxAndReduction'][$product['tax_rate']] += Tools::ps_round(($price_tax_excl_with_reduction - $total_ecotax) * (1 + $product['tax_rate'] / 100) + $total_ecotax, 2);
 			}
@@ -1273,7 +1332,7 @@ class PDFCore extends PDF_PageGroupCore
 
 	static protected function convertSign($s)
 	{
-		return str_replace(array('€', '£', '¥'), array(chr(128), chr(163), chr(165)), $s);
+		return str_replace(array('€', '£', '¥', '&cent;', '&pound;', '&yen;', '&euro;'), array(chr(128), chr(163), chr(165), chr(162), chr(163), chr(165), chr(128)), $s);
 	}
 
 	static protected function l($string)

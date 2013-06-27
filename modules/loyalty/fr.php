@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{loyalty}prestashop>loyalty_30146a132c2aa28808a8411ed74c12ed'] = 'Programme de fidélité';
 $_MODULE['<{loyalty}prestashop>loyalty_f8763c754ba455aa6e8ddf0e62911eb7'] = 'Propose un programme de fidélité à vos clients';
 $_MODULE['<{loyalty}prestashop>loyalty_f0338d5a7bbd642cc188ca69c8a97b12'] = 'Cette action effacera tous les points de fidélité et l\'historique des points de tous vos clients, êtes vous sûr ?';
@@ -80,13 +81,13 @@ $_MODULE['<{loyalty}prestashop>loyalty_2af3bf4c82c5b33875d532820a959799'] = 'Gé
 $_MODULE['<{loyalty}prestashop>loyalty_d1228f5476d15142b1358ae4b5fa2454'] = 'Commande n°';
 $_MODULE['<{loyalty}prestashop>loyalty_d5797f3bbadc278f756576dafc6ab4b8'] = 'points.';
 $_MODULE['<{loyalty}prestashop>loyalty_1f67ea7a0b26e9eacc70523bde28df0c'] = 'plus...';
-$_MODULE['<{loyalty}prestashop>loyalty_a16cf3ec5200cc519f4fe48e34b1df83'] = 'Le montant minimum de commande afin d\'utiliser ces bons est  : ';
+$_MODULE['<{loyalty}prestashop>loyalty_a16cf3ec5200cc519f4fe48e34b1df83'] = 'Le montant minimum de commande afin d\'utiliser ces bons est  :';
 $_MODULE['<{loyalty}prestashop>loyalty_8e69341aca5dbf9f55c2e75a2ed5df3c'] = 'Aucun bon de réduction pour le moment.';
 $_MODULE['<{loyalty}prestashop>loyalty_00d56a5e37c19c59d521530fc8e7f337'] = 'Aucun point de fidélité pour le moment.';
 $_MODULE['<{loyalty}prestashop>loyalty_0b3db27bc15f682e92ff250ebb167d4b'] = 'Retour à votre compte';
 $_MODULE['<{loyalty}prestashop>my-account_c540093e64d84440025b2d8201f04336'] = 'Mes points de fidélité';
 $_MODULE['<{loyalty}prestashop>product_ded9088edfbcc1041c3a642b031c8f72'] = 'Programme de fidélisation';
-$_MODULE['<{loyalty}prestashop>product_08ef6b34ab8e7039ef0ee69378f0ac0b'] = 'En achetant ce produit vous pouvez gagner jusqu\'à ';
+$_MODULE['<{loyalty}prestashop>product_08ef6b34ab8e7039ef0ee69378f0ac0b'] = 'En achetant ce produit vous pouvez gagner jusqu\'à';
 $_MODULE['<{loyalty}prestashop>product_2996152bb442bf98c80c515c6055de5f'] = 'points de fidélité';
 $_MODULE['<{loyalty}prestashop>product_b40d5c523ee75453134b1449dd9cd13a'] = 'point de fidélité';
 $_MODULE['<{loyalty}prestashop>product_b9cb3a85529dd593c14c838e22976cff'] = 'Votre panier totalisera';

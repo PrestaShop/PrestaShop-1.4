@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{stripejs}prestashop>order-confirmation_068935d52b70618432d158e189887453'] = 'Félicitations, votre paiement a été approuvé et votre commande a bien été enregistrée sous la référence';
 $_MODULE['<{stripejs}prestashop>order-confirmation_fad1b32bfea488fd65a915e20f6e96df'] = 'Désolé, malheureusement une erreur est survenue lors de la transaction.';
 $_MODULE['<{stripejs}prestashop>order-confirmation_0d4e007412611fa67ae987261c6ec921'] = 'Merci de vérifier vos informations banquaires et d\'essayer à nouveau ou de prendre contact avec nous afin de résoudre ce problème.';
@@ -40,7 +41,7 @@ $_MODULE['<{stripejs}prestashop>payment_1b2fc950e7bc5c8cbf3a5fd0796929d3'] = 'Me
 $_MODULE['<{stripejs}prestashop>payment_8cd55976df404786fda3244c0bbae519'] = 'Votre carte bancaire a été supprimée avec succès, merci de saisir une nouvelle carte :';
 $_MODULE['<{stripejs}prestashop>payment_db553023bd67198667579e7561650093'] = 'Une erreur est survenue lors de la suppression de cette carte bancaire. Merci de nous contacter.';
 $_MODULE['<{stripejs}prestashop>stripejs_ce7566d1d08cc094b74cf283cf9c56a5'] = 'Stripe';
-$_MODULE['<{stripejs}prestashop>stripejs_9eede721e083de7931e8e6ebd48ce580'] = 'Acceptez des paiements par cartes bancaire (Visa, Mastercard, Amex, Discover & Diners Club)';
+$_MODULE['<{stripejs}prestashop>stripejs_22c1550388a66b0f1e85576b1b6ad9f5'] = 'Acceptez les paiement par carte de crédit avec Stripe (Visa, Mastercard, Amex, Discover and Diners Club)';
 $_MODULE['<{stripejs}prestashop>stripejs_3a9ca40670c468f8caf646c41f278dfb'] = 'Attention : tous les détails de transaction Stripe et les alias de cartes bancaires sauvegardés seront supprimés. Confirmez-vous la désinstallation de ce module ?';
 $_MODULE['<{stripejs}prestashop>stripejs_0882683ae397b97594bcc04332cb0406'] = 'Afin de fonctionner correctement avec PrestaShop v1.4.x, ce module requiert le module de Rétro-compatibilité (v0.3 ou plus récente)';
 $_MODULE['<{stripejs}prestashop>stripejs_e991b71085336e1b95dfbde4f87604b6'] = 'Vous pouvez télécharger ce module gratuitement ici : http://addons.prestashop.com/fr/modules-prestashop/6222-backwardcompatibility.html';

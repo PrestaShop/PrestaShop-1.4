@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_d7897df448ce113a0205078a9255f7b7'] = 'Vota USPS Calulator';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_660e7e160b8b390f9d36f6886cbeaa9d'] = 'Calcola le tariffe di spedizione per il servizio postale degli Stati Uniti per il trasporto nazionale all\'interno degli Stati Uniti.';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_883fa0069f4b0454e2277dd567ab3991'] = 'Unità di peso (LB o KG).\'';
@@ -11,7 +12,7 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_d2d22fe4f85d971b090bcbacec8f0123'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_813c2f71e65f4cd51a9c529ee2dd7efe'] = 'USPS CAP';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_20449d3f0b6c6b9265a5cd2a470a6451'] = 'Packaging peso';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_bfc00de34bc04366e7fee516adf7dca5'] = 'La tassa';
-$_MODULE['<{uspscarrier}prestashop>uspscarrier_761c02f2b956cac5abe5539c6d908508'] = 'Dimensione Confezione USPS ';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_761c02f2b956cac5abe5539c6d908508'] = 'Dimensione Confezione USPS';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_ca9df8a12e7558c34bcf7b88aab5cba5'] = 'Tipo di confezione USPS';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_f347d2e6d32688d9174b7aa1fc0124b1'] = 'USPS gestibile da una macchina';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_abca8ad9739957246c02470f31f040e0'] = 'USPS Modalità di calcolo';
@@ -22,9 +23,9 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_8c2647c84442d515b68c6fdba7d4fb25'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_d3d3b81729b689260abfd1b21de630ea'] = 'MD flat rate box';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_b2922d7be2ba2729e3b5022fe871185f'] = 'Flat rate envelope';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_24950d4800d6cab9c22cc4c9361588e8'] = 'SM flat rate box';
-$_MODULE['<{uspscarrier}prestashop>uspscarrier_ad47020f69ab3fd7f0851d85039a85c5'] = 'LG flat rate box ';
-$_MODULE['<{uspscarrier}prestashop>uspscarrier_7545c5d3ad246a683a197a2903a4d5e6'] = 'Rectangular ';
-$_MODULE['<{uspscarrier}prestashop>uspscarrier_b089be65fd32939f1bf1c4aeff1a7457'] = 'Non rectangular ';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_ad47020f69ab3fd7f0851d85039a85c5'] = 'LG flat rate box';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_7545c5d3ad246a683a197a2903a4d5e6'] = 'Rectangular';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_b089be65fd32939f1bf1c4aeff1a7457'] = 'Non rectangular';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_f8320b26d30ab433c5a54546d21f414c'] = 'Falso';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_f827cf462f62848df37c5e1e94a4da74'] = 'Vero';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_386aad80d82f8245e9ef80352a2240e8'] = 'Tutti gli articoli in un unico pacchetto';
@@ -35,8 +36,7 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_2923c2caf8d0b17f409e66e798ea94cf'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_82d36b7a513a66cfdcede4d0b56ba36e'] = 'Rate Calculator USPS non è ancora configurato, è necessario:';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_15507d23c7b911b14ebd95a9a0e12560'] = 'Inserire l\'ID utente USPS e CAP Orignation su \"Impostazioni generali\" forma';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_5ea70d7b669a7e15e6d402bd423aa56e'] = 'Seleziona il tuo Delivery Services disponibili';
-$_MODULE['<{uspscarrier}prestashop>uspscarrier_e20f6d6f13fe70e78f6e2ab488493ccf'] = 'Test di connessione Webservice ';
-$_MODULE['<{uspscarrier}prestashop>uspscarrier_d5377c8cc8c83b501472660c69f694e8'] = 'estensione cURL non abilitata, il modulo USPS può funzionare senza cURL ma sarebbe meglio per attivarlo.';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_e20f6d6f13fe70e78f6e2ab488493ccf'] = 'Test di connessione Webservice';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_52f4393e1b52ba63e27310ca92ba098c'] = 'Impostazioni generali';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_277d63a9b24a09697e3c64092eaf4353'] = 'Impostazioni categorie';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_098eec2cabe2c39c6dec3fc522b6571a'] = 'Impostazioni prodotti';
@@ -66,7 +66,7 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_f804c2bdebc117d9cde3cddad3b49845'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_0ddc2a5660f7d095fff34d6b93077c80'] = 'Configurazione servizio';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_aa9265dfaf7bc267a6e606335d942883'] = 'Dimensione confezione';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_2afc962933ab94b832df8bfaa34ef05b'] = 'Seleziona dimensione confezione nella lista';
-$_MODULE['<{uspscarrier}prestashop>uspscarrier_da42caf26ef85de3d7e48e16ca60b891'] = 'Tipo di confezione ';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_da42caf26ef85de3d7e48e16ca60b891'] = 'Tipo di confezione';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_795de10b1bdcb843b3703c63ad577fc6'] = 'Seleziona tipo di confezione nella lista';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_93c8645dbbc33cf8d126266a827a5501'] = 'Trattabile da una macchina';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_67cd0f5256c40c16a6cfd6effe3ab06b'] = 'Seleziona se è trattabile da una macchina o no di default.';
@@ -82,7 +82,7 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_2c73878daaa3c04dfa31722352c48620'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_f858ebce2deafd485f17522ca80bca2b'] = 'Prestashop non può connettersi ai webservices USPS';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_9d1b485edd50e6fbd288b340b386b07d'] = 'Nessuna descrizione dell\'errore trovato';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_c888438d14855d7d96a2724ee9c306bd'] = 'Impostazioni aggiornate';
-$_MODULE['<{uspscarrier}prestashop>uspscarrier_b9284bff13acffdd879ef4ac7fca5234'] = 'Impostazioni non riuscite ';
+$_MODULE['<{uspscarrier}prestashop>uspscarrier_b9284bff13acffdd879ef4ac7fca5234'] = 'Impostazioni non riuscite';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_b01d4c0704016db61b3f4836d59f9bbe'] = 'È necessario configurare il tab \"Impostazioni generali\" prima di utilizzare questo tab';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_a37b48e8684078c0620a997b3baeee9f'] = 'In questo tab è possibile impostare una configurazione specifica per ogni categoria.';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_f421827ff72ef9a61fb27aa0de62f1e4'] = 'ID Config';
@@ -125,5 +125,4 @@ $_MODULE['<{uspscarrier}prestashop>uspscarrier_0fa89de654af3ca488d7aa942bbc271a'
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_f1e8dbea2e6af679d6503a5756345fce'] = 'Questa sezione ti permette di definire una configurazione specifica USPS per ogni prodotto (come tipo di confezione e spese aggiuntive).';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_902b0d55fddef6f8d651fe1035b7d4bd'] = 'Errore';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_ad20d10621babf619967b16f690a05f2'] = 'USPS Webservice sembra essere fuori uso, si prega di attendere qualche minuto e riprovare';
-$_MODULE['<{uspscarrier}prestashop>uspscarrier_a4692f93340d1d8c0c01e94baa56b8b9'] = 'Webservice USPS scaduto.';
 $_MODULE['<{uspscarrier}prestashop>uspscarrier_ef87d840de42d54364089d1d45f8d08c'] = 'Impossibile connettersi a USPS.com';

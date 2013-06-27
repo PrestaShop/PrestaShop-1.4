@@ -176,7 +176,7 @@ class BankWire extends PaymentModule
 			'currencies' => $this->getCurrency((int)$cart->id_currency),
 			'total' => $cart->getOrderTotal(true, Cart::BOTH),
 			'this_path' => $this->_path,
-			'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/'
+			'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.((int)Configuration::get('PS_REWRITING_SETTINGS') && count(Language::getLanguages()) > 1 && isset($smarty->ps_language) && !empty($smarty->ps_language) ? $smarty->ps_language->iso_code.'/' : '').'modules/'.$this->name.'/'
 		));
 
 		return $this->display(__FILE__, 'payment_execution.tpl');
@@ -193,7 +193,7 @@ class BankWire extends PaymentModule
 
 		$smarty->assign(array(
 			'this_path' => $this->_path,
-			'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/'
+			'this_path_ssl' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__.((int)Configuration::get('PS_REWRITING_SETTINGS') && count(Language::getLanguages()) > 1 && isset($smarty->ps_language) && !empty($smarty->ps_language) ? $smarty->ps_language->iso_code.'/' : '').'modules/'.$this->name.'/'
 		));
 		return $this->display(__FILE__, 'payment.tpl');
 	}

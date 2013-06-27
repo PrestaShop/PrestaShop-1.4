@@ -1,40 +1,55 @@
-CONTRIBUTORS
-============
+	- aFolletete
+	- aKorczak
+	- aMarandon
+	- aNiassy
+	- bLeveque
+	- bMancone
+	- Bruno42
+	- Damien Metzger
+	- djfm
+	- dJorge
+	- dKiyindou
+	- dMetzger
+	- eCrubille
+	- fBrignoli
+	- fGaillard
+	- fOlivier
+	- Francois Gaillard
+	- François Gaillard
+	- fSerny
+	- gBrunier
+	- gCharmes
+	- gPoulain
+	- Gregory Roussac
+	- gRoussac
+	- hAitmansour
+	- heri
+	- hLavigne
+	- jason
+	- jGalby
+	- jmCollin
+	- jObregon
+	- jVincent
+	- lBrieu
+	- lCherifi
+	- lLefevre
+	- Mathieu
+	- mBertholino
+	- mBiart
+	- mDeflotte
+	- mDubois
+	- mMarinetti
+	- nPellicari
+	- nStojanovic
+	- pSang
+	- rChambily
+	- Rémi Gaillard
+	- rGaillard
+	- rMalie
+	- rMontagne
+	- tDidierjean
+	- tLeclerc
+	- vAugagneur
+	- vChabot
+	- vSchoener
 
-- DamienMetzger 
-- François Gaillard 
-- Rémi Gaillard 
-- Vincent Augagneur 
-- aFolletete 
-- aKorczak 
-- aNiassy 
-- bLeveque 
-- bMancone 
-- dMetzger 
-- dSevere 
-- fBrignoli 
-- fSerny 
-- gBrunier 
-- gCharmes 
-- gPoulain 
-- hAitmansour 
-- jBreux 
-- jObregon 
-- jmCollin 
-- lBrieu 
-- lCherifi 
-- lLefevre 
-- mBertholino 
-- mDeflotte 
-- mMarinetti 
-- nPellicari 
-- rGaillard 
-- rMalie 
-- rMontagne 
-- sLorenzini 
-- sThiebaut 
-- tDidierjean 
-- vAugagneur 
-- vChabot 
-- vKham 
-- vSchoener 

@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{productcomments}prestashop>productcomments_b91c4e8b229a399a3bc911d352524a9b'] = 'Comentario sobre el producto';
 $_MODULE['<{productcomments}prestashop>productcomments_0c21532dfd3476791e5aab1aa7fa7405'] = 'Permitir a los usuarios registrar comentarios acerca del producto';
 $_MODULE['<{productcomments}prestashop>productcomments_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Confirmación';
@@ -31,12 +32,12 @@ $_MODULE['<{productcomments}prestashop>productcomments_7799b301b44c329fc9ec6a3a9
 $_MODULE['<{productcomments}prestashop>productcomments_7753ab38f8e113e8af65ab1241331625'] = 'Puede definir varios criterios para guiar a sus clientes en su comentario. Por ejemplo: eficacia, diseño, etc...';
 $_MODULE['<{productcomments}prestashop>productcomments_bc58d00e1e42de31a8e58f8dc7d9bdc7'] = 'Puede añadir un nuevo criterio a continuación:';
 $_MODULE['<{productcomments}prestashop>productcomments_49ee3087348e8d44e1feda1917443987'] = 'Nombre';
-$_MODULE['<{productcomments}prestashop>productcomments_f255b686708be7c5082cd3f5bab872c1'] = 'Aplicar a ';
+$_MODULE['<{productcomments}prestashop>productcomments_f255b686708be7c5082cd3f5bab872c1'] = 'Aplicar a';
 $_MODULE['<{productcomments}prestashop>productcomments_4d3d769b812b6faa6b76e1a8abaece2d'] = 'Activo';
 $_MODULE['<{productcomments}prestashop>productcomments_f1d04e02f02d1f13450ae56f213a93f2'] = 'Modificar este criterio';
 $_MODULE['<{productcomments}prestashop>productcomments_9be4d6372a6487e90d8f153c66c1499d'] = 'Añadir este criterio';
 $_MODULE['<{productcomments}prestashop>productcomments_21a512e9d635e82fc7c7077fc880988b'] = 'Criterio';
-$_MODULE['<{productcomments}prestashop>productcomments_a1fa27779242b4902f7ae3bdd5c6d508'] = 'Tipo ';
+$_MODULE['<{productcomments}prestashop>productcomments_a1fa27779242b4902f7ae3bdd5c6d508'] = 'Tipo';
 $_MODULE['<{productcomments}prestashop>productcomments_ec53a8c4f07baed5d8825072c89799be'] = 'Estado';
 $_MODULE['<{productcomments}prestashop>productcomments_7dce122004969d56ae2e0245cb754d35'] = 'Modificar';
 $_MODULE['<{productcomments}prestashop>productcomments_d737ea5cce602ab5ff68318f90218436'] = 'Administrar el';

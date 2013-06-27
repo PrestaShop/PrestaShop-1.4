@@ -113,27 +113,14 @@ class AdminAddresses extends AdminTab
 			if ((int)$country->contains_states && !$id_state)
 				$this->_errors[] = Tools::displayError('An address located in a country containing states must have a state selected.');
 
-			/* Check zip code */
-			if ($country->need_zip_code)
-			{
-				$zip_code_format = $country->zip_code_format;
-				if (($postcode = Tools::getValue('postcode')) AND $zip_code_format)
-				{
-					$zip_regexp = '/^'.$zip_code_format.'$/ui';
-					$zip_regexp = str_replace(' ', '( |)', $zip_regexp);
-					$zip_regexp = str_replace('-', '(-|)', $zip_regexp);
-					$zip_regexp = str_replace('N', '[0-9]', $zip_regexp);
-					$zip_regexp = str_replace('L', '[a-zA-Z]', $zip_regexp);
-					$zip_regexp = str_replace('C', $country->iso_code, $zip_regexp);
-					if (!preg_match($zip_regexp, $postcode))
-						$this->_errors[] = Tools::displayError('Your zip/postal code is incorrect.').'<br />'.Tools::displayError('Must be typed as follows:').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
-				}
-				elseif ($zip_code_format)
-					$this->_errors[] = Tools::displayError('Postcode required.');
-				elseif ($postcode AND !preg_match('/^[0-9a-zA-Z -]{4,9}$/ui', $postcode))
-					$this->_errors[] = Tools::displayError('Your zip/postal code is incorrect.');
-			}
-
+			$postcode = Tools::getValue('postcode');		
+			/* Check zip code format */
+			if ($country->zip_code_format && !$country->checkZipCode($postcode))
+				$this->_errors[] = Tools::displayError('Your zip/postal code is incorrect.').'<br />'.Tools::displayError('Must be typed as follows:').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $country->zip_code_format)));
+			elseif(empty($postcode) && $country->need_zip_code)
+				$this->_errors[] = Tools::displayError('Postcode required.');
+			elseif ($postcode && !Validate::isPostCode($postcode))
+				$this->_errors[] = Tools::displayError('Your zip/postal code is incorrect.');
 
 			/* If this address come from order's edition and is the same as the other one (invoice or delivery one)
 			** we delete its id_address to force the creation of a new one */
@@ -144,6 +131,10 @@ class AdminAddresses extends AdminTab
 					$_POST['id_address'] = '';
 			}
 		}
+
+		if (Tools::getIsset('delete'.$this->table) && $this->tabAccess['delete'] === '1')
+			call_user_func_array(array($this->className, '_cleanCart'), array(null, (int)(Tools::getValue('id_address'))));
+
 		if (!sizeof($this->_errors))
 			parent::postProcess();
 
@@ -230,13 +221,12 @@ class AdminAddresses extends AdminTab
 
 		if (!($obj = $this->loadObject(true)))
 			return;
-
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post">
 		'.((int)($obj->id) ? '<input type="hidden" name="id_'.$this->table.'" value="'.(int)($obj->id).'" />' : '').'
 		'.(($id_order = (int)(Tools::getValue('id_order'))) ? '<input type="hidden" name="id_order" value="'.(int)($id_order).'" />' : '').'
 		'.(($address_type = (int)(Tools::getValue('address_type'))) ? '<input type="hidden" name="address_type" value="'.(int)($address_type).'" />' : '').'
-		'.(Tools::getValue('realedit') ? '<input type="hidden" name="realedit" value="1" />' : '').'
+		'.(!(bool)$obj->isUsed() ? '<input type="hidden" name="realedit" value="1" />' : '').'
 			<fieldset>
 				<legend><img src="../img/admin/contact.gif" alt="" />'.$this->l('Addresses').'</legend>';
 		switch ($this->addressType)
@@ -247,9 +237,9 @@ class AdminAddresses extends AdminTab
 				$manufacturers = Manufacturer::getManufacturers();
 				echo '<select name="id_manufacturer">';
 				if (!sizeof($manufacturers))
-					echo '<option value="0">'.$this->l('No manufacturer available').'&nbsp</option>';
+					echo '<option value="0">'.$this->l('No manufacturer available').'&nbsp;</option>';
 				foreach ($manufacturers as $manufacturer)
-					echo '<option value="'.(int)($manufacturer['id_manufacturer']).'"'.($this->getFieldValue($obj, 'id_manufacturer') == $manufacturer['id_manufacturer'] ? ' selected="selected"' : '').'>'.$manufacturer['name'].'&nbsp</option>';
+					echo '<option value="'.(int)($manufacturer['id_manufacturer']).'"'.($this->getFieldValue($obj, 'id_manufacturer') == $manufacturer['id_manufacturer'] ? ' selected="selected"' : '').'>'.$manufacturer['name'].'&nbsp;</option>';
 				echo	'</select>';
 				echo '</div>';
 				echo '<input type="hidden" name="alias" value="manufacturer">';
@@ -495,19 +485,7 @@ class AdminAddresses extends AdminTab
 	
 	public function afterDelete($new_address, $id_address_old)
 	{
-		if (Validate::isLoadedObject($new_address))
-		{
-			$result = Db::getInstance()->Execute('
-			UPDATE `'._DB_PREFIX_.'cart` SET id_address_delivery = '.(int)$new_address->id.'
-			WHERE id_address_delivery = '.(int)$id_address_old.' AND id_cart NOT IN (SELECT id_cart FROM '._DB_PREFIX_.'orders)');
-
-			$result &= Db::getInstance()->Execute('
-			UPDATE `'._DB_PREFIX_.'cart` SET id_address_invoice = '.(int)$new_address->id.'
-			WHERE id_address_invoice = '.(int)$id_address_old.' AND id_cart NOT IN (SELECT id_cart FROM '._DB_PREFIX_.'orders)');
-
-			return $result;
-		}
-		
-		return false;
+		$result = call_user_func_array(array($this->className, '_cleanCart'), array($new_address, (int)$id_address_old, (int)$new_address->id_customer));
+		return $result;
 	}
 }

@@ -96,7 +96,7 @@ class AuthControllerCore extends FrontController
 			$this->errors = array_unique(array_merge($this->errors, $address->validateControler()));
 
 			/* US customer: normalize the address */
-			if ($address->id_country == Country::getByIso('US'))
+			if ($address->id_country == Country::getByIso('US') && Configuration::get('PS_TAASC'))
 			{
 				include_once(_PS_TAASC_PATH_.'AddressStandardizationSolution.php');
 				$normalize = new AddressStandardizationSolution;
@@ -104,25 +104,17 @@ class AuthControllerCore extends FrontController
 				$address->address2 = $normalize->AddressLineStandardization($address->address2);
 			}
 
-			$zip_code_format = Country::getZipCodeFormat((int)(Tools::getValue('id_country')));
-			if (Country::getNeedZipCode((int)(Tools::getValue('id_country'))))
-			{
-				if (($postcode = Tools::getValue('postcode')) AND $zip_code_format)
-				{
-					$zip_regexp = '/^'.$zip_code_format.'$/ui';
-					$zip_regexp = str_replace(' ', '( |)', $zip_regexp);
-					$zip_regexp = str_replace('-', '(-|)', $zip_regexp);
-					$zip_regexp = str_replace('N', '[0-9]', $zip_regexp);
-					$zip_regexp = str_replace('L', '[a-zA-Z]', $zip_regexp);
-					$zip_regexp = str_replace('C', Country::getIsoById((int)(Tools::getValue('id_country'))), $zip_regexp);
-					if (!preg_match($zip_regexp, $postcode))
-						$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid.').'<br />'.Tools::displayError('Must be typed as follows:').' '.str_replace('C', Country::getIsoById((int)(Tools::getValue('id_country'))), str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
-				}
-				elseif ($zip_code_format)
-					$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is required.');
-				elseif ($postcode AND !preg_match('/^[0-9a-zA-Z -]{4,9}$/ui', $postcode))
-					$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid.');
-			}
+			if (!($country = new Country($address->id_country)) || !Validate::isLoadedObject($country))
+				$this->errors[] = Tools::displayError('Country cannot be loaded with address->id_country');
+			$postcode = Tools::getValue('postcode');		
+			/* Check zip code format */
+			if ($country->zip_code_format && !$country->checkZipCode($postcode))
+				$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid.').'<br />'.Tools::displayError('Must be typed as follows:').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $country->zip_code_format)));
+			elseif(empty($postcode) && $country->need_zip_code)
+				$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is required.');
+			elseif ($postcode && !Validate::isPostCode($postcode))
+				$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid.');
+
 			if (Country::isNeedDniByCountryId($address->id_country) AND (!Tools::getValue('dni') OR !Validate::isDniLite(Tools::getValue('dni'))))
 				$this->errors[] = Tools::displayError('Identification number is incorrect or has already been used.');
 			elseif (!Country::isNeedDniByCountryId($address->id_country))
@@ -265,8 +257,7 @@ class AuthControllerCore extends FrontController
 					self::$cart->id_customer = (int)$customer->id;
 					// If a logged guest logs in as a customer, the cart secure key was already set and needs to be updated
 					self::$cart->secure_key = $customer->secure_key;
-					$id_guest = (int)Guest::getFromCustomer(self::$cart->id_customer);
-					if($id_guest)
+					if ($id_guest = (int)Guest::getFromCustomer(self::$cart->id_customer))
 						self::$cart->id_guest = $id_guest;
 					self::$cart->save();
 					self::$cookie->id_cart = (int)self::$cart->id;

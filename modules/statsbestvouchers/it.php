@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{statsbestvouchers}prestashop>statsbestvouchers_4f29d8c727dcf2022ac241cb96c31083'] = 'recordset vuoto restituito';
 $_MODULE['<{statsbestvouchers}prestashop>statsbestvouchers_eab2b4237a7cd89c309119e35f62d168'] = 'Visualizzazione';
 $_MODULE['<{statsbestvouchers}prestashop>statsbestvouchers_8bf8854bebe108183caeb845c7676ae4'] = 'di';

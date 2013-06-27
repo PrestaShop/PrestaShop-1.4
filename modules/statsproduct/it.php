@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{statsproduct}prestashop>statsproduct_78e454064a7d3a7755a011a3b79f31a7'] = 'Dettagli del prodotto';
 $_MODULE['<{statsproduct}prestashop>statsproduct_285201dab507840d082d58dc13602b00'] = 'Ottieni  statistiche dettagliate per ogni prodotto';
 $_MODULE['<{statsproduct}prestashop>statsproduct_3ec365dd533ddb7ef3d1c111186ce872'] = 'Dettagli';

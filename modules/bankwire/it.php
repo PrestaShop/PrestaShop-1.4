@@ -2,12 +2,13 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{bankwire}prestashop>bankwire_85ee0d0492a4e37e6c183520f5d59c40'] = 'Bonifico Bancario';
 $_MODULE['<{bankwire}prestashop>bankwire_f652b92eefd4ecfe61ef5fb118157a05'] = 'Accetto pagamenti tramite bonifico bancario';
 $_MODULE['<{bankwire}prestashop>bankwire_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = 'Sei sicuro di voler cancellare i tuoi dati?';
 $_MODULE['<{bankwire}prestashop>bankwire_f05d09f37c9a02f0737c1e71142028a9'] = 'Il proprietario dell\'account e i dati devono essere configurati per usare questo modulo correttamente';
 $_MODULE['<{bankwire}prestashop>bankwire_4402acab1c8f90dcf4a31dc96833bd86'] = 'Nessuna valuta impostata per questo modulo';
-$_MODULE['<{bankwire}prestashop>bankwire_bfa43217dfe8261ee7cb040339085677'] = ' i dati dell\'account sono obbligatori.';
+$_MODULE['<{bankwire}prestashop>bankwire_bfa43217dfe8261ee7cb040339085677'] = 'i dati dell\'account sono obbligatori.';
 $_MODULE['<{bankwire}prestashop>bankwire_ccab155f173ac76f79eb192703f86b18'] = 'Il proprietario dell\'account è obbligatorio.';
 $_MODULE['<{bankwire}prestashop>bankwire_444bcb3a3fcf8389296c49467f27e1d6'] = 'ok';
 $_MODULE['<{bankwire}prestashop>bankwire_c888438d14855d7d96a2724ee9c306bd'] = 'Impostazioni aggiornate';

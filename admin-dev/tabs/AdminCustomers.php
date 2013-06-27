@@ -288,8 +288,9 @@ class AdminCustomers extends AdminTab
 		$referrers = Referrer::getReferrers((int)$customer->id);
 		if ($totalCustomer = Db::getInstance()->getValue('SELECT SUM(total_paid_real) FROM '._DB_PREFIX_.'orders WHERE id_customer = '.$customer->id.' AND valid = 1'))
 		{
-			Db::getInstance()->getValue('SELECT SQL_CALC_FOUND_ROWS COUNT(*) FROM '._DB_PREFIX_.'orders WHERE valid = 1 GROUP BY id_customer HAVING SUM(total_paid_real) > '.$totalCustomer);
-			$countBetterCustomers = (int)Db::getInstance()->getValue('SELECT FOUND_ROWS()') + 1;
+			$sql = 'SELECT SQL_CALC_FOUND_ROWS COUNT(*) FROM '._DB_PREFIX_.'orders WHERE valid = 1 GROUP BY id_customer HAVING SUM(total_paid_real) >= '.$totalCustomer;		
+			Db::getInstance()->ExecuteS($sql);								
+			$countBetterCustomers = (int)Db::getInstance()->getValue('SELECT FOUND_ROWS() AS `'.md5($sql).'`');
 		}
 		else
 			$countBetterCustomers = '-';
@@ -701,15 +702,15 @@ class AdminCustomers extends AdminTab
 					<input type="radio" size="33" name="id_gender" id="gender_3" value="9" '.(($this->getFieldValue($obj, 'id_gender') == 9 OR !$this->getFieldValue($obj, 'id_gender')) ? 'checked="checked" ' : '').'/>
 					<label class="t" for="gender_3"> '.$this->l('Unknown').'</label>
 				</div>
+<label>'.$this->l('First name:').' </label>
+				<div class="margin-form">
+					<input type="text" size="33" name="firstname" value="'.htmlentities($this->getFieldValue($obj, 'firstname'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
+					<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' 0-9!<>,;?=+()@#"�{}_$%:<span class="hint-pointer">&nbsp;</span></span>
+				</div>				
 				<label>'.$this->l('Last name:').' </label>
 				<div class="margin-form">
 					<input type="text" size="33" name="lastname" value="'.htmlentities($this->getFieldValue($obj, 'lastname'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
 					<span class="hint" name="help_box">'.$this->l('Invalid characters:').' 0-9!<>,;?=+()@#"�{}_$%:<span class="hint-pointer">&nbsp;</span></span>
-				</div>
-				<label>'.$this->l('First name:').' </label>
-				<div class="margin-form">
-					<input type="text" size="33" name="firstname" value="'.htmlentities($this->getFieldValue($obj, 'firstname'), ENT_COMPAT, 'UTF-8').'" /> <sup>*</sup>
-					<span class="hint" name="help_box">'.$this->l('Forbidden characters:').' 0-9!<>,;?=+()@#"�{}_$%:<span class="hint-pointer">&nbsp;</span></span>
 				</div>';
 		// if the customer is guest, he hasn't any password
 		if ($obj->id && !$obj->is_guest || Tools::isSubmit('add').$this->table)

@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{homefeatured}prestashop>homefeatured_cd2c2dc24eaf11ba856da4a2e2a248be'] = 'Produits phares sur la page d\'accueil';
 $_MODULE['<{homefeatured}prestashop>homefeatured_bedd0eb227b31705fce270fe1ec5639f'] = 'Affiche les produits phares au centre de votre page d\'accueil';
 $_MODULE['<{homefeatured}prestashop>homefeatured_dd0de17e8450a0fd3248b19c4a4f803b'] = 'Nombre de produits invalides';

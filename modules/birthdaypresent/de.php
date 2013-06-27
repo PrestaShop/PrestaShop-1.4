@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_c2796655c25e1b0b8582716036aece08'] = 'Geburtstagsgeschenk';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_d1f5899bf2af57ed816390d9d740daf6'] = 'Bieten Sie Ihren Kunden automatisch Geburtstagsgeschenke an';
 $_MODULE['<{birthdaypresent}prestashop>birthdaypresent_ccfcf858237a83953c1ac03b5abde35e'] = 'Erstellen Sie einen Gutschein für Kunden, die Geburtstag haben und mind. eine Bestellung bereits getätigt haben.';

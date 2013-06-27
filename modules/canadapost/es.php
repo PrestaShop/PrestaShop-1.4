@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{canadapost}prestashop>canadapost_883fa0069f4b0454e2277dd567ab3991'] = '\"Unidad de peso (LB o KG)\"';
 $_MODULE['<{canadapost}prestashop>canadapost_5a3ceec65d417f5d92c26dbf0dccc00d'] = '\"Unidad de medida (cm o in)\"';
 $_MODULE['<{canadapost}prestashop>canadapost_4d470fde8487e755a50e9235e3dc13ab'] = 'debe estar configurado para funcionar correctamente';

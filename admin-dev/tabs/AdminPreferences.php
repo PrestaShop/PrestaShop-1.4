@@ -263,14 +263,26 @@ class AdminPreferences extends AdminTab
 		{
 			if (Tools::isSubmit('submitAppearanceconfiguration'))
 			{
+				if ((isset($_FILES['PS_LOGO']['error']) && $_FILES['PS_LOGO']['error'] == 1) ||
+				(isset($_FILES['PS_LOGO_MAIL']['error']) && $_FILES['PS_LOGO_MAIL']['error'] == 1) ||
+				(isset($_FILES['PS_LOGO_INVOICE']['error']) && $_FILES['PS_LOGO_INVOICE']['error'] == 1) ||
+				(isset($_FILES['PS_FAVICON']['error']) && $_FILES['PS_FAVICON']['error'] == 1) ||
+				(isset($_FILES['PS_STORES_ICON']['error']) && $_FILES['PS_STORES_ICON']['error'] == 1))
+				{
+					$uploadMaxSize = (int)str_replace('M', '',ini_get('upload_max_filesize'));
+					$postMaxSize = (int)str_replace('M', '', ini_get('post_max_size'));
+					$maxSize = $uploadMaxSize < $postMaxSize ? $uploadMaxSize : $postMaxSize;					
+					$this->_errors[] = Tools::displayError('An error occurred during logo copy. Image size must be below').' '.$maxSize. 'M.';
+				}
 				if (isset($_FILES['PS_LOGO']['tmp_name']) AND $_FILES['PS_LOGO']['tmp_name'])
 				{
+
 					if ($error = checkImage($_FILES['PS_LOGO'], 300000))
 						$this->_errors[] = $error;
 					if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS') OR !move_uploaded_file($_FILES['PS_LOGO']['tmp_name'], $tmpName))
 						return false;
 					elseif (!@imageResize($tmpName, _PS_IMG_DIR_.'logo.jpg'))
-						$this->_errors[] = 'an error occurred during logo copy';
+						$this->_errors[] = Tools::displayError('an error occurred during logo copy');
 					unlink($tmpName);
 				}
 				if (isset($_FILES['PS_LOGO_MAIL']['tmp_name']) AND $_FILES['PS_LOGO_MAIL']['tmp_name'])
@@ -280,7 +292,7 @@ class AdminPreferences extends AdminTab
 					if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS_MAIL') OR !move_uploaded_file($_FILES['PS_LOGO_MAIL']['tmp_name'], $tmpName))
 						return false;
 					elseif (!@imageResize($tmpName, _PS_IMG_DIR_.'logo_mail.jpg'))
-						$this->_errors[] = 'an error occurred during logo copy';
+						$this->_errors[] = Tools::displayError('an error occurred during logo copy');
 					unlink($tmpName);
 				}
 				if (isset($_FILES['PS_LOGO_INVOICE']['tmp_name']) AND $_FILES['PS_LOGO_INVOICE']['tmp_name'])
@@ -290,7 +302,7 @@ class AdminPreferences extends AdminTab
 					if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS_INVOICE') OR !move_uploaded_file($_FILES['PS_LOGO_INVOICE']['tmp_name'], $tmpName))
 						return false;
 					elseif (!@imageResize($tmpName, _PS_IMG_DIR_.'logo_invoice.jpg'))
-						$this->_errors[] = 'an error occurred during logo copy';
+						$this->_errors[] = Tools::displayError('an error occurred during logo copy');
 					unlink($tmpName);
 				}
 				if (isset($_FILES['PS_STORES_ICON']['tmp_name']) AND $_FILES['PS_STORES_ICON']['tmp_name'])
@@ -300,7 +312,7 @@ class AdminPreferences extends AdminTab
 					if (!$tmpName = tempnam(_PS_TMP_IMG_DIR_, 'PS_STORES_ICON') OR !move_uploaded_file($_FILES['PS_STORES_ICON']['tmp_name'], $tmpName))
 						return false;
 					elseif (!@imageResize($tmpName, _PS_IMG_DIR_.'logo_stores.gif'))
-						$this->_errors[] = 'an error occurred during logo copy';
+						$this->_errors[] = Tools::displayError('an error occurred during logo copy');
 					unlink($tmpName);
 				}
 				$this->uploadIco('PS_FAVICON', _PS_IMG_DIR_.'favicon.ico');
@@ -415,7 +427,7 @@ class AdminPreferences extends AdminTab
 			$val = $this->getVal($confValues, $key);
 
 			if (!in_array($field['type'], array('image', 'radio', 'container', 'container_end')) OR isset($field['show']))
-				echo '<div style="clear: both; padding-top:15px;">'.($field['title'] ? '<label >'.$field['title'].'</label>' : '').'<div class="margin-form" style="padding-top:5px;">';
+				echo '<div style="clear: both; padding-top:15px;">'.($field['title'] ? '<label >'.str_replace(' :', '&nbsp;:', $field['title']).'</label>' : '').'<div class="margin-form" style="padding-top:5px;">';
 
 			/* Display the appropriate input type for each field */
 			switch ($field['type'])
@@ -462,7 +474,7 @@ class AdminPreferences extends AdminTab
 
 				case 'image':
 					echo '
-					<table cellspacing="0" cellpadding="0">
+					<table cellspacing="0" cellpadding="0" width="100%" style="text-align:left;">
 						<tr>';
 					if ($name == 'themes')
 						echo '
@@ -529,7 +541,7 @@ class AdminPreferences extends AdminTab
 				break;
 
 				case 'maintenance_ip':
-					echo '<input type="text"'.(isset($field['id']) === true ? ' id="'.$field['id'].'"' : '').' size="'.(isset($field['size']) ? (int)($field['size']) : 5).'" name="'.$key.'" value="'.($field['type'] == 'password' ? '' : htmlentities($val, ENT_COMPAT, 'UTF-8')).'" />'.(isset($field['next']) ? '&nbsp;'.strval($field['next']) : '').' &nbsp<a href="#" class="button" onclick="addRemoteAddr(); return false;">'.$this->l('Add my IP').'</a>';
+					echo '<input type="text"'.(isset($field['id']) === true ? ' id="'.$field['id'].'"' : '').' size="'.(isset($field['size']) ? (int)($field['size']) : 5).'" name="'.$key.'" value="'.($field['type'] == 'password' ? '' : htmlentities($val, ENT_COMPAT, 'UTF-8')).'" />'.(isset($field['next']) ? '&nbsp;'.strval($field['next']) : '').' &nbsp;<a href="#" class="button" onclick="addRemoteAddr(); return false;">'.$this->l('Add my IP').'</a>';
 					break;
 				case 'limit':
 					echo '<input type="text" size="'.(isset($field['size']) ? (int)($field['size']) : 5).'" name="'.$key.'" value="'.($field['type'] == 'password' ? '' : htmlentities($val, ENT_COMPAT, 'UTF-8')).'" /> MB';

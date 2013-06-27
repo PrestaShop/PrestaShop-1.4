@@ -381,7 +381,7 @@ class AdminCustomerThreads extends AdminTab
 						<img src="'.__PS_BASE_URI__.'img/admin/contact.gif" alt="" style="margin-bottom: 5px;" /><br />'.$this->l('Reply to this message').'
 					</button>
 				</p>
-				<div id="reply_to_'.(int)($message['id_customer_message']).'" style="display: none; margin-top: 20px;"">
+				<div id="reply_to_'.(int)($message['id_customer_message']).'" style="display: none; margin-top: 20px;">
 					<form action="'.Tools::htmlentitiesutf8($_SERVER['REQUEST_URI']).'" method="post" enctype="multipart/form-data">
 						<p>'.$this->l('Please type your reply below:').'</p>
 						<textarea style="width: 450px; height: 175px;" name="reply_message">'.str_replace('\r\n', "\n", Configuration::get('PS_CUSTOMER_SERVICE_SIGNATURE', $message['id_lang'])).'</textarea>

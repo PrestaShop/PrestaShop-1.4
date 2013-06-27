@@ -88,10 +88,10 @@ class AdminStockMvt extends AdminTab
 				<div class="clear space">&nbsp;</div>
 				<label>'.$this->l('Action:').'</label>
 				<div class="margin-form">
-					<select name="sign">
-						<option value="1">'.$this->l('Increase stock').'</option>
-						<option value="-1">'.$this->l('Decrease stock').'</option>
-					</select>
+				<select name="sign">
+					<option value="1"'.($obj->sign == 1 ? ' selected="selected"' : '').'>Increase stock</option>
+					<option value="-1"'.($obj->sign == -1 ? ' selected="selected"' : '').'>Decrease stock</option>
+				</select>
 				</div>
 				<div class="clear space">&nbsp;</div>';
 		echo 	'<div class="margin-form">
@@ -180,7 +180,7 @@ class AdminStockMvt extends AdminTab
 
 		$this->_defaultOrderBy = $this->identifier;
 		$this->fieldsDisplay = array('id_stock_mvt_reason' => array('title' => $this->l('ID'), 'width' => 40),
-												'sign' => array('title' => $this->l('Sign'), 'width' => 15, 'align' => 'center', 'type' => 'select',  'icon' => array(-1 => 'arrow_down.png', 1 => 'arrow_up.png'), 'orderby' => false),
+												'sign' => array('title' => '', 'width' => 15, 'align' => 'center', 'type' => 'select',  'icon' => array(-1 => 'arrow_down.png', 1 => 'arrow_up.png')),
 												'name' => array('title' => $this->l('Name'), 'width' => 500));
 		
 		$reasons = StockMvtReason::getStockMvtReasons((int)$cookie->id_lang);

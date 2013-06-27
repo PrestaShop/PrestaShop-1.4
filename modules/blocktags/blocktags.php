@@ -31,7 +31,7 @@ define('BLOCKTAGS_MAX_LEVEL', 3);
 
 class BlockTags extends Module
 {
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'blocktags';
 		$this->tab = 'front_office_features';
@@ -45,7 +45,7 @@ class BlockTags extends Module
 		$this->description = $this->l('Adds a block containing a tag cloud.');
 	}
 
-	function install()
+	public function install()
 	{
 		return parent::install() && $this->registerHook('leftColumn') && $this->registerHook('header') && Configuration::updateValue('BLOCKTAGS_NBR', 10);
 	}
@@ -92,7 +92,7 @@ class BlockTags extends Module
 	*
 	* @todo Links on tags (dedicated page or search ?)
 	*/
-	function hookLeftColumn($params)
+	public function hookLeftColumn($params)
 	{
 		global $smarty;
 
@@ -106,14 +106,13 @@ class BlockTags extends Module
 		return $this->display(__FILE__, 'blocktags.tpl');
 	}
 
-	function hookRightColumn($params)
+	public function hookRightColumn($params)
 	{
 		return $this->hookLeftColumn($params);
 	}
 	
-	function hookHeader($params)
+	public function hookHeader($params)
 	{
 		Tools::addCSS(($this->_path).'blocktags.css', 'all');
 	}
-
 }

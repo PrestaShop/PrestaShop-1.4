@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{blocklink}prestashop>blocklink_fc738410141e4ec0c0319a81255a1431'] = 'Bloc liens';
 $_MODULE['<{blocklink}prestashop>blocklink_baa2ae9622a47c3217d725d1537e5187'] = 'Ajoute un bloc avec des liens additionels.';
 $_MODULE['<{blocklink}prestashop>blocklink_d98d5daaf408b77b05a2eeb6ae88d6df'] = 'Êtes-vous sûr de vouloir supprimer tous vos liens ?';

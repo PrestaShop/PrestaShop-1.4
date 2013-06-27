@@ -1,4 +1,29 @@
 <?php
+/*
+* 2007-2013 PrestaShop
+*
+* NOTICE OF LICENSE
+*
+* This source file is subject to the Academic Free License (AFL 3.0)
+* that is bundled with this package in the file LICENSE.txt.
+* It is also available through the world-wide-web at this URL:
+* http://opensource.org/licenses/afl-3.0.php
+* If you did not receive a copy of the license and are unable to
+* obtain it through the world-wide-web, please send an email
+* to license@prestashop.com so we can send you a copy immediately.
+*
+* DISCLAIMER
+*
+* Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+* versions in the future. If you wish to customize PrestaShop for your
+* needs please refer to http://www.prestashop.com for more information.
+*
+*  @author PrestaShop SA <contact@prestashop.com>
+*  @copyright  2007-2013 PrestaShop SA
+*  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+*  International Registered Trademark & Property of PrestaShop SA
+*/
+
 // Avoid direct access to the file
 require_once(_PS_MODULE_DIR_."/tntcarrier/classes/PackageTnt.php");
 require_once(_PS_MODULE_DIR_."/tntcarrier/classes/TntWebService.php");
@@ -22,12 +47,11 @@ class TntCarrier extends CarrierModule
 	** Construct Method
 	**
 	*/
-
 	public function __construct()
 	{
 		$this->name = 'tntcarrier';
 		$this->tab = 'shipping_logistics';
-		$this->version = '1.8.1';
+		$this->version = '1.9.4';
 		$this->author = 'PrestaShop';
 		$this->limited_countries = array('fr');
 		$this->module_key = 'd4dcfde9937b67002235598ac35cbdf8';
@@ -173,12 +197,12 @@ class TntCarrier extends CarrierModule
 		$languages = Language::getLanguages(true);
 		foreach ($languages as $language)
 		{
-			if ($language['iso_code'] == 'fr')
+			if (($language['iso_code'] == 'fr') || ($language['iso_code'] == 'en'))
 				$carrier->delay[(int)$language['id_lang']] = $config['delay'][$language['iso_code']];
-			if ($language['iso_code'] == 'en')
+			if ($language['iso_code'] == Language::getIsoById(Configuration::get('PS_LANG_DEFAULT')) && isset($config['delay'][$language['iso_code']]))
 				$carrier->delay[(int)$language['id_lang']] = $config['delay'][$language['iso_code']];
-			if ($language['iso_code'] == Language::getIsoById(Configuration::get('PS_LANG_DEFAULT')))
-				$carrier->delay[(int)$language['id_lang']] = $config['delay'][$language['iso_code']];
+			elseif ($language['iso_code'] == Language::getIsoById(Configuration::get('PS_LANG_DEFAULT')) && isset($config['delay']['en']))
+				$carrier->delay[(int)$language['id_lang']] = $config['delay']['en'];
 		}
 
 		if ($carrier->add())
@@ -281,7 +305,10 @@ class TntCarrier extends CarrierModule
 
 		$alert = array();
 		if (!Configuration::get('TNT_CARRIER_LOGIN') || !Configuration::get('TNT_CARRIER_PASSWORD') || !Configuration::get('TNT_CARRIER_NUMBER_ACCOUNT'))
+		{
+			$smarty->assign('account_set', false);
 			$alert['account'] = 1;
+		}
 		if (
 			!Configuration::get('TNT_CARRIER_SHIPPING_ADDRESS1') ||
 			!Configuration::get('TNT_CARRIER_SHIPPING_ZIPCODE') ||
@@ -321,17 +348,20 @@ class TntCarrier extends CarrierModule
 	private function _displayFormConfig()
 	{
 		global $smarty;
+		
 		$var = array('account' => $this->_displayFormAccount(), 'shipping' => $this->_displayFormShipping(), 'service' => $this->_displayService(),
 					 'country' => $this->_displayCountry('Corse'), 'info' => $this->_displayInfo('weight'));
 		$smarty->assign('varMain', $var);
 		$html = $this->display( __FILE__, 'tpl/main.tpl' );
+		
 		if (isset($_GET['id_tab']))
 			$html .= '<script>
-				  $(".menuTabButton.selected").removeClass("selected");
-				  $("#menuTab'.htmlentities(Tools::getValue('id_tab')).'").addClass("selected");
-				  $(".tabItem.selected").removeClass("selected");
-				  $("#menuTab'.htmlentities(Tools::getValue('id_tab')).'Sheet").addClass("selected");
+				$(".menuTabButton.selected").removeClass("selected");
+				$("#menuTab'.htmlentities(Tools::getValue('id_tab')).'").addClass("selected");
+				$(".tabItem.selected").removeClass("selected");
+				$("#menuTab'.htmlentities(Tools::getValue('id_tab')).'Sheet").addClass("selected");
 			</script>';
+
 		return $html;
 	}
 
@@ -339,7 +369,7 @@ class TntCarrier extends CarrierModule
 	{
 		global $smarty;
 		$var = array('login' => Tools::getValue('tnt_carrier_login', Configuration::get('TNT_CARRIER_LOGIN')), 'password' => Tools::getValue('tnt_carrier_password', Configuration::get('TNT_CARRIER_PASSWORD')),
-					 'account' => Tools::getValue('tnt_carrier_number_account', Configuration::get('TNT_CARRIER_NUMBER_ACCOUNT')));
+					 'account' => str_replace(' ', '', Tools::getValue('tnt_carrier_number_account', Configuration::get('TNT_CARRIER_NUMBER_ACCOUNT'))));
 		$smarty->assign('varAccount', $var);
 		return $this->display( __FILE__, 'tpl/accountForm.tpl' );
 	}
@@ -551,7 +581,7 @@ class TntCarrier extends CarrierModule
 	{
 		$login = pSQL(Tools::getValue('tnt_carrier_login'));
 		$password = pSQL(Tools::getValue('tnt_carrier_password'));
-		$number = pSQL(Tools::getValue('tnt_carrier_number_account'));
+		$number = pSQL(str_replace(' ', '', Tools::getValue('tnt_carrier_number_account')));
 		if (!$login || !$password || !$number)
 			$this->_postErrors[] = $this->l('All the fields are required');
 		Configuration::updateValue('TNT_CARRIER_LOGIN', $login);
@@ -907,7 +937,7 @@ class TntCarrier extends CarrierModule
 				}
 			}
 			$link = new Link();
-			$redirect = $link->getPageLink('order.php?step=2');
+			$redirect = $link->getPageLink('order.php', false, null, 'step=2');
 			$smarty->assign('redirect' , $redirect);
 			if (!sizeof($cities))
 				$smarty->assign('cityError', $this->l('your shipping address zipcode is not correct.'));
@@ -915,18 +945,29 @@ class TntCarrier extends CarrierModule
 		}
 		$services = Db::getInstance()->ExecuteS('SELECT `id_carrier`, `option` FROM `'._DB_PREFIX_.'tnt_carrier_option`');
 		$dueDate = serviceCache::getDueDate($id_cart, $services);
-		$smarty->assign('id_cart', $id_cart);
-		$smarty->assign('tnt_token', Configuration::get('TNT_CARRIER_TOKEN'));
-		$smarty->assign('version', _PS_VERSION_);
-		$smarty->assign('services', $services);
-		$smarty->assign('dueDate', $dueDate);
-		if (_PS_VERSION_ >= 1.5)
+		
+		$smarty->assign(
+			array(
+				'shop_url' => Tools::getShopDomainSsl(true, true).__PS_BASE_URI__,
+				'id_cart' => $id_cart,
+				'tnt_token' => Configuration::get('TNT_CARRIER_TOKEN'),
+				'version' => _PS_VERSION_,
+				'services' => $services,
+				'dueDate' => $dueDate,
+			)
+		);
+		
+		$output = null;
+		if (isset($this->context) && method_exists($this->context->controller, 'addJS'))
 		{
 			$this->context->controller->addJS('http://maps.google.com/maps/api/js?sensor=true');
 			$this->context->controller->addJS($this->_path.'js/relais.js');
 			$this->context->controller->addJS($this->_path.'js/jquery-ui-1.8.10.custom.min.js');
 		}
-		return $this->display( __FILE__, 'tpl/relaisColis.tpl' );
+		else
+			$smarty->assign('js_include', true);
+		
+		return $output.$this->display(__FILE__, 'tpl/relaisColis.tpl');
 	}
 
 	public function hookadminOrder($params)
@@ -1112,7 +1153,7 @@ class TntCarrier extends CarrierModule
 			return false;
 		if (!extension_loaded('soap'))
 			return false;
-
+		
 		$product = $params->getProducts();
 		$weight = 0;
 		$add = 0;

@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{ganalytics}prestashop>ganalytics_7510f8b22dd3e10476096425f78d4239'] = 'Aún no ha configurado su ID de Google Analytics';
 $_MODULE['<{ganalytics}prestashop>ganalytics_aba1a7971f85c725ba4aed21343eeb4b'] = 'Integrar el script de Google Analytics en su tienda';
 $_MODULE['<{ganalytics}prestashop>ganalytics_fa214007826415a21a8456e3e09f999d'] = '¿Está seguro de querer eliminar todos sus datos?';
@@ -29,7 +30,7 @@ $_MODULE['<{ganalytics}prestashop>ganalytics_467ed594f2aa9b3e802037a10bad61b1'] 
 $_MODULE['<{ganalytics}prestashop>ganalytics_2edf3f56ba30ad663429ba0e812a2396'] = 'Introduzca un nombre para este paso';
 $_MODULE['<{ganalytics}prestashop>ganalytics_c909bea215f88ff0de9888dc95eed1ca'] = 'Si este paso es necesario en el proceso de conversión, seleccione la casilla de la derecha del paso.';
 $_MODULE['<{ganalytics}prestashop>ganalytics_9d25cb4b66791343ca319b3cdb82dba6'] = 'Continue avanzando hasta completar el objetivo. Debe introducir de 1 a 10 etapas.';
-$_MODULE['<{ganalytics}prestashop>ganalytics_1c681b64f4cd8f52aecbb55c98f5c768'] = 'Para terminar, configure los parámetros complementarios para continuar los siguientes pasos: ';
+$_MODULE['<{ganalytics}prestashop>ganalytics_1c681b64f4cd8f52aecbb55c98f5c768'] = 'Para terminar, configure los parámetros complementarios para continuar los siguientes pasos:';
 $_MODULE['<{ganalytics}prestashop>ganalytics_bb1ca9cfa0f3f7dbd06a2364c9a0dc9c'] = 'Si las URLs introducidas arriba distinguen entre mayúsculas y minúsculas, marque la casilla de verificación.';
 $_MODULE['<{ganalytics}prestashop>ganalytics_047cf7562621a3639b3e04a63dc6b41f'] = 'Seleccione el objetivo apropiado. (';
 $_MODULE['<{ganalytics}prestashop>ganalytics_d59048f21fd887ad520398ce677be586'] = 'Más información';

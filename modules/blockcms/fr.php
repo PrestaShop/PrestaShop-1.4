@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{blockcms}prestashop>blockcms_cd275312651aebf8cbbb8d3bb1c086ae'] = 'Bloc CMS';
 $_MODULE['<{blockcms}prestashop>blockcms_cdca12007979fc49008fd125cdb775fc'] = 'Ajoute un bloc contenant plusieurs lien vers vos pages CMS';
 $_MODULE['<{blockcms}prestashop>blockcms_97390dd0b5ba7867120aee2ff22bfa38'] = 'Configuration du bloc CMS';

@@ -776,11 +776,11 @@ class CartCore extends ObjectModel
 				WHERE `id_cart` = '.(int)($this->id).'
 					AND `id_product` = '.(int)($id_product).'
 					AND `id_product_attribute` = '.(int)($id_product_attribute)));
-			if (!$this->_deleteCustomization((int)($id_customization), (int)($id_product), (int)($id_product_attribute)))
+			if (!$this->_deleteCustomization((int)$id_customization, (int)$id_product, (int)$id_product_attribute))
 				return false;
 			// refresh cache of self::_products
 			$this->_products = $this->getProducts(true);
-			return ($customizationQuantity == $productTotalQuantity AND $this->deleteProduct((int)($id_product), $id_product_attribute, NULL));
+			return ($customizationQuantity == $productTotalQuantity AND $this->deleteProduct((int)$id_product, (int)$id_product_attribute, NULL));
 		}
 
 		/* Get customization quantity */
@@ -809,7 +809,7 @@ class CartCore extends ObjectModel
 	 * @param integer $id_customization
 	 * @return boolean result
 	 */
-	protected	function _deleteCustomization($id_customization, $id_product, $id_product_attribute)
+	protected function _deleteCustomization($id_customization, $id_product, $id_product_attribute)
 	{
 		$result = true;
 		$customization = Db::getInstance()->getRow('SELECT *
@@ -935,7 +935,7 @@ class CartCore extends ObjectModel
 
 				if ($withTaxes)
 				{
-					$total_price = ($total_price - $total_ecotax) * (1 + (float)(Tax::getProductTaxRate((int)$product['id_product'], (int)$this->{Configuration::get('PS_TAX_ADDRESS_TYPE')})) / 100);
+					$total_price = ($total_price - $total_ecotax) * (1 + (float)Tax::getProductTaxRate((int)$product['id_product'], (int)$this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) / 100);
 					$total_ecotax = $total_ecotax * (1 + Tax::getProductEcotaxRate((int)$this->{Configuration::get('PS_TAX_ADDRESS_TYPE')}) / 100);
 					$total_price = Tools::ps_round($total_price + $total_ecotax, 2);
 				}
@@ -1269,7 +1269,7 @@ class CartCore extends ObjectModel
 			LEFT JOIN `'._DB_PREFIX_.'product` p ON cp.`id_product` = p.`id_product`
 			WHERE (cp.`id_product_attribute` IS NULL OR cp.`id_product_attribute` = 0)
 			AND cp.`id_cart` = '.(int)($this->id));
-			self::$_totalWeight[$this->id] = round((float)($result['nb']) + (float)($result2['nb']), 3);
+			self::$_totalWeight[$this->id] = round((float)($result['nb']) + (float)($result2['nb']), 4);
 		}
 		return self::$_totalWeight[$this->id];
 	}
@@ -1279,7 +1279,7 @@ class CartCore extends ObjectModel
 	*
 	* @return mixed Return a string if an error occurred and false otherwise
 	*/
-	function checkDiscountValidity($discountObj, $discounts, $order_total, $products, $checkCartDiscount = false)
+	public function checkDiscountValidity($discountObj, $discounts, $order_total, $products, $checkCartDiscount = false)
 	{
 		global $cookie;
 
@@ -1379,7 +1379,7 @@ class CartCore extends ObjectModel
 	*
 	* @return array Cart details
 	*/
-	function getSummaryDetails()
+	public function getSummaryDetails()
 	{
 		global $cookie;
 
@@ -1445,7 +1445,7 @@ class CartCore extends ObjectModel
 	* @return array Carts
 	* @deprecated
 	*/
-	static function getNonOrderedCarts($dateFrom, $dateTo)
+	public static function getNonOrderedCarts($dateFrom, $dateTo)
 	{
 		Tools::displayAsDeprecated();
 		if (!Validate::isDate($dateFrom) OR !Validate::isDate($dateTo))
@@ -1649,7 +1649,7 @@ class CartCore extends ObjectModel
 		$success = true;
 		$products = Db::getInstance()->ExecuteS('SELECT * FROM `'._DB_PREFIX_.'cart_product` WHERE `id_cart` = '.(int)$this->id);
 		foreach ($products as $product)
-			$success &= $cart->updateQty($product['quantity'], (int)$product['id_product'], (int)$product['id_product_attribute'], null, 'up');
+			$cart->updateQty($product['quantity'], (int)$product['id_product'], (int)$product['id_product_attribute'], null, 'up');
 
 		// Customized products
 		$customs = Db::getInstance()->ExecuteS('
@@ -1693,7 +1693,7 @@ class CartCore extends ObjectModel
 			Db::getInstance()->Execute($sql_custom_data);
 		}
 
-		return array('cart' => $cart, 'success' => $success);
+		return array('cart' => $cart, 'success' => (bool)Cart::getNbProducts($cart->id));
 	}
 
 	public function getWsCartRows()

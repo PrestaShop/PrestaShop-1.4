@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2013 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -275,18 +275,18 @@ class BlockLink extends Module
 			foreach ($languages as $language)
 				$this->_html .= '
 					<div id="text_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
-						<input type="text" name="text_'.$language['id_lang'].'" id="textInput_'.$language['id_lang'].'" value="'.(($this->error AND isset($_POST['text_'.$language['id_lang']])) ? $_POST['text_'.$language['id_lang']] : '').'" /><sup> *</sup>
+						<input type="text" name="text_'.$language['id_lang'].'" id="textInput_'.$language['id_lang'].'" value="'.Tools::safeOutput(($this->error AND isset($_POST['text_'.$language['id_lang']])) ? $_POST['text_'.$language['id_lang']] : '').'" /><sup> *</sup>
 					</div>';
 			$this->_html .= $this->displayFlags($languages, $defaultLanguage, $divLangName, 'text', true);
 			$this->_html .= '
 					<div class="clear"></div>
 				</div>
 				<label>'.$this->l('URL:').'</label>
-				<div class="margin-form"><input type="text" name="url" id="url" value="'.(($this->error AND isset($_POST['url'])) ? $_POST['url'] : '').'" /><sup> *</sup></div>
+				<div class="margin-form"><input type="text" name="url" id="url" value="'.Tools::safeOutput(($this->error AND isset($_POST['url'])) ? $_POST['url'] : '').'" /><sup> *</sup></div>
 				<label>'.$this->l('Open in a new window:').'</label>
 				<div class="margin-form"><input type="checkbox" name="newWindow" id="newWindow" '.(($this->error AND isset($_POST['newWindow'])) ? 'checked="checked"' : '').' /></div>
 				<div class="margin-form">
-					<input type="hidden" name="id" id="id" value="'.($this->error AND isset($_POST['id']) ? $_POST['id'] : '').'" />
+					<input type="hidden" name="id" id="id" value="'.($this->error AND isset($_POST['id']) ? (int)$_POST['id'] : '').'" />
 					<input type="submit" class="button" name="submitLinkAdd" value="'.$this->l('Add this link').'" />
 					<input type="submit" class="button disable" name="submitLinkUpdate" value="'.$this->l('Edit this link').'" id="submitLinkUpdate" />
 				</div>
@@ -300,14 +300,14 @@ class BlockLink extends Module
 		foreach ($languages as $language)
 			$this->_html .= '
 					<div id="title_'.$language['id_lang'].'" style="display: '.($language['id_lang'] == $defaultLanguage ? 'block' : 'none').'; float: left;">
-						<input type="text" name="title_'.$language['id_lang'].'" value="'.(($this->error AND isset($_POST['title'])) ? $_POST['title'] : Configuration::get('PS_BLOCKLINK_TITLE', $language['id_lang'])).'" /><sup> *</sup>
+						<input type="text" name="title_'.$language['id_lang'].'" value="'.Tools::safeOutput(($this->error AND isset($_POST['title'])) ? $_POST['title'] : Configuration::get('PS_BLOCKLINK_TITLE', $language['id_lang'])).'" /><sup> *</sup>
 					</div>';
 		$this->_html .= $this->displayFlags($languages, $defaultLanguage, $divLangName, 'title', true);
 		$this->_html .= '
 				<div class="clear"></div>
 				</div>
 				<label>'.$this->l('Block URL:').'</label>
-				<div class="margin-form"><input type="text" name="title_url" value="'.(($this->error AND isset($_POST['title_url'])) ? $_POST['title_url'] : $title_url).'" /></div>
+				<div class="margin-form"><input type="text" name="title_url" value="'.Tools::safeOutput(($this->error AND isset($_POST['title_url'])) ? $_POST['title_url'] : $title_url).'" /></div>
 				<div class="margin-form"><input type="submit" class="button" name="submitTitle" value="'.$this->l('Update').'" /></div>
 			</form>
 		</fieldset>
@@ -341,7 +341,7 @@ class BlockLink extends Module
 				var links = new Array();';
 			foreach ($links AS $link)
 			{
-				$this->_html .= 'links['.$link['id'].'] = new Array(\''.addslashes($link['url']).'\', '.$link['newWindow'];
+				$this->_html .= 'links['.$link['id'].'] = new Array(\''.addslashes($link['url']).'\', '.(int)$link['newWindow'];
 				foreach ($languages AS $language)
 					if (isset($link['text_'.$language['id_lang']]))
 						$this->_html .= ', \''.addslashes($link['text_'.$language['id_lang']]).'\'';
@@ -374,8 +374,8 @@ class BlockLink extends Module
 					<td>'.$link['text_'.$cookie->id_lang].'</td>
 					<td>'.$link['url'].'</td>
 					<td>
-						<img src="../img/admin/edit.gif" alt="" title="" onclick="linkEdition('.$link['id'].')" style="cursor: pointer" />
-						<img src="../img/admin/delete.gif" alt="" title="" onclick="linkDeletion('.$link['id'].')" style="cursor: pointer" />
+						<img src="../img/admin/edit.gif" alt="" title="" onclick="linkEdition('.(int)$link['id'].')" style="cursor: pointer" />
+						<img src="../img/admin/delete.gif" alt="" title="" onclick="linkDeletion('.(int)$link['id'].')" style="cursor: pointer" />
 					</td>
 				</tr>';
 
@@ -393,7 +393,7 @@ class BlockLink extends Module
 
 		$this->_html .= '
 		</table>
-		<input type="hidden" id="languageFirst" value="'.$languages[$idLng]['id_lang'].'" />
+		<input type="hidden" id="languageFirst" value="'.(int)$languages[$idLng]['id_lang'].'" />
 		<input type="hidden" id="languageNb" value="'.sizeof($languages).'" />';
 	}
 }

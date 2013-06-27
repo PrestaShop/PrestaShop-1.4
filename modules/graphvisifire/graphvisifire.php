@@ -61,7 +61,7 @@ class GraphVisifire extends ModuleGraphEngine
 		}
     }
 
-	function install()
+	public function install()
 	{
 		return (parent::install() AND $this->registerHook('GraphEngine'));
 	}

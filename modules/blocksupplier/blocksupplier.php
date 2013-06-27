@@ -43,14 +43,14 @@ class BlockSupplier extends Module
         $this->description = $this->l('Adds a block displaying suppliers.');
     }
 
-	function install()
+	public function install()
 	{
 		return (parent::install() && $this->registerHook('leftColumn') && $this->registerHook('header') && 
 		Configuration::updateValue('SUPPLIER_DISPLAY_TEXT', true) && Configuration::updateValue('SUPPLIER_DISPLAY_TEXT_NB', 5) &&
 		Configuration::updateValue('SUPPLIER_DISPLAY_FORM', true));
 	}
 
-	function hookLeftColumn($params)
+	public function hookLeftColumn($params)
 	{
 		global $smarty, $link;
 		$smarty->assign(array(
@@ -64,7 +64,7 @@ class BlockSupplier extends Module
 		return $this->display(__FILE__, 'blocksupplier.tpl');
 	}
 
-	function getContent()
+	public function getContent()
 	{
 		$output = '<h2>'.$this->displayName.'</h2>';
 		if (Tools::isSubmit('submitBlockSuppliers'))
@@ -118,12 +118,12 @@ class BlockSupplier extends Module
 		return $output;
 	}
 	
-	function hookRightColumn($params)
+	public function hookRightColumn($params)
 	{
 		return $this->hookLeftColumn($params);
 	}
 	
-	function hookHeader($params)
+	public function hookHeader($params)
 	{
 		Tools::addCSS(($this->_path).'blocksupplier.css', 'all');
 	}

@@ -31,7 +31,7 @@ class FianetSceau extends Module
 {
 	private $id_order;
 	
-	function __construct()
+	public function __construct()
 	{
 	 	$this->name = 'fianetsceau';
 	 	$this->tab = 'front_office_features';

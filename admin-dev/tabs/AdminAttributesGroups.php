@@ -81,7 +81,7 @@ class AdminAttributesGroups extends AdminTab
 					$object = new $this->className();
 					if ($object->deleteSelection($_POST[$this->table.'Box']))
 						Tools::redirectAdmin($currentIndex.'&conf=2'.'&token='.$this->token);
-					$this->_errors[] = Tools::displayError('An error occurred while deleting selection.');
+					$this->_errors[] = Tools::displayError('cannot delete this Attribute Group, the selected item is still associated with one or more product combinations');
 				}
 				else
 					$this->_errors[] = Tools::displayError('You must select at least one element to delete.');
@@ -91,6 +91,13 @@ class AdminAttributesGroups extends AdminTab
 		}
 		else
 			parent::postProcess();
+												
+		if (isset($this->_errors) && count($this->_errors))
+		{
+			$key = array_search('An error occurred during deletion of '.$this->table.'.', $this->_errors);
+			if ($key !== false)
+				$this->_errors[$key] = Tools::displayError('cannot delete this Attribute Group, the selected item is still associated with one or more product combinations');
+		}						
 	}
 
 	public function displayErrors()
@@ -162,7 +169,7 @@ class AdminAttributesGroups extends AdminTab
 				<td style="vertical-align: top; padding: 4px 0 4px 0" class="center">
 					<a href="'.$currentIndex.'&id_'.$this->table.'='.$id.'&update'.$this->table.'&token='.$this->token.'">
 					<img src="../img/admin/edit.gif" border="0" alt="'.$this->l('Edit').'" title="'.$this->l('Edit').'" /></a>&nbsp;
-					<a href="'.$currentIndex.'&id_'.$this->table.'='.$id.'&delete'.$this->table.'&token='.$this->token.'" onclick="return confirm(\''.$this->l('Delete item', __CLASS__, true, false).' : '.$tr['name'].'?\');">
+					<a href="'.$currentIndex.'&id_'.$this->table.'='.$id.'&delete'.$this->table.'&token='.$this->token.'" onclick="return confirm(\''.$this->l('Delete attribute group named : ', __CLASS__, true, false).' : '.$tr['name'].'?\');">
 					<img src="../img/admin/delete.gif" border="0" alt="'.$this->l('Delete').'" title="'.$this->l('Delete').'" /></a>
 				</td>
 			</tr>';

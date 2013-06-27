@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_cb313e911b15b21b57f4fc7b53058e4f'] = 'Ricevi il pagamento con Authorize.net';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_9d5b40ff49295ac0b4a5a13a88ccd285'] = 'estensione cURL deve essere abilitato sul server per utilizzare questo modulo.';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_20015706a8cbd457cbb6ea3e7d5dc9b3'] = 'Configurazione aggiornata';
@@ -19,6 +20,7 @@ $_MODULE['<{authorizeaim}prestashop>authorizeaim_0cbc6611f5540bd0809a388dc95a615
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_291cdb0a8abb42484f5d44dc20540ce6'] = 'Carte di credito:';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_bd80f7c7727e488952c160cf6b3ca59a'] = '\"Hold for Review\"  stato ordine';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_b17f3f4dcf653a5776792498a9b44d6a'] = 'Aggiorna le impostazioni';
+$_MODULE['<{authorizeaim}prestashop>authorizeaim_a78492add38b055001c29c9b085c3a38'] = 'Dettaglio errore da AuthorizeAIM:';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_f745351b1387473d3d2de5bfe18d3562'] = 'Errore, vi preghiamo di verificare le informazioni della carta';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_f4ddb8bc0f6457fe6cbe0a7255e7b542'] = 'Paga con authorizeaim';
 $_MODULE['<{authorizeaim}prestashop>authorizeaim_5e9cf585e909dce58db79b2db422c4c8'] = 'logo visa';

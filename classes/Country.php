@@ -340,4 +340,21 @@ class CountryCore extends ObjectModel
 			FROM `'._DB_PREFIX_.'country`
 			WHERE `id_country` = '.(int)$id_country);
 	}
+	
+	/**
+	 * Replace letters of zip code format And check this format on the zip code
+	 * @param $zip_code
+	 * @return (bool)
+	 */
+	public function checkZipCode($zip_code)
+	{
+		$zip_regexp = '/^'.$this->zip_code_format.'$/ui';
+		$zip_regexp = str_replace(' ', '( |)', $zip_regexp);
+		$zip_regexp = str_replace('-', '(-|)', $zip_regexp);
+		$zip_regexp = str_replace('N', '[0-9]', $zip_regexp);
+		$zip_regexp = str_replace('L', '[a-zA-Z]', $zip_regexp);
+		$zip_regexp = str_replace('C', $this->iso_code, $zip_regexp);
+
+		return (bool)preg_match($zip_regexp, $zip_code);
+	 }
 }

@@ -69,7 +69,7 @@ class ProductComment extends ObjectModel
 	protected 	$table = 'product_comment';
 	protected 	$identifier = 'id_product_comment';
 
-	public	function getFields()
+	public function getFields()
 	{
 	 	parent::validateFields(false);
 		$fields['id_product'] = (int)($this->id_product);

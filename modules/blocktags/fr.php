@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{blocktags}prestashop>blocktags_f2568a62d4ac8d1d5b532556379772ba'] = 'Bloc tags';
 $_MODULE['<{blocktags}prestashop>blocktags_a332910d45d955dad6c84817fe478e95'] = 'Ajoute un bloc contenant les tags et un lien vers la recherche correspondante';
 $_MODULE['<{blocktags}prestashop>blocktags_4c1ef2cab0e711084a14f3d367a13c54'] = 'Vous devez remplir le champs \"tags affichés\".';

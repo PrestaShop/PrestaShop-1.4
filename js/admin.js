@@ -469,77 +469,6 @@ function	viewTemplates(id_select, id_lang, prefix, ext)
 	return ;
 }
 
-function validateImportation(mandatory)
-{
-    var type_value = [];
-	var seted_value = [];
-	var elem;
-	var col = 'unknow';
-
-	toggle(getE('error_duplicate_type'), false);
-	toggle(getE('required_column'), false);
-    for (i = 0; elem = getE('type_value['+i+']'); i++)
-    {
-		if (seted_value[elem.options[elem.selectedIndex].value])
-		{
-			scroll(0,0);
-			toggle(getE('error_duplicate_type'), true);
-			return false;
-		}
-		else if (elem.options[elem.selectedIndex].value != 'no')
-			seted_value[elem.options[elem.selectedIndex].value] = true;
-	}
-	for (needed in mandatory)
-		if (!seted_value[mandatory[needed]])
-		{
-			scroll(0,0);
-			toggle(getE('required_column'), true);
-			getE('missing_column').innerHTML = mandatory[needed];
-			elem = getE('type_value[0]');
-			for (i = 0; i < elem.length; ++i)
-			{
-				if (elem.options[i].value == mandatory[needed])
-				{
-					getE('missing_column').innerHTML = elem.options[i].innerHTML;
-					break ;
-				}
-			}
-			return false
-		}
-}
-
-function askFeatureName(selected, selector)
-{
-	var elem;
-
-	if (selected.value == 'feature')
-	{
-		$('#features_' + selector).show();
-		$('#feature_name_' + selector).attr('name', selected.name);
-	}
-	else
-	{
-		$('#features_' + selector).hide();
-		$('#feature_name_' + selector).removeAttr('name');
-	}
-
-}
-
-function replaceFeature(toReplace, selector)
-{
-	var elem;
-
-	if ($('#feature_name_' + selector).val() == '')
-		return false;
-
-	elem = getE(toReplace);
-	elem.options[elem.selectedIndex].text = $('#feature_name_' + selector).val();
-	elem.options[elem.selectedIndex].value = '#F_' + $('#feature_name_' + selector).val();
-	$('#features_' + selector).toggle();
-	$('#feature_name_' + selector).val('');
-	$('#feature_name_' + selector).attr('name', '');
-}
-
 /* Manage default category on page: edit product */
 function checkDefaultCategory(category_id)
 {
@@ -602,11 +531,11 @@ function selectCheckbox(obj)
 
 function toogleShippingCost(obj)
 {
-	generateDiscount = $(obj).parent().find('#generateDiscount').is(':checked');;
+	generateDiscount = $(obj).parent().find('#generateDiscount').is(':checked');
 	generateCreditSlip = $(obj).parent().find('#generateCreditSlip').is(':checked');
 	if (generateDiscount != true && generateCreditSlip != true)
 	{
-		$(obj).parent().find('#spanShippingBack input[type=checkbox]').attr("checked", false);
+		$(obj).parent().find('#spanShippingBack input[type=checkbox]').prop("checked", false);
 		$(obj).parent().find('#spanShippingBack').css('display', 'none');
 	}
 	else
@@ -718,9 +647,9 @@ function orderOverwriteMessage(sl, text)
 	}
 }
 
-function setCancelQuantity(itself, id_order_detail, quantity)
+function setCancelQuantity(itself, id_order_detail, quantity, customization)
 {
-	$('#cancelQuantity_' + id_order_detail).val($(itself).attr('checked') ? quantity : '');
+	$('#cancel' + (customization ? 'Customization' : '' ) + 'Quantity_' + id_order_detail).val($(itself).attr('checked') ? quantity : '');
 }
 
 function stockManagementActivationAuthorization()
@@ -775,6 +704,13 @@ function disableZipFormat()
 		$('.zip_code_format').show();
 }
 
+function disableTAASC()
+{
+	if ($('#iso_code').val() == 'US')
+		$('#TAASC').show();
+	else
+		$('#TAASC').hide();
+}
 
 function spreadFees(id_range)
 {

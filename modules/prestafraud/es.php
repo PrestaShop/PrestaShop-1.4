@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{prestafraud}prestashop>prestafraud_eed029a9cfe78c1230a654e58fe8b6f8'] = 'PrestaShop Security';
 $_MODULE['<{prestafraud}prestashop>prestafraud_95d311a37e934646eec0c79c4f266feb'] = 'Proteja su tienda de pagos fraudulentos';
 $_MODULE['<{prestafraud}prestashop>prestafraud_4d0a6a9777a818ecc3b59b9a8ecd0c43'] = '- Por favor, elija su actividad principal -';

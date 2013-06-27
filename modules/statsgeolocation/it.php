@@ -2,8 +2,9 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{statsgeolocation}prestashop>statsgeolocation_323d4eb70b252acb4a04eaf9e0882597'] = 'Geolocalizzazione';
-$_MODULE['<{statsgeolocation}prestashop>statsgeolocation_621bd20bc26d0f67bacffc7785616372'] = 'Mostra l\'origine dei tuoi clienti ';
+$_MODULE['<{statsgeolocation}prestashop>statsgeolocation_621bd20bc26d0f67bacffc7785616372'] = 'Mostra l\'origine dei tuoi clienti';
 $_MODULE['<{statsgeolocation}prestashop>statsgeolocation_62d043b80de9ab4b2fde9adc6597da04'] = 'Questo modulo indica la distribuzione dei Paesi dei tuoi clienti, mostrando i diversi punti di grandezza sulla mappa mondiale sotto. Vedi la fama del tuo sito web in tutto il mondo e quale continente non hai ancora conquistato.';
 $_MODULE['<{statsgeolocation}prestashop>statsgeolocation_6602bbeb2956c035fb4cb5e844a4861b'] = 'Guida';
 $_MODULE['<{statsgeolocation}prestashop>statsgeolocation_e346362c256cd1ff6efd70288f769d89'] = 'Apriti al mondo';

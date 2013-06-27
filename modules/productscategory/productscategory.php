@@ -118,7 +118,7 @@ class productsCategory extends Module
 			return;
 
 		// Get infos
-		$categoryProducts = $category->getProducts((int)$cookie->id_lang, 1, 100); /* 100 products max. */
+		$categoryProducts = $category->getProducts((int)$cookie->id_lang, 1, 30); /* 30 products max. */
 		$sizeOfCategoryProducts = (int)count($categoryProducts);
 		$middlePosition = 0;
 

@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{statsequipment}prestashop>statsequipment_719d067b229178f03bcfa1da4ac4dede'] = 'Software';
 $_MODULE['<{statsequipment}prestashop>statsequipment_a7b3ac03f9e0f1dabad82e41f6cfed37'] = 'Visualizza il software utilizzato dai visitatori';
 $_MODULE['<{statsequipment}prestashop>statsequipment_dcbcd22b719ba36dad1330178c6bf761'] = 'Determina la percentuale di browser utilizzati dai tuoi clienti.';

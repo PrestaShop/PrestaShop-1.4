@@ -226,15 +226,19 @@ class OrderControllerCore extends ParentOrderController
 	 */
 	public function processAddress()
 	{
+		$same = Tools::isSubmit('same');
+		if(!Tools::getValue('id_address_invoice', false) && !$same)
+			$same = true;		
+		
 		if (!Customer::customerHasAddress((int)self::$cookie->id_customer, (int)Tools::getValue('id_address_delivery'))
-			|| (!Tools::isSubmit('same') && !Customer::customerHasAddress((int)self::$cookie->id_customer, (int)Tools::getValue('id_address_invoice'))))
+			|| (!$same && !Customer::customerHasAddress((int)self::$cookie->id_customer, (int)Tools::getValue('id_address_invoice'))))
 			$this->errors[] = Tools::displayError('Invalid address');
 		elseif (!Tools::isSubmit('id_address_delivery') || !Address::isCountryActiveById((int)Tools::getValue('id_address_delivery')))
 			$this->errors[] = Tools::displayError('This address is not in a valid area.');
 		else
 		{
 			self::$cart->id_address_delivery = (int)Tools::getValue('id_address_delivery');
-			self::$cart->id_address_invoice = Tools::isSubmit('same') ? self::$cart->id_address_delivery : (int)Tools::getValue('id_address_invoice');
+			self::$cart->id_address_invoice = $same ? self::$cart->id_address_delivery : (int)Tools::getValue('id_address_invoice');
 			if (!self::$cart->update())
 				$this->errors[] = Tools::displayError('An error occurred while updating your cart.');
 

@@ -980,7 +980,8 @@ class Tools14
 
 		// If it was not possible to lowercase the string with mb_strtolower, we do it after the transformations.
 		// This way we lose fewer special chars.
-		$str = strtolower($str);
+		if (!function_exists('mb_strtolower'))
+			$str = strtolower($str);
 
 		return $str;
 	}
@@ -1042,7 +1043,8 @@ class Tools14
 	*/
 	public static function dateYears()
 	{
-		for ($i = date('Y') - 10; $i >= 1900; $i--)
+		$tab = array();
+		for ($i = date('Y'); $i >= 1900; $i--)
 			$tab[] = $i;
 		return $tab;
 	}
@@ -1248,20 +1250,32 @@ class Tools14
 		return self::$file_exists_cache[$filename];
 	}
 
-	public static function file_get_contents($url, $useIncludePath = false, $streamContext = NULL, $curlTimeOut = 5)
+	public static function file_get_contents($url, $use_include_path = false, $stream_context = null, $curl_timeout = 5)
 	{
-		if ($streamContext == NULL)
-			$streamContext = @stream_context_create(array('http' => array('timeout' => 5)));
-
-		if (in_array(ini_get('allow_url_fopen'), array('On', 'on', '1')))
-			return @file_get_contents($url, $useIncludePath, $streamContext);
-		elseif (function_exists('curl_init') && in_array(ini_get('allow_url_fopen'), array('On', 'on', '1')))
+		if (!extension_loaded('openssl') AND strpos('https://', $url) === true)
+			$url = str_replace('https', 'http', $url);
+		if ($stream_context == null && preg_match('/^https?:\/\//', $url))
+			$stream_context = @stream_context_create(array('http' => array('timeout' => $curl_timeout)));
+		if (in_array(ini_get('allow_url_fopen'), array('On', 'on', '1')) || !preg_match('/^https?:\/\//', $url))
+			return @file_get_contents($url, $use_include_path, $stream_context);
+		elseif (function_exists('curl_init'))
 		{
 			$curl = curl_init();
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 			curl_setopt($curl, CURLOPT_URL, $url);
-			curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $curlTimeOut);
-			curl_setopt($curl, CURLOPT_TIMEOUT, $curlTimeOut);
+			curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5);
+			curl_setopt($curl, CURLOPT_TIMEOUT, $curl_timeout);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+			$opts = stream_context_get_options($stream_context);
+			if (isset($opts['http']['method']) && self::strtolower($opts['http']['method']) == 'post')
+			{
+				curl_setopt($curl, CURLOPT_POST, true);
+				if (isset($opts['http']['content']))
+				{
+					parse_str($opts['http']['content'], $datas);
+					curl_setopt($curl, CURLOPT_POSTFIELDS, $datas);
+				}
+			}
 			$content = curl_exec($curl);
 			curl_close($curl);
 			return $content;
@@ -1272,10 +1286,7 @@ class Tools14
 
 	public static function simplexml_load_file($url, $class_name = null)
 	{
-		if (in_array(ini_get('allow_url_fopen'), array('On', 'on', '1')))
-			return simplexml_load_string(Tools14::file_get_contents($url), $class_name);
-		else
-			return false;
+		return @simplexml_load_string(self::file_get_contents($url), $class_name);
 	}
 
 	public static function minifyHTML($html_content)
@@ -1380,12 +1391,18 @@ class Tools14
 
 	public static function packJS($js_content)
 	{
-		if (strlen($js_content) > 0)
+		if (!empty($js_content))
 		{
 			require_once(_PS_TOOL_DIR_.'js_minify/jsmin.php');
-			return JSMin::minify($js_content);
+			try {
+				$js_content = JSMin::minify($js_content);
+			} catch (Exception $e) {
+				if (_PS_MODE_DEV_)
+					echo $e->getMessage();
+				return $js_content;
+			}
 		}
-		return false;
+		return $js_content;
 	}
 
 	public static function minifyCSS($css_content, $fileuri = false)
@@ -1667,7 +1684,7 @@ class Tools14
 			foreach ($js_files_infos as $file_infos)
 			{
 				if (file_exists($file_infos['path']))
-					$content .= file_get_contents($file_infos['path']).';';
+					$content .= self::file_get_contents($file_infos['path']).';';
 				else
 					$compressed_js_files_not_found[] = $file_infos['path'];
 			}
@@ -2033,7 +2050,7 @@ FileETag INode MTime Size
 		}
 		else
 		{
-			require_once(dirname(__FILE__).'/../tools/pclzip/pclzip.lib.php');
+			require_once(dirname(__FILE__).'/pclzip.lib.php');
 			$zip = new PclZip($fromFile);
 			return ($zip->privCheckFormat() === true);
 		}
@@ -2056,7 +2073,7 @@ FileETag INode MTime Size
 		}
 		else
 		{
-			require_once(dirname(__FILE__).'/../tools/pclzip/pclzip.lib.php');
+			require_once(dirname(__FILE__).'/pclzip.lib.php');
 			$zip = new PclZip($fromFile);
 			$list = $zip->extract(PCLZIP_OPT_PATH, $toDir);
 			foreach ($list as $extractedFile)
@@ -2219,17 +2236,6 @@ FileETag INode MTime Size
 				if (strpos($module, $name) !== false)
 					return true;
 			}
-		}
-		else{
-			// If apache_get_modules does not exists,
-			// one solution should be parsing httpd.conf, 
-			// but we could simple parse phpinfo(INFO_MODULES) return string
-			ob_start();
-			phpinfo(INFO_MODULES);
-			$phpinfo = ob_get_contents();
-			ob_end_clean();
-			if (strpos($phpinfo, $name) !== false)
-				return true;
 		}
 		return false;
 	}

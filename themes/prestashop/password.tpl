@@ -23,7 +23,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-{capture name=path}{l s='Forgot your password'}{/capture}
+{capture name=path}<a rel="nofollow" href="{$link->getPageLink('authentication.php', true)}">{l s='Log in'}</a><span class="navigation-pipe">{$navigationPipe}</span>{l s='Forgot your password'}{/capture}
 {include file="$tpl_dir./breadcrumb.tpl"}
 
 <h1>{l s='Forgot your password'}</h1>

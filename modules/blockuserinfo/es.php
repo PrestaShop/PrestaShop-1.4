@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{blockuserinfo}prestashop>blockuserinfo_a2e9cd952cda8ba167e62b25a496c6c1'] = 'Bloque de información personal';
 $_MODULE['<{blockuserinfo}prestashop>blockuserinfo_970a31aa19d205f92ccfd1913ca04dc0'] = 'Añadir un bloque para mostrar información acerca del cliente';
 $_MODULE['<{blockuserinfo}prestashop>blockuserinfo_83218ac34c1834c26781fe4bde918ee4'] = 'Bienvenido';

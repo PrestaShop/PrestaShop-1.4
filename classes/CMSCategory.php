@@ -422,6 +422,8 @@ class CMSCategoryCore extends ObjectModel
 			return false;
 		if ($id_parent == 1)
 			return true;
+		if ($id_cms_category = 1 && $id_parent == 0)
+			return true;
 		$i = (int)$id_parent;
 
 		while (42)

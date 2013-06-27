@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{mailalerts}prestashop>mailalerts_fd30254803e8db32521d3390131a44da'] = 'Alertes email';
 $_MODULE['<{mailalerts}prestashop>mailalerts_2d51f4a7ab8a12c4f35b507019523b8c'] = 'Envoie des notifications par e-mail aux clients et aux marchands.';
 $_MODULE['<{mailalerts}prestashop>mailalerts_8fd3b84964bd6dfec8095f658d200b29'] = 'Etes-vous sûr de vouloir supprimer toutes les notifications clients ?';
@@ -13,9 +14,9 @@ $_MODULE['<{mailalerts}prestashop>mailalerts_ea379dd90c33c1345f40aa0afa6688d8'] 
 $_MODULE['<{mailalerts}prestashop>mailalerts_86e8d61297942b00e9937299735df971'] = 'Donne au client la possibilité de recevoir une notification lorsqu\'un produit hors-stock est de nouveau disponible';
 $_MODULE['<{mailalerts}prestashop>mailalerts_38fb7d24e0d60a048f540ecb18e13376'] = 'Enregistrer';
 $_MODULE['<{mailalerts}prestashop>mailalerts_d9b64868bb5b490c5c0627abe835acf6'] = 'Notification marchand';
-$_MODULE['<{mailalerts}prestashop>mailalerts_9204d21640382a89a95ec42f44f9051c'] = 'Nouvelle commande : ';
+$_MODULE['<{mailalerts}prestashop>mailalerts_9204d21640382a89a95ec42f44f9051c'] = 'Nouvelle commande :';
 $_MODULE['<{mailalerts}prestashop>mailalerts_fd5dc19a70d21e130f2e4ab5eb205e66'] = 'Recevoir une notification si une nouvelle commande est passée';
-$_MODULE['<{mailalerts}prestashop>mailalerts_ebc3ccf8441dba3c1615afa6acb3282a'] = 'Hors stock : ';
+$_MODULE['<{mailalerts}prestashop>mailalerts_ebc3ccf8441dba3c1615afa6acb3282a'] = 'Hors stock :';
 $_MODULE['<{mailalerts}prestashop>mailalerts_c009546071b59092716ba006f307c6af'] = 'Recevoir une notification si la quantité du produit est en dessous du seuil d\'alerte';
 $_MODULE['<{mailalerts}prestashop>mailalerts_af097c4096dc45754451f6f656dd1ee0'] = 'Seuil d\'alerte:';
 $_MODULE['<{mailalerts}prestashop>mailalerts_65d0578157fd293e96f55f2d9228c07b'] = 'Quantité pour laquelle le produit est considéré hors stock';
@@ -26,7 +27,7 @@ $_MODULE['<{mailalerts}prestashop>mailalerts_c1ee76f076a5b97e3b4b0c0e5703246e'] 
 $_MODULE['<{mailalerts}prestashop>mailalerts_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Confirmation';
 $_MODULE['<{mailalerts}prestashop>mailalerts_c888438d14855d7d96a2724ee9c306bd'] = 'Configuration mise à jour';
 $_MODULE['<{mailalerts}prestashop>mailalerts_ce241f25e003bafeb9fce6857d8f027f'] = 'Merci d\'entrer une (ou plusieurs) addresse(s) email';
-$_MODULE['<{mailalerts}prestashop>mailalerts_29aae9c646337554f4de7ae29050c39f'] = 'E-mail invalide : ';
+$_MODULE['<{mailalerts}prestashop>mailalerts_29aae9c646337554f4de7ae29050c39f'] = 'E-mail invalide :';
 $_MODULE['<{mailalerts}prestashop>my-account_4edfd10d0bb5f51e0fd2327df608b5a8'] = 'Mes alertes';
 $_MODULE['<{mailalerts}prestashop>my-account_abca7cba75e5a9ff86b1490f32891f82'] = 'alertes';
 $_MODULE['<{mailalerts}prestashop>myalerts_d95cf4ab2cbf1dfb63f066b50558b07d'] = 'Mon compte';

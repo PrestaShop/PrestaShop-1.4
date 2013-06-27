@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{moneybookers}prestashop>confirmation_2e2117b7c81aa9ea6931641ea2c6499f'] = 'Ihre Bestellung vom';
 $_MODULE['<{moneybookers}prestashop>confirmation_75fbf512d744977d62599cc3f0ae2bb4'] = 'ist abgeschlossen.';
 $_MODULE['<{moneybookers}prestashop>confirmation_15d18c17d7aef219c342bb0d81e823ab'] = 'Ihre Bestellung wird so schnell wie möglich verschickt werden.';
@@ -38,6 +39,14 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_e86e85752dd7a7b31bb935c862480ce
 $_MODULE['<{moneybookers}prestashop>moneybookers_239d45036930947dbf41506d27fa1aa7'] = 'Ändern Sie die Logo Position im Front-office.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_81149af5698332fdf2d6869a66b6ad12'] = 'Live edit';
 $_MODULE['<{moneybookers}prestashop>moneybookers_708c440d8915f957ee6717efc426a863'] = 'Einstellugnen speichern';
+$_MODULE['<{moneybookers}prestashop>moneybookers_f284fe53995a4cc2e1e099cb1e511ec8'] = 'Konto-Bestätigung';
+$_MODULE['<{moneybookers}prestashop>moneybookers_c5093f03229416cc06a625654429d7f2'] = 'Ihr Konto wurde aktiviert';
+$_MODULE['<{moneybookers}prestashop>moneybookers_bd8df5ae85f76ba759fa979ada8566ea'] = 'Sie müssen';
+$_MODULE['<{moneybookers}prestashop>moneybookers_558b256c79bbcf473cc7347ec1ca9d54'] = 'Ihr Konto bestätigen';
+$_MODULE['<{moneybookers}prestashop>moneybookers_71b5b9efebe9c2f73fad6dd1849b4312'] = 'Mein Konto bestätigen';
+$_MODULE['<{moneybookers}prestashop>moneybookers_ece6bf0de28bb0442df6e3a1fd7657d4'] = 'Wenn Sie Hilfe benötigen, lesen Sie das Aktivierungshandbuch';
+$_MODULE['<{moneybookers}prestashop>moneybookers_32e70e9f3def9ebdcdbc872b739b919f'] = 'Sie können Moneybookers mit dem folgenden Testzugang ausprobieren: testaccount2@moneybookers.com, Kennwort: mbtest.';
+$_MODULE['<{moneybookers}prestashop>moneybookers_f5944cfc42cfb20119407c59a97bd9d1'] = 'Warnung: dies ist nur ein Test-Account. Sie erhalten kein Geld, wenn Sie diesen Test-Account in Ihrem Shop nutzen. rnUm Geld empfangen zu können, müssen Sie Ihre persönlichen Anmeldedaten und Kennwort verwenden!';
 $_MODULE['<{moneybookers}prestashop>moneybookers_5138738b54f0d4bdf7c72780db651abc'] = 'Kontoeröffnung';
 $_MODULE['<{moneybookers}prestashop>moneybookers_41992c760318e60740f7a9b2819af191'] = 'Starten Sie mit der Eröffung eines';
 $_MODULE['<{moneybookers}prestashop>moneybookers_c0302a6fbca061af831bc12f06cadb2f'] = 'Gratis-Kontos';
@@ -54,14 +63,6 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_1467fcd161d2aee8146c7808c937785
 $_MODULE['<{moneybookers}prestashop>moneybookers_936ccdb97115e9f35a11d35e3d5b5cad'] = 'klicken Sie bitte hier';
 $_MODULE['<{moneybookers}prestashop>moneybookers_11c8ff1cde03aa19406dfe5971b92553'] = 'Moneybookers eWallet';
 $_MODULE['<{moneybookers}prestashop>moneybookers_223b661f7b13d33498a9274bb10e3538'] = 'Quick Checkout Moneybookers';
-$_MODULE['<{moneybookers}prestashop>moneybookers_f284fe53995a4cc2e1e099cb1e511ec8'] = 'Konto-Bestätigung';
-$_MODULE['<{moneybookers}prestashop>moneybookers_c5093f03229416cc06a625654429d7f2'] = 'Ihr Konto wurde aktiviert';
-$_MODULE['<{moneybookers}prestashop>moneybookers_bd8df5ae85f76ba759fa979ada8566ea'] = 'Sie müssen';
-$_MODULE['<{moneybookers}prestashop>moneybookers_558b256c79bbcf473cc7347ec1ca9d54'] = 'Ihr Konto bestätigen';
-$_MODULE['<{moneybookers}prestashop>moneybookers_71b5b9efebe9c2f73fad6dd1849b4312'] = 'Mein Konto bestätigen';
-$_MODULE['<{moneybookers}prestashop>moneybookers_ece6bf0de28bb0442df6e3a1fd7657d4'] = 'Wenn Sie Hilfe benötigen, lesen Sie das Aktivierungshandbuch';
-$_MODULE['<{moneybookers}prestashop>moneybookers_32e70e9f3def9ebdcdbc872b739b919f'] = 'Sie können Moneybookers mit dem folgenden Testzugang ausprobieren: testaccount2@moneybookers.com, Kennwort: mbtest.';
-$_MODULE['<{moneybookers}prestashop>moneybookers_f5944cfc42cfb20119407c59a97bd9d1'] = 'Warnung: dies ist nur ein Test-Account. Sie erhalten kein Geld, wenn Sie diesen Test-Account in Ihrem Shop nutzen. rnUm Geld empfangen zu können, müssen Sie Ihre persönlichen Anmeldedaten und Kennwort verwenden!';
 $_MODULE['<{moneybookers}prestashop>moneybookers_0b65457508cf73c9ed8c96f56b8910ce'] = 'Kennwortbestätigung';
 $_MODULE['<{moneybookers}prestashop>moneybookers_e44efbda9396a5641d730f0ac4866e52'] = 'Ihr Kennwort wurde aktiviert';
 $_MODULE['<{moneybookers}prestashop>moneybookers_98061690dbf6a359c5b2aeb84d0eb317'] = 'Sie müssen';

@@ -30,13 +30,27 @@ if (function_exists('date_default_timezone_set'))
 	date_default_timezone_set('Europe/Paris');
 
 /* Redefine REQUEST_URI if empty (on some webservers...) */
-$_SERVER['REQUEST_URI'] = str_replace('//', '/', $_SERVER['REQUEST_URI']);
-if (!isset($_SERVER['REQUEST_URI']) || $_SERVER['REQUEST_URI'] == '')
-	$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
+if (!isset($_SERVER['REQUEST_URI']) || empty($_SERVER['REQUEST_URI']))
+{
+	if (!isset($_SERVER['SCRIPT_NAME']) && isset($_SERVER['SCRIPT_FILENAME']))
+		$_SERVER['SCRIPT_NAME'] = $_SERVER['SCRIPT_FILENAME'];
+	if (isset($_SERVER['SCRIPT_NAME']))
+	{
+		if (basename($_SERVER['SCRIPT_NAME']) == 'index.php' && empty($_SERVER['QUERY_STRING']))
+			$_SERVER['REQUEST_URI'] = dirname($_SERVER['SCRIPT_NAME']).'/';
+		else
+		{
+			$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
+			if (isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']))
+				$_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
+		}
+	}
+}
 if ($tmp = strpos($_SERVER['REQUEST_URI'], '?'))
 	$_SERVER['REQUEST_URI'] = substr($_SERVER['REQUEST_URI'], 0, $tmp);
+$_SERVER['REQUEST_URI'] = str_replace('//', '/', $_SERVER['REQUEST_URI']);
 
-define('INSTALL_VERSION', '1.4.10.0');
+define('INSTALL_VERSION', '1.4.11.0');
 define('MINIMUM_VERSION_TO_UPDATE', '0.8.5');
 define('INSTALL_PATH', dirname(__FILE__));
 if (version_compare(phpversion(), '5.0.0', '<'))
@@ -347,7 +361,7 @@ if ($lm->getIncludeTradFilename())
 			<?php
 
 				$isoForLink = (in_array($lm->getIsoCodeSelectedLang(), array('fr', 'it', 'de', 'en', 'es')) ? $lm->getIsoCodeSelectedLang() : 'en');
-				echo lang('Prestashop and its community offers over 40 different languages for free download at');
+				echo lang('Prestashop and its community offers over 60 different languages for free download at');
 
 			?><br /><a href="http://www.prestashop.com/<?php echo $isoForLink; ?>/<?php echo lang('translations'); ?>" target="_blank">http://www.prestashop.com/<?php echo $isoForLink; ?>/<?php echo lang('translations'); ?></a>
 		</p>
@@ -679,9 +693,9 @@ if ($lm->getIncludeTradFilename())
 					<div class="field">
 						<label for="catalogMode" class="aligned"><?php echo lang('Catalog mode only:'); ?></label>
 						<span class="contentinput">
-							<input type="radio" name="catalogMode" id="catalogMode_1" value="1" />
+							<input type="radio" name="catalogMode" id="catalogMode_1" value="1" autocomplete="off" />
 							<label for="catalogMode_1" class="radiolabel"><?php echo lang('Yes'); ?></label>&nbsp; &nbsp;
-							<input type="radio" name="catalogMode" id="catalogMode_0" value="0" checked="checked"/>
+							<input type="radio" name="catalogMode" id="catalogMode_0" value="0" autocomplete="off" checked="checked"/>
 							<label for="catalogMode_0" class="radiolabel"><?php echo lang('No'); ?></label>
 						</span>
 						<p class="userInfos aligned"><?php echo lang('If you activate this feature, all purchasing will be disabled. However, you will be able to enable purchasing later in your Back Office.'); ?></p>

@@ -208,8 +208,8 @@ class AdminGroups extends AdminTab
 						
 			if ($customerPageIndex > 1)
 			{
-					echo '&nbsp<input type="image" onclick="document.getElementById(\'customerPageIndex\').value=1" src="../img/admin/list-prev2.gif">&nbsp';
-					echo '&nbsp<input type="image" onclick="document.getElementById(\'customerPageIndex\').value='.($customerPageIndex-1).'" src="../img/admin/list-prev.gif">&nbsp';
+					echo '&nbsp;<input type="image" onclick="document.getElementById(\'customerPageIndex\').value=1" src="../img/admin/list-prev2.gif">&nbsp;';
+					echo '&nbsp;<input type="image" onclick="document.getElementById(\'customerPageIndex\').value='.($customerPageIndex-1).'" src="../img/admin/list-prev.gif">&nbsp;';
 			}
 			
 			echo    'Page <b><select onChange="submit()" name="customerPageIndex" id="customerPageIndex">';
@@ -219,8 +219,8 @@ class AdminGroups extends AdminTab
 			
 			if ($customerPageIndex < $totalPages)
 			{
-					echo '&nbsp<input type="image" onclick="document.getElementById(\'customerPageIndex\').value='.((int)$customerPageIndex+1).'" src="../img/admin/list-next.gif">';
-					echo '&nbsp<input type="image" onclick="document.getElementById(\'customerPageIndex\').value='.$totalPages.'" src="../img/admin/list-next2.gif">';
+					echo '&nbsp;<input type="image" onclick="document.getElementById(\'customerPageIndex\').value='.((int)$customerPageIndex+1).'" src="../img/admin/list-next.gif">';
+					echo '&nbsp;<input type="image" onclick="document.getElementById(\'customerPageIndex\').value='.$totalPages.'" src="../img/admin/list-next2.gif">';
 			}
 			
 			echo 	'			| Display

@@ -74,6 +74,19 @@ class LoyaltyModule extends ObjectModel
 
 		return isset($result['id_loyalty']) ? $result['id_loyalty'] : false;
 	}
+	
+	public static function getAllByOrderId($id_order)
+	{
+		if (!Validate::isUnsignedId($id_order))
+			return false;
+
+		$result = Db::getInstance()->executeS('
+		SELECT f.id_loyalty
+		FROM `'._DB_PREFIX_.'loyalty` f
+		WHERE f.id_order = '.(int)($id_order));
+
+		return $result;
+	}	
 
 	public static function getOrderNbPoints($order)
 	{
@@ -108,13 +121,14 @@ class LoyaltyModule extends ObjectModel
 						$smarty->assign('no_pts_discounted', 1);
 					continue;
 				}
-				$total += ($taxesEnabled == PS_TAX_EXC ? $product['price'] : $product['price_wt']) * (int)$product['cart_quantity'];
+				$price = $taxesEnabled == PS_TAX_EXC ? $product['price'] : $product['price_wt'];
+				$total += self::getNbPointsByPrice($price, isset($cart->id_currency) ? (int)$cart->id_currency : 0) * (int)$product['cart_quantity'];
 			}
 			foreach ($cart->getDiscounts(false) as $discount)
-				$total -= $discount['value_real'];
+				$total -= self::getNbPointsByPrice($discount['value_real'], isset($cart->id_currency) ? (int)$cart->id_currency : 0);;
 		}
 
-		return self::getNbPointsByPrice($total, isset($cart->id_currency) ? (int)$cart->id_currency : 0);
+		return $total;
 	}
 
 	public static function getVoucherValue($nbPoints, $id_currency = NULL)
@@ -149,18 +163,20 @@ class LoyaltyModule extends ObjectModel
 
 	public static function getPointsByCustomer($id_customer)
 	{
-		return 
-		Db::getInstance()->getValue('
+		 
+		$a = Db::getInstance()->getValue('
 		SELECT SUM(f.points) points
 		FROM `'._DB_PREFIX_.'loyalty` f
 		WHERE f.id_customer = '.(int)($id_customer).'
-		AND f.id_loyalty_state IN ('.(int)(LoyaltyStateModule::getValidationId()).', '.(int)(LoyaltyStateModule::getNoneAwardId()).')')
-		+		
-		Db::getInstance()->getValue('
+		AND f.id_loyalty_state IN ('.(int)(LoyaltyStateModule::getValidationId()).', '.(int)(LoyaltyStateModule::getNoneAwardId()).')');
+	
+		$b = Db::getInstance()->getValue('
 		SELECT SUM(f.points) points
 		FROM `'._DB_PREFIX_.'loyalty` f
 		WHERE f.id_customer = '.(int)($id_customer).'
-		AND f.id_loyalty_state = '.(int)LoyaltyStateModule::getCancelId().' AND points < 0');	
+		AND f.id_loyalty_state = '.(int)LoyaltyStateModule::getCancelId().' AND points < 0');
+								
+		return (int)$a + $b;
 	}
 
 	public static function getAllByIdCustomer($id_customer, $id_lang, $onlyValidate = false, $pagination = false, $nb = 10, $page = 1)
@@ -200,6 +216,7 @@ class LoyaltyModule extends ObjectModel
 		if (!Validate::isLoadedObject($discount))
 			die(Tools::displayError('Incorrect object Discount.'));
 		$items = self::getAllByIdCustomer((int)$discount->id_customer, NULL, true);
+		$associated = false;
 		foreach ($items AS $item)
 		{
 			$f = new LoyaltyModule((int)$item['id_loyalty']);
@@ -213,7 +230,9 @@ class LoyaltyModule extends ObjectModel
 			$f->id_discount = (int)$discount->id;
 			$f->id_loyalty_state = (int)LoyaltyStateModule::getConvertId();
 			$f->save();
+			$associated = true;
 		}
+		return $associated;
 	}
 
 	public static function getOrdersByIdDiscount($id_discount)

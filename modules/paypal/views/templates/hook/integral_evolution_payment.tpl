@@ -23,6 +23,8 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
+<hr style="border-top: 1px dotted rgb(204, 204, 204);" />
+
 <iframe name="hss_iframe" width="556px" height="540px" style="overflow: hidden; border: none" class="payment_module"></iframe>
 
 <form style="display: none" target="hss_iframe" id="paypal_hss_iframe" name="form_iframe" method="post" action="{$action_url}">
@@ -68,6 +70,7 @@
 	<input type="hidden" name="cancel_return" value="{$cancel_return}" />
 	<input type="hidden" name="return" value="{$return_url}" />
     <input type="hidden" name="bn" value="{$tracking_code}" />
+    <input type="hidden" name="lc" value="{$iso_code}" />
 </form>
 
 {literal}

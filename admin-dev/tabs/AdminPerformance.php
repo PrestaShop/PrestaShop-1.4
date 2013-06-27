@@ -47,7 +47,7 @@ class AdminPerformance extends AdminTab
 					$cache_active = 0;
 				else
 					$cache_active = 1;
-				if (!$caching_system = Tools::getValue('caching_system'))
+				if ((!$caching_system = Tools::getValue('caching_system')) || !in_array($caching_system, array('MCached', 'CacheFS')))
 					$this->_errors[] = Tools::displayError('Caching system is missing');
 				else
 					$settings = preg_replace('/define\(\'_PS_CACHING_SYSTEM_\', \'([a-z0-9=\/+-_]+)\'\);/Ui', 'define(\'_PS_CACHING_SYSTEM_\', \''.$caching_system.'\');', $settings);
@@ -69,6 +69,8 @@ class AdminPerformance extends AdminTab
 				}
 				elseif($caching_system == 'MCached' && $cache_active && !_PS_CACHE_ENABLED_ && _PS_CACHING_SYSTEM_ == 'MCached')
 					Cache::getInstance()->flush();
+				elseif ( _PS_CACHING_SYSTEM_ != 'CacheFS' ||  !$cache_active ||  !_PS_CACHE_ENABLED_ ||  (int)Tools::getValue('ps_cache_fs_directory_depth') == 0)
+					CacheFS::deleteCacheDirectory();					
 				if (!sizeof($this->_errors))
 				{
 					$settings = preg_replace('/define\(\'_PS_CACHE_ENABLED_\', \'([0-9])\'\);/Ui', 'define(\'_PS_CACHE_ENABLED_\', \''.(int)$cache_active.'\');', $settings);

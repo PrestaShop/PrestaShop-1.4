@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{trustedshops}prestashop>display_products_02ecb4a4709d9bcc590f1a25fc82c0e2'] = 'Trusted Shops protection acheteur (recommandée)';
 $_MODULE['<{trustedshops}prestashop>display_products_1107bf75ac50728edbeb497ab803a104'] = 'Protection acheteur jusqu\'à';
 $_MODULE['<{trustedshops}prestashop>display_products_69db1ddc2a15253abb0a11beb1eae734'] = 'TVA incluse';
@@ -76,7 +77,6 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_3ec2499357b45a38139485b2b8
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_a8fcbddffdaccc6daa529aa9c38d82df'] = 'Aucun certificat n\'a été distribué pour cette Trusted Shops ID';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_5abbd73fc5189212c57adfb43adac459'] = 'Certificat de test';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_109715467b74bd66639faa5673f707c1'] = 'Erreur inconnue';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_d4eb1e83b0ea3af3e2b8a6e7b7984d9c'] = 'le champ % est erroné, veuillez vérifier qu\'il a été correctement remplie';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_c230eb5eefd15fa219ff97d42e461a7d'] = 'Certains paramètres envoyés à la méthode \"requestForProtectionV2\" sont faux ou manquant\"';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_b656f5f53cf7ee9bbfe7452685f71e30'] = 'L\'API de Trusted Shops retourne une erreur concernant l\'application n°';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_fdf1d399a4b88e3c62ff925295a4bb0c'] = 'Le numéro %1$d de l\'application Trusted Shops a fonctionné avec succès. Le numéro de garantie est : %2$d';

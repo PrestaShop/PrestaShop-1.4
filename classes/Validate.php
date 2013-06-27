@@ -276,7 +276,7 @@ class ValidateCore
 	*/
 	public static function isPrice($price)
 	{
-		return preg_match('/^[0-9]{1,10}(\.[0-9]{1,9})?$/', $price);
+		return preg_match('/^[0-9]{1,10}(\.[0-9]{1,9})?$/', sprintf('%f', $price));
 	}
 
 	/**
@@ -287,7 +287,7 @@ class ValidateCore
 	 */
 	public static function isNegativePrice($price)
 	{
-		return preg_match('/^[-]?[0-9]{1,10}(\.[0-9]{1,9})?$/', $price);
+		return preg_match('/^[-]?[0-9]{1,10}(\.[0-9]{1,9})?$/', sprintf('%f', $price));
 	}
 
 	/**
@@ -298,22 +298,22 @@ class ValidateCore
 	*/
 	public static function isLanguageIsoCode($isoCode)
 	{
-		return preg_match('/^[a-zA-Z]{2,3}$/', $isoCode);
+		return (bool)preg_match('/^[a-zA-Z]{2,3}$/s', $isoCode);
 	}
 	
 	public static function isLanguageCode($s)
 	{
-		return preg_match('/^[a-zA-Z]{2}(-[a-zA-Z]{2})?$/', $s);
+		return (bool)preg_match('/^[a-zA-Z]{2}(-[a-zA-Z]{2})?$/s', $s);
 	}
 	
 	public static function isStateIsoCode($isoCode)
 	{
-		return preg_match('/^[a-zA-Z0-9]{2,3}((-)[a-zA-Z0-9]{1,3})?$/', $isoCode);
+		return (bool)preg_match('/^[a-zA-Z0-9]{1,4}((-)[a-zA-Z0-9]{1,4})?$/s', $isoCode);
 	}
 	
 	public static function isNumericIsoCode($isoCode)
 	{
-		return preg_match('/^[0-9]{2,3}$/', $isoCode);
+		return (bool)preg_match('/^[0-9]{2,3}$/s', $isoCode);
 	}
 
 	/**
@@ -1089,7 +1089,7 @@ class ValidateCore
 	*/
 	public static function isLangIsoCode($iso_code)
 	{
-		return (bool)(preg_match('/^[a-zA-Z]{2,3}$/s', $iso_code));
+		return (bool)self::isLanguageIsoCode($iso_code);
 	}
 	
 	/**

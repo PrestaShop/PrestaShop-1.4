@@ -53,7 +53,7 @@ class CustomerMessageCore extends ObjectModel
 			),
 	);
 	
-	public	function getFields()
+	public function getFields()
 	{
 	 	parent::validateFields();
 		$fields['id_customer_thread'] = (int)($this->id_customer_thread);
@@ -75,5 +75,11 @@ class CustomerMessageCore extends ObjectModel
 	{
 		return ip2long($this->ip_address);
 	}
-}
 
+	public function delete()
+	{
+	    if (!empty($this->file_name))
+	        @unlink(_PS_UPLOAD_DIR_.$this->file_name);
+	    return parent::delete();
+	}	
+}

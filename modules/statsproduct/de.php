@@ -2,8 +2,9 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{statsproduct}prestashop>statsproduct_78e454064a7d3a7755a011a3b79f31a7'] = 'Produktdetails';
-$_MODULE['<{statsproduct}prestashop>statsproduct_285201dab507840d082d58dc13602b00'] = 'Holen Sie sich detaillierte Statistiken für jedes Produkt';
+$_MODULE['<{statsproduct}prestashop>statsproduct_285201dab507840d082d58dc13602b00'] = 'Detaillierte Statistiken für jedes Produkt erhalten';
 $_MODULE['<{statsproduct}prestashop>statsproduct_3ec365dd533ddb7ef3d1c111186ce872'] = 'Details';
 $_MODULE['<{statsproduct}prestashop>statsproduct_981a6013008c8f4b75836b0f415b05b8'] = 'Insgesamt gekauft:';
 $_MODULE['<{statsproduct}prestashop>statsproduct_6780a9268e38d2ddd4f6c4a8ccf83d24'] = 'Verkäufe (-Tx):';
@@ -20,7 +21,7 @@ $_MODULE['<{statsproduct}prestashop>statsproduct_03ab340b3f99e03cff9e84314ead38c
 $_MODULE['<{statsproduct}prestashop>statsproduct_3601146c4e948c32b6424d2c0a7f0118'] = 'Preis';
 $_MODULE['<{statsproduct}prestashop>statsproduct_a1892c39b2598b4f30f9cc92c59f1aa5'] = 'Cross-Selling';
 $_MODULE['<{statsproduct}prestashop>statsproduct_df644ae155e79abf54175bd15d75f363'] = 'Produktname';
-$_MODULE['<{statsproduct}prestashop>statsproduct_2a0440eec72540c5b30d9199c01f348c'] = 'Verkaufte Menge ';
+$_MODULE['<{statsproduct}prestashop>statsproduct_2a0440eec72540c5b30d9199c01f348c'] = 'Verkaufte Menge';
 $_MODULE['<{statsproduct}prestashop>statsproduct_844c29394eea07066bb2efefc35784ec'] = 'Durchschnittlicher Preis';
 $_MODULE['<{statsproduct}prestashop>statsproduct_0173374ac20f5843d58b553d5b226ef6'] = 'Wählen Sie eine Kategorie';
 $_MODULE['<{statsproduct}prestashop>statsproduct_b1c94ca2fbc3e78fc30069c8d0f01680'] = 'Alle';

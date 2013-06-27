@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_416900392875e9effb318da8648fbdcb'] = 'muss konfiguriert sein, um dieses Modul richtig zu nutzen';
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_e2236d4f47edb104d62eaa4168b298f0'] = 'muss konfiguriert sein, um dieses Modul richtig zu nutzen';
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_b718adec73e04ce3ec720dd11a06a308'] = 'ID';
@@ -40,6 +41,7 @@ $_MODULE['<{tntcarrier}prestashop>getshippingnumber_0be8406951cdfda82f00f79328cf
 $_MODULE['<{tntcarrier}prestashop>getshippingnumber_c2ba7e785c49050f48da9aacc45c2b85'] = 'Service';
 $_MODULE['<{tntcarrier}prestashop>getshippingnumber_77587239bf4c54ea493c7033e1dbf636'] = 'Nachname';
 $_MODULE['<{tntcarrier}prestashop>getshippingnumber_bc910f8bdf70f29374f496f05be0330c'] = 'Vorname';
+$_MODULE['<{tntcarrier}prestashop>getshippingnumber_1e4dbc7eaa78468a3bc1448a3d68d906'] = 'Telefon-Nr.';
 $_MODULE['<{tntcarrier}prestashop>getshippingnumber_3225a10b07f1580f10dee4abc3779e6c'] = 'Parameter';
 $_MODULE['<{tntcarrier}prestashop>getshippingnumber_ec03d3b301ba9b151bc36b4811158dc7'] = 'Absendedatum:';
 $_MODULE['<{tntcarrier}prestashop>getshippingnumber_2fcecaf04456ae2ceac826fd0ccaaf1c'] = 'Kontonummer';
@@ -71,5 +73,3 @@ $_MODULE['<{tntcarrier}prestashop>shippingnumber_c3f15ecc6da0827a8da712cb43a0b59
 $_MODULE['<{tntcarrier}prestashop>shippingnumber_0c458988127eb2150776881e2ef3f0c4'] = 'Lieferadresse:';
 $_MODULE['<{tntcarrier}prestashop>shippingnumber_e19726b466603bc3e444dd26fbcde074'] = 'Kundenadresse';
 $_MODULE['<{tntcarrier}prestashop>weightform_c3f15ecc6da0827a8da712cb43a0b596'] = 'Informationen zum Lieferanten';
-
-?>

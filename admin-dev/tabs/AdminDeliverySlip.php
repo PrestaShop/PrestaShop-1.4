@@ -96,9 +96,20 @@ class AdminDeliverySlip extends AdminTab
 					$this->_errors[] = $this->l('No delivery slip found for this period');
 			}			
 		}
+		elseif (Tools::getValue('submitOptionsdelivery'))
+		{
+		    $next_slipnum = abs((int)Tools::getValue('PS_DELIVERY_NUMBER'));
+		    $_POST['PS_DELIVERY_NUMBER']= $next_slipnum;
+		    $max_existing = abs((int)Db::getInstance()->getValue('SELECT MAX(`delivery_number`) FROM `'._DB_PREFIX_.'orders`'));
+		    if ((int)$next_slipnum < 1 || (int)$next_slipnum > 4294967295)
+		        $this->_errors[] = $this->l('The delivery number requires a value between 1 and 4294967295');
+		    if ($max_existing  &&  $next_slipnum <= abs((int)($max_existing)))
+		        $this->_errors[] = $this->l('To avoid duplicating numbers assigned to existing slips, delivery slip number must be greater than').' '.$max_existing;
+
+		    if (!count($this->_errors))
+		        parent::postProcess();
+		}
 		else
 			parent::postProcess();
 	}
 }
-
-

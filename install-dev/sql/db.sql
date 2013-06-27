@@ -1511,8 +1511,7 @@ CREATE TABLE `PREFIX_stock_mvt` (
   `date_upd` datetime NOT NULL,
   PRIMARY KEY  (`id_stock_mvt`),
   KEY `id_order` (`id_order`),
-  KEY `id_product` (`id_product`),
-  KEY `id_product_attribute` (`id_product_attribute`),
+  KEY `id_product_id_product_attribute` (`id_product`,`id_product_attribute`),
   KEY `id_stock_mvt_reason` (`id_stock_mvt_reason`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
 
@@ -1523,7 +1522,6 @@ CREATE TABLE `PREFIX_stock_mvt_reason` (
   `date_upd` datetime NOT NULL,
   PRIMARY KEY  (`id_stock_mvt_reason`)
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8;
-
 
 CREATE TABLE `PREFIX_stock_mvt_reason_lang` (
   `id_stock_mvt_reason` int(10) NOT NULL,
@@ -1679,4 +1677,3 @@ CREATE TABLE `PREFIX_address_format` (
   `format` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id_country`)
 ) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8;
-

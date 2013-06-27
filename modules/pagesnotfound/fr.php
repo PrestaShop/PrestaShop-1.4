@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{pagesnotfound}prestashop>pagesnotfound_251295238bdf7693252f2804c8d3707e'] = 'Pages introuvables';
 $_MODULE['<{pagesnotfound}prestashop>pagesnotfound_3ae7050d9f8502e9b69448a6db73fab2'] = 'Affiche les pages demandées mais qui n\'existent pas';
 $_MODULE['<{pagesnotfound}prestashop>pagesnotfound_23dbe39a97cb7e4e528f25f5795d317f'] = 'Pages non trouvées ont été supprimés.';

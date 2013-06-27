@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{shopimporter}prestashop>shopimporter_d714c742b360a8ecbb124c15e9a391a1'] = 'Import de tienda';
 $_MODULE['<{shopimporter}prestashop>shopimporter_eac980737d1ffd0fb480772dbcf57742'] = 'Este módulo le permite importar su tienda a partir de otro sistema.';
 $_MODULE['<{shopimporter}prestashop>shopimporter_4994a8ffeba4ac3140beb89e8d41f174'] = 'Idiomas';

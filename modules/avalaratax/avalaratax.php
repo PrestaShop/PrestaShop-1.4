@@ -39,9 +39,8 @@ class AvalaraTax extends Module
 	{
 		$this->name = 'avalaratax';
 		$this->tab = 'billing_invoicing';
-		$this->version = '3.0.8';
+		$this->version = '3.1.1';
 		$this->author = 'PrestaShop';
-		$this->limited_countries = array('us', 'ca');
 		parent::__construct();
 
 		$this->displayName = $this->l('Avalara - AvaTax');
@@ -175,12 +174,13 @@ class AvalaraTax extends Module
 	{
 		return array(
 			'Tax.php' => array(
-				'source' => 'override/classes/tax/Tax.php',
+				'source' => 'override-14x/classes/Tax.php',
 				'dest' => 'override/classes/Tax.php',
 				'md5' => array(
 					'1.1' => '5d9e318d673bfa723b02f14f952e0a7a',
 					'2.3' => '86c900cd6fff286aa6a52df2ff72228a',
 					'3.0.2' => 'c558c0b15877980134e301af34e42c3e',
+					'3.1.1' => '38acdbc8b4d57d7e5110d589a78796bc',
 				)
 			),
 			'Cart.php' => array(
@@ -1386,7 +1386,7 @@ else
 					$_POST['postcode'] =  Tools::safeOutput(substr($normalizedAddress['Normalized']['PostalCode'], 0, strpos($normalizedAddress['Normalized']['PostalCode'], '-')));
 				}
 			}
-			else
+			elseif (Configuration::get('PS_TAASC'))
 			{
 				include_once(_PS_TAASC_PATH_.'AddressStandardizationSolution.php');
 				$normalize = new AddressStandardizationSolution();

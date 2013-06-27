@@ -162,7 +162,11 @@ class AdminAttributes extends AdminTab
 		}
 		else
 			parent::postProcess();
+		if (isset($this->_errors) && count($this->_errors))
+		{
+			$key = array_search('An error occurred during deletion of '.$this->table.'.', $this->_errors);
+			if ($key !== false)
+				$this->_errors[$key] = Tools::displayError('cannot delete this Attribute, the selected item is still associated with one or more product combinations');
+		}
 	}
 }
-
-

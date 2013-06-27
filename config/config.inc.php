@@ -64,15 +64,21 @@ require_once(dirname(__FILE__).'/autoload.php');
 /* Redefine REQUEST_URI if empty (on some webservers...) */
 if (!isset($_SERVER['REQUEST_URI']) || empty($_SERVER['REQUEST_URI']))
 {
-	if (substr($_SERVER['SCRIPT_NAME'], -9) == 'index.php' && empty($_SERVER['QUERY_STRING']))
-		$_SERVER['REQUEST_URI'] = dirname($_SERVER['SCRIPT_NAME']).'/';
-	else
+	if (!isset($_SERVER['SCRIPT_NAME']) && isset($_SERVER['SCRIPT_FILENAME']))
+		$_SERVER['SCRIPT_NAME'] = $_SERVER['SCRIPT_FILENAME'];
+	if (isset($_SERVER['SCRIPT_NAME']))
 	{
-		$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
-		if (isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']))
-			$_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
+		if (basename($_SERVER['SCRIPT_NAME']) == 'index.php' && empty($_SERVER['QUERY_STRING']))
+			$_SERVER['REQUEST_URI'] = dirname($_SERVER['SCRIPT_NAME']).'/';
+		else
+		{
+			$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
+			if (isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']))
+				$_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
+		}
 	}
 }
+$_SERVER['REQUEST_URI'] = str_replace('//', '/', $_SERVER['REQUEST_URI']);
 
 /* Trying to redefine HTTP_HOST if empty (on some webservers...) */
 if (!isset($_SERVER['HTTP_HOST']) || empty($_SERVER['HTTP_HOST']))
@@ -149,3 +155,4 @@ if (function_exists('date_default_timezone_set'))
 
 /* Smarty */
 require_once(dirname(__FILE__).'/smarty.config.inc.php');
+/* PrestaShop Mobile */ if (file_exists(_PS_MODULE_DIR_.'mobile_theme/mobile.config.inc.php')) include(_PS_MODULE_DIR_.'mobile_theme/mobile.config.inc.php');

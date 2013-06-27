@@ -19,7 +19,7 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2013 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
@@ -52,7 +52,7 @@ define('PREG_CLASS_SEARCH_EXCLUDE',
 '\x{2ce5}-\x{2cff}\x{2d6f}\x{2e00}-\x{3005}\x{3007}-\x{303b}\x{303d}-\x{303f}'.
 '\x{3099}-\x{309e}\x{30a0}\x{30fb}\x{30fd}\x{30fe}\x{3190}-\x{319f}\x{31c0}-'.
 '\x{31cf}\x{3200}-\x{33ff}\x{4dc0}-\x{4dff}\x{a015}\x{a490}-\x{a716}\x{a802}'.
-'\x{E000}-\x{F8FF}\x{FB29}\x{FD3E}-\x{FD3F}\x{FDFC}-\x{FDFD}'.
+'\x{e000}-\x{f8ff}\x{fb29}\x{fd3e}-\x{fd3f}\x{fdfc}-\x{fdfd}'.
 '\x{fd3f}\x{fdfc}-\x{fe6b}\x{feff}-\x{ff0f}\x{ff1a}-\x{ff20}\x{ff3b}-\x{ff40}'.
 '\x{ff5b}-\x{ff65}\x{ff70}\x{ff9e}\x{ff9f}\x{ffe0}-\x{fffd}');
 
@@ -99,6 +99,19 @@ class SearchCore
 		$string = html_entity_decode($string, ENT_NOQUOTES, 'utf-8');
 
 		$string = preg_replace('/(['.PREG_CLASS_NUMBERS.']+)['.PREG_CLASS_PUNCTUATION.']+(?=['.PREG_CLASS_NUMBERS.'])/u', '\1', $string);
+
+		$words = explode(' ', $string);
+		$processed_words = array();
+		foreach ($words as &$word)
+		{
+			$alias = new Alias(null, $word);
+			if (Validate::isLoadedObject($alias))
+			{
+				$word = $alias->search;
+				$processed_words[] = $word;
+			}
+		}
+
 		$string = preg_replace('/['.PREG_CLASS_SEARCH_EXCLUDE.']+/u', ' ', $string);
 
 		if ($indexation)
@@ -122,16 +135,17 @@ class SearchCore
 
 		if (!$indexation)
 		{
-			$words = explode(' ', $string);
-			$processed_words = array();
 			// search for aliases for each word of the query
 			foreach ($words as $word)
 			{
-				$alias = new Alias(null, $word);
-				if (Validate::isLoadedObject($alias))
-					$processed_words[] = $alias->search;
-				else
-					$processed_words[] = $word;
+				if (!in_array($word, $processed_words))
+				{
+					$alias = new Alias(null, $word);
+					if (Validate::isLoadedObject($alias))
+						$processed_words[] = $alias->search;
+					else
+						$processed_words[] = $word;
+				}
 			}
 			$string = implode(' ', $processed_words);
 		}

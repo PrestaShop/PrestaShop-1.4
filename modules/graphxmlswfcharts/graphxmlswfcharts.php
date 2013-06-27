@@ -45,7 +45,7 @@ class GraphXmlSwfCharts extends ModuleGraphEngine
 	private	$_legend_more = '';
 	private	$_titles = '';
 
-	function __construct($type = null)
+	public function __construct($type = null)
 	{
 		if ($type != null)
 		{
@@ -67,7 +67,7 @@ class GraphXmlSwfCharts extends ModuleGraphEngine
 		}
 	}
 
-	function install()
+	public function install()
 	{
 		return (parent::install() AND $this->registerHook('GraphEngine'));
 	}

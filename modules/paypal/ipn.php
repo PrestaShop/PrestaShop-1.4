@@ -1,6 +1,10 @@
 <?php
 /*
+<<<<<<< HEAD
 * 2007-2012 PrestaShop
+=======
+* 2007-2013 PrestaShop
+>>>>>>> development
 *
 * NOTICE OF LICENSE
 *
@@ -19,62 +23,39 @@
 * needs please refer to http://www.prestashop.com for more information.
 *
 *  @author PrestaShop SA <contact@prestashop.com>
-*  @copyright  2007-2012 PrestaShop SA
+*  @copyright  2007-2013 PrestaShop SA
 *  @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
 include_once(dirname(__FILE__).'/../../config/config.inc.php');
 include_once(dirname(__FILE__).'/../../init.php');
+include_once(dirname(__FILE__).'/paypal_orders.php');
 
-include_once(_PS_MODULE_DIR_.'paypal/paypal.php');
-$paypal = new Paypal();
-$paypal_order = new PayPalOrder();
-
-if (!$transaction_id = Tools::getValue('txn_id'))
-	die($paypal->l('No transaction id'));
-if (!$id_order = $paypal_order->getIdOrderByTransactionId($transaction_id))
-	die($paypal->l('No order'));
-
-$order = new Order((int)$id_order);
-if (!Validate::isLoadedObject($order) || !$order->id)
-	die($paypal->l('Invalid order'));
-if (!$amount = (float)Tools::getValue('mc_gross') || ($amount != $order->total_paid))
-	die($paypal->l('Incorrect amount'));
-
-if (!$status = (string)Tools::getValue('payment_status'))
-	die($paypal->l('Incorrect order status'));
-
-// Getting params
-$params = 'cmd=_notify-validate';
-foreach ($_POST as $key => $value)
-	$params .= '&'.$key.'='.urlencode(stripslashes($value));
-
-// Checking params by asking PayPal
-include(_PS_MODULE_DIR_.'paypal/api/paypal_lib.php');
-$paypalAPI = new PaypalLib();
-$result = $paypalAPI->makeSimpleCall($paypal->getAPIURL(), $paypal->getAPIScript(), $params);
-if (!$result || (Tools::strlen($result) < 8) || (!$status = substr($result, -8)) || $status != 'VERIFIED')
-	die($paypal->l('Cannot verify PayPal order'));
-
-// Getting order status
-switch ($status)
+function getIPNTransactionDetails()
 {
-	case 'Completed':
-		$id_order_state = Configuration::get('PS_OS_PAYMENT');
-		break;
-	case 'Pending':
-		$id_order_state = Configuration::get('PS_OS_PAYPAL');
-		break;
-	default:
-		$id_order_state = Configuration::get('PS_OS_ERROR');
+	$transaction_id = pSQL(Tools::getValue('txn_id'));
+	return array(
+		'id_invoice' => null,
+		'id_transaction' => $transaction_id,
+		'transaction_id' => $transaction_id,
+		'currency' => pSQL(Tools::getValue('mc_currency')),
+		'total_paid' => (float)Tools::getValue('mc_gross'),
+		'shipping' => (float)Tools::getValue('mc_shipping'),
+		'payment_date' => pSQL(Tools::getValue('payment_date')),
+		'payment_status' => pSQL(Tools::getValue('payment_status')),
+	);
 }
 
-if ($order->getCurrentState() == $id_order_state)
-	die($paypal->l('Same status'));
+if (Tools::getValue('payment_status') !== false)
+{	
+	$details = getIPNTransactionDetails();
+	$id_order = PayPalOrder::getIdOrderByTransactionId($details['id_transaction']);
+	PayPalOrder::updateOrder($id_order, $details);
 
-// Set order state in order history
-$history = new OrderHistory();
-$history->id_order = (int)$order->id;
-$history->changeIdOrderState((int)$id_order_state, (int)$order->id);
-$history->addWithemail(true, $extraVars);
+	$history = new OrderHistory();
+	$history->id_order = (int)$id_order;
+	$history->changeIdOrderState((int)Configuration::get('PS_OS_PAYMENT'), $history->id_order);
+	$history->addWithemail();
+	$history->save();
+}

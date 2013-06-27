@@ -2,7 +2,8 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{blocknewsletter}prestashop>blocknewsletter_9e31b08a00c1ed653bcaa517dee84714'] = 'Blocco newsletter ';
+
+$_MODULE['<{blocknewsletter}prestashop>blocknewsletter_9e31b08a00c1ed653bcaa517dee84714'] = 'Blocco newsletter';
 $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_ba457fab18d697d978befb95e827eb91'] = 'Aggiunge un blocco per l\'iscrizione alla newsletter';
 $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_179bbcbd2e1104cdf9dcecd91264a961'] = 'Sei sicuro di voler eliminare tutti i tuoi contatti?';
 $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_f0e9c1e3969d351170373b5cec2131c2'] = 'Codice del buono non valido';
@@ -12,7 +13,7 @@ $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_a3399c10bd24eba0b78fbd595
 $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_a6105c0a611b41b08f1209506350279e'] = 'sì';
 $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_7fa3b767c460b54a2be4d49030b349c7'] = 'no';
 $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_b68ae6efae2fca059754c27ff94494cd'] = 'Invio di e-mail di conferma dopo l\'iscrizione?';
-$_MODULE['<{blocknewsletter}prestashop>blocknewsletter_506e58042922bff5bd753dc612e84f5b'] = 'Codice buono di benvenuto ';
+$_MODULE['<{blocknewsletter}prestashop>blocknewsletter_506e58042922bff5bd753dc612e84f5b'] = 'Codice buono di benvenuto';
 $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_de3bd7faad12c79178b1b22bf6119e35'] = 'Lascia vuoto per disattivare';
 $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_06933067aafd48425d67bcb01bba5cb6'] = 'Aggiorna';
 $_MODULE['<{blocknewsletter}prestashop>blocknewsletter_6e659c47c94d1e1dc7121859f43fb2b0'] = 'Indirizzo e-mail non valido';

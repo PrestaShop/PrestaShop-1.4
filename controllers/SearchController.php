@@ -47,8 +47,9 @@ class SearchControllerCore extends FrontController
 		{
 			self::$link = new Link();
 			$searchResults = Search::find((int)Tools::getValue('id_lang'), $query, 1, 10, 'position', 'desc', true);
-			foreach ($searchResults as &$product)
-				$product['product_link'] = self::$link->getProductLink($product['id_product'], $product['prewrite'], $product['crewrite']);
+			if (is_array($searchResults))
+				foreach ($searchResults as &$product)
+					$product['product_link'] = self::$link->getProductLink($product['id_product'], $product['prewrite'], $product['crewrite']);
 			die(Tools::jsonEncode($searchResults));
 		}		
 		elseif ($this->instantSearch && !is_array($query))
@@ -86,6 +87,7 @@ class SearchControllerCore extends FrontController
 		}
 		elseif ($tag = urldecode(Tools::getValue('tag')) AND !is_array($tag))
 		{
+			$this->productSort();
 			$nbProducts = (int)(Search::searchTag((int)(self::$cookie->id_lang), $tag, true));
 			$this->pagination($nbProducts);
 			$result = Search::searchTag((int)(self::$cookie->id_lang), $tag, false, $this->p, $this->n, $this->orderBy, $this->orderWay);

@@ -2,13 +2,14 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{payulatam}prestashop>payulatam_d7014345dff0b6d41a3753941ceae745'] = 'PayU Latam';
 $_MODULE['<{payulatam}prestashop>payulatam_ad7bbe1756b33297b84ca933b301a1ed'] = 'Módulo para aceptar pagos con tarjetas de crédito,  transferencias bancarias locales y depósitos en efectivo,   en  todos los países latinoamericanos.';
 $_MODULE['<{payulatam}prestashop>payulatam_69a1a3ad8dd5da6db3c4da838a0cf9c7'] = '¿Está seguro que desea eliminar estos datos?';
 $_MODULE['<{payulatam}prestashop>payulatam_4d51c8de422054448e6ce0ba8e601d26'] = 'Cómo configurar';
 $_MODULE['<{payulatam}prestashop>payulatam_2daf1cb573c2c61422faf64610cf9402'] = 'Credeciales';
 $_MODULE['<{payulatam}prestashop>payulatam_bffe9a3c9a7e00ba00a11749e022d911'] = 'Iniciar sesión';
-$_MODULE['<{payulatam}prestashop>payulatam_a258e02b85d2f3934756318b1146faa0'] = ' Para utilizar este módulo, por favor  llene el siguiente formulario con la información para  iniciar sesión proporcionada por PayU Latam.';
+$_MODULE['<{payulatam}prestashop>payulatam_a258e02b85d2f3934756318b1146faa0'] = 'Para utilizar este módulo, por favor  llene el siguiente formulario con la información para  iniciar sesión proporcionada por PayU Latam.';
 $_MODULE['<{payulatam}prestashop>payulatam_4900277fff3afc0461ef35ed8e4dfc8d'] = 'Identificacion del Comerciante';
 $_MODULE['<{payulatam}prestashop>payulatam_d79468b950252dcc618754785d063794'] = 'La identificación del comerciante (usuario) que le ha suministro PayU Latam duarntre  la creación de su cuenta.';
 $_MODULE['<{payulatam}prestashop>payulatam_ed7a1f73f28e3e6ecbf256ad8103f303'] = 'Clave Api';
@@ -48,7 +49,7 @@ $_MODULE['<{payulatam}prestashop>help_de9d5eb0c57329d33a004da6f9b88e64'] = '¿C�
 $_MODULE['<{payulatam}prestashop>help_e43ec38a93023bde02ff70f28b925702'] = 'Ir a';
 $_MODULE['<{payulatam}prestashop>help_d7014345dff0b6d41a3753941ceae745'] = 'PayU Latam';
 $_MODULE['<{payulatam}prestashop>help_0c09b6123c0215d14ee9da84cf8d8525'] = 'y llene el siguiente formulario para crear su cuenta.';
-$_MODULE['<{payulatam}prestashop>help_d18ca9666aec2ae985098cee94d7223d'] = 'Cómo configurar el módulo PayU Latam: ';
+$_MODULE['<{payulatam}prestashop>help_d18ca9666aec2ae985098cee94d7223d'] = 'Cómo configurar el módulo PayU Latam:';
 $_MODULE['<{payulatam}prestashop>help_57586ef4d57c206f46c0982d5626d159'] = 'Entre su nombre de usario  y contraseña  al inicio de la sesion localizado en la esquina superior derecha.';
 $_MODULE['<{payulatam}prestashop>help_2674eb279b8ee61135a07dcf89a3f33d'] = 'www.paylatam.com';
 $_MODULE['<{payulatam}prestashop>help_4bf012de5b43ee61aff0169a4ffeea90'] = 'Dentro del modulo de PayU Latam vaya a la parte administrativa a la seccion de \"configuracion\"';

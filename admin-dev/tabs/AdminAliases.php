@@ -26,7 +26,7 @@
 
 class AdminAliases extends AdminTab
 {
-	function __construct()
+	public function __construct()
 	{
 	 	$this->table = 'alias';
 	 	$this->className = 'Alias';

@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_f7c34fc4a48bc683445c1e7bbc245508'] = 'Bloque de novedades';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_cc68052332d758d991b64087c6e4352e'] = 'Mostrar el bloque con los nuevos productos añadidos';
 $_MODULE['<{blocknewproducts}prestashop>blocknewproducts_57af4b7e82ba04c42eb3ac111310a505'] = 'Debe rellenar el campo \"productos mostrados\"';

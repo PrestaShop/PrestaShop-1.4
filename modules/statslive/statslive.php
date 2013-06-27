@@ -29,7 +29,7 @@ if (!defined('_PS_VERSION_'))
 
 class StatsLive extends Module
 {
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'statslive';
 		$this->tab = 'analytics_stats';

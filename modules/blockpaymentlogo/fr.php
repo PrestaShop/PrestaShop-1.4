@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{blockpaymentlogo}prestashop>blockpaymentlogo_1bd130f5640104712b3c7dec66b7b0a1'] = 'Bloc logo de paiement';
 $_MODULE['<{blockpaymentlogo}prestashop>blockpaymentlogo_8e27bf58ec687eea4b244d563dcbd8ac'] = 'Ajoute un bloc affichant tous les logos des modes de paiement.';
 $_MODULE['<{blockpaymentlogo}prestashop>blockpaymentlogo_8fc87743f34723d06ebff41629d2fdb5'] = 'Logo de paiement';

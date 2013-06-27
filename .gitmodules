@@ -10,9 +10,6 @@
 [submodule "modules/backwardcompatibility/backward_compatibility"]
 	path = modules/backwardcompatibility/backward_compatibility
 	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
-[submodule "modules/canadapost/backward_compatibility"]
-	path = modules/canadapost/backward_compatibility
-	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
 [submodule "modules/cloudcache/backward_compatibility"]
 	path = modules/cloudcache/backward_compatibility
 	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
@@ -22,14 +19,8 @@
 [submodule "modules/fedexcarrier/backward_compatibility"]
 	path = modules/fedexcarrier/backward_compatibility
 	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
-[submodule "modules/gadsense/backward_compatibility"]
-	path = modules/gadsense/backward_compatibility
-	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
 [submodule "modules/ganalytics/backward_compatibility"]
 	path = modules/ganalytics/backward_compatibility
-	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
-[submodule "modules/gcheckout/backward_compatibility"]
-	path = modules/gcheckout/backward_compatibility
 	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
 [submodule "modules/hipay/backward_compatibility"]
 	path = modules/hipay/backward_compatibility
@@ -82,3 +73,12 @@
 [submodule "modules/payulatam/backward_compatibility"]
 	path = modules/payulatam/backward_compatibility
 	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/trustly/backward_compatibility"]
+	path = modules/trustly/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/gsitemap/backward_compatibility"]
+	path = modules/gsitemap/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility
+[submodule "modules/nqgatewayneteven/backward_compatibility"]
+	path = modules/nqgatewayneteven/backward_compatibility
+	url = https://github.com/PrestaShop/PrestaShop-backward_compatibility.git

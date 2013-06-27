@@ -24,7 +24,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-class	ConfigurationTestCore
+class ConfigurationTestCore
 {
 	static function check($tests)
 	{
@@ -65,6 +65,11 @@ class	ConfigurationTestCore
 	static function test_fopen()
 	{
 		return ini_get('allow_url_fopen');
+	}
+
+	static function test_curl()
+	{
+		return function_exists('curl_init');
 	}
 
 	static function test_system($funcs)

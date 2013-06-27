@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{statsstock}prestashop>statsstock_1e8a6897e195774f3bc6fa7b2ae7f801'] = 'Estadísticas stock';
 $_MODULE['<{statsstock}prestashop>statsstock_8fd17aacf4c601e502cade4914545d4d'] = 'Valor del stock';
 $_MODULE['<{statsstock}prestashop>statsstock_3adbdb3ac060038aa0e6e6c138ef9873'] = 'Categoría';

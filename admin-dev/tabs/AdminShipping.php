@@ -196,7 +196,7 @@ class AdminShipping extends AdminTab
 		global $currentIndex;
 		
 		$carrierArray = array();
-		$id_carrier = Tools::getValue('id_carrier');
+		$id_carrier = (int)Tools::getValue('id_carrier');
 		$carriers = Carrier::getCarriers((int)_PS_LANG_DEFAULT_, true, false, false, null, Carrier::PS_CARRIERS_AND_CARRIER_MODULES_NEED_RANGE);
 		foreach ($carriers AS $carrier)
 			if (!$carrier['is_free'])
@@ -270,7 +270,7 @@ class AdminShipping extends AdminTab
 						if (isset($deliveryArray[$zone['id_zone']][$id_carrier][$range[$rangeIdentifier]]))
 							$price = $deliveryArray[$zone['id_zone']][$id_carrier][$range[$rangeIdentifier]];
 						else
-							$price = '0.00';
+							$price = '';
 						echo '<td class="center">'.$currency->getSign('left').'<input type="text" class="fees_'.$range[$rangeIdentifier].'" onchange="this.value = this.value.replace(/,/g, \'.\');" name="fees_'.$zone['id_zone'].'_'.$range[$rangeIdentifier].'" onkeyup="clearAllFees('.$range[$rangeIdentifier].')" value="'.$price.'" style="width: 45px;" />'.$currency->getSign('right').'</td>';
 					}
 					echo '

@@ -94,6 +94,10 @@ li.disabled span {
 	border: 1px #d0d3d8 solid;
 	margin-bottom: 1.5em
 }
+#color_to_pick_list {
+	height: 100%;
+	overflow: hidden;
+}
 #color_to_pick_list li {
 	display: inline;
 	float: left;

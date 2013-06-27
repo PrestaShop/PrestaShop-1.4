@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{canadapost}prestashop>canadapost_a5daea18a1d4214028a538c3bf5a41cc'] = 'Bieten Sie Ihren Kunden, abweichende Lieferadresse Methoden mit Kanada Beitrag';
 $_MODULE['<{canadapost}prestashop>canadapost_883fa0069f4b0454e2277dd567ab3991'] = 'Gewicht Unit (LB oder KG).';
 $_MODULE['<{canadapost}prestashop>canadapost_5a3ceec65d417f5d92c26dbf0dccc00d'] = 'Dimension Unit (cm oder in).';

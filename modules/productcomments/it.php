@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{productcomments}prestashop>productcomments_b91c4e8b229a399a3bc911d352524a9b'] = 'Commenti  prodotto';
 $_MODULE['<{productcomments}prestashop>productcomments_0c21532dfd3476791e5aab1aa7fa7405'] = 'Consenti agli utenti di inviare un commento su un prodotto';
 $_MODULE['<{productcomments}prestashop>productcomments_f4d1ea475eaa85102e2b4e6d95da84bd'] = 'Conferma';

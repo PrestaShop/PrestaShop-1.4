@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{blockstore}prestashop>blockstore_50d335623ef166aeea8da2a3c2c63a3e'] = 'Bloque tiendas';
 $_MODULE['<{blockstore}prestashop>blockstore_7118171dfc2981fd3d7f3aab97fb572d'] = 'Mostrar un bloque con un link hacia la lista de tiendas';
 $_MODULE['<{blockstore}prestashop>blockstore_f32a6c9e15dd20152ee8b14c7f94b040'] = 'imagen no válida';

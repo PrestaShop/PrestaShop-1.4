@@ -57,8 +57,11 @@ class AdminAttachments extends AdminTab
 			$this->_errors[] = Tools::displayError('This functionnality has been disabled.');
 			return;
 		}
-		/* PrestaShop demo mode*/
-		if (Tools::isSubmit('submitAdd'.$this->table))
+		
+		global $cookie;
+		
+		$this->tabAccess = Profile::getProfileAccess($cookie->profile, $this->id);
+		if ($this->tabAccess['add'] === '1' AND Tools::isSubmit('submitAdd'.$this->table))
 		{
 			if ($id = (int)(Tools::getValue('id_attachment')) AND $a = new Attachment($id))
 			{
@@ -78,6 +81,8 @@ class AdminAttachments extends AdminTab
 							$this->_errors[] = $this->l('File copy failed');
 						$_POST['file_name'] = $_FILES['file']['name'];
 						@unlink($_FILES['file']['tmp_name']);
+						if (!sizeof($this->_errors) && file_exists(_PS_DOWNLOAD_DIR_.$a->file))
+							@unlink(_PS_DOWNLOAD_DIR_.$a->file);	
 						$_POST['file'] = $uniqid;
 						$_POST['mime'] = $_FILES['file']['type'];
 					}
@@ -94,7 +99,10 @@ class AdminAttachments extends AdminTab
 			}
 			$this->validateRules();
 		}
-		return parent::postProcess();
+		$return = parent::postProcess();
+		if (!$return && isset($uniqid) && file_exists(_PS_DOWNLOAD_DIR_.$uniqid))
+			@unlink(_PS_DOWNLOAD_DIR_.$uniqid);
+		return $return;
 	}
 	
 	public function displayForm($isMainTab = true)

@@ -2,24 +2,25 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{kialasmall}prestashop>ajax_db26e10564e958809d798e8048fcbc0a'] = 'Clave de seguridad no válida';
 $_MODULE['<{kialasmall}prestashop>kialasmall_a00d8f811eac41c177e5fb6cf94a9b91'] = 'Integración simple de los webservices de Kiala';
 $_MODULE['<{kialasmall}prestashop>kialasmall_7fc5135167a46310d460c978f416a08c'] = 'Ofrece opciones de entrega y ahorro a tus clientes. Activa la opción de punto de recogida y entrega de Kiala';
-$_MODULE['<{kialasmall}prestashop>kialasmall_8acabcc788c316f92b7850c76265b49b'] = 'Debe habilitar la extensión cURL y la opción \"allow_url_fopen\" en su servidor si quiere usar este módulo. ';
+$_MODULE['<{kialasmall}prestashop>kialasmall_8acabcc788c316f92b7850c76265b49b'] = 'Debe habilitar la extensión cURL y la opción \"allow_url_fopen\" en su servidor si quiere usar este módulo.';
 $_MODULE['<{kialasmall}prestashop>kialasmall_d591cbc447d01e5a6165096ebfdf804e'] = 'Debe habilitar la extensión cURL en su servidor si quiere usar este módulo.';
 $_MODULE['<{kialasmall}prestashop>kialasmall_1b18bd5d9d85f4f667614345ee20e3b2'] = 'Debe habilitar la opción \"allow_url_fopen\" en su servidor si quiere usar este módulo.';
 $_MODULE['<{kialasmall}prestashop>kialasmall_57354d15700e634285683009151d295c'] = 'Debe habilitar la extensión SOAP en su servidor si quiere usar este módulo.';
-$_MODULE['<{kialasmall}prestashop>kialasmall_b7913c6307841fc850477e9990c35b12'] = 'Debe desactivar el módulo Kiala antes de configurar este módulo. ';
+$_MODULE['<{kialasmall}prestashop>kialasmall_b7913c6307841fc850477e9990c35b12'] = 'Debe desactivar el módulo Kiala antes de configurar este módulo.';
 $_MODULE['<{kialasmall}prestashop>kialasmall_d4d6a6191d4ec550609af5e31e40744a'] = 'Estado del módulo Kiala';
 $_MODULE['<{kialasmall}prestashop>kialasmall_6f7fd64c9bdad36bffbc6c23a46b922a'] = '¡El módulo Kiala está configurado y en línea!';
 $_MODULE['<{kialasmall}prestashop>kialasmall_5479636a6a7a576b0cbf0f671af9663d'] = 'El módulo Kiala no ha sido configurado todavía, debe:';
 $_MODULE['<{kialasmall}prestashop>kialasmall_c6096e7865a698ee11ecef6e39feea39'] = 'Registrar una cuenta en Kiala';
-$_MODULE['<{kialasmall}prestashop>kialasmall_064a4b5242fb35fd5dbb011d6df9581c'] = 'configurar y activar la entrega por Kiala para su país (vea ';
+$_MODULE['<{kialasmall}prestashop>kialasmall_064a4b5242fb35fd5dbb011d6df9581c'] = 'configurar y activar la entrega por Kiala para su país (vea';
 $_MODULE['<{kialasmall}prestashop>kialasmall_9371d7a2e3ae86a00aab4771e39d255d'] = ')';
 $_MODULE['<{kialasmall}prestashop>kialasmall_f09ea5dca3d187c50a634239778a5a3c'] = 'Permitir URL fopen';
 $_MODULE['<{kialasmall}prestashop>kialasmall_c7760f2c36d4e647e8a254cef51cbae8'] = 'Habilitar cURL';
 $_MODULE['<{kialasmall}prestashop>kialasmall_ef0932992a07b54437aaf05db94f754b'] = '¿Cómo realizar la mejor integración de la opción Kiala en la página de check-out?';
-$_MODULE['<{kialasmall}prestashop>kialasmall_676b9df388173c21960734237af8f0f0'] = 'Como comercio on-line, proponer la opción de Kiala a menudo significa añadir un servicio adicional para tus clientes, al tiempo de generar ahorros en los gastos de envío. Como consecuencia, será fundamental posicionar correctamente la opción de entrega con Kiala en la página de “check-out” con el fin de hacer que esta “opción de entrega” sea lo más visible posible y genere los ahorros esperados. Siguiendo los consejos sobre cómo posicionar Kiala, conseguirá que el porcentaje de envíos que se realicen por esta vía sea hasta 3 veces superior. ';
+$_MODULE['<{kialasmall}prestashop>kialasmall_676b9df388173c21960734237af8f0f0'] = 'Como comercio on-line, proponer la opción de Kiala a menudo significa añadir un servicio adicional para tus clientes, al tiempo de generar ahorros en los gastos de envío. Como consecuencia, será fundamental posicionar correctamente la opción de entrega con Kiala en la página de “check-out” con el fin de hacer que esta “opción de entrega” sea lo más visible posible y genere los ahorros esperados. Siguiendo los consejos sobre cómo posicionar Kiala, conseguirá que el porcentaje de envíos que se realicen por esta vía sea hasta 3 veces superior.';
 $_MODULE['<{kialasmall}prestashop>kialasmall_4bb82a627a48ab582bf88684dd9fe953'] = 'Los elementos claves para un gran posicionamiento son:';
 $_MODULE['<{kialasmall}prestashop>kialasmall_e83ca24e479d10cd0db75f3ec0d279ad'] = 'La opción de Kiala está pre-seleccionada por defecto';
 $_MODULE['<{kialasmall}prestashop>kialasmall_b36e95a5971bcaadd6f1058eb2656867'] = 'La opción de Kiala, se propone a un precio de entrega más bajo que la entrega a domicilio';
@@ -37,7 +38,6 @@ $_MODULE['<{kialasmall}prestashop>kialasmall_d89658c392fc66e0e5f7e4d2e1f2cc5d'] 
 $_MODULE['<{kialasmall}prestashop>kialasmall_9d9111b77edd02d8c7a2b3b3c02bb1c2'] = '¿Criterio de seguimiento del paquete?';
 $_MODULE['<{kialasmall}prestashop>kialasmall_ce26601dac0dea138b7295f02b7620a7'] = 'Cliente';
 $_MODULE['<{kialasmall}prestashop>kialasmall_a240fa27925a635b08dc28c9e4f9216d'] = 'Pedido';
-$_MODULE['<{kialasmall}prestashop>kialasmall_51299e0a386a12b89b81403902a124ea'] = 'URL a usar para el \"webservice\"';
 $_MODULE['<{kialasmall}prestashop>kialasmall_d4dccb8ca2dac4e53c01bd9954755332'] = 'Guardar ajustes';
 $_MODULE['<{kialasmall}prestashop>kialasmall_4d7400be7c3ed888ad93f5355c1f8e55'] = 'No se encontró Punto Kiala';
 $_MODULE['<{kialasmall}prestashop>kialasmall_a34c9abff690c30540446f5b1e47cc6c'] = 'El tiempo de preparación no es válido.';
@@ -57,14 +57,14 @@ $_MODULE['<{kialasmall}prestashop>kialasmall_50034441fb25c30f207609b91703ae9b'] 
 $_MODULE['<{kialasmall}prestashop>kialasmall_24e21d69f4dbf5e268611f8149612e8e'] = 'Contraseña de Kiala:';
 $_MODULE['<{kialasmall}prestashop>kialasmall_d35e9defb4810dea1304a4b2a873c88f'] = 'Tiempo de preparación:';
 $_MODULE['<{kialasmall}prestashop>kialasmall_3d091e856cb7615d1ccb96bc759b5a92'] = 'Activo:';
-$_MODULE['<{kialasmall}prestashop>kialasmall_f65fa952b6097ffb1529914992ef532b'] = 'Si no está activo, Kiala no estará disponible para los clientes de este país ';
+$_MODULE['<{kialasmall}prestashop>kialasmall_f65fa952b6097ffb1529914992ef532b'] = 'Si no está activo, Kiala no estará disponible para los clientes de este país';
 $_MODULE['<{kialasmall}prestashop>kialasmall_38fb7d24e0d60a048f540ecb18e13376'] = 'Guardar';
 $_MODULE['<{kialasmall}prestashop>kialasmall_19f823c6453c2b1ffd09cb715214813d'] = 'Campo obligatorio';
 $_MODULE['<{kialasmall}prestashop>kialasmall_630f6dc397fe74e52d5189e2c80f282b'] = 'Volver a la lista';
 $_MODULE['<{kialasmall}prestashop>orderdetail_8bfb1a91719f4af3785a59bc9d66fd8f'] = 'Su pedido está siendo entregado por Kiala.';
 $_MODULE['<{kialasmall}prestashop>orderdetail_2be7f2a9c726e7751f463b514af98c71'] = 'Haga click aquí para seguir su pedido';
 $_MODULE['<{kialasmall}prestashop>point-1-4_3cdfc1acfd5f159c7be997ac2f8864b0'] = 'Punto Kiala';
-$_MODULE['<{kialasmall}prestashop>point-1-4_1daeb62f5ea9a861590e3cbcb41c9b20'] = 'Ha seleccionado la entrega en un Punto Kiala. Kiala le permite recoger sus paquetes en tiendas cercanas con amplios horarios de apertura y sin hacer cola. ';
+$_MODULE['<{kialasmall}prestashop>point-1-4_1daeb62f5ea9a861590e3cbcb41c9b20'] = 'Ha seleccionado la entrega en un Punto Kiala. Kiala le permite recoger sus paquetes en tiendas cercanas con amplios horarios de apertura y sin hacer cola.';
 $_MODULE['<{kialasmall}prestashop>point-1-4_3b80b03d9ae2f392c26a85edbde62b79'] = '(Más información…)';
 $_MODULE['<{kialasmall}prestashop>point-1-4_e31d53195a6270ac33bd62eb82b5468c'] = 'Basándonos en su dirección, le recomendamos este Punto Kiala:';
 $_MODULE['<{kialasmall}prestashop>point-1-4_baf1380998f08358a21c71f54c1e7108'] = 'Ha seleccionado este Punto Kiala:';
@@ -84,7 +84,7 @@ $_MODULE['<{kialasmall}prestashop>point-1-4_193f44cfc5d63ad30662b4f02e76c63d'] =
 $_MODULE['<{kialasmall}prestashop>point-1-4_e16b5b7f26f54214445cbe38d72c2828'] = 'Rapidez';
 $_MODULE['<{kialasmall}prestashop>point-1-4_8d5d5d5e14bb0fee2d100ea7d98bedb8'] = 'Su paquete es entregado en un abrir y cerrar de ojos. Sin hacer cola. Sin estrés.';
 $_MODULE['<{kialasmall}prestashop>point_3cdfc1acfd5f159c7be997ac2f8864b0'] = 'Punto Kiala';
-$_MODULE['<{kialasmall}prestashop>point_1daeb62f5ea9a861590e3cbcb41c9b20'] = 'Ha seleccionado la entrega en un Punto Kiala. Kiala le permite recoger sus paquetes en tiendas cercanas con amplios horarios de apertura y sin hacer cola. ';
+$_MODULE['<{kialasmall}prestashop>point_1daeb62f5ea9a861590e3cbcb41c9b20'] = 'Ha seleccionado la entrega en un Punto Kiala. Kiala le permite recoger sus paquetes en tiendas cercanas con amplios horarios de apertura y sin hacer cola.';
 $_MODULE['<{kialasmall}prestashop>point_3b80b03d9ae2f392c26a85edbde62b79'] = '(Más información…)';
 $_MODULE['<{kialasmall}prestashop>point_e31d53195a6270ac33bd62eb82b5468c'] = 'Basándonos en su dirección, le recomendamos este Punto Kiala:';
 $_MODULE['<{kialasmall}prestashop>point_baf1380998f08358a21c71f54c1e7108'] = 'Ha seleccionado este Punto Kiala:';

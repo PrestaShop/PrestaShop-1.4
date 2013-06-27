@@ -2,7 +2,8 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{blockuserinfo}prestashop>blockuserinfo_a2e9cd952cda8ba167e62b25a496c6c1'] = 'Benutzerinfo-Block';
+
+$_MODULE['<{blockuserinfo}prestashop>blockuserinfo_a2e9cd952cda8ba167e62b25a496c6c1'] = 'Block Benutzerinfo';
 $_MODULE['<{blockuserinfo}prestashop>blockuserinfo_970a31aa19d205f92ccfd1913ca04dc0'] = 'Fügt einen Block hinzu, der Informationen über den Kunden anzeigt';
 $_MODULE['<{blockuserinfo}prestashop>blockuserinfo_83218ac34c1834c26781fe4bde918ee4'] = 'Willkommen';
 $_MODULE['<{blockuserinfo}prestashop>blockuserinfo_4b877ba8588b19f1b278510bf2b57ebb'] = 'Abmelden';

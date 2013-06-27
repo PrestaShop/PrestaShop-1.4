@@ -128,7 +128,7 @@ class SpecificPriceCore extends ObjectModel
 				AND
 				(`to` = \'0000-00-00 00:00:00\' OR NOW() <= `to`)
 			)
-			ORDER BY `from_quantity` DESC, `score` DESC');
+			ORDER BY `from_quantity` DESC, `score` DESC, `from` DESC');
 		}
 		return self::$_specificPriceCache[$key];
 	}

@@ -23,25 +23,26 @@
 *  @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
 *  International Registered Trademark & Property of PrestaShop SA
 */
-
 abstract class CacheCore
 {
-	
 	protected static $_instance;
 	protected $_keysCached = array();
 	protected $_tablesCached = array();
-	protected $_blackList = array('cart',
-												'cart_discount',
-												'cart_product',
-												'connections',
-												'connections_source',
-												'connections_page',
-												'customer',
-												'customer_group',
-												'customized_data',
-												'guest',
-												'pagenotfound',
-												'page_viewed');
+	protected $_blackList = array(
+		'cart',
+		'cart_discount',
+		'cart_product',
+		'connections',
+		'connections_source',
+		'connections_page',
+		'customer',
+		'customer_group',
+		'customized_data',
+		'guest',
+		'pagenotfound',
+		'page_viewed'
+	);
+
 	public static function getInstance()
 	{	
 		if (!isset(self::$_instance))
@@ -52,17 +53,44 @@ abstract class CacheCore
 		}
 		return self::$_instance;
 	}
-	
+
 	protected function __construct()
 	{
 	}
-		
+
 	protected function isBlacklist($query)
 	{
 		foreach ($this->_blackList as $find)
 			if (strpos($query, $find))
 				return true;
 		return false;
+	}
+
+	public function checkQuery($query)
+	{
+		if (preg_match('/INSERT |UPDATE |DELETE |DROP |REPLACE /im', $query, $qtype))
+			$this->deleteQuery($query);
+	}
+
+	protected function getTables($query)
+	{
+		if (preg_match_all('/('._DB_PREFIX_.'[a-z_-]*)`?.*/im', $query, $res))
+			return $res[1];
+		return false;
+	}
+
+	protected function getKey($query)
+	{
+		$key = '';
+		$tables = $this->getTables($query);
+		if (is_array($tables))
+			foreach($tables AS $table)
+				$key .= $this->getTableNamespacePrefix($table);
+		else
+			$key .= 'nok'.$tables;
+
+		$key .= $query;
+		return md5($key);
 	}
 
 	abstract public function get($key);

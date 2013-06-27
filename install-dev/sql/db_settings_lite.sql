@@ -187,7 +187,7 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (97, 'PS_GEOLOCATION_BEHAVIOR', '0', NOW(), NOW()),
 (98, 'PS_LOCALE_LANGUAGE', '', NOW(), NOW()),
 (99, 'PS_LOCALE_COUNTRY', '', NOW(), NOW()),
-(100, 'PS_ATTACHMENT_MAXIMUM_SIZE', '2', NOW(), NOW()),
+(100, 'PS_ATTACHMENT_MAXIMUM_SIZE', '4', NOW(), NOW()),
 (101, 'PS_SMARTY_CACHE', '1', NOW(), NOW()),
 (102, 'PS_DIMENSION_UNIT', 'cm', NOW(), NOW()),
 (103, 'PS_FORCE_SMARTY_2', '0', NOW(), NOW()),
@@ -223,8 +223,8 @@ INSERT INTO `PREFIX_configuration` (`id_configuration`, `name`, `value`, `date_a
 (133, 'PS_COOKIE_LIFETIME_FO', '480', NOW(), NOW()),
 (134, 'PS_COOKIE_LIFETIME_BO', '480', NOW(), NOW()),
 (135, 'PS_RESTRICT_DELIVERED_COUNTRIES', '0', NOW(), NOW()),
-(136, 'PS_LIMIT_UPLOAD_IMAGE_VALUE', '2', NOW(), NOW()),
-(137, 'PS_LIMIT_UPLOAD_FILE_VALUE', '2', NOW(), NOW()),
+(136, 'PS_LIMIT_UPLOAD_IMAGE_VALUE', '4', NOW(), NOW()),
+(137, 'PS_LIMIT_UPLOAD_FILE_VALUE', '4', NOW(), NOW()),
 (138, 'PS_CART_FOLLOWING', 1, NOW(), NOW()),
 (139, 'PS_TAX_DISPLAY_ALL', 0, NOW(), NOW());
 
@@ -1092,8 +1092,8 @@ INSERT INTO `PREFIX_meta_lang` (`id_meta`, `id_lang`, `title`, `description`, `k
 (25, 5, 'Ospite di monitoraggio', '', '', 'ospite-monitoraggio');
 
 /* Stats */
-INSERT INTO `PREFIX_operating_system` (`name`) VALUES ('Windows XP'),('Windows Vista'),('MacOsX'),('Linux');
-INSERT INTO `PREFIX_web_browser` (`name`) VALUES ('Safari'),('Firefox 2.x'),('Firefox 3.x'),('Opera'),('IE 6.x'),('IE 7.x'),('IE 8.x'),('Google Chrome');
+INSERT INTO `PREFIX_operating_system` (`name`) VALUES ('Windows XP'),('Windows Vista'),('Windows 7'),('Windows 8'),('MacOsX'),('Linux'),('Android');
+INSERT INTO `PREFIX_web_browser` (`name`) VALUES ('Safari'),('Safari iPad'),('Firefox'),('Opera'),('IE 6'),('IE 7'),('IE 8'),('IE 9'),('IE 10'),('Chrome');
 INSERT INTO `PREFIX_page_type` (`id_page_type`, `name`) VALUES
 (13, 'authentication.php'),(11, 'best-sales.php'),(2, 'category.php'),(7, 'cms.php'),(12, 'contact-form.php'),(5, 'index.php'),(4, 'manufacturer.php'),
 (3, 'order.php'),(10, 'prices-drop.php'),(1, 'product.php'),(8, 'search.php'),(14, 'sitemap.php'),(9, 'stores.php'),(6, 'supplier.php');

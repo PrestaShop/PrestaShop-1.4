@@ -1,6 +1,6 @@
 Hi {firstname} {lastname},
 
-Your order #{id_order} has been placed successfully. Your order will be shipped as soon as payment is received.
+Your order {order_name} has been placed successfully. Your order will be shipped as soon as payment is received.
 
 Please note that you have selected to pay by bank wire. Please send your wire to:
 

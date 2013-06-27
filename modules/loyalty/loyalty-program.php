@@ -39,7 +39,8 @@ if (!$cookie->isLogged())
 Tools::addCSS(_PS_CSS_DIR_.'jquery.cluetip.css', 'all');
 Tools::addJS(array(_PS_JS_DIR_.'jquery/jquery.dimensions.js',_PS_JS_DIR_.'jquery/jquery.cluetip.js'));
 
-$customerPoints = (int)(LoyaltyModule::getPointsByCustomer((int)($cookie->id_customer)));
+$customerPoints = (int)LoyaltyModule::getPointsByCustomer((int)($cookie->id_customer));
+$customerPoints = $customerPoints < 0 ? 0 : $customerPoints;
 
 /* transform point into voucher if needed */
 if (Tools::getValue('transform-points') == 'true' AND $customerPoints > 0)
@@ -98,7 +99,8 @@ if (Tools::getValue('transform-points') == 'true' AND $customerPoints > 0)
 		$voucher->add();
 
 	/* Register order(s) which contributed to create this voucher */
-	LoyaltyModule::registerDiscount($voucher);
+	if (!LoyaltyModule::registerDiscount($voucher))
+		$voucher->delete();
 
 	Tools::redirect('modules/loyalty/loyalty-program.php');
 }

@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{stripejs}prestashop>order-confirmation_068935d52b70618432d158e189887453'] = 'Felicitaciones , su pago ha sido aprobado y su orden ha sido guardada bajo la referencia  de su pedido.';
 $_MODULE['<{stripejs}prestashop>order-confirmation_fad1b32bfea488fd65a915e20f6e96df'] = 'Lo sentimos , desafortunadamente  ha ocurrido un error durante la transacción. =';
 $_MODULE['<{stripejs}prestashop>order-confirmation_0d4e007412611fa67ae987261c6ec921'] = 'Por favor, compruebe los datos de su tarjeta de crédito e inténtelo de nuevo o si prefiere se puede  poner en contacto con nosotros  para resolver este problema. = Su pedido de Referencia:';
@@ -38,12 +39,12 @@ $_MODULE['<{stripejs}prestashop>payment_75f834f9007dbad0bcd184b8c7233898'] = 'Fe
 $_MODULE['<{stripejs}prestashop>payment_a1cee963b0db73564674790ed71bfac3'] = 'Numero de tarjeta de credito equivocado';
 $_MODULE['<{stripejs}prestashop>payment_1b2fc950e7bc5c8cbf3a5fd0796929d3'] = 'Por favor verifique el numero  e intente su pago de nuevo';
 $_MODULE['<{stripejs}prestashop>payment_8cd55976df404786fda3244c0bbae519'] = 'Su numero de tarjeta de credito ha sido borrada, por favor entre un nuevo numero de tarjeta.';
-$_MODULE['<{stripejs}prestashop>payment_db553023bd67198667579e7561650093'] = 'Un error ha ocurrido mientras borrabamos su tarjeta de credito por favor contactese con nosotros.';
+$_MODULE['<{stripejs}prestashop>payment_db553023bd67198667579e7561650093'] = 'Un error ha ocurrido mientras tratábamos de borrar tu tarjeta de crédito. Por favor contacta con nosotros.';
 $_MODULE['<{stripejs}prestashop>stripejs_ce7566d1d08cc094b74cf283cf9c56a5'] = 'Stripe';
-$_MODULE['<{stripejs}prestashop>stripejs_9eede721e083de7931e8e6ebd48ce580'] = 'Acepte Pagos con Stripe usando  trajetas de credito ( VIsa, Mastercard, Amex, Discover & Diners Club)';
-$_MODULE['<{stripejs}prestashop>stripejs_3a9ca40670c468f8caf646c41f278dfb'] = 'Atencion: Para todo los clientes de Stripe todas las transacciones  con trajeta de credito salvadas en su base de datos  seran borradas. Esta seguro de uqe desea borra el modulo de Stripe?';
-$_MODULE['<{stripejs}prestashop>stripejs_0882683ae397b97594bcc04332cb0406'] = 'Para que el modulo de Stripe trabeje correctamente  en PrestaShop v1.4 requiere compatibilidad hacia atras hasta a version v.03';
-$_MODULE['<{stripejs}prestashop>stripejs_e991b71085336e1b95dfbde4f87604b6'] = 'Usted puede descargar le modulo gratuitamente desde:http://addons.prestashop.com/en/modules-prestashop/6222-backwardcompatibility.html ';
+$_MODULE['<{stripejs}prestashop>stripejs_22c1550388a66b0f1e85576b1b6ad9f5'] = 'Aceptamos pagos de tarjetas de crédito con Stripe (Visa, Mastercard, Amex, Discover y Diners Club)';
+$_MODULE['<{stripejs}prestashop>stripejs_3a9ca40670c468f8caf646c41f278dfb'] = 'Aviso: todas las tarjetas de crédito de los clientes de Stripe y los detalles de las transacciones guardadas en tu base de datos serán borradas. ¿está seguro de que desea desinstalar el módulo?';
+$_MODULE['<{stripejs}prestashop>stripejs_0882683ae397b97594bcc04332cb0406'] = 'Para trabajar correctamente con  PrestaShop v1.4, el módulo Stripe requiere el módulo de compatibilidad hacia atrás versión mínima v0.3.';
+$_MODULE['<{stripejs}prestashop>stripejs_e991b71085336e1b95dfbde4f87604b6'] = 'Usted puede descargar le modulo gratuitamente desde:http://addons.prestashop.com/en/modules-prestashop/6222-backwardcompatibility.html';
 $_MODULE['<{stripejs}prestashop>stripejs_ab73c5d092ddbff9466e9f2c62d25c2e'] = 'Usted no puede recibir devolucion de mas de';
 $_MODULE['<{stripejs}prestashop>stripejs_692f32bb3a33ea6dc488fa8392acc076'] = 'en esta orden';
 $_MODULE['<{stripejs}prestashop>stripejs_e6f641ae8ac72385a9556588b0cac77c'] = 'Precesado';
@@ -64,7 +65,7 @@ $_MODULE['<{stripejs}prestashop>stripejs_b9e14d9b2886bcff408b85aefa780419'] = 'N
 $_MODULE['<{stripejs}prestashop>stripejs_c3511f5784030b4fc5cc3aef7e377446'] = 'Costo de transaccion';
 $_MODULE['<{stripejs}prestashop>stripejs_1ee1c44c2dc81681f961235604247b81'] = 'Modo';
 $_MODULE['<{stripejs}prestashop>stripejs_955ad3298db330b5ee880c2c9e6f23a0'] = 'FUncionando';
-$_MODULE['<{stripejs}prestashop>stripejs_f57d43cc9b3a6de6321db64e41edc238'] = 'Test ( Usted no recibira ningun pago hasta que no ponga en funcionamiento el modulo \"Live Mode\" ';
+$_MODULE['<{stripejs}prestashop>stripejs_f57d43cc9b3a6de6321db64e41edc238'] = 'Test ( Usted no recibira ningun pago hasta que no ponga en funcionamiento el modulo \"Live Mode\"';
 $_MODULE['<{stripejs}prestashop>stripejs_3f3e336e2f1fa10375efd923fca18b55'] = 'Atencion:';
 $_MODULE['<{stripejs}prestashop>stripejs_75927a6d57cb972f6e864a9d8da63d1b'] = 'El cliente pago usando Stripe y ocurrio un error ( Revise los detalles al fina de la pagina)';
 $_MODULE['<{stripejs}prestashop>stripejs_be0144c7c2b0d21519098dc2cff5c799'] = 'Precesa a hace un reembolso parcial o total usando Stripe';

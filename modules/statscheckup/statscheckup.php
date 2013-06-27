@@ -29,7 +29,7 @@ if (!defined('_PS_VERSION_'))
 
 class StatsCheckUp extends Module
 {
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'statscheckup';
 		$this->tab = 'analytics_stats';

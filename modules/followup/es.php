@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{followup}prestashop>followup_9c34e90380dac7b56fdd19192a99d531'] = 'Retome contacto con sus clientes';
 $_MODULE['<{followup}prestashop>followup_57476355fcd04050bff196ae9aa4673c'] = 'Retome contacto con sus clientes enviando emails diariamente';
 $_MODULE['<{followup}prestashop>followup_f71a41841c80c2ef0ec02a6ad5449c65'] = '¿Está seguro de querer suprimir sus parámetros y sus estadísticas?';

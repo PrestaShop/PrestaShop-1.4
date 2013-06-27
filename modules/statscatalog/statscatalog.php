@@ -32,7 +32,7 @@ class StatsCatalog extends Module
 	private $_join = '';
 	private $_where = '';
 
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'statscatalog';
 		$this->tab = 'analytics_stats';

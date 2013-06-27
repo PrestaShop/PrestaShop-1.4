@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{cloudcache}prestashop>cloudcache_f86d8910fee395bdb3d9e0165763235d'] = 'CloudCache';
 $_MODULE['<{cloudcache}prestashop>cloudcache_04a5752fc2ed63bac60e8e819fb37a8a'] = 'Accélérez votre boutique avec le Content Delivery Network (CDN) de CloudCache.com';
 $_MODULE['<{cloudcache}prestashop>cloudcache_ea5eb3f904bf42377277255cbd0e2251'] = 'Pour fonctionner correctement le module \"Rétro-compatibilité\" doit être activé.';

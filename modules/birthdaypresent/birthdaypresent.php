@@ -31,7 +31,7 @@ class BirthdayPresent extends Module
 {
 	private $_html = '';
 
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'birthdaypresent';
 		$this->tab = 'pricing_promotion';

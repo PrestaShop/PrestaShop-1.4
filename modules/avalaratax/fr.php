@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{avalaratax}prestashop>avalaratax_fea2a64a31f1513f4b2565ebfaff597b'] = 'Avalara - AvaTax';
 $_MODULE['<{avalaratax}prestashop>avalaratax_ae8a727f868a8bbca075451c34154bfe'] = 'Les taxes de vente sont compliquées. Avatax facilite les taxes.';
 $_MODULE['<{avalaratax}prestashop>avalaratax_abec8ce9e661c64f0731e0bf94473d89'] = 'Erreur lors de la suppression de l\'override';

@@ -596,7 +596,7 @@ class ReferralProgram extends Module
 			$discount = new Discount((int)$referralprogram->id_discount_sponsor);
 			$currency = new Currency((int)$order->id_currency);
 			$discount_display = $discount->display($discount->value, (int)$discount->id_discount_type, $currency);
-			$data = array('{sponsored_firstname}' => $customer->firstname, '{sponsored_lastname}' => $customer->lastname, '{discount_display}' => $discount_display, '{discount_name}' => $discount->name);
+			$data = array('{sponsored_firstname}' => $customer->firstname, '{sponsored_lastname}' => $customer->lastname, '{discount_display}' => $discount_display, '{discount_name}' => $discount->name, '{order_name}' => sprintf("#%06d", (int)$order->id));
 			Mail::Send((int)$order->id_lang, 'referralprogram-congratulations', Mail::l('Congratulations!', (int)$order->id_lang), $data, $sponsor->email, $sponsor->firstname.' '.$sponsor->lastname, strval(Configuration::get('PS_SHOP_EMAIL')), strval(Configuration::get('PS_SHOP_NAME')), NULL, NULL, dirname(__FILE__).'/mails/');
 			return true;
 		}

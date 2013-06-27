@@ -94,6 +94,7 @@ function setCustomerAddress($ppec, $customer)
 	if (isset($ppec->result['PAYMENTREQUEST_0_SHIPTOSTREET2']))
 		$address->address2 = $ppec->result['PAYMENTREQUEST_0_SHIPTOSTREET2'];
 	$address->city = $ppec->result['PAYMENTREQUEST_0_SHIPTOCITY'];
+	$address->id_state = (int)State::getIdByIso($ppec->result['SHIPTOSTATE'], $address->id_country);
 	$address->postcode = $ppec->result['SHIPTOZIP'];
 	$address->id_customer = $customer->id;
 	return $address;
@@ -105,7 +106,6 @@ if ($request_type && $ppec->type)
 	$product_quantity = (int)Tools::getValue('quantity');
 	$id_product_attribute = Tools::getValue('id_p_attr');
 
-	//d(var_dump($id_product, $product_quantity, $id_product_attribute));
 	if (($id_product > 0) && $id_product_attribute !== false && ($product_quantity > 0))
 	{
 		setContextData($ppec);
@@ -206,13 +206,12 @@ elseif (!empty($ppec->token) && ($ppec->token == $token) && ($ppec->payer_id = $
 				$ppec->logs[] = $ppec->l('Cannot update existing cart');
 			else
 			{
-				$payment_cart = (bool) ($ppec->type != 'payment_cart');
+				$payment_cart = (bool)($ppec->type != 'payment_cart');
 				$ppec->redirectToCheckout($customer, $payment_cart);
 			}
 		}
 	}
 }
-
 /**
  * Check payment return
  */
@@ -220,25 +219,39 @@ function validateOrder($customer, $cart, $ppec)
 {
 	$amount_match = $ppec->rightPaymentProcess();
 	$order_total = (float)$cart->getOrderTotal(true, Cart::BOTH);
-	
+
 	// Payment succeed
 	if ($ppec->hasSucceedRequest() && !empty($ppec->token) && $amount_match)
 	{
 		if ((bool)Configuration::get('PAYPAL_CAPTURE'))
 		{
+			$payment_type = (int)Configuration::get('PS_OS_WS_PAYMENT');
 			$payment_status = 'Pending_capture';
 			$message = $ppec->l('Pending payment capture.').'<br />';
 		}
 		else
 		{
-			$payment_status = $ppec->result['PAYMENTINFO_0_PAYMENTSTATUS'];
-			$message = $ppec->l('Payment accepted.').'<br />';
+			if (isset($ppec->result['PAYMENTINFO_0_PAYMENTSTATUS']))
+				$payment_status = $ppec->result['PAYMENTINFO_0_PAYMENTSTATUS'];
+			else
+				$payment_status = 'Error';
+			
+			if (strcmp($payment_status, 'Completed') === 0)
+			{
+				$payment_type = (int)Configuration::get('PS_OS_PAYMENT');
+				$message = $ppec->l('Payment accepted.').'<br />';
+			}
+			elseif (strcmp($payment_status, 'Pending') === 0)
+			{
+				$payment_type = (int)Configuration::get('PS_OS_PAYPAL');
+				$message = $ppec->l('Pending payment confirmation.').'<br />';
+			}
 		}
-		$payment_type = (int)Configuration::get('PS_OS_PAYMENT');
 	}
 	// Payment error
 	else
 	{
+		$payment_status = $ppec->result['PAYMENTINFO_0_PAYMENTSTATUS'];
 		$payment_type = (int)Configuration::get('PS_OS_ERROR');
 
 		if ($amount_match)
@@ -255,7 +268,7 @@ function validateOrder($customer, $cart, $ppec)
 }
 
 // If Previous steps succeed, ready (means 'ready to pay') will be set to true
-if (($ppec->ready && !empty($ppec->token) && (Tools::isSubmit('confirmation') || $ppec->type == 'payment_cart')))
+if ($ppec->ready && !empty($ppec->token) && (Tools::isSubmit('confirmation') || $ppec->type == 'payment_cart'))
 {
 	// Check modification on the product cart / quantity
 	if ($ppec->isProductsListStillRight())
@@ -318,7 +331,7 @@ if (($ppec->ready && !empty($ppec->token) && (Tools::isSubmit('confirmation') ||
 	}
 }
 
-$display = (_PS_VERSION_ < '1.5') ? new BWDisplay() : $display = new FrontController();
+$display = (_PS_VERSION_ < '1.5') ? new BWDisplay() : new FrontController();
 $payment_confirmation = Tools::getValue('get_confirmation');
 
 // Display payment confirmation

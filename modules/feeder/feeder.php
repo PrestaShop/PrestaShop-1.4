@@ -46,7 +46,7 @@ class Feeder extends Module
 		$this->description = $this->l('Generate a RSS products feed');
 	}
 	
-	function install()
+	public function install()
 	{
 		if (!parent::install())
 			return false;
@@ -55,14 +55,15 @@ class Feeder extends Module
 		return true;
 	}
 	
-	function hookHeader($params)
+	public function hookHeader($params)
 	{
 		global $smarty, $cookie;
 		
 		$id_category = (int)(Tools::getValue('id_category'));
+		
 		if (!$id_category)
 		{
-			if (isset($_SERVER['HTTP_REFERER']) AND preg_match('!^(.*)\/([0-9]+)\-(.*[^\.])|(.*)id_category=([0-9]+)(.*)$!', $_SERVER['HTTP_REFERER'], $regs) AND !strstr($_SERVER['HTTP_REFERER'], '.html'))
+			if (isset($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'], Tools::getHttpHost()) && preg_match('!^(.*)\/([0-9]+)\-(.*[^\.])|(.*)id_category=([0-9]+)(.*)$!', $_SERVER['HTTP_REFERER'], $regs))
 			{
 				if (isset($regs[2]) AND is_numeric($regs[2]))
 					$id_category = (int)($regs[2]);

@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{editorial}prestashop>editorial_a46dcd3561c3feeb53903dfc0f796a35'] = 'Editeur de page d\'accueil';
 $_MODULE['<{editorial}prestashop>editorial_d02076897ed05399e22a0597404924ad'] = 'Un éditeur de texte pour votre page d\'accueil';
 $_MODULE['<{editorial}prestashop>editorial_7fc8b5e7597368c070f5bc87c719dcc1'] = 'Vous ne pouvez pas effectuer cette action';

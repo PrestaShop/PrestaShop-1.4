@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{dateofdelivery}prestashop>beforecarrier_75261aaef97717dda0ca98743b24f8f3'] = 'Fecha aproximada de entraga con este transportista entre';
 $_MODULE['<{dateofdelivery}prestashop>beforecarrier_be5d5d37542d75f93a87094459f76678'] = 'y';
 $_MODULE['<{dateofdelivery}prestashop>beforecarrier_b7ab10d227790bd29e51c1845153f126'] = 'con los modos de pago directos (ejemplo: tarjeta de crédito)';

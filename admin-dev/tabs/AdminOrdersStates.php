@@ -55,7 +55,9 @@ class AdminOrdersStates extends AdminTab
 	{
 		global $cookie;
 		
-		if (Tools::isSubmit('submitAdd'.$this->table))
+		$this->tabAccess = Profile::getProfileAccess($cookie->profile, $this->id);						
+		
+		if ($this->tabAccess['add'] === '1' AND Tools::isSubmit('submitAdd'.$this->table))
 		{
 			$this->deleted = false;
 			$_POST['invoice'] = Tools::getValue('invoice', 0);
@@ -71,7 +73,7 @@ class AdminOrdersStates extends AdminTab
 			}
 			parent::postProcess();
 		}
-		elseif (isset($_GET['delete'.$this->table]))
+		elseif ($this->tabAccess['delete'] === '1' AND isset($_GET['delete'.$this->table]))
 		{
 			$orderState = new OrderState((int)($_GET['id_order_state']), $cookie->id_lang);
 			if (!$orderState->isRemovable())
@@ -79,7 +81,7 @@ class AdminOrdersStates extends AdminTab
 			else
 				parent::postProcess();
 		}
-		elseif (isset($_POST['submitDelorder_state']))
+		elseif ($this->tabAccess['delete'] === '1' AND isset($_POST['submitDelorder_state']))
 		{
 			foreach ($_POST[$this->table.'Box'] AS $selection)
 			{

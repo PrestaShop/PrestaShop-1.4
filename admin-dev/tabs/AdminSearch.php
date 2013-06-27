@@ -67,7 +67,7 @@ class AdminSearch extends AdminTab
 		$this->_list['customers'] = Customer::searchByName(trim($query));
 	}
 
-	function postProcess()
+	public function postProcess()
 	{
 		global $cookie;
 

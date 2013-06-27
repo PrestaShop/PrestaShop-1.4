@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{cheque}prestashop>cheque_060bf2d587991d8f090a1309b285291c'] = 'Cheque';
 $_MODULE['<{cheque}prestashop>cheque_44cd16893a0a7731735c02999cc81adc'] = 'Módulo para aceptar pagos con cheque';
 $_MODULE['<{cheque}prestashop>cheque_fa214007826415a21a8456e3e09f999d'] = '¿Está seguro de que desea eliminar sus datos?';
@@ -19,7 +20,7 @@ $_MODULE['<{cheque}prestashop>cheque_d75e7b0f61c58d5d1cef7b56322c8b21'] = 'Por f
 $_MODULE['<{cheque}prestashop>cheque_75475839e69bef6ed57a8200a5a71d37'] = 'a la orden de';
 $_MODULE['<{cheque}prestashop>cheque_dd7bf230fde8d4836917806aff6a6b27'] = 'Dirección';
 $_MODULE['<{cheque}prestashop>cheque_b17f3f4dcf653a5776792498a9b44d6a'] = 'Actualizar';
-$_MODULE['<{cheque}prestashop>payment_a5967aadef7d23b5027d46e107faf6d0'] = 'Pagar por cheque ';
+$_MODULE['<{cheque}prestashop>payment_a5967aadef7d23b5027d46e107faf6d0'] = 'Pagar por cheque';
 $_MODULE['<{cheque}prestashop>payment_30bee0e9549e97b2f65f8fd8fc5948be'] = 'Pagar por cheque (proceso más largo)';
 $_MODULE['<{cheque}prestashop>payment_execution_83aa0e5744c86bf2d9d006319db14839'] = 'Pago por cheque';
 $_MODULE['<{cheque}prestashop>payment_execution_f1d3b424cd68795ecaa552883759aceb'] = 'Resumen del pedido';
@@ -44,6 +45,6 @@ $_MODULE['<{cheque}prestashop>payment_return_84cca8efe379645790938f55b701a1a4'] 
 $_MODULE['<{cheque}prestashop>payment_return_c5a6826dd3b059e32a3fa1ae029179de'] = 'enviar a';
 $_MODULE['<{cheque}prestashop>payment_return_13f4ac6dc75b5829499cb9cf8b733071'] = 'Le hemos enviado un email con los datos anteriores.';
 $_MODULE['<{cheque}prestashop>payment_return_ffd2478830ca2f519f7fe7ee259d4b96'] = 'Le enviaremos su pedido en cuanto recibamos el pago';
-$_MODULE['<{cheque}prestashop>payment_return_0db71da7150c27142eef9d22b843b4a9'] = 'Para cualquier duda o para más información, póngase en contacto con nuestro servicio ';
+$_MODULE['<{cheque}prestashop>payment_return_0db71da7150c27142eef9d22b843b4a9'] = 'Para cualquier duda o para más información, póngase en contacto con nuestro servicio';
 $_MODULE['<{cheque}prestashop>payment_return_64430ad2835be8ad60c59e7d44e4b0b1'] = 'de atención al cliente';
 $_MODULE['<{cheque}prestashop>payment_return_8de637e24570c1edb0357826a2ad5aea'] = 'Hay un problema con su pedido, póngase en contacto con el servicio de atención al cliente.';

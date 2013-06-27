@@ -87,7 +87,7 @@ class EmployeeCore extends ObjectModel
 	);
 
 
-	public	function getFields()
+	public function getFields()
 	{
 	 	parent::validateFields();
 

@@ -183,33 +183,33 @@ class ToolsInstall
 		}
 	}
 
-	static function strtolower($str)
+	public static function strtolower($str)
 	{
 		if (function_exists('mb_strtolower'))
 			return mb_strtolower($str, 'utf-8');
 		return strtolower($str);
 	}
 
-	static function strtoupper($str)
+	public static function strtoupper($str)
 	{
 		if (function_exists('mb_strtoupper'))
 			return mb_strtoupper($str, 'utf-8');
 		return strtoupper($str);
 	}
 	
-	static function ucfirst($str)
+	public static function ucfirst($str)
 	{
 		return self::strtoupper(self::substr($str, 0, 1)).self::substr($str, 1);
 	}
 	
-	static function substr($str, $start, $length = false, $encoding = 'utf-8')
+	public static function substr($str, $start, $length = false, $encoding = 'utf-8')
 	{
 		if (function_exists('mb_substr'))
 			return mb_substr($str, $start, ($length === false ? self::strlen($str) : $length), $encoding);
 		return substr($str, $start, $length);
 	}
 	
-	static function strlen($str)
+	public static function strlen($str)
 	{
 		if (function_exists('mb_strlen'))
 			return mb_strlen($str, 'utf-8');

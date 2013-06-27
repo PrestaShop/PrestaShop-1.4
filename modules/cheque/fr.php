@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{cheque}prestashop>cheque_060bf2d587991d8f090a1309b285291c'] = 'Chèque';
 $_MODULE['<{cheque}prestashop>cheque_44cd16893a0a7731735c02999cc81adc'] = 'Accepter les paiements par chèque';
 $_MODULE['<{cheque}prestashop>cheque_fa214007826415a21a8456e3e09f999d'] = 'Etes-vous sûr de vouloir supprimer vos paramètres ?';

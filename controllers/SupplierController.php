@@ -81,6 +81,7 @@ class SupplierControllerCore extends FrontController
 				'nb_products' => $nbProducts,
 				'products' => $this->supplier->getProducts($this->supplier->id, (int)self::$cookie->id_lang, (int)$this->p, (int)$this->n, $this->orderBy, $this->orderWay),
 				'path' => ($this->supplier->active ? Tools::safeOutput($this->supplier->name) : ''),
+				'homeSize' => Image::getSize('home'),
 				'supplier' => $this->supplier));
 		}
 		elseif (!Tools::getValue('id_supplier'))

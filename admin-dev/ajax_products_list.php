@@ -60,8 +60,8 @@ FROM `'._DB_PREFIX_.'product` p
 LEFT JOIN `'._DB_PREFIX_.'product_lang` pl ON (pl.id_product = p.id_product)
 WHERE (pl.name LIKE \'%'.pSQL($query).'%\' OR p.reference LIKE \'%'.pSQL($query).'%\') AND pl.id_lang = '.(int)$cookie->id_lang.
 (!empty($excludeIds) ? ' AND p.id_product NOT IN ('.$excludeIds.') ' : ' ').
-($excludeVirtuals ? 'AND p.id_product NOT IN (SELECT pd.id_product FROM `'._DB_PREFIX_.'product_download` pd WHERE (pd.id_product = p.id_product))' : ''));
+($excludeVirtuals ? 'AND p.id_product NOT IN (SELECT pd.id_product FROM `'._DB_PREFIX_.'product_download` pd WHERE (pd.id_product = p.id_product))' : '').' LIMIT 20');
 
 if ($items)
 	foreach ($items as $item)
-		echo trim($item['name']).(!empty($item['reference']) ? ' (ref: '.$item['reference'].')' : '').'|'.(int)$item['id_product']."\n";
+		echo trim($item['name']).'|'.intval($item['id_product']).(!empty($item['reference']) ? '|'.' (ref: '.pSQL($item['reference']).')' : '').'|'.(int)$item['id_product']."\n";

@@ -4,7 +4,7 @@ Te informamos de la creación de un vale de descuento para ti como resultado de 
 
 Aquí tienes tu código del vale:{voucher_num}, por la cantidad de:{voucher_amount}.
 
-Simplemente copia y pega este código durante el proceso de pago de tu próximo pedido.
+Simplemente pega éste código en tu próximo carrito antes de pagar el pedido.
 
 Gracias por comprar en {shop_name}.
 

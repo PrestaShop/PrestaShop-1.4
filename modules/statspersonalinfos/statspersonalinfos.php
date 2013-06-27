@@ -33,7 +33,7 @@ class StatsPersonalInfos extends ModuleGraph
 	private $_query = '';
 	private $_option;
 
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'statspersonalinfos';
 		$this->tab = 'analytics_stats';

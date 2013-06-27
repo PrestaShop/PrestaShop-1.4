@@ -92,33 +92,23 @@ class AddressControllerCore extends FrontController
 				die(Tools::displayError());
 
 			/* US customer: normalize the address */
-			if ($address->id_country == Country::getByIso('US'))
+			if ($address->id_country == Country::getByIso('US') && Configuration::get('PS_TAASC'))
 			{
 				include_once(_PS_TAASC_PATH_.'AddressStandardizationSolution.php');
 				$normalize = new AddressStandardizationSolution;
 				$address->address1 = $normalize->AddressLineStandardization($address->address1);
 				$address->address2 = $normalize->AddressLineStandardization($address->address2);
 			}
-
-			$zip_code_format = $country->zip_code_format;
-			if ($country->need_zip_code)
-			{
-				if (($postcode = Tools::getValue('postcode')) AND $zip_code_format)
-				{
-					$zip_regexp = '/^'.$zip_code_format.'$/ui';
-					$zip_regexp = str_replace(' ', '( |)', $zip_regexp);
-					$zip_regexp = str_replace('-', '(-|)', $zip_regexp);
-					$zip_regexp = str_replace('N', '[0-9]', $zip_regexp);
-					$zip_regexp = str_replace('L', '[a-zA-Z]', $zip_regexp);
-					$zip_regexp = str_replace('C', $country->iso_code, $zip_regexp);
-					if (!preg_match($zip_regexp, $postcode))
-						$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid.').'<br />'.Tools::displayError('Must be typed as follows:').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
-				}
-				elseif ($zip_code_format)
-					$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is required.');
-				elseif ($postcode AND !preg_match('/^[0-9a-zA-Z -]{4,9}$/ui', $postcode))
-						$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid.').'<br />'.Tools::displayError('Must be typed as follows:').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $zip_code_format)));
-			}
+			
+			$postcode = Tools::getValue('postcode');		
+			/* Check zip code format */
+			if ($country->zip_code_format && !$country->checkZipCode($postcode))
+				$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid.').'<br />'.Tools::displayError('Must be typed as follows:').' '.str_replace('C', $country->iso_code, str_replace('N', '0', str_replace('L', 'A', $country->zip_code_format)));
+			elseif(empty($postcode) && $country->need_zip_code)
+				$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is required.');
+			elseif ($postcode && !Validate::isPostCode($postcode))
+				$this->errors[] = '<strong>'.Tools::displayError('Zip/ Postal code').'</strong> '.Tools::displayError('is invalid.');
+			
 			if ($country->isNeedDni() AND (!Tools::getValue('dni') OR !Validate::isDniLite(Tools::getValue('dni'))))
 				$this->errors[] = Tools::displayError('Identification number is incorrect or has already been used.');
 			elseif (!$country->isNeedDni())

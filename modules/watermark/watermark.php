@@ -125,7 +125,7 @@ class Watermark extends Module
 		Configuration::updateValue('WATERMARK_TYPES', implode(',', Tools::getValue('image_types')));
 		Configuration::updateValue('WATERMARK_Y_ALIGN', Tools::getValue('yalign'));
 		Configuration::updateValue('WATERMARK_X_ALIGN', Tools::getValue('xalign'));
-		Configuration::updateValue('WATERMARK_TRANSPARENCY', Tools::getValue('transparency'));
+		Configuration::updateValue('WATERMARK_TRANSPARENCY', (int)Tools::getValue('transparency'));
 
 		//submited watermark
 		if (isset($_FILES['PS_WATERMARK']) AND !empty($_FILES['PS_WATERMARK']['tmp_name']))
@@ -166,7 +166,7 @@ class Watermark extends Module
 					</tr>
 					<tr>
 						<td width="270" style="height: 35px;">'.$this->l('Watermark transparency (0-100)').'</td>
-					    <td><input type="text" name="transparency" value="'.Tools::getValue('transparency', Configuration::get('WATERMARK_TRANSPARENCY')).'" style="width: 30px;" /></td>
+					    <td><input type="text" name="transparency" value="'.(int)Tools::getValue('transparency', Configuration::get('WATERMARK_TRANSPARENCY')).'" style="width: 30px;" /></td>
 					</tr>
 					<tr><td width="270" style="height: 35px;">'.$this->l('Watermark X align').'</td>
 					    <td>

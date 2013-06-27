@@ -141,7 +141,7 @@ class CategoryCore extends ObjectModel
 		return parent::getTranslationsFields(array('name', 'description', 'link_rewrite', 'meta_title', 'meta_keywords', 'meta_description'));
 	}
 
-	public	function add($autodate = true, $nullValues = false)
+	public function add($autodate = true, $nullValues = false)
 	{
 		$this->position = self::getLastPosition((int)$this->id_parent);
 		if (!isset($this->level_depth))
@@ -274,6 +274,7 @@ class CategoryCore extends ObjectModel
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_product` WHERE `id_category` IN ('.$list.')');
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'category_group` WHERE `id_category` IN ('.$list.')');
 		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'discount_category` WHERE `id_category` IN ('.$list.')');
+		Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'scene_category` WHERE `id_category` IN ('.$list.')');
 
 		self::cleanPositions($this->id_parent);
 

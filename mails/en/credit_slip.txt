@@ -1,6 +1,6 @@
 Hi {firstname} {lastname},
 
-This is to inform you about the generation of a credit slip in your name from your order #{id_order}.
+This is to inform you about the generation of a credit slip in your name from your order {order_name}.
 
 You can review this credit slip and download the invoice from the "Order follow" section of your account by clicking "My account" on our Website.
 

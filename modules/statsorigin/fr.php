@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{statsorigin}prestashop>statsorigin_f0b1507c6bdcdefb60a0e6f9b89d4ae8'] = 'Sites affluents';
 $_MODULE['<{statsorigin}prestashop>statsorigin_ada7786973910e9c8cb95f0450bf55c3'] = 'Affiche les sites d\'origine de vos visiteurs';
 $_MODULE['<{statsorigin}prestashop>statsorigin_14542f5997c4a02d4276da364657f501'] = 'Lien direct';

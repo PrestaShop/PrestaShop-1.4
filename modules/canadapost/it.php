@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{canadapost}prestashop>canadapost_9a5872e6530b14c9ec112f0821ce16bb'] = 'Calcola spese postali Canadesi';
 $_MODULE['<{canadapost}prestashop>canadapost_a5daea18a1d4214028a538c3bf5a41cc'] = 'Offrire ai vostri clienti, modalità di consegna diversi post con il Canada';
 $_MODULE['<{canadapost}prestashop>canadapost_883fa0069f4b0454e2277dd567ab3991'] = '\'Unità di Peso (LB o KG).\'';

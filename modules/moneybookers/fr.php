@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{moneybookers}prestashop>confirmation_2e2117b7c81aa9ea6931641ea2c6499f'] = 'Votre commande sur';
 $_MODULE['<{moneybookers}prestashop>confirmation_75fbf512d744977d62599cc3f0ae2bb4'] = 'est validée.';
 $_MODULE['<{moneybookers}prestashop>confirmation_15d18c17d7aef219c342bb0d81e823ab'] = 'Votre commande va être livrée dès que possible.';
@@ -29,15 +30,15 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_e4abb55720e3790fe55982fec858d21
 $_MODULE['<{moneybookers}prestashop>moneybookers_f16072c370ef52db2e329a87b5e7177a'] = 'Colone Droite';
 $_MODULE['<{moneybookers}prestashop>moneybookers_a9dd80641753cafc9c967e317ba92a28'] = 'A propos de Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_8342dda89e8c20bb92916fbe052c583a'] = 'Profitez des tarifs spéciaux que Moneybookers offre aux marchands de Prestashop !';
-$_MODULE['<{moneybookers}prestashop>moneybookers_a6207ac8be7c2857cab3e2ec7e249c9b'] = 'Moneybookers, géré par Skrill Holdings, est un des plus importants systèmes de paiement en ligne dEurope, proposant plus de 100 options de paiement et 41 devises dans plus de 200 pays et territoires.  Plus de 80 000 marchands utilisent déjà cette solution, parmi lesquels eBay.com, Skype et Thomas Cook. ';
-$_MODULE['<{moneybookers}prestashop>moneybookers_fd64efe530ffe239dcf40c9e97942779'] = 'Avec plus de 17 millions de titulaires de comptes et plus de 15 000 nouveaux comptes chaque jour, Moneybookers offre aussi lun des plus grands portemonnaies électroniques du monde. Vos clients peuvent également régler leur paiement en utilisant seulement leur e-mail et leur mot de passe grâce à notre e-Wallet. ';
+$_MODULE['<{moneybookers}prestashop>moneybookers_a6207ac8be7c2857cab3e2ec7e249c9b'] = 'Moneybookers, géré par Skrill Holdings, est un des plus importants systèmes de paiement en ligne dEurope, proposant plus de 100 options de paiement et 41 devises dans plus de 200 pays et territoires.  Plus de 80 000 marchands utilisent déjà cette solution, parmi lesquels eBay.com, Skype et Thomas Cook.';
+$_MODULE['<{moneybookers}prestashop>moneybookers_fd64efe530ffe239dcf40c9e97942779'] = 'Avec plus de 17 millions de titulaires de comptes et plus de 15 000 nouveaux comptes chaque jour, Moneybookers offre aussi lun des plus grands portemonnaies électroniques du monde. Vos clients peuvent également régler leur paiement en utilisant seulement leur e-mail et leur mot de passe grâce à notre e-Wallet.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_76264fd7352f803c63396bc27b0ee893'] = 'Moneybookers change de nom et devient Skrill !';
 $_MODULE['<{moneybookers}prestashop>moneybookers_f4f70727dc34561dfde1a3c529b6205c'] = 'Configuration';
 $_MODULE['<{moneybookers}prestashop>moneybookers_dcb9d2155cf2b2ca72e501943e26c20c'] = 'Vous avez la possibilité dafficher le module Skrill/Moneybookers sur votre boutique ce qui rassure vos clients sur votre sérieux et sur la liste étendue des possibilités de paiements que vous proposez.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_e86e85752dd7a7b31bb935c862480cee'] = 'Choisir la position du logo';
 $_MODULE['<{moneybookers}prestashop>moneybookers_239d45036930947dbf41506d27fa1aa7'] = 'Change la position du logo dans le Front Office. Fonctionne avec';
 $_MODULE['<{moneybookers}prestashop>moneybookers_81149af5698332fdf2d6869a66b6ad12'] = 'Live edit';
-$_MODULE['<{moneybookers}prestashop>moneybookers_708c440d8915f957ee6717efc426a863'] = 'Envoyer ';
+$_MODULE['<{moneybookers}prestashop>moneybookers_708c440d8915f957ee6717efc426a863'] = 'Envoyer';
 $_MODULE['<{moneybookers}prestashop>moneybookers_f284fe53995a4cc2e1e099cb1e511ec8'] = 'Validation de votre compte';
 $_MODULE['<{moneybookers}prestashop>moneybookers_c5093f03229416cc06a625654429d7f2'] = 'Votre compte a bien été validé';
 $_MODULE['<{moneybookers}prestashop>moneybookers_bd8df5ae85f76ba759fa979ada8566ea'] = 'Entrer l\'email utilisé pour';
@@ -61,17 +62,17 @@ $_MODULE['<{moneybookers}prestashop>moneybookers_7d294d4900ff1a38f5b0a89612916ea
 $_MODULE['<{moneybookers}prestashop>moneybookers_1467fcd161d2aee8146c7808c9377852'] = 'Pour voir la dernière mise à jour des frais détaillés';
 $_MODULE['<{moneybookers}prestashop>moneybookers_936ccdb97115e9f35a11d35e3d5b5cad'] = 'Cliquez ici';
 $_MODULE['<{moneybookers}prestashop>moneybookers_11c8ff1cde03aa19406dfe5971b92553'] = 'Porte-monnaie électronique Moneybookers';
-$_MODULE['<{moneybookers}prestashop>moneybookers_223b661f7b13d33498a9274bb10e3538'] = 'Portail de Paiements Directs Moneybookers ';
+$_MODULE['<{moneybookers}prestashop>moneybookers_223b661f7b13d33498a9274bb10e3538'] = 'Portail de Paiements Directs Moneybookers';
 $_MODULE['<{moneybookers}prestashop>moneybookers_0b65457508cf73c9ed8c96f56b8910ce'] = 'Validation de votre mot secret';
 $_MODULE['<{moneybookers}prestashop>moneybookers_e44efbda9396a5641d730f0ac4866e52'] = 'Votre mot secret a bien été validé';
-$_MODULE['<{moneybookers}prestashop>moneybookers_98061690dbf6a359c5b2aeb84d0eb317'] = 'Vous avez besoin de ';
+$_MODULE['<{moneybookers}prestashop>moneybookers_98061690dbf6a359c5b2aeb84d0eb317'] = 'Vous avez besoin de';
 $_MODULE['<{moneybookers}prestashop>moneybookers_7360d9333103eec04f2d91fa513a1f46'] = 'valider votre mot secret';
 $_MODULE['<{moneybookers}prestashop>moneybookers_7986dbc3b2bf0e8f72a328c094981836'] = 'merci de saisir le même mot secret que celui entré dans votre compte Moneybookers :';
 $_MODULE['<{moneybookers}prestashop>moneybookers_22f2d26badcc700d11b93f57dc96d386'] = 'Valider mon mot secret';
 $_MODULE['<{moneybookers}prestashop>moneybookers_cbcd58fce9759ea6e84c86ed92a3db44'] = 'Quest-ce que le mot secret ?';
 $_MODULE['<{moneybookers}prestashop>moneybookers_ef3cefa901bd32ea6aa2d0f6900b7725'] = 'Le mot secret est différent du mot de passe. Il sagit dun mot à renseigner qui permettra à Moneybookers de crypter les demandes de votre serveur de manière sécurisée.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_7a038bedf7925ddfe9a628ed750bf9a7'] = 'Pourquoi un mot secret en plus du mot de passe ?';
-$_MODULE['<{moneybookers}prestashop>moneybookers_e2571078c4c457621378b3ae187771c7'] = 'Le mot secret existe afin de renforcer le degré de sécurité des transactions. ';
+$_MODULE['<{moneybookers}prestashop>moneybookers_e2571078c4c457621378b3ae187771c7'] = 'Le mot secret existe afin de renforcer le degré de sécurité des transactions.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_6c6df049c4f3fb886250d59a4f0cf3b6'] = 'Le mot de passe, lui, est seulement utilisé pour la connexion à Moneybookers par sécurité. Son éventuelle modification ne doit pas affecter le mot secret. Ainsi pour une double protection des données, ils vaut mieux quils soient différents.';
 $_MODULE['<{moneybookers}prestashop>moneybookers_4746f98d01ce62cd5805981a289d182c'] = 'Ou puis-je trouver mon mot secret ?';
 $_MODULE['<{moneybookers}prestashop>moneybookers_72d809da732bc81a8a81fede00831836'] = 'Une fois votre compte validé, connectez vous sur votre compte Moneybookers et rentrez dans la section « Outils Marchands ». Vous pourrez définir votre mot secret.';

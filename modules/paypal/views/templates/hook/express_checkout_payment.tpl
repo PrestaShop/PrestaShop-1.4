@@ -41,5 +41,5 @@
 
 <form id="paypal_payment_form" action="{$base_dir_ssl}modules/paypal/express_checkout/payment.php" data-ajax="false" title="{l s='Pay with PayPal' mod='paypal'}" method="post">
 	<input type="hidden" name="express_checkout" value="{$PayPal_payment_type}"/>
-	<input type="hidden" name="current_shop_url" value="{$PayPal_current_shop_url}" />
+	<input type="hidden" name="current_shop_url" value="{$PayPal_current_page}" />
 </form>

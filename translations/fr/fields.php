@@ -2,6 +2,7 @@
 
 global $_FIELDS;
 $_FIELDS = array();
+
 $_FIELDS['Address_71581233bcc121fcc409ecce9317fbde'] = 'customer ID';
 $_FIELDS['Address_98305bfa557ba2547e7de1fb77053c93'] = 'manufacturer ID';
 $_FIELDS['Address_ad8a1593fb8fbba0eb0f9dba0e51e7f1'] = 'supplier ID';
@@ -180,7 +181,7 @@ $_FIELDS['Employee_0c83f57c786a0b4a39efab23731c7ebc'] = 'e-mail';
 $_FIELDS['Employee_2241013f64d89954e85e6285f0c6b85b'] = 'lang ID';
 $_FIELDS['Employee_76a2173be6393254e72ffa4d6df1030a'] = 'password';
 $_FIELDS['Employee_c76a5e84e4bdee527e274ea30c680d79'] = 'actif';
-$_FIELDS['Employee_7d33fcc514e7c41792b26c9782103f73'] = 'profile ID';
+$_FIELDS['Employee_7d33fcc514e7c41792b26c9782103f73'] = 'profil de permissions';
 $_FIELDS['Employee_19bd0ea6d7e46a8f82a0278c2175e57c'] = 'Couleur du back office';
 $_FIELDS['Employee_a5253b4a2c85873f246fe02468c03064'] = 'Thème du back office';
 $_FIELDS['Employee_a290beb0a2e38a7e1bfae93d67809058'] = 'Mode du back office';

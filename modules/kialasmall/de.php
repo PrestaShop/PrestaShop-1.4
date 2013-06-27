@@ -2,11 +2,14 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{kialasmall}prestashop>ajax_db26e10564e958809d798e8048fcbc0a'] = 'Ungültiger Sicherheitsschlüssel';
 $_MODULE['<{kialasmall}prestashop>kialasmall_8acabcc788c316f92b7850c76265b49b'] = 'Auf Ihrem Server muss die cURL-Erweiterung installiert sein, sowie auch die Einstellungen allow_url_fopen aktiviert sein.';
 $_MODULE['<{kialasmall}prestashop>kialasmall_d591cbc447d01e5a6165096ebfdf804e'] = 'Sie müssen cURL-Erweiterung aktivieren, um dieses Modul nutzen zu können.';
 $_MODULE['<{kialasmall}prestashop>kialasmall_1b18bd5d9d85f4f667614345ee20e3b2'] = 'Sie müssen allow_url_fopen aktivieren, um dieses Modul nutzen zu können.';
 $_MODULE['<{kialasmall}prestashop>kialasmall_9371d7a2e3ae86a00aab4771e39d255d'] = ')';
+$_MODULE['<{kialasmall}prestashop>kialasmall_f09ea5dca3d187c50a634239778a5a3c'] = 'Lassen url fopen';
+$_MODULE['<{kialasmall}prestashop>kialasmall_c7760f2c36d4e647e8a254cef51cbae8'] = 'Aktivieren cURL';
 $_MODULE['<{kialasmall}prestashop>kialasmall_ce26601dac0dea138b7295f02b7620a7'] = 'Kunde';
 $_MODULE['<{kialasmall}prestashop>kialasmall_a240fa27925a635b08dc28c9e4f9216d'] = 'Bestellung';
 $_MODULE['<{kialasmall}prestashop>kialasmall_d4dccb8ca2dac4e53c01bd9954755332'] = 'Speichern Sie die Einstellungen';

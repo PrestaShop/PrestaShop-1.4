@@ -198,9 +198,9 @@ class authorizeAIM extends PaymentModule
 			$cards['ax'] = Configuration::get('AUTHORIZE_AIM_CARD_AX') == 'on';
 
 			if (method_exists('Tools', 'getShopDomainSsl'))
-				$url = 'https://'.Tools::getShopDomainSsl().__PS_BASE_URI__.'/modules/'.$this->name.'/';
+				$url = 'https://'.Tools::getShopDomainSsl().__PS_BASE_URI__.((int)Configuration::get('PS_REWRITING_SETTINGS') && isset($smarty->ps_language) && !empty($smarty->ps_language) ? $smarty->ps_language->iso_code.'/' : '').'/modules/'.$this->name.'/';
 			else
-				$url = 'https://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.'modules/'.$this->name.'/';
+				$url = 'https://'.$_SERVER['HTTP_HOST'].__PS_BASE_URI__.((int)Configuration::get('PS_REWRITING_SETTINGS') && isset($smarty->ps_language) && !empty($smarty->ps_language) ? $smarty->ps_language->iso_code.'/' : '').'modules/'.$this->name.'/';
 
 			$this->context->smarty->assign('x_invoice_num', (int)$params['cart']->id);
 			$this->context->smarty->assign('cards', $cards);

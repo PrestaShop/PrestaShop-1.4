@@ -66,12 +66,12 @@ class BlockManufacturer extends Module
 		return $this->display(__FILE__, 'blockmanufacturer.tpl');
 	}
 	
-	function hookRightColumn($params)
+	public function hookRightColumn($params)
 	{
 		return $this->hookLeftColumn($params);
 	}
 	
-	function getContent()
+	public function getContent()
 	{
 		$output = '<h2>'.$this->displayName.'</h2>';
 		if (Tools::isSubmit('submitBlockManufacturers'))
@@ -125,7 +125,7 @@ class BlockManufacturer extends Module
 		return $output;
 	}
 	
-	function hookHeader($params)
+	public function hookHeader($params)
 	{
 		Tools::addCSS(($this->_path).'blockmanufacturer.css', 'all');
 	}	

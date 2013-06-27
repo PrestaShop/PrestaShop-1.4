@@ -3877,7 +3877,7 @@ class BlockLayered extends Module
 			array(
 				'homeSize' => Image::getSize('home'),
 				'nb_products' => $nb_products,
-				'category' => (object)array('id' => Tools::getValue('id_category_layered', 1)),
+				'category' => (object)array('id' => (int)Tools::getValue('id_category_layered', 1)),
 				'pages_nb' => (int)($pages_nb),
 				'p' => (int)$p,
 				'n' => (int)$n,

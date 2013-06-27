@@ -29,7 +29,7 @@ if (!defined('_PS_VERSION_'))
 
 class StatsStock extends Module
 {
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'statsstock';
 		$this->tab = 'analytics_stats';
@@ -48,7 +48,7 @@ class StatsStock extends Module
 		return (parent::install() && $this->registerHook('AdminStatsModules'));
 	}
 	
-	function hookAdminStatsModules()
+	public function hookAdminStatsModules()
 	{
 		global $cookie, $currentIndex;
 		

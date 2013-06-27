@@ -24,7 +24,7 @@
 *  International Registered Trademark & Property of PrestaShop SA
 */
 
-class		EditorialClass extends ObjectModel
+class EditorialClass extends ObjectModel
 {
 	/** @var integer editorial id*/
 	public		$id = 1;
@@ -51,7 +51,7 @@ class		EditorialClass extends ObjectModel
 	protected 	$fieldsValidateLang = array(
 		'body_title' => 'isGenericName',
 		'body_subheading' => 'isGenericName',
-		'body_paragraph' => 'isCleanHtml',
+		'body_paragraph' => 'isString',
 		'body_logo_subheading' => 'isGenericName');
 	
 	/**

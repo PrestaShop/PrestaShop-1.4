@@ -2,14 +2,15 @@
 
 global $_MODULE;
 $_MODULE = array();
-$_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_4f29d8c727dcf2022ac241cb96c31083'] = 'Ausgabe Aufnahmeeinstellungen leer';
+
+$_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_4f29d8c727dcf2022ac241cb96c31083'] = 'Leerer Datensatz zurückgegeben';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_eab2b4237a7cd89c309119e35f62d168'] = 'Anzeige';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_8bf8854bebe108183caeb845c7676ae4'] = 'von';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_dff4bf10409100d989495c6d5486035e'] = 'Nachname';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_04176f095283bc729f1e3926967e7034'] = 'Vorname';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_ce8ae9da5b7cd6c3df2929543a9af92d'] = 'E-Mail';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_d7e637a6e9ff116de2fa89551240a94d'] = 'Besuche';
-$_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_1ff1b62d08d1195f073c6adac00f1894'] = 'ausgegebenes Geld ';
+$_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_1ff1b62d08d1195f073c6adac00f1894'] = 'ausgegebenes Geld';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_8b83489bd116cb60e2f348e9c63cd7f6'] = 'Beste Kunden';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_cdc31cfb8cc370e79d854a2f82849dd2'] = 'Eine Liste der besten Kunden';
 $_MODULE['<{statsbestcustomers}prestashop>statsbestcustomers_998e4c5c80f27dec552e99dfed34889a'] = 'CSV-Export';

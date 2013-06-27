@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{shopimporter}prestashop>shopimporter_d714c742b360a8ecbb124c15e9a391a1'] = 'Importatore negozio';
 $_MODULE['<{shopimporter}prestashop>shopimporter_eac980737d1ffd0fb480772dbcf57742'] = 'Questo modulo ti consente di importare il tuo negozio da un altro sistema in PrestaShop';
 $_MODULE['<{shopimporter}prestashop>shopimporter_4994a8ffeba4ac3140beb89e8d41f174'] = 'Lingua';

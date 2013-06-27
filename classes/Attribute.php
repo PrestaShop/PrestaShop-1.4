@@ -76,7 +76,7 @@ class AttributeCore extends ObjectModel
 
 	public function delete()
 	{
-		if (($result = Db::getInstance()->ExecuteS('SELECT `id_product_attribute` FROM `'._DB_PREFIX_.'product_attribute_combination` WHERE `'.$this->identifier.'` = '.(int)($this->id))) === false)
+		if (($result = Db::getInstance()->ExecuteS('SELECT `id_product_attribute` FROM `'._DB_PREFIX_.'product_attribute_combination` WHERE `'.$this->identifier.'` = '.(int)($this->id))) != false)
 			return false;
 		$combinationIds = array();
 		if (Db::getInstance()->numRows())
@@ -88,6 +88,8 @@ class AttributeCore extends ObjectModel
 			if (Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product_attribute` IN ('.implode(', ', $combinationIds).')') === false)
 				return false;
 		}
+		if(!$this->deleteImage())
+			return false;		
 		$return = parent::delete();
 		if ($return)
 			Module::hookExec('afterDeleteAttribute', array('id_attribute' => $this->id));
@@ -161,7 +163,7 @@ class AttributeCore extends ObjectModel
 		FROM `'._DB_PREFIX_.'product_attribute` 
 		WHERE `id_product` = '.(int)$id_product);
 		
-		return $quantity !== false ? (int)$quantity : false;
+		return !is_null($quantity) ? (int)$quantity : false;
 	}
 
 	/**
@@ -174,7 +176,7 @@ class AttributeCore extends ObjectModel
 	public static function updateQtyProduct(&$arr)
 	{
 		$qty = self::getAttributeQty((int)$arr['id_product']);
-		if ((bool)$qty !== false)
+		if ($qty !== false)
 		{
 			$arr['quantity'] = (int)$qty;
 			return true;

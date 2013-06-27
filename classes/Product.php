@@ -246,7 +246,7 @@ class ProductCore extends ObjectModel
 	protected $fieldsValidateLang = array(
 		'meta_description' => 'isGenericName', 'meta_keywords' => 'isGenericName',
 		'meta_title' => 'isGenericName', 'link_rewrite' => 'isLinkRewrite', 'name' => 'isCatalogName',
-		'description' => 'isString', 'description_short' => 'isString', 'available_now' => 'isGenericName', 'available_later' => 'IsGenericName');
+		'description' => 'isCleanHtml', 'description_short' => 'isCleanHtml', 'available_now' => 'isGenericName', 'available_later' => 'IsGenericName');
 
 	protected 	$table = 'product';
 	protected 	$identifier = 'id_product';
@@ -285,6 +285,7 @@ class ProductCore extends ObjectModel
 				'fields' => array(
 					'id' => array('required' => true),
 					'id_feature_value' => array('required' => true, 'xlink_resource' => 'product_feature_values'),
+					'custom' => array('required' => false),
 			)),
 			'tags' => array('resource' => 'tag',
 				'fields' => array(
@@ -560,9 +561,9 @@ class ProductCore extends ObjectModel
 		Hook::deleteProduct($this);
 		if (!parent::delete() || !$this->deleteCategories(true) || !$this->deleteProductAttributes() ||
 			!$this->deleteProductFeatures() || !$this->deleteTags() || !$this->deleteCartProducts() ||
-			!$this->deleteAttributesImpacts() || !$this->deleteAttachments() || !$this->deleteCustomization() ||
-			!SpecificPrice::deleteByProductId((int)($this->id)) || !$this->deletePack() || !$this->deleteProductSale() ||
-			!$this->deleteSceneProducts() || !$this->deleteSearchIndexes() || !$this->deleteAccessories() || !$this->deleteFromAccessories())
+			!$this->deleteAttachments() || !$this->deleteCustomization() || !SpecificPrice::deleteByProductId((int)($this->id)) || 
+			!$this->deletePack() || !$this->deleteProductSale() || !$this->deleteSceneProducts() || 
+			!$this->deleteSearchIndexes() || !$this->deleteAccessories() || !$this->deleteFromAccessories())
 			return false;
 
 		if (!_PS_MODE_DEMO_ && !$this->deleteImages())
@@ -931,14 +932,22 @@ class ProductCore extends ObjectModel
 
 	public function addCombinationEntity($wholesale_price, $price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL, $upc = NULL, $minimal_quantity = 1)
 	{
-		if (
-			!$id_product_attribute = $this->addProductAttribute($price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location, $upc, $minimal_quantity)
+		if (!$id_product_attribute = $this->addProductAttribute($price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location, $upc, $minimal_quantity)
 			OR !Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product_attribute` SET `wholesale_price` = '.(float)($wholesale_price).' WHERE `id_product_attribute` = '.(int)($id_product_attribute))
 		)
 			return false;
 		return (int)($id_product_attribute);
 	}
 
+	public function updateCombinationEntity($id_product_attribute, $wholesale_price, $price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location = NULL, $upc = NULL, $minimal_quantity = 1)
+	{
+		if (!$id_product_attribute = $this->updateProductAttribute($id_product_attribute, '', $price, $weight, $unit_impact, $ecotax, $quantity, $id_images, $reference, $supplier_reference, $ean13, $default, $location, $upc, $minimal_quantity)
+			OR !Db::getInstance()->Execute('UPDATE `'._DB_PREFIX_.'product_attribute` SET `wholesale_price` = '.(float)($wholesale_price).' WHERE `id_product_attribute` = '.(int)($id_product_attribute))
+		)
+			return false;
+		return (int)($id_product_attribute);
+	}
+	
 	public function addProductAttributeMultiple($attributes, $setDefault = true)
 	{
 		$values = array();
@@ -1085,6 +1094,8 @@ class ProductCore extends ObjectModel
 		WHERE `id_product_attribute` IN (SELECT `id_product_attribute` FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product` = '.(int)$this->id.')');
 		
 		$result &= Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'product_attribute` WHERE `id_product` = '.(int)$this->id);
+		
+		$result &= Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'attribute_impact` WHERE `id_product` = '.(int)$this->id);
 
 		return $result;
 	}
@@ -1096,6 +1107,7 @@ class ProductCore extends ObjectModel
 	*/
     public function deleteAttributesImpacts()
     {
+    	Tools::displayasdeprecated();
         return Db::getInstance()->Execute('DELETE FROM `'._DB_PREFIX_.'attribute_impact` WHERE `id_product` = '.(int)$this->id);
     }
 
@@ -1866,11 +1878,12 @@ class ProductCore extends ObjectModel
 				$reduc = Tools::ps_round(!$use_tax ? $reduction_amount / (1 + $tax_rate / 100) : $reduction_amount, $decimals);
 			}
 			else
-				$reduc = Tools::ps_round($price * $specific_price['reduction'], $decimals);
+				$reduc = $price * $specific_price['reduction'];
 		}
 
 		if ($only_reduc)
-			return $reduc;
+			return Tools::ps_round($reduc, $decimals);
+
 		if ($use_reduc)
 			$price -= $reduc;
 
@@ -1884,7 +1897,6 @@ class ProductCore extends ObjectModel
 				$price *= ((100 - Group::getReductionByIdGroup($id_group)) / 100);
 		}
 
-		$price = Tools::ps_round($price, $decimals);
 		// Eco Tax
 		if (($result['ecotax'] OR isset($result['attribute_ecotax'])) AND $with_ecotax)
 		{
@@ -2134,12 +2146,12 @@ class ProductCore extends ObjectModel
 		if ($this->isAvailableWhenOutOfStock($this->out_of_stock))
 			return true;
 
-		$result = Db::getInstance()->getRow('
+		$result = (int)Db::getInstance()->getValue('
 		SELECT `quantity`
 		FROM `'._DB_PREFIX_.'product`
 		WHERE `id_product` = '.(int)($this->id));
 
-		return ($result AND $qty <= $result['quantity']);
+		return ($result AND $qty <= $result);
 	}
 
 	/**
@@ -2319,8 +2331,9 @@ class ProductCore extends ObjectModel
 	{
 		if (!isset(self::$_cacheFeatures[$id_product]))
 			self::$_cacheFeatures[$id_product] = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-			SELECT id_feature, id_product, id_feature_value
-			FROM `'._DB_PREFIX_.'feature_product`
+			SELECT fp.id_feature, fp.id_product, fp.id_feature_value, custom
+			FROM `'._DB_PREFIX_.'feature_product` fp
+			LEFT JOIN `'._DB_PREFIX_.'feature_value` fv ON (fp.id_feature_value = fv.id_feature_value)
 			WHERE `id_product` = '.(int)$id_product);
 
 		return self::$_cacheFeatures[$id_product];
@@ -2862,7 +2875,11 @@ class ProductCore extends ObjectModel
 			$productAttributeId = (int)(isset($productUpdate['id_product_attribute']) ? $productUpdate['id_product_attribute'] : $productUpdate['product_attribute_id']);
 			$productQuantity = (int)(isset($productUpdate['cart_quantity']) ? $productUpdate['cart_quantity'] : $productUpdate['product_quantity']);
 			$price = isset($productUpdate['price']) ? $productUpdate['price'] : $productUpdate['product_price'];
-			$priceWt = isset($productUpdate['price_wt']) ? $productUpdate['price_wt'] : $productUpdate['product_price_wt'];
+
+			if (isset($productUpdate['price_wt']) && $productUpdate['price_wt'])
+				$priceWt = $productUpdate['price_wt'];
+			else
+				$priceWt = isset($productUpdate['price_wt']) ? $productUpdate['price_wt'] : $productUpdate['product_price_wt'];
 
 			if (isset($customizedDatas[$productId][$productAttributeId]))
 				foreach ($customizedDatas[$productId][$productAttributeId] as $customization)
@@ -3184,12 +3201,50 @@ class ProductCore extends ObjectModel
 	* @param $productFeatures Product Feature ids
 	* @return boolean
 	*/
-	public function setWsProductFeatures($productFeatures)
+	public function setWsProductFeatures($product_features)
 	{
-		$this->deleteProductFeatures();
-		foreach ($productFeatures as $productFeature)
-			$this->addFeaturesToDB($productFeature['id'], $productFeature['id_feature_value']);
-		return true;
+		$db_features = Db::getInstance()->executeS('
+								SELECT p.*, f.`custom`
+								FROM `'._DB_PREFIX_.'feature_product` p
+								LEFT JOIN `'._DB_PREFIX_.'feature_value` f ON (f.`id_feature_value` = p.`id_feature_value`)
+								WHERE `id_product` = '.(int)$this->id
+							);
+
+
+		$pfa = array();
+		foreach ($product_features as $product_feature)
+			$pfa[$product_feature['id']] = 1;
+
+		foreach ($db_features as $db_feature)
+		{
+			// test if feature should stay in db (if it is part of updated product)
+			if (!isset($pfa[$db_feature['id_feature']]))
+			{
+					// delete only custom features
+					if ($db_feature['custom'])
+					{
+						Db::getInstance()->execute('
+							DELETE FROM `'._DB_PREFIX_.'feature_value_lang`
+							WHERE `id_feature_value` = '.(int)$db_feature['id_feature_value']
+						);
+						Db::getInstance()->execute('
+							DELETE FROM `'._DB_PREFIX_.'feature_value`
+							WHERE `id_feature_value` = '.(int)$db_feature['id_feature_value']
+						);
+
+					}
+			}
+		}
+
+		Db::getInstance()->execute('
+			DELETE FROM `'._DB_PREFIX_.'feature_product`
+			WHERE `id_product` = '.(int)$this->id
+		);
+
+ 		foreach ($product_features as $product_feature)
+ 			$this->addFeaturesToDB($product_feature['id'], $product_feature['id_feature_value'], $product_feature['custom']);
+
+ 		return true;
 	}
 
 	/**
@@ -3475,11 +3530,16 @@ class ProductCore extends ObjectModel
 	 * @return boolean
 	 */
 	protected function isDeletable()
-	{
-		return !(bool)Db::getInstance()->getValue('
-		SELECT COUNT(*)
+	{	
+		$sql = 'SELECT COUNT(*)
 		FROM `'._DB_PREFIX_.'order_detail` od
 		LEFT JOIN `'._DB_PREFIX_.'orders` o	ON (o.`id_order` = od.`id_order`)
-		WHERE `valid` = 0 AND `product_id` = '.(int)$this->id);
+		LEFT JOIN `'._DB_PREFIX_.'order_history` oh	ON (o.`id_order` = oh.`id_order`)		
+		WHERE `product_id` = '.(int)$this->id.' 
+		AND (oh.id_order_history IN (SELECT MAX(id_order_history) 
+			FROM `'._DB_PREFIX_.'order_history`						
+			HAVING id_order_state NOT IN ('.(int)_PS_OS_CANCELED_.', '.(int)_PS_OS_REFUND_.') AND `valid` = 0 
+			ORDER BY id_order_history DESC))';					
+		return (!(bool)Db::getInstance()->getValue($sql));					
 	}
 }

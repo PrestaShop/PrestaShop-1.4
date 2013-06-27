@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{socolissimo}prestashop>ajax_607e1d854783c8229998ac2b5b6923d3'] = 'Jeton de sécurité invalide';
 $_MODULE['<{socolissimo}prestashop>ajax_67933de20c945d1759ab891fb9dc1fd7'] = 'Aucune information de livraison sélectionnée';
 $_MODULE['<{socolissimo}prestashop>error_58d256f5c88c3a887c1c3b8c9ee76f4d'] = 'Liste des erreurs SoColissimo :';

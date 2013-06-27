@@ -74,7 +74,7 @@ class LanguageCore extends ObjectModel
 		'pdf' => '_LANGPDF',
 	);
 
-	public	function __construct($id = null, $id_lang = null)
+	public function __construct($id = null, $id_lang = null)
 	{
 		parent::__construct($id);
 	}

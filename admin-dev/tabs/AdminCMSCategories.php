@@ -77,12 +77,13 @@ class AdminCMSCategories extends AdminTab
 	public function display($token = NULL)
 	{
 		global $currentIndex, $cookie;
-		$id_cms_category = (int)(Tools::getValue('id_cms_category', 1));
+		$id_cms_category = (int)Tools::getValue('id_cms_category', 1);
 
-		$this->getList((int)($cookie->id_lang), !$cookie->__get($this->table.'Orderby') ? 'position' : null, !$cookie->__get($this->table.'Orderway') ? 'ASC' : null);
+		$this->getList((int)$cookie->id_lang, !$cookie->__get($this->table.'Orderby') ? 'position' : null, !$cookie->__get($this->table.'Orderway') ? 'ASC' : null);
 		
 		echo '<h3>'.(!$this->_listTotal ? ($this->l('There are no subcategories')) : ($this->_listTotal.' '.($this->_listTotal > 1 ? $this->l('subcategories') : $this->l('subCMS Category')))).' '.$this->l('in CMS Category').' "'.stripslashes(CMSCategory::hideCMSCategoryPosition($this->_CMSCategory->getName())).'"</h3>';
-		echo '<a href="'.__PS_BASE_URI__.substr($_SERVER['PHP_SELF'], strlen(__PS_BASE_URI__)).'?tab=AdminCMSContent&add'.$this->table.'&id_parent='.(int)Tools::getValue('id_cms_category').'&token='.($token != null ? $token : $this->token).'"><img src="../img/admin/add.gif" border="0" /> '.$this->l('Add a new sub CMS Category').'</a>
+		if ($this->tabAccess['add'] === '1')				
+			echo '<a href="'.__PS_BASE_URI__.substr($_SERVER['PHP_SELF'], strlen(__PS_BASE_URI__)).'?tab=AdminCMSContent&add'.$this->table.'&id_parent='.(int)Tools::getValue('id_cms_category').'&token='.($token != null ? $token : $this->token).'"><img src="../img/admin/add.gif" border="0" /> '.$this->l('Add a new sub CMS Category').'</a>
 		<div style="margin:10px;">';
 		$this->displayList($token);
 		echo '</div>';
@@ -94,13 +95,11 @@ class AdminCMSCategories extends AdminTab
 
 		$this->tabAccess = Profile::getProfileAccess($cookie->profile, $this->id);
 		
-		
-		if (Tools::isSubmit('submitAdd'.$this->table))
+		if ($this->tabAccess['add'] === '1' AND Tools::isSubmit('submitAdd'.$this->table))
 		{
-			
 			if ($id_cms_category = (int)(Tools::getValue('id_cms_category')))
 			{
-				if (!CMSCategory::checkBeforeMove($id_cms_category, (int)(Tools::getValue('id_parent'))))
+				if (!CMSCategory::checkBeforeMove($id_cms_category, (int)Tools::getValue('id_parent')))
 				{
 					$this->_errors[] = Tools::displayError('CMS Category cannot be moved here');
 					return false;
@@ -213,8 +212,11 @@ class AdminCMSCategories extends AdminTab
 						<input type="text" style="width: 260px" name="name_'.$language['id_lang'].'" id="name_'.$language['id_lang'].'" value="'.htmlentities($this->getFieldValue($obj, 'name', (int)($language['id_lang'])), ENT_COMPAT, 'UTF-8').'" '.((!$obj->id) ? ' onkeyup="copy2friendlyURL();"' : '').' /><sup> *</sup>
 						<span class="hint" name="help_box">'.$this->l('Invalid characters:').' <>;=#{}<span class="hint-pointer">&nbsp;</span></span>
 					</div>';
-		echo '	<p class="clear"></p>
-				</div>
+		echo '		<p class="clear"></p>
+				</div>';
+		if (Tools::getValue('id_cms_category') != 1)
+		{
+			echo '
 				<label>'.$this->l('Displayed:').' </label>
 				<div class="margin-form">
 					<input type="radio" name="active" id="active_on" value="1" '.($active ? 'checked="checked" ' : '').'/>
@@ -225,12 +227,18 @@ class AdminCMSCategories extends AdminTab
 				<label>'.$this->l('Parent CMS Category:').' </label>
 				<div class="margin-form">
 					<select name="id_parent">';
-		$categories = CMSCategory::getCategories((int)($cookie->id_lang), false);
-		CMSCategory::recurseCMSCategory($categories, $categories[0][1], 1, $this->getFieldValue($obj, 'id_parent'));
-		echo '
+			$categories = CMSCategory::getCategories((int)($cookie->id_lang), false);
+			CMSCategory::recurseCMSCategory($categories, $categories[0][1], 1, $this->getFieldValue($obj, 'id_parent'));
+			echo '
 					</select>
-				</div>
-				<label>'.$this->l('Description:').' </label>
+				</div>';
+		}
+		else
+			echo '
+			<input type="hidden" name="id_parent" value="0" />
+			<input type="hidden" name="active" value="1" />';
+		
+		echo '	<label>'.$this->l('Description:').' </label>
 				<div class="margin-form translatable">';
 		foreach ($this->_languages as $language)
 			echo '
@@ -278,10 +286,10 @@ class AdminCMSCategories extends AdminTab
 					</div>';
 		echo '	<p class="clear"></p>
 				</div>
-				
-				<div class="margin-form">
-					<input type="submit" value="'.$this->l('Save and back to parent CMS Category').'" name="submitAdd'.$this->table.'AndBackToParent" class="button" />
-					&nbsp;<input type="submit" class="button" name="submitAdd'.$this->table.'" value="'.$this->l('Save').'"/>
+				<div class="margin-form">';
+		if (Tools::getValue('id_cms_category') != 1)
+			echo '	<input type="submit" value="'.$this->l('Save and back to parent CMS Category').'" name="submitAdd'.$this->table.'AndBackToParent" class="button" />&nbsp;';
+		echo '		<input type="submit" class="button" name="submitAdd'.$this->table.'" value="'.$this->l('Save').'"/>
 				</div>
 				<div class="small"><sup>*</sup> '.$this->l('Required field').'</div>
 			</fieldset>

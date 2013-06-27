@@ -357,7 +357,7 @@ class AdminInformation extends AdminTab
 		return self::test_dir($dir);
 	}
 	
-	static function test_cache_dir($dir)
+	static private function test_cache_dir($dir)
 	{
 		return self::test_dir($dir);
 	}

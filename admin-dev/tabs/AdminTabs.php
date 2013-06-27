@@ -79,10 +79,9 @@ class AdminTabs extends AdminTab
 
 	private function _posTabs($name, $arrayTabs)
 	{
-		global $currentIndex;
-		
 		if (sizeof($arrayTabs) > 1)
 		{
+			global $currentIndex;
 			echo '
 			<table class="table" cellspacing="0" cellpadding="0" style="margin-bottom: 5px;">
 				<tr>';
@@ -126,8 +125,8 @@ class AdminTabs extends AdminTab
 
 		echo '
 		<form action="'.$currentIndex.'&submitAdd'.$this->table.'=1&token='.$this->token.'" method="post" enctype="multipart/form-data">
-		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.$obj->id.'" />' : '').'
-		'.($obj->position ? '<input type="hidden" name="position" value="'.$obj->position.'" />' : '').'
+		'.($obj->id ? '<input type="hidden" name="id_'.$this->table.'" value="'.(int)$obj->id.'" />' : '').'
+		'.($obj->position ? '<input type="hidden" name="position" value="'.(int)$obj->position.'" />' : '').'
 			<fieldset><legend><img src="../img/admin/tab.gif" />'.$this->l('Tabs').'</legend>
 				<label>'.$this->l('Name:').' </label>
 				<div class="margin-form">';

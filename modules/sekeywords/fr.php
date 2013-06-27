@@ -2,13 +2,14 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{sekeywords}prestashop>sekeywords_65b0b42febc8ea16db4652eab6f420a4'] = 'Mots clés';
 $_MODULE['<{sekeywords}prestashop>sekeywords_de13be6263895a5efe4d51e15ab1535e'] = 'Affiche les mots clés qui ont mené les visiteurs jusqu\'à votre boutique';
 $_MODULE['<{sekeywords}prestashop>sekeywords_a6a5cc2d3979e54597c79a68448adee2'] = 'mot clé trouvé pour votre recherche.';
 $_MODULE['<{sekeywords}prestashop>sekeywords_abc9f128fb01c8504e08e77bfc8af795'] = 'mots clés trouvés pour votre recherche.';
 $_MODULE['<{sekeywords}prestashop>sekeywords_867343577fa1f33caa632a19543bd252'] = 'mots clés';
 $_MODULE['<{sekeywords}prestashop>sekeywords_e52e6aa1a43a0187e44f048f658db5f9'] = 'Occurences';
-$_MODULE['<{sekeywords}prestashop>sekeywords_998e4c5c80f27dec552e99dfed34889a'] = 'Export CSV ';
+$_MODULE['<{sekeywords}prestashop>sekeywords_998e4c5c80f27dec552e99dfed34889a'] = 'Export CSV';
 $_MODULE['<{sekeywords}prestashop>sekeywords_0849140171616600e8f2c35f0a225212'] = 'Filter par mot clé';
 $_MODULE['<{sekeywords}prestashop>sekeywords_188ef1f71ff3ef1c5501dc5c8ee27f88'] = 'et minimum d\'occurences';
 $_MODULE['<{sekeywords}prestashop>sekeywords_03e0e9ef8b776b5f7bcc590e51bfa63b'] = 'Appliquer';

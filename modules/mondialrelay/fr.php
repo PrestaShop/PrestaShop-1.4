@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_e82faee1422140edd04b2f94c5051500'] = 'Action terminée avec succès!';
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_3b2d373418745276ae6e207421245cdc'] = 'Le statut de la commande a été mis à jour';
 $_MODULE['<{mondialrelay}prestashop>adminmondialrelay_b4ac3d3f15bc0984d0906aff1202e701'] = 'Impossible de mettre à jour le compte';
@@ -123,7 +124,7 @@ $_MODULE['<{mondialrelay}prestashop>configuration_9ffc3ccc968a96d902af963c6d7b4e
 $_MODULE['<{mondialrelay}prestashop>configuration_fcf5b2122da1d5a5f5c7253b96a3f9d9'] = 'URL de la tache CRON';
 $_MODULE['<{mondialrelay}prestashop>configuration_66661dacf33146201b60dc16520ddd68'] = 'Ajouter une méthode de transport';
 $_MODULE['<{mondialrelay}prestashop>configuration_531e144cc23ef08408b81cb4d9c641dc'] = 'Nom du transporteur';
-$_MODULE['<{mondialrelay}prestashop>configuration_8f497c1a3d15af9e0c215019f26b887d'] = 'Délais ';
+$_MODULE['<{mondialrelay}prestashop>configuration_8f497c1a3d15af9e0c215019f26b887d'] = 'Délais';
 $_MODULE['<{mondialrelay}prestashop>configuration_201bdb87f8e278b943d07ae924d5de6e'] = 'Mode de livraison';
 $_MODULE['<{mondialrelay}prestashop>configuration_142ef02888af88b8b772335277d1c0c8'] = 'Livraison dans un point relais';
 $_MODULE['<{mondialrelay}prestashop>configuration_eeab8b7cf3c7a558a0e8a4050fa994ca'] = 'Livraison Colis Drive';

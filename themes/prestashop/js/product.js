@@ -357,11 +357,11 @@ function displayImage(domAAroundImgThumb)
         var newSrc = domAAroundImgThumb.attr('href').replace('thickbox','large');
         if ($('#bigpic').attr('src') != newSrc)
         {
-            $('#bigpic').attr({'src' : newSrc, 'title' : domAAroundImgThumb.attr('title')});
-			if (typeof(jqZoomEnabled) != 'undefined' && jqZoomEnabled)
-				$('#bigpic').attr('alt', domAAroundImgThumb.attr('href'));
-			else
-				$('#bigpic').attr('alt', domAAroundImgThumb.attr('title'));				
+            $('#bigpic').attr({'src' : newSrc, 'title' : domAAroundImgThumb.attr('title')}).load(function() {
+				if (typeof(jqZoomEnabled) != 'undefined' && jqZoomEnabled)
+					$('#bigpic').attr('rel', domAAroundImgThumb.attr('href'));
+				$('#bigpic').attr('alt', domAAroundImgThumb.attr('title'));
+			});
         }
         $('#views_block li a').removeClass('shown');
         $(domAAroundImgThumb).addClass('shown');

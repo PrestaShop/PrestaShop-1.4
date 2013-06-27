@@ -34,7 +34,7 @@ class StatsVisits extends ModuleGraph
 	private $_query2 = '';
 	private $_option;
 
-	function __construct()
+	public function __construct()
 	{
 		$this->name = 'statsvisits';
 		$this->tab = 'analytics_stats';

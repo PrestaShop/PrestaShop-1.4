@@ -152,7 +152,7 @@ class CountyCore extends ObjectModel
 			SELECT DISTINCT c.`id_county`
 			FROM `'._DB_PREFIX_.'county` c
 			LEFT JOIN `'._DB_PREFIX_.'county_zip_code` cz ON (c.`id_county` = cz.`id_county`)
-			WHERE c.`id_state` = '.(int)$id_state.' AND cz.`from_zip_code` >= '.(int)$zip_code.' AND cz.`to_zip_code` <= '.(int)$zip_code);
+			WHERE c.`id_state` = '.(int)$id_state.' AND cz.`from_zip_code` <= '.(int)$zip_code.' AND cz.`to_zip_code` >= '.(int)$zip_code);
 		}
 
 		return self::$_cache_county_zipcode[$id_state.'-'.$zip_code];
@@ -170,7 +170,7 @@ class CountyCore extends ObjectModel
 			SELECT COUNT(*) FROM `'._DB_PREFIX_.'county_zip_code` cz
 			LEFT JOIN `'._DB_PREFIX_.'county` c ON (c.`id_county` = cz.`id_county`)
 			LEFT JOIN `'._DB_PREFIX_.'state` s ON (s.`id_state` = c.`id_state`)
-			WHERE `from_zip_code` >= '.(int)$from.' AND `to_zip_code` <= '.(int)$to.'
+			WHERE `from_zip_code` <= '.(int)$from.' AND `to_zip_code` >= '.(int)$to.'
 			AND s.`id_country` = (
 				SELECT `id_country`
 				FROM `'._DB_PREFIX_.'state` s

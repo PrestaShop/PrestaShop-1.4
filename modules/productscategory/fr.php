@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{productscategory}prestashop>productscategory_db33983df8ef521000b0ab60dcb5a83f'] = 'Dans la même catégorie';
 $_MODULE['<{productscategory}prestashop>productscategory_0157084bddd8b408e1cdaba00f54a009'] = 'Affiche la liste des produits dans la même catégorie que celui affiché';
 $_MODULE['<{productscategory}prestashop>productscategory_462390017ab0938911d2d4e964c0cab7'] = 'Paramètres mis à jour avec succès';

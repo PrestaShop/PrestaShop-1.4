@@ -73,7 +73,7 @@ class ThemeInstallator extends Module
 		@ini_set('memory_limit', '2G');
 
 		$this->name = 'themeinstallator';
-		$this->version = '2.1';
+		$this->version = '2.4';
 		$this->author = 'PrestaShop';
 		$this->need_instance = 0;
 		if (version_compare(_PS_VERSION_, 1.4) >= 0)
@@ -107,6 +107,14 @@ class ThemeInstallator extends Module
 
 			$this->action_form = $this->current_index.'&configure='.$this->name.'&token='.Tools::htmlentitiesUTF8(Tools::getValue('token'));
 		}
+	}
+	
+	public function install()
+	{
+		if ($this->id)
+			return true;
+		else
+			return parent::install();
 	}
 
 	/* Check status of backward compatibility module*/
@@ -308,7 +316,14 @@ class ThemeInstallator extends Module
 	{
 		if (Tools::isSubmit('submitImport1'))
 		{
-			if ($_FILES['themearchive']['error'] || !file_exists($_FILES['themearchive']['tmp_name']))
+			if (isset($_FILES['themearchive']['error']) && $_FILES['themearchive']['error'] == 1)
+			{
+				$uploadMaxSize = (int)str_replace('M', '',ini_get('upload_max_filesize'));
+				$postMaxSize = (int)str_replace('M', '', ini_get('post_max_size'));
+				$maxSize = $uploadMaxSize < $postMaxSize ? $uploadMaxSize : $postMaxSize;					
+				$this->errors[] = parent::displayError($this->l('An error occurred during logo copy. Image size must be below').' '.$maxSize. 'M.');
+			}		
+			elseif ($_FILES['themearchive']['error'] || !file_exists($_FILES['themearchive']['tmp_name']))
 				$this->errors[] = parent::displayError($this->l('An error has occurred during the file upload.'));
 			elseif (substr($_FILES['themearchive']['name'], -4) != '.zip')
 				$this->errors[] = parent::displayError($this->l('Only zip files are allowed'));
@@ -403,18 +418,11 @@ class ThemeInstallator extends Module
 		if (Tools::isSubmit('submitExport') && $this->error === false && $this->checkPostedDatas() == true)
 		{
 			self::getThemeVariations();
-
-			// Check variations exists
-			if (empty($this->variations))
-				$this->_html .= parent::displayError($this->l('You must select at least one theme'));
-			else
-			{
-				self::getDocumentation();
-				self::getHookState();
-				self::getImageState();
-				self::generateXML();
-				self::generateArchive();
-			}
+			self::getDocumentation();
+			self::getHookState();
+			self::getImageState();
+			self::generateXML();
+			self::generateArchive();
 		}
 		self::authorInformationForm();
 		self::modulesInformationForm();
@@ -651,7 +659,7 @@ class ThemeInstallator extends Module
 			{
 				$flag = 0;
 				// Disable native modules
-				if ($val == 2 && (($this->to_disable && count($this->to_disable)) || ($this->selected_disable_modules && count($this->selected_disable_modules)))&& _PS_VERSION_ > '1.5')
+				if ($val == 2 && ($this->to_disable && count($this->to_disable)) || ($this->selected_disable_modules && count($this->selected_disable_modules)))
 					foreach (array_merge($this->to_disable, $this->selected_disable_modules) as $row)
 					{
 						$obj = Module::getInstanceByName($row);
@@ -659,14 +667,23 @@ class ThemeInstallator extends Module
 						{
 							if ($flag++ == 0)
 								$msg .= '<b>'.$this->l('The following modules have been disabled:').'</b><br />';
-
-							// Delete all native module which are in the front office feature category and in selected shops
-							$sql = 'DELETE FROM `'._DB_PREFIX_.'module_shop` WHERE `id_module` = '.pSQL($obj->id).' AND `id_shop` = '.(int)$id_shop;
-							$sql1 = 'DELETE FROM `'._DB_PREFIX_.'hook_module` WHERE `id_module` = '.pSQL($obj->id).' AND `id_shop` = '.(int)$id_shop;
+							if ( _PS_VERSION_ > '1.5')
+							{
+								// Delete all native module which are in the front office feature category and in selected shops
+								$sql = 'DELETE FROM `'._DB_PREFIX_.'module_shop` WHERE `id_module` = '.pSQL($obj->id).' AND `id_shop` = '.(int)$id_shop;
+								$sql1 = 'DELETE FROM `'._DB_PREFIX_.'hook_module` WHERE `id_module` = '.pSQL($obj->id).' AND `id_shop` = '.(int)$id_shop;
+							}
+							elseif (_PS_VERSION_ < '1.5')
+							{
+								$sql = 'UPDATE `'._DB_PREFIX_.'module` SET active = 0 WHERE `id_module` = '.pSQL($obj->id);
+								$sql1 = 'DELETE FROM `'._DB_PREFIX_.'hook_module` WHERE `id_module` = '.pSQL($obj->id);
+							}
 							if (Db::getInstance()->execute($sql) && Db::getInstance()->execute($sql1))
-								$msg .= '<i>- '.pSQL($row).'</i><br />';
+								$msg .= '<i>- '.pSQL($row).'</i><br />';							
 						}
 					}
+					
+					
 
 				$flag = 0;
 				if ($this->to_enable && count($this->to_enable))
@@ -786,7 +803,7 @@ class ThemeInstallator extends Module
 					continue;
 
 				if ($variation != $theme_directory)
-					$theme_directory .= $variation;
+					$theme_directory = $variation;
 
 				if (empty($theme_directory))
 					$theme_directory = str_replace(' ', '', (string)$this->xml['name']);
@@ -919,30 +936,7 @@ class ThemeInstallator extends Module
 			<input type="submit" class="button" name="prevThemes" value="'.$this->l('Previous').'" />
 			<input type="submit" class="button" name="submitModules" value="'.$this->l('Next').'" />
 		</fieldset>
-		</form>
-		<script type="text/javascript">
-			$(document).ready(function() {
-					$.ajax({
-						type : "POST",
-						url : "'.str_replace('index', 'ajax-tab', $this->current_index).'",
-						data :	{
-							"theme_list" : '.Tools::jsonEncode(array((string)$this->xml->theme_key)).',
-							"controller" : "AdminModules",
-							"action" : "wsThemeCall",
-							"token" : "'.Tools::getAdminToken('AdminModules'.(int)Tab::getIdFromClassName('AdminModules').(int)$this->context->employee->id).'"
-						},
-						dataType: "json",
-						success: function(json)
-						{
-							//console.log(json);
-						},
-						error: function(xhr, ajaxOptions, thrownError)
-						{
-							//jAlert("TECHNICAL ERROR"+res);
-						}
-					});
-				});
-		</script>';
+		</form>';
 	}
 
 	private function displayForm2()
@@ -1204,7 +1198,8 @@ class ThemeInstallator extends Module
 			$zip->close();
 			if ($this->error === false)
 			{
-				ob_end_clean();
+				if (ob_get_length() > 0)
+					ob_end_clean();
 				header('Content-Type: multipart/x-zip');
 				header('Content-Disposition:attachment;filename="'.$zip_file_name.'"');
 				readfile(_EXPORT_FOLDER_.$zip_file_name);
@@ -1239,6 +1234,7 @@ class ThemeInstallator extends Module
 		}
 
 		$variations = $theme->addChild('variations');
+		if (count($this->variations))
 		foreach ($this->variations as $row)
 		{
 			$array = explode('¤', $row);
@@ -1441,6 +1437,7 @@ class ThemeInstallator extends Module
 	{
 		// @todo check theme variation pertinence
 		$count = 0;
+		$this->variations[] = Tools::getValue('theme_name').'¤'.Tools::getValue('theme_directory').'¤'.Tools::getValue('compa_from').'¤'.Tools::getValue('compa_to');
 		while (Tools::isSubmit('myvar_'.++$count))
 		{
 			if ((int)Tools::getValue('myvar_'.$count) == -1)

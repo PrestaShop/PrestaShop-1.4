@@ -56,11 +56,12 @@ function deletProductFromSummary(id)
 	var productId = 0;
 	var productAttributeId = 0;
 	var ids = 0;
+    id = id.replace(/^_/, '');
 	ids = id.split('_');
 	productId = parseInt(ids[0]);
 	if (typeof(ids[1]) != 'undefined')
 		productAttributeId = parseInt(ids[1]);
-	if (typeof(ids[2]) != 'undefined')
+	if (typeof(ids[2]) != 'undefined' && ids[2] !== 'nocustom')
 		customizationId = parseInt(ids[2]);
 	$.ajax({
        type: 'POST',
@@ -101,21 +102,45 @@ function deletProductFromSummary(id)
 
 					var exist = false;
 					for (i=0;i<jsonData.summary.products.length;i++)
-						if (jsonData.summary.products[i].id_product == productId)
-							exist = true;
+					{
+						if (jsonData.summary.products[i].id_product == productId
+							&& jsonData.summary.products[i].id_product_attribute == productAttributeId
+							&& (parseInt(jsonData.summary.products[i].customization_quantity) > 0))
+								exist = true;
+					}
 
 					// if all customization remove => delete product line
-					if (!exist)
-						$('#product_'+ productId+'_'+productAttributeId).fadeOut('slow', function(){
-							$(this).remove();
-						});
+					if (!exist && customizationId)
+ 						$('#product_' + productId + '_' + productAttributeId).fadeOut('slow', function() {
+ 							$(this).remove();
+							var line = $('#product_' + productId + '_' + productAttributeId + '_nocustom');
+							if (line.length > 0)
+							{
+								line.find('input[name^=quantity_], .cart_quantity_down, .cart_quantity_up, .cart_quantity_delete').each(function(){
+									if (typeof($(this).attr('name')) != 'undefined')
+										$(this).attr('name', $(this).attr('name').replace(/nocustom/, ''));
+									if (typeof($(this).attr('id')) != 'undefined')
+										$(this).attr('id', $(this).attr('id').replace(/nocustom/, ''));
+								});
+								line.find('span[id^=total_product_price_]').each(function(){
+									$(this).attr('id', $(this).attr('id').replace(/_nocustom/, ''));
+								});
+								line.attr('id', line.attr('id').replace(/nocustom/, ''));
+							}
+ 							refreshOddRow();
+ 						});
 				}
 				updateCartSummary(jsonData.summary);
 				updateCustomizedDatas(jsonData.customizedDatas);
 				updateHookShoppingCart(jsonData.HOOK_SHOPPING_CART);
 				updateHookShoppingCartExtra(jsonData.HOOK_SHOPPING_CART_EXTRA);
 				if (jsonData.carriers != null)
-					updateCarrierList(jsonData);
+				{
+					if (typeof(orderProcess) != 'undefined')					
+						updateCarrierSelectionAndGift();
+					else				
+						updateCarrierList(jsonData);
+				}
     		}
        	},
        error: function(XMLHttpRequest, textStatus, errorThrown)
@@ -133,11 +158,12 @@ function upQuantity(id, qty)
 	var productId = 0;
 	var productAttributeId = 0;
 	var ids = 0;
+    id = id.replace(/^_/, '');
 	ids = id.split('_');
 	productId = parseInt(ids[0]);
 	if (typeof(ids[1]) != 'undefined')
 		productAttributeId = parseInt(ids[1]);
-	if (typeof(ids[2]) != 'undefined')
+	if (typeof(ids[2]) != 'undefined' && ids[2] !== 'nocustom')
 		customizationId = parseInt(ids[2]);
 	$.ajax({
        type: 'POST',
@@ -198,11 +224,11 @@ function downQuantity(id, qty)
 	var ids = 0;
 	if (newVal > 0)
 	{
-		ids = id.split('_');
+		ids = id.replace(/^_/, '').split('_');
 		productId = parseInt(ids[0]);
 		if (typeof(ids[1]) != 'undefined')
 			productAttributeId = parseInt(ids[1]);
-		if (typeof(ids[2]) != 'undefined')
+		if (typeof(ids[2]) != 'undefined' && ids[2] !== 'nocustom')
 			customizationId = parseInt(ids[2]);
 		$.ajax({
 	       type: 'POST',
@@ -256,44 +282,47 @@ function updateCartSummary(json)
 	var nbrProducts = 0;
 
 	if (typeof json == 'undefined')
-		return;
+		return;		
 
 	for (i=0;i<json.products.length;i++)
 	{
-		key_for_blockcart = json.products[i].id_product+'_'+json.products[i].id_product_attribute;
+		var key_for_blockcart = json.products[i].id_product + '_'+ json.products[i].id_product_attribute;
 		if (json.products[i].id_product_attribute == 0)
 			key_for_blockcart = json.products[i].id_product;
 
-		$('#cart_block_product_'+key_for_blockcart+' span.quantity').html(json.products[i].cart_quantity);
+		$('#cart_block_product_' + key_for_blockcart + ' span.quantity').html(json.products[i].cart_quantity);
 
 		if (priceDisplayMethod != 0)
 		{
-    		$('#cart_block_product_'+key_for_blockcart+' span.price').html(formatCurrency(json.products[i].total, currencyFormat, currencySign, currencyBlank));
-			$('#product_price_'+json.products[i].id_product+'_'+json.products[i].id_product_attribute).html(formatCurrency(json.products[i].price, currencyFormat, currencySign, currencyBlank));
-    		$('#total_product_price_'+json.products[i].id_product+'_'+json.products[i].id_product_attribute).html(formatCurrency(json.products[i].total, currencyFormat, currencySign, currencyBlank));
+    		$('#cart_block_product_' + key_for_blockcart + ' span.price').html(formatCurrency(json.products[i].total, currencyFormat, currencySign, currencyBlank));
+			$('#product_price_' + json.products[i].id_product + '_' + json.products[i].id_product_attribute).html(formatCurrency(json.products[i].price, currencyFormat, currencySign, currencyBlank));
+    		$('#total_product_price_' + json.products[i].id_product + '_' + json.products[i].id_product_attribute).html(formatCurrency(json.products[i].total, currencyFormat, currencySign, currencyBlank));
 		}
 		else
 		{
-    		$('#cart_block_product_'+key_for_blockcart+' span.price').html(formatCurrency(json.products[i].total_wt, currencyFormat, currencySign, currencyBlank));
-			$('#product_price_'+json.products[i].id_product+'_'+json.products[i].id_product_attribute).html(formatCurrency(json.products[i].price_wt, currencyFormat, currencySign, currencyBlank));
-    		$('#total_product_price_'+json.products[i].id_product+'_'+json.products[i].id_product_attribute).html(formatCurrency(json.products[i].total_wt, currencyFormat, currencySign, currencyBlank));
+    		$('#cart_block_product_' + key_for_blockcart + ' span.price').html(formatCurrency(json.products[i].total_wt, currencyFormat, currencySign, currencyBlank));
+			$('#product_price_' + json.products[i].id_product + '_' + json.products[i].id_product_attribute).html(formatCurrency(json.products[i].price_wt, currencyFormat, currencySign, currencyBlank));
+    		$('#total_product_price_' + json.products[i].id_product + '_' + json.products[i].id_product_attribute).html(formatCurrency(json.products[i].total_wt, currencyFormat, currencySign, currencyBlank));
 		}
-
+		
 		nbrProducts += parseInt(json.products[i].cart_quantity);
-
+		
 		if(json.products[i].id_customization == null)
 		{
-			$('input[name=quantity_'+json.products[i].id_product+'_'+json.products[i].id_product_attribute+(json.products[i].id_customization != null ? '_'+json.products[i].id_customization : '')+']').val(json.products[i].cart_quantity);
-			$('input[name=quantity_'+json.products[i].id_product+'_'+json.products[i].id_product_attribute+(json.products[i].id_customization != null ? '_'+json.products[i].id_customization : '')+'_hidden]').val(json.products[i].cart_quantity);
+			$('input[name=quantity_' + json.products[i].id_product + '_' + json.products[i].id_product_attribute +' ]').val(json.products[i].cart_quantity);
+			$('input[name=quantity_' + json.products[i].id_product+'_' + json.products[i].id_product_attribute + '_hidden]').val(json.products[i].cart_quantity);
 		}
-		else
-			$('#cart_quantity_custom_'+json.products[i].id_product+'_'+json.products[i].id_product_attribute).html(json.products[i].cart_quantity);
+		else // TODO : need elseif(is a custom product without custom) here or must have correct customization_quantity (and total) from json and not only first customization quantity
+		{
+            $('input[name=quantity_' + json.products[i].id_product + '_' + json.products[i].id_product_attribute + ((json.products[i].customizationQuantityTotal != json.products[i].cart_quantity)? '_nocustom' : '')  + ']').val(parseInt(json.products[i].cart_quantity) - parseInt($('#cart_quantity_custom_' + json.products[i].id_product + '_' + + json.products[i].id_product_attribute).html()));
+            $('input[name=quantity_' + json.products[i].id_product + '_' + json.products[i].id_product_attribute + ((json.products[i].customizationQuantityTotal != json.products[i].cart_quantity)? '_nocustom' : '')  + '_hidden]').val(parseInt(json.products[i].cart_quantity) - parseInt($('#cart_quantity_custom_' + json.products[i].id_product + '_' + + json.products[i].id_product_attribute).html()));
+		}
 
 		// Show / hide quantity button if minimal quantity
 		if (parseInt(json.products[i].minimal_quantity) == parseInt(json.products[i].cart_quantity) && json.products[i].minimal_quantity != 1)
-			$('#cart_quantity_down_'+json.products[i].id_product+'_'+json.products[i].id_product_attribute+(json.products[i].id_customization != null ? '_'+json.products[i].id_customization : '')).fadeTo('slow',0.3);
+			$('#cart_quantity_down_' + json.products[i].id_product + '_' + json.products[i].id_product_attribute + (json.products[i].id_customization != null ? '_'+json.products[i].id_customization : '')).fadeTo('slow',0.3);
 		else
-			$('#cart_quantity_down_'+json.products[i].id_product+'_'+json.products[i].id_product_attribute+(json.products[i].id_customization != null ? '_'+json.products[i].id_customization : '')).fadeTo('slow',1);
+			$('#cart_quantity_down_' + json.products[i].id_product + '_' + json.products[i].id_product_attribute+(json.products[i].id_customization != null ? '_'+json.products[i].id_customization : '')).fadeTo('slow',1);
 	}
 
 	// Update discounts
@@ -397,11 +426,17 @@ function updateCustomizedDatas(json)
 {
 	for(i in json)
 		for(j in json[i])
+        {
+            var total = 0;
 			for(k in json[i][j])
 			{
 				$('input[name=quantity_'+i+'_'+j+'_'+k+'_hidden]').val(json[i][j][k]['quantity']);
 				$('input[name=quantity_'+i+'_'+j+'_'+k+']').val(json[i][j][k]['quantity']);
+                total += parseInt(json[i][j][k]['quantity']);
 			}
+            if (total > 0)
+                $('#cart_quantity_custom_' + i + '_' + j).html(parseInt(total));
+        }
 }
 
 function updateHookShoppingCart(html)

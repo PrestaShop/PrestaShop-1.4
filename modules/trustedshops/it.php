@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{trustedshops}prestashop>display_products_02ecb4a4709d9bcc590f1a25fc82c0e2'] = 'Protezione acquirente Trusted Shops (consigliato)';
 $_MODULE['<{trustedshops}prestashop>display_products_1107bf75ac50728edbeb497ab803a104'] = 'Acquirente della protezione fino a';
 $_MODULE['<{trustedshops}prestashop>display_products_69db1ddc2a15253abb0a11beb1eae734'] = 'incl. IVA';
@@ -79,7 +80,6 @@ $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_109715467b74bd66639faa5673
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_d4eb1e83b0ea3af3e2b8a6e7b7984d9c'] = 'Il campo %s è sbagliato, assicurati che sia stato correttamente compilato.';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_c230eb5eefd15fa219ff97d42e461a7d'] = 'Alcuni parametri per l\'invio al metodo \"requestForProtectionV2\"  sono sbagliati o mancanti.';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_b656f5f53cf7ee9bbfe7452685f71e30'] = 'Trusted Shops API segnala un errore riguardante l\'applicazione n.';
-$_MODULE['<{trustedshops}prestashop>tsbuyerprotection_fdf1d399a4b88e3c62ff925295a4bb0c'] = 'Negozi di fiducia numero della domanda% 1 $ d è stato elaborato correttamente. Il numero di garanzia è la seguente:% 2 $ d';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_fd511061055fcb2d10d31a51be3539d0'] = 'Link di registrazione';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_de5536f42490f11e92ad1c20d999fd15'] = 'Fare clic per ottenere il link di registrazione';
 $_MODULE['<{trustedshops}prestashop>tsbuyerprotection_58e9c4050ed75489c2108a1b316f1251'] = 'Link di registrazione è stato creato. Seguite questo link se non sono stati reindirizzati in precedenza:';

@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{watermark}prestashop>watermark_ee20bb60493f049175fc10c35acd2272'] = 'Marca de agua (filigrana)';
 $_MODULE['<{watermark}prestashop>watermark_8d7c07bcea7e80d072308e4bd4cc37b0'] = 'Proteja la imagen por una marca de agua';
 $_MODULE['<{watermark}prestashop>watermark_fa214007826415a21a8456e3e09f999d'] = '¿Está seguro de querer suprimir los detalles?';

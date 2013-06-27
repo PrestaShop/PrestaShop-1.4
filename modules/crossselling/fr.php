@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{crossselling}prestashop>crossselling_a1892c39b2598b4f30f9cc92c59f1aa5'] = 'Ventes croisées';
 $_MODULE['<{crossselling}prestashop>crossselling_7112af09e8e3594c4c71d241fe272ba9'] = 'Les clients qui ont acheté ce produit ont également acheté...';
 $_MODULE['<{crossselling}prestashop>crossselling_462390017ab0938911d2d4e964c0cab7'] = 'Paramètres mis à jour';

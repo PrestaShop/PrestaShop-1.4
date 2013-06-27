@@ -2,8 +2,9 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_58ec6a48b4720ef0aa2adfded1ccf8a3'] = 'TNT Express';
-$_MODULE['<{tntcarrier}prestashop>tntcarrier_9b7637001f5d2bcb42efb4ab6b3e93da'] = 'Offre aux clients, différentes methodes de livraison';
+$_MODULE['<{tntcarrier}prestashop>tntcarrier_9b7637001f5d2bcb42efb4ab6b3e93da'] = 'La livraison express 24h partout en France avant 13h';
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_416900392875e9effb318da8648fbdcb'] = 'doivent etre configurés pour utiliser le module correctement';
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_e2236d4f47edb104d62eaa4168b298f0'] = 'doit être configuré pour utiliser le module correctement.';
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_632cae5cf3af08786414932a8e6f96a0'] = 'Identifiant TNT';
@@ -52,10 +53,10 @@ $_MODULE['<{tntcarrier}prestashop>tntcarrier_bef36fffa9fb82dcc73c1b55539f6898'] 
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_a8902236aba1133fdf18a5fa229422bb'] = 'Choisisser une des villes suivantes :';
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_5a55814ea2a5efd195b6e0dc338f1962'] = 'Le code postal de votre adresse de livraison n\'est pas correct.';
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_b0a69455a720e7aee38c69c11335255a'] = 'Merci de modifier le champ';
-$_MODULE['<{tntcarrier}prestashop>tntcarrier_f491268900a525fd4a6396e2419efff8'] = 'dans le cadre \\\"Adresse de livraison\\\"';
+$_MODULE['<{tntcarrier}prestashop>tntcarrier_f491268900a525fd4a6396e2419efff8'] = 'dans le cadre \"Adresse de livraison\"';
 $_MODULE['<{tntcarrier}prestashop>tntcarrier_a75e89fe8027552b64e93022b676e313'] = 'dans la configuration de votre module TNT.';
 $_MODULE['<{tntcarrier}prestashop>accountform_d968787921c136e1cf9f766562aec8bc'] = 'Les paramètres suivants vous ont été fournis par TNT';
-$_MODULE['<{tntcarrier}prestashop>accountform_af7c2efe81330e4c9089f2c90781282e'] = 'Si vous n\'êtes pas encore inscrit, cliquez ';
+$_MODULE['<{tntcarrier}prestashop>accountform_af7c2efe81330e4c9089f2c90781282e'] = 'Si vous n\'êtes pas encore inscrit, cliquez';
 $_MODULE['<{tntcarrier}prestashop>accountform_6c92285fa6d3e827b198d120ea3ac674'] = 'ici';
 $_MODULE['<{tntcarrier}prestashop>accountform_91396a85cdff74c571ec0bdc5a9bc136'] = '(Cf. guide de configuration ci-joint)';
 $_MODULE['<{tntcarrier}prestashop>accountform_160f61d02d22b76b47b4305094bf36a6'] = 'Compte TNT';

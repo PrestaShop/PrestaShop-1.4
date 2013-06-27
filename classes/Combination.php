@@ -167,4 +167,12 @@ class CombinationCore extends ObjectModel
 		Db::getInstance()->Execute('INSERT INTO `'._DB_PREFIX_.'product_attribute_image` (`id_product_attribute`, `id_image`) VALUES '.implode(',', $sqlValues));
 		return true;
 	}
+	
+	public static function getCombinationbyRef($reference)
+	{
+		return Db::getInstance()->getValue('
+		SELECT `id_product_attribute`
+		FROM `'._DB_PREFIX_.'product_attribute`
+		WHERE `reference` LIKE \''.$reference.'\'');	
+	}
 }

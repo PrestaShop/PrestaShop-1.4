@@ -32,7 +32,7 @@ include_once(_PS_PEAR_XML_PARSER_PATH_.'Parser.php');
 
 class Blockrss extends Module
 {
- 	function __construct()
+ 	public function __construct()
  	{
  	 	$this->name = 'blockrss';
  	 	$this->tab = 'front_office_features';
@@ -49,7 +49,7 @@ class Blockrss extends Module
 		$this->valid = false;
  	}
 
- 	function install()
+ 	public function install()
  	{
 		Configuration::updateValue('RSS_FEED_TITLE', $this->l('RSS feed'));
 		Configuration::updateValue('RSS_FEED_NBR', 5);
@@ -146,7 +146,7 @@ class Blockrss extends Module
 		return $output;
 	}
 
-	function hookLeftColumn($params)
+	public function hookLeftColumn($params)
 	{
 		global $smarty;
 		
@@ -176,12 +176,12 @@ class Blockrss extends Module
  	 	return $this->display(__FILE__, 'blockrss.tpl');
  	}
 
-	function hookRightColumn($params)
+	public function hookRightColumn($params)
 	{
 		return $this->hookLeftColumn($params);
 	}
 	
-	function hookHeader($params)
+	public function hookHeader($params)
 	{
 		Tools::addCSS(($this->_path).'blockrss.css', 'all');
 	}

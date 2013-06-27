@@ -2,6 +2,7 @@
 
 global $_MODULE;
 $_MODULE = array();
+
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_8b15fc6468c919d299f9a601b61b95fc'] = 'Account clienti';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_089c9061407fd978366e78b6ad1d0111'] = 'Visualizzare lo stato di registrazione del cliente';
 $_MODULE['<{statsregistrations}prestashop>statsregistrations_d2599cba054b58d8319484590dc24104'] = 'I visitatori che si sono fermati alla fase di registrazione:';

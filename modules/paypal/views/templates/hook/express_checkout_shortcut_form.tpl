@@ -5,6 +5,6 @@
 	<input type="hidden" name="quantity" value="1" />
 	<input type="hidden" name="id_p_attr" value="" />
 	<input type="hidden" name="express_checkout" value="{$PayPal_payment_type}"/>
-	<input type="hidden" name="current_shop_url" value="{$PayPal_current_shop_url}" />
-    <input type="hidden" name="bn" value="{$PayPal_tracking_code}" />
+	<input type="hidden" name="current_shop_url" value="{$PayPal_current_page}" />
+	<input type="hidden" name="bn" value="{$PayPal_tracking_code}" />
 </form>
