@@ -974,7 +974,7 @@ abstract class AdminTabCore
 				return false;
 			}
 		}
-		return false;
+		return true;
 	}
 
 
