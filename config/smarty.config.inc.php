@@ -38,7 +38,7 @@ $smarty->caching = false;
 $smarty->force_compile = (bool)Configuration::get('PS_SMARTY_FORCE_COMPILE');
 $smarty->compile_check = false;
 $smarty->debugging = false;
-$smarty->debugging_ctrl = 'URL';  /* 'NONE' on production */
+$smarty->debugging_ctrl = 'NONE';  /* 'URL' for debug, dev only */
 
 if (_PS_FORCE_SMARTY_2_)
 {
