@@ -314,8 +314,8 @@ function updateCartSummary(json)
 		}
 		else // TODO : need elseif(is a custom product without custom) here or must have correct customization_quantity (and total) from json and not only first customization quantity
 		{
-            $('input[name=quantity_' + json.products[i].id_product + '_' + json.products[i].id_product_attribute + ((json.products[i].customizationQuantityTotal != json.products[i].cart_quantity)? '_nocustom' : '')  + ']').val(parseInt(json.products[i].cart_quantity) - parseInt($('#cart_quantity_custom_' + json.products[i].id_product + '_' + + json.products[i].id_product_attribute).html()));
-            $('input[name=quantity_' + json.products[i].id_product + '_' + json.products[i].id_product_attribute + ((json.products[i].customizationQuantityTotal != json.products[i].cart_quantity)? '_nocustom' : '')  + '_hidden]').val(parseInt(json.products[i].cart_quantity) - parseInt($('#cart_quantity_custom_' + json.products[i].id_product + '_' + + json.products[i].id_product_attribute).html()));
+            $('input[name=quantity_' + json.products[i].id_product + '_' + json.products[i].id_product_attribute + ((json.products[i].customizationQuantityTotal != json.products[i].cart_quantity)? '_nocustom' : '')  + ']').val(parseInt(json.products[i].cart_quantity) - parseInt($('#cart_quantity_custom_' + json.products[i].id_product + '_' + json.products[i].id_product_attribute).html()));
+            $('input[name=quantity_' + json.products[i].id_product + '_' + json.products[i].id_product_attribute + ((json.products[i].customizationQuantityTotal != json.products[i].cart_quantity)? '_nocustom' : '')  + '_hidden]').val(parseInt(json.products[i].cart_quantity) - parseInt($('#cart_quantity_custom_' + json.products[i].id_product + '_' + json.products[i].id_product_attribute).html()));
 		}
 
 		// Show / hide quantity button if minimal quantity

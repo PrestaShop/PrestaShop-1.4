@@ -1,6 +1,10 @@
 <?php
 /*
+<<<<<<< HEAD
+* 2007-2012 PrestaShop
+=======
 * 2007-2013 PrestaShop
+>>>>>>> development
 *
 * NOTICE OF LICENSE
 *

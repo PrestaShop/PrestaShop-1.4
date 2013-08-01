@@ -47,4 +47,4 @@ if ($quantity && $quantity > 0)
 		echo $product_quantity;
 }
 
-die();
+die;

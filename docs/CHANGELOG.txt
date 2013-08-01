@@ -24,7 +24,7 @@ International Registred Trademark & Property of PrestaShop SA
 Release Notes for PrestaShop 1.4
 --------------------------------
 ####################################
-#   v1.4.11.0 - (2013-06-27)  #
+#     v1.4.11.0 - (2013-06-27)     #
 ####################################
 
 	Fixed bugs:
