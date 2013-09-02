@@ -103,7 +103,7 @@ class BlockViewed extends Module
 
 			$productIds = implode(',', $productsViewed);
 			$productsImages = Db::getInstance(_PS_USE_SQL_SLAVE_)->ExecuteS('
-			SELECT i.id_image, p.id_product, il.legend, p.active, pl.name, pl.description_short, pl.link_rewrite, cl.link_rewrite AS category_rewrite
+			SELECT i.id_image, p.id_product, il.legend, p.active, pl.name, pl.description_short, pl.link_rewrite, p.ean13, cl.link_rewrite AS category_rewrite
 			FROM '._DB_PREFIX_.'product p
 			LEFT JOIN '._DB_PREFIX_.'product_lang pl ON (pl.id_product = p.id_product)
 			LEFT JOIN '._DB_PREFIX_.'image i ON (i.id_product = p.id_product AND i.cover = 1)
@@ -132,6 +132,7 @@ class BlockViewed extends Module
 					$obj->name = $productsImagesArray[$productViewed]['name'];
 					$obj->description_short = $productsImagesArray[$productViewed]['description_short'];
 					$obj->link_rewrite = $productsImagesArray[$productViewed]['link_rewrite'];
+					$obj->ean13 = $productsImagesArray[$productViewed]['ean13'];
 					$obj->category_rewrite = $productsImagesArray[$productViewed]['category_rewrite'];
 
 					if (!isset($obj->cover) || !$productsImagesArray[$productViewed]['id_image'])
