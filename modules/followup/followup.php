@@ -274,7 +274,7 @@ class Followup extends Module
 	{
 		$emailLogs = $this->getLogsEmail(1);
 		$sql = '
-			SELECT c.id_cart, o.id_lang, cu.id_customer, cu.firstname, cu.lastname, cu.email
+			SELECT c.id_cart, c.id_lang, cu.id_customer, cu.firstname, cu.lastname, cu.email
 			FROM '._DB_PREFIX_.'cart c
 			LEFT JOIN '._DB_PREFIX_.'orders o ON (o.id_cart = c.id_cart)
 			RIGHT JOIN '._DB_PREFIX_.'customer cu ON (cu.id_customer = c.id_customer)
