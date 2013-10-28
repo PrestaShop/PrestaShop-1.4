@@ -82,7 +82,7 @@ class SEKeywords extends ModuleGraph
 	
 	public function hookTop($params)
 	{
-		if (!isset($_SERVER['HTTP_REFERER']) || strstr($_SERVER['HTTP_REFERER'], Tools::getHttpHost(false, false)))
+		if (!isset($_SERVER['HTTP_REFERER']) || strpos($_SERVER['HTTP_REFERER'], Tools::getHttpHost(false, false) == 0))
 			return;
 
 		if ($keywords = $this->getKeywords($_SERVER['HTTP_REFERER']))
@@ -163,12 +163,12 @@ class SEKeywords extends ModuleGraph
 			if (strstr($parsedUrl['host'], $host))
 			{
 				$kArray = array();
-				preg_match('/[^a-z]'.$varname.'=.+\&'.'/U', $parsedUrl['query'], $kArray);
+				preg_match('/[^a-zA-Z&]?'.$varname.'=.*\&'.'/U', $parsedUrl['query'], $kArray);
 				if (!isset($kArray[0]) || empty($kArray[0]))
-					preg_match('/[^a-z]'.$varname.'=.+$'.'/', $parsedUrl['query'], $kArray);
+					preg_match('/[^a-zA-Z&]?'.$varname.'=.*$'.'/', $parsedUrl['query'], $kArray);
 				if (!isset($kArray[0]) || empty($kArray[0]))
 					return false;
-				if ($kArray[0][0] == '&')
+				if ($kArray[0][0] == '&' && Tools::strlen($kArray[0]) == 1)
 					return false;
 				return urldecode(str_replace('+', ' ', ltrim(substr(rtrim($kArray[0], '&'), strlen($varname) + 1), '=')));
 			}
