@@ -1072,14 +1072,17 @@ class PDFCore extends PDF_PageGroupCore
 			$this->Cell($w[3], 6, '', 'B', 0, 'R');
 			$this->Cell($w[4], 6, '1', 'B', 0, 'C');
 
-            $discount_value = $discount['value'];
             $tax_rate_discount = 0;
             if (self::$_priceDisplayMethod == PS_TAX_EXC)
                 $tax_rate_discount = self::$order->getTaxesAverageUsed();
 
-            $discount_value = $discount_value / (1 + $tax_rate_discount / 100);
+			$c_decimals = self::$currency->decimals * _PS_PRICE_DISPLAY_PRECISION_;
+			$discount_value = Tools::ps_round($discount['value'] / (1 + $tax_rate_discount / 100), $c_decimals);
 
-			$this->Cell($w[5], 6, ((!self::$orderSlip && ($discount['value'] != 0.00)) ? '-' : '').self::convertSign(Tools::displayPrice($discount_value, self::$currency, true)), 'B', 0, 'R');
+			$discount_display = self::convertSign(Discount::display($discount_value, $discount['id_discount_type'], self::$currency));
+			$math_sign = (!self::$orderSlip && ($discount['value'] != 0.00)) ? '-' : '';
+
+			$this->Cell($w[5], 6, $math_sign.$discount_display, 'B', 0, 'R');
 			$this->Ln();
 		}
 
