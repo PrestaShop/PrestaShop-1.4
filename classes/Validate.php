@@ -492,7 +492,7 @@ class ValidateCore
 	*/
 	public static function isPasswd($passwd, $size = 5)
 	{
-		return preg_match('/^[.a-zA-Z_0-9-!@#$%\^&*()]{'.(int)$size.',32}$/', $passwd);
+		return (strlen($passwd) >= $size && strlen($passwd) < 255);
 	}
 
 	public static function isPasswdAdmin($passwd)
