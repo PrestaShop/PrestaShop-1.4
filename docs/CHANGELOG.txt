@@ -46,6 +46,28 @@ Release Notes for PrestaShop 1.4
 
 
 ####################################
+#   v1.4.11.1 - (2015-07-29)  #
+####################################
+
+	Improved/changed features:
+
+	[*] CORE : Add Random charlist to passwdGen
+
+	Fixed bugs:
+
+	[-] FO : Fix bug backport of #PSCFV-9021
+	[-] FO : Fix bug #PSCFV-9674, typo in cart-summary
+
+	[-] BO : Report of #PSCFV-9906 could not register search engines keywords
+
+	[-] MO : Followup bug from #PSCFI-6622 id_lang not defined when no orders
+	[-] MO : No ean13 for link rewrite
+	[-] MO : Report of https://github.com/PrestaShop/PrestaShop/commit/5d8d7c03838cd1e5b027e19a1e75e0e7f152f0e5
+
+	[-] PDF : a discount in percent was displayed as amount
+
+
+####################################
 #     v1.4.11.0 - (2013-06-27)     #
 ####################################
 
