@@ -30,7 +30,7 @@ class MySQLCore extends Db
 	{
 		if (!defined('_PS_DEBUG_SQL_'))
 			define('_PS_DEBUG_SQL_', false);
-		if ($this->_link = mysql_connect($this->_server, $this->_user, $this->_password))
+		if ($this->_link = @mysql_connect($this->_server, $this->_user, $this->_password))
 		{
 			if (!$this->set_db($this->_database))
 				die('The database selection cannot be made.');
