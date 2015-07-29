@@ -378,7 +378,7 @@ class OrderCore extends ObjectModel
 	{
 		if (!$id_order_state)
 			$id_order_state = 0;
-		
+
 		$logable = false;
 		$delivery = false;
 		if ($filters > 0)
@@ -443,8 +443,10 @@ class OrderCore extends ObjectModel
 
 	public function setProductPrices(&$row)
 	{
-		$row['product_price'] = Tools::ps_round($row['product_price'], 2);
-		$row['product_price_wt'] = Tools::ps_round($row['product_price'] * (1 + $row['tax_rate'] / 100), 2);
+		if ($this->_taxCalculationMethod == PS_TAX_EXC)
+			$row['product_price'] = Tools::ps_round($row['product_price'], 2);
+		else
+			$row['product_price_wt'] = Tools::ps_round($row['product_price'] * (1 + $row['tax_rate'] / 100), 2);
 
 		$group_reduction = 1;
 		if ($row['group_reduction'] > 0)
@@ -521,7 +523,7 @@ class OrderCore extends ObjectModel
 	 * Returns the taxes rates average by using the historized products
    */
 	public function getTaxesAverageUsed()
-	{	
+	{
 		$products = $this->getProducts();
 		$total_products_moy = 0;
 		$ratio_tax = 0;
@@ -540,7 +542,7 @@ class OrderCore extends ObjectModel
 			return $ratio_tax / $total_products_moy;
 
 		return 0;
-	} 
+	}
 
 	/**
 	 * Count virtual products in order
