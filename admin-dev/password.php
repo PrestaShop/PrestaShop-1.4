@@ -60,12 +60,12 @@ else if (isset($_POST['Submit']))
 			if ((strtotime($employee->last_passwd_gen.'+'.Configuration::get('PS_PASSWD_TIME_BACK').' minutes') - time()) > 0 )
 				$errors[] = Tools::displayError('You can regenerate your password only every').' '.Configuration::get('PS_PASSWD_TIME_BACK').' '.Tools::displayError('minute(s)');
 			else
-			{	
-				$pwd = Tools::passwdGen();
-				
+			{
+				$pwd = Tools::passwdGen(10, 'RANDOM');
+
 				$previous_password = $employee->passwd;
 				$previous_last_passwd_gen = $employee->last_passwd_gen;
-				
+
 				$employee->passwd = md5(pSQL(_COOKIE_KEY_.$pwd));
 				$employee->last_passwd_gen = date('Y-m-d H:i:s', time());
 				if (!$employee->update())

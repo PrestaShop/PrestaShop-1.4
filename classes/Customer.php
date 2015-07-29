@@ -174,7 +174,7 @@ class CustomerCore extends ObjectModel
 				$obj = new Address((int)$address['id_address']);
 				$obj->delete();
 			}
-		}			
+		}
 	 	return parent::update(true);
 	}
 
@@ -302,7 +302,7 @@ class CustomerCore extends ObjectModel
 	  */
 	public static function customerHasAddress($id_customer, $id_address)
 	{
-		$key = (int)$id_customer.'-'.(int)$id_address;		
+		$key = (int)$id_customer.'-'.(int)$id_address;
 		if (!array_key_exists($key, self::$_customerHasAddress))
 		{
 			self::$_customerHasAddress[$key] = (bool)Db::getInstance(_PS_USE_SQL_SLAVE_)->getValue('
@@ -628,7 +628,7 @@ class CustomerCore extends ObjectModel
 		if (!$this->isGuest())
 			return false;
 		if (empty($password))
-			$password = Tools::passwdGen();
+			$password = Tools::passwdGen(8, 'RANDOM');
 		if (!Validate::isPasswd($password))
 			return false;
 

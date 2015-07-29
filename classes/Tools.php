@@ -33,14 +33,94 @@ class ToolsCore
 	 * Random password generator
 	 *
 	 * @param integer $length Desired length (optional)
+	 * @param string $flag Output type (ALPHANUMERIC, RANDOM)
 	 * @return string Password
 	 */
-	public static function passwdGen($length = 8)
+	public static function passwdGen($length = 8, $flag = 'ALPHANUMERIC')
 	{
-		$str = 'abcdefghijkmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-		for ($i = 0, $passwd = ''; $i < $length; $i++)
-			$passwd .= self::substr($str, mt_rand(0, self::strlen($str) - 1), 1);
-		return $passwd;
+		$length = (int)$length;
+
+		if ($length <= 0)
+			return false;
+
+		switch ($flag) {
+			case 'RANDOM':
+				$num_bytes = ceil($length * 0.75);
+				$bytes = Tools::getBytes($num_bytes);
+				return substr(rtrim(base64_encode($bytes), '='), 0, $length);
+			case 'ALPHANUMERIC':
+			default:
+				$str = 'abcdefghijkmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+				break;
+		}
+
+		$bytes = Tools::getBytes($length);
+		$position = 0;
+		$result = '';
+
+		for ($i = 0; $i < $length; $i++)
+		{
+			$position = ($position + ord($bytes[$i])) % strlen($str);
+			$result .= $str[$position];
+		}
+
+		return $result;
+	}
+
+	public static function getBytes($length)
+	{
+		$length = (int)$length;
+		if ($length <= 0)
+			return false;
+		if (function_exists('openssl_random_pseudo_bytes'))
+		{
+			$bytes = openssl_random_pseudo_bytes($length, $crypto_strong);
+			if ($crypto_strong === true)
+				return $bytes;
+		}
+		if (function_exists('mcrypt_create_iv'))
+		{
+			$bytes = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM);
+			if ($bytes !== false && strlen($bytes) === $length)
+				return $bytes;
+		}
+		// Else try to get $length bytes of entropy
+		$result         = '';
+		$entropy        = '';
+		$msec_per_round = 400;
+		$bits_per_round = 2;
+		$total          = $length;
+		$hash_length    = 20;
+		while (strlen($result) < $length)
+		{
+			$bytes  = ($total > $hash_length) ? $hash_length : $total;
+			$total -= $bytes;
+			for ($i=1; $i < 3; $i++)
+			{
+				$t1 = microtime(true);
+				$seed = mt_rand();
+				for ($j=1; $j < 50; $j++)
+					$seed = sha1($seed);
+				$t2 = microtime(true);
+				$entropy .= $t1 . $t2;
+			}
+			$div = (int) (($t2 - $t1) * 1000000);
+			if ($div <= 0)
+				$div = 400;
+			$rounds = (int) ($msec_per_round * 50 / $div);
+			$iter = $bytes * (int) (ceil(8 / $bits_per_round));
+			for ($i = 0; $i < $iter; $i ++)
+			{
+				$t1 = microtime();
+				$seed = sha1(mt_rand());
+				for ($j = 0; $j < $rounds; $j++)
+					$seed = sha1($seed);
+				$t2 = microtime();
+				$entropy .= $t1 . $t2;
+			}
+			$result .= sha1($entropy, true);
+		}
+		return substr($result, 0, $length);
 	}
 
 	/**
@@ -466,7 +546,7 @@ class ToolsCore
 			$currency = Currency::getCurrent();
 		elseif (is_numeric($currency))
 			$currency = Currency::getCurrencyInstance($currency);
-		
+
 		if (isset($currency->id))
 		{
 			$c_id = $currency->id;
@@ -1398,7 +1478,7 @@ class ToolsCore
 		{
 			$htmlContentCopy = $html_content;
 			$html_content = preg_replace_callback('/\\s*(<script\\b[^>]*?>)([\\s\\S]*?)(<\\/script>)\\s*/i', array('Tools', 'packJSinHTMLpregCallback'), $html_content);
-			
+
 			// If the string is too big preg_replace return an error
 			// In this case, we don't compress the content
 			if (preg_last_error() == PREG_BACKTRACK_LIMIT_ERROR)
@@ -2151,7 +2231,7 @@ FileETag INode MTime Size
 	        return true;
 	    else
 	        return false;
-	}	
+	}
 
 	/**
 	 * Get products order field name for queries.
