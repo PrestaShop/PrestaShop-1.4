@@ -1,39 +1,42 @@
+	- Bruno42
+	- Damien Metzger
+	- Francois Gaillard
+	- François Gaillard
+	- Gregory Roussac
+	- Julien Martin
+	- Jérôme Nadaud
+	- Mathieu
+	- Rémi Gaillard
 	- aFolletete
 	- aKorczak
 	- aMarandon
 	- aNiassy
 	- bLeveque
 	- bMancone
-	- Bruno42
-	- Damien Metzger
-	- djfm
 	- dJorge
 	- dKiyindou
 	- dMetzger
+	- djfm
 	- eCrubille
 	- fBrignoli
 	- fGaillard
 	- fOlivier
-	- Francois Gaillard
-	- François Gaillard
 	- fSerny
 	- gBrunier
 	- gCharmes
 	- gPoulain
-	- Gregory Roussac
 	- gRoussac
 	- hAitmansour
-	- heri
 	- hLavigne
-	- jason
+	- heri
 	- jGalby
-	- jmCollin
 	- jObregon
 	- jVincent
+	- jason
+	- jmCollin
 	- lBrieu
 	- lCherifi
 	- lLefevre
-	- Mathieu
 	- mBertholino
 	- mBiart
 	- mDeflotte
@@ -43,7 +46,6 @@
 	- nStojanovic
 	- pSang
 	- rChambily
-	- Rémi Gaillard
 	- rGaillard
 	- rMalie
 	- rMontagne
@@ -52,4 +54,5 @@
 	- vAugagneur
 	- vChabot
 	- vSchoener
+	- zapalm
 
